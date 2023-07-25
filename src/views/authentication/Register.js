@@ -5,8 +5,8 @@ import PageContainer from "src/components/container/PageContainer";
 import Logo from "src/layouts/full/shared/logo/Logo";
 import AuthRegister from "./auth/AuthRegister";
 
-const Register2 = () => (
-  <PageContainer title="Register" description="this is Register page">
+const Register = () => (
+  <PageContainer title="Register" description="Register page">
     <Box
       sx={{
         position: "relative",
@@ -81,4 +81,4 @@ const Register2 = () => (
   </PageContainer>
 );
 
-export default Register2;
+export default Register;

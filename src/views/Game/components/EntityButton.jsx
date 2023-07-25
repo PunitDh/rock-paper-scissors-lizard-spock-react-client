@@ -3,24 +3,30 @@ import React from "react";
 import styled from "@emotion/styled";
 import { Button } from "@mui/material";
 import { useSocket } from "src/hooks/useSocket";
+import { useToken } from "src/hooks/useToken";
 
 const Entity = styled(Button)(({ btncolor }) => ({
   color: btncolor,
-  // width: "8rem"
 }));
 
-const EntityButton = ({ children, btncolor, onMove }) => {
+const EntityButton = ({ children, btncolor, gameId }) => {
   const socket = useSocket();
+  const token = useToken();
 
   const handleMove = () => {
+    const payload = {
+      playerId: token.decoded.id,
+      move: children,
+      gameId,
+    };
     if (socket) {
-      socket.emit("play-move", children);
+      socket.emit("play-move", payload);
     }
   };
 
   if (socket) {
-    socket.on("move-played", (...args) => {
-      console.log(...args);
+    socket.on("move-played", (payload) => {
+      console.log(payload);
     });
   }
 

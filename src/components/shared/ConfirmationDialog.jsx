@@ -14,6 +14,7 @@ const ConfirmationDialog = ({
   open,
   title,
   content,
+  confirmBtnText,
   ...other
 }) => {
   const [value, setValue] = useState(valueProp);
@@ -50,7 +51,7 @@ const ConfirmationDialog = ({
         <Button autoFocus onClick={onCancel}>
           Cancel
         </Button>
-        <Button onClick={onHandleConfirm}>Start Game</Button>
+        <Button onClick={onHandleConfirm}>{confirmBtnText}</Button>
       </DialogActions>
     </Dialog>
   );

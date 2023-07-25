@@ -12,7 +12,6 @@ import {
 // components
 import Profile from "./Profile";
 import { IconBellRinging, IconMenu } from "@tabler/icons";
-import { useSocket } from "src/hooks/useSocket";
 
 const Header = (props) => {
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
@@ -31,19 +30,6 @@ const Header = (props) => {
     width: "100%",
     color: theme.palette.text.secondary,
   }));
-
-  const socket = useSocket();
-
-  const handleConnect = () => {
-    console.log({ socket });
-    socket.emit("new-user", "Punit");
-  };
-
-  if (socket) {
-    socket.on("user-registered", (user) => {
-      console.log({ user });
-    });
-  }
 
   return (
     <AppBarStyled position="sticky" color="default">
@@ -81,7 +67,6 @@ const Header = (props) => {
         <Box flexGrow={1} />
         <Stack spacing={1} direction="row" alignItems="center">
           <Button
-            onClick={handleConnect}
             variant="contained"
             color="primary"
             type="button"

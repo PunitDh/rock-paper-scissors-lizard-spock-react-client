@@ -1,82 +1,121 @@
 import React from "react";
 import { Box, Typography, Button } from "@mui/material";
-import { Link } from "react-router-dom";
 
-import CustomTextField from "../../../components/forms/theme-elements/CustomTextField";
 import { Stack } from "@mui/system";
+import CustomTextField from "../../../components/forms/theme-elements/CustomTextField";
 
-const AuthRegister = ({ title, subtitle, subtext }) => (
-  <>
-    {title ? (
-      <Typography fontWeight="700" variant="h2" mb={1}>
-        {title}
-      </Typography>
-    ) : null}
+import { isSuccess } from "src/utils";
+import { useAuth } from "src/hooks/useAuth";
 
-    {subtext}
+const AuthRegister = ({ title, subtitle, subtext }) => {
+  const auth = useAuth();
 
-    <Box>
-      <Stack mb={3}>
-        <Typography
-          variant="subtitle1"
-          fontWeight={600}
-          component="label"
-          htmlFor="name"
-          mb="5px"
-        >
-          Name
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const payload = {
+      name: e.target.name.value,
+      email: e.target.email.value,
+      password: e.target.password.value,
+      confirmPassword: e.target.confirmPassword.value,
+    };
+    auth.register(payload);
+  };
+
+  return (
+    <>
+      {title ? (
+        <Typography fontWeight="700" variant="h2" mb={1}>
+          {title}
         </Typography>
-        <CustomTextField id="name" variant="outlined" fullWidth />
+      ) : null}
 
-        <Typography
-          variant="subtitle1"
-          fontWeight={600}
-          component="label"
-          htmlFor="email"
-          mb="5px"
-          mt="25px"
-        >
-          Email Address
-        </Typography>
-        <CustomTextField id="email" variant="outlined" fullWidth />
+      {subtext}
+      <Box>
+        <form onSubmit={handleSubmit}>
+          <Stack mb={3}>
+            <Typography
+              variant="subtitle1"
+              fontWeight={600}
+              component="label"
+              htmlFor="name"
+              mb="5px"
+            >
+              Name
+            </Typography>
+            <CustomTextField
+              name="name"
+              id="name"
+              variant="outlined"
+              fullWidth
+            />
 
-        <Typography
-          variant="subtitle1"
-          fontWeight={600}
-          component="label"
-          htmlFor="password"
-          mb="5px"
-          mt="25px"
-        >
-          Password
-        </Typography>
-        <CustomTextField id="password" variant="outlined" fullWidth />
+            <Typography
+              variant="subtitle1"
+              fontWeight={600}
+              component="label"
+              htmlFor="email"
+              mb="5px"
+              mt="25px"
+            >
+              Email Address
+            </Typography>
+            <CustomTextField
+              name="email"
+              id="email"
+              variant="outlined"
+              fullWidth
+            />
 
-        <Typography
-          variant="subtitle1"
-          fontWeight={600}
-          component="label"
-          htmlFor="confirm-password"
-          mb="5px"
-          mt="25px"
-        >
-          Confirm Password
-        </Typography>
-        <CustomTextField id="confirm-password" variant="outlined" fullWidth />
-      </Stack>
-      <Button
-        color="primary"
-        variant="contained"
-        size="large"
-        fullWidth
-        component={Link}
-        to="/auth/login"
-      >
-        Sign Up
-      </Button>
-    </Box>
-    {subtitle}
-  </>
-);
+            <Typography
+              variant="subtitle1"
+              fontWeight={600}
+              component="label"
+              htmlFor="password"
+              mb="5px"
+              mt="25px"
+            >
+              Password
+            </Typography>
+            <CustomTextField
+              id="password"
+              name="password"
+              type="password"
+              variant="outlined"
+              fullWidth
+            />
+
+            <Typography
+              variant="subtitle1"
+              fontWeight={600}
+              component="label"
+              htmlFor="confirm-password"
+              mb="5px"
+              mt="25px"
+            >
+              Confirm Password
+            </Typography>
+            <CustomTextField
+              id="confirm-password"
+              name="confirmPassword"
+              type="password"
+              variant="outlined"
+              fullWidth
+            />
+          </Stack>
+          <Button
+            type="submit"
+            color="primary"
+            variant="contained"
+            size="large"
+            fullWidth
+          >
+            Sign Up
+          </Button>
+        </form>
+      </Box>
+      {subtitle}
+    </>
+  );
+};
 
 export default AuthRegister;

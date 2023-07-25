@@ -22,6 +22,7 @@ const Register = Loadable(
   lazy(() => import("../views/authentication/Register"))
 );
 const Login = Loadable(lazy(() => import("../views/authentication/Login")));
+const Logout = Loadable(lazy(() => import("../views/authentication/Logout")));
 
 const Router = [
   {
@@ -44,6 +45,7 @@ const Router = [
       { path: "404", element: <Error /> },
       { path: "/auth/register", element: <Register /> },
       { path: "/auth/login", element: <Login /> },
+      { path: "/auth/logout", element: <Logout /> },
       { path: "*", element: <Navigate to="/auth/404" /> },
     ],
   },

@@ -11,11 +11,10 @@ const GameButton = styled(Button)({
 
 export default function StartGameButton({ user }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [value, setValue] = useState("Dione");
+  const [value, setValue] = useState();
   const navigate = useNavigate();
 
   const handleStartGame = (playerId) => {
-    console.log(playerId);
     navigate(`/game/${playerId}`);
   };
 
@@ -43,9 +42,10 @@ export default function StartGameButton({ user }) {
         keepMounted
         open={confirmOpen}
         onCancel={handleClose}
-        onConfirm={handleStartGame}
+        onConfirm={() => handleStartGame(user.id)}
         value={value}
         title="New Game"
+        confirmBtnText="Start Game"
         content={`Start new game with ${user.name}?`}
       />
     </>

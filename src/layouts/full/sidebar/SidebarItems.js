@@ -19,7 +19,7 @@ const SidebarItems = () => {
           ) : item.gameContext ? (
             <ContextNavItem item={item} key={item.id} pathDirect={pathDirect} />
           ) : (
-            <NavItem item={item} key={item.id} pathDirect={pathDirect} />
+            <NavItem onClick={item.onClick} item={item} key={item.id} pathDirect={pathDirect} />
           )
         )}
       </List>
