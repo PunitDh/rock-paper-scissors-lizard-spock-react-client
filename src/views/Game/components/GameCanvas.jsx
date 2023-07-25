@@ -49,19 +49,19 @@ const GameCanvas = () => {
         ))}
       </ResultContainer>
       <ButtonContainer>
-        <EntityButton onMove={addMove} btnColor="brown">
+        <EntityButton onMove={addMove} btncolor="brown">
           Rock
         </EntityButton>
-        <EntityButton onMove={addMove} btnColor="gray">
+        <EntityButton onMove={addMove} btncolor="gray">
           Paper
         </EntityButton>
-        <EntityButton onMove={addMove} btnColor="silver">
+        <EntityButton onMove={addMove} btncolor="silver">
           Scissors
         </EntityButton>
-        <EntityButton onMove={addMove} btnColor="green">
+        <EntityButton onMove={addMove} btncolor="green">
           Lizard
         </EntityButton>
-        <EntityButton onMove={addMove} btnColor="blue">
+        <EntityButton onMove={addMove} btncolor="blue">
           Spock
         </EntityButton>
       </ButtonContainer>

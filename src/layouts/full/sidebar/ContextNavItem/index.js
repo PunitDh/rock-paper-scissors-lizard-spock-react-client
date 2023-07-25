@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
 // mui imports
 import {
@@ -98,12 +97,6 @@ const ContextNavItem = ({ item, level, pathDirect, onClick }) => {
       </List>
     </>
   );
-};
-
-ContextNavItem.propTypes = {
-  item: PropTypes.object,
-  level: PropTypes.number,
-  pathDirect: PropTypes.any,
 };
 
 export default ContextNavItem;

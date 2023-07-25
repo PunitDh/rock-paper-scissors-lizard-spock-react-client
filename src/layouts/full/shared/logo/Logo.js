@@ -3,7 +3,7 @@ import LogoImage from "src/assets/images/logos/logo.png";
 import { Typography, styled } from "@mui/material";
 import { useTheme } from "@emotion/react";
 
-const LinkStyled = styled(Link)(({ color, hoverColor }) => ({
+const LinkStyled = styled(Link)(({ color, hovercolor }) => ({
   height: "70px",
   width: "100%",
   overflow: "hidden",
@@ -14,7 +14,7 @@ const LinkStyled = styled(Link)(({ color, hoverColor }) => ({
   gap: "0.5rem",
   color,
   "&:hover": {
-    color: hoverColor,
+    color: hovercolor,
   },
 }));
 
@@ -23,7 +23,7 @@ const Logo = () => {
   return (
     <LinkStyled
       color="#5D87FF"
-      hoverColor={theme.palette.text.secondary}
+      hovercolor={theme.palette.text.secondary}
       title="Rock Paper Scissors Lizard Spock"
       to="/"
     >

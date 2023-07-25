@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
 import { Box, styled } from '@mui/material';
@@ -23,12 +22,6 @@ const Scrollbar = (props) => {
       {children}
     </SimpleBarStyle>
   );
-};
-
-Scrollbar.propTypes = {
-  children: PropTypes.node,
-  sx: PropTypes.object,
-  other: PropTypes.any,
 };
 
 export default Scrollbar;

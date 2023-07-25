@@ -8,7 +8,6 @@ import {
   Badge,
   Button,
 } from "@mui/material";
-import PropTypes from "prop-types";
 
 // components
 import Profile from "./Profile";
@@ -39,6 +38,12 @@ const Header = (props) => {
     console.log({ socket });
     socket.emit("new-user", "Punit");
   };
+
+  if (socket) {
+    socket.on("user-registered", (user) => {
+      console.log({ user });
+    });
+  }
 
   return (
     <AppBarStyled position="sticky" color="default">
@@ -88,10 +93,6 @@ const Header = (props) => {
       </ToolbarStyled>
     </AppBarStyled>
   );
-};
-
-Header.propTypes = {
-  sx: PropTypes.object,
 };
 
 export default Header;

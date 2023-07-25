@@ -51,6 +51,18 @@ const AuthRegister = ({ title, subtitle, subtext }) => (
           Password
         </Typography>
         <CustomTextField id="password" variant="outlined" fullWidth />
+
+        <Typography
+          variant="subtitle1"
+          fontWeight={600}
+          component="label"
+          htmlFor="confirm-password"
+          mb="5px"
+          mt="25px"
+        >
+          Confirm Password
+        </Typography>
+        <CustomTextField id="confirm-password" variant="outlined" fullWidth />
       </Stack>
       <Button
         color="primary"

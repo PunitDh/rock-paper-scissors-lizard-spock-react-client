@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
 // mui imports
 import {
@@ -65,12 +64,6 @@ const NavItem = ({ item, level, pathDirect, onClick }) => {
       </ListItemStyled>
     </List>
   );
-};
-
-NavItem.propTypes = {
-  item: PropTypes.object,
-  level: PropTypes.number,
-  pathDirect: PropTypes.any,
 };
 
 export default NavItem;
