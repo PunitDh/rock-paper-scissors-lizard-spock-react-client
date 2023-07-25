@@ -9,7 +9,7 @@ export default function useRequest(message, payload) {
   const [response, setResponse] = useState(null);
 
   useEffect(() => {
-    socket?.emit(message.request, { ...payload, _jwt: token });
+    socket?.emit(message.request, { ...payload, _jwt: token.jwt });
   }, [socket]);
 
   if (socket) {

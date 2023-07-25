@@ -3,7 +3,7 @@ import useToken from "./useToken";
 import useSocket from "./useSocket";
 import { isSuccess } from "src/utils";
 
-const useAuth = () => {
+export default function useAuth () {
   const token = useToken();
   const navigate = useNavigate();
   const socket = useSocket();
@@ -34,5 +34,3 @@ const useAuth = () => {
     },
   };
 };
-
-export default useAuth;

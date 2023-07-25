@@ -11,7 +11,7 @@ import DashboardCard from "../../../../components/shared/DashboardCard";
 import ResponsiveTableCell from "src/components/shared/ResponsiveTableCell";
 import StyledTableCell from "src/components/shared/StyledTableCell";
 import UserRow from "./UserRow";
-import useSocketMessage from "src/hooks/useSocketMessage";
+import { useRequest, useSocketMessage, useToken } from "src/hooks";
 
 const users = [
   {
@@ -54,8 +54,8 @@ const users = [
 
 const OnlineUsers = ({ search }) => {
   const SocketMessage = useSocketMessage();
-  console.log({ SocketMessage });
-  // const request = useRequest(messages)
+  const users = useRequest(SocketMessage.CURRENT_USERS);
+  const token = useToken();
 
   const currentUsers =
     search.length > 0
@@ -85,7 +85,7 @@ const OnlineUsers = ({ search }) => {
             </TableRow>
           </TableHead>
           <TableBody style={{ width: "100%" }}>
-            {currentUsers.map((user) => (
+            {currentUsers?.map((user) => (
               <UserRow key={user.id} user={user} />
             ))}
           </TableBody>

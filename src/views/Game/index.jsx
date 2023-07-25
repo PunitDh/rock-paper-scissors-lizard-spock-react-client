@@ -18,7 +18,6 @@ const ScoreContainer = styled(Container)({
 
 const Game = () => {
   const { id } = useParams();
-  console.log({ id });
   return (
     <PageContainer title={`Game ${id}`}>
       <GameCard title={`Game with {name}`} elevation={9}>
