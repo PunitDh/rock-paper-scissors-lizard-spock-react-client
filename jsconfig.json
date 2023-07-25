@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "baseUrl": "."
+  },
+  "include": ["src/**/*", "src/data/index.js"],
+  "exclude": ["node_modules"]
+}
