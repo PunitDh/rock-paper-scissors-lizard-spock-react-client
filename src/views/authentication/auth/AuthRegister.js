@@ -1,11 +1,8 @@
 import React from "react";
 import { Box, Typography, Button } from "@mui/material";
-
 import { Stack } from "@mui/system";
 import CustomTextField from "../../../components/forms/theme-elements/CustomTextField";
-
-import { isSuccess } from "src/utils";
-import { useAuth } from "src/hooks/useAuth";
+import useAuth from "src/hooks/useAuth";
 
 const AuthRegister = ({ title, subtitle, subtext }) => {
   const auth = useAuth();

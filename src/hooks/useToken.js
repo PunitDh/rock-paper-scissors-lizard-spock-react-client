@@ -1,10 +1,10 @@
 import jwtDecode from "jwt-decode";
 
-export const useToken = () => {
+export default function useToken() {
   const token = localStorage.getItem("rpsls-token");
 
   return {
-    token,
+    jwt: token,
     decoded: token && jwtDecode(token),
     set: (token) => {
       localStorage.setItem("rpsls-token", token);
@@ -13,4 +13,4 @@ export const useToken = () => {
       localStorage.removeItem("rpsls-token");
     },
   };
-};
+}

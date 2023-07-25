@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router";
-import { useToken } from "./useToken";
-import { useSocket } from "./useSocket";
+import useToken from "./useToken";
+import useSocket from "./useSocket";
 import { isSuccess } from "src/utils";
 
-export const useAuth = () => {
+const useAuth = () => {
   const token = useToken();
   const navigate = useNavigate();
   const socket = useSocket();
@@ -34,3 +34,5 @@ export const useAuth = () => {
     },
   };
 };
+
+export default useAuth;

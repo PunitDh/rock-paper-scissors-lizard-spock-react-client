@@ -7,7 +7,6 @@ import {
 } from "@tabler/icons";
 import { currentGames } from "../../../data";
 import { uniqueId } from "lodash";
-import { useAuth, useLogout } from "src/hooks/useAuth";
 
 const Menuitems = [
   {

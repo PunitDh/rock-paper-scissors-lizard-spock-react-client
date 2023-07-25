@@ -14,7 +14,7 @@ import {
 import { IconListCheck, IconMail, IconUser } from "@tabler/icons";
 
 import ProfileImg from "src/assets/images/profile/user-1.jpg";
-import { useToken } from "src/hooks/useToken";
+import { useToken } from "src/hooks";
 
 const Profile = () => {
   const [anchorEl2, setAnchorEl2] = useState(null);

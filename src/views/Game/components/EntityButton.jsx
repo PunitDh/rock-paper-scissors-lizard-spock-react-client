@@ -1,9 +1,6 @@
-import React from "react";
-
 import styled from "@emotion/styled";
 import { Button } from "@mui/material";
-import { useSocket } from "src/hooks/useSocket";
-import { useToken } from "src/hooks/useToken";
+import { useSocket, useToken } from "src/hooks";
 
 const Entity = styled(Button)(({ btncolor }) => ({
   color: btncolor,

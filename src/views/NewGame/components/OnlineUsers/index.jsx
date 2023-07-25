@@ -11,6 +11,7 @@ import DashboardCard from "../../../../components/shared/DashboardCard";
 import ResponsiveTableCell from "src/components/shared/ResponsiveTableCell";
 import StyledTableCell from "src/components/shared/StyledTableCell";
 import UserRow from "./UserRow";
+import useSocketMessage from "src/hooks/useSocketMessage";
 
 const users = [
   {
@@ -52,6 +53,10 @@ const users = [
 ];
 
 const OnlineUsers = ({ search }) => {
+  const SocketMessage = useSocketMessage();
+  console.log({ SocketMessage });
+  // const request = useRequest(messages)
+
   const currentUsers =
     search.length > 0
       ? users.filter((user) =>
