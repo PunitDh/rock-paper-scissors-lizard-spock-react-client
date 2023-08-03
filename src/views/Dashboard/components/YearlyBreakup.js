@@ -1,4 +1,3 @@
-import React from 'react';
 import Chart from 'react-apexcharts';
 import { useTheme } from '@mui/material/styles';
 import { Grid, Stack, Typography, Avatar } from '@mui/material';

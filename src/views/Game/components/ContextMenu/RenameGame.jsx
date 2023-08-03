@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   Button,
   TextField,
@@ -8,12 +7,22 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
+import { useRef } from "react";
+import { useGame } from "src/hooks";
 
-export default function RenameGame({ handleClose, open }) {
+export default function RenameGame({ handleClose, open, gameId }) {
+  const game = useGame();
+  const gameName = useRef();
   const handleRename = (e) => {
     e.preventDefault();
-    handleClose();
+    if (gameName.current) {
+      game.rename({ gameId: gameId, name: gameName.current.value });
+      handleClose();
+    } else {
+      console.error("Failed to set game name");
+    }
   };
+
   return (
     <div>
       <Dialog open={open} onClose={handleClose}>
@@ -31,13 +40,14 @@ export default function RenameGame({ handleClose, open }) {
               type="text"
               fullWidth
               variant="standard"
+              ref={gameName}
             />
           </DialogContent>
           <DialogActions>
-            <Button type="button" onAnimationEnd={handleClose}>
+            <Button type="button" onClick={handleClose}>
               Cancel
             </Button>
-            <Button type="submit" onAnimationEnd={handleRename}>
+            <Button type="button" onAnimationEnd={handleRename}>
               Rename
             </Button>
           </DialogActions>

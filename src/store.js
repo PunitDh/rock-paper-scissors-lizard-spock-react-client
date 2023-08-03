@@ -1,10 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import gameSlice from "./redux/gameSlice";
-import mesageSlice from "./redux/mesageSlice";
+import menuSlice from "./redux/menuSlice";
 
 export default configureStore({
   reducer: {
     game: gameSlice,
-    messages: mesageSlice,
+    menu: menuSlice,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });

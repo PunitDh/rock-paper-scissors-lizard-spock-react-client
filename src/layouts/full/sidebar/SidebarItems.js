@@ -1,27 +1,24 @@
-import React from "react";
-import Menuitems from "./MenuItems";
 import { useLocation } from "react-router";
 import { Box, List } from "@mui/material";
-import NavItem from "./NavItem";
 import NavGroup from "./NavGroup";
-import ContextNavItem from "./ContextNavItem";
+import { useSelector } from "react-redux";
 
 const SidebarItems = () => {
   const { pathname } = useLocation();
   const pathDirect = pathname;
+  const menuItems = useSelector((state) => state.menu);
 
   return (
     <Box sx={{ px: 3 }}>
       <List sx={{ pt: 0 }} className="sidebarNav">
-        {Menuitems.map((item) =>
-          item.subheader ? (
-            <NavGroup item={item} key={item.subheader} />
-          ) : item.gameContext ? (
-            <ContextNavItem item={item} key={item.id} pathDirect={pathDirect} />
-          ) : (
-            <NavItem onClick={item.onClick} item={item} key={item.id} pathDirect={pathDirect} />
-          )
-        )}
+        {Object.keys(menuItems).map((item) => (
+          <NavGroup
+            item={item}
+            key={item}
+            navItems={menuItems[item]}
+            pathDirect={pathDirect}
+          />
+        ))}
       </List>
     </Box>
   );

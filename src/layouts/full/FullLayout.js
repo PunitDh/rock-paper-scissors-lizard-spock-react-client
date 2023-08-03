@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { styled, Container, Box } from "@mui/material";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 import Header from "./Header";
 import Sidebar from "./sidebar/Sidebar";
 import Footer from "./Footer";
 import { useSocket, useToken } from "src/hooks";
 import { useDispatch } from "react-redux";
-import { setMessages } from "src/redux/mesageSlice";
-import { isSuccess } from "src/utils";
+import { Status, isSuccess } from "src/utils";
+import { setCurrentGames } from "src/redux/menuSlice";
+import { setCurrentGame } from "src/redux/gameSlice";
 
 const MainWrapper = styled("div")(() => ({
   display: "flex",
@@ -32,58 +33,46 @@ const FullLayout = () => {
   const socket = useSocket();
   const token = useToken();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    socket?.emit("get-messages", token.jwt);
-  }, [socket]);
-
-  if (socket) {
-    socket.on("messages", (response) =>
+    socket?.emit("get-current-games", { _jwt: token.jwt });
+    socket?.on(Status.UNAUTHORIZED, () => {
+      navigate("/auth/login");
+    });
+    socket?.on("current-games", (response) =>
       isSuccess(response)
-        .then((payload) => dispatch(setMessages(payload)))
+        .then((payload) => dispatch(setCurrentGames(payload)))
         .catch(console.error)
     );
-  }
+    socket?.on("move-played", (response) =>
+      isSuccess(response)
+        .then((rounds) => dispatch(setCurrentGame(rounds)))
+        .catch(console.error)
+    );
+  }, [socket]);
 
   return (
     <MainWrapper className="mainwrapper">
-      {/* ------------------------------------------- */}
-      {/* Sidebar */}
-      {/* ------------------------------------------- */}
       <Sidebar
         isSidebarOpen={isSidebarOpen}
         isMobileSidebarOpen={isMobileSidebarOpen}
         onSidebarClose={() => setMobileSidebarOpen(false)}
       />
-      {/* ------------------------------------------- */}
-      {/* Main Wrapper */}
-      {/* ------------------------------------------- */}
       <PageWrapper className="page-wrapper">
-        {/* ------------------------------------------- */}
-        {/* Header */}
-        {/* ------------------------------------------- */}
         <Header
           toggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
           toggleMobileSidebar={() => setMobileSidebarOpen(true)}
         />
-        {/* ------------------------------------------- */}
-        {/* PageContent */}
-        {/* ------------------------------------------- */}
         <Container
           sx={{
             paddingTop: "20px",
             maxWidth: "1200px",
           }}
         >
-          {/* ------------------------------------------- */}
-          {/* Page Route */}
-          {/* ------------------------------------------- */}
           <Box sx={{ minHeight: "calc(100vh - 170px)" }}>
             <Outlet />
           </Box>
-          {/* ------------------------------------------- */}
-          {/* End Page */}
-          {/* ------------------------------------------- */}
         </Container>
         <Footer />
       </PageWrapper>

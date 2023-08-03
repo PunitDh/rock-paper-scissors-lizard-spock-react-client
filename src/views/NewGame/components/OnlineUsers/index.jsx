@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Typography,
   Box,
@@ -11,56 +11,28 @@ import DashboardCard from "../../../../components/shared/DashboardCard";
 import ResponsiveTableCell from "src/components/shared/ResponsiveTableCell";
 import StyledTableCell from "src/components/shared/StyledTableCell";
 import UserRow from "./UserRow";
-import { useRequest, useSocketMessage, useToken } from "src/hooks";
-
-const users = [
-  {
-    id: "1",
-    name: "Sunil Joshi",
-    post: "Web Designer",
-    pname: "Elite Admin",
-    priority: "Low",
-    pbg: "primary.main",
-    wlRatio: "3.9",
-  },
-  {
-    id: "2",
-    name: "Andrew McDownland",
-    post: "Project Manager",
-    pname: "Real Homes WP Theme",
-    priority: "Medium",
-    pbg: "secondary.main",
-    wlRatio: "24.5",
-  },
-  {
-    id: "3",
-    name: "Christopher Jamil",
-    post: "Project Manager",
-    pname: "MedicalPro WP Theme",
-    priority: "High",
-    pbg: "error.main",
-    wlRatio: "12.8",
-  },
-  {
-    id: "4",
-    name: "Nirav Joshi",
-    post: "Frontend Engineer",
-    pname: "Hosting Press HTML",
-    priority: "Critical",
-    pbg: "success.main",
-    wlRatio: "2.4",
-  },
-];
+import { useSocket, useToken } from "src/hooks";
+import { isSuccess } from "src/utils";
 
 const OnlineUsers = ({ search }) => {
-  const SocketMessage = useSocketMessage();
-  const users = useRequest(SocketMessage.CURRENT_USERS);
+  const socket = useSocket();
   const token = useToken();
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    socket?.emit("get-current-users", { _jwt: token.jwt });
+  }, [socket]);
+
+  socket?.on("current-users", (response) =>
+    isSuccess(response).then(setUsers).catch(console.error)
+  );
 
   const currentUsers =
     search.length > 0
       ? users.filter((user) =>
-          user.name.toLowerCase().includes(search.toLowerCase())
+          `${user.id} ${user.firstName} ${user.lastName}`
+            .toLowerCase()
+            .includes(search.toLowerCase())
         )
       : users;
 

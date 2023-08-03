@@ -1,8 +1,6 @@
 import styled from "@emotion/styled";
-import React from "react";
 import EntityButton from "./EntityButton";
 import { Container } from "./styles";
-import { useSocket } from "src/hooks/useSocket";
 
 const ButtonContainer = styled(Container)({
   height: "20%",

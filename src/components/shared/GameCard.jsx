@@ -9,7 +9,7 @@ const ResponsiveCard = styled(Card)({
   maxWidth: "90vw",
 });
 
-const GameCard = ({ title, children }) => {
+const GameCard = ({ title, children, action }) => {
   return (
     <ResponsiveCard elevation={9}>
       <CardContent>
@@ -23,6 +23,7 @@ const GameCard = ({ title, children }) => {
           <Box>
             <Typography variant="h5">{title}</Typography>
           </Box>
+          {action}
         </Stack>
       </CardContent>
       {children}

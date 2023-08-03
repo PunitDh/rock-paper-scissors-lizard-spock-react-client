@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { Stack } from "@mui/system";
 import CustomTextField from "../../../components/forms/theme-elements/CustomTextField";
@@ -9,11 +8,13 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const { email, password, confirmPassword, firstName, lastName } = e.target;
     const payload = {
-      name: e.target.name.value,
-      email: e.target.email.value,
-      password: e.target.password.value,
-      confirmPassword: e.target.confirmPassword.value,
+      firstName: firstName.value,
+      lastName: lastName.value,
+      email: email.value,
+      password: password.value,
+      confirmPassword: confirmPassword.value,
     };
     auth.register(payload);
   };
@@ -34,14 +35,31 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
               variant="subtitle1"
               fontWeight={600}
               component="label"
-              htmlFor="name"
+              htmlFor="firstName"
               mb="5px"
             >
-              Name
+              First Name
+            </Typography>
+
+            <CustomTextField
+              name="firstName"
+              id="firstName"
+              variant="outlined"
+              fullWidth
+            />
+
+            <Typography
+              variant="subtitle1"
+              fontWeight={600}
+              component="label"
+              htmlFor="lastName"
+              mb="5px"
+            >
+              Last Name
             </Typography>
             <CustomTextField
-              name="name"
-              id="name"
+              name="lastName"
+              id="lastName"
               variant="outlined"
               fullWidth
             />

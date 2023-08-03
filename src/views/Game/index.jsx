@@ -1,31 +1,53 @@
-import React from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useGame } from "src/hooks";
 import { useParams } from "react-router";
 import PageContainer from "src/components/container/PageContainer";
 import GameCard from "src/components/shared/GameCard";
 import styled from "@emotion/styled";
 import { Container } from "./components/styles";
 import PlayButtons from "./components/PlayButtons";
+import ResultTable from "./components/ResultTable";
+import MaxRoundsSelect from "./components/MaxRoundsSelect";
 
 const ResultContainer = styled(Container)({
-  height: "70%",
+  height: "75%",
   flexDirection: "column",
-  overflow: "scroll",
 });
 
 const ScoreContainer = styled(Container)({
-  height: "10%",
+  height: "5%",
 });
 
 const Game = () => {
-  const { id } = useParams();
+  const { gameId } = useParams();
+  const game = useGame();
+  const [maxRounds, setMaxRounds] = useState(3);
+  const { currentGame } = useSelector((state) => state.game);
+
+  useEffect(() => {
+    game.getGame({ gameId });
+  }, [game.socket]);
+
   return (
-    <PageContainer title={`Game ${id}`}>
-      <GameCard title={`Game with {name}`} elevation={9}>
-        <ScoreContainer>Score</ScoreContainer>
-        <ResultContainer>Game results</ResultContainer>
-        <PlayButtons id={id} />
-      </GameCard>
-    </PageContainer>
+    currentGame.id && (
+      <PageContainer title={currentGame.name}>
+        <GameCard
+          title={currentGame.name}
+          action={<MaxRoundsSelect onChange={setMaxRounds} value={maxRounds} />}
+        >
+          <ScoreContainer>Score</ScoreContainer>
+          <ResultContainer>
+            <ResultTable
+              rounds={currentGame.rounds.filter((it) => it.moves.length > 0)}
+              maxRounds={maxRounds}
+              players={currentGame.players}
+            />
+          </ResultContainer>
+          <PlayButtons id={gameId} />
+        </GameCard>
+      </PageContainer>
+    )
   );
 };
 

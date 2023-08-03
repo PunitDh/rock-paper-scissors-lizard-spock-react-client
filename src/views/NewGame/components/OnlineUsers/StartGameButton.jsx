@@ -20,14 +20,13 @@ export default function StartGameButton({ user }) {
   const handleStartGame = (playerId) => {
     const payload = {
       players: [token.decoded.id, playerId],
-      name: `Game ${token.decoded.games.length + 1}`,
     };
     game.create(payload);
   };
 
   useEffect(() => {
     if (game.created) {
-      navigate(`/game/${game.id}`);
+      navigate(`/games/${game.id}`);
     }
   }, [game.created]);
 
@@ -45,7 +44,7 @@ export default function StartGameButton({ user }) {
         variant="contained"
         size="medium"
         disableElevation
-        title={`Start game with ${user.name}`}
+        title={`Start game with ${user.firstName}`}
         onClick={() => setConfirmOpen(true)}
       >
         Start Game
@@ -59,7 +58,7 @@ export default function StartGameButton({ user }) {
         value={value}
         title="New Game"
         confirmBtnText="Start Game"
-        content={`Start new game with ${user.name}?`}
+        content={`Start new game with ${user.firstName}?`}
       />
     </>
   );

@@ -1,14 +1,14 @@
 import styled from "@emotion/styled";
 import { Button } from "@mui/material";
-import { useSocket, useToken } from "src/hooks";
+import { useGame, useToken } from "src/hooks";
 
 const Entity = styled(Button)(({ btncolor }) => ({
   color: btncolor,
 }));
 
 const EntityButton = ({ children, btncolor, gameId }) => {
-  const socket = useSocket();
   const token = useToken();
+  const game = useGame();
 
   const handleMove = () => {
     const payload = {
@@ -16,16 +16,9 @@ const EntityButton = ({ children, btncolor, gameId }) => {
       move: children,
       gameId,
     };
-    if (socket) {
-      socket.emit("play-move", payload);
-    }
-  };
 
-  if (socket) {
-    socket.on("move-played", (payload) => {
-      console.log(payload);
-    });
-  }
+    game.playMove(payload);
+  };
 
   return (
     <Entity

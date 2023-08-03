@@ -1,12 +1,11 @@
 import { TableRow, Typography } from "@mui/material";
-import React from "react";
 import ResponsiveTableCell from "src/components/shared/ResponsiveTableCell";
 import StyledTableCell from "src/components/shared/StyledTableCell";
 import StartGameButton from "./StartGameButton";
 
 const UserRow = ({ user }) => {
   return (
-    <TableRow key={user.name}>
+    <TableRow key={user.firstName + user.lastName}>
       <ResponsiveTableCell>
         <Typography
           sx={{
@@ -17,7 +16,9 @@ const UserRow = ({ user }) => {
           {user.id}
         </Typography>
       </ResponsiveTableCell>
-      <StyledTableCell>{user.name}</StyledTableCell>
+      <StyledTableCell>
+        {user.firstName} {user.lastName}
+      </StyledTableCell>
       <StyledTableCell>
         <StartGameButton user={user} />
       </StyledTableCell>

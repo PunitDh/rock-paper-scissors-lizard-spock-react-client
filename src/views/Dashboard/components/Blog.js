@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { CardContent, Typography, Grid, Rating, Tooltip, Fab } from '@mui/material';
 import img1 from 'src/assets/images/products/s4.jpg';

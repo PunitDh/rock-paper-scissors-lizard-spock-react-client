@@ -3,15 +3,15 @@ import { createSlice } from "@reduxjs/toolkit";
 export const gameSlice = createSlice({
   name: "game",
   initialState: {
-    currentGames: [],
+    currentGame: {},
   },
   reducers: {
-    setCurrentGames: (state, action) => {
-      state.currentGames = action.payload;
+    setCurrentGame: (state, action) => {
+      state.currentGame = action.payload;
     },
   },
 });
 
-export const { setCurrentGames } = gameSlice.actions;
+export const { setCurrentGame } = gameSlice.actions;
 
 export default gameSlice.reducer;

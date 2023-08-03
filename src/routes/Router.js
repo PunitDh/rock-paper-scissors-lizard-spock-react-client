@@ -1,4 +1,4 @@
-import React, { lazy } from "react";
+import { lazy } from "react";
 import { Navigate } from "react-router-dom";
 import Loadable from "../layouts/full/shared/loadable/Loadable";
 
@@ -29,10 +29,10 @@ const Router = [
     path: "/",
     element: <FullLayout />,
     children: [
-      { path: "/", element: <Navigate to="/dashboard" /> },
+      { path: "/", element: <Navigate to="/games" /> },
       { path: "/dashboard", exact: true, element: <Dashboard /> },
-      { path: "/game", exact: true, element: <NewGame /> },
-      { path: "/game/:id", exact: true, element: <Game /> },
+      { path: "/games", exact: true, element: <NewGame /> },
+      { path: "/games/:gameId", exact: true, element: <Game /> },
       { path: "/ui/typography", exact: true, element: <TypographyPage /> },
       { path: "/ui/shadow", exact: true, element: <Shadow /> },
       { path: "*", element: <Navigate to="/auth/404" /> },

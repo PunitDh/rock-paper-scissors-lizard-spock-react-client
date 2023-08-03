@@ -13,7 +13,6 @@ const Menuitems = [
     navlabel: true,
     subheader: "Home",
   },
-
   {
     id: uniqueId(),
     title: "Dashboard",
@@ -24,7 +23,7 @@ const Menuitems = [
     id: uniqueId(),
     title: "New Game",
     icon: IconDeviceGamepad2,
-    href: "/game",
+    href: "/games",
   },
   {
     navlabel: true,
