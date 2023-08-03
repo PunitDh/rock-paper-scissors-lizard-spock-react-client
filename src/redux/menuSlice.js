@@ -49,12 +49,12 @@ export const menuSlice = createSlice({
   name: "menu",
   initialState: {
     Home: [
-      {
-        id: uniqueId(),
-        title: "Dashboard",
-        icon: IconLayoutDashboard,
-        href: "/dashboard",
-      },
+      // {
+      //   id: uniqueId(),
+      //   title: "Dashboard",
+      //   icon: IconLayoutDashboard,
+      //   href: "/dashboard",
+      // },
       {
         id: uniqueId(),
         title: "New Game",

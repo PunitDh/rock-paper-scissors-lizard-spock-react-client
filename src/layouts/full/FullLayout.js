@@ -47,7 +47,7 @@ const FullLayout = () => {
     );
     socket?.on("move-played", (response) =>
       isSuccess(response)
-        .then((rounds) => dispatch(setCurrentGame(rounds)))
+        .then((game) => dispatch(setCurrentGame(game)))
         .catch(console.error)
     );
   }, [socket]);

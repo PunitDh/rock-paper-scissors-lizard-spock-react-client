@@ -8,10 +8,13 @@ import { useNavigate } from "react-router";
 
 function getGame(request, socket, createRequest, dispatch, navigate) {
   socket?.emit("load-game", createRequest(request));
-  socket?.on("game-loaded", (response) =>
-    isSuccess(response)
-      .then((payload) => dispatch(setCurrentGame(payload)))
-      .catch(() => navigate("/games"))
+  socket?.on(
+    "game-loaded",
+    (response) =>
+      isSuccess(response)
+        .then((payload) => dispatch(setCurrentGame(payload)))
+        .catch(console.error)
+    // .catch(() => navigate("/games"))
   );
 }
 
@@ -57,14 +60,14 @@ export default function useGame() {
     },
     playMove: (request) => {
       socket.emit("play-move", createRequest(request));
-      socket.once("move-played", (response) =>
+      socket.on("move-played", (response) => {
         isSuccess(response)
           .then((payload) => {
             dispatch(setCurrentGame(payload));
             setId(payload.id);
           })
-          .catch(console.error)
-      );
+          .catch(console.error);
+      });
     },
   };
 }
