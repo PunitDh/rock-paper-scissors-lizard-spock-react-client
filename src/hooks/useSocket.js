@@ -1,16 +1,6 @@
-import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import { useContext } from "react";
+import SocketContext from "src/context/SocketContext";
 
 export default function useSocket() {
-  const [socket, setSocket] = useState();
-
-  useEffect(() => {
-    const s = io(process.env.REACT_APP_SERVER_URL, {
-      transports: ["websocket", "polling", "flashsocket"],
-    });
-    setSocket(s);
-    return () => s.disconnect();
-  }, []);
-
-  return socket;
+  return useContext(SocketContext);
 }

@@ -3,7 +3,7 @@ import useToken from "./useToken";
 import useSocket from "./useSocket";
 import { isSuccess } from "src/utils";
 
-export default function useAuth () {
+export default function useAuth() {
   const token = useToken();
   const navigate = useNavigate();
   const socket = useSocket();
@@ -33,4 +33,4 @@ export default function useAuth () {
       navigate("/auth/login");
     },
   };
-};
+}

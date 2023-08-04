@@ -27,7 +27,7 @@ const Game = () => {
 
   useEffect(() => {
     game.getGame({ gameId });
-  }, [game.socket]);
+  }, [game.socket, gameId]);
 
   return (
     currentGame.id && (
