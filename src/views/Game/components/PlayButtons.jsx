@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import EntityButton from "./EntityButton";
 import { Container } from "./styles";
+import { entities } from "src/data";
 
 const ButtonContainer = styled(Container)({
   height: "20%",
@@ -12,21 +13,14 @@ const ButtonContainer = styled(Container)({
 const PlayButtons = ({ id }) => {
   return (
     <ButtonContainer>
-      <EntityButton gameId={id} btncolor="brown">
-        Rock
-      </EntityButton>
-      <EntityButton gameId={id} btncolor="gray">
-        Paper
-      </EntityButton>
-      <EntityButton gameId={id} btncolor="silver">
-        Scissors
-      </EntityButton>
-      <EntityButton gameId={id} btncolor="green">
-        Lizard
-      </EntityButton>
-      <EntityButton gameId={id} btncolor="blue">
-        Spock
-      </EntityButton>
+      {entities.map((entity) => (
+        <EntityButton
+          key={entity.name}
+          gameId={id}
+          btncolor={entity.color}
+          entity={entity.name}
+        />
+      ))}
     </ButtonContainer>
   );
 };

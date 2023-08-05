@@ -210,6 +210,14 @@ const avatars = [
   { id: 14, image: woman },
 ];
 
+const entities = [
+  { color: "brown", name: "Rock" },
+  { color: "gray", name: "Paper" },
+  { color: "silver", name: "Scissors" },
+  { color: "green", name: "Lizard" },
+  { color: "blue", name: "Spock" },
+];
+
 const currentGames = [
   {
     id: uniqueId(),
@@ -220,4 +228,4 @@ const currentGames = [
   },
 ];
 
-export { currentGames, avatars };
+export { currentGames, avatars, entities };

@@ -7,7 +7,7 @@ export const menuSlice = createSlice({
   name: "player",
   initialState: {
     token: localStorage.getItem(tokenKey),
-    decoded: jwtDecode(localStorage.getItem(tokenKey)),
+    decoded: {},
   },
   reducers: {
     setToken: (state, action) => {

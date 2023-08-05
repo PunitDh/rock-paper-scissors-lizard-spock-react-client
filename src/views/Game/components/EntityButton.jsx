@@ -6,14 +6,14 @@ const Entity = styled(Button)(({ btncolor }) => ({
   color: btncolor,
 }));
 
-const EntityButton = ({ children, btncolor, gameId }) => {
+const EntityButton = ({ entity, btncolor, gameId }) => {
   const token = useToken();
   const game = useGame();
 
   const handleMove = () => {
     const payload = {
       playerId: token.decoded.id,
-      move: children,
+      move: entity,
       gameId,
     };
 
@@ -25,9 +25,9 @@ const EntityButton = ({ children, btncolor, gameId }) => {
       onClick={handleMove}
       variant="outlined"
       btncolor={btncolor}
-      title={`Play ${children}`}
+      title={`Play ${entity}`}
     >
-      {children}
+      {entity}
     </Entity>
   );
 };

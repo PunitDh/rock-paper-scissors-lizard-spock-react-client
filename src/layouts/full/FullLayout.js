@@ -50,7 +50,7 @@ const FullLayout = () => {
         .then((game) => dispatch(setCurrentGame(game)))
         .catch(console.error)
     );
-  }, [socket, game, token.jwt, dispatch, navigate]);
+  }, [token.jwt]);
 
   return (
     <MainWrapper className="mainwrapper">
