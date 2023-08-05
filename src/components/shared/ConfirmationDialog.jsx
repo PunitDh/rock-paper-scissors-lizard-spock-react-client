@@ -4,8 +4,9 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  TextField,
 } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const ConfirmationDialog = ({
   onConfirm,
@@ -47,6 +48,7 @@ const ConfirmationDialog = ({
     >
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>{content}</DialogContent>
+        
       <DialogActions>
         <Button autoFocus onClick={onCancel}>
           Cancel

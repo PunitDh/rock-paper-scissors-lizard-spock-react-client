@@ -17,10 +17,10 @@ import {
   IconChessRook,
   IconDeviceGamepad2,
   IconGoGame,
-  IconLayoutDashboard,
   IconLogin,
   IconLogout,
   IconTrophy,
+  IconUser,
   IconUserPlus,
 } from "@tabler/icons";
 import { uniqueId, sample } from "lodash";
@@ -78,6 +78,12 @@ export const menuSlice = createSlice({
       },
     ],
     Settings: [
+      {
+        id: uniqueId(),
+        title: "Profile",
+        icon: IconUser,
+        href: "/profile",
+      },
       {
         id: uniqueId(),
         title: "Logout",

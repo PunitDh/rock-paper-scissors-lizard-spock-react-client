@@ -6,18 +6,6 @@ import { setCurrentGame } from "src/redux/gameSlice";
 import useToken from "./useToken";
 import { useNavigate } from "react-router";
 
-function getGame(request, socket, createRequest, dispatch, navigate) {
-  socket?.emit("load-game", createRequest(request));
-  socket?.on(
-    "game-loaded",
-    (response) =>
-      isSuccess(response)
-        .then((payload) => dispatch(setCurrentGame(payload)))
-        .catch(console.error)
-    // .catch(() => navigate("/games"))
-  );
-}
-
 export default function useGame() {
   const socket = useSocket();
   const [created, setCreated] = useState(false);
@@ -48,15 +36,22 @@ export default function useGame() {
     id,
     socket,
     rename: (request) => {
-      console.log(createRequest(request));
-      // socket.emit("rename-game", createRequest(request));
-      // socket.once("game-renamed", console.log);
+      socket.emit("rename-game", createRequest(request));
+      socket.once("game-renamed", console.log);
     },
     close: (gameId) => {
       socket.emit("close-game", gameId);
     },
     getGame: (request) => {
-      getGame(request, socket, createRequest, dispatch, navigate);
+      socket.emit("load-game", createRequest(request));
+      socket.on(
+        "game-loaded",
+        (response) =>
+          isSuccess(response)
+            .then((payload) => dispatch(setCurrentGame(payload)))
+            .catch(console.error)
+        // .catch(() => navigate("/games"))
+      );
     },
     playMove: (request) => {
       socket.emit("play-move", createRequest(request));

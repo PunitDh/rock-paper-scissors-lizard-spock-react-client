@@ -27,7 +27,7 @@ const Game = () => {
 
   useEffect(() => {
     game.getGame({ gameId });
-  }, [game.socket, gameId]);
+  }, [game, gameId]);
 
   return (
     currentGame.id && (
@@ -39,7 +39,7 @@ const Game = () => {
           <ScoreContainer>Score</ScoreContainer>
           <ResultContainer>
             <ResultTable
-              rounds={currentGame.rounds.filter((it) => it.moves.length > 0)}
+              rounds={currentGame.rounds?.filter((it) => it.moves.length > 0)}
               maxRounds={maxRounds}
               players={currentGame.players}
             />

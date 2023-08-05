@@ -12,6 +12,7 @@ const BlankLayout = Loadable(
 const Dashboard = Loadable(lazy(() => import("../views/Dashboard")));
 const NewGame = Loadable(lazy(() => import("../views/NewGame")));
 const Game = Loadable(lazy(() => import("../views/Game")));
+const Profile = Loadable(lazy(() => import("../views/Profile")));
 
 const TypographyPage = Loadable(
   lazy(() => import("../views/utilities/TypographyPage"))
@@ -33,6 +34,7 @@ const Router = [
       { path: "/dashboard", exact: true, element: <Dashboard /> },
       { path: "/games", exact: true, element: <NewGame /> },
       { path: "/games/:gameId", exact: true, element: <Game /> },
+      { path: "/profile", exact: true, element: <Profile /> },
       { path: "/ui/typography", exact: true, element: <TypographyPage /> },
       { path: "/ui/shadow", exact: true, element: <Shadow /> },
       { path: "*", element: <Navigate to="/auth/404" /> },

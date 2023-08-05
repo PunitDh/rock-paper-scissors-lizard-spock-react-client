@@ -2,6 +2,20 @@
 // import img2 from "../assets/images/profile/user-2.jpg";
 // import img3 from "../assets/images/profile/user-3.jpg";
 // import img4 from "../assets/images/profile/user-4.jpg";
+import astronaut from "../assets/images/profile/astronaut.png";
+import bear from "../assets/images/profile/bear.png";
+import cat from "../assets/images/profile/cat.png";
+import dog from "../assets/images/profile/dog.png";
+import hacker from "../assets/images/profile/hacker.png";
+import happyMan from "../assets/images/profile/happy-man.png";
+import manWinking from "../assets/images/profile/man-winking.png";
+import man from "../assets/images/profile/man.png";
+import panda from "../assets/images/profile/panda.png";
+import prideFemale from "../assets/images/profile/pride-female.png";
+import rabbit from "../assets/images/profile/rabbit.png";
+import user1 from "../assets/images/profile/user-1.jpg";
+import winkingFemale from "../assets/images/profile/winking-female.png";
+import woman from "../assets/images/profile/woman.png";
 
 import { IconTypography } from "@tabler/icons";
 import { uniqueId } from "lodash";
@@ -179,6 +193,23 @@ import { uniqueId } from "lodash";
 //   },
 // ];
 
+const avatars = [
+  { id: 1, image: astronaut },
+  { id: 2, image: bear },
+  { id: 3, image: cat },
+  { id: 4, image: dog },
+  { id: 5, image: hacker },
+  { id: 6, image: happyMan },
+  { id: 7, image: manWinking },
+  { id: 8, image: man },
+  { id: 9, image: panda },
+  { id: 10, image: prideFemale },
+  { id: 11, image: rabbit },
+  { id: 12, image: user1 },
+  { id: 13, image: winkingFemale },
+  { id: 14, image: woman },
+];
+
 const currentGames = [
   {
     id: uniqueId(),
@@ -189,4 +220,4 @@ const currentGames = [
   },
 ];
 
-export { currentGames };
+export { currentGames, avatars };

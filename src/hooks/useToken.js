@@ -1,17 +1,15 @@
 import jwtDecode from "jwt-decode";
+import { useDispatch, useSelector } from "react-redux";
+import { clearToken, setToken } from "src/redux/playerSlice";
 
 export default function useToken() {
-  const tokenKey = "rpsls-token";
-  const token = localStorage.getItem(tokenKey);
+  const { token } = useSelector((state) => state.player);
+  const dispatch = useDispatch();
 
   return {
     jwt: token,
     decoded: token && jwtDecode(token),
-    set: (token) => {
-      localStorage.setItem(tokenKey, token);
-    },
-    clear: () => {
-      localStorage.removeItem(tokenKey);
-    },
+    set: (token) => dispatch(setToken(token)),
+    clear: () => dispatch(clearToken()),
   };
 }

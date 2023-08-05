@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
-import useAuth from "src/hooks/useAuth";
+import { useEffect } from "react";
+import usePlayer from "src/hooks/usePlayer";
 
 const Logout = () => {
-  const auth = useAuth();
+  const player = usePlayer();
 
   useEffect(() => {
-    auth.logout();
-  }, []);
+    player.logout();
+  }, [player]);
 
   return <div></div>;
 };

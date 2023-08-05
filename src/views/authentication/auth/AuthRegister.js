@@ -1,10 +1,10 @@
 import { Box, Typography, Button } from "@mui/material";
 import { Stack } from "@mui/system";
 import CustomTextField from "../../../components/forms/theme-elements/CustomTextField";
-import useAuth from "src/hooks/useAuth";
+import usePlayer from "src/hooks/usePlayer";
 
 const AuthRegister = ({ title, subtitle, subtext }) => {
-  const auth = useAuth();
+  const player = usePlayer();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,7 +16,7 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
       password: password.value,
       confirmPassword: confirmPassword.value,
     };
-    auth.register(payload);
+    player.register(payload);
   };
 
   return (

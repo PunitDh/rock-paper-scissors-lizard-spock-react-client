@@ -1,6 +1,3 @@
-import { IconTypography } from "@tabler/icons";
-import { uniqueId } from "lodash";
-
 export const Status = {
   SUCCESS: "success",
   ERROR: "error",
@@ -13,14 +10,4 @@ export function isSuccess(response) {
       ? resolve(response.payload)
       : reject(response.payload);
   });
-}
-
-export function gameToNavItemMapper(game) {
-  return {
-    id: uniqueId(),
-    title: game.name,
-    icon: IconTypography,
-    href: `/games/${game.id}`,
-    gameContext: true,
-  };
 }

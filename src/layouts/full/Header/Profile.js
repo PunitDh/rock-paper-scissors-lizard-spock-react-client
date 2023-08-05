@@ -10,16 +10,22 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-
-import { IconListCheck, IconMail, IconUser } from "@tabler/icons";
-
+import {
+  IconListCheck,
+  IconMail,
+  IconUser,
+  IconUserCheck,
+} from "@tabler/icons";
 import ProfileImg from "src/assets/images/profile/user-1.jpg";
 import { useToken } from "src/hooks";
+import { avatars } from "src/data";
 
 const Profile = () => {
   const [anchorEl2, setAnchorEl2] = useState(null);
   const token = useToken();
   const navigate = useNavigate();
+  const profileImage =
+    avatars.find((it) => it.id === token.decoded.avatar)?.image || ProfileImg;
 
   const handleClick2 = (event) => {
     setAnchorEl2(event.currentTarget);
@@ -50,8 +56,8 @@ const Profile = () => {
         onClick={handleClick2}
       >
         <Avatar
-          src={ProfileImg}
-          alt={ProfileImg}
+          src={profileImage}
+          alt={String(token.decoded.avatar)}
           sx={{
             width: 35,
             height: 35,
@@ -75,6 +81,14 @@ const Profile = () => {
           },
         }}
       >
+        <MenuItem>
+          <ListItemIcon>
+            <IconUserCheck width={20} />
+          </ListItemIcon>
+          <ListItemText>
+            {token.decoded.firstName} {token.decoded.lastName}
+          </ListItemText>
+        </MenuItem>
         <MenuItem>
           <ListItemIcon>
             <IconUser width={20} />

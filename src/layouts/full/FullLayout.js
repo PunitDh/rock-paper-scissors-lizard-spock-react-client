@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { styled, Container, Box } from "@mui/material";
 import { Outlet, useNavigate } from "react-router-dom";
-
 import Header from "./Header";
 import Sidebar from "./sidebar/Sidebar";
 import Footer from "./Footer";
-import { useSocket, useToken } from "src/hooks";
+import { useGame, useSocket, useToken } from "src/hooks";
 import { useDispatch } from "react-redux";
 import { Status, isSuccess } from "src/utils";
-import { setCurrentGames } from "src/redux/menuSlice";
 import { setCurrentGame } from "src/redux/gameSlice";
+import { setCurrentGames } from "src/redux/menuSlice";
 
 const MainWrapper = styled("div")(() => ({
   display: "flex",
@@ -31,26 +30,27 @@ const FullLayout = () => {
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   const socket = useSocket();
+  const game = useGame();
   const token = useToken();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    socket?.emit("get-current-games", { _jwt: token.jwt });
-    socket?.on(Status.UNAUTHORIZED, () => {
-      navigate("/auth/login");
-    });
-    socket?.on("current-games", (response) =>
+    socket.emit("get-current-games", { _jwt: token.jwt });
+    socket.once("current-games", (response) =>
       isSuccess(response)
         .then((payload) => dispatch(setCurrentGames(payload)))
         .catch(console.error)
     );
-    socket?.on("move-played", (response) =>
+    socket.on(Status.UNAUTHORIZED, () => {
+      navigate("/auth/login");
+    });
+    socket.on("move-played", (response) =>
       isSuccess(response)
         .then((game) => dispatch(setCurrentGame(game)))
         .catch(console.error)
     );
-  }, [socket]);
+  }, [socket, game, token.jwt, dispatch, navigate]);
 
   return (
     <MainWrapper className="mainwrapper">

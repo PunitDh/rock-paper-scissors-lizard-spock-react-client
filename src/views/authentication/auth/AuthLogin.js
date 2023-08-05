@@ -9,10 +9,10 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import CustomTextField from "../../../components/forms/theme-elements/CustomTextField";
-import useAuth from "src/hooks/useAuth";
+import usePlayer from "src/hooks/usePlayer";
 
 const AuthLogin = ({ title, subtitle, subtext }) => {
-  const auth = useAuth();
+  const player = usePlayer();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,7 +20,7 @@ const AuthLogin = ({ title, subtitle, subtext }) => {
       email: e.target.email.value,
       password: e.target.password.value,
     };
-    auth.login(payload);
+    player.login(payload);
   };
 
   return (

@@ -14,12 +14,12 @@ function App() {
       transports: ["websocket", "polling", "flashsocket"],
     });
     setSocket(s);
-    console.log("socket saved");
     return () => s.disconnect();
   }, []);
 
   const routing = useRoutes(Router);
   const theme = baselightTheme;
+
   return (
     <ThemeProvider theme={theme}>
       <SocketContext.Provider value={socket}>

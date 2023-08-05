@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Typography,
   Box,
@@ -20,10 +20,10 @@ const OnlineUsers = ({ search }) => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    socket?.emit("get-current-users", { _jwt: token.jwt });
+    socket.emit("get-current-users", { _jwt: token.jwt });
   }, [socket]);
 
-  socket?.on("current-users", (response) =>
+  socket.on("current-users", (response) =>
     isSuccess(response).then(setUsers).catch(console.error)
   );
 

@@ -6,16 +6,15 @@ import {
   Stack,
   IconButton,
   Badge,
-  Button,
 } from "@mui/material";
 
 // components
 import Profile from "./Profile";
 import { IconBellRinging, IconMenu } from "@tabler/icons";
+import { useToken } from "src/hooks";
 
-const Header = (props) => {
-  
-
+const Header = ({ toggleMobileSidebar }) => {
+  const token = useToken();
   const AppBarStyled = styled(AppBar)(({ theme }) => ({
     boxShadow: "none",
     background: theme.palette.background.paper,
@@ -36,7 +35,7 @@ const Header = (props) => {
         <IconButton
           color="inherit"
           aria-label="menu"
-          onClick={props.toggleMobileSidebar}
+          onClick={toggleMobileSidebar}
           sx={{
             display: {
               lg: "none",
@@ -65,13 +64,10 @@ const Header = (props) => {
         </IconButton>
         <Box flexGrow={1} />
         <Stack spacing={1} direction="row" alignItems="center">
-          <Button
-            variant="contained"
-            color="primary"
-            type="button"
-          >
+          {/* <Button variant="contained" color="primary" type="button">
             Start New Game
-          </Button>
+          </Button> */}
+          {token.decoded.firstName} {token.decoded.lastName}
           <Profile />
         </Stack>
       </ToolbarStyled>
