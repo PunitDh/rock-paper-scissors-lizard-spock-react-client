@@ -2,7 +2,11 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { useNotification, usePlayer, useSocket, useToken } from "src/hooks";
-import { setCurrentGame, setCurrentUsers } from "src/redux/gameSlice";
+import {
+  setCurrentGame,
+  setCurrentUsers,
+  setRecentGames,
+} from "src/redux/gameSlice";
 import { setCurrentGames } from "src/redux/menuSlice";
 import { Status, isSuccess } from "src/utils";
 import { SocketResponse } from "src/utils/constants";
@@ -67,6 +71,11 @@ const SocketListeners = () => {
           dispatch(setCurrentGame(game));
           navigate(`/games/${game.id}`);
         })
+        .catch(notification.error)
+    );
+    socket.on(SocketResponse.RECENT_GAMES_LOADED, (response) =>
+      isSuccess(response)
+        .then((game) => dispatch(setRecentGames(game)))
         .catch(notification.error)
     );
 

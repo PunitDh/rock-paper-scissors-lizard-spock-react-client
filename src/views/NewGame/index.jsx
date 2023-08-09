@@ -21,7 +21,7 @@ const NewGame = () => {
           <Grid item xs={12} lg={4}>
             <RecentGames />
           </Grid>
-          <Grid item xs={12}></Grid>
+          
         </Grid>
       </Box>
     </PageContainer>

@@ -9,6 +9,8 @@ import { Container } from "./components/styles";
 import PlayButtons from "./components/PlayButtons";
 import ResultTable from "./components/ResultTable";
 import GameActions from "./components/GameActions";
+import { calculateScore } from "src/utils";
+import { Bold } from "src/components/shared/styles";
 
 const ResultContainer = styled(Container)({
   height: "75%",
@@ -29,6 +31,14 @@ const Game = () => {
     game.getGame({ gameId });
   }, [gameId]);
 
+  const score = currentGame.id && calculateScore(currentGame);
+
+  const playerScores =
+    currentGame.id &&
+    Object.entries(score)
+      .map(([player, score]) => `${player}: ${score}`)
+      .join(", ");
+
   return (
     currentGame.id && (
       <PageContainer title={currentGame.name}>
@@ -42,7 +52,9 @@ const Game = () => {
             />
           }
         >
-          <ScoreContainer>Score</ScoreContainer>
+          <ScoreContainer score={score}>
+            <Bold>Score:</Bold> {playerScores}
+          </ScoreContainer>
           <ResultContainer>
             <ResultTable
               rounds={currentGame.rounds?.filter((it) => it.moves.length > 0)}

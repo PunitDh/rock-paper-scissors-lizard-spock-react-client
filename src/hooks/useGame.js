@@ -25,5 +25,7 @@ export default function useGame() {
       socket.emit(SocketRequest.RESET_GAME_ROUNDS, createRequest(request)),
     getCurrentUsers: (request) =>
       socket.emit(SocketRequest.LOAD_CURRENT_USERS, createRequest(request)),
+    getRecentGames: (request) =>
+      socket.emit(SocketRequest.LOAD_RECENT_GAMES, createRequest(request)),
   };
 }

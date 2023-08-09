@@ -11,3 +11,19 @@ export function isSuccess(response) {
       : reject(response.payload);
   });
 }
+
+export function calculateScore(game) {
+  const score = {};
+
+  game.players.forEach((player) => {
+    score[player.firstName] = game.rounds.filter(
+      (round) => round.winner.playerId === player.id
+    ).length;
+  });
+
+  score.Ties = game.rounds.filter(
+    (round) => round.winner.method?.toLowerCase() === "tie"
+  ).length;
+
+  return score;
+}
