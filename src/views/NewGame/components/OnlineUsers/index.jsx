@@ -6,22 +6,21 @@ import {
   TableBody,
   TableHead,
   TableRow,
+  Tooltip,
 } from "@mui/material";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import ResponsiveTableCell from "src/components/shared/ResponsiveTableCell";
 import StyledTableCell from "src/components/shared/StyledTableCell";
 import UserRow from "./UserRow";
-import { useSocket, useToken } from "src/hooks";
+import { useGame } from "src/hooks";
 import { useSelector } from "react-redux";
-import { SocketRequest } from "src/utils/constants";
 
 const OnlineUsers = ({ search }) => {
-  const socket = useSocket();
-  const token = useToken();
+  const game = useGame();
   const { currentUsers } = useSelector((state) => state.game);
 
   useEffect(() => {
-    socket.emit(SocketRequest.LOAD_CURRENT_USERS, { _jwt: token.jwt });
+    game.getCurrentUsers();
   }, []);
 
   const currentUsersFiltered =
@@ -39,16 +38,18 @@ const OnlineUsers = ({ search }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <ResponsiveTableCell>
+              {/* <ResponsiveTableCell>
                 <Typography variant="subtitle2" fontWeight={600}>
                   Id
                 </Typography>
-              </ResponsiveTableCell>
+              </ResponsiveTableCell> */}
               <StyledTableCell>Name</StyledTableCell>
               <StyledTableCell>Action</StyledTableCell>
               <ResponsiveTableCell align="right">
                 <Typography variant="subtitle2" fontWeight={600}>
-                  W/L Ratio
+                  <Tooltip title="Win / loss ratio">
+                    <span>W/L Ratio</span>
+                  </Tooltip>
                 </Typography>
               </ResponsiveTableCell>
             </TableRow>

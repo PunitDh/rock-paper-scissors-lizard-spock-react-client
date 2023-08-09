@@ -1,12 +1,13 @@
 import styled from "@emotion/styled";
 import DashboardCard from "../../../../components/shared/DashboardCard";
-import { Box, Button } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
 import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
 import { useState } from "react";
 import DialogContent from "./DialogContent";
 import { usePlayer } from "src/hooks";
+import { TitledButton } from "src/components/shared/styles";
 
-const RedButton = styled(Button)({
+const RedButton = styled(TitledButton)({
   backgroundColor: "red",
   "&:hover": {
     backgroundColor: "darkred",
@@ -43,13 +44,14 @@ const DeleteProfile = () => {
         onConfirm={handleSubmit}
         onCancel={handleClose}
         value={value}
-        title={"Delete Profile"}
-        confirmBtnText={"Delete Permanently"}
+        title="Delete Profile"
+        confirmBtnText="Delete Permanently"
         content={DialogContent({ password, setPassword })}
         open={confirm}
       />
       <Box>
         <RedButton
+          title="Permanently delete your profile"
           type="button"
           color="primary"
           variant="contained"

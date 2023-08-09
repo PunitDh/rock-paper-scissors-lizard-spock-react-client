@@ -23,5 +23,7 @@ export default function useGame() {
       socket.emit(SocketRequest.PLAY_MOVE, createRequest(request)),
     resetRounds: (request) =>
       socket.emit(SocketRequest.RESET_GAME_ROUNDS, createRequest(request)),
+    getCurrentUsers: (request) =>
+      socket.emit(SocketRequest.LOAD_CURRENT_USERS, createRequest(request)),
   };
 }

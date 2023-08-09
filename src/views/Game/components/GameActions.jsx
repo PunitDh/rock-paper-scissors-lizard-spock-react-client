@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import MaxRoundsSelect from "./MaxRoundsSelect";
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 import { useGame } from "src/hooks";
 import { FlexBox } from "src/components/shared/styles";
 import { IconEraser } from "@tabler/icons";
@@ -26,15 +26,16 @@ const GameActions = ({ onMaxRoundsChange, maxRounds, gameId }) => {
         content="Are you sure you want to reset all rounds?"
         confirmBtnText="Reset"
       />
-      <Button
-        variant="contained"
-        size="medium"
-        disableElevation
-        title={`Reset rounds in this game`}
-        onClick={() => setConfirmReset(true)}
-      >
-        <IconEraser />
-      </Button>
+      <Tooltip title="Reset rounds in this game">
+        <Button
+          variant="contained"
+          size="medium"
+          disableElevation
+          onClick={() => setConfirmReset(true)}
+        >
+          <IconEraser />
+        </Button>
+      </Tooltip>
       <MaxRoundsSelect onChange={onMaxRoundsChange} value={maxRounds} />
     </FlexBox>
   );

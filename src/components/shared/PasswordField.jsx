@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Password, TextFields } from "@mui/icons-material";
-import { TextField } from "@mui/material";
+import { TextField, Tooltip } from "@mui/material";
 import { useState } from "react";
 
 const Container = styled.div({
@@ -27,12 +27,11 @@ const PasswordField = (props) => {
   return (
     <Container>
       <StyledTextField type={show ? "text" : "password"} {...props} />
-      <Icon
-        title={show ? "Hide password" : "Show password"}
-        onClick={() => setShow((show) => !show)}
-      >
-        {show ? <TextFields /> : <Password />}
-      </Icon>
+      <Tooltip title={show ? "Hide password" : "Show password"}>
+        <Icon onClick={() => setShow((show) => !show)}>
+          {show ? <TextFields /> : <Password />}
+        </Icon>
+      </Tooltip>
     </Container>
   );
 };

@@ -19,13 +19,20 @@ const FloatingFab = styled.div({
   position: "absolute",
   right: 10,
   top: 15,
+  cursor: "pointer",
 });
 
 const UserSearch = ({ search, setSearch }) => {
   return (
     <DashboardCard title="Search User">
       <SearchGroup>
-        <SearchField type="search" autoComplete="off" search={search} onChange={(e) => setSearch(e.target.value)} />
+        <SearchField
+          type="search"
+          autoComplete="off"
+          placeholder="Search for a user"
+          search={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
         <FloatingFab size="medium">
           <IconSearch />
         </FloatingFab>

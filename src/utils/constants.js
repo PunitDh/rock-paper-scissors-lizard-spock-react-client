@@ -18,7 +18,7 @@ export const SocketRequest = Object.freeze({
   RENAME_GAME: "rename-game",
   RESET_GAME_ROUNDS: "reset-rounds",
   CREATE_GAME: "create-game",
-  CLOSE_GAME: "close-game"
+  CLOSE_GAME: "close-game",
 });
 
 export const SocketResponse = Object.freeze({
@@ -33,4 +33,5 @@ export const SocketResponse = Object.freeze({
   GAME_RENAMED: "game-renamed",
   GAME_ROUNDS_RESET: "rounds-reset",
   GAME_CREATED: "game-created",
+  GAME_CLOSED: "game-closed",
 });

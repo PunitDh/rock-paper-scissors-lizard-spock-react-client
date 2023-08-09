@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Avatar, Typography } from "@mui/material";
+import { Avatar, Tooltip, Typography } from "@mui/material";
 import { useState } from "react";
 import { FlexBox } from "src/components/shared/styles";
 import { avatars } from "src/data";
@@ -35,13 +35,14 @@ const AvatarSelectField = ({ selected = 1 }) => {
       </Typography>
       <FlexBox justifyContent="center" wrap="wrap" gap="0.5rem">
         {avatars.map((avatar) => (
-          <SelectableAvatar
-            onClick={() => setSelectedAvatar(avatar.id)}
-            key={avatar.id}
-            src={avatar.image}
-            alt={String(avatar.id)}
-            selected={selectedAvatar === avatar.id}
-          />
+          <Tooltip key={avatar.id} title={avatar.name}>
+            <SelectableAvatar
+              onClick={() => setSelectedAvatar(avatar.id)}
+              src={avatar.image}
+              alt={String(avatar.id)}
+              selected={selectedAvatar === avatar.id}
+            />
+          </Tooltip>
         ))}
         <input name="avatar" type="hidden" value={selectedAvatar} />
       </FlexBox>

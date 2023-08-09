@@ -1,4 +1,4 @@
-import { Avatar, TableRow, Typography } from "@mui/material";
+import { Avatar, TableRow, Tooltip, Typography } from "@mui/material";
 import ResponsiveTableCell from "src/components/shared/ResponsiveTableCell";
 import StyledTableCell from "src/components/shared/StyledTableCell";
 import StartGameButton from "./StartGameButton";
@@ -31,7 +31,7 @@ const UserRow = ({ user }) => {
 
   return (
     <TableRow key={user.firstName + user.lastName}>
-      <ResponsiveTableCell>
+      {/* <ResponsiveTableCell>
         <Typography
           sx={{
             fontSize: "15px",
@@ -40,23 +40,25 @@ const UserRow = ({ user }) => {
         >
           {user.id}
         </Typography>
-      </ResponsiveTableCell>
+      </ResponsiveTableCell> */}
       <StyledTableCell>
         <NameBox gap="0.5rem" alignItems="center" justifyContent="flex-start">
           <SmallAvatar src={avatars[user.avatar]?.image || ""} />
           <span>
             {user.firstName} {user.lastName}
           </span>
-          <span title={onlineIconTitle}>
+          <Tooltip title={onlineIconTitle}>
             <OnlineIcon online={user.isOnline} />
-          </span>
+          </Tooltip>
         </NameBox>
       </StyledTableCell>
       <StyledTableCell>
         <StartGameButton user={user} />
       </StyledTableCell>
       <ResponsiveTableCell align="right">
-        <Typography variant="h6">{user.wlRatio}</Typography>
+        <Typography variant="h6">
+          {(user.losses > 0 ? user.wins / user.losses : 0).toFixed(4)}
+        </Typography>
       </ResponsiveTableCell>
     </TableRow>
   );

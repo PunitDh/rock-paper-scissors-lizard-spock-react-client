@@ -1,6 +1,7 @@
 import DashboardCard from "../../../components/shared/DashboardCard";
 import { Box, Button, Stack } from "@mui/material";
 import FormField from "src/components/shared/FormField";
+import { TitledButton } from "src/components/shared/styles";
 import { usePlayer } from "src/hooks";
 
 const ChangePassword = () => {
@@ -26,14 +27,15 @@ const ChangePassword = () => {
             <FormField type="password" label="New Password" />
             <FormField type="password" label="Confirm New Password" />
           </Stack>
-          <Button
+          <TitledButton
             type="submit"
             color="primary"
             variant="contained"
             size="large"
+            title="Change your password"
           >
             Change Password
-          </Button>
+          </TitledButton>
         </form>
       </Box>
     </DashboardCard>

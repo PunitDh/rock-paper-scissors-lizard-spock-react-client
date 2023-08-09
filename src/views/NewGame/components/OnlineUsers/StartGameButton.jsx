@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 import styled from "@emotion/styled";
 import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
 import { useGame, useToken } from "src/hooks";
@@ -32,15 +32,16 @@ export default function StartGameButton({ user }) {
 
   return (
     <>
-      <GameButton
-        variant="contained"
-        size="medium"
-        disableElevation
-        title={`Start game with ${user.firstName}`}
-        onClick={() => setConfirmOpen(true)}
-      >
-        Start Game
-      </GameButton>
+      <Tooltip title={`Start game with ${user.firstName}`}>
+        <GameButton
+          variant="contained"
+          size="medium"
+          disableElevation
+          onClick={() => setConfirmOpen(true)}
+        >
+          Start Game
+        </GameButton>
+      </Tooltip>
       <ConfirmationDialog
         id="new-game-confirmation-dialog"
         keepMounted

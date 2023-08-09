@@ -194,20 +194,20 @@ import { uniqueId } from "lodash";
 // ];
 
 const avatars = [
-  { id: 1, image: astronaut },
-  { id: 2, image: bear },
-  { id: 3, image: cat },
-  { id: 4, image: dog },
-  { id: 5, image: hacker },
-  { id: 6, image: happyMan },
-  { id: 7, image: manWinking },
-  { id: 8, image: man },
-  { id: 9, image: panda },
-  { id: 10, image: prideFemale },
-  { id: 11, image: rabbit },
-  { id: 12, image: user1 },
-  { id: 13, image: winkingFemale },
-  { id: 14, image: woman },
+  { id: 1, image: astronaut, name: "Astronaut" },
+  { id: 2, image: bear, name: "Bear" },
+  { id: 3, image: cat, name: "Cat" },
+  { id: 4, image: dog, name: "Dog" },
+  { id: 5, image: hacker, name: "Hacker" },
+  { id: 6, image: happyMan, name: "Happy Man" },
+  { id: 7, image: manWinking, name: "Winking Man" },
+  { id: 8, image: man, name: "Man" },
+  { id: 9, image: panda, name: "Panda" },
+  { id: 10, image: prideFemale, name: "Pride Woman" },
+  { id: 11, image: rabbit, name: "Rabbit" },
+  { id: 12, image: user1, name: "User1" },
+  { id: 13, image: winkingFemale, name: "Winking Woman" },
+  { id: 14, image: woman, name: "Woman" },
 ];
 
 const entities = [

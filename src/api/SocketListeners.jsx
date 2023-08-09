@@ -28,9 +28,9 @@ const SocketListeners = () => {
   useEffect(() => {
     socket.on(SocketResponse.USER_LOGGED_IN, handleToken);
     socket.on(SocketResponse.USER_REGISTERED, handleToken);
-    socket.on(SocketResponse.PROFILE_UPDATED, (response) => {
-      handleToken(response, "Profile updated!", "/profile");
-    });
+    socket.on(SocketResponse.PROFILE_UPDATED, (response) =>
+      handleToken(response, "Profile updated!", "/profile")
+    );
     socket.on(SocketResponse.PROFILE_DELETED, (response) =>
       isSuccess(response).then(player.logout).catch(notification.error)
     );
@@ -42,12 +42,12 @@ const SocketListeners = () => {
     );
     socket.on(SocketResponse.CURRENT_GAMES_LOADED, (response) =>
       isSuccess(response)
-        .then((payload) => dispatch(setCurrentGames(payload)))
+        .then((games) => dispatch(setCurrentGames(games)))
         .catch(notification.error)
     );
     socket.on(SocketResponse.CURRENT_GAME_LOADED, (response) =>
       isSuccess(response)
-        .then((payload) => dispatch(setCurrentGame(payload)))
+        .then((game) => dispatch(setCurrentGame(game)))
         .catch(() => navigate("/games"))
     );
     socket.on(SocketResponse.CURRENT_USERS_LOADED, (response) =>
@@ -67,7 +67,7 @@ const SocketListeners = () => {
           dispatch(setCurrentGame(game));
           navigate(`/games/${game.id}`);
         })
-        .catch(console.error)
+        .catch(notification.error)
     );
 
     return () => {

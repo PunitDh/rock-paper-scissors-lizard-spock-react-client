@@ -3,6 +3,7 @@ import { usePlayer, useToken } from "src/hooks";
 import { Box, Button, Stack } from "@mui/material";
 import FormField from "src/components/shared/FormField";
 import AvatarSelectField from "../../../components/shared/AvatarSelectField";
+import { TitledButton } from "src/components/shared/styles";
 
 const UpdateProfile = () => {
   const token = useToken();
@@ -30,14 +31,15 @@ const UpdateProfile = () => {
             <FormField label="Email" value={token.decoded.email} />
             <AvatarSelectField selected={token.decoded.avatar} />
           </Stack>
-          <Button
+          <TitledButton
+            title="Update your profile"
             type="submit"
             color="primary"
             variant="contained"
             size="large"
           >
             Update Profile
-          </Button>
+          </TitledButton>
         </form>
       </Box>
     </DashboardCard>
