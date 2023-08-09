@@ -8,18 +8,20 @@ import {
   DialogTitle,
 } from "@mui/material";
 import { useRef } from "react";
-import { useGame } from "src/hooks";
+import { useGame, useNotification } from "src/hooks";
 
 export default function RenameGame({ handleClose, open, gameId }) {
   const game = useGame();
   const gameName = useRef();
+  const notification = useNotification();
+
   const handleRename = (e) => {
     e.preventDefault();
     if (gameName.current) {
       game.rename({ gameId: gameId, name: gameName.current.value });
       handleClose();
     } else {
-      console.error("Failed to set game name");
+      notification.error("Failed to set game name");
     }
   };
 

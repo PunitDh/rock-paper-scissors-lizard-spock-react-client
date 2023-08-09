@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@mui/material";
 import styled from "@emotion/styled";
-import { useNavigate } from "react-router-dom";
 import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
 import { useGame, useToken } from "src/hooks";
 
@@ -13,7 +12,6 @@ const GameButton = styled(Button)({
 export default function StartGameButton({ user }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [value, setValue] = useState();
-  const navigate = useNavigate();
   const game = useGame();
   const token = useToken();
 
@@ -23,12 +21,6 @@ export default function StartGameButton({ user }) {
     };
     game.create(payload);
   };
-
-  useEffect(() => {
-    if (game.created) {
-      navigate(`/games/${game.id}`);
-    }
-  }, [game.created]);
 
   const handleClose = (newValue) => {
     setConfirmOpen(false);

@@ -8,7 +8,6 @@ import styled from "@emotion/styled";
 import { Container } from "./components/styles";
 import PlayButtons from "./components/PlayButtons";
 import ResultTable from "./components/ResultTable";
-import MaxRoundsSelect from "./components/MaxRoundsSelect";
 import GameActions from "./components/GameActions";
 
 const ResultContainer = styled(Container)({

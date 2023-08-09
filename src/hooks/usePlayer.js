@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router";
 import useToken from "./useToken";
 import useSocket from "./useSocket";
+import { SocketRequest } from "src/utils/constants";
 
 export default function usePlayer() {
   const token = useToken();
@@ -13,24 +14,17 @@ export default function usePlayer() {
   });
 
   return {
-    login: (payload) => {
-      socket.emit("login-user", payload);
-    },
-    register: (payload) => {
-      socket.emit("register-user", payload);
-    },
+    login: (payload) => socket.emit(SocketRequest.LOGIN_USER, payload),
+    register: (payload) => socket.emit(SocketRequest.REGISTER_USER, payload),
     logout: () => {
       token.clear();
       navigate("/auth/login");
     },
-    updateProfile: (request) => {
-      socket.emit("update-profile", createSecureRequest(request));
-    },
-    updatePassword: (request) => {
-      socket.emit("update-password", createSecureRequest(request));
-    },
-    deleteProfile: (request) => {
-      socket.emit("delete-profile", createSecureRequest(request));
-    },
+    updateProfile: (request) =>
+      socket.emit(SocketRequest.UPDATE_PROFILE, createSecureRequest(request)),
+    updatePassword: (request) =>
+      socket.emit(SocketRequest.UPDATE_PASSWORD, createSecureRequest(request)),
+    deleteProfile: (request) =>
+      socket.emit(SocketRequest.DELETE_PROFILE, createSecureRequest(request)),
   };
 }

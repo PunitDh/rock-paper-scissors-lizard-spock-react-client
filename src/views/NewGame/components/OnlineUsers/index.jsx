@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   Typography,
   Box,
@@ -11,30 +11,27 @@ import DashboardCard from "../../../../components/shared/DashboardCard";
 import ResponsiveTableCell from "src/components/shared/ResponsiveTableCell";
 import StyledTableCell from "src/components/shared/StyledTableCell";
 import UserRow from "./UserRow";
-import { useNotification, useSocket, useToken } from "src/hooks";
-import { isSuccess } from "src/utils";
+import { useSocket, useToken } from "src/hooks";
+import { useSelector } from "react-redux";
+import { SocketRequest } from "src/utils/constants";
 
 const OnlineUsers = ({ search }) => {
   const socket = useSocket();
   const token = useToken();
-  const [users, setUsers] = useState([]);
-  const notification = useNotification();
+  const { currentUsers } = useSelector((state) => state.game);
 
   useEffect(() => {
-    socket.emit("get-current-users", { _jwt: token.jwt });
-    socket.on("current-users", (response) =>
-      isSuccess(response).then(setUsers).catch(notification.error)
-    );
-  }, [token.jwt]);
+    socket.emit(SocketRequest.LOAD_CURRENT_USERS, { _jwt: token.jwt });
+  }, []);
 
-  const currentUsers =
+  const currentUsersFiltered =
     search.length > 0
-      ? users.filter((user) =>
+      ? currentUsers.filter((user) =>
           `${user.id} ${user.firstName} ${user.lastName}`
             .toLowerCase()
             .includes(search.toLowerCase())
         )
-      : users;
+      : currentUsers;
 
   return (
     <DashboardCard title="Current Online Users">
@@ -57,7 +54,7 @@ const OnlineUsers = ({ search }) => {
             </TableRow>
           </TableHead>
           <TableBody style={{ width: "100%" }}>
-            {currentUsers?.map((user) => (
+            {currentUsersFiltered?.map((user) => (
               <UserRow key={user.id} user={user} />
             ))}
           </TableBody>

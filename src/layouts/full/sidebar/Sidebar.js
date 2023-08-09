@@ -3,6 +3,7 @@ import Logo from "../shared/logo/Logo";
 import SidebarItems from "./SidebarItems";
 import { useEffect } from "react";
 import { useSocket, useToken } from "src/hooks";
+import { SocketRequest } from "src/utils/constants";
 
 const Sidebar = (props) => {
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
@@ -11,8 +12,8 @@ const Sidebar = (props) => {
   const sidebarWidth = "270px";
 
   useEffect(() => {
-    socket.emit("get-current-games", { _jwt: token.jwt });
-  }, [token.jwt]);
+    socket.emit(SocketRequest.LOAD_CURRENT_GAMES, { _jwt: token.jwt });
+  }, []);
 
   if (lgUp) {
     return (

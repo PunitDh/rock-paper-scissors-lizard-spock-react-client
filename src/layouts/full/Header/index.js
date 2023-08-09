@@ -12,8 +12,6 @@ import {
 import Profile from "./Profile";
 import { IconBellRinging, IconMenu } from "@tabler/icons";
 import { useToken } from "src/hooks";
-import { useEffect, useState } from "react";
-import jwtDecode from "jwt-decode";
 
 const AppBarStyled = styled(AppBar)(({ theme }) => ({
   boxShadow: "none",
@@ -31,11 +29,6 @@ const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
 
 const Header = ({ toggleMobileSidebar }) => {
   const token = useToken();
-  const [decoded, setDecoded] = useState(token.decoded);
-
-  useEffect(() => {
-    setDecoded(jwtDecode(token.jwt));
-  }, [token.jwt]);
 
   return (
     <AppBarStyled position="sticky" color="default">
@@ -72,8 +65,8 @@ const Header = ({ toggleMobileSidebar }) => {
         </IconButton>
         <Box flexGrow={1} />
         <Stack spacing={1} direction="row" alignItems="center">
-          {decoded.firstName} {decoded.lastName}
-          <Profile decoded={decoded} />
+          {token.decoded.firstName} {token.decoded.lastName}
+          <Profile decoded={token.decoded} />
         </Stack>
       </ToolbarStyled>
     </AppBarStyled>

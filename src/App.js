@@ -4,7 +4,7 @@ import Router from "./routes/Router";
 import { baselightTheme } from "./theme/DefaultColors";
 import { SocketProvider } from "./context/SocketContext";
 import { NotificationProvider } from "./context/NotificationContext";
-import SocketListeners from "./context/SocketListeners";
+import SocketListeners from "./api/SocketListeners";
 
 function App() {
   const routing = useRoutes(Router);
