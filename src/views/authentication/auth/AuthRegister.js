@@ -1,7 +1,7 @@
 import { Box, Typography, Button } from "@mui/material";
 import { Stack } from "@mui/system";
 import CustomTextField from "../../../components/forms/theme-elements/CustomTextField";
-import usePlayer from "src/hooks/usePlayer";
+import { usePlayer } from "src/hooks";
 import AvatarSelectField from "src/components/shared/AvatarSelectField";
 
 const AuthRegister = ({ title, subtitle, subtext }) => {

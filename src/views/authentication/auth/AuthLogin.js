@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import CustomTextField from "../../../components/forms/theme-elements/CustomTextField";
-import usePlayer from "src/hooks/usePlayer";
+import { usePlayer } from "src/hooks";
 
 const AuthLogin = ({ title, subtitle, subtext }) => {
   const player = usePlayer();

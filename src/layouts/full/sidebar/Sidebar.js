@@ -1,10 +1,18 @@
 import { useMediaQuery, Box, Drawer } from "@mui/material";
 import Logo from "../shared/logo/Logo";
 import SidebarItems from "./SidebarItems";
+import { useEffect } from "react";
+import { useSocket, useToken } from "src/hooks";
 
 const Sidebar = (props) => {
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
+  const socket = useSocket();
+  const token = useToken();
   const sidebarWidth = "270px";
+
+  useEffect(() => {
+    socket.emit("get-current-games", { _jwt: token.jwt });
+  }, [token.jwt]);
 
   if (lgUp) {
     return (

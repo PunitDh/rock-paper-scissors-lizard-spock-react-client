@@ -4,6 +4,7 @@ import Router from "./routes/Router";
 import { baselightTheme } from "./theme/DefaultColors";
 import { SocketProvider } from "./context/SocketContext";
 import { NotificationProvider } from "./context/NotificationContext";
+import SocketListeners from "./context/SocketListeners";
 
 function App() {
   const routing = useRoutes(Router);
@@ -13,6 +14,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <NotificationProvider>
         <SocketProvider>
+          <SocketListeners />
           <CssBaseline />
           {routing}
         </SocketProvider>

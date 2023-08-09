@@ -4,7 +4,6 @@ import { isSuccess } from "src/utils";
 import { useDispatch } from "react-redux";
 import { setCurrentGame } from "src/redux/gameSlice";
 import useToken from "./useToken";
-import { useNavigate } from "react-router";
 
 export default function useGame() {
   const socket = useSocket();
@@ -12,7 +11,6 @@ export default function useGame() {
   const [id, setId] = useState(false);
   const dispatch = useDispatch();
   const token = useToken();
-  const navigate = useNavigate();
 
   const createRequest = (request) => ({
     ...request,
@@ -44,27 +42,10 @@ export default function useGame() {
     },
     getGame: (request) => {
       socket.emit("load-game", createRequest(request));
-      socket.on(
-        "game-loaded",
-        (response) =>
-          isSuccess(response)
-            .then((payload) => dispatch(setCurrentGame(payload)))
-            .catch(console.error)
-        // .catch(() => navigate("/games"))
-      );
     },
     playMove: (request) => {
       socket.emit("play-move", createRequest(request));
-      socket.on("move-played", (response) => {
-        isSuccess(response)
-          .then((payload) => {
-            dispatch(setCurrentGame(payload));
-            setId(payload.id);
-          })
-          .catch(console.error);
-      });
     },
-
     resetRounds: (request) => {
       socket.emit("reset-rounds", createRequest(request));
       socket.on("rounds-reset", (response) => {

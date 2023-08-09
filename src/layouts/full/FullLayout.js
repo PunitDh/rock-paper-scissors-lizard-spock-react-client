@@ -1,14 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { styled, Container, Box } from "@mui/material";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import Header from "./Header";
 import Sidebar from "./sidebar/Sidebar";
 import Footer from "./Footer";
-import { useNotification, useSocket, useToken } from "src/hooks";
-import { useDispatch } from "react-redux";
-import { Status, isSuccess } from "src/utils";
-import { setCurrentGame } from "src/redux/gameSlice";
-import { setCurrentGames } from "src/redux/menuSlice";
+import { useNotification, useToken } from "src/hooks";
 import Notification from "src/components/shared/Notification";
 
 const MainWrapper = styled("div")(() => ({
@@ -29,28 +25,8 @@ const PageWrapper = styled("div")(() => ({
 const FullLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-  const socket = useSocket();
   const token = useToken();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const notification = useNotification();
-
-  useEffect(() => {
-    socket.emit("get-current-games", { _jwt: token.jwt });
-    socket.on("current-games", (response) =>
-      isSuccess(response)
-        .then((payload) => dispatch(setCurrentGames(payload)))
-        .catch(console.error)
-    );
-    socket.on(Status.UNAUTHORIZED, () => {
-      navigate("/auth/login");
-    });
-    socket.on("move-played", (response) =>
-      isSuccess(response)
-        .then((game) => dispatch(setCurrentGame(game)))
-        .catch(console.error)
-    );
-  }, [token.jwt]);
 
   if (!token.jwt) {
     return <Navigate to="/auth/login" />;

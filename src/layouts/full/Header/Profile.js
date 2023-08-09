@@ -17,15 +17,15 @@ import {
   IconUserCheck,
 } from "@tabler/icons";
 import ProfileImg from "src/assets/images/profile/user-1.jpg";
-import { useToken } from "src/hooks";
 import { avatars } from "src/data";
+import { usePlayer } from "src/hooks";
 
-const Profile = () => {
+const Profile = ({ decoded }) => {
   const [anchorEl2, setAnchorEl2] = useState(null);
-  const token = useToken();
+  const player = usePlayer();
   const navigate = useNavigate();
   const profileImage =
-    avatars.find((it) => it.id === token.decoded.avatar)?.image || ProfileImg;
+    avatars.find((it) => it.id === decoded.avatar)?.image || ProfileImg;
 
   const handleClick2 = (event) => {
     setAnchorEl2(event.currentTarget);
@@ -33,11 +33,6 @@ const Profile = () => {
 
   const handleClose2 = () => {
     setAnchorEl2(null);
-  };
-
-  const handleLogout = () => {
-    token.clear();
-    navigate("/auth/login");
   };
 
   return (
@@ -57,7 +52,7 @@ const Profile = () => {
       >
         <Avatar
           src={profileImage}
-          alt={String(token.decoded.avatar)}
+          alt={String(decoded.avatar)}
           sx={{
             width: 35,
             height: 35,
@@ -86,7 +81,7 @@ const Profile = () => {
             <IconUserCheck width={20} />
           </ListItemIcon>
           <ListItemText>
-            {token.decoded.firstName} {token.decoded.lastName}
+            {decoded.firstName} {decoded.lastName}
           </ListItemText>
         </MenuItem>
         <MenuItem onClick={() => navigate("/profile")}>
@@ -109,7 +104,7 @@ const Profile = () => {
         </MenuItem>
         <Box mt={1} py={1} px={2}>
           <Button
-            onClick={handleLogout}
+            onClick={player.logout}
             variant="outlined"
             color="primary"
             type="button"

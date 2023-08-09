@@ -14,8 +14,7 @@ const ChangePassword = () => {
       newPassword: newPassword.value,
       confirmNewPassword: confirmNewPassword.value,
     };
-    // player.updatePassword(payload);
-    console.log(payload);
+    player.updatePassword(payload);
   };
 
   return (

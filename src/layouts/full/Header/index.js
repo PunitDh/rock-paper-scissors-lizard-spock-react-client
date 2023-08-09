@@ -12,22 +12,30 @@ import {
 import Profile from "./Profile";
 import { IconBellRinging, IconMenu } from "@tabler/icons";
 import { useToken } from "src/hooks";
+import { useEffect, useState } from "react";
+import jwtDecode from "jwt-decode";
+
+const AppBarStyled = styled(AppBar)(({ theme }) => ({
+  boxShadow: "none",
+  background: theme.palette.background.paper,
+  justifyContent: "center",
+  backdropFilter: "blur(4px)",
+  [theme.breakpoints.up("lg")]: {
+    minHeight: "70px",
+  },
+}));
+const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
+  width: "100%",
+  color: theme.palette.text.secondary,
+}));
 
 const Header = ({ toggleMobileSidebar }) => {
   const token = useToken();
-  const AppBarStyled = styled(AppBar)(({ theme }) => ({
-    boxShadow: "none",
-    background: theme.palette.background.paper,
-    justifyContent: "center",
-    backdropFilter: "blur(4px)",
-    [theme.breakpoints.up("lg")]: {
-      minHeight: "70px",
-    },
-  }));
-  const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
-    width: "100%",
-    color: theme.palette.text.secondary,
-  }));
+  const [decoded, setDecoded] = useState(token.decoded);
+
+  useEffect(() => {
+    setDecoded(jwtDecode(token.jwt));
+  }, [token.jwt]);
 
   return (
     <AppBarStyled position="sticky" color="default">
@@ -64,11 +72,8 @@ const Header = ({ toggleMobileSidebar }) => {
         </IconButton>
         <Box flexGrow={1} />
         <Stack spacing={1} direction="row" alignItems="center">
-          {/* <Button variant="contained" color="primary" type="button">
-            Start New Game
-          </Button> */}
-          {token.decoded.firstName} {token.decoded.lastName}
-          <Profile />
+          {decoded.firstName} {decoded.lastName}
+          <Profile decoded={decoded} />
         </Stack>
       </ToolbarStyled>
     </AppBarStyled>

@@ -22,11 +22,10 @@ const OnlineUsers = ({ search }) => {
 
   useEffect(() => {
     socket.emit("get-current-users", { _jwt: token.jwt });
-  }, [socket]);
-
-  socket.on("current-users", (response) =>
-    isSuccess(response).then(setUsers).catch(notification.error)
-  );
+    socket.on("current-users", (response) =>
+      isSuccess(response).then(setUsers).catch(notification.error)
+    );
+  }, [token.jwt]);
 
   const currentUsers =
     search.length > 0
