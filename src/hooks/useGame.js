@@ -21,8 +21,8 @@ export default function useGame() {
 
   return {
     create: (request) => {
-      socket.emit("create-game", request);
-      socket.once("game-created", (response) =>
+      socket.emit("create-game", createRequest(request));
+      socket.on("game-created", (response) =>
         isSuccess(response)
           .then((payload) => {
             setCreated(true);
@@ -37,7 +37,7 @@ export default function useGame() {
     socket,
     rename: (request) => {
       socket.emit("rename-game", createRequest(request));
-      socket.once("game-renamed", console.log);
+      socket.on("game-renamed", console.log);
     },
     close: (gameId) => {
       socket.emit("close-game", gameId);
@@ -60,6 +60,17 @@ export default function useGame() {
           .then((payload) => {
             dispatch(setCurrentGame(payload));
             setId(payload.id);
+          })
+          .catch(console.error);
+      });
+    },
+
+    resetRounds: (request) => {
+      socket.emit("reset-rounds", createRequest(request));
+      socket.on("rounds-reset", (response) => {
+        isSuccess(response)
+          .then((payload) => {
+            dispatch(setCurrentGame(payload));
           })
           .catch(console.error);
       });

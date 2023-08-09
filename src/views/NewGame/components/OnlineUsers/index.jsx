@@ -11,20 +11,21 @@ import DashboardCard from "../../../../components/shared/DashboardCard";
 import ResponsiveTableCell from "src/components/shared/ResponsiveTableCell";
 import StyledTableCell from "src/components/shared/StyledTableCell";
 import UserRow from "./UserRow";
-import { useSocket, useToken } from "src/hooks";
+import { useNotification, useSocket, useToken } from "src/hooks";
 import { isSuccess } from "src/utils";
 
 const OnlineUsers = ({ search }) => {
   const socket = useSocket();
   const token = useToken();
   const [users, setUsers] = useState([]);
+  const notification = useNotification();
 
   useEffect(() => {
     socket.emit("get-current-users", { _jwt: token.jwt });
   }, [socket]);
 
   socket.on("current-users", (response) =>
-    isSuccess(response).then(setUsers).catch(console.error)
+    isSuccess(response).then(setUsers).catch(notification.error)
   );
 
   const currentUsers =

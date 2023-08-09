@@ -19,7 +19,7 @@ const SelectableAvatar = styled(Avatar)(({ selected }) => ({
   },
 }));
 
-const AvatarSelectField = ({ selected }) => {
+const AvatarSelectField = ({ selected = 1 }) => {
   const [selectedAvatar, setSelectedAvatar] = useState(selected);
   return (
     <>

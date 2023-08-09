@@ -9,6 +9,7 @@ import { Container } from "./components/styles";
 import PlayButtons from "./components/PlayButtons";
 import ResultTable from "./components/ResultTable";
 import MaxRoundsSelect from "./components/MaxRoundsSelect";
+import GameActions from "./components/GameActions";
 
 const ResultContainer = styled(Container)({
   height: "75%",
@@ -34,7 +35,13 @@ const Game = () => {
       <PageContainer title={currentGame.name}>
         <GameCard
           title={currentGame.name}
-          action={<MaxRoundsSelect onChange={setMaxRounds} value={maxRounds} />}
+          action={
+            <GameActions
+              onMaxRoundsChange={setMaxRounds}
+              maxRounds={maxRounds}
+              gameId={gameId}
+            />
+          }
         >
           <ScoreContainer>Score</ScoreContainer>
           <ResultContainer>

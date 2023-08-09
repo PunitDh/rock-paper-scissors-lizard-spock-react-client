@@ -1,10 +1,10 @@
 import styled from "@emotion/styled";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import { Box, Button } from "@mui/material";
-import { usePlayer } from "src/hooks";
 import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
 import { useState } from "react";
-import ConfirmDialogContent from "./ConfirmDialogContent";
+import DialogContent from "./DialogContent";
+import { usePlayer } from "src/hooks";
 
 const RedButton = styled(Button)({
   backgroundColor: "red",
@@ -17,7 +17,6 @@ const DeleteProfile = () => {
   const [confirm, setConfirm] = useState(false);
   const [value, setValue] = useState();
   const [password, setPassword] = useState("");
-
   const player = usePlayer();
 
   const handleClose = (newValue) => {
@@ -34,8 +33,7 @@ const DeleteProfile = () => {
 
   const handleSubmit = () => {
     const payload = { password };
-    // player.updatePassword(payload);
-    console.log(payload);
+    player.deleteProfile(payload);
   };
 
   return (
@@ -47,7 +45,7 @@ const DeleteProfile = () => {
         value={value}
         title={"Delete Profile"}
         confirmBtnText={"Delete Permanently"}
-        content={ConfirmDialogContent({ password, setPassword })}
+        content={DialogContent({ password, setPassword })}
         open={confirm}
       />
       <Box>

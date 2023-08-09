@@ -89,7 +89,7 @@ const Profile = () => {
             {token.decoded.firstName} {token.decoded.lastName}
           </ListItemText>
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={() => navigate("/profile")}>
           <ListItemIcon>
             <IconUser width={20} />
           </ListItemIcon>

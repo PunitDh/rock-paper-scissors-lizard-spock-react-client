@@ -2,19 +2,22 @@ import { Box, Typography, Button } from "@mui/material";
 import { Stack } from "@mui/system";
 import CustomTextField from "../../../components/forms/theme-elements/CustomTextField";
 import usePlayer from "src/hooks/usePlayer";
+import AvatarSelectField from "src/components/shared/AvatarSelectField";
 
 const AuthRegister = ({ title, subtitle, subtext }) => {
   const player = usePlayer();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { email, password, confirmPassword, firstName, lastName } = e.target;
+    const { email, password, confirmPassword, firstName, lastName, avatar } =
+      e.target;
     const payload = {
       firstName: firstName.value,
       lastName: lastName.value,
       email: email.value,
       password: password.value,
       confirmPassword: confirmPassword.value,
+      avatar: avatar.value,
     };
     player.register(payload);
   };
@@ -116,6 +119,8 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
               variant="outlined"
               fullWidth
             />
+
+            <AvatarSelectField />
           </Stack>
           <Button
             type="submit"

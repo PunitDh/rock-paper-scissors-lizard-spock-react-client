@@ -7,11 +7,14 @@ const RedBox = styled(Box)({
   color: "red",
 });
 
-const ConfirmDialogContent = ({ password, setPassword }) => {
+const DialogContent = ({ password, setPassword }) => {
   return (
     <Stack>
       <FlexBox gap="0.5rem" direction="column">
-        <Box>Permanently delete profile? This action is irreversible.</Box>
+        <Box>
+          Permanently delete profile? This action will delete your player
+          profile and all associated games. This action is irreversible.
+        </Box>
         <RedBox>Enter your password below to delete your profile.</RedBox>
         <Box>
           <PasswordField
@@ -24,4 +27,4 @@ const ConfirmDialogContent = ({ password, setPassword }) => {
   );
 };
 
-export default ConfirmDialogContent;
+export default DialogContent;

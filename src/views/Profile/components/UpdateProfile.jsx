@@ -2,7 +2,7 @@ import DashboardCard from "../../../components/shared/DashboardCard";
 import { usePlayer, useToken } from "src/hooks";
 import { Box, Button, Stack } from "@mui/material";
 import FormField from "src/components/shared/FormField";
-import AvatarSelectField from "./AvatarSelectField";
+import AvatarSelectField from "../../../components/shared/AvatarSelectField";
 
 const UpdateProfile = () => {
   const token = useToken();
