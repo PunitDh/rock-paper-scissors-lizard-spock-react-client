@@ -7,23 +7,21 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import { useRef } from "react";
-import { useGame, useNotification } from "src/hooks";
+import { useGame, useToken } from "src/hooks";
 
-export default function RenameGame({ handleClose, open, gameId }) {
+export default function RenameGame({ handleClose, open, selectedGame }) {
   const game = useGame();
-  const gameName = useRef();
-  const notification = useNotification();
+  const token = useToken();
 
   const handleRename = (e) => {
     e.preventDefault();
-    if (gameName.current) {
-      game.rename({ gameId: gameId, name: gameName.current.value });
-      handleClose();
-    } else {
-      notification.error("Failed to set game name");
-    }
+    game.rename({ gameId: selectedGame.id, name: e.target.name.value });
+    handleClose();
   };
+
+  const otherPlayer = selectedGame.players.find(
+    (player) => player.id !== token.decoded.id
+  );
 
   return (
     <div>
@@ -32,7 +30,7 @@ export default function RenameGame({ handleClose, open, gameId }) {
         <form onSubmit={handleRename}>
           <DialogContent>
             <DialogContentText>
-              Rename your game with {"{name}"}
+              Rename your game with {otherPlayer.firstName}
             </DialogContentText>
             <TextField
               autoFocus
@@ -42,16 +40,15 @@ export default function RenameGame({ handleClose, open, gameId }) {
               type="text"
               fullWidth
               variant="standard"
-              ref={gameName}
+              defaultValue={selectedGame.title}
+              autoComplete="off"
             />
           </DialogContent>
           <DialogActions>
             <Button type="button" onClick={handleClose}>
               Cancel
             </Button>
-            <Button type="button" onAnimationEnd={handleRename}>
-              Rename
-            </Button>
+            <Button type="submit">Rename</Button>
           </DialogActions>
         </form>
       </Dialog>

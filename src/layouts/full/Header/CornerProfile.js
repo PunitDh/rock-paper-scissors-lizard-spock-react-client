@@ -20,19 +20,19 @@ import ProfileImg from "src/assets/images/profile/user-1.jpg";
 import { avatars } from "src/data";
 import { usePlayer } from "src/hooks";
 
-const Profile = ({ decoded }) => {
-  const [anchorEl2, setAnchorEl2] = useState(null);
+const CornerProfile = ({ decoded }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
   const player = usePlayer();
   const navigate = useNavigate();
   const profileImage =
     avatars.find((it) => it.id === decoded.avatar)?.image || ProfileImg;
 
-  const handleClick2 = (event) => {
-    setAnchorEl2(event.currentTarget);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
   };
 
-  const handleClose2 = () => {
-    setAnchorEl2(null);
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -44,11 +44,11 @@ const Profile = ({ decoded }) => {
         aria-controls="msgs-menu"
         aria-haspopup="true"
         sx={{
-          ...(typeof anchorEl2 === "object" && {
+          ...(typeof anchorEl === "object" && {
             color: "primary.main",
           }),
         }}
-        onClick={handleClick2}
+        onClick={handleClick}
       >
         <Avatar
           src={profileImage}
@@ -59,15 +59,12 @@ const Profile = ({ decoded }) => {
           }}
         />
       </IconButton>
-      {/* ------------------------------------------- */}
-      {/* Message Dropdown */}
-      {/* ------------------------------------------- */}
       <Menu
         id="msgs-menu"
-        anchorEl={anchorEl2}
+        anchorEl={anchorEl}
         keepMounted
-        open={Boolean(anchorEl2)}
-        onClose={handleClose2}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         sx={{
@@ -118,4 +115,4 @@ const Profile = ({ decoded }) => {
   );
 };
 
-export default Profile;
+export default CornerProfile;

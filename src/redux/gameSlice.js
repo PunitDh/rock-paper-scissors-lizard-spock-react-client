@@ -17,10 +17,19 @@ export const gameSlice = createSlice({
     setRecentGames: (state, action) => {
       state.recentGames = action.payload;
     },
+    updateCurrentGame: (state, action) => {
+      if (state.currentGame.id === action.payload.id) {
+        state.currentGame = action.payload;
+      }
+    },
   },
 });
 
-export const { setCurrentGame, setCurrentUsers, setRecentGames } =
-  gameSlice.actions;
+export const {
+  setCurrentGame,
+  setCurrentUsers,
+  setRecentGames,
+  updateCurrentGame,
+} = gameSlice.actions;
 
 export default gameSlice.reducer;

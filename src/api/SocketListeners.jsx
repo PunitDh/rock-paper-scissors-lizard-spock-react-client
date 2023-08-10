@@ -6,8 +6,9 @@ import {
   setCurrentGame,
   setCurrentUsers,
   setRecentGames,
+  updateCurrentGame,
 } from "src/redux/gameSlice";
-import { setCurrentGames } from "src/redux/menuSlice";
+import { setCurrentGames, updateCurrentGameMenu } from "src/redux/menuSlice";
 import { Status, isSuccess } from "src/utils";
 import { SocketResponse } from "src/utils/constants";
 
@@ -59,12 +60,18 @@ const SocketListeners = () => {
         .then((users) => dispatch(setCurrentUsers(users)))
         .catch(notification.error)
     );
-    socket.on(SocketResponse.GAME_RENAMED, notification.success);
-    socket.on(SocketResponse.GAME_ROUNDS_RESET, (response) => {
+    socket.on(SocketResponse.GAME_RENAMED, (response) =>
+      isSuccess(response).then((game) => {
+        dispatch(updateCurrentGameMenu(game));
+        dispatch(updateCurrentGame(game));
+        notification.success("Game updated!")
+      })
+    );
+    socket.on(SocketResponse.GAME_ROUNDS_RESET, (response) =>
       isSuccess(response)
         .then((game) => dispatch(setCurrentGame(game)))
-        .catch(notification.error);
-    });
+        .catch(notification.error)
+    );
     socket.on(SocketResponse.GAME_CREATED, (response) =>
       isSuccess(response)
         .then((game) => {

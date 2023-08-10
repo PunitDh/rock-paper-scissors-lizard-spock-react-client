@@ -8,23 +8,23 @@ export default function usePlayer() {
   const navigate = useNavigate();
   const socket = useSocket();
 
-  const createSecureRequest = (request) => ({
+  const secure = (request) => ({
     ...request,
     _jwt: token.jwt,
   });
 
   return {
-    login: (payload) => socket.emit(SocketRequest.LOGIN_USER, payload),
-    register: (payload) => socket.emit(SocketRequest.REGISTER_USER, payload),
+    login: (request) => socket.emit(SocketRequest.LOGIN_USER, request),
+    register: (request) => socket.emit(SocketRequest.REGISTER_USER, request),
     logout: () => {
       token.clear();
       navigate("/auth/login");
     },
     updateProfile: (request) =>
-      socket.emit(SocketRequest.UPDATE_PROFILE, createSecureRequest(request)),
+      socket.emit(SocketRequest.UPDATE_PROFILE, secure(request)),
     updatePassword: (request) =>
-      socket.emit(SocketRequest.UPDATE_PASSWORD, createSecureRequest(request)),
+      socket.emit(SocketRequest.UPDATE_PASSWORD, secure(request)),
     deleteProfile: (request) =>
-      socket.emit(SocketRequest.DELETE_PROFILE, createSecureRequest(request)),
+      socket.emit(SocketRequest.DELETE_PROFILE, secure(request)),
   };
 }

@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 
 // components
-import Profile from "./Profile";
+import CornerProfile from "./CornerProfile";
 import { IconBellRinging, IconMenu } from "@tabler/icons";
 import { useToken } from "src/hooks";
 
@@ -53,11 +53,6 @@ const Header = ({ toggleMobileSidebar }) => {
           color="inherit"
           aria-controls="msgs-menu"
           aria-haspopup="true"
-          sx={{
-            ...(typeof anchorEl2 === "object" && {
-              color: "primary.main",
-            }),
-          }}
         >
           <Badge variant="dot" color="primary">
             <IconBellRinging size="21" stroke="1.5" />
@@ -66,7 +61,7 @@ const Header = ({ toggleMobileSidebar }) => {
         <Box flexGrow={1} />
         <Stack spacing={1} direction="row" alignItems="center">
           {token.decoded.firstName} {token.decoded.lastName}
-          <Profile decoded={token.decoded} />
+          <CornerProfile decoded={token.decoded} />
         </Stack>
       </ToolbarStyled>
     </AppBarStyled>

@@ -45,6 +45,15 @@ const icons = [
   IconBallVolleyball,
 ];
 
+const menuMapper = (game) => ({
+  id: game.id,
+  title: game.name,
+  icon: sample(icons),
+  href: `/games/${game.id}`,
+  gameContext: true,
+  players: game.players,
+});
+
 export const menuSlice = createSlice({
   name: "menu",
   initialState: {
@@ -94,17 +103,17 @@ export const menuSlice = createSlice({
   },
   reducers: {
     setCurrentGames: (state, { payload = [] }) => {
-      state["Current Games"] = payload.map((game) => ({
-        id: game.id,
-        title: game.name,
-        icon: sample(icons),
-        href: `/games/${game.id}`,
-        gameContext: true,
-      }));
+      state["Current Games"] = payload.map(menuMapper);
+    },
+    updateCurrentGameMenu: (state, action) => {
+      const gameIndex = state["Current Games"].findIndex(
+        (it) => it.id === action.payload.id
+      );
+      state["Current Games"][gameIndex] = menuMapper(action.payload);
     },
   },
 });
 
-export const { setCurrentGames } = menuSlice.actions;
+export const { setCurrentGames, updateCurrentGameMenu } = menuSlice.actions;
 
 export default menuSlice.reducer;

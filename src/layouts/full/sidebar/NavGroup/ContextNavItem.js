@@ -64,7 +64,13 @@ const ContextNavItem = ({ item, level, pathDirect, onClick }) => {
           handleRenameOpen={handleRenameOpen}
         />
       )}
-      {rename && <RenameGame open={rename} handleClose={handleRenameClose} />}
+      {rename && (
+        <RenameGame
+          open={rename}
+          handleClose={handleRenameClose}
+          selectedGame={item}
+        />
+      )}
       <List
         onContextMenu={handleContextMenu}
         component="li"
