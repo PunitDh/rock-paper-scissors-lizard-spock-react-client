@@ -9,7 +9,9 @@ const RecentGames = () => {
   const game = useGame();
   const { recentGames } = useSelector((state) => state.game);
 
-  useEffect(() => game.getRecentGames(), []);
+  useEffect(() => {
+    game.getRecentGames();
+  }, []);
 
   return (
     <DashboardCard title="Recent Games">

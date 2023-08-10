@@ -28,7 +28,9 @@ const Game = () => {
   const [maxRounds, setMaxRounds] = useState(3);
   const { currentGame } = useSelector((state) => state.game);
 
-  useEffect(() => game.getGame({ gameId }), [gameId]);
+  useEffect(() => {
+    game.getGame({ gameId });
+  }, [gameId]);
 
   const score = currentGame.id && calculateScore(currentGame);
 

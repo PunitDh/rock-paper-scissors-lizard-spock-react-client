@@ -9,7 +9,9 @@ const Sidebar = (props) => {
   const game = useGame();
   const sidebarWidth = "270px";
 
-  useEffect(() => game.getCurrentGames(), []);
+  useEffect(() => {
+    game.getCurrentGames();
+  }, []);
 
   if (lgUp) {
     return (
