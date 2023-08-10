@@ -2,9 +2,7 @@ import { Box, Menu, MenuItem, ListItemIcon, ListItemText } from "@mui/material";
 import { IconMail, IconUser } from "@tabler/icons";
 
 const ContextMenu = ({ open, setOpen, handleRenameOpen }) => {
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleClose = () => setOpen(false);
 
   return (
     <Box>

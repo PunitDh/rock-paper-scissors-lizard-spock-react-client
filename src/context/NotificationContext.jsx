@@ -21,13 +21,11 @@ export const NotificationProvider = ({ children }) => {
     setOpen(true);
   };
 
-  const success = (message, duration = 6000) => {
+  const success = (message, duration = 6000) =>
     set(message, NotificationType.SUCCESS, duration);
-  };
 
-  const error = (message, duration = 6000) => {
+  const error = (message, duration = 6000) =>
     set(message, NotificationType.ERROR, duration);
-  };
 
   return (
     <NotificationContext.Provider

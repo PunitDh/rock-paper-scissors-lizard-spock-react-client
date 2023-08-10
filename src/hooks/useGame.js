@@ -23,9 +23,13 @@ export default function useGame() {
       socket.emit(SocketRequest.PLAY_MOVE, secure(request)),
     resetRounds: (request) =>
       socket.emit(SocketRequest.RESET_GAME_ROUNDS, secure(request)),
+    getCurrentGames: (request) =>
+      socket.emit(SocketRequest.LOAD_CURRENT_GAMES, secure(request)),
     getCurrentUsers: (request) =>
       socket.emit(SocketRequest.LOAD_CURRENT_USERS, secure(request)),
     getRecentGames: (request) =>
       socket.emit(SocketRequest.LOAD_RECENT_GAMES, secure(request)),
+    changeIcon: (request) =>
+      socket.emit(SocketRequest.CHANGE_ICON, secure(request)),
   };
 }

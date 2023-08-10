@@ -22,23 +22,21 @@ const FloatingFab = styled.div({
   cursor: "pointer",
 });
 
-const UserSearch = ({ search, setSearch }) => {
-  return (
-    <DashboardCard title="Search User">
-      <SearchGroup>
-        <SearchField
-          type="search"
-          autoComplete="off"
-          placeholder="Search for a user"
-          search={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <FloatingFab size="medium">
-          <IconSearch />
-        </FloatingFab>
-      </SearchGroup>
-    </DashboardCard>
-  );
-};
+const UserSearch = ({ search, setSearch }) => (
+  <DashboardCard title="Search User">
+    <SearchGroup>
+      <SearchField
+        type="search"
+        autoComplete="off"
+        placeholder="Search for a user"
+        search={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+      <FloatingFab size="medium">
+        <IconSearch />
+      </FloatingFab>
+    </SearchGroup>
+  </DashboardCard>
+);
 
 export default UserSearch;

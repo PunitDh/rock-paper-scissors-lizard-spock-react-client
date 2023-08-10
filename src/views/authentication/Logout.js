@@ -3,12 +3,9 @@ import { usePlayer } from "src/hooks";
 
 const Logout = () => {
   const player = usePlayer();
+  useEffect(() => player.logout(), []);
 
-  useEffect(() => {
-    player.logout();
-  }, []);
-
-  return <div></div>;
+  return <></>;
 };
 
 export default Logout;

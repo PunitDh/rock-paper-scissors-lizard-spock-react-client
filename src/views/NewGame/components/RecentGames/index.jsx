@@ -5,13 +5,11 @@ import { useSelector } from "react-redux";
 import { useGame } from "src/hooks";
 import RecentGame from "./RecentGame";
 
-const RecentTransactions = () => {
+const RecentGames = () => {
   const game = useGame();
   const { recentGames } = useSelector((state) => state.game);
 
-  useEffect(() => {
-    game.getRecentGames();
-  }, []);
+  useEffect(() => game.getRecentGames(), []);
 
   return (
     <DashboardCard title="Recent Games">
@@ -42,4 +40,4 @@ const RecentTransactions = () => {
   );
 };
 
-export default RecentTransactions;
+export default RecentGames;

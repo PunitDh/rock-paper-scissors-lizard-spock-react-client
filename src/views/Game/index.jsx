@@ -11,6 +11,7 @@ import ResultTable from "./components/ResultTable";
 import GameActions from "./components/GameActions";
 import { calculateScore } from "src/utils";
 import { Bold } from "src/components/shared/styles";
+import GameTitle from "./components/GameTitle";
 
 const ResultContainer = styled(Container)({
   height: "75%",
@@ -27,9 +28,7 @@ const Game = () => {
   const [maxRounds, setMaxRounds] = useState(3);
   const { currentGame } = useSelector((state) => state.game);
 
-  useEffect(() => {
-    game.getGame({ gameId });
-  }, [gameId]);
+  useEffect(() => game.getGame({ gameId }), [gameId]);
 
   const score = currentGame.id && calculateScore(currentGame);
 
@@ -43,7 +42,7 @@ const Game = () => {
     currentGame.id && (
       <PageContainer title={currentGame.name}>
         <GameCard
-          title={currentGame.name}
+          title={<GameTitle currentGame={currentGame} />}
           action={
             <GameActions
               onMaxRoundsChange={setMaxRounds}

@@ -1,8 +1,7 @@
 import { MenuItem, Select, Tooltip } from "@mui/material";
 
-const MaxRoundsSelect = ({ value, onChange }) => {
-  return (
-    <Tooltip title="Maximum rounds to display">
+const MaxRoundsSelect = ({ value, onChange }) => (
+  <Tooltip title="Maximum rounds to display">
     <Select
       labelId="max-rounds"
       id="max-rounds"
@@ -14,8 +13,7 @@ const MaxRoundsSelect = ({ value, onChange }) => {
       <MenuItem value={8}>8</MenuItem>
       <MenuItem value={10}>10</MenuItem>
     </Select>
-    </Tooltip>
-  );
-};
+  </Tooltip>
+);
 
 export default MaxRoundsSelect;

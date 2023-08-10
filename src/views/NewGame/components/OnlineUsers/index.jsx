@@ -19,9 +19,7 @@ const OnlineUsers = ({ search }) => {
   const game = useGame();
   const { currentUsers } = useSelector((state) => state.game);
 
-  useEffect(() => {
-    game.getCurrentUsers();
-  }, []);
+  useEffect(() => game.getCurrentUsers(), []);
 
   const currentUsersFiltered =
     search.length > 0

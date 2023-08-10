@@ -7,13 +7,10 @@ import { IconEraser } from "@tabler/icons";
 import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
 
 const GameActions = ({ onMaxRoundsChange, maxRounds, gameId }) => {
+  const [confirmReset, setConfirmReset] = useState(false);
   const game = useGame();
 
-  const handleResetRounds = () => {
-    game.resetRounds({ gameId });
-  };
-
-  const [confirmReset, setConfirmReset] = useState(false);
+  const handleResetRounds = () => game.resetRounds({ gameId });
 
   return (
     <FlexBox gap="1rem">

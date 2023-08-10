@@ -2,7 +2,7 @@ const { default: styled } = require("@emotion/styled");
 const { Box, Button, Tooltip } = require("@mui/material");
 
 export const FlexBox = styled(Box)(
-  ({ direction, wrap, justifyContent, alignItems, gap }) => ({
+  ({ direction, wrap, justifyContent="center", alignItems="center", gap }) => ({
     display: "flex",
     flexDirection: direction,
     flexWrap: wrap,

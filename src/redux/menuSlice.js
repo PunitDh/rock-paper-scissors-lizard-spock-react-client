@@ -1,57 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
-  IconAbacus,
-  IconAtom,
-  IconAtom2,
-  IconBallBaseball,
-  IconBallBasketball,
-  IconBallBowling,
-  IconBallFootball,
-  IconBallTennis,
-  IconBallVolleyball,
-  IconChess,
-  IconChessBishop,
-  IconChessKing,
-  IconChessKnight,
-  IconChessQueen,
-  IconChessRook,
   IconDeviceGamepad2,
-  IconGoGame,
   IconLogin,
   IconLogout,
-  IconTrophy,
   IconUser,
   IconUserPlus,
 } from "@tabler/icons";
-import { uniqueId, sample } from "lodash";
-
-const icons = [
-  IconChess,
-  IconGoGame,
-  IconTrophy,
-  IconAbacus,
-  IconChessBishop,
-  IconAtom2,
-  IconAtom,
-  IconChessKing,
-  IconChessKnight,
-  IconChessQueen,
-  IconChessRook,
-  IconBallBaseball,
-  IconBallBasketball,
-  IconBallBowling,
-  IconBallFootball,
-  IconBallTennis,
-  IconBallVolleyball,
-];
+import { uniqueId } from "lodash";
+import { icons } from "src/data";
 
 const menuMapper = (game) => ({
   id: game.id,
   title: game.name,
-  icon: sample(icons),
+  icon: icons.find((icon) => icon.id === game.icon).icon,
   href: `/games/${game.id}`,
   gameContext: true,
   players: game.players,
+  //icon: game.icon
 });
 
 export const menuSlice = createSlice({

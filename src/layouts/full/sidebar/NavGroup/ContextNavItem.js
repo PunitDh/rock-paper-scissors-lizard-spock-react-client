@@ -15,6 +15,7 @@ import RenameGame from "src/views/Game/components/ContextMenu/RenameGame";
 const ContextNavItem = ({ item, level, pathDirect, onClick }) => {
   const [menu, showMenu] = useState(false);
   const [rename, showRename] = useState(false);
+
   const handleContextMenu = (e) => {
     e.preventDefault();
     showMenu(true);
@@ -25,9 +26,7 @@ const ContextNavItem = ({ item, level, pathDirect, onClick }) => {
     showMenu(false);
   };
 
-  const handleRenameClose = () => {
-    showRename(false);
-  };
+  const handleRenameClose = () => showRename(false);
 
   const Icon = item.icon;
   const theme = useTheme();

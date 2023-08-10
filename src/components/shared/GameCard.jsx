@@ -9,26 +9,24 @@ const ResponsiveCard = styled(Card)({
   maxWidth: "90vw",
 });
 
-const GameCard = ({ title, children, action }) => {
-  return (
-    <ResponsiveCard elevation={9}>
-      <CardContent>
-        <Stack
-          direction="row"
-          spacing={2}
-          justifyContent="space-between"
-          alignItems={"center"}
-          mb={3}
-        >
-          <Box>
-            <Typography variant="h5">{title}</Typography>
-          </Box>
-          {action}
-        </Stack>
-      </CardContent>
-      {children}
-    </ResponsiveCard>
-  );
-};
+const GameCard = ({ title, children, action }) => (
+  <ResponsiveCard elevation={9}>
+    <CardContent>
+      <Stack
+        direction="row"
+        spacing={2}
+        justifyContent="space-between"
+        alignItems={"center"}
+        mb={3}
+      >
+        <Box>
+          <Typography variant="h5">{title}</Typography>
+        </Box>
+        {action}
+      </Stack>
+    </CardContent>
+    {children}
+  </ResponsiveCard>
+);
 
 export default GameCard;

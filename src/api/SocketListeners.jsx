@@ -20,7 +20,7 @@ const SocketListeners = () => {
   const player = usePlayer();
   const dispatch = useDispatch();
 
-  const handleToken = (response, successMessage, navigateTo = "/") => {
+  const handleToken = (response, successMessage, navigateTo = "/") =>
     isSuccess(response)
       .then((payload) => {
         token.set(payload);
@@ -28,7 +28,15 @@ const SocketListeners = () => {
         navigate(navigateTo);
       })
       .catch(notification.error);
-  };
+
+  const updateGame = (response, successMessage = "Game updated!") =>
+    isSuccess(response)
+      .then((game) => {
+        dispatch(updateCurrentGameMenu(game));
+        dispatch(updateCurrentGame(game));
+        notification.success(successMessage);
+      })
+      .catch(notification.error);
 
   useEffect(() => {
     socket.on(SocketResponse.USER_LOGGED_IN, handleToken);
@@ -60,13 +68,8 @@ const SocketListeners = () => {
         .then((users) => dispatch(setCurrentUsers(users)))
         .catch(notification.error)
     );
-    socket.on(SocketResponse.GAME_RENAMED, (response) =>
-      isSuccess(response).then((game) => {
-        dispatch(updateCurrentGameMenu(game));
-        dispatch(updateCurrentGame(game));
-        notification.success("Game updated!")
-      })
-    );
+    socket.on(SocketResponse.GAME_RENAMED, updateGame);
+    socket.on(SocketResponse.ICON_CHANGED, updateGame);
     socket.on(SocketResponse.GAME_ROUNDS_RESET, (response) =>
       isSuccess(response)
         .then((game) => dispatch(setCurrentGame(game)))

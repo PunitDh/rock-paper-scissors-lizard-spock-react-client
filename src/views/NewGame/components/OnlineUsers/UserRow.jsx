@@ -30,17 +30,7 @@ const UserRow = ({ user }) => {
   }`;
 
   return (
-    <TableRow key={user.firstName + user.lastName}>
-      {/* <ResponsiveTableCell>
-        <Typography
-          sx={{
-            fontSize: "15px",
-            fontWeight: "500",
-          }}
-        >
-          {user.id}
-        </Typography>
-      </ResponsiveTableCell> */}
+    <TableRow>
       <StyledTableCell>
         <NameBox gap="0.5rem" alignItems="center" justifyContent="flex-start">
           <SmallAvatar src={avatars[user.avatar]?.image || ""} />

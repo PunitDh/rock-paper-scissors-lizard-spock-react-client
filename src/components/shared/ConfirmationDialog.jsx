@@ -31,11 +31,8 @@ const ConfirmationDialog = ({
     }
   }, [valueProp, open]);
 
-  const handleEntering = () => {
-    if (radioGroupRef.current != null) {
-      radioGroupRef.current.focus();
-    }
-  };
+  const handleEntering = () =>
+    radioGroupRef.current != null && radioGroupRef.current.focus();
 
   return (
     <Dialog

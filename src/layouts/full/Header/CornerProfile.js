@@ -27,13 +27,9 @@ const CornerProfile = ({ decoded }) => {
   const profileImage =
     avatars.find((it) => it.id === decoded.avatar)?.image || ProfileImg;
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const handleClick = (event) => setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
+  const navigateTo = (to) => () => handleClose(navigate(to));
 
   return (
     <Box>
@@ -81,7 +77,7 @@ const CornerProfile = ({ decoded }) => {
             {decoded.firstName} {decoded.lastName}
           </ListItemText>
         </MenuItem>
-        <MenuItem onClick={() => navigate("/profile")}>
+        <MenuItem onClick={navigateTo("/profile")}>
           <ListItemIcon>
             <IconUser width={20} />
           </ListItemIcon>

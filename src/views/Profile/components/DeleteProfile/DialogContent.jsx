@@ -7,24 +7,22 @@ const RedBox = styled(Box)({
   color: "red",
 });
 
-const DialogContent = ({ password, setPassword }) => {
-  return (
-    <Stack>
-      <FlexBox gap="0.5rem" direction="column">
-        <Box>
-          Permanently delete profile? This action will delete your player
-          profile and all associated games. This action is irreversible.
-        </Box>
-        <RedBox>Enter your password below to delete your profile.</RedBox>
-        <Box>
-          <PasswordField
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </Box>
-      </FlexBox>
-    </Stack>
-  );
-};
+const DialogContent = ({ password, setPassword }) => (
+  <Stack>
+    <FlexBox gap="0.5rem" direction="column">
+      <Box>
+        Permanently delete profile? This action will delete your player profile
+        and all associated games. This action is irreversible.
+      </Box>
+      <RedBox>Enter your password below to delete your profile.</RedBox>
+      <Box>
+        <PasswordField
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </Box>
+    </FlexBox>
+  </Stack>
+);
 
 export default DialogContent;

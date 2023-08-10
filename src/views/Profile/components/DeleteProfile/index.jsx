@@ -28,14 +28,8 @@ const DeleteProfile = () => {
     }
   };
 
-  const handleConfirm = () => {
-    setConfirm(true);
-  };
-
-  const handleSubmit = () => {
-    const payload = { password };
-    player.deleteProfile(payload);
-  };
+  const handleConfirm = () => setConfirm(true);
+  const handleSubmit = () => player.deleteProfile({ password });
 
   return (
     <DashboardCard title="Delete Profile">

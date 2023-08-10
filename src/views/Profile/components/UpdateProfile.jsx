@@ -1,6 +1,6 @@
 import DashboardCard from "../../../components/shared/DashboardCard";
 import { usePlayer, useToken } from "src/hooks";
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import FormField from "src/components/shared/FormField";
 import AvatarSelectField from "../../../components/shared/AvatarSelectField";
 import { TitledButton } from "src/components/shared/styles";
