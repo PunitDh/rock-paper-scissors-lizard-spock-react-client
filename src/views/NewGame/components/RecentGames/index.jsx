@@ -19,8 +19,6 @@ const RecentGames = () => {
         <Timeline
           className="theme-timeline"
           nonce={undefined}
-          onResize={undefined}
-          onResizeCapture={undefined}
           sx={{
             p: 0,
             "& .MuiTimelineConnector-root": {

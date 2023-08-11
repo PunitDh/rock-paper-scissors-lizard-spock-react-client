@@ -18,7 +18,7 @@ const StyledTable = styled(Table)({
   height: "60%",
 });
 
-const ResultTable = ({ rounds, maxRounds, players = [] }) => {
+const ResultTable = ({ rounds, maxRounds, players = [], score }) => {
   const token = useToken();
   const firstPlayer = players.find((it) => it.id === token.decoded.id);
   const secondPlayer = players.find((it) => it.id !== token.decoded.id);
@@ -28,8 +28,14 @@ const ResultTable = ({ rounds, maxRounds, players = [] }) => {
       <StyledTable>
         <TableHead>
           <TableRow>
-            <PlayerNameHeaderCell player={firstPlayer} />
-            <PlayerNameHeaderCell player={secondPlayer} />
+            <PlayerNameHeaderCell
+              player={firstPlayer}
+              score={score[firstPlayer.id]}
+            />
+            <PlayerNameHeaderCell
+              player={secondPlayer}
+              score={score[secondPlayer.id]}
+            />
             <TableCell align="right">
               <Typography variant="subtitle2" fontWeight={600}>
                 Winner

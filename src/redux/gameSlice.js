@@ -21,7 +21,7 @@ export const gameSlice = createSlice({
       if (state.currentGame.id === action.payload.id) {
         state.currentGame = action.payload;
       }
-    },
+    }
   },
 });
 

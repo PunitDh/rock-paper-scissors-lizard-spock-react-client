@@ -16,12 +16,12 @@ export function calculateScore(game) {
   const score = {};
 
   game.players.forEach((player) => {
-    score[player.firstName] = game.rounds.filter(
+    score[player.id] = game.rounds.filter(
       (round) => round.winner.playerId === player.id
     ).length;
   });
 
-  score.Ties = game.rounds.filter(
+  score.ties = game.rounds.filter(
     (round) => round.winner.method?.toLowerCase() === "tie"
   ).length;
 

@@ -1,10 +1,12 @@
 import { SocketRequest } from "src/utils/constants";
 import useSocket from "./useSocket";
 import useToken from "./useToken";
+import { useSelector } from "react-redux";
 
 export default function useGame() {
   const socket = useSocket();
   const token = useToken();
+  const { currentGame } = useSelector((state) => state.game);
 
   const secure = (request) => ({
     ...request,
@@ -12,6 +14,9 @@ export default function useGame() {
   });
 
   return {
+    fetchPlayer: (playerId) =>
+      currentGame?.players.find((player) => player.id === playerId),
+    currentGame,
     create: (request) =>
       socket.emit(SocketRequest.CREATE_GAME, secure(request)),
     rename: (request) =>
