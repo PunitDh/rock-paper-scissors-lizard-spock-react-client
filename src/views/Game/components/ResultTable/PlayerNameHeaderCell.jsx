@@ -14,6 +14,7 @@ const Score = styled(FlexBox)(({ theme }) => ({
 }));
 
 const PlayerNameHeaderCell = ({ player, score }) => {
+  if (!player) return null;
   const avatar = avatars.find((avatar) => avatar.id === player.avatar).image;
   return (
     <TableCell>

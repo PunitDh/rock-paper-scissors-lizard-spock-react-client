@@ -5,9 +5,8 @@ import FormField from "src/components/shared/FormField";
 import AvatarSelectField from "../../../components/shared/AvatarSelectField";
 import { TitledButton } from "src/components/shared/styles";
 
-const UpdateProfile = () => {
+const UpdateProfile = ({ player }) => {
   const token = useToken();
-  const player = usePlayer();
 
   const handleSubmit = (e) => {
     e.preventDefault();

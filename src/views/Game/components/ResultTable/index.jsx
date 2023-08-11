@@ -31,11 +31,11 @@ const ResultTable = ({ rounds, maxRounds, players = [], score }) => {
           <TableRow>
             <PlayerNameHeaderCell
               player={firstPlayer}
-              score={score[firstPlayer.id]}
+              score={score[firstPlayer?.id]}
             />
             <PlayerNameHeaderCell
               player={secondPlayer}
-              score={score[secondPlayer.id]}
+              score={score[secondPlayer?.id]}
             />
             <TableCell align="right">
               <Typography variant="subtitle2" fontWeight={600}>

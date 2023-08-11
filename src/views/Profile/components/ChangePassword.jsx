@@ -2,11 +2,9 @@ import DashboardCard from "../../../components/shared/DashboardCard";
 import { Box, Stack } from "@mui/material";
 import FormField from "src/components/shared/FormField";
 import { TitledButton } from "src/components/shared/styles";
-import { usePlayer } from "src/hooks";
 
-const ChangePassword = () => {
-  const player = usePlayer();
-
+const ChangePassword = ({ player }) => {
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     const { oldPassword, newPassword, confirmNewPassword } = e.target;

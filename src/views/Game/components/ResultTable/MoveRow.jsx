@@ -7,6 +7,8 @@ const StyledAvatar = styled(Avatar)({
   borderRadius: 0,
   width: "25px",
   height: "25px",
+  justifyContent: "center",
+  alignItems: "center",
 });
 
 const MoveRow = ({ firstPlayer, secondPlayer, moves, winner }) => {
@@ -25,7 +27,7 @@ const MoveRow = ({ firstPlayer, secondPlayer, moves, winner }) => {
   return (
     <TableRow>
       <TableCell>{getImage(firstPlayerMove?.move)}</TableCell>
-      <TableCell>
+      <TableCell align="left">
         {moves.length === 1 && secondPlayerMove
           ? "<Move Played>"
           : getImage(secondPlayerMove?.move)}

@@ -12,7 +12,7 @@ const ButtonContainer = styled(Container)({
 
 const PlayButtons = ({ id, playerId, lastRound, opponent }) => {
   return (
-    <ButtonContainer>
+    lastRound.moves && <ButtonContainer>
       {lastRound.moves.length === 1 && lastRound.moves[0].player === playerId
         ? `Waiting for ${opponent.firstName} to play`
         : entities.map((entity) => (

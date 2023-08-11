@@ -11,21 +11,19 @@ const Notification = ({
   horizontal = "center",
 }) => {
   const handleClose = () => notification.setOpen(false);
-  return (
-    notification.message && (
-      <Snackbar
-        anchorOrigin={{ vertical, horizontal }}
-        autoHideDuration={notification.duration}
-        open={notification.open}
-        onClose={handleClose}
-        key={vertical + horizontal}
-      >
-        <WideAlert onClose={handleClose} severity={notification.type}>
-          {notification.message}
-        </WideAlert>
-      </Snackbar>
-    )
-  );
+  return notification.message ? (
+    <Snackbar
+      anchorOrigin={{ vertical, horizontal }}
+      autoHideDuration={notification.duration}
+      open={notification.open}
+      onClose={handleClose}
+      key={vertical + horizontal}
+    >
+      <WideAlert onClose={handleClose} severity={notification.type}>
+        {notification.message}
+      </WideAlert>
+    </Snackbar>
+  ) : null;
 };
 
 export default Notification;

@@ -4,7 +4,6 @@ import { Box } from "@mui/material";
 import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
 import { useState } from "react";
 import DialogContent from "./DialogContent";
-import { usePlayer } from "src/hooks";
 import { TitledButton } from "src/components/shared/styles";
 
 const RedButton = styled(TitledButton)({
@@ -14,11 +13,10 @@ const RedButton = styled(TitledButton)({
   },
 });
 
-const DeleteProfile = () => {
+const DeleteProfile = ({ player }) => {
   const [confirm, setConfirm] = useState(false);
   const [value, setValue] = useState();
   const [password, setPassword] = useState("");
-  const player = usePlayer();
 
   const handleClose = (newValue) => {
     setConfirm(false);

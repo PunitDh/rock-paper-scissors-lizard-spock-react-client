@@ -15,13 +15,13 @@ export function isSuccess(response) {
 export function calculateScore(game) {
   const score = {};
 
-  game.players.forEach((player) => {
-    score[player.id] = game.rounds.filter(
+  game.players?.forEach((player) => {
+    score[player.id] = game.rounds?.filter(
       (round) => round.winner.playerId === player.id
     ).length;
   });
 
-  score.ties = game.rounds.filter(
+  score.ties = game.rounds?.filter(
     (round) => round.winner.method?.toLowerCase() === "tie"
   ).length;
 

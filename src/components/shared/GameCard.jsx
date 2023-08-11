@@ -3,7 +3,6 @@ import { Box, Card, CardContent, Stack, Typography } from "@mui/material";
 
 const ResponsiveCard = styled(Card)({
   display: "flex",
-  justifyContent: "space-between",
   flexDirection: "column",
   height: "85vh",
   maxWidth: "90vw",
@@ -12,13 +11,7 @@ const ResponsiveCard = styled(Card)({
 const GameCard = ({ title, children, action }) => (
   <ResponsiveCard elevation={9}>
     <CardContent>
-      <Stack
-        direction="row"
-        spacing={2}
-        justifyContent="space-between"
-        alignItems={"center"}
-        mb={3}
-      >
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Box>
           <Typography variant="h5">{title}</Typography>
         </Box>

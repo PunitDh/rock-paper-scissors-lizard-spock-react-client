@@ -11,12 +11,12 @@ import { FlexBox } from "src/components/shared/styles";
 import GameTitle from "./components/GameTitle";
 import { CircularProgress } from "@mui/material";
 import { calculateScore } from "src/utils";
+import LoadingScreen from "src/components/shared/LoadingScreen";
 
 const ResultContainer = styled(FlexBox)({
-  height: "60%",
+  height: "80%",
   flexDirection: "column",
   justifyContent: "flex-start",
-  marginTop: "2rem",
 });
 
 const Game = () => {
@@ -70,10 +70,8 @@ const Game = () => {
       </GameCard>
     </PageContainer>
   ) : (
-    <PageContainer title={"Loading..."} id="pagecontainer">
-      <FlexBox height="100vh">
-        <CircularProgress />
-      </FlexBox>
+    <PageContainer title="Loading...">
+      <LoadingScreen />
     </PageContainer>
   );
 };

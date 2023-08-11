@@ -1,6 +1,6 @@
 import { TextField, Tooltip } from "@mui/material";
 import { withStyles } from "@mui/styles";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import IconSelectField from "src/components/shared/IconSelectField";
 import { FlexBox } from "src/components/shared/styles";
 import { icons } from "src/data";
@@ -28,20 +28,37 @@ const InvisibleTextField = withStyles({
   },
 })(TextField);
 
-const GameTitle = ({ currentGame }) => {
-  const icon = icons.find((it) => it.id === currentGame.icon);
+const GameTitle = () => {
   const game = useGame();
+  const [gameName, setGameName] = useState(game.currentGame.name);
+  const icon = icons.find((it) => it.id === game.currentGame.icon);
+
+  const handleChange = (e) => {
+    e.preventDefault();
+    setGameName(e.target.value);
+  };
+
   const handleRename = (e) => {
     e.preventDefault();
-    game.rename({ gameId: currentGame.id, name: e.target.name.value });
+    game.rename({ gameId: game.currentGame.id, name: gameName });
   };
+
+  useEffect(() => {
+    setGameName(game.currentGame.name);
+  }, [game.currentGame?.id]);
 
   return (
     <FlexBox gap="0.5rem" alignItems="stretch">
-      <IconSelectField selected={icon.id} gameId={currentGame.id} />
-      <form onSubmit={handleRename} onBlur={handleRename}>
+      <IconSelectField selected={icon.id} gameId={game.currentGame.id} />
+      <form onSubmit={handleRename}>
         <Tooltip title="Rename game">
-          <InvisibleTextField defaultValue={currentGame.name} name="name" />
+          <InvisibleTextField
+            value={gameName}
+            name="name"
+            onChange={handleChange}
+            onBlur={handleRename}
+            autoComplete="off"
+          />
         </Tooltip>
       </form>
     </FlexBox>

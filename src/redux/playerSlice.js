@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-const tokenKey = "rpsls-token";
+import { tokenKey } from "src/utils/constants";
 
 export const menuSlice = createSlice({
   name: "player",

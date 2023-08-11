@@ -3,6 +3,8 @@ import { Button, Tooltip } from "@mui/material";
 import styled from "@emotion/styled";
 import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
 import { useGame, useToken } from "src/hooks";
+import { icons } from "src/data";
+import { sample } from "lodash";
 
 const GameButton = styled(Button)({
   backgroundColor: "primary.main",
@@ -18,6 +20,7 @@ export default function StartGameButton({ user }) {
   const handleStartGame = (playerId) => {
     const payload = {
       players: [token.decoded.id, playerId],
+      icon: sample(icons.map((it) => it.id)),
     };
     game.create(payload);
   };

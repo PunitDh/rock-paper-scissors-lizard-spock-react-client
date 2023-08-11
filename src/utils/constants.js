@@ -39,3 +39,5 @@ export const SocketResponse = Object.freeze({
   GAME_CREATED: "game-created",
   GAME_CLOSED: "game-closed",
 });
+
+export const tokenKey = "rpsls-token";
