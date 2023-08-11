@@ -31,6 +31,11 @@ import rabbit from "../assets/images/profile/rabbit.png";
 import user1 from "../assets/images/profile/user-1.jpg";
 import winkingFemale from "../assets/images/profile/winking-female.png";
 import woman from "../assets/images/profile/woman.png";
+import rock from "../assets/images/entities/rock.png";
+import paper from "../assets/images/entities/paper.png";
+import scissors from "../assets/images/entities/scissors.png";
+import lizard from "../assets/images/entities/lizard.png";
+import spock from "../assets/images/entities/spock.png";
 
 const avatars = [
   { id: 1, image: astronaut, name: "Astronaut" },
@@ -70,11 +75,11 @@ const icons = [
 ];
 
 const entities = [
-  { color: "brown", name: "Rock" },
-  { color: "gray", name: "Paper" },
-  { color: "silver", name: "Scissors" },
-  { color: "green", name: "Lizard" },
-  { color: "blue", name: "Spock" },
+  { color: "brown", name: "Rock", image: rock },
+  { color: "gray", name: "Paper", image: paper },
+  { color: "silver", name: "Scissors", image: scissors },
+  { color: "green", name: "Lizard", image: lizard },
+  { color: "blue", name: "Spock", image: spock },
 ];
 
 export { avatars, icons, entities };
