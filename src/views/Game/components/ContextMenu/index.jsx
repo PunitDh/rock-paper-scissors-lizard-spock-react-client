@@ -5,6 +5,7 @@ const ContextMenu = ({
   open,
   setOpen,
   handleRenameOpen,
+  handleDeleteConfirm,
   ariaLabelledBy,
   anchorEl,
 }) => {
@@ -39,11 +40,11 @@ const ContextMenu = ({
           </ListItemIcon>
           <ListItemText>Rename Game</ListItemText>
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={handleDeleteConfirm}>
           <ListItemIcon>
             <IconMail width={20} />
           </ListItemIcon>
-          <ListItemText>Close Game</ListItemText>
+          <ListItemText>Delete Game</ListItemText>
         </MenuItem>
       </Menu>
     </Box>

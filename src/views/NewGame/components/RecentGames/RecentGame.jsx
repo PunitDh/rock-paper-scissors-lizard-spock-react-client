@@ -7,6 +7,7 @@ import {
   TimelineSeparator,
 } from "@mui/lab";
 import React from "react";
+import { Bold } from "src/components/shared/styles";
 import { calculateScore } from "src/utils";
 
 const RecentGame = ({ game }) => {
@@ -19,8 +20,8 @@ const RecentGame = ({ game }) => {
 
   const score = calculateScore(game);
 
-  const playerScores = Object.entries(score)
-    .map(([player, score]) => `${player}: ${score}`)
+  const playerScores = Object.values(score)
+    .map((player) => `${player.name}: ${player.score}`)
     .join(", ");
 
   const rounds = game.rounds.filter((it) => it.moves.length > 0).length;
@@ -41,7 +42,7 @@ const RecentGame = ({ game }) => {
             .join(` played ${rounds} round${rounds !== 1 ? "s" : ""} with `)}
         </div>
         <div>
-          <strong>Score:</strong> {playerScores}
+          <Bold>{playerScores}</Bold>
         </div>
       </TimelineContent>
     </TimelineItem>

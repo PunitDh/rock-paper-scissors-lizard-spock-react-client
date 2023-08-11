@@ -21,6 +21,6 @@ export const TitledButton = ({ title, children, ...other }) => (
   </Tooltip>
 );
 
-export const Bold = styled.div({
+export const Bold = styled.span({
   fontWeight: "bold",
 });

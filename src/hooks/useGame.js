@@ -21,7 +21,7 @@ export default function useGame() {
       socket.emit(SocketRequest.CREATE_GAME, secure(request)),
     rename: (request) =>
       socket.emit(SocketRequest.RENAME_GAME, secure(request)),
-    close: (gameId) => socket.emit(SocketRequest.CLOSE_GAME, gameId),
+    delete: (request) => socket.emit(SocketRequest.DELETE_GAME, secure(request)),
     getGame: (request) =>
       socket.emit(SocketRequest.LOAD_CURRENT_GAME, secure(request)),
     playMove: (request) =>

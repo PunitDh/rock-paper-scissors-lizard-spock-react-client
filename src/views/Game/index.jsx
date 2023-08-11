@@ -9,7 +9,6 @@ import ResultTable from "./components/ResultTable";
 import GameActions from "./components/GameActions";
 import { FlexBox } from "src/components/shared/styles";
 import GameTitle from "./components/GameTitle";
-import { CircularProgress } from "@mui/material";
 import { calculateScore } from "src/utils";
 import LoadingScreen from "src/components/shared/LoadingScreen";
 

@@ -16,14 +16,21 @@ export function calculateScore(game) {
   const score = {};
 
   game.players?.forEach((player) => {
-    score[player.id] = game.rounds?.filter(
-      (round) => round.winner.playerId === player.id
-    ).length;
+    const { id: playerId } = player;
+    score[playerId] = {
+      name: player.firstName,
+      score: game.rounds?.filter((round) => round.winner.playerId === playerId)
+        .length,
+    };
   });
 
-  score.ties = game.rounds?.filter(
+  const tieScore = game.rounds?.filter(
     (round) => round.winner.method?.toLowerCase() === "tie"
   ).length;
+  score.ties = {
+    name: "Ties",
+    score: tieScore,
+  };
 
   return score;
 }

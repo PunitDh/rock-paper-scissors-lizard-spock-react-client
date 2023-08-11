@@ -20,7 +20,7 @@ export const SocketRequest = Object.freeze({
   CHANGE_ICON: "change-icon",
   RESET_GAME_ROUNDS: "reset-rounds",
   CREATE_GAME: "create-game",
-  CLOSE_GAME: "close-game",
+  DELETE_GAME: "delete-game",
 });
 
 export const SocketResponse = Object.freeze({
@@ -37,7 +37,7 @@ export const SocketResponse = Object.freeze({
   ICON_CHANGED: "icon-changed",
   GAME_ROUNDS_RESET: "rounds-reset",
   GAME_CREATED: "game-created",
-  GAME_CLOSED: "game-closed",
+  GAME_DELETED: "game-deleted",
 });
 
 export const tokenKey = "rpsls-token";

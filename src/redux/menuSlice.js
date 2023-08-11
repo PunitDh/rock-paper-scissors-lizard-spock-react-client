@@ -47,11 +47,21 @@ export const menuSlice = createSlice({
       const gameIndex = state["Current Games"].findIndex(
         (it) => it.id === action.payload.id
       );
-      state["Current Games"][gameIndex] = menuMapper(action.payload);
+      if (gameIndex > -1) {
+        state["Current Games"][gameIndex] = menuMapper(action.payload);
+      } else {
+        state["Current Games"].push(menuMapper(action.payload));
+      }
+    },
+    deleteGameFromMenu: (state, action) => {
+      state["Current Games"] = state["Current Games"].filter(
+        (game) => game.id !== action.payload.id
+      );
     },
   },
 });
 
-export const { setCurrentGames, updateCurrentGameMenu } = menuSlice.actions;
+export const { setCurrentGames, updateCurrentGameMenu, deleteGameFromMenu } =
+  menuSlice.actions;
 
 export default menuSlice.reducer;

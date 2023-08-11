@@ -8,7 +8,11 @@ import {
   setRecentGames,
   updateCurrentGame,
 } from "src/redux/gameSlice";
-import { setCurrentGames, updateCurrentGameMenu } from "src/redux/menuSlice";
+import {
+  deleteGameFromMenu,
+  setCurrentGames,
+  updateCurrentGameMenu,
+} from "src/redux/menuSlice";
 import { Status, isSuccess } from "src/utils";
 import { SocketResponse } from "src/utils/constants";
 
@@ -79,8 +83,14 @@ const SocketListeners = () => {
       isSuccess(response)
         .then((game) => {
           dispatch(setCurrentGame(game));
+          dispatch(updateCurrentGameMenu(game));
           navigate(`/games/${game.id}`);
         })
+        .catch(notification.error)
+    );
+    socket.on(SocketResponse.GAME_DELETED, (response) =>
+      isSuccess(response)
+        .then((game) => dispatch(deleteGameFromMenu(game)))
         .catch(notification.error)
     );
     socket.on(SocketResponse.RECENT_GAMES_LOADED, (response) =>

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-// mui imports
 import {
   ListItemIcon,
   ListItem,
@@ -10,11 +9,13 @@ import {
   useTheme,
 } from "@mui/material";
 import ContextMenu from "src/views/Game/components/ContextMenu";
-import RenameGameModal from "src/views/Game/components/ContextMenu/RenameGame";
+import RenameGameModal from "src/views/Game/components/ContextMenu/RenameGameModal";
+import DeleteConfirmation from "src/views/Game/components/ContextMenu/DeleteConfirmation";
 
 const ContextNavItem = ({ item, level, pathDirect, onClick }) => {
   const [anchorEl, setAnchorEl] = useState(false);
   const [rename, showRename] = useState(false);
+  const [deleteConfirmation, showDeleteConfirmation] = useState(false);
 
   const handleContextMenu = (e) => {
     e.preventDefault();
@@ -26,7 +27,13 @@ const ContextNavItem = ({ item, level, pathDirect, onClick }) => {
     setAnchorEl(null);
   };
 
+  const handleDeleteConfirm = () => {
+    showDeleteConfirmation(true);
+    setAnchorEl(null);
+  };
+
   const handleRenameClose = () => showRename(false);
+  const handleDeleteConfirmationClose = () => showDeleteConfirmation(false);
 
   const Icon = item.icon;
   const theme = useTheme();
@@ -61,6 +68,7 @@ const ContextNavItem = ({ item, level, pathDirect, onClick }) => {
           open={anchorEl}
           setOpen={setAnchorEl}
           handleRenameOpen={handleRenameOpen}
+          handleDeleteConfirm={handleDeleteConfirm}
           ariaLabelledBy={item.id}
           anchorEl={anchorEl}
         />
@@ -69,6 +77,13 @@ const ContextNavItem = ({ item, level, pathDirect, onClick }) => {
         <RenameGameModal
           open={rename}
           handleClose={handleRenameClose}
+          selectedGame={item}
+        />
+      )}
+      {deleteConfirmation && (
+        <DeleteConfirmation
+          open={deleteConfirmation}
+          handleClose={handleDeleteConfirmationClose}
           selectedGame={item}
         />
       )}

@@ -7,6 +7,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
+import { Bold } from "src/components/shared/styles";
 import { useGame, useToken } from "src/hooks";
 
 export default function RenameGameModal({ handleClose, open, selectedGame }) {
@@ -30,7 +31,7 @@ export default function RenameGameModal({ handleClose, open, selectedGame }) {
         <form onSubmit={handleRename}>
           <DialogContent>
             <DialogContentText>
-              Rename your game with {otherPlayer.firstName}
+              Rename your game with <Bold>{otherPlayer.firstName}</Bold>
             </DialogContentText>
             <TextField
               autoFocus
