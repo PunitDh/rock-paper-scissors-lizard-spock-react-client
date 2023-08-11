@@ -28,7 +28,11 @@ const UpdateProfile = () => {
           <Stack mb={3}>
             <FormField label="First Name" value={token.decoded.firstName} />
             <FormField label="Last Name" value={token.decoded.lastName} />
-            <FormField label="Email" value={token.decoded.email} />
+            <FormField
+              label="Email"
+              value={token.decoded.email}
+              disabled={!token.decoded.isAdmin}
+            />
             <AvatarSelectField selected={token.decoded.avatar} />
           </Stack>
           <TitledButton

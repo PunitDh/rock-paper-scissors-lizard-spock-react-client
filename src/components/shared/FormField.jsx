@@ -1,9 +1,16 @@
-import { Typography } from "@mui/material";
+import { Tooltip, Typography } from "@mui/material";
 import CustomTextField from "../forms/theme-elements/CustomTextField";
 import { camelCase, kebabCase } from "lodash";
 import PasswordField from "./PasswordField";
 
-const FormField = ({ value, label, type = "text", name, id }) => {
+const FormField = ({
+  value,
+  label,
+  type = "text",
+  name,
+  id,
+  disabled = false,
+}) => {
   const autoId = kebabCase(label);
   const autoName = camelCase(label);
 
@@ -21,7 +28,11 @@ const FormField = ({ value, label, type = "text", name, id }) => {
       </Typography>
 
       {type === "password" ? (
-        <PasswordField id={id || autoId} name={name || autoName} />
+        <PasswordField
+          id={id || autoId}
+          name={name || autoName}
+          disabled={disabled}
+        />
       ) : (
         <CustomTextField
           id={id || autoId}
@@ -29,6 +40,7 @@ const FormField = ({ value, label, type = "text", name, id }) => {
           type={type}
           variant="outlined"
           defaultValue={value}
+          disabled={disabled}
         />
       )}
     </>

@@ -28,7 +28,7 @@ const FullLayout = () => {
   const token = useToken();
   const notification = useNotification();
 
-  if (!token.jwt) {
+  if (!token.decoded) {
     return <Navigate to="/auth/login" />;
   }
 

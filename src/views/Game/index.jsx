@@ -11,6 +11,7 @@ import GameActions from "./components/GameActions";
 import { calculateScore } from "src/utils";
 import { Bold, FlexBox } from "src/components/shared/styles";
 import GameTitle from "./components/GameTitle";
+import { CircularProgress } from "@mui/material";
 
 const ResultContainer = styled(FlexBox)({
   height: "60%",
@@ -49,38 +50,42 @@ const Game = () => {
     (player) => player.id !== token.decoded.id
   );
 
-  return (
-    currentGame.id && (
-      <PageContainer title={currentGame.name}>
-        <GameCard
-          title={<GameTitle currentGame={currentGame} />}
-          action={
-            <GameActions
-              onMaxRoundsChange={setMaxRounds}
-              maxRounds={maxRounds}
-              gameId={gameId}
-            />
-          }
-        >
-          <ScoreContainer score={score}>
-            <Bold>Score:</Bold> {playerScores}
-          </ScoreContainer>
-          <ResultContainer>
-            <ResultTable
-              rounds={currentGame.rounds?.filter((it) => it.moves.length > 0)}
-              maxRounds={maxRounds}
-              players={currentGame.players}
-            />
-          </ResultContainer>
-          <PlayButtons
-            id={gameId}
-            playerId={token.decoded.id}
-            lastRound={lastRound}
-            opponent={opponent}
+  return currentGame.id ? (
+    <PageContainer title={currentGame.name}>
+      <GameCard
+        title={<GameTitle currentGame={currentGame} />}
+        action={
+          <GameActions
+            onMaxRoundsChange={setMaxRounds}
+            maxRounds={maxRounds}
+            gameId={gameId}
           />
-        </GameCard>
-      </PageContainer>
-    )
+        }
+      >
+        <ScoreContainer score={score}>
+          <Bold>Score:</Bold> {playerScores}
+        </ScoreContainer>
+        <ResultContainer>
+          <ResultTable
+            rounds={currentGame.rounds?.filter((it) => it.moves.length > 0)}
+            maxRounds={maxRounds}
+            players={currentGame.players}
+          />
+        </ResultContainer>
+        <PlayButtons
+          id={gameId}
+          playerId={token.decoded.id}
+          lastRound={lastRound}
+          opponent={opponent}
+        />
+      </GameCard>
+    </PageContainer>
+  ) : (
+    <PageContainer title={"Loading..."} id="pagecontainer">
+      <FlexBox height="100vh">
+        <CircularProgress />
+      </FlexBox>
+    </PageContainer>
   );
 };
 
