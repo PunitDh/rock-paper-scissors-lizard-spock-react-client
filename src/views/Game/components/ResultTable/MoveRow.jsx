@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { Avatar, TableCell, TableRow } from "@mui/material";
+import ResponsiveTableCell from "src/components/shared/ResponsiveTableCell";
 import { entities } from "src/data";
 
 const StyledAvatar = styled(Avatar)({
@@ -30,7 +31,7 @@ const MoveRow = ({ firstPlayer, secondPlayer, moves, winner }) => {
           : getImage(secondPlayerMove?.move)}
       </TableCell>
       <TableCell align="right">{winner.firstName}</TableCell>
-      <TableCell align="right">{winner.reason}</TableCell>
+      <ResponsiveTableCell align="right">{winner.reason}</ResponsiveTableCell>
     </TableRow>
   );
 };

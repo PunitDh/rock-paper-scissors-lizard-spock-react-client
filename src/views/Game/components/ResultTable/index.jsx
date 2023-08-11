@@ -10,6 +10,7 @@ import { useToken } from "src/hooks";
 import MoveRow from "./MoveRow";
 import styled from "@emotion/styled";
 import PlayerNameHeaderCell from "./PlayerNameHeaderCell";
+import ResponsiveTableCell from "src/components/shared/ResponsiveTableCell";
 
 const StyledTable = styled(Table)({
   whiteSpace: "nowrap",
@@ -41,11 +42,11 @@ const ResultTable = ({ rounds, maxRounds, players = [], score }) => {
                 Winner
               </Typography>
             </TableCell>
-            <TableCell align="right">
+            <ResponsiveTableCell align="right">
               <Typography variant="subtitle2" fontWeight={600}>
                 Reason
               </Typography>
-            </TableCell>
+            </ResponsiveTableCell>
           </TableRow>
         </TableHead>
         <TableBody sx={{ overflow: "scroll" }}>
