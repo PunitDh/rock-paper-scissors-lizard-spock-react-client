@@ -3,24 +3,11 @@ import { Link } from "react-router-dom";
 import PageContainer from "src/components/container/PageContainer";
 import Logo from "src/layouts/full/shared/logo/Logo";
 import AuthRegister from "./auth/AuthRegister";
+import { AuthBox } from "./styles";
 
 const Register = () => (
   <PageContainer title="Register" description="Register page">
-    <Box
-      sx={{
-        position: "relative",
-        "&:before": {
-          content: '""',
-          background: "radial-gradient(#d2f1df, #d3d7fa, #bad8f4)",
-          backgroundSize: "400% 400%",
-          animation: "gradient 15s ease infinite",
-          position: "absolute",
-          height: "100%",
-          width: "100%",
-          opacity: "0.3",
-        },
-      }}
-    >
+    <AuthBox>
       <Grid
         container
         spacing={0}
@@ -76,7 +63,7 @@ const Register = () => (
           </Card>
         </Grid>
       </Grid>
-    </Box>
+    </AuthBox>
   </PageContainer>
 );
 

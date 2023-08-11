@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import DashboardCard from "../../../../components/shared/DashboardCard";
-import { Box, Tooltip } from "@mui/material";
+import { Box } from "@mui/material";
 import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
 import { useState } from "react";
 import DialogContent from "./DialogContent";

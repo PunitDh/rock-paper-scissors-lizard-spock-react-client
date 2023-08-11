@@ -1,11 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-  IconDeviceGamepad2,
-  IconLogin,
-  IconLogout,
-  IconUser,
-  IconUserPlus,
-} from "@tabler/icons";
+import { IconDeviceGamepad2, IconLogout, IconUser } from "@tabler/icons";
 import { uniqueId } from "lodash";
 import { icons } from "src/data";
 
@@ -16,19 +10,12 @@ const menuMapper = (game) => ({
   href: `/games/${game.id}`,
   gameContext: true,
   players: game.players,
-  //icon: game.icon
 });
 
 export const menuSlice = createSlice({
   name: "menu",
   initialState: {
     Home: [
-      // {
-      //   id: uniqueId(),
-      //   title: "Dashboard",
-      //   icon: IconLayoutDashboard,
-      //   href: "/dashboard",
-      // },
       {
         id: uniqueId(),
         title: "New Game",
@@ -37,20 +24,6 @@ export const menuSlice = createSlice({
       },
     ],
     "Current Games": [],
-    Auth: [
-      {
-        id: uniqueId(),
-        title: "Login",
-        icon: IconLogin,
-        href: "/auth/login",
-      },
-      {
-        id: uniqueId(),
-        title: "Register",
-        icon: IconUserPlus,
-        href: "/auth/register",
-      },
-    ],
     Settings: [
       {
         id: uniqueId(),

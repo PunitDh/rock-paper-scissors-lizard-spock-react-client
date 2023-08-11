@@ -3,6 +3,8 @@ import { Stack } from "@mui/system";
 import CustomTextField from "../../../components/forms/theme-elements/CustomTextField";
 import { usePlayer } from "src/hooks";
 import AvatarSelectField from "src/components/shared/AvatarSelectField";
+import { avatars } from "src/data";
+import { sample } from "lodash";
 
 const AuthRegister = ({ title, subtitle, subtext }) => {
   const player = usePlayer();
@@ -120,7 +122,7 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
               fullWidth
             />
 
-            <AvatarSelectField />
+            <AvatarSelectField selected={sample(avatars.map((it) => it.id))} />
           </Stack>
           <Button
             type="submit"

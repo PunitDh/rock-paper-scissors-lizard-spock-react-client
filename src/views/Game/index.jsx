@@ -5,20 +5,21 @@ import { useParams } from "react-router";
 import PageContainer from "src/components/container/PageContainer";
 import GameCard from "src/components/shared/GameCard";
 import styled from "@emotion/styled";
-import { Container } from "./components/styles";
 import PlayButtons from "./components/PlayButtons";
 import ResultTable from "./components/ResultTable";
 import GameActions from "./components/GameActions";
 import { calculateScore } from "src/utils";
-import { Bold } from "src/components/shared/styles";
+import { Bold, FlexBox } from "src/components/shared/styles";
 import GameTitle from "./components/GameTitle";
 
-const ResultContainer = styled(Container)({
-  height: "75%",
+const ResultContainer = styled(FlexBox)({
+  height: "60%",
   flexDirection: "column",
+  justifyContent: "flex-start",
+  marginTop: "2rem",
 });
 
-const ScoreContainer = styled(Container)({
+const ScoreContainer = styled(FlexBox)({
   height: "5%",
 });
 

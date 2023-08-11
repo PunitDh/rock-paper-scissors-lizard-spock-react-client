@@ -1,28 +1,13 @@
 import { Link } from "react-router-dom";
 import { Grid, Box, Card, Stack, Typography } from "@mui/material";
-
-// components
 import PageContainer from "src/components/container/PageContainer";
 import Logo from "src/layouts/full/shared/logo/Logo";
 import AuthLogin from "./auth/AuthLogin";
+import { AuthBox } from "./styles";
 
 const Login = () => (
-  <PageContainer title="Login" description="this is Login page">
-    <Box
-      sx={{
-        position: "relative",
-        "&:before": {
-          content: '""',
-          background: "radial-gradient(#d2f1df, #d3d7fa, #bad8f4)",
-          backgroundSize: "400% 400%",
-          animation: "gradient 15s ease infinite",
-          position: "absolute",
-          height: "100%",
-          width: "100%",
-          opacity: "0.3",
-        },
-      }}
-    >
+  <PageContainer title="Login" description="Login page">
+    <AuthBox>
       <Grid
         container
         spacing={0}
@@ -78,7 +63,7 @@ const Login = () => (
           </Card>
         </Grid>
       </Grid>
-    </Box>
+    </AuthBox>
   </PageContainer>
 );
 

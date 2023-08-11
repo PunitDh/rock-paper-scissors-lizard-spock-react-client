@@ -18,18 +18,22 @@ import {
 } from "@tabler/icons";
 import ProfileImg from "src/assets/images/profile/user-1.jpg";
 import { avatars } from "src/data";
-import { usePlayer } from "src/hooks";
+import styled from "@emotion/styled";
+
+const ProfileAvatar = styled(Avatar)({
+  width: 35,
+  height: 35,
+});
 
 const CornerProfile = ({ decoded }) => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const player = usePlayer();
   const navigate = useNavigate();
   const profileImage =
     avatars.find((it) => it.id === decoded.avatar)?.image || ProfileImg;
 
-  const handleClick = (event) => setAnchorEl(event.currentTarget);
-  const handleClose = () => setAnchorEl(null);
-  const navigateTo = (to) => () => handleClose(navigate(to));
+  const openMenu = (event) => setAnchorEl(event.currentTarget);
+  const closeMenu = () => setAnchorEl(null);
+  const navigateTo = (to) => () => closeMenu(navigate(to));
 
   return (
     <Box>
@@ -44,23 +48,16 @@ const CornerProfile = ({ decoded }) => {
             color: "primary.main",
           }),
         }}
-        onClick={handleClick}
+        onClick={openMenu}
       >
-        <Avatar
-          src={profileImage}
-          alt={String(decoded.avatar)}
-          sx={{
-            width: 35,
-            height: 35,
-          }}
-        />
+        <ProfileAvatar src={profileImage} alt={String(decoded.avatar)} />
       </IconButton>
       <Menu
         id="msgs-menu"
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
-        onClose={handleClose}
+        onClose={closeMenu}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         sx={{
@@ -83,21 +80,9 @@ const CornerProfile = ({ decoded }) => {
           </ListItemIcon>
           <ListItemText>My Profile</ListItemText>
         </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <IconMail width={20} />
-          </ListItemIcon>
-          <ListItemText>My Account</ListItemText>
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <IconListCheck width={20} />
-          </ListItemIcon>
-          <ListItemText>My Tasks</ListItemText>
-        </MenuItem>
         <Box mt={1} py={1} px={2}>
           <Button
-            onClick={player.logout}
+            onClick={navigateTo("/auth/logout")}
             variant="outlined"
             color="primary"
             type="button"

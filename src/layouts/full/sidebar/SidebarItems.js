@@ -11,11 +11,11 @@ const SidebarItems = () => {
   return (
     <Box sx={{ px: 3 }}>
       <List sx={{ pt: 0 }} className="sidebarNav">
-        {Object.keys(menuItems).map((item) => (
+        {Object.keys(menuItems).map((groupName) => (
           <NavGroup
-            item={item}
-            key={item}
-            navItems={menuItems[item]}
+            item={groupName}
+            key={groupName}
+            navItems={menuItems[groupName]}
             pathDirect={pathDirect}
           />
         ))}
@@ -23,4 +23,5 @@ const SidebarItems = () => {
     </Box>
   );
 };
+
 export default SidebarItems;

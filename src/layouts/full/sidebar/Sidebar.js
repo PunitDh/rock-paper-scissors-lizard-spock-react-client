@@ -3,6 +3,12 @@ import Logo from "../shared/logo/Logo";
 import SidebarItems from "./SidebarItems";
 import { useEffect } from "react";
 import { useGame } from "src/hooks";
+import styled from "@emotion/styled";
+
+const WideBox = styled(Box)(({ width }) => ({
+  width,
+  flexShrink: 0,
+}));
 
 const Sidebar = (props) => {
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
@@ -15,12 +21,7 @@ const Sidebar = (props) => {
 
   if (lgUp) {
     return (
-      <Box
-        sx={{
-          width: sidebarWidth,
-          flexShrink: 0,
-        }}
-      >
+      <WideBox width={sidebarWidth}>
         <Drawer
           anchor="left"
           open={props.isSidebarOpen}
@@ -45,7 +46,7 @@ const Sidebar = (props) => {
             </Box>
           </Box>
         </Drawer>
-      </Box>
+      </WideBox>
     );
   }
 
