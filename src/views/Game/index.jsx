@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useGame } from "src/hooks";
+import { useGame, useToken } from "src/hooks";
 import { useParams } from "react-router";
 import PageContainer from "src/components/container/PageContainer";
 import GameCard from "src/components/shared/GameCard";
@@ -28,6 +28,7 @@ const Game = () => {
   const game = useGame();
   const [maxRounds, setMaxRounds] = useState(3);
   const { currentGame } = useSelector((state) => state.game);
+  const token = useToken();
 
   useEffect(() => {
     game.getGame({ gameId });
@@ -40,6 +41,11 @@ const Game = () => {
     Object.entries(score)
       .map(([player, score]) => `${player}: ${score}`)
       .join(", ");
+
+  const lastRound = currentGame.rounds[currentGame.rounds.length - 1];
+  const opponent = currentGame.players.find(
+    (player) => player.id !== token.decoded.id
+  );
 
   return (
     currentGame.id && (
@@ -64,7 +70,7 @@ const Game = () => {
               players={currentGame.players}
             />
           </ResultContainer>
-          <PlayButtons id={gameId} />
+          <PlayButtons id={gameId} lastRound={lastRound} opponent={opponent} />
         </GameCard>
       </PageContainer>
     )

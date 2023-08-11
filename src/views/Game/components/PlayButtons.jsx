@@ -10,17 +10,19 @@ const ButtonContainer = styled(Container)({
   flexWrap: "wrap",
 });
 
-const PlayButtons = ({ id }) => {
+const PlayButtons = ({ id, lastRound, opponent }) => {
   return (
     <ButtonContainer>
-      {entities.map((entity) => (
-        <EntityButton
-          key={entity.name}
-          gameId={id}
-          btncolor={entity.color}
-          entity={entity.name}
-        />
-      ))}
+      {lastRound.moves.length !== 1
+        ? entities.map((entity) => (
+            <EntityButton
+              key={entity.name}
+              gameId={id}
+              btncolor={entity.color}
+              entity={entity.name}
+            />
+          ))
+        : `Waiting for ${opponent.firstName} to play`}
     </ButtonContainer>
   );
 };
