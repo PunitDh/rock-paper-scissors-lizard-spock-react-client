@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import EntityButton from "./EntityButton";
-import { Container } from "./styles";
+import { Container } from "../styles";
 import { entities } from "src/data";
 
 const ButtonContainer = styled(Container)({

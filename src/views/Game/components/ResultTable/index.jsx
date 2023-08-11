@@ -9,6 +9,7 @@ import {
 import { useToken } from "src/hooks";
 import MoveRow from "./MoveRow";
 import styled from "@emotion/styled";
+import PlayerNameHeaderCell from "./PlayerNameHeaderCell";
 
 const StyledTable = styled(Table)({
   whiteSpace: "nowrap",
@@ -27,16 +28,8 @@ const ResultTable = ({ rounds, maxRounds, players = [] }) => {
       <StyledTable>
         <TableHead>
           <TableRow>
-            <TableCell>
-              <Typography variant="subtitle2" fontWeight={600}>
-                {firstPlayer.firstName}
-              </Typography>
-            </TableCell>
-            <TableCell>
-              <Typography variant="subtitle2" fontWeight={600}>
-                {secondPlayer.firstName}
-              </Typography>
-            </TableCell>
+            <PlayerNameHeaderCell player={firstPlayer} />
+            <PlayerNameHeaderCell player={secondPlayer} />
             <TableCell align="right">
               <Typography variant="subtitle2" fontWeight={600}>
                 Winner
