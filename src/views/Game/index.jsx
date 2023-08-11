@@ -42,7 +42,8 @@ const Game = () => {
       .map(([player, score]) => `${player}: ${score}`)
       .join(", ");
 
-  const lastRound = currentGame.rounds && currentGame.rounds[currentGame.rounds.length - 1];
+  const lastRound =
+    currentGame.rounds && currentGame.rounds[currentGame.rounds.length - 1];
   const opponent = currentGame.players?.find(
     (player) => player.id !== token.decoded.id
   );
@@ -70,7 +71,12 @@ const Game = () => {
               players={currentGame.players}
             />
           </ResultContainer>
-          <PlayButtons id={gameId} lastRound={lastRound} opponent={opponent} />
+          <PlayButtons
+            id={gameId}
+            playerId={token.decoded.id}
+            lastRound={lastRound}
+            opponent={opponent}
+          />
         </GameCard>
       </PageContainer>
     )
