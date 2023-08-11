@@ -1,17 +1,32 @@
 import { Box, Menu, MenuItem, ListItemIcon, ListItemText } from "@mui/material";
 import { IconMail, IconUser } from "@tabler/icons";
 
-const ContextMenu = ({ open, setOpen, handleRenameOpen }) => {
+const ContextMenu = ({
+  open,
+  setOpen,
+  handleRenameOpen,
+  ariaLabelledBy,
+  anchorEl,
+}) => {
   const handleClose = () => setOpen(false);
 
   return (
     <Box>
       <Menu
-        id="msgs-menu"
-        anchorEl={open}
+        id="context-menu"
         keepMounted
         open={Boolean(open)}
         onClose={handleClose}
+        anchorEl={anchorEl}
+        MenuListProps={{ "aria-labelledby": ariaLabelledBy }}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
         sx={{
           "& .MuiMenu-paper": {
             width: "200px",

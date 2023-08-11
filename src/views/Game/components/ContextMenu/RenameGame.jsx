@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { useGame, useToken } from "src/hooks";
 
-export default function RenameGame({ handleClose, open, selectedGame }) {
+export default function RenameGameModal({ handleClose, open, selectedGame }) {
   const game = useGame();
   const token = useToken();
 

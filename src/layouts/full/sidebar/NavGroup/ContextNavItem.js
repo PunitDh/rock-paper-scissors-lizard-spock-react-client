@@ -10,20 +10,20 @@ import {
   useTheme,
 } from "@mui/material";
 import ContextMenu from "src/views/Game/components/ContextMenu";
-import RenameGame from "src/views/Game/components/ContextMenu/RenameGame";
+import RenameGameModal from "src/views/Game/components/ContextMenu/RenameGame";
 
 const ContextNavItem = ({ item, level, pathDirect, onClick }) => {
-  const [menu, showMenu] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(false);
   const [rename, showRename] = useState(false);
 
   const handleContextMenu = (e) => {
     e.preventDefault();
-    showMenu(true);
+    setAnchorEl(e.currentTarget);
   };
 
   const handleRenameOpen = () => {
     showRename(true);
-    showMenu(false);
+    setAnchorEl(null);
   };
 
   const handleRenameClose = () => showRename(false);
@@ -56,15 +56,17 @@ const ContextNavItem = ({ item, level, pathDirect, onClick }) => {
 
   return (
     <>
-      {menu && (
+      {anchorEl && (
         <ContextMenu
-          open={menu}
-          setOpen={showMenu}
+          open={anchorEl}
+          setOpen={setAnchorEl}
           handleRenameOpen={handleRenameOpen}
+          ariaLabelledBy={item.id}
+          anchorEl={anchorEl}
         />
       )}
       {rename && (
-        <RenameGame
+        <RenameGameModal
           open={rename}
           handleClose={handleRenameClose}
           selectedGame={item}
@@ -75,16 +77,21 @@ const ContextNavItem = ({ item, level, pathDirect, onClick }) => {
         component="li"
         disablePadding
         key={item.id}
+        id={item.id}
       >
         <ListItemStyled
           button
           component={item.external ? "a" : NavLink}
           to={item.href}
+          id={item.id}
           href={item.external ? item.href : ""}
           disabled={item.disabled}
           selected={pathDirect === item.href}
           target={item.external ? "_blank" : ""}
           onClick={onClick}
+          aria-controls={anchorEl ? "demo-positioned-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={anchorEl ? "true" : undefined}
         >
           <ListItemIcon
             sx={{
