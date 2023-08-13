@@ -8,9 +8,41 @@ import {
   ListItemText,
   useTheme,
 } from "@mui/material";
-import ContextMenu from "src/views/Game/components/ContextMenu";
-import RenameGameModal from "src/views/Game/components/ContextMenu/RenameGameModal";
-import DeleteConfirmation from "src/views/Game/components/ContextMenu/DeleteConfirmation";
+import ContextMenu from "../ContextMenu";
+import RenameGameModal from "../ContextMenu/RenameGameModal";
+import DeleteConfirmation from "../ContextMenu/DeleteConfirmation";
+import { FlexBox } from "src/components/shared/styles";
+
+const ListItemStyled = styled(ListItem)(({ theme, level }) => ({
+  whiteSpace: "nowrap",
+  marginBottom: "2px",
+  padding: "8px 10px",
+  borderRadius: "8px",
+  backgroundColor: level > 1 ? "transparent !important" : "inherit",
+  color: theme.palette.text.secondary,
+  paddingLeft: "10px",
+  "&:hover": {
+    backgroundColor: theme.palette.primary.light,
+    color: theme.palette.primary.main,
+  },
+  "&.Mui-selected": {
+    color: "white",
+    backgroundColor: theme.palette.primary.main,
+    "&:hover": {
+      backgroundColor: theme.palette.primary.main,
+      color: "white",
+    },
+  },
+}));
+
+const MovePlayedNotification = styled(FlexBox)({
+  fontSize: "small",
+  color: "white",
+  backgroundColor: "red",
+  width: "1rem",
+  height: "1rem",
+  borderRadius: "0.5rem",
+});
 
 const ContextNavItem = ({ item, level, pathDirect, onClick }) => {
   const [anchorEl, setAnchorEl] = useState(false);
@@ -38,28 +70,6 @@ const ContextNavItem = ({ item, level, pathDirect, onClick }) => {
   const Icon = item.icon;
   const theme = useTheme();
   const itemIcon = <Icon stroke={1.5} size="1.3rem" />;
-
-  const ListItemStyled = styled(ListItem)(() => ({
-    whiteSpace: "nowrap",
-    marginBottom: "2px",
-    padding: "8px 10px",
-    borderRadius: "8px",
-    backgroundColor: level > 1 ? "transparent !important" : "inherit",
-    color: theme.palette.text.secondary,
-    paddingLeft: "10px",
-    "&:hover": {
-      backgroundColor: theme.palette.primary.light,
-      color: theme.palette.primary.main,
-    },
-    "&.Mui-selected": {
-      color: "white",
-      backgroundColor: theme.palette.primary.main,
-      "&:hover": {
-        backgroundColor: theme.palette.primary.main,
-        color: "white",
-      },
-    },
-  }));
 
   return (
     <>
@@ -95,6 +105,8 @@ const ContextNavItem = ({ item, level, pathDirect, onClick }) => {
         id={item.id}
       >
         <ListItemStyled
+          theme={theme}
+          level={level}
           button
           component={item.external ? "a" : NavLink}
           to={item.href}
@@ -117,9 +129,12 @@ const ContextNavItem = ({ item, level, pathDirect, onClick }) => {
           >
             {itemIcon}
           </ListItemIcon>
-          <ListItemText>
-            <>{item.title}</>
-          </ListItemText>
+          <ListItemText>{item.title}</ListItemText>
+          {item.movePlayed && (
+            <MovePlayedNotification>
+              {Number(item.movePlayed)}
+            </MovePlayedNotification>
+          )}
         </ListItemStyled>
       </List>
     </>

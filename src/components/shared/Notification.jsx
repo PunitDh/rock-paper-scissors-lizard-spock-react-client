@@ -20,7 +20,7 @@ const Notification = ({
       key={vertical + horizontal}
     >
       <WideAlert onClose={handleClose} severity={notification.type}>
-        {notification.message}
+        {String(notification.message)}
       </WideAlert>
     </Snackbar>
   ) : null;

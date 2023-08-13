@@ -10,9 +10,10 @@ import {
 } from "src/redux/gameSlice";
 import {
   deleteGameFromMenu,
-  setCurrentGames,
+  setCurrentGamesNav,
   updateCurrentGameMenu,
 } from "src/redux/menuSlice";
+import { setCurrentGames } from "src/redux/playerSlice";
 import { Status, isSuccess } from "src/utils";
 import { SocketResponse } from "src/utils/constants";
 
@@ -23,6 +24,11 @@ const SocketListeners = () => {
   const navigate = useNavigate();
   const player = usePlayer();
   const dispatch = useDispatch();
+
+  const setGames = (games) => {
+    dispatch(setCurrentGames(games));
+    dispatch(setCurrentGamesNav(games));
+  };
 
   const handleToken = (response, successMessage, navigateTo = "/") =>
     isSuccess(response)
@@ -58,9 +64,7 @@ const SocketListeners = () => {
         .catch(notification.error)
     );
     socket.on(SocketResponse.CURRENT_GAMES_LOADED, (response) =>
-      isSuccess(response)
-        .then((games) => dispatch(setCurrentGames(games)))
-        .catch(notification.error)
+      isSuccess(response).then(setGames).catch(notification.error)
     );
     socket.on(SocketResponse.CURRENT_GAME_LOADED, (response) =>
       isSuccess(response)

@@ -8,6 +8,8 @@ const Entity = styled(Button)(({ btncolor }) => ({
 
 const ButtonAvatar = styled(Avatar)({
   borderRadius: 0,
+  width: "2rem",
+  height: "2rem",
 });
 
 const EntityButton = ({ gameId, entity }) => {
@@ -27,7 +29,7 @@ const EntityButton = ({ gameId, entity }) => {
   return (
     <Tooltip title={`Play ${entity.name}`}>
       <Entity onClick={handleMove} variant="outlined" btncolor={entity.color}>
-        <ButtonAvatar src={entity.image} />
+        <ButtonAvatar className="entity" src={entity.image} />
       </Entity>
     </Tooltip>
   );

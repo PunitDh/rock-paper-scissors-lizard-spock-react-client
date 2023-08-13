@@ -10,12 +10,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import {
-  IconListCheck,
-  IconMail,
-  IconUser,
-  IconUserCheck,
-} from "@tabler/icons";
+import { IconUser, IconUserCheck } from "@tabler/icons";
 import ProfileImg from "src/assets/images/profile/user-1.jpg";
 import { avatars } from "src/data";
 import styled from "@emotion/styled";

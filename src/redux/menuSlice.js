@@ -3,6 +3,8 @@ import { IconDeviceGamepad2, IconLogout, IconUser } from "@tabler/icons";
 import { uniqueId } from "lodash";
 import { icons } from "src/data";
 
+const CURRENT_GAMES_MENU = "Current Games";
+
 const menuMapper = (game) => ({
   id: game.id,
   title: game.name,
@@ -10,6 +12,7 @@ const menuMapper = (game) => ({
   href: `/games/${game.id}`,
   gameContext: true,
   players: game.players,
+  movePlayed: false,
 });
 
 export const menuSlice = createSlice({
@@ -23,7 +26,7 @@ export const menuSlice = createSlice({
         href: "/games",
       },
     ],
-    "Current Games": [],
+    [CURRENT_GAMES_MENU]: [],
     Settings: [
       {
         id: uniqueId(),
@@ -40,28 +43,35 @@ export const menuSlice = createSlice({
     ],
   },
   reducers: {
-    setCurrentGames: (state, { payload = [] }) => {
-      state["Current Games"] = payload.map(menuMapper);
+    setCurrentGamesNav: (state, { payload = [] }) => {
+      state[CURRENT_GAMES_MENU] = payload.map(menuMapper);
     },
     updateCurrentGameMenu: (state, action) => {
-      const gameIndex = state["Current Games"].findIndex(
+      const gameIndex = state[CURRENT_GAMES_MENU].findIndex(
         (it) => it.id === action.payload.id
       );
       if (gameIndex > -1) {
-        state["Current Games"][gameIndex] = menuMapper(action.payload);
+        state[CURRENT_GAMES_MENU][gameIndex] = menuMapper(action.payload);
       } else {
-        state["Current Games"].push(menuMapper(action.payload));
+        state[CURRENT_GAMES_MENU].push(menuMapper(action.payload));
       }
     },
+    // setMovePlayedNotification: (state, action) => {
+    //   const game = state[CURRENT_GAMES_MENU].find(
+    //     (it) => it.id === action.payload.gameId
+    //   );
+
+    //   game.movePlayed = action.payload.movePlayed;
+    // },
     deleteGameFromMenu: (state, action) => {
-      state["Current Games"] = state["Current Games"].filter(
+      state[CURRENT_GAMES_MENU] = state[CURRENT_GAMES_MENU].filter(
         (game) => game.id !== action.payload.id
       );
     },
   },
 });
 
-export const { setCurrentGames, updateCurrentGameMenu, deleteGameFromMenu } =
+export const { setCurrentGamesNav, updateCurrentGameMenu, deleteGameFromMenu } =
   menuSlice.actions;
 
 export default menuSlice.reducer;

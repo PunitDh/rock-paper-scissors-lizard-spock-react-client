@@ -24,13 +24,13 @@ const MoveRow = ({ firstPlayer, secondPlayer, moves, winner }) => {
       />
     );
 
+  const otherPlayerPlayed = moves.length === 1 && secondPlayerMove;
+
   return (
     <TableRow>
       <TableCell>{getImage(firstPlayerMove?.move)}</TableCell>
       <TableCell align="left">
-        {moves.length === 1 && secondPlayerMove
-          ? "<Move Played>"
-          : getImage(secondPlayerMove?.move)}
+        {otherPlayerPlayed ? "<Move Played>" : getImage(secondPlayerMove?.move)}
       </TableCell>
       <TableCell align="right">{winner.firstName}</TableCell>
       <ResponsiveTableCell align="right">{winner.reason}</ResponsiveTableCell>
