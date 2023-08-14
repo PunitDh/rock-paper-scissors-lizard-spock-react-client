@@ -20,6 +20,8 @@ export default function usePlayer() {
       token.clear();
       navigate("/auth/login");
     },
+    sendMessage: (request) =>
+      socket.emit(SocketRequest.SEND_MESSAGE, secure(request)),
     updateProfile: (request) =>
       socket.emit(SocketRequest.UPDATE_PROFILE, secure(request)),
     updatePassword: (request) =>

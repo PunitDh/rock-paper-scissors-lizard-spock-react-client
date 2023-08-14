@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Avatar, TableCell, Typography } from "@mui/material";
 import React from "react";
 import { FlexBox } from "src/components/shared/styles";
-import { avatars } from "src/data";
+import { getAvatar } from "src/data";
 
 const Score = styled(FlexBox)(({ theme }) => ({
   fontSize: "large",
@@ -15,13 +15,13 @@ const Score = styled(FlexBox)(({ theme }) => ({
 
 const PlayerNameHeaderCell = ({ player, score }) => {
   if (!player) return null;
-  const avatar = avatars.find((avatar) => avatar.id === player.avatar).image;
+  const { image } = getAvatar(player.avatar);
   return (
     <TableCell>
       <Typography variant="subtitle2" fontWeight={600}>
         <FlexBox justifyContent="flex-start" gap="0.5rem">
           <FlexBox flexDirection="column">
-            <Avatar src={avatar} />
+            <Avatar src={image} />
             {player.firstName}
           </FlexBox>
           <FlexBox>

@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { IconUser, IconUserCheck } from "@tabler/icons";
 import ProfileImg from "src/assets/images/profile/user-1.jpg";
-import { avatars } from "src/data";
+import { getAvatar } from "src/data";
 import styled from "@emotion/styled";
 
 const ProfileAvatar = styled(Avatar)({
@@ -23,8 +23,7 @@ const ProfileAvatar = styled(Avatar)({
 const CornerProfile = ({ decoded }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
-  const profileImage =
-    avatars.find((it) => it.id === decoded.avatar)?.image || ProfileImg;
+  const profileImage = getAvatar(decoded.avatar)?.image || ProfileImg;
 
   const openMenu = (event) => setAnchorEl(event.currentTarget);
   const closeMenu = () => setAnchorEl(null);

@@ -27,7 +27,6 @@ export default function StartGameButton({ user }) {
 
   const handleClose = (newValue) => {
     setConfirmOpen(false);
-
     if (newValue) {
       setValue(newValue);
     }

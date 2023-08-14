@@ -1,14 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IconDeviceGamepad2, IconLogout, IconUser } from "@tabler/icons";
 import { uniqueId } from "lodash";
-import { icons } from "src/data";
+import { getIcon } from "src/data";
 
 const CURRENT_GAMES_MENU = "Current Games";
 
 const menuMapper = (game) => ({
   id: game.id,
   title: game.name,
-  icon: icons.find((icon) => icon.id === game.icon).icon,
+  icon: getIcon(game.icon).icon,
   href: `/games/${game.id}`,
   gameContext: true,
   players: game.players,

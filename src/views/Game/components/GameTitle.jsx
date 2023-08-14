@@ -3,7 +3,7 @@ import { withStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
 import IconSelectField from "src/components/shared/IconSelectField";
 import { FlexBox } from "src/components/shared/styles";
-import { icons } from "src/data";
+import { getIcon } from "src/data";
 import { useGame } from "src/hooks";
 
 const InvisibleTextField = withStyles({
@@ -31,7 +31,7 @@ const InvisibleTextField = withStyles({
 const GameTitle = () => {
   const game = useGame();
   const [gameName, setGameName] = useState(game.currentGame.name);
-  const icon = icons.find((it) => it.id === game.currentGame.icon);
+  const icon = getIcon(game.currentGame.icon);
 
   const handleChange = (e) => {
     e.preventDefault();

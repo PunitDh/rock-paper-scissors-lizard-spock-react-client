@@ -1,4 +1,6 @@
 import { Toolbar, styled, Stack } from "@mui/material";
+import config from "src/config";
+import ChatBox from "src/views/ChatBox";
 
 const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
   display: "flex",
@@ -13,6 +15,7 @@ const Footer = () => (
     <Stack spacing={1} direction="row" alignItems="center">
       Copyright 2023 - Punit Dharmadhikari
     </Stack>
+    {config.featureToggles.conversations && <ChatBox />}
   </ToolbarStyled>
 );
 

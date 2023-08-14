@@ -54,6 +54,8 @@ const avatars = [
   { id: 14, image: woman, name: "Woman" },
 ];
 
+const getAvatar = (id) => avatars.find((it) => it.id === id);
+
 const icons = [
   { id: 1, icon: IconChess },
   { id: 2, icon: IconGoGame },
@@ -74,6 +76,8 @@ const icons = [
   { id: 17, icon: IconBallVolleyball },
 ];
 
+const getIcon = (id) => icons.find((it) => it.id === id);
+
 const entities = [
   { color: "brown", name: "Rock", image: rock },
   { color: "gray", name: "Paper", image: paper },
@@ -82,4 +86,4 @@ const entities = [
   { color: "blue", name: "Spock", image: spock },
 ];
 
-export { avatars, icons, entities };
+export { avatars, getAvatar, icons, getIcon, entities };

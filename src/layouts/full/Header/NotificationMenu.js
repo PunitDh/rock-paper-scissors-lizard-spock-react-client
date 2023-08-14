@@ -85,8 +85,11 @@ const NotificationMenu = () => {
 
   const navigateTo = (to) => () => handleClose(navigate(to));
 
+  const opponentPlayed = (round) =>
+    round.moves.length === 1 && round.moves[0].player !== token.decoded.id;
+
   const inProgressGames = currentGames
-    .filter((game) => game.rounds.some((round) => round.moves.length === 1))
+    .filter((game) => game.rounds.some(opponentPlayed))
     .map((game) => ({
       gameId: game.id,
       player: game.players.find((player) => player.id !== token.decoded.id),
@@ -96,16 +99,19 @@ const NotificationMenu = () => {
     <>
       <IconButton
         size="large"
-        aria-label="show 11 new notifications"
         color="inherit"
         aria-controls={open ? "notification-menu" : null}
         aria-haspopup="true"
         aria-expanded={open ? "true" : null}
-        onClick={handleClick}
+        onClick={inProgressGames.length > 0 ? handleClick : null}
       >
-        <Badge variant="dot" color="primary">
+        {inProgressGames.length > 0 ? (
+          <Badge variant="dot" color="primary">
+            <IconBellRinging size="21" stroke="1.5" />
+          </Badge>
+        ) : (
           <IconBellRinging size="21" stroke="1.5" />
-        </Badge>
+        )}
       </IconButton>
       <StyledMenu
         id="notification-menu"
