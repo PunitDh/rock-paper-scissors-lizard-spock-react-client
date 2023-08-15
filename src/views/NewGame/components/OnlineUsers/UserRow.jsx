@@ -4,7 +4,7 @@ import StyledTableCell from "src/components/shared/StyledTableCell";
 import StartGameButton from "./StartGameButton";
 import styled from "@emotion/styled";
 import { blink } from "./styles";
-import { avatars } from "src/data";
+import { avatars, getAvatar } from "src/data";
 import { FlexBox } from "src/components/shared/styles";
 import { useToken } from "src/hooks";
 
@@ -42,7 +42,7 @@ const UserRow = ({ user }) => {
         <StyledTableCell>
           <NameBox gap="0.5rem" alignItems="center" justifyContent="flex-start">
             <Tooltip title={`Start conversation with ${user.firstName}`}>
-            <SmallAvatar onClick={startConversation} src={avatars[user.avatar]?.image || ""} />
+            <SmallAvatar onClick={startConversation} src={getAvatar(user.avatar)} />
             </Tooltip>
             <span>
               {user.firstName} {user.lastName}
