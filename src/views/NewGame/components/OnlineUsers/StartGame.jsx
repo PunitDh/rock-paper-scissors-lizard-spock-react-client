@@ -1,17 +1,19 @@
 import { useState } from "react";
-import { Button, Tooltip } from "@mui/material";
+import { Tooltip } from "@mui/material";
 import styled from "@emotion/styled";
 import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
 import { useGame, useToken } from "src/hooks";
 import { icons } from "src/data";
 import { sample } from "lodash";
+import { PlayCircleFilled } from "@mui/icons-material";
 
-const GameButton = styled(Button)({
+const GameButton = styled(PlayCircleFilled)(({ theme }) => ({
   backgroundColor: "primary.main",
-  color: "#fff",
-});
+  color: theme.palette.primary.main,
+  cursor: "pointer",
+}));
 
-export default function StartGameButton({ user }) {
+export default function StartGame({ user }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [value, setValue] = useState();
   const game = useGame();
@@ -34,15 +36,8 @@ export default function StartGameButton({ user }) {
 
   return (
     <>
-      <Tooltip title={`Start game with ${user.firstName}`}>
-        <GameButton
-          variant="contained"
-          size="medium"
-          disableElevation
-          onClick={() => setConfirmOpen(true)}
-        >
-          Start Game
-        </GameButton>
+      <Tooltip title={`Start new game with ${user.firstName}`}>
+        <GameButton onClick={() => setConfirmOpen(true)} />
       </Tooltip>
       <ConfirmationDialog
         id="new-game-confirmation-dialog"

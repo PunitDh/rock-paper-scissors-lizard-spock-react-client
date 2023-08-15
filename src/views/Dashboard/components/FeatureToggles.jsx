@@ -10,7 +10,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import useAdmin from "src/hooks/useAdmin";
 
 const Toggle = styled(Typography)({

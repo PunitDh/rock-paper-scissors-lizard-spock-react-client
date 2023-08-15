@@ -14,9 +14,9 @@ export default function useGame() {
   });
 
   return {
+    currentGame,
     fetchPlayer: (playerId) =>
       currentGame?.players.find((player) => player.id === playerId),
-    currentGame,
     create: (request) =>
       socket.emit(SocketRequest.CREATE_GAME, secure(request)),
     rename: (request) =>

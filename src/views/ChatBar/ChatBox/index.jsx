@@ -1,11 +1,11 @@
 import { Paper, Toolbar, Tooltip, Typography } from "@mui/material";
-import { MessageLeft } from "./MessageLeft";
-import { MessageRight } from "./MessageRight";
+import styled from "@emotion/styled";
 import { TextInput } from "./TextInput";
 import { Close } from "@mui/icons-material";
-import styled from "@emotion/styled";
 import { useEffect, useRef, useState } from "react";
 import { useToken } from "src/hooks";
+import { MessageRight } from "./MessageRight";
+import { MessageLeft } from "./MessageLeft";
 import { getAvatar } from "src/data";
 
 const CloseButton = styled(Close)({

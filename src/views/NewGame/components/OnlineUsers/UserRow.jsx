@@ -1,12 +1,13 @@
 import { Avatar, TableRow, Tooltip, Typography } from "@mui/material";
 import ResponsiveTableCell from "src/components/shared/ResponsiveTableCell";
 import StyledTableCell from "src/components/shared/StyledTableCell";
-import StartGameButton from "./StartGameButton";
+import StartGame from "./StartGame";
 import styled from "@emotion/styled";
 import { blink } from "./styles";
-import { avatars, getAvatar } from "src/data";
+import { getAvatar } from "src/data";
 import { FlexBox } from "src/components/shared/styles";
 import { useToken } from "src/hooks";
+import StartChat from "./StartChat";
 
 const OnlineIcon = styled.div(({ online }) => ({
   backgroundColor: online ? "lightgreen" : "red",
@@ -32,17 +33,13 @@ const UserRow = ({ user }) => {
     user.isOnline ? "online" : "offline"
   }`;
 
-  const startConversation = () => {
-    console.log(user.id)
-  }
-
   return (
     (!user.hidden || token.decoded.isAdmin) && (
       <TableRow>
         <StyledTableCell>
           <NameBox gap="0.5rem" alignItems="center" justifyContent="flex-start">
             <Tooltip title={`Start conversation with ${user.firstName}`}>
-            <SmallAvatar onClick={startConversation} src={getAvatar(user.avatar)} />
+              <SmallAvatar src={getAvatar(user.avatar)} />
             </Tooltip>
             <span>
               {user.firstName} {user.lastName}
@@ -53,7 +50,10 @@ const UserRow = ({ user }) => {
           </NameBox>
         </StyledTableCell>
         <StyledTableCell>
-          <StartGameButton user={user} />
+          <FlexBox alignItems="center" justifyContent="flex-start" gap="0.5rem">
+            <StartGame user={user} />
+            <StartChat user={user} />
+          </FlexBox>
         </StyledTableCell>
         <ResponsiveTableCell align="right">
           <Typography variant="h6">

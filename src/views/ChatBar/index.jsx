@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import React from "react";
 import { useSelector } from "react-redux";
-import ChatBox from "../ChatBox";
+import ChatBox from "./ChatBox";
 
 const Container = styled.div({
   position: "fixed",

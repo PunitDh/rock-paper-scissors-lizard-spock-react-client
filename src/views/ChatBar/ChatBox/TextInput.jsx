@@ -27,7 +27,7 @@ export const TextInput = ({ receiver, token }) => {
       sender: token.decoded.id,
     };
     console.log({ request });
-    player.sendMessage(request);
+    // player.sendMessage(request);
     e.target.reset();
   };
 
