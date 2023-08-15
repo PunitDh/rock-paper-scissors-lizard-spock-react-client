@@ -5,6 +5,7 @@ import { baselightTheme } from "./theme/DefaultColors";
 import { SocketProvider } from "./context/SocketContext";
 import { NotificationProvider } from "./context/NotificationContext";
 import SocketListeners from "./api/SocketListeners";
+import { TokenProvider } from "./context/TokenContext";
 
 function App() {
   const routing = useRoutes(Router);
@@ -14,9 +15,11 @@ function App() {
     <ThemeProvider theme={theme}>
       <NotificationProvider>
         <SocketProvider>
-          <SocketListeners />
-          <CssBaseline />
-          {routing}
+          <TokenProvider>
+            <SocketListeners />
+            <CssBaseline />
+            {routing}
+          </TokenProvider>
         </SocketProvider>
       </NotificationProvider>
     </ThemeProvider>

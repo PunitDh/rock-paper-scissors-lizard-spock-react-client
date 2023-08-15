@@ -54,7 +54,7 @@ const avatars = [
   { id: 14, image: woman, name: "Woman" },
 ];
 
-const getAvatar = (id) => avatars.find((it) => it.id === id);
+const getAvatar = (id) => avatars.find((it) => it.id === id)?.image;
 
 const icons = [
   { id: 1, icon: IconChess },

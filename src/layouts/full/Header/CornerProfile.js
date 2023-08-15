@@ -23,7 +23,7 @@ const ProfileAvatar = styled(Avatar)({
 const CornerProfile = ({ decoded }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
-  const profileImage = getAvatar(decoded.avatar)?.image || ProfileImg;
+  const profileImage = getAvatar(decoded.avatar) || ProfileImg;
 
   const openMenu = (event) => setAnchorEl(event.currentTarget);
   const closeMenu = () => setAnchorEl(null);

@@ -14,9 +14,9 @@ const ListSubheaderStyle = styled((props) => (
   padding: "3px 12px",
 }));
 
-const NavGroup = ({ item, navItems, pathDirect }) => (
+const NavGroup = ({ groupName, navItems, pathDirect }) => (
   <>
-    <ListSubheaderStyle>{item}</ListSubheaderStyle>
+    <ListSubheaderStyle>{groupName}</ListSubheaderStyle>
     {navItems.map((navItem) =>
       navItem.gameContext ? (
         <ContextNavItem

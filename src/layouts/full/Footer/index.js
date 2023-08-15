@@ -1,5 +1,6 @@
 import { Toolbar, styled, Stack } from "@mui/material";
-import config from "src/config";
+import { useSelector } from "react-redux";
+import ChatBar from "src/views/ChatBar";
 import ChatBox from "src/views/ChatBox";
 
 const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
@@ -10,13 +11,16 @@ const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const Footer = () => (
-  <ToolbarStyled>
-    <Stack spacing={1} direction="row" alignItems="center">
-      Copyright 2023 - Punit Dharmadhikari
-    </Stack>
-    {config.featureToggles.conversations && <ChatBox />}
-  </ToolbarStyled>
-);
+const Footer = () => {
+  const { siteSettings } = useSelector((state) => state.site);
+  return (
+    <ToolbarStyled>
+      <Stack spacing={1} direction="row" alignItems="center">
+        Copyright 2023 - Punit Dharmadhikari
+      </Stack>
+      {siteSettings.conversations && <ChatBar />}
+    </ToolbarStyled>
+  );
+};
 
 export default Footer;

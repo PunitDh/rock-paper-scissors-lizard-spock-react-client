@@ -1,9 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IconDeviceGamepad2, IconLogout, IconUser } from "@tabler/icons";
+import {
+  IconDashboard,
+  IconDeviceGamepad2,
+  IconLogout,
+  IconUser,
+} from "@tabler/icons";
 import { uniqueId } from "lodash";
 import { getIcon } from "src/data";
 
-const CURRENT_GAMES_MENU = "Current Games";
+const CURRENT_GAMES_NAV_GROUP = "Current Games";
 
 const menuMapper = (game) => ({
   id: game.id,
@@ -18,6 +23,15 @@ const menuMapper = (game) => ({
 export const menuSlice = createSlice({
   name: "menu",
   initialState: {
+    Dashboard: [
+      {
+        id: uniqueId(),
+        title: "Dashboard",
+        icon: IconDashboard,
+        href: "/dashboard",
+        restricted: true,
+      },
+    ],
     Home: [
       {
         id: uniqueId(),
@@ -26,7 +40,8 @@ export const menuSlice = createSlice({
         href: "/games",
       },
     ],
-    [CURRENT_GAMES_MENU]: [],
+
+    [CURRENT_GAMES_NAV_GROUP]: [],
     Settings: [
       {
         id: uniqueId(),
@@ -44,27 +59,20 @@ export const menuSlice = createSlice({
   },
   reducers: {
     setCurrentGamesNav: (state, { payload = [] }) => {
-      state[CURRENT_GAMES_MENU] = payload.map(menuMapper);
+      state[CURRENT_GAMES_NAV_GROUP] = payload.map(menuMapper);
     },
     updateCurrentGameMenu: (state, action) => {
-      const gameIndex = state[CURRENT_GAMES_MENU].findIndex(
+      const gameIndex = state[CURRENT_GAMES_NAV_GROUP].findIndex(
         (it) => it.id === action.payload.id
       );
       if (gameIndex > -1) {
-        state[CURRENT_GAMES_MENU][gameIndex] = menuMapper(action.payload);
+        state[CURRENT_GAMES_NAV_GROUP][gameIndex] = menuMapper(action.payload);
       } else {
-        state[CURRENT_GAMES_MENU].push(menuMapper(action.payload));
+        state[CURRENT_GAMES_NAV_GROUP].push(menuMapper(action.payload));
       }
     },
-    // setMovePlayedNotification: (state, action) => {
-    //   const game = state[CURRENT_GAMES_MENU].find(
-    //     (it) => it.id === action.payload.gameId
-    //   );
-
-    //   game.movePlayed = action.payload.movePlayed;
-    // },
     deleteGameFromMenu: (state, action) => {
-      state[CURRENT_GAMES_MENU] = state[CURRENT_GAMES_MENU].filter(
+      state[CURRENT_GAMES_NAV_GROUP] = state[CURRENT_GAMES_NAV_GROUP].filter(
         (game) => game.id !== action.payload.id
       );
     },

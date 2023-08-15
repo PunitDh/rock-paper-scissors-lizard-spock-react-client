@@ -1,10 +1,12 @@
-import { Avatar, Typography } from "@mui/material";
+import { Avatar } from "@mui/material";
 import { FlexBox } from "src/components/shared/styles";
 import styled from "@emotion/styled";
 import { deepOrange } from "@mui/material/colors";
+import { MessageContent, TimeStamp } from "./styles";
 
 const DisplayName = styled.div({
-  marginLeft: "20px",
+  fontSize: "0.85em",
+  marginLeft: "10px",
 });
 
 const MessageBlue = styled.div({
@@ -42,17 +44,6 @@ const MessageBlue = styled.div({
   },
 });
 
-const MessageContent = styled(Typography)({
-  padding: 0,
-  margin: 0,
-});
-
-const TimeStamp = styled.div({
-  fontSize: ".85em",
-  fontWeight: "300",
-  alignSelf: "flex-end",
-});
-
 const MessageAvatar = styled(Avatar)(({ theme }) => ({
   width: theme.spacing(4),
   height: theme.spacing(4),
@@ -79,14 +70,7 @@ export const MessageLeft = (props) => {
             height="100%"
             gap="0.1rem"
           >
-            <MessageContent variant>
-              {message}
-              {message}
-              {message}
-              {message}
-              {message}
-            </MessageContent>
-
+            <MessageContent variant="body2">{message}</MessageContent>
             <TimeStamp>{timestamp}</TimeStamp>
           </FlexBox>
         </MessageBlue>

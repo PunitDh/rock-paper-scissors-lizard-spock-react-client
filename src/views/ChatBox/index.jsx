@@ -8,10 +8,6 @@ import { useEffect, useRef, useState } from "react";
 import { useToken } from "src/hooks";
 import { getAvatar } from "src/data";
 
-const Container = styled.div({
-  position: "absolute",
-});
-
 const CloseButton = styled(Close)({
   cursor: "pointer",
   "&:hover": {
@@ -38,10 +34,7 @@ const StyledPaper = styled(Paper)(({ show, toolbarheight }) => ({
   display: "flex",
   alignItems: "center",
   flexDirection: "column",
-  position: "fixed",
   zIndex: "99",
-  bottom: 0,
-  right: "1rem",
 }));
 
 const MessageBody = styled(Paper)({
@@ -51,7 +44,7 @@ const MessageBody = styled(Paper)({
   height: "calc( 100% - 80px )",
 });
 
-function ChatBox() {
+function ChatBox({ conversation }) {
   const [show, setShow] = useState(false);
   const [toolbarHeight, setToolbarHeight] = useState();
   const toolbarRef = useRef();
@@ -63,48 +56,44 @@ function ChatBox() {
     }
   }, [show]);
 
+  const formatDate = (date) =>
+    new Intl.DateTimeFormat("en-AU", {
+      dateStyle: "short",
+      timeStyle: "short",
+      timeZone: "Australia/Sydney",
+    }).format(new Date(date));
+
   return (
-    <Container>
-      <StyledPaper show={show} toolbarheight={toolbarHeight?.height}>
-        <ToolbarStyled ref={toolbarRef} id="chat-toolbar">
-          <Typography>Chat</Typography>
-          <Tooltip title="Close chat">
-            <CloseButton onClick={() => setShow((show) => !show)} />
-          </Tooltip>
-        </ToolbarStyled>
-        <MessageBody id="style-1">
-          <MessageLeft
-            message=""
-            timestamp="MM/DD 00:00"
-            photoURL="https://lh3.googleusercontent.com/a-/AOh14Gi4vkKYlfrbJ0QLJTg_DLjcYyyK7fYoWRpz2r4s=s96-c"
-            displayName=""
-            avatarDisp={true}
-          />
-          <MessageLeft
-            message=""
-            timestamp="MM/DD 00:00"
-            photoURL=""
-            displayName=""
-            avatarDisp={false}
-          />
-          <MessageRight
-            message=""
-            timestamp="MM/DD 00:00"
-            photoURL={getAvatar(token.decoded.avatar).image}
-            displayName=""
-            avatarDisp={true}
-          />
-          <MessageRight
-            message=""
-            timestamp="MM/DD 00:00"
-            photoURL={getAvatar(token.decoded.avatar).image}
-            displayName=""
-            avatarDisp={true}
-          />
-        </MessageBody>
-        <TextInput token={token} />
-      </StyledPaper>
-    </Container>
+    <StyledPaper show={show} toolbarheight={toolbarHeight?.height}>
+      <ToolbarStyled ref={toolbarRef} id="chat-toolbar">
+        <Typography>Chat</Typography>
+        <Tooltip title="Close chat">
+          <CloseButton onClick={() => setShow((show) => !show)} />
+        </Tooltip>
+      </ToolbarStyled>
+      <MessageBody>
+        {conversation.messages.map((message) =>
+          message.sender.id === token.decoded.id ? (
+            <MessageRight
+              message={message.message}
+              timestamp={formatDate(message.createdAt)}
+              photoURL={getAvatar(token.decoded.avatar)}
+              displayName={token.decoded.firstName}
+              avatarDisp={true}
+            />
+          ) : (
+            <MessageLeft
+              message={message.message}
+              timestamp={formatDate(message.createdAt)}
+              photoURL={getAvatar(message.sender.avatar)}
+              displayName={message.sender.firstName}
+              avatarDisp={true}
+            />
+          )
+        )}
+      </MessageBody>
+      <TextInput token={token} />
+    </StyledPaper>
   );
 }
 

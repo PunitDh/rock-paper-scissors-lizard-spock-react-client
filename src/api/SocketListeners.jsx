@@ -14,8 +14,9 @@ import {
   updateCurrentGameMenu,
 } from "src/redux/menuSlice";
 import { setCurrentGames } from "src/redux/playerSlice";
+import { setSiteSettings } from "src/redux/siteSlice";
 import { Status, isSuccess } from "src/utils";
-import { SocketResponse } from "src/utils/constants";
+import { SocketRequest, SocketResponse } from "src/utils/constants";
 
 const SocketListeners = () => {
   const socket = useSocket();
@@ -39,6 +40,11 @@ const SocketListeners = () => {
       })
       .catch(notification.error);
 
+  const handleSiteSettings = (response) =>
+    isSuccess(response)
+      .then((settings) => dispatch(setSiteSettings(settings)))
+      .catch(notification.error);
+
   const updateGame = (response, successMessage = "Game updated!") =>
     isSuccess(response)
       .then((game) => {
@@ -49,6 +55,9 @@ const SocketListeners = () => {
       .catch(notification.error);
 
   useEffect(() => {
+    socket.emit(SocketRequest.GET_SITE_SETTINGS);
+    socket.on(SocketResponse.SITE_SETTINGS_RECEIVED, handleSiteSettings);
+    socket.on(SocketResponse.SITE_SETTINGS_UPDATED, handleSiteSettings);
     socket.on(SocketResponse.USER_LOGGED_IN, handleToken);
     socket.on(SocketResponse.USER_REGISTERED, handleToken);
     socket.on(SocketResponse.PROFILE_UPDATED, (response) =>

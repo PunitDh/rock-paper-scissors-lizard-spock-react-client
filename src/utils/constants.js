@@ -6,6 +6,8 @@ export const NotificationType = Object.freeze({
 });
 
 export const SocketRequest = Object.freeze({
+  GET_SITE_SETTINGS: "get-site-settings",
+  UPDATE_SITE_SETTINGS: "update-site-settings",
   LOGIN_USER: "login-user",
   REGISTER_USER: "register-user",
   UPDATE_PROFILE: "update-profile",
@@ -25,6 +27,8 @@ export const SocketRequest = Object.freeze({
 });
 
 export const SocketResponse = Object.freeze({
+  SITE_SETTINGS_RECEIVED: "site-settings",
+  SITE_SETTINGS_UPDATED: "site-settings-updated",
   USER_LOGGED_IN: "user-logged-in",
   USER_REGISTERED: "user-registered",
   PROFILE_UPDATED: "profile-updated",

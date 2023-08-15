@@ -15,13 +15,13 @@ const Score = styled(FlexBox)(({ theme }) => ({
 
 const PlayerNameHeaderCell = ({ player, score }) => {
   if (!player) return null;
-  const { image } = getAvatar(player.avatar);
+  const avatar = getAvatar(player.avatar);
   return (
     <TableCell>
       <Typography variant="subtitle2" fontWeight={600}>
         <FlexBox justifyContent="flex-start" gap="0.5rem">
           <FlexBox flexDirection="column">
-            <Avatar src={image} />
+            <Avatar src={avatar} />
             {player.firstName}
           </FlexBox>
           <FlexBox>

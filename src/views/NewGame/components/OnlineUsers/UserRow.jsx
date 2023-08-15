@@ -23,6 +23,7 @@ const NameBox = styled(FlexBox)({
 const SmallAvatar = styled(Avatar)({
   width: "30px",
   height: "30px",
+  cursor: "pointer",
 });
 
 const UserRow = ({ user }) => {
@@ -31,12 +32,18 @@ const UserRow = ({ user }) => {
     user.isOnline ? "online" : "offline"
   }`;
 
+  const startConversation = () => {
+    console.log(user.id)
+  }
+
   return (
     (!user.hidden || token.decoded.isAdmin) && (
       <TableRow>
         <StyledTableCell>
           <NameBox gap="0.5rem" alignItems="center" justifyContent="flex-start">
-            <SmallAvatar src={avatars[user.avatar]?.image || ""} />
+            <Tooltip title={`Start conversation with ${user.firstName}`}>
+            <SmallAvatar onClick={startConversation} src={avatars[user.avatar]?.image || ""} />
+            </Tooltip>
             <span>
               {user.firstName} {user.lastName}
             </span>
