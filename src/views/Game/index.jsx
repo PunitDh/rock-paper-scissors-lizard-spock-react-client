@@ -47,6 +47,7 @@ const Game = () => {
             onMaxRoundsChange={setMaxRounds}
             maxRounds={maxRounds}
             gameId={gameId}
+            opponent={opponent}
           />
         }
       >

@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useSelector } from "react-redux";
-import useAdmin from "src/hooks/useAdmin";
+import { useAdmin } from "src/hooks";
 
 const Toggle = styled(Typography)({
   cursor: "pointer",
