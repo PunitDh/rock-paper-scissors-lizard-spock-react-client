@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { styled, Container, Box } from "@mui/material";
 import { Navigate, Outlet } from "react-router-dom";
 import Header from "./Header";
 import Sidebar from "./sidebar/Sidebar";
 import Footer from "./Footer";
-import { useNotification, useToken } from "src/hooks";
+import { useNotification, usePlayer, useToken } from "src/hooks";
 import Notification from "src/components/shared/Notification";
 
 const MainWrapper = styled("div")(() => ({
@@ -27,6 +27,13 @@ const FullLayout = () => {
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const token = useToken();
   const notification = useNotification();
+  const player = usePlayer();
+
+  useEffect(() => {
+    if (token.decoded) {
+      player.getConversations();
+    }
+  }, []);
 
   if (!token.decoded) {
     return <Navigate to="/auth/login" />;

@@ -103,6 +103,7 @@ function ChatBox({ open, conversation }) {
               photoURL={getAvatar(token.decoded.avatar)}
               displayName={token.decoded.firstName}
               avatarDisp={true}
+              key={message.id}
             />
           ) : (
             <MessageLeft
@@ -111,6 +112,7 @@ function ChatBox({ open, conversation }) {
               photoURL={getAvatar(receiver.avatar)}
               displayName={receiver.firstName}
               avatarDisp={true}
+              key={message.id}
             />
           )
         )}

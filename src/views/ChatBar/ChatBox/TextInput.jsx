@@ -16,7 +16,12 @@ const WrapText = styled(TextField)({
   width: "100%",
 });
 
-export const TextInput = ({ conversationId, receiver, token, textfieldRef }) => {
+export const TextInput = ({
+  conversationId,
+  receiver,
+  token,
+  textfieldRef,
+}) => {
   const player = usePlayer();
 
   const handleSubmit = (e) => {
@@ -40,7 +45,7 @@ export const TextInput = ({ conversationId, receiver, token, textfieldRef }) => 
         required
         ref={textfieldRef}
       />
-      <Button variant="contained" color="primary">
+      <Button variant="contained" color="primary" type="submit">
         <Send />
       </Button>
     </WrapForm>
