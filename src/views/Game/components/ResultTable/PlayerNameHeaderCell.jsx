@@ -23,6 +23,7 @@ const PlayerNameHeaderCell = ({ player, score }) => {
         <FlexBox justifyContent="flex-start" gap="0.5rem">
           <FlexBox flexDirection="column">
             <Avatar src={avatar} />
+            {player.firstName}
           </FlexBox>
           <FlexBox>
             <Score>{score}</Score>
