@@ -26,6 +26,7 @@ const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
   color: "white",
   borderTopRightRadius: "0.5rem",
   borderTopLeftRadius: "0.5rem",
+  cursor: "pointer",
 }));
 
 const StyledPaper = styled(Paper)(({ show, toolbarheight }) => ({
@@ -64,7 +65,7 @@ function ChatBox({ open, conversation }) {
   };
 
   const maximize = () => {
-    setShow(true);
+    setShow((show) => !show);
   };
 
   useEffect(() => {
