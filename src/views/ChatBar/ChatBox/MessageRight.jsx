@@ -48,23 +48,17 @@ const MessageAvatar = styled(Avatar)(({ theme }) => ({
   height: theme.spacing(4),
 }));
 
-export const MessageRight = (props) => {
-  const message = props.message ? props.message : "no message";
-  const timestamp = props.timestamp ? props.timestamp : "";
-  const photoURL = props.photoURL ? props.photoURL : "dummy.js";
-
-  return (
-    <FlexBox alignItems="flex-start" justifyContent="flex-end" width="100%">
-      <FlexBox alignItems="flex-end" flexDirection="column" width="100%">
-        <DisplayName>{props.displayName}</DisplayName>
-        <MessageOrange>
-          <MessageContent>{message}</MessageContent>
-          <TimeStamp>{timestamp}</TimeStamp>
-        </MessageOrange>
-      </FlexBox>
-      <FlexBox justifyContent="flex-start" alignItems="flex-start">
-        <MessageAvatar alt={message} src={photoURL}></MessageAvatar>
-      </FlexBox>
+export const MessageRight = ({ content, displayName, timestamp, photoURL }) => (
+  <FlexBox alignItems="flex-start" justifyContent="flex-end" width="100%">
+    <FlexBox alignItems="flex-end" flexDirection="column" width="100%">
+      <DisplayName>{displayName}</DisplayName>
+      <MessageOrange>
+        <MessageContent>{content}</MessageContent>
+        <TimeStamp>{timestamp}</TimeStamp>
+      </MessageOrange>
     </FlexBox>
-  );
-};
+    <FlexBox justifyContent="flex-start" alignItems="flex-start">
+      <MessageAvatar alt={displayName} src={photoURL}></MessageAvatar>
+    </FlexBox>
+  </FlexBox>
+);

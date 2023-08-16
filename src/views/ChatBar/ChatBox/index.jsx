@@ -98,21 +98,21 @@ function ChatBox({ open, conversation }) {
         {conversation.messages.map((message) =>
           message.sender === token.decoded.id ? (
             <MessageRight
-              message={message.content}
+              key={message.id}
+              content={message.content}
               timestamp={formatDate(message.createdAt)}
               photoURL={getAvatar(token.decoded.avatar)}
               displayName={token.decoded.firstName}
               avatarDisp={true}
-              key={message.id}
             />
           ) : (
             <MessageLeft
-              message={message.content}
+              key={message.id}
+              content={message.content}
               timestamp={formatDate(message.createdAt)}
               photoURL={getAvatar(receiver.avatar)}
               displayName={receiver.firstName}
               avatarDisp={true}
-              key={message.id}
             />
           )
         )}

@@ -48,33 +48,25 @@ const MessageAvatar = styled(Avatar)(({ theme }) => ({
   width: theme.spacing(4),
   height: theme.spacing(4),
   color: theme.palette.getContrastText(deepOrange[500]),
-  // backgroundColor: deepOrange[500],
 }));
 
-export const MessageLeft = (props) => {
-  const message = props.message ? props.message : "no message";
-  const timestamp = props.timestamp ? props.timestamp : "";
-  const photoURL = props.photoURL ? props.photoURL : "dummy.js";
-  const displayName = props.displayName ? props.displayName : "";
-
-  return (
-    <FlexBox alignItems="flex-start" justifyContent="flex-start">
-      <MessageAvatar alt={displayName} src={photoURL} />
-      <div>
-        <DisplayName>{displayName}</DisplayName>
-        <MessageBlue>
-          <FlexBox
-            alignItems="space-between"
-            justifyContent="space-between"
-            flexDirection="column"
-            height="100%"
-            gap="0.1rem"
-          >
-            <MessageContent variant="body2">{message}</MessageContent>
-            <TimeStamp>{timestamp}</TimeStamp>
-          </FlexBox>
-        </MessageBlue>
-      </div>
-    </FlexBox>
-  );
-};
+export const MessageLeft = ({ content, timestamp, photoURL, displayName }) => (
+  <FlexBox alignItems="flex-start" justifyContent="flex-start">
+    <MessageAvatar alt={displayName} src={photoURL} />
+    <div>
+      <DisplayName>{displayName}</DisplayName>
+      <MessageBlue>
+        <FlexBox
+          alignItems="space-between"
+          justifyContent="space-between"
+          flexDirection="column"
+          height="100%"
+          gap="0.1rem"
+        >
+          <MessageContent variant="body2">{content}</MessageContent>
+          <TimeStamp>{timestamp}</TimeStamp>
+        </FlexBox>
+      </MessageBlue>
+    </div>
+  </FlexBox>
+);
