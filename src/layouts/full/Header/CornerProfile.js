@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { IconUser, IconUserCheck } from "@tabler/icons";
 import ProfileImg from "src/assets/images/profile/user-1.jpg";
-import { getAvatar } from "src/data";
+import { getAvatar } from "src/assets";
 import styled from "@emotion/styled";
 
 const ProfileAvatar = styled(Avatar)({

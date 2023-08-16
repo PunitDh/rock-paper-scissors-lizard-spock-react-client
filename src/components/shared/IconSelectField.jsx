@@ -1,5 +1,5 @@
 import { MenuItem, Select, Tooltip } from "@mui/material";
-import { icons } from "src/data";
+import { icons } from "src/assets";
 import { useGame } from "src/hooks";
 
 const selectStyles = {

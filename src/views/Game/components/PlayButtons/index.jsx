@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import EntityButton from "./EntityButton";
 import { Container } from "../styles";
-import { entities } from "src/data";
+import { entities } from "src/assets";
 
 const ButtonContainer = styled(Container)({
   height: "20%",

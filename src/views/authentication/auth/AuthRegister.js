@@ -3,7 +3,7 @@ import { Stack } from "@mui/system";
 import CustomTextField from "../../../components/forms/theme-elements/CustomTextField";
 import { usePlayer } from "src/hooks";
 import AvatarSelectField from "src/components/shared/AvatarSelectField";
-import { avatars } from "src/data";
+import { avatars } from "src/assets";
 import { sample } from "lodash";
 
 const AuthRegister = ({ title, subtitle, subtext }) => {

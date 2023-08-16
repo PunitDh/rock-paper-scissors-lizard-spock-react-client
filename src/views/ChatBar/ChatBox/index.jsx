@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { useToken } from "src/hooks";
 import { MessageRight } from "./MessageRight";
 import { MessageLeft } from "./MessageLeft";
-import { getAvatar } from "src/data";
+import { getAvatar } from "src/assets";
 import { useDispatch } from "react-redux";
 import { setCurrentConversation } from "src/redux/conversationSlice";
 

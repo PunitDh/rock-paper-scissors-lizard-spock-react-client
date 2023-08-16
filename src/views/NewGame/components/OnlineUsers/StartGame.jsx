@@ -3,7 +3,7 @@ import { Tooltip } from "@mui/material";
 import styled from "@emotion/styled";
 import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
 import { useGame, useToken } from "src/hooks";
-import { icons } from "src/data";
+import { icons } from "src/assets";
 import { sample } from "lodash";
 import { PlayCircleFilled } from "@mui/icons-material";
 

@@ -4,7 +4,7 @@ import StyledTableCell from "src/components/shared/StyledTableCell";
 import StartGame from "./StartGame";
 import styled from "@emotion/styled";
 import { blink } from "./styles";
-import { getAvatar } from "src/data";
+import { getAvatar } from "src/assets";
 import { FlexBox } from "src/components/shared/styles";
 import { useToken } from "src/hooks";
 import StartChat from "./StartChat";

@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Avatar, Tooltip, Typography } from "@mui/material";
 import { useState } from "react";
 import { FlexBox } from "src/components/shared/styles";
-import { avatars } from "src/data";
+import { avatars } from "src/assets";
 
 const SelectableAvatar = styled(Avatar)(({ selected }) => ({
   cursor: "pointer",

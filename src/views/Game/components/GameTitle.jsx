@@ -3,7 +3,7 @@ import { withStyles } from "@mui/styles";
 import React, { useEffect, useState } from "react";
 import IconSelectField from "src/components/shared/IconSelectField";
 import { FlexBox } from "src/components/shared/styles";
-import { getIcon } from "src/data";
+import { getIcon } from "src/assets";
 import { useGame } from "src/hooks";
 
 const InvisibleTextField = withStyles({

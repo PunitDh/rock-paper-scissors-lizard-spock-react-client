@@ -6,7 +6,7 @@ import {
   IconUser,
 } from "@tabler/icons";
 import { uniqueId } from "lodash";
-import { getIcon } from "src/data";
+import { getIcon } from "src/assets";
 
 const CURRENT_GAMES_NAV_GROUP = "Current Games";
 
