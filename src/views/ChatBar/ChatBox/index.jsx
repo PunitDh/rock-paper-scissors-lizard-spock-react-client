@@ -38,6 +38,9 @@ const StyledPaper = styled(Paper)(({ maximized, toolbarheight }) => ({
   alignItems: "center",
   flexDirection: "column",
   zIndex: "99",
+  boxShadow:  "-10px -10px 35px -10px rgba(0,0,0,0.7)",
+  borderTopRightRadius: "0.5rem",
+  borderTopLeftRadius: "0.5rem",
 }));
 
 const MessageBody = styled(Paper)({
