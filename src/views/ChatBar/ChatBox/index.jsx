@@ -98,7 +98,7 @@ function ChatBox({ open, conversation }) {
         {conversation.messages.map((message) =>
           message.sender === token.decoded.id ? (
             <MessageRight
-              message={message.message}
+              message={message.content}
               timestamp={formatDate(message.createdAt)}
               photoURL={getAvatar(token.decoded.avatar)}
               displayName={token.decoded.firstName}
@@ -107,7 +107,7 @@ function ChatBox({ open, conversation }) {
             />
           ) : (
             <MessageLeft
-              message={message.message}
+              message={message.content}
               timestamp={formatDate(message.createdAt)}
               photoURL={getAvatar(receiver.avatar)}
               displayName={receiver.firstName}
