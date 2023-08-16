@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
-import React from "react";
 import { useSelector } from "react-redux";
 import ChatBox from "./ChatBox";
+import { useEffect, useState } from "react";
 
 const Container = styled.div({
   position: "fixed",
@@ -16,59 +16,21 @@ const Container = styled.div({
 });
 
 const ChatBar = () => {
-  // const { conversations } = useSelector((state) => state.conversation);
+  const { currentConversation } = useSelector((state) => state.conversation);
+  const [open, setOpen] = useState(false);
 
-  const conversations = [
-    {
-      id: "1",
-      messages: [
-        {
-          sender: {
-            firstName: "test",
-            avatar: 11,
-          },
-          message: "Hi",
-          createdAt: new Date(),
-        },
-        {
-          sender: {
-            firstName: "test",
-            avatar: 11,
-          },
-          message: "Hello",
-          createdAt: new Date(),
-        },
-        {
-          sender: { id: "64cb796996357d030d1b9311" },
-          message: "Hi",
-          createdAt: new Date(),
-        },
-        {
-          sender: {
-            firstName: "test",
-            avatar: 11,
-          },
-          message: "Test",
-          createdAt: new Date(),
-        },
-        {
-          sender: {
-            firstName: "test",
-            avatar: 11,
-            id: "64cb796996357d030d1b9311",
-          },
-          message: "Test",
-          createdAt: new Date(),
-        },
-      ],
-    },
-  ];
+  useEffect(() => {
+    setOpen(true);
+  }, [currentConversation?.messages.length]);
 
   return (
     <Container>
-      {conversations.map((conversation) => (
+      {currentConversation && (
+        <ChatBox open={open} conversation={currentConversation} />
+      )}
+      {/* {conversations.map((conversation) => (
         <ChatBox key={conversation.id} conversation={conversation} />
-      ))}
+      ))} */}
     </Container>
   );
 };

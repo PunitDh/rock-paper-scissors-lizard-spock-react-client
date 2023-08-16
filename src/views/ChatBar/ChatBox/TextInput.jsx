@@ -2,6 +2,7 @@ import { Button, TextField } from "@mui/material";
 import { Send } from "@mui/icons-material";
 import styled from "@emotion/styled";
 import { usePlayer } from "src/hooks";
+import { useEffect, useRef } from "react";
 
 const WrapForm = styled.form(({ theme }) => ({
   display: "flex",
@@ -16,18 +17,18 @@ const WrapText = styled(TextField)({
   width: "100%",
 });
 
-export const TextInput = ({ receiver, token }) => {
+export const TextInput = ({ conversationId, receiver, token, textfieldRef }) => {
   const player = usePlayer();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const request = {
+      conversationId,
       receiver,
       message: e.target.message.value,
       sender: token.decoded.id,
     };
-    console.log({ request });
-    // player.sendMessage(request);
+    player.sendMessage(request);
     e.target.reset();
   };
 
@@ -37,6 +38,8 @@ export const TextInput = ({ receiver, token }) => {
         id="standard-text"
         name="message"
         placeholder="Enter a message"
+        required
+        ref={textfieldRef}
       />
       <Button variant="contained" color="primary">
         <Send />

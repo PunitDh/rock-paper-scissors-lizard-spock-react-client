@@ -48,7 +48,7 @@ const MessageAvatar = styled(Avatar)(({ theme }) => ({
   width: theme.spacing(4),
   height: theme.spacing(4),
   color: theme.palette.getContrastText(deepOrange[500]),
-  backgroundColor: deepOrange[500],
+  // backgroundColor: deepOrange[500],
 }));
 
 export const MessageLeft = (props) => {

@@ -13,6 +13,6 @@ export default function useConversation() {
 
   return {
     start: (request) =>
-      socket.emit(SocketRequest.SEND_MESSAGE, secure(request)),
+      socket.emit(SocketRequest.START_CONVERSATION, secure(request)),
   };
 }

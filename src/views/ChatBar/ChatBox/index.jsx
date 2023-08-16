@@ -7,6 +7,8 @@ import { useToken } from "src/hooks";
 import { MessageRight } from "./MessageRight";
 import { MessageLeft } from "./MessageLeft";
 import { getAvatar } from "src/data";
+import { useDispatch } from "react-redux";
+import { setCurrentConversation } from "src/redux/conversationSlice";
 
 const CloseButton = styled(Close)({
   cursor: "pointer",
@@ -44,17 +46,37 @@ const MessageBody = styled(Paper)({
   height: "calc( 100% - 80px )",
 });
 
-function ChatBox({ conversation }) {
-  const [show, setShow] = useState(false);
+function ChatBox({ open, conversation }) {
+  const [show, setShow] = useState(open);
+  const dispatch = useDispatch();
   const [toolbarHeight, setToolbarHeight] = useState();
   const toolbarRef = useRef();
+  const scrollToBottomRef = useRef();
+  const textfieldRef = useRef();
   const token = useToken();
+  const receiver = conversation.players.find(
+    (player) => player.id !== token.decoded.id
+  );
+
+  const closeChatBox = () => {
+    dispatch(setCurrentConversation(null));
+    setShow(false);
+  };
+
+  const maximize = () => {
+    setShow(true);
+  };
 
   useEffect(() => {
     if (toolbarRef.current) {
       setToolbarHeight(getComputedStyle(toolbarRef.current));
     }
   }, [show]);
+
+  useEffect(() => {
+    scrollToBottomRef.current?.scrollIntoView();
+    textfieldRef.current?.focus();
+  }, [conversation.messages?.length]);
 
   const formatDate = (date) =>
     new Intl.DateTimeFormat("en-AU", {
@@ -65,15 +87,15 @@ function ChatBox({ conversation }) {
 
   return (
     <StyledPaper show={show} toolbarheight={toolbarHeight?.height}>
-      <ToolbarStyled ref={toolbarRef} id="chat-toolbar">
+      <ToolbarStyled ref={toolbarRef} id="chat-toolbar" onClick={maximize}>
         <Typography>Chat</Typography>
         <Tooltip title="Close chat">
-          <CloseButton onClick={() => setShow((show) => !show)} />
+          <CloseButton onClick={closeChatBox} />
         </Tooltip>
       </ToolbarStyled>
       <MessageBody>
         {conversation.messages.map((message) =>
-          message.sender.id === token.decoded.id ? (
+          message.sender === token.decoded.id ? (
             <MessageRight
               message={message.message}
               timestamp={formatDate(message.createdAt)}
@@ -85,14 +107,20 @@ function ChatBox({ conversation }) {
             <MessageLeft
               message={message.message}
               timestamp={formatDate(message.createdAt)}
-              photoURL={getAvatar(message.sender.avatar)}
-              displayName={message.sender.firstName}
+              photoURL={getAvatar(receiver.avatar)}
+              displayName={receiver.firstName}
               avatarDisp={true}
             />
           )
         )}
+        <div ref={scrollToBottomRef} />
       </MessageBody>
-      <TextInput token={token} />
+      <TextInput
+        conversationId={conversation.id}
+        receiver={receiver.id}
+        textfieldRef={textfieldRef}
+        token={token}
+      />
     </StyledPaper>
   );
 }

@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 import { Tooltip } from "@mui/material";
 import { Chat } from "@mui/icons-material";
-import { useToken } from "src/hooks";
 import { useConversation } from "src/hooks";
 
 const GameButton = styled(Chat)(({ theme }) => ({
@@ -12,14 +11,8 @@ const GameButton = styled(Chat)(({ theme }) => ({
 
 export default function StartChat({ user }) {
   const conversation = useConversation();
-  const token = useToken();
 
-  const handleStartChat = () => {
-    const payload = {
-      players: [token.decoded.id, user.id],
-    };
-    conversation.start(payload);
-  };
+  const handleStartChat = () => conversation.start({ player: user.id });
 
   return (
     <Tooltip title={`Chat with ${user.firstName}`}>

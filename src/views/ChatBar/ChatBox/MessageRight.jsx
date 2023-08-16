@@ -40,7 +40,7 @@ const MessageOrange = styled.div({
 
 const DisplayName = styled.div({
   fontSize: "0.85em",
-  marginRight: "10px"
+  marginRight: "10px",
 });
 
 const MessageAvatar = styled(Avatar)(({ theme }) => ({
@@ -54,8 +54,8 @@ export const MessageRight = (props) => {
   const photoURL = props.photoURL ? props.photoURL : "dummy.js";
 
   return (
-    <FlexBox alignItems="flex-start" justifyContent="flex-end">
-      <FlexBox alignItems="flex-end" flexDirection="column">
+    <FlexBox alignItems="flex-start" justifyContent="flex-end" width="100%">
+      <FlexBox alignItems="flex-end" flexDirection="column" width="100%">
         <DisplayName>{props.displayName}</DisplayName>
         <MessageOrange>
           <MessageContent>{message}</MessageContent>

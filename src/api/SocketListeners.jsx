@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { useNotification, usePlayer, useSocket, useToken } from "src/hooks";
+import { setCurrentConversation } from "src/redux/conversationSlice";
 import {
   setCurrentGame,
   setCurrentUsers,
@@ -31,6 +32,11 @@ const SocketListeners = () => {
     dispatch(setCurrentGamesNav(games));
   };
 
+  const handleResponse = (response, dispatchFunction) =>
+    isSuccess(response)
+      .then((payload) => dispatch(dispatchFunction(payload)))
+      .catch(notification.error);
+
   const handleToken = (response, successMessage, navigateTo = "/") =>
     isSuccess(response)
       .then((payload) => {
@@ -41,9 +47,7 @@ const SocketListeners = () => {
       .catch(notification.error);
 
   const handleSiteSettings = (response) =>
-    isSuccess(response)
-      .then((settings) => dispatch(setSiteSettings(settings)))
-      .catch(notification.error);
+    handleResponse(response, setSiteSettings);
 
   const updateGame = (response, successMessage = "Game updated!") =>
     isSuccess(response)
@@ -68,10 +72,15 @@ const SocketListeners = () => {
     );
     socket.on(Status.UNAUTHORIZED, () => navigate("/auth/login"));
     socket.on(SocketResponse.MOVE_PLAYED, (response) =>
-      isSuccess(response)
-        .then((game) => dispatch(setCurrentGame(game)))
-        .catch(notification.error)
+      handleResponse(response, setCurrentGame)
     );
+    socket.on(SocketResponse.CONVERSATION_STARTED, (response) =>
+      handleResponse(response, setCurrentConversation)
+    );
+    socket.on(SocketResponse.MESSAGE_SENT, (response) =>
+      handleResponse(response, setCurrentConversation)
+    );
+
     socket.on(SocketResponse.CURRENT_GAMES_LOADED, (response) =>
       isSuccess(response).then(setGames).catch(notification.error)
     );
@@ -81,17 +90,15 @@ const SocketListeners = () => {
         .catch(() => navigate("/games"))
     );
     socket.on(SocketResponse.CURRENT_USERS_LOADED, (response) =>
-      isSuccess(response)
-        .then((users) => dispatch(setCurrentUsers(users)))
-        .catch(notification.error)
+      handleResponse(response, setCurrentUsers)
     );
+
     socket.on(SocketResponse.GAME_RENAMED, updateGame);
     socket.on(SocketResponse.ICON_CHANGED, updateGame);
     socket.on(SocketResponse.GAME_ROUNDS_RESET, (response) =>
-      isSuccess(response)
-        .then((game) => dispatch(setCurrentGame(game)))
-        .catch(notification.error)
+      handleResponse(response, setCurrentGame)
     );
+
     socket.on(SocketResponse.GAME_CREATED, (response) =>
       isSuccess(response)
         .then((game) => {
@@ -102,14 +109,11 @@ const SocketListeners = () => {
         .catch(notification.error)
     );
     socket.on(SocketResponse.GAME_DELETED, (response) =>
-      isSuccess(response)
-        .then((game) => dispatch(deleteGameFromMenu(game)))
-        .catch(notification.error)
+      handleResponse(response, deleteGameFromMenu)
     );
+
     socket.on(SocketResponse.RECENT_GAMES_LOADED, (response) =>
-      isSuccess(response)
-        .then((game) => dispatch(setRecentGames(game)))
-        .catch(notification.error)
+      handleResponse(response, setRecentGames)
     );
 
     return () => {
