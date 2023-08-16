@@ -2,7 +2,6 @@ import { Button, TextField } from "@mui/material";
 import { Send } from "@mui/icons-material";
 import styled from "@emotion/styled";
 import { usePlayer } from "src/hooks";
-import { useEffect, useRef } from "react";
 
 const WrapForm = styled.form(({ theme }) => ({
   display: "flex",
