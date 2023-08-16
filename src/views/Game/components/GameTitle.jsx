@@ -48,7 +48,7 @@ const GameTitle = () => {
   }, [game.currentGame?.id]);
 
   return (
-    <FlexBox gap="0.5rem" alignItems="stretch">
+    <FlexBox gap="0" alignItems="stretch" justifyContent="flex-start">
       <IconSelectField selected={icon.id} gameId={game.currentGame.id} />
       <form onSubmit={handleRename}>
         <Tooltip title="Rename game">
