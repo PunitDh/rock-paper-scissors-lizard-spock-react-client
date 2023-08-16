@@ -29,9 +29,9 @@ const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
   cursor: "pointer",
 }));
 
-const StyledPaper = styled(Paper)(({ show, toolbarheight }) => ({
+const StyledPaper = styled(Paper)(({ maximized, toolbarheight }) => ({
   width: "80vw",
-  height: show ? "80vh" : toolbarheight,
+  height: maximized ? "80vh" : toolbarheight,
   maxWidth: "300px",
   maxHeight: "500px",
   display: "flex",
@@ -48,7 +48,7 @@ const MessageBody = styled(Paper)({
 });
 
 function ChatBox({ open, conversation }) {
-  const [show, setShow] = useState(open);
+  const [maximized, setMaximized] = useState(open);
   const dispatch = useDispatch();
   const [toolbarHeight, setToolbarHeight] = useState();
   const toolbarRef = useRef();
@@ -61,22 +61,23 @@ function ChatBox({ open, conversation }) {
 
   const closeChatBox = () => {
     dispatch(setCurrentConversation(null));
-    setShow(false);
+    setMaximized(false);
   };
 
   const maximize = () => {
-    setShow((show) => !show);
+    setMaximized((maximized) => !maximized);
   };
 
   useEffect(() => {
     if (toolbarRef.current) {
       setToolbarHeight(getComputedStyle(toolbarRef.current));
     }
-  }, [show]);
+  }, [maximized]);
 
   useEffect(() => {
     scrollToBottomRef.current?.scrollIntoView();
     textfieldRef.current?.focus();
+    setMaximized(true);
   }, [conversation.messages?.length]);
 
   const formatDate = (date) =>
@@ -87,7 +88,7 @@ function ChatBox({ open, conversation }) {
     }).format(new Date(date));
 
   return (
-    <StyledPaper show={show} toolbarheight={toolbarHeight?.height}>
+    <StyledPaper maximized={maximized} toolbarheight={toolbarHeight?.height}>
       <ToolbarStyled ref={toolbarRef} id="chat-toolbar" onClick={maximize}>
         <Typography>Chat</Typography>
         <Tooltip title="Close chat">
@@ -98,7 +99,7 @@ function ChatBox({ open, conversation }) {
         {conversation.messages.map((message) =>
           message.sender === token.decoded.id ? (
             <MessageRight
-              key={message.id}
+              key={message._id}
               content={message.content}
               timestamp={formatDate(message.createdAt)}
               photoURL={getAvatar(token.decoded.avatar)}
@@ -107,7 +108,7 @@ function ChatBox({ open, conversation }) {
             />
           ) : (
             <MessageLeft
-              key={message.id}
+              key={message._id}
               content={message.content}
               timestamp={formatDate(message.createdAt)}
               photoURL={getAvatar(receiver.avatar)}

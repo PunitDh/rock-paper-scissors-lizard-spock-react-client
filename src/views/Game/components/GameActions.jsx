@@ -41,15 +41,7 @@ const GameActions = ({ onMaxRoundsChange, maxRounds, gameId, opponent }) => {
         <ChatIcon onClick={handleStartChat} />
       </Tooltip>
       <Tooltip title="Reset rounds in this game">
-        {/* <Button
-          variant="contained"
-          size="medium"
-          disableElevation
-          onClick={() => setConfirmReset(true)}
-        > */}
-
         <RestartGameIcon onClick={() => setConfirmReset(true)} />
-        {/* </Button> */}
       </Tooltip>
       <MaxRoundsSelect onChange={onMaxRoundsChange} value={maxRounds} />
     </FlexBox>

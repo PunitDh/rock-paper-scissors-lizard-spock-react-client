@@ -77,10 +77,9 @@ const SocketListeners = () => {
     socket.on(SocketResponse.CONVERSATION_STARTED, (response) =>
       handleResponse(response, setCurrentConversation)
     );
-    socket.on(SocketResponse.MESSAGE_SENT, (response) => {
-      console.log("Message sent");
-      handleResponse(response, setCurrentConversation);
-    });
+    socket.on(SocketResponse.MESSAGE_SENT, (response) =>
+      handleResponse(response, setCurrentConversation)
+    );
 
     socket.on(SocketResponse.CURRENT_GAMES_LOADED, (response) =>
       isSuccess(response).then(setGames).catch(notification.error)
