@@ -17,25 +17,32 @@ import {
   IconGoGame,
   IconTrophy,
 } from "@tabler/icons";
-import astronaut from "../assets/images/profile/astronaut.png";
-import bear from "../assets/images/profile/bear.png";
-import cat from "../assets/images/profile/cat.png";
-import dog from "../assets/images/profile/dog.png";
-import hacker from "../assets/images/profile/hacker.png";
-import happyMan from "../assets/images/profile/happy-man.png";
-import manWinking from "../assets/images/profile/man-winking.png";
-import man from "../assets/images/profile/man.png";
-import panda from "../assets/images/profile/panda.png";
-import prideFemale from "../assets/images/profile/pride-female.png";
-import rabbit from "../assets/images/profile/rabbit.png";
-import user1 from "../assets/images/profile/user-1.jpg";
-import winkingFemale from "../assets/images/profile/winking-female.png";
-import woman from "../assets/images/profile/woman.png";
-import rock from "../assets/images/entities/rock.png";
-import paper from "../assets/images/entities/paper.png";
-import scissors from "../assets/images/entities/scissors.png";
-import lizard from "../assets/images/entities/lizard.png";
-import spock from "../assets/images/entities/spock.png";
+import astronaut from "./images/profile/astronaut.png";
+import bear from "./images/profile/bear.png";
+import cat from "./images/profile/cat.png";
+import dog from "./images/profile/dog.png";
+import hacker from "./images/profile/hacker.png";
+import happyMan from "./images/profile/happy-man.png";
+import manWinking from "./images/profile/man-winking.png";
+import man from "./images/profile/man.png";
+import panda from "./images/profile/panda.png";
+import prideFemale from "./images/profile/pride-female.png";
+import rabbit from "./images/profile/rabbit.png";
+import user1 from "./images/profile/user-1.jpg";
+import winkingFemale from "./images/profile/winking-female.png";
+import woman from "./images/profile/woman.png";
+import rock from "./images/entities/rock.png";
+import paper from "./images/entities/paper.png";
+import scissors from "./images/entities/scissors.png";
+import lizard from "./images/entities/lizard.png";
+import spock from "./images/entities/spock.png";
+import ErrorImg from "./images/backgrounds/404-error-idea.gif";
+import Product1 from "./images/products/s4.jpg";
+import Product2 from "./images/products/s5.jpg";
+import Product3 from "./images/products/s7.jpg";
+import Product4 from "./images/products/s11.jpg";
+import ProfileImg from "./images/profile/user-1.jpg";
+import LogoImage from "./images/logos/logo.png";
 
 const avatars = [
   { id: 1, image: astronaut, name: "Astronaut" },
@@ -86,4 +93,17 @@ const entities = [
   { color: "blue", name: "Spock", image: spock },
 ];
 
-export { avatars, getAvatar, icons, getIcon, entities };
+export {
+  avatars,
+  getAvatar,
+  icons,
+  getIcon,
+  entities,
+  ErrorImg,
+  Product1,
+  Product2,
+  Product3,
+  Product4,
+  ProfileImg,
+  LogoImage,
+};

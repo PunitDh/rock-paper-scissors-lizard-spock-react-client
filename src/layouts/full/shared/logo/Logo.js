@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import LogoImage from "src/assets/images/logos/logo.png";
 import { Typography, styled } from "@mui/material";
 import { useTheme } from "@emotion/react";
+import { LogoImage } from "src/assets";
 
 const LinkStyled = styled(Link)(({ color, hovercolor }) => ({
   height: "70px",
