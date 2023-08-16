@@ -4,17 +4,17 @@ import { useNavigate } from "react-router";
 import { useNotification, usePlayer, useSocket, useToken } from "src/hooks";
 import { setCurrentConversation } from "src/redux/conversationSlice";
 import {
-  setCurrentGame,
-  setCurrentUsers,
-  setRecentGames,
-  updateCurrentGame,
-} from "src/redux/gameSlice";
-import {
   deleteGameFromMenu,
   setCurrentGamesNav,
   updateCurrentGameMenu,
 } from "src/redux/menuSlice";
-import { setCurrentGames } from "src/redux/playerSlice";
+import {
+  setCurrentGames,
+  setCurrentGame,
+  setCurrentUsers,
+  setRecentGames,
+  updateCurrentGame,
+} from "src/redux/playerSlice";
 import { setSiteSettings } from "src/redux/siteSlice";
 import { Status, isSuccess } from "src/utils";
 import { SocketRequest, SocketResponse } from "src/utils/constants";

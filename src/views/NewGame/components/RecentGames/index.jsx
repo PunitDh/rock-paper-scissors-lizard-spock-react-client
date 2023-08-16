@@ -7,7 +7,7 @@ import RecentGame from "./RecentGame";
 
 const RecentGames = () => {
   const game = useGame();
-  const { recentGames } = useSelector((state) => state.game);
+  const { recentGames } = useSelector((state) => state.player);
 
   useEffect(() => {
     game.getRecentGames();

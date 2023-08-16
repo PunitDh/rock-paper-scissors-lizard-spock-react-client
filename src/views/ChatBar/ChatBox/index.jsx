@@ -64,9 +64,7 @@ function ChatBox({ open, conversation }) {
     setMaximized(false);
   };
 
-  const maximize = () => {
-    setMaximized((maximized) => !maximized);
-  };
+  const maximize = () => setMaximized((maximized) => !maximized);
 
   useEffect(() => {
     if (toolbarRef.current) {

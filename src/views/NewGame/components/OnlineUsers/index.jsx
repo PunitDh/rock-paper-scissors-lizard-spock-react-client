@@ -17,7 +17,7 @@ import { useSelector } from "react-redux";
 
 const OnlineUsers = ({ search }) => {
   const game = useGame();
-  const { currentUsers } = useSelector((state) => state.game);
+  const { currentUsers } = useSelector((state) => state.player);
 
   useEffect(() => {
     game.getCurrentUsers();

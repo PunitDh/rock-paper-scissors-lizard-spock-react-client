@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Badge,
   Button,
@@ -94,6 +94,10 @@ const NotificationMenu = () => {
       gameId: game.id,
       player: game.players.find((player) => player.id !== token.decoded.id),
     }));
+
+  useEffect(() => {
+    console.log({inProgressGames});
+  }, [inProgressGames.length]);
 
   return (
     <>

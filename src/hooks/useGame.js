@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 export default function useGame() {
   const socket = useSocket();
   const token = useToken();
-  const { currentGame } = useSelector((state) => state.game);
+  const { currentGame } = useSelector((state) => state.player);
 
   const secure = (request) => ({
     ...request,
