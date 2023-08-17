@@ -1,3 +1,4 @@
+import { VideoCall } from "@mui/icons-material";
 import { createSlice } from "@reduxjs/toolkit";
 import {
   IconDashboard,
@@ -42,6 +43,14 @@ export const menuSlice = createSlice({
     ],
 
     [CURRENT_GAMES_NAV_GROUP]: [],
+    Utilities: [
+      {
+        id: uniqueId(),
+        title: "Video Converter",
+        icon: VideoCall,
+        href: "/video",
+      },
+    ],
     Settings: [
       {
         id: uniqueId(),

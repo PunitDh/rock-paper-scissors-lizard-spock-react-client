@@ -28,26 +28,43 @@ const FeatureToggles = () => {
     });
   };
 
+  const settings = [
+    {
+      title: "Conversations",
+      name: "conversations",
+      id: "conversations-toggle",
+      selector: siteSettings.conversations,
+    },
+    {
+      title: "Video Converter",
+      name: "videoConverter",
+      id: "video-converter-toggle",
+      selector: siteSettings.videoConverter,
+    },
+  ];
+
   return (
     <DashboardCard title="Feature Toggles">
       <FormGroup>
         <Table>
           <TableBody>
-            <TableRow>
-              <TableCell>
-                <FormLabel htmlFor="conversations-toggle">
-                  <Toggle variant="button">Conversations</Toggle>
-                </FormLabel>
-              </TableCell>
-              <TableCell>
-                <Switch
-                  id="conversations-toggle"
-                  name="conversations"
-                  onChange={handleToggle}
-                  defaultChecked={siteSettings.conversations}
-                />
-              </TableCell>
-            </TableRow>
+            {settings.map((setting) => (
+              <TableRow key={setting.id}>
+                <TableCell>
+                  <FormLabel htmlFor={setting.id}>
+                    <Toggle variant="button">{setting.title}</Toggle>
+                  </FormLabel>
+                </TableCell>
+                <TableCell>
+                  <Switch
+                    id={setting.id}
+                    name={setting.name}
+                    onChange={handleToggle}
+                    defaultChecked={setting.selector}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </FormGroup>

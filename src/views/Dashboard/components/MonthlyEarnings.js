@@ -3,6 +3,11 @@ import { useTheme } from "@mui/material/styles";
 import { Stack, Typography, Avatar, Fab } from "@mui/material";
 import { IconArrowDownRight, IconCurrencyDollar } from "@tabler/icons";
 import DashboardCard from "../../../components/shared/DashboardCard";
+import styled from "@emotion/styled";
+
+const ZFab = styled(Fab)({
+  zIndex: "0",
+});
 
 const MonthlyEarnings = () => {
   // chart color
@@ -54,9 +59,9 @@ const MonthlyEarnings = () => {
     <DashboardCard
       title="Monthly Earnings"
       action={
-        <Fab color="secondary" size="medium" sx={{ color: "#ffffff" }}>
+        <ZFab color="secondary" size="medium" sx={{ color: "#ffffff" }}>
           <IconCurrencyDollar width={24} />
-        </Fab>
+        </ZFab>
       }
       footer={
         <Chart

@@ -10,6 +10,7 @@ const BlankLayout = Loadable(
 
 /* ****Pages***** */
 const Dashboard = Loadable(lazy(() => import("../views/Dashboard")));
+const VideoConverter = Loadable(lazy(() => import("../views/VideoConverter")));
 const NewGame = Loadable(lazy(() => import("../views/NewGame")));
 const Game = Loadable(lazy(() => import("../views/Game")));
 const Profile = Loadable(lazy(() => import("../views/Profile")));
@@ -32,6 +33,7 @@ const Router = [
     children: [
       { path: "/", element: <Navigate to="/games" /> },
       { path: "/dashboard", exact: true, element: <Dashboard /> },
+      { path: "/video", exact: true, element: <VideoConverter /> },
       { path: "/games", exact: true, element: <NewGame /> },
       { path: "/games/:gameId", exact: true, element: <Game /> },
       { path: "/profile", exact: true, element: <Profile /> },

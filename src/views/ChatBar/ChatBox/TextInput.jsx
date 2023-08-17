@@ -20,7 +20,6 @@ export const TextInput = ({
   conversationId,
   receiver,
   token,
-  textfieldRef,
 }) => {
   const player = usePlayer();
 
@@ -43,7 +42,6 @@ export const TextInput = ({
         name="message"
         placeholder="Enter a message"
         required
-        ref={textfieldRef}
       />
       <Button variant="contained" color="primary" type="submit">
         <Send />

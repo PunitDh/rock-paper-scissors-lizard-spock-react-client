@@ -1,11 +1,5 @@
 import { Grid, Box } from "@mui/material";
 import PageContainer from "src/components/container/PageContainer";
-import SalesOverview from "./components/SalesOverview";
-import YearlyBreakup from "./components/YearlyBreakup";
-import RecentTransactions from "./components/RecentTransactions";
-import ProductPerformance from "./components/ProductPerformance";
-import Blog from "./components/Blog";
-import MonthlyEarnings from "./components/MonthlyEarnings";
 import FeatureToggles from "./components/FeatureToggles";
 
 const Dashboard = () => {
@@ -15,28 +9,6 @@ const Dashboard = () => {
         <Grid container spacing={3}>
           <Grid item xs={12} lg={12}>
             <FeatureToggles />
-          </Grid>
-          <Grid item xs={12} lg={8}>
-            <SalesOverview />
-          </Grid>
-          <Grid item xs={12} lg={4}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <YearlyBreakup />
-              </Grid>
-              <Grid item xs={12}>
-                <MonthlyEarnings />
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs={12} lg={4}>
-            <RecentTransactions />
-          </Grid>
-          <Grid item xs={12} lg={8}>
-            <ProductPerformance />
-          </Grid>
-          <Grid item xs={12}>
-            <Blog />
           </Grid>
         </Grid>
       </Box>

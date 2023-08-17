@@ -37,8 +37,8 @@ const StyledPaper = styled(Paper)(({ maximized, toolbarheight }) => ({
   display: "flex",
   alignItems: "center",
   flexDirection: "column",
-  zIndex: "99",
-  boxShadow:  "-10px -10px 35px -10px rgba(0,0,0,0.7)",
+  // zIndex: "999999",
+  boxShadow: "-1rem -1rem 3rem -1rem rgba(0,0,0,0.7)",
   borderTopRightRadius: "0.5rem",
   borderTopLeftRadius: "0.5rem",
 }));
@@ -56,7 +56,6 @@ function ChatBox({ open, conversation }) {
   const [toolbarHeight, setToolbarHeight] = useState();
   const toolbarRef = useRef();
   const scrollToBottomRef = useRef();
-  const textfieldRef = useRef();
   const token = useToken();
   const receiver = conversation.players.find(
     (player) => player.id !== token.decoded.id
@@ -77,7 +76,6 @@ function ChatBox({ open, conversation }) {
 
   useEffect(() => {
     scrollToBottomRef.current?.scrollIntoView();
-    textfieldRef.current?.focus();
     setMaximized(true);
   }, [conversation.messages?.length]);
 
@@ -123,7 +121,7 @@ function ChatBox({ open, conversation }) {
       <TextInput
         conversationId={conversation.id}
         receiver={receiver.id}
-        textfieldRef={textfieldRef}
+        autoFocus
         token={token}
       />
     </StyledPaper>
