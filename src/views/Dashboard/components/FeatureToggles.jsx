@@ -36,7 +36,7 @@ const FeatureToggles = () => {
       selector: siteSettings.conversations,
     },
     {
-      title: "Video Converter",
+      title: "Video Subtitle Translator",
       name: "videoConverter",
       id: "video-converter-toggle",
       selector: siteSettings.videoConverter,

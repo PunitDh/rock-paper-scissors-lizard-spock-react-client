@@ -46,7 +46,7 @@ export const menuSlice = createSlice({
     Utilities: [
       {
         id: uniqueId(),
-        title: "Video Converter",
+        title: "Video Subtitle Translator",
         icon: VideoCall,
         href: "/video",
       },

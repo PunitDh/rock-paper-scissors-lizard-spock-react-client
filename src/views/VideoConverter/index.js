@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 export default function VideoConverter() {
   const { videoConverter } = useSelector((state) => state.site.siteSettings);
   return (
-    <PageContainer title="Video Converter">
+    <PageContainer title="Video Subtitle Translator">
       {videoConverter ? (
         <Box>
           <Grid container spacing={3}>

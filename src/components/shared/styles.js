@@ -1,19 +1,15 @@
-const { default: styled } = require("@emotion/styled");
-const { Box, Button, Tooltip } = require("@mui/material");
+import styled from "@emotion/styled";
+import { Box, Button, Tooltip } from "@mui/material";
 
-export const FlexBox = styled(Box)(
-  ({ direction, wrap, justifyContent="center", alignItems="center", gap, height, width, justifySelf, alignSelf }) => ({
-    display: "flex",
-    flexDirection: direction,
-    flexWrap: wrap,
-    justifyContent,
-    alignItems,
-    height,
-    width,
-    gap,
-    justifySelf,
-    alignSelf
-  })
+export const FlexBox = ({
+  children,
+  justifyContent = "center",
+  alignItems = "center",
+  ...styles
+}) => (
+  <Box sx={{ display: "flex", justifyContent, alignItems, ...styles }}>
+    {children}
+  </Box>
 );
 
 export const TitledButton = ({ title, children, ...other }) => (
