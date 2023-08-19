@@ -120,18 +120,17 @@ const Convert = () => {
           </InputGroup>
 
           <InputGroup>
-            <TitledButton
-              title={`Generate Subtitles in ${language}`}
-              variant="contained"
-              type="submit"
-              disabled={loading}
-            >
-              {loading ? (
-                <CircularProgress />
-              ) : (
-                `Generate Subtitles in ${language}`
-              )}
-            </TitledButton>
+            {loading ? (
+              <CircularProgress />
+            ) : (
+              <TitledButton
+                title={`Generate Subtitles in ${language}`}
+                variant="contained"
+                type="submit"
+              >
+                Generate Subtitles in {language}
+              </TitledButton>
+            )}
           </InputGroup>
 
           {(loading || subtitles.translation) && (
