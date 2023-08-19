@@ -95,10 +95,6 @@ const NotificationMenu = () => {
       player: game.players.find((player) => player.id !== token.decoded.id),
     }));
 
-  useEffect(() => {
-    console.log({inProgressGames});
-  }, [inProgressGames.length]);
-
   return (
     <>
       <IconButton

@@ -1,4 +1,4 @@
-import DashboardCard from "../../../../components/shared/DashboardCard";
+import DashboardCard from "../../../../../components/shared/DashboardCard";
 import { Timeline, timelineOppositeContentClasses } from "@mui/lab";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";

@@ -24,11 +24,11 @@ const Logo = () => {
     <LinkStyled
       color="#5D87FF"
       hovercolor={theme.palette.text.secondary}
-      title="Rock Paper Scissors Lizard Spock"
+      title="One Site To Rule Them All"
       to="/"
     >
       <img src={LogoImage} alt="Logo" height={70} />
-      <Typography variant="h6">Rock Paper Scissors Lizard Spock</Typography>
+      <Typography variant="h6">One Site to Rule Them All</Typography>
     </LinkStyled>
   );
 };

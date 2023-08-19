@@ -8,7 +8,7 @@ import {
   TableRow,
   Tooltip,
 } from "@mui/material";
-import DashboardCard from "../../../../components/shared/DashboardCard";
+import DashboardCard from "../../../../../components/shared/DashboardCard";
 import ResponsiveTableCell from "src/components/shared/ResponsiveTableCell";
 import StyledTableCell from "src/components/shared/StyledTableCell";
 import UserRow from "./UserRow";
