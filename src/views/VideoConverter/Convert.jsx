@@ -1,10 +1,5 @@
 import styled from "@emotion/styled";
-import {
-  CheckBoxOutlineBlankOutlined,
-  DoneOutline,
-  Download,
-  UploadFile,
-} from "@mui/icons-material";
+import { DoneOutline, Download, UploadFile } from "@mui/icons-material";
 import {
   Box,
   CircularProgress,
@@ -13,7 +8,6 @@ import {
   List,
   ListItem,
   ListItemAvatar,
-  ListItemText,
   MenuItem,
   Select,
   TextField,
@@ -68,7 +62,7 @@ const Convert = () => {
   const [loading, setLoading] = useState(false);
   const [subtitles, setSubtitles] = useState({});
   const [language, setLanguage] = useState("Spanish");
-  const [updates, setUpdated] = useState([]);
+  const [updates, setUpdates] = useState([]);
   const notification = useNotification();
   const socket = useSocket();
 
@@ -81,7 +75,7 @@ const Convert = () => {
     const sessionId = Math.random().toString(36).slice(2, 9);
     socket.emit("request-progress-update", sessionId);
     socket.on("update-progress", (update) => {
-      setUpdated((facts) => facts.concat(update));
+      setUpdates((facts) => facts.concat(update));
     });
     formData.append("file", video);
     formData.append("language", language);
