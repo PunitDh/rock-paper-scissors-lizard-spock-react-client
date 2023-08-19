@@ -1,12 +1,5 @@
-import styled from "@emotion/styled";
-import { Box, Card, CardContent, Stack, Typography } from "@mui/material";
-
-const ResponsiveCard = styled(Card)({
-  display: "flex",
-  flexDirection: "column",
-  height: "85vh",
-  maxWidth: "90vw",
-});
+import { Box, CardContent, Stack, Typography } from "@mui/material";
+import { ResponsiveCard } from "./styles";
 
 const GameCard = ({ title, children, action }) => (
   <ResponsiveCard elevation={9}>

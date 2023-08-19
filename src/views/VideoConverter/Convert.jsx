@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 import { DoneOutline, Download, UploadFile } from "@mui/icons-material";
 import {
-  Box,
   CircularProgress,
   Fab,
   FormLabel,
@@ -12,50 +11,26 @@ import {
   Select,
   TextField,
   Tooltip,
-  Typography,
 } from "@mui/material";
 import React, { useRef, useState } from "react";
 import { api } from "src/api";
+import { languages } from "src/assets";
 import DashboardCard from "src/components/shared/DashboardCard";
-import { FlexBox, TitledButton } from "src/components/shared/styles";
+import { TitledButton } from "src/components/shared/styles";
 import { useNotification, useSocket } from "src/hooks";
+import InputGroup from "./components/InputGroup";
+import {
+  IndentedBox,
+  ResponsiveFlexBox,
+  ResponsiveTextField,
+  ResponsiveTypography,
+} from "./styles";
 
 const FileInput = styled(TextField)({
   display: "none",
 });
 
-const IndentedBox = styled(Box)({
-  marginLeft: "2rem",
-  width: "100%",
-});
-
 const Convert = () => {
-  const languages = [
-    "Arabic",
-    "Bengali",
-    "Chinese (Mandarin)",
-    "English",
-    "French",
-    "German",
-    "Greek",
-    "Hindi",
-    "Italian",
-    "Japanese",
-    "Javanese",
-    "Korean",
-    "Malay",
-    "Marathi",
-    "Portuguese",
-    "Punjabi",
-    "Russian",
-    "Spanish",
-    "Swahili",
-    "Tamil",
-    "Telugu",
-    "Turkish",
-    "Urdu",
-    "Vietnamese",
-  ];
   const fileRef = useRef();
   const handleUpload = () => fileRef.current?.click();
   const [video, setVideo] = useState(null);
@@ -92,147 +67,125 @@ const Convert = () => {
   };
 
   return (
-    <DashboardCard title="Generate Subtitles in Any Language">
+    <DashboardCard
+      sx={{ height: "100%" }}
+      title="Generate Subtitles in Any Language"
+    >
       <form onSubmit={handleSubmit}>
-        <FlexBox flexDirection="column" gap="2rem" alignItems="flex-start">
-          <FlexBox gap="1rem" flexDirection="column" alignItems="flex-start">
-            <Typography variant="h6">Upload a video:</Typography>
-            <IndentedBox>
-              <FormLabel htmlFor="upload-video-file">
-                <Tooltip title="Select a video file to upload">
-                  <Fab color="primary" aria-label="add" onClick={handleUpload}>
-                    <UploadFile />
-                  </Fab>
-                </Tooltip>
-                <FileInput
-                  type="file"
-                  id="upload-video-file"
-                  inputRef={fileRef}
-                  onChange={(e) => setVideo(e.target.files[0])}
-                  InputProps={{ accept: "video/mp4,video/x-m4v,video/*" }}
-                />
-              </FormLabel>
-            </IndentedBox>
-          </FlexBox>
+        <ResponsiveFlexBox flexDirection="column" gap="2rem">
+          <InputGroup title="Upload a video:">
+            <FormLabel htmlFor="upload-video-file">
+              <Tooltip title="Select a video file to upload">
+                <Fab color="primary" aria-label="add" onClick={handleUpload}>
+                  <UploadFile />
+                </Fab>
+              </Tooltip>
+              <FileInput
+                type="file"
+                id="upload-video-file"
+                inputRef={fileRef}
+                onChange={(e) => setVideo(e.target.files[0])}
+                InputProps={{ accept: "video/mp4,video/x-m4v,video/*" }}
+              />
+            </FormLabel>
+          </InputGroup>
 
           {video && (
-            <FlexBox gap="1rem" flexDirection="column" alignItems="flex-start">
-              <Typography variant="h6">Preview:</Typography>
-              <IndentedBox>
-                <video
-                  src={URL.createObjectURL(video)}
-                  controls
-                  width={300}
-                  height={200}
-                />
-              </IndentedBox>
-            </FlexBox>
+            <InputGroup title="Preview:">
+              <video
+                src={URL.createObjectURL(video)}
+                controls
+                // width={300}
+                height={200}
+              />
+            </InputGroup>
           )}
 
-          <FlexBox gap="1rem" flexDirection="column" alignItems="flex-start">
-            <Typography variant="h6">Select language:</Typography>
-            <IndentedBox>
-              <Select
-                labelId="subtitle-language"
-                id="subtitle-language"
-                name="language"
-                size="small"
-                value={language}
-                maxRows={6}
-                onChange={(e) => setLanguage(e.target.value)}
-              >
-                {languages.map((lang) => (
-                  <MenuItem key={lang} value={lang}>
-                    {lang}
-                  </MenuItem>
-                ))}
-              </Select>
-            </IndentedBox>
-          </FlexBox>
+          <InputGroup title="Select language:">
+            <Select
+              labelId="subtitle-language"
+              id="subtitle-language"
+              name="language"
+              size="small"
+              value={language}
+              maxRows={6}
+              onChange={(e) => setLanguage(e.target.value)}
+            >
+              {languages.map((lang) => (
+                <MenuItem key={lang} value={lang}>
+                  {lang}
+                </MenuItem>
+              ))}
+            </Select>
+          </InputGroup>
 
-          <FlexBox gap="1rem" flexDirection="column" alignItems="flex-start">
-            <IndentedBox>
-              <TitledButton
-                title={`Generate Subtitles in ${language}`}
-                variant="contained"
-                type="submit"
-                disabled={loading}
-              >
-                {loading ? (
-                  <CircularProgress />
-                ) : (
-                  <>Generate Subtitles in {language}</>
-                )}
-              </TitledButton>
-            </IndentedBox>
-          </FlexBox>
+          <InputGroup>
+            <TitledButton
+              title={`Generate Subtitles in ${language}`}
+              variant="contained"
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? (
+                <CircularProgress />
+              ) : (
+                `Generate Subtitles in ${language}`
+              )}
+            </TitledButton>
+          </InputGroup>
 
           {(loading || subtitles.translation) && (
-            <FlexBox gap="1rem" flexDirection="column" alignItems="flex-start">
-              <Typography variant="h6">Progress Update:</Typography>
-              <IndentedBox>
-                <List dense={false}>
-                  {updates.map((update) => (
-                    <ListItem variant="body-2">
-                      <ListItemAvatar>
-                        <DoneOutline sx={{ color: "green" }} />
-                      </ListItemAvatar>
-                      {update}
-                    </ListItem>
-                  ))}
-                </List>
-              </IndentedBox>
-            </FlexBox>
+            <InputGroup title="Progress Update:">
+              <List dense={false}>
+                {updates.map((update) => (
+                  <ListItem key={update} variant="body-2">
+                    <ListItemAvatar>
+                      <DoneOutline sx={{ color: "green" }} />
+                    </ListItemAvatar>
+                    {update}
+                  </ListItem>
+                ))}
+              </List>
+            </InputGroup>
           )}
 
-          <FlexBox
-            gap="1rem"
-            flexDirection="column"
-            alignItems="flex-start"
-            width="30rem"
-          >
-            {subtitles.translation ? (
-              <FlexBox
-                flexDirection="column"
-                gap="1rem"
-                alignItems="flex-start"
-                width="100%"
-              >
-                <Typography variant="h6">Output</Typography>
-                <IndentedBox>
-                  <TextField
-                    label="Subtitles"
-                    multiline
-                    minRows={15}
-                    sx={{ width: "100%" }}
-                    InputProps={{ style: { fontFamily: "monospace" } }}
-                    defaultValue={subtitles.translation}
-                  />
-                </IndentedBox>
+          {subtitles.translation && (
+            <ResponsiveFlexBox flexDirection="column" gap="1rem" width="100%">
+              <ResponsiveTypography variant="subtitle1">
+                Output:
+              </ResponsiveTypography>
+              <IndentedBox>
+                <ResponsiveTextField
+                  label="Subtitles"
+                  multiline
+                  minRows={15}
+                  InputProps={{ style: { fontFamily: "monospace" } }}
+                  defaultValue={subtitles.translation}
+                />
+              </IndentedBox>
 
-                <Typography variant="h6">
-                  Download Subtitles as a <code>.srt</code> file
-                </Typography>
-                <IndentedBox>
-                  <Tooltip title="Download subtitles file">
-                    <a
-                      href={`${process.env.REACT_APP_SERVER_URL}/${subtitles.location}`}
-                      download
-                    >
-                      <Fab color="primary" aria-label="add">
-                        <Download />
-                      </Fab>
-                    </a>
-                  </Tooltip>
-                </IndentedBox>
+              <ResponsiveTypography variant="subtitle1">
+                Download Subtitles as a <code>.srt</code> file
+              </ResponsiveTypography>
+              <IndentedBox>
+                <Tooltip title="Download subtitles file">
+                  <a
+                    href={`${process.env.REACT_APP_SERVER_URL}/${subtitles.location}`}
+                    download
+                  >
+                    <Fab color="primary" aria-label="add">
+                      <Download />
+                    </Fab>
+                  </a>
+                </Tooltip>
+              </IndentedBox>
 
-                <Typography variant="h6">
-                  Note: Files will only be stored on the server for 24 hours.
-                </Typography>
-              </FlexBox>
-            ) : null}
-          </FlexBox>
-        </FlexBox>
+              <ResponsiveTypography variant="subtitle1" bold>
+                Note: Files will only be stored on the server for 24 hours.
+              </ResponsiveTypography>
+            </ResponsiveFlexBox>
+          )}
+        </ResponsiveFlexBox>
       </form>
     </DashboardCard>
   );

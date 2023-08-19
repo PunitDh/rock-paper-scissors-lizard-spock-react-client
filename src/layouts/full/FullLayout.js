@@ -9,7 +9,7 @@ import Notification from "src/components/shared/Notification";
 
 const MainWrapper = styled("div")(() => ({
   display: "flex",
-  minHeight: "100vh",
+  minHeight: "100dvh",
   width: "100%",
 }));
 
@@ -59,7 +59,7 @@ const FullLayout = () => {
               maxWidth: "1200px",
             }}
           >
-            <Box sx={{ minHeight: "calc(100vh - 170px)" }}>
+            <Box sx={{ minHeight: "calc(100dvh - 170px)" }}>
               <Outlet />
             </Box>
           </Container>

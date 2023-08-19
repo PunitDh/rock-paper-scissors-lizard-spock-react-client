@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Box, Button, Tooltip } from "@mui/material";
+import { Box, Button, Card, Tooltip } from "@mui/material";
 
 export const FlexBox = ({
   children,
@@ -17,6 +17,13 @@ export const TitledButton = ({ title, children, ...other }) => (
     <Button {...other}>{children}</Button>
   </Tooltip>
 );
+
+export const ResponsiveCard = styled(Card)({
+  display: "flex",
+  flexDirection: "column",
+  height: "85dvh",
+  maxWidth: "90dvw",
+});
 
 export const Bold = styled.span({
   fontWeight: "bold",

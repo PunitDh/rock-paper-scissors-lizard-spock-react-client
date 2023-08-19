@@ -93,6 +93,33 @@ const entities = [
   { color: "blue", name: "Spock", image: spock },
 ];
 
+const languages = [
+  "Arabic",
+  "Bengali",
+  "Chinese (Mandarin)",
+  "English",
+  "French",
+  "German",
+  "Greek",
+  "Hindi",
+  "Italian",
+  "Japanese",
+  "Javanese",
+  "Korean",
+  "Malay",
+  "Marathi",
+  "Portuguese",
+  "Punjabi",
+  "Russian",
+  "Spanish",
+  "Swahili",
+  "Tamil",
+  "Telugu",
+  "Turkish",
+  "Urdu",
+  "Vietnamese",
+];
+
 export {
   avatars,
   getAvatar,
@@ -106,4 +133,5 @@ export {
   Product4,
   ProfileImg,
   LogoImage,
+  languages
 };

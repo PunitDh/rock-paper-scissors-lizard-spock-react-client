@@ -31,7 +31,7 @@ const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
 
 const StyledPaper = styled(Paper)(({ maximized, toolbarheight }) => ({
   width: "80vw",
-  height: maximized ? "80vh" : toolbarheight,
+  height: maximized ? "80dvh" : toolbarheight,
   maxWidth: "300px",
   maxHeight: "500px",
   display: "flex",

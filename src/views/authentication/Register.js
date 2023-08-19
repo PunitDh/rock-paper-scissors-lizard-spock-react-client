@@ -12,7 +12,7 @@ const Register = () => (
         container
         spacing={0}
         justifyContent="center"
-        sx={{ height: "100vh" }}
+        sx={{ height: "100dvh" }}
       >
         <Grid
           item
