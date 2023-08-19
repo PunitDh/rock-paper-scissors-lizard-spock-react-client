@@ -1,12 +1,14 @@
 import styled from "@emotion/styled";
 import { Download, UploadFile } from "@mui/icons-material";
 import {
+  Box,
   CircularProgress,
   Fab,
   FormLabel,
   Input,
   MenuItem,
   Select,
+  TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -18,6 +20,11 @@ import { useNotification } from "src/hooks";
 
 const FileInput = styled(Input)({
   display: "none",
+});
+
+const IndentedBox = styled(Box)({
+  marginLeft: "2rem",
+  width: "100%",
 });
 
 const Convert = () => {
@@ -71,70 +78,81 @@ const Convert = () => {
   };
 
   return (
-    <DashboardCard title="Video Subtitle Translator">
+    <DashboardCard title="Generate Subtitles in Any Language">
       <form onSubmit={handleSubmit}>
         <FlexBox flexDirection="column" gap="2rem" alignItems="flex-start">
           <FlexBox gap="1rem" flexDirection="column" alignItems="flex-start">
-            <Typography variant="h6">Select video to upload</Typography>
-            <FormLabel htmlFor="upload-video-file">
-              <Tooltip title="Select a video file to upload">
-                <Fab color="primary" aria-label="add" onClick={handleUpload}>
-                  <UploadFile />
-                </Fab>
-              </Tooltip>
-              <FileInput
-                type="file"
-                id="upload-video-file"
-                inputRef={fileRef}
-                onChange={(e) => setVideo(e.target.files[0])}
-              />
-            </FormLabel>
+            <Typography variant="h6">Upload a video:</Typography>
+            <IndentedBox>
+              <FormLabel htmlFor="upload-video-file">
+                <Tooltip title="Select a video file to upload">
+                  <Fab color="primary" aria-label="add" onClick={handleUpload}>
+                    <UploadFile />
+                  </Fab>
+                </Tooltip>
+                <FileInput
+                  type="file"
+                  id="upload-video-file"
+                  inputRef={fileRef}
+                  onChange={(e) => setVideo(e.target.files[0])}
+                />
+              </FormLabel>
+            </IndentedBox>
           </FlexBox>
 
-          <FlexBox gap="1rem" flexDirection="column" alignItems="flex-start">
-            {video && (
-              <>
-                <Typography variant="h6">Preview</Typography>
+          {video && (
+            <FlexBox gap="1rem" flexDirection="column" alignItems="flex-start">
+              <Typography variant="h6">Preview:</Typography>
+              <IndentedBox>
                 <video
                   src={URL.createObjectURL(video)}
                   controls
                   width={300}
                   height={200}
                 />
-              </>
-            )}
+              </IndentedBox>
+            </FlexBox>
+          )}
+
+          <FlexBox gap="1rem" flexDirection="column" alignItems="flex-start">
+            <Typography variant="h6">Select language:</Typography>
+            <IndentedBox>
+              <Select
+                labelId="subtitle-language"
+                id="subtitle-language"
+                name="language"
+                size="small"
+                value={language}
+                maxRows={6}
+                onChange={(e) => setLanguage(e.target.value)}
+              >
+                {languages.map((lang) => (
+                  <MenuItem key={lang} value={lang}>
+                    {lang}
+                  </MenuItem>
+                ))}
+              </Select>
+            </IndentedBox>
           </FlexBox>
 
           <FlexBox gap="1rem" flexDirection="column" alignItems="flex-start">
-            <Typography variant="h6">
-              Select language to translate to
-            </Typography>
-            <Select
-              labelId="subtitle-language"
-              id="subtitle-language"
-              name="language"
-              size="small"
-              value={language}
-              maxRows={6}
-              onChange={(e) => setLanguage(e.target.value)}
-            >
-              {languages.map((lang) => (
-                <MenuItem key={lang} value={lang}>
-                  {lang}
-                </MenuItem>
-              ))}
-            </Select>
+            <IndentedBox>
+              <TitledButton
+                title={`Generate Subtitles in ${language}`}
+                variant="contained"
+                type="submit"
+              >
+                Generate Subtitles in {language}
+              </TitledButton>
+            </IndentedBox>
           </FlexBox>
 
-          <TitledButton
-            title={`Generate Subtitles in ${language}`}
-            variant="contained"
-            type="submit"
+          <FlexBox
+            gap="1rem"
+            flexDirection="column"
+            alignItems="flex-start"
+            width="30rem"
           >
-            Generate Subtitles in {language}
-          </TitledButton>
-
-          <FlexBox gap="1rem">
             {loading ? (
               <CircularProgress />
             ) : subtitles.translation ? (
@@ -142,26 +160,36 @@ const Convert = () => {
                 flexDirection="column"
                 gap="1rem"
                 alignItems="flex-start"
+                width="100%"
               >
                 <Typography variant="h6">Output</Typography>
-                <textarea
-                  rows={15}
-                  cols={50}
-                  defaultValue={subtitles.translation}
-                ></textarea>
+                <IndentedBox>
+                  <TextField
+                    id="outlined-multiline-flexible"
+                    label="Subtitles"
+                    multiline
+                    minRows={15}
+                    sx={{ width: "100%" }}
+                    defaultValue={subtitles.translation}
+                  />
+                </IndentedBox>
+
                 <Typography variant="h6">
                   Download Subtitles as a <code>.srt</code> file
                 </Typography>
-                <Tooltip title="Download subtitles file">
-                  <a
-                    href={`${process.env.REACT_APP_SERVER_URL}/${subtitles.location}`}
-                    download
-                  >
-                    <Fab color="primary" aria-label="add">
-                      <Download />
-                    </Fab>
-                  </a>
-                </Tooltip>
+                <IndentedBox>
+                  <Tooltip title="Download subtitles file">
+                    <a
+                      href={`${process.env.REACT_APP_SERVER_URL}/${subtitles.location}`}
+                      download
+                    >
+                      <Fab color="primary" aria-label="add">
+                        <Download />
+                      </Fab>
+                    </a>
+                  </Tooltip>
+                </IndentedBox>
+
                 <Typography variant="h6">
                   Note: Files will only be stored on the server for 24 hours.
                 </Typography>
