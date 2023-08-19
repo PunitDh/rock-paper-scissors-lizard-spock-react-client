@@ -165,11 +165,11 @@ const Convert = () => {
                 <Typography variant="h6">Output</Typography>
                 <IndentedBox>
                   <TextField
-                    id="outlined-multiline-flexible"
                     label="Subtitles"
                     multiline
                     minRows={15}
                     sx={{ width: "100%" }}
+                    InputProps={{ style: { fontFamily: "monospace" } }}
                     defaultValue={subtitles.translation}
                   />
                 </IndentedBox>
