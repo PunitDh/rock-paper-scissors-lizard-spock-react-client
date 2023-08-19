@@ -1,11 +1,19 @@
 import styled from "@emotion/styled";
-import { Download, UploadFile } from "@mui/icons-material";
+import {
+  CheckBoxOutlineBlankOutlined,
+  DoneOutline,
+  Download,
+  UploadFile,
+} from "@mui/icons-material";
 import {
   Box,
   CircularProgress,
   Fab,
   FormLabel,
-  Input,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
   MenuItem,
   Select,
   TextField,
@@ -16,9 +24,9 @@ import React, { useRef, useState } from "react";
 import { api } from "src/api";
 import DashboardCard from "src/components/shared/DashboardCard";
 import { FlexBox, TitledButton } from "src/components/shared/styles";
-import { useNotification } from "src/hooks";
+import { useNotification, useSocket } from "src/hooks";
 
-const FileInput = styled(Input)({
+const FileInput = styled(TextField)({
   display: "none",
 });
 
@@ -60,19 +68,31 @@ const Convert = () => {
   const [loading, setLoading] = useState(false);
   const [subtitles, setSubtitles] = useState({});
   const [language, setLanguage] = useState("Spanish");
+  const [updates, setUpdated] = useState([]);
   const notification = useNotification();
+  const socket = useSocket();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!video || !language) {
+      return notification.error("A video file is required");
+    }
     const formData = new FormData();
+    const sessionId = Math.random().toString(36).slice(2, 9);
+    socket.emit("request-progress-update", sessionId);
+    socket.on("update-progress", (update) => {
+      setUpdated((facts) => facts.concat(update));
+    });
     formData.append("file", video);
     formData.append("language", language);
+    formData.append("sessionId", sessionId);
     setLoading(true);
     api
       .translateSubtitles(formData)
       .then((response) => {
         setLoading(false);
         setSubtitles(response.data);
+        socket.off("update-progress");
       })
       .catch(notification.error);
   };
@@ -95,6 +115,7 @@ const Convert = () => {
                   id="upload-video-file"
                   inputRef={fileRef}
                   onChange={(e) => setVideo(e.target.files[0])}
+                  InputProps={{ accept: "video/mp4,video/x-m4v,video/*" }}
                 />
               </FormLabel>
             </IndentedBox>
@@ -141,11 +162,34 @@ const Convert = () => {
                 title={`Generate Subtitles in ${language}`}
                 variant="contained"
                 type="submit"
+                disabled={loading}
               >
-                Generate Subtitles in {language}
+                {loading ? (
+                  <CircularProgress />
+                ) : (
+                  <>Generate Subtitles in {language}</>
+                )}
               </TitledButton>
             </IndentedBox>
           </FlexBox>
+
+          {(loading || subtitles.translation) && (
+            <FlexBox gap="1rem" flexDirection="column" alignItems="flex-start">
+              <Typography variant="h6">Progress Update:</Typography>
+              <IndentedBox>
+                <List dense={false}>
+                  {updates.map((update) => (
+                    <ListItem variant="body-2">
+                      <ListItemAvatar>
+                        <DoneOutline sx={{ color: "green" }} />
+                      </ListItemAvatar>
+                      {update}
+                    </ListItem>
+                  ))}
+                </List>
+              </IndentedBox>
+            </FlexBox>
+          )}
 
           <FlexBox
             gap="1rem"
@@ -153,9 +197,7 @@ const Convert = () => {
             alignItems="flex-start"
             width="30rem"
           >
-            {loading ? (
-              <CircularProgress />
-            ) : subtitles.translation ? (
+            {subtitles.translation ? (
               <FlexBox
                 flexDirection="column"
                 gap="1rem"
