@@ -13,6 +13,7 @@ import {
   TableCell,
   TableRow,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import React, { useRef, useState } from "react";
 import { api } from "src/api";
@@ -163,6 +164,10 @@ const Convert = () => {
                         </Fab>
                       </a>
                     </Tooltip>
+                    <Typography variant="h6">
+                      Note: The subtitles file will only be stored on the server
+                      for 24 hours.
+                    </Typography>
                   </FlexBox>
                 ) : null}
               </TableCell>
