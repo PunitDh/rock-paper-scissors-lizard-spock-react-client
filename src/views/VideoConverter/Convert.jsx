@@ -154,7 +154,10 @@ const Convert = () => {
                       defaultValue={subtitles.translation}
                     ></textarea>
                     <Tooltip title="Download subtitles file">
-                      <a href={`${subtitles.savedFile}`} download>
+                      <a
+                        href={`${process.env.REACT_APP_SERVER_URL}/${subtitles.location}`}
+                        download
+                      >
                         <Fab color="primary" aria-label="add">
                           <Download />
                         </Fab>
