@@ -54,8 +54,6 @@ const SocketListeners = () => {
     api.getSiteSettings();
 
     socket.on(SocketResponse.UPDATE_SITE_SETTINGS, handleSiteSettings);
-    socket.on(SocketResponse.LOGIN_USER, handleToken);
-    socket.on(SocketResponse.REGISTER_USER, handleToken);
     socket.on(SocketResponse.UPDATE_PROFILE, (response) =>
       handleToken(response, "Profile updated!", "/profile")
     );
@@ -77,16 +75,6 @@ const SocketListeners = () => {
     socket.on(SocketResponse.CHANGE_ICON, updateGame);
     socket.on(SocketResponse.RESET_GAME_ROUNDS, (response) =>
       handleResponse(response, setCurrentGame)
-    );
-
-    socket.on(SocketResponse.CREATE_GAME, (response) =>
-      isSuccess(response)
-        .then((game) => {
-          dispatch(setCurrentGame(game));
-          dispatch(updateCurrentGameMenu(game));
-          navigate(`/games/${game.id}`);
-        })
-        .catch(notification.error)
     );
 
     socket.on(SocketResponse.DELETE_GAME, (response) =>

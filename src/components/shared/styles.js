@@ -1,13 +1,24 @@
 import styled from "@emotion/styled";
-import { Box, Button, Card, Tooltip } from "@mui/material";
+import { Box, Button, Card, TextField, Tooltip } from "@mui/material";
 
 export const FlexBox = ({
   children,
   justifyContent = "center",
   alignItems = "center",
+  flexDirection = "row",
+  wrap,
   ...styles
 }) => (
-  <Box sx={{ display: "flex", justifyContent, alignItems, ...styles }}>
+  <Box
+    sx={{
+      display: "flex",
+      justifyContent,
+      alignItems,
+      flexWrap: wrap,
+      flexDirection,
+      ...styles,
+    }}
+  >
     {children}
   </Box>
 );
@@ -27,4 +38,8 @@ export const ResponsiveCard = styled(Card)({
 
 export const Bold = styled.span({
   fontWeight: "bold",
+});
+
+export const WideTextField = styled(TextField)({
+  width: "100%",
 });

@@ -9,7 +9,7 @@ import {
   setCurrentUsers,
   setRecentGames,
 } from "src/redux/playerSlice";
-import { setCurrentGamesNav } from "src/redux/menuSlice";
+import { setCurrentGamesNav, updateCurrentGameMenu } from "src/redux/menuSlice";
 import { useNavigate } from "react-router";
 import { setSiteSettings } from "src/redux/siteSlice";
 
@@ -91,6 +91,17 @@ export default function useAPI() {
         .then((data) => dispatch(setConversations(data.payload)))
         .catch(notification.error),
 
+    createGame: (data) => {
+      return request
+        .post("/games/new", data, authHeaders)
+        .then((data) => {
+          dispatch(setCurrentGame(data.payload));
+          dispatch(updateCurrentGameMenu(data.payload));
+          navigate(`/games/${data.payload.id}`);
+        })
+        .catch(notification.error);
+    },
+
     getCurrentGames: () =>
       request
         .get("/player/games", authHeaders)
@@ -105,7 +116,7 @@ export default function useAPI() {
         .get("/games/recent", { ...authHeaders, params: { limit } })
         .then((data) => dispatch(setRecentGames(data.payload)))
         .catch(notification.error),
-        
+
     getCurrentUsers: () =>
       request
         .get("/player/players", authHeaders)

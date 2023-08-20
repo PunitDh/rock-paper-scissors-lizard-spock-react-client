@@ -2,7 +2,7 @@ import DashboardCard from "../../../components/shared/DashboardCard";
 import { Box, Stack } from "@mui/material";
 import FormField from "src/components/shared/FormField";
 import AvatarSelectField from "../../../components/shared/AvatarSelectField";
-import { TitledButton } from "src/components/shared/styles";
+import { FlexBox, TitledButton } from "src/components/shared/styles";
 import { useToken } from "src/hooks";
 
 const UpdateProfile = ({ player }) => {
@@ -24,7 +24,7 @@ const UpdateProfile = ({ player }) => {
     <DashboardCard title="Update Profile">
       <Box>
         <form onSubmit={handleSubmit}>
-          <Stack mb={3}>
+          <FlexBox flexDirection="column" alignItems="flex-start" gap="0.5rem">
             <FormField label="First Name" value={token.decoded.firstName} />
             <FormField label="Last Name" value={token.decoded.lastName} />
             <FormField
@@ -33,16 +33,16 @@ const UpdateProfile = ({ player }) => {
               disabled={!token.decoded.isAdmin}
             />
             <AvatarSelectField selected={token.decoded.avatar} />
-          </Stack>
-          <TitledButton
-            title="Update your profile"
-            type="submit"
-            color="primary"
-            variant="contained"
-            size="large"
-          >
-            Update Profile
-          </TitledButton>
+            <TitledButton
+              title="Update your profile"
+              type="submit"
+              color="primary"
+              variant="contained"
+              size="large"
+            >
+              Update Profile
+            </TitledButton>
+          </FlexBox>
         </form>
       </Box>
     </DashboardCard>

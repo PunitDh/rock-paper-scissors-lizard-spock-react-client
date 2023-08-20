@@ -19,10 +19,15 @@ const SelectableAvatar = styled(Avatar)(({ selected }) => ({
   },
 }));
 
+const Container = styled.div({
+  marginTop: "1rem",
+  marginBottom: "1rem",
+});
+
 const AvatarSelectField = ({ selected = 1 }) => {
   const [selectedAvatar, setSelectedAvatar] = useState(selected);
   return (
-    <>
+    <Container>
       <Typography
         variant="subtitle1"
         fontWeight={600}
@@ -46,7 +51,7 @@ const AvatarSelectField = ({ selected = 1 }) => {
         ))}
         <input name="avatar" type="hidden" value={selectedAvatar} />
       </FlexBox>
-    </>
+    </Container>
   );
 };
 

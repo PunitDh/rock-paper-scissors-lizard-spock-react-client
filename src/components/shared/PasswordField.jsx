@@ -1,14 +1,11 @@
 import styled from "@emotion/styled";
 import { Password, TextFields } from "@mui/icons-material";
-import { TextField, Tooltip } from "@mui/material";
+import { Tooltip } from "@mui/material";
 import { useState } from "react";
+import { WideTextField } from "./styles";
 
 const Container = styled.div({
   position: "relative",
-  width: "100%",
-});
-
-const StyledTextField = styled(TextField)({
   width: "100%",
 });
 
@@ -26,7 +23,7 @@ const PasswordField = (props) => {
   const [show, setShow] = useState(false);
   return (
     <Container>
-      <StyledTextField type={show ? "text" : "password"} {...props} />
+      <WideTextField type={show ? "text" : "password"} {...props} />
       <Tooltip title={show ? "Hide password" : "Show password"}>
         <Icon onClick={() => setShow((show) => !show)}>
           {show ? <TextFields /> : <Password />}

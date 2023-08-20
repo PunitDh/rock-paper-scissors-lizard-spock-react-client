@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Tooltip } from "@mui/material";
 import styled from "@emotion/styled";
 import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
-import { useGame, useToken } from "src/hooks";
+import { useAPI } from "src/hooks";
 import { icons } from "src/assets";
 import { sample } from "lodash";
 import { PlayCircleFilled } from "@mui/icons-material";
@@ -16,14 +16,14 @@ const GameButton = styled(PlayCircleFilled)(({ theme }) => ({
 export default function StartGame({ user }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [value, setValue] = useState();
-  const game = useGame();
+  const api = useAPI();
 
   const handleStartGame = (opponent) => {
     const payload = {
       opponent,
       icon: sample(icons.map((it) => it.id)),
     };
-    game.create(payload);
+    api.createGame(payload);
   };
 
   const handleClose = (newValue) => {

@@ -5,6 +5,9 @@ import { useEffect, useRef, useState } from "react";
 import { Typography } from "@mui/material";
 
 const LogTable = styled.div({
+  display: "flex",
+  flexDirection: "column",
+  flexWrap: "nowrap",
   height: "30rem",
   overflowY: "scroll",
 });
@@ -12,7 +15,9 @@ const LogTable = styled.div({
 const LogMessage = styled(Typography)(({ color }) => ({
   color,
   fontFamily: "monospace",
-  display: "block",
+  maxWidth: "100%",
+  borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
+  marginBottom: "0.1rem",
 }));
 
 const APILogs = () => {

@@ -43,6 +43,7 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
               component="label"
               htmlFor="firstName"
               mb="5px"
+              mt="25px"
             >
               First Name
             </Typography>
@@ -60,6 +61,7 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
               component="label"
               htmlFor="lastName"
               mb="5px"
+              mt="25px"
             >
               Last Name
             </Typography>

@@ -2,6 +2,16 @@ import { Typography } from "@mui/material";
 import CustomTextField from "../forms/theme-elements/CustomTextField";
 import { camelCase, kebabCase } from "lodash";
 import PasswordField from "./PasswordField";
+import styled from "@emotion/styled";
+
+const WideTextField = styled(CustomTextField)({
+  width: "100%",
+});
+
+const Container = styled.div({
+  marginTop: "1rem",
+  marginBottom: "1rem",
+})
 
 const FormField = ({
   value,
@@ -15,14 +25,14 @@ const FormField = ({
   const autoName = camelCase(label);
 
   return (
-    <>
+    <Container>
       <Typography
         variant="subtitle1"
         fontWeight={600}
         component="label"
         htmlFor={id || autoId}
         mb="5px"
-        mt="25px"
+        mt="1.25rem"
       >
         {label}
       </Typography>
@@ -34,7 +44,7 @@ const FormField = ({
           disabled={disabled}
         />
       ) : (
-        <CustomTextField
+        <WideTextField
           id={id || autoId}
           name={name || autoName}
           type={type}
@@ -43,7 +53,7 @@ const FormField = ({
           disabled={disabled}
         />
       )}
-    </>
+    </Container>
   );
 };
 
