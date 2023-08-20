@@ -50,8 +50,8 @@ export default function useAPI() {
     },
   };
 
-  const handleToken = (payload) => {
-    token.set(payload);
+  const handleToken = (data) => {
+    token.set(data.payload);
     notification.success("Success");
     navigate("/");
   };
@@ -117,6 +117,8 @@ export default function useAPI() {
         .get(`/games/${gameId}`, authHeaders)
         .then((data) => dispatch(setCurrentGame(data.payload)))
         .catch(() => navigate("/games")),
+
+    getLogs: () => request.get(`/admin/logs`, authHeaders),
 
     translateSubtitles: (formData) =>
       request.post("/video/subtitles/translate", formData, authHeaders),

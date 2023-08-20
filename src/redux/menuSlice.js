@@ -24,7 +24,7 @@ const menuMapper = (game) => ({
 export const menuSlice = createSlice({
   name: "menu",
   initialState: {
-    Dashboard: [
+    Admin: [
       {
         id: uniqueId(),
         title: "Dashboard",

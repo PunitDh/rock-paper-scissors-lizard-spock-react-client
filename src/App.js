@@ -4,7 +4,7 @@ import Router from "./routes/Router";
 import { baselightTheme } from "./theme/DefaultColors";
 import { SocketProvider } from "./context/SocketContext";
 import { NotificationProvider } from "./context/NotificationContext";
-import SocketListeners from "./api/SocketListeners";
+import SocketListeners from "./listeners/SocketListeners";
 import { TokenProvider } from "./context/TokenContext";
 
 function App() {

@@ -30,8 +30,6 @@ const Game = () => {
     getGame(gameId);
   }, [gameId]);
 
-  console.log({ loading });
-
   const lastRound =
     game.currentGame.rounds &&
     game.currentGame.rounds[game.currentGame.rounds.length - 1];
