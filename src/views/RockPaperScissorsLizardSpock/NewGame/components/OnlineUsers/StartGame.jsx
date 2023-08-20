@@ -17,11 +17,10 @@ export default function StartGame({ user }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [value, setValue] = useState();
   const game = useGame();
-  const token = useToken();
 
-  const handleStartGame = (playerId) => {
+  const handleStartGame = (opponent) => {
     const payload = {
-      players: [token.decoded.id, playerId],
+      opponent,
       icon: sample(icons.map((it) => it.id)),
     };
     game.create(payload);
@@ -36,7 +35,7 @@ export default function StartGame({ user }) {
 
   return (
     <>
-      <Tooltip title={`Start new game with ${user.firstName}`}>
+      <Tooltip title={`Play with ${user.firstName}`}>
         <GameButton onClick={() => setConfirmOpen(true)} />
       </Tooltip>
       <ConfirmationDialog
@@ -46,9 +45,9 @@ export default function StartGame({ user }) {
         onCancel={handleClose}
         onConfirm={() => handleStartGame(user.id)}
         value={value}
-        title="New Game"
+        title="Play"
         confirmBtnText="Start Game"
-        content={`Start new game with ${user.firstName}?`}
+        content={`Play with ${user.firstName}?`}
       />
     </>
   );

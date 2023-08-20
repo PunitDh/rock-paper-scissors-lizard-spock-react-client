@@ -100,12 +100,12 @@ export default function useAPI() {
         })
         .catch(notification.error),
 
-    getRecentGames: () =>
+    getRecentGames: (limit) =>
       request
-        .get("/games/recent", authHeaders)
+        .get("/games/recent", { ...authHeaders, params: { limit } })
         .then((data) => dispatch(setRecentGames(data.payload)))
         .catch(notification.error),
-
+        
     getCurrentUsers: () =>
       request
         .get("/player/players", authHeaders)

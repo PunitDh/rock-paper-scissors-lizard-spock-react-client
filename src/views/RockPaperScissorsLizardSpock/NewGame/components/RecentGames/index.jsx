@@ -10,9 +10,10 @@ const RecentGames = () => {
   const api = useAPI();
   const { recentGames } = useSelector((state) => state.player);
   const [getRecentGames, loading] = useLoading(api.getRecentGames);
+  const limit = 6;
 
   useEffect(() => {
-    getRecentGames();
+    getRecentGames(limit);
   }, []);
 
   return (
@@ -35,7 +36,7 @@ const RecentGames = () => {
             },
           }}
         >
-          {recentGames.slice(0, 6).map((game) => (
+          {recentGames.map((game) => (
             <RecentGame key={game.id} game={game} />
           ))}
         </Timeline>

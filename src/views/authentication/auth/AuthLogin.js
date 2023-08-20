@@ -6,13 +6,15 @@ import {
   Button,
   Stack,
   Checkbox,
+  CircularProgress,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import CustomTextField from "../../../components/forms/theme-elements/CustomTextField";
-import { useAPI } from "src/hooks";
+import { useAPI, useLoading } from "src/hooks";
 
 const AuthLogin = ({ title, subtitle, subtext }) => {
   const api = useAPI();
+  const [loginPlayer, loading] = useLoading(api.loginPlayer);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,7 +22,7 @@ const AuthLogin = ({ title, subtitle, subtext }) => {
       email: e.target.email.value,
       password: e.target.password.value,
     };
-    api.loginPlayer(payload);
+    loginPlayer(payload);
   };
 
   return (
@@ -100,7 +102,7 @@ const AuthLogin = ({ title, subtitle, subtext }) => {
             fullWidth
             type="submit"
           >
-            Sign In
+            {loading ? <CircularProgress /> : "Sign In"}
           </Button>
         </Box>
       </form>
