@@ -1,23 +1,19 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import { useNotification, usePlayer, useSocket, useToken } from "src/hooks";
+import {
+  useAPI,
+  useNotification,
+  usePlayer,
+  useSocket,
+  useToken,
+} from "src/hooks";
 import { setCurrentConversation } from "src/redux/conversationSlice";
-import {
-  deleteGameFromMenu,
-  setCurrentGamesNav,
-  updateCurrentGameMenu,
-} from "src/redux/menuSlice";
-import {
-  setCurrentGames,
-  setCurrentGame,
-  setCurrentUsers,
-  setRecentGames,
-  updateCurrentGame,
-} from "src/redux/playerSlice";
+import { deleteGameFromMenu, updateCurrentGameMenu } from "src/redux/menuSlice";
+import { setCurrentGame, updateCurrentGame } from "src/redux/playerSlice";
 import { setSiteSettings } from "src/redux/siteSlice";
 import { Status, isSuccess } from "src/utils";
-import { SocketRequest, SocketResponse } from "src/utils/constants";
+import { SocketResponse } from "src/utils/constants";
 
 const SocketListeners = () => {
   const socket = useSocket();
@@ -26,11 +22,7 @@ const SocketListeners = () => {
   const navigate = useNavigate();
   const player = usePlayer();
   const dispatch = useDispatch();
-
-  const setGames = (games) => {
-    dispatch(setCurrentGames(games));
-    dispatch(setCurrentGamesNav(games));
-  };
+  const api = useAPI();
 
   const handleResponse = (response, dispatchFunction) =>
     isSuccess(response)
@@ -59,8 +51,8 @@ const SocketListeners = () => {
       .catch(notification.error);
 
   useEffect(() => {
-    socket.emit(SocketRequest.GET_SITE_SETTINGS);
-    socket.on(SocketResponse.SITE_SETTINGS_RECEIVED, handleSiteSettings);
+    api.getSiteSettings();
+
     socket.on(SocketResponse.SITE_SETTINGS_UPDATED, handleSiteSettings);
     socket.on(SocketResponse.USER_LOGGED_IN, handleToken);
     socket.on(SocketResponse.USER_REGISTERED, handleToken);
@@ -81,18 +73,6 @@ const SocketListeners = () => {
       handleResponse(response, setCurrentConversation)
     );
 
-    socket.on(SocketResponse.CURRENT_GAMES_LOADED, (response) =>
-      isSuccess(response).then(setGames).catch(notification.error)
-    );
-    socket.on(SocketResponse.CURRENT_GAME_LOADED, (response) =>
-      isSuccess(response)
-        .then((game) => dispatch(setCurrentGame(game)))
-        .catch(() => navigate("/games"))
-    );
-    socket.on(SocketResponse.CURRENT_USERS_LOADED, (response) =>
-      handleResponse(response, setCurrentUsers)
-    );
-
     socket.on(SocketResponse.GAME_RENAMED, updateGame);
     socket.on(SocketResponse.ICON_CHANGED, updateGame);
     socket.on(SocketResponse.GAME_ROUNDS_RESET, (response) =>
@@ -108,12 +88,9 @@ const SocketListeners = () => {
         })
         .catch(notification.error)
     );
+
     socket.on(SocketResponse.GAME_DELETED, (response) =>
       handleResponse(response, deleteGameFromMenu)
-    );
-
-    socket.on(SocketResponse.RECENT_GAMES_LOADED, (response) =>
-      handleResponse(response, setRecentGames)
     );
 
     return () => {

@@ -2,7 +2,7 @@ import { useMediaQuery, Box, Drawer } from "@mui/material";
 import Logo from "../shared/logo/Logo";
 import SidebarItems from "./SidebarItems";
 import { useEffect } from "react";
-import { useGame } from "src/hooks";
+import { useAPI } from "src/hooks";
 import styled from "@emotion/styled";
 
 const WideBox = styled(Box)(({ width }) => ({
@@ -12,11 +12,11 @@ const WideBox = styled(Box)(({ width }) => ({
 
 const Sidebar = (props) => {
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
-  const game = useGame();
+  const api = useAPI();
   const sidebarWidth = "270px";
 
   useEffect(() => {
-    game.getCurrentGames();
+    api.getCurrentGames();
   }, []);
 
   if (lgUp) {

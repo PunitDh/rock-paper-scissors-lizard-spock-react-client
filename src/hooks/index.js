@@ -5,6 +5,7 @@ import useToken from "./useToken";
 import useNotification from "./useNotification";
 import useConversation from "./useConversation";
 import useAdmin from "./useAdmin";
+import useAPI from "./useAPI";
 
 export {
   usePlayer,
@@ -14,4 +15,5 @@ export {
   useToken,
   useNotification,
   useConversation,
+  useAPI,
 };

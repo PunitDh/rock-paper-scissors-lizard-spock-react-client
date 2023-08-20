@@ -26,6 +26,7 @@ export const SocketRequest = Object.freeze({
   RESET_GAME_ROUNDS: "reset-rounds",
   CREATE_GAME: "create-game",
   DELETE_GAME: "delete-game",
+  PROGRESS_UPDATE: "request-progress-update",
 });
 
 export const SocketResponse = Object.freeze({
@@ -48,6 +49,7 @@ export const SocketResponse = Object.freeze({
   GAME_ROUNDS_RESET: "rounds-reset",
   GAME_CREATED: "game-created",
   GAME_DELETED: "game-deleted",
+  PROGRESS_UPDATE: "update-progress",
 });
 
 export const tokenKey = "rpsls-token";

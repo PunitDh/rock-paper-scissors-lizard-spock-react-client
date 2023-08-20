@@ -12,7 +12,6 @@ const NewGame = () => {
       <Box>
         <Grid container spacing={3}>
           <Grid item xs={12} lg={12}>
-            {/* <SalesOverview /> */}
             <UserSearch search={search} setSearch={setSearch} />
           </Grid>
           <Grid item xs={12} lg={8}>
@@ -21,7 +20,6 @@ const NewGame = () => {
           <Grid item xs={12} lg={4}>
             <RecentGames />
           </Grid>
-          
         </Grid>
       </Box>
     </PageContainer>

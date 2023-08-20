@@ -13,7 +13,6 @@ import {
   Tooltip,
 } from "@mui/material";
 import React, { useRef, useState } from "react";
-import { api } from "src/api";
 import { languages } from "src/assets";
 import DashboardCard from "src/components/shared/DashboardCard";
 import { TitledButton } from "src/components/shared/styles";
@@ -25,6 +24,7 @@ import {
   ResponsiveTextField,
   ResponsiveTypography,
 } from "./styles";
+import useAPI from "src/hooks/useAPI";
 
 const FileInput = styled(TextField)({
   display: "none",
@@ -40,6 +40,7 @@ const Convert = () => {
   const [updates, setUpdates] = useState([]);
   const notification = useNotification();
   const socket = useSocket();
+  const api = useAPI();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -49,18 +50,16 @@ const Convert = () => {
     const formData = new FormData();
     const sessionId = Math.random().toString(36).slice(2, 9);
     socket.emit("request-progress-update", sessionId);
-    socket.on("update-progress", (update) => {
-      setUpdates((facts) => facts.concat(update));
-    });
+    socket.on("update-progress", (update) => setUpdates([update]));
     formData.append("file", video);
     formData.append("language", language);
     formData.append("sessionId", sessionId);
     setLoading(true);
     api
       .translateSubtitles(formData)
-      .then((response) => {
+      .then((data) => {
         setLoading(false);
-        setSubtitles(response.data);
+        setSubtitles(data);
         socket.off("update-progress");
       })
       .catch(notification.error);

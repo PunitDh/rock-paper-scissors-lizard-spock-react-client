@@ -89,7 +89,7 @@ const NotificationMenu = () => {
     round.moves.length === 1 && round.moves[0].player !== token.decoded.id;
 
   const inProgressGames = currentGames
-    .filter((game) => game.rounds.some(opponentPlayed))
+    ?.filter((game) => game.rounds.some(opponentPlayed))
     .map((game) => ({
       gameId: game.id,
       player: game.players.find((player) => player.id !== token.decoded.id),

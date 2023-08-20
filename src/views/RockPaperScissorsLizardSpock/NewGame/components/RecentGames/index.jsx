@@ -2,15 +2,15 @@ import DashboardCard from "../../../../../components/shared/DashboardCard";
 import { Timeline, timelineOppositeContentClasses } from "@mui/lab";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useGame } from "src/hooks";
+import { useAPI } from "src/hooks";
 import RecentGame from "./RecentGame";
 
 const RecentGames = () => {
-  const game = useGame();
+  const api = useAPI();
   const { recentGames } = useSelector((state) => state.player);
 
   useEffect(() => {
-    game.getRecentGames();
+    api.getRecentGames();
   }, []);
 
   return (
@@ -31,7 +31,7 @@ const RecentGames = () => {
             },
           }}
         >
-          {recentGames.map((game) => (
+          {recentGames.slice(0, 6).map((game) => (
             <RecentGame key={game.id} game={game} />
           ))}
         </Timeline>

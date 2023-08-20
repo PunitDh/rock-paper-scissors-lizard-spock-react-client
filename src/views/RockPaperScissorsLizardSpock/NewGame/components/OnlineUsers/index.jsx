@@ -12,15 +12,15 @@ import DashboardCard from "../../../../../components/shared/DashboardCard";
 import ResponsiveTableCell from "src/components/shared/ResponsiveTableCell";
 import StyledTableCell from "src/components/shared/StyledTableCell";
 import UserRow from "./UserRow";
-import { useGame } from "src/hooks";
+import { useAPI } from "src/hooks";
 import { useSelector } from "react-redux";
 
 const OnlineUsers = ({ search }) => {
-  const game = useGame();
   const { currentUsers } = useSelector((state) => state.player);
+  const api = useAPI();
 
   useEffect(() => {
-    game.getCurrentUsers();
+    api.getCurrentUsers();
   }, []);
 
   const currentUsersFiltered =

@@ -14,14 +14,10 @@ export default function usePlayer() {
   });
 
   return {
-    login: (request) => socket.emit(SocketRequest.LOGIN_USER, request),
-    register: (request) => socket.emit(SocketRequest.REGISTER_USER, request),
     logout: () => {
       token.clear();
       navigate("/auth/login");
     },
-    getConversations: (request) =>
-      socket.emit(SocketRequest.GET_CONVERSATIONS, secure(request)),
     sendMessage: (request) =>
       socket.emit(SocketRequest.SEND_MESSAGE, secure(request)),
     updateProfile: (request) =>
