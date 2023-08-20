@@ -1,12 +1,9 @@
 import styled from "@emotion/styled";
-import { DoneOutline, Download, UploadFile } from "@mui/icons-material";
+import { Download, UploadFile } from "@mui/icons-material";
 import {
   CircularProgress,
   Fab,
   FormLabel,
-  List,
-  ListItem,
-  ListItemAvatar,
   MenuItem,
   Select,
   TextField,
@@ -25,6 +22,7 @@ import {
   ResponsiveTypography,
 } from "./styles";
 import useAPI from "src/hooks/useAPI";
+import ProgressUpdate from "./ProgressUpdate";
 
 const FileInput = styled(TextField)({
   display: "none",
@@ -37,7 +35,6 @@ const Convert = () => {
   const [loading, setLoading] = useState(false);
   const [subtitles, setSubtitles] = useState({});
   const [language, setLanguage] = useState("Spanish");
-  const [updates, setUpdates] = useState([]);
   const notification = useNotification();
   const socket = useSocket();
   const api = useAPI();
@@ -50,7 +47,6 @@ const Convert = () => {
     const formData = new FormData();
     const sessionId = Math.random().toString(36).slice(2, 9);
     socket.emit("request-progress-update", sessionId);
-    socket.on("update-progress", (update) => setUpdates([update]));
     formData.append("file", video);
     formData.append("language", language);
     formData.append("sessionId", sessionId);
@@ -60,7 +56,6 @@ const Convert = () => {
       .then((data) => {
         setLoading(false);
         setSubtitles(data);
-        socket.off("update-progress");
       })
       .catch(notification.error);
   };
@@ -91,12 +86,7 @@ const Convert = () => {
 
           {video && (
             <InputGroup title="Preview:">
-              <video
-                src={URL.createObjectURL(video)}
-                controls
-                // width={300}
-                height={200}
-              />
+              <video src={URL.createObjectURL(video)} controls height={200} />
             </InputGroup>
           )}
 
@@ -132,20 +122,7 @@ const Convert = () => {
             )}
           </InputGroup>
 
-          {(loading || subtitles.translation) && (
-            <InputGroup title="Progress Update:">
-              <List dense={false}>
-                {updates.map((update) => (
-                  <ListItem key={update} variant="body-2">
-                    <ListItemAvatar>
-                      <DoneOutline sx={{ color: "green" }} />
-                    </ListItemAvatar>
-                    {update}
-                  </ListItem>
-                ))}
-              </List>
-            </InputGroup>
-          )}
+          {(loading || subtitles.translation) && <ProgressUpdate />}
 
           {subtitles.translation && (
             <ResponsiveFlexBox flexDirection="column" gap="1rem" width="100%">

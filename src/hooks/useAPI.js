@@ -27,17 +27,14 @@ export default function useAPI() {
 
   const request = {
     send: function (method, endpoint, ...args) {
-      return new Promise((resolve, reject) => {
-        console.log(args);
-        return axios[method](
+      return new Promise((resolve, reject) =>
+        axios[method](
           `${process.env.REACT_APP_SERVER_URL}${endpoint}`,
           ...args
         ).then((response) =>
-          response.status < 400
-            ? resolve(response.data.payload)
-            : reject(response.data.payload)
-        );
-      });
+          response.status < 400 ? resolve(response.data) : reject(response.data)
+        )
+      );
     },
     get: function (...args) {
       return this.send("get", ...args);
@@ -75,14 +72,14 @@ export default function useAPI() {
     getSiteSettings: () =>
       request
         .get("/admin/settings")
-        .then((payload) => dispatch(setSiteSettings(payload)))
+        .then((data) => dispatch(setSiteSettings(data.payload)))
         .catch(notification.error),
 
     updateProfile: (formData) =>
       request
         .put("/player", formData, authHeaders)
-        .then((payload) => {
-          token.set(payload);
+        .then((data) => {
+          token.set(data);
           notification.success("Profile updated!");
           navigate("/profile");
         })
@@ -91,34 +88,34 @@ export default function useAPI() {
     getConversations: () =>
       request
         .get("/player/chats", authHeaders)
-        .then((payload) => dispatch(setConversations(payload)))
+        .then((data) => dispatch(setConversations(data.payload)))
         .catch(notification.error),
 
     getCurrentGames: () =>
       request
         .get("/player/games", authHeaders)
-        .then((payload) => {
-          dispatch(setCurrentGames(payload));
-          dispatch(setCurrentGamesNav(payload));
+        .then((data) => {
+          dispatch(setCurrentGames(data.payload));
+          dispatch(setCurrentGamesNav(data.payload));
         })
         .catch(notification.error),
 
     getRecentGames: () =>
       request
         .get("/games/recent", authHeaders)
-        .then((payload) => dispatch(setRecentGames(payload)))
+        .then((data) => dispatch(setRecentGames(data.payload)))
         .catch(notification.error),
 
     getCurrentUsers: () =>
       request
         .get("/player/players", authHeaders)
-        .then((payload) => dispatch(setCurrentUsers(payload)))
+        .then((data) => dispatch(setCurrentUsers(data.payload)))
         .catch(notification.error),
 
     getGame: ({ gameId }) =>
       request
         .get(`/games/${gameId}`, authHeaders)
-        .then((payload) => dispatch(setCurrentGame(payload)))
+        .then((data) => dispatch(setCurrentGame(data.payload)))
         .catch(() => navigate("/games")),
 
     translateSubtitles: (formData) =>
