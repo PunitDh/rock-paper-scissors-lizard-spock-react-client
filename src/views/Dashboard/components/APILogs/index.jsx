@@ -17,7 +17,7 @@ const LogMessage = styled(Typography)(({ color }) => ({
   fontFamily: "monospace",
   maxWidth: "100%",
   borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
-  marginBottom: "0.1rem",
+  marginTop: "0.5rem",
 }));
 
 const APILogs = () => {
