@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAPI, useGame, useToken } from "src/hooks";
+import { useAPI, useGame, useLoading, useToken } from "src/hooks";
 import { useParams } from "react-router";
 import PageContainer from "src/components/container/PageContainer";
 import GameCard from "src/components/shared/GameCard";
@@ -24,10 +24,13 @@ const Game = () => {
   const [maxRounds, setMaxRounds] = useState(3);
   const token = useToken();
   const api = useAPI();
+  const [getGame, loading] = useLoading(api.getGame);
 
   useEffect(() => {
-    api.getGame({ gameId });
+    getGame(gameId);
   }, [gameId]);
+
+  console.log({ loading });
 
   const lastRound =
     game.currentGame.rounds &&
@@ -36,8 +39,6 @@ const Game = () => {
   const opponent = game.currentGame.players?.find(
     (player) => player.id !== token.decoded.id
   );
-
-  const score = game.currentGame.id && calculateScore(game.currentGame);
 
   return game.currentGame.id ? (
     <PageContainer title={game.currentGame.name}>
@@ -59,7 +60,7 @@ const Game = () => {
             )}
             maxRounds={maxRounds}
             players={game.currentGame.players}
-            score={score}
+            score={calculateScore(game.currentGame)}
           />
         </ResultContainer>
         <PlayButtons

@@ -9,8 +9,6 @@ export const TokenProvider = ({ children }) => {
   const { token } = useSelector((state) => state.player);
   const dispatch = useDispatch();
 
-  console.log({token});
-
   return (
     <TokenContext.Provider
       value={{

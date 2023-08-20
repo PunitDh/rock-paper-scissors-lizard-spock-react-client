@@ -2,20 +2,24 @@ import DashboardCard from "../../../../../components/shared/DashboardCard";
 import { Timeline, timelineOppositeContentClasses } from "@mui/lab";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useAPI } from "src/hooks";
+import { useAPI, useLoading } from "src/hooks";
 import RecentGame from "./RecentGame";
+import LoadingComponent from "src/components/shared/LoadingComponent";
 
 const RecentGames = () => {
   const api = useAPI();
   const { recentGames } = useSelector((state) => state.player);
+  const [getRecentGames, loading] = useLoading(api.getRecentGames);
 
   useEffect(() => {
-    api.getRecentGames();
+    getRecentGames();
   }, []);
 
   return (
     <DashboardCard title="Recent Games">
-      <>
+      {loading ? (
+        <LoadingComponent />
+      ) : (
         <Timeline
           className="theme-timeline"
           nonce={undefined}
@@ -35,7 +39,7 @@ const RecentGames = () => {
             <RecentGame key={game.id} game={game} />
           ))}
         </Timeline>
-      </>
+      )}
     </DashboardCard>
   );
 };

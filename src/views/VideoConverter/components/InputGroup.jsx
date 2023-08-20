@@ -1,5 +1,8 @@
-
-import { IndentedBox, ResponsiveTypography, ResponsiveFlexBox } from "../styles";
+import {
+  IndentedBox,
+  ResponsiveTypography,
+  ResponsiveFlexBox,
+} from "../styles";
 
 const InputGroup = ({ title, children }) => (
   <ResponsiveFlexBox gap="1rem" flexDirection="column" width="100%">

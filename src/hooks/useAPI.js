@@ -112,7 +112,7 @@ export default function useAPI() {
         .then((data) => dispatch(setCurrentUsers(data.payload)))
         .catch(notification.error),
 
-    getGame: ({ gameId }) =>
+    getGame: (gameId) =>
       request
         .get(`/games/${gameId}`, authHeaders)
         .then((data) => dispatch(setCurrentGame(data.payload)))

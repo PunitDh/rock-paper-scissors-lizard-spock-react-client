@@ -53,33 +53,33 @@ const SocketListeners = () => {
   useEffect(() => {
     api.getSiteSettings();
 
-    socket.on(SocketResponse.SITE_SETTINGS_UPDATED, handleSiteSettings);
-    socket.on(SocketResponse.USER_LOGGED_IN, handleToken);
-    socket.on(SocketResponse.USER_REGISTERED, handleToken);
-    socket.on(SocketResponse.PROFILE_UPDATED, (response) =>
+    socket.on(SocketResponse.UPDATE_SITE_SETTINGS, handleSiteSettings);
+    socket.on(SocketResponse.LOGIN_USER, handleToken);
+    socket.on(SocketResponse.REGISTER_USER, handleToken);
+    socket.on(SocketResponse.UPDATE_PROFILE, (response) =>
       handleToken(response, "Profile updated!", "/profile")
     );
-    socket.on(SocketResponse.PROFILE_DELETED, (response) =>
+    socket.on(SocketResponse.DELETE_PROFILE, (response) =>
       isSuccess(response).then(player.logout).catch(notification.error)
     );
     socket.on(Status.UNAUTHORIZED, () => navigate("/auth/login"));
-    socket.on(SocketResponse.MOVE_PLAYED, (response) =>
+    socket.on(SocketResponse.PLAY_MOVE, (response) =>
       handleResponse(response, setCurrentGame)
     );
-    socket.on(SocketResponse.CONVERSATION_STARTED, (response) =>
+    socket.on(SocketResponse.START_CONVERSATION, (response) =>
       handleResponse(response, setCurrentConversation)
     );
-    socket.on(SocketResponse.MESSAGE_SENT, (response) =>
+    socket.on(SocketResponse.SEND_MESSAGE, (response) =>
       handleResponse(response, setCurrentConversation)
     );
 
-    socket.on(SocketResponse.GAME_RENAMED, updateGame);
-    socket.on(SocketResponse.ICON_CHANGED, updateGame);
-    socket.on(SocketResponse.GAME_ROUNDS_RESET, (response) =>
+    socket.on(SocketResponse.RENAME_GAME, updateGame);
+    socket.on(SocketResponse.CHANGE_ICON, updateGame);
+    socket.on(SocketResponse.RESET_GAME_ROUNDS, (response) =>
       handleResponse(response, setCurrentGame)
     );
 
-    socket.on(SocketResponse.GAME_CREATED, (response) =>
+    socket.on(SocketResponse.CREATE_GAME, (response) =>
       isSuccess(response)
         .then((game) => {
           dispatch(setCurrentGame(game));
@@ -89,7 +89,7 @@ const SocketListeners = () => {
         .catch(notification.error)
     );
 
-    socket.on(SocketResponse.GAME_DELETED, (response) =>
+    socket.on(SocketResponse.DELETE_GAME, (response) =>
       handleResponse(response, deleteGameFromMenu)
     );
 
