@@ -12,12 +12,15 @@ import {
 import { setCurrentGamesNav, updateCurrentGameMenu } from "src/redux/menuSlice";
 import { useNavigate } from "react-router";
 import { setSiteSettings } from "src/redux/siteSlice";
+import useSocket from "./useSocket";
+import { SocketRequest, SocketResponse } from "src/utils/constants";
 
 export default function useAPI() {
   const token = useToken();
   const notification = useNotification();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const socket = useSocket();
 
   const authHeaders = {
     headers: {
@@ -32,7 +35,9 @@ export default function useAPI() {
           `${process.env.REACT_APP_SERVER_URL}${endpoint}`,
           ...args
         ).then((response) =>
-          response.status < 400 ? resolve(response.data) : reject(response.data)
+          response.status < 400 && response.data.status === "success"
+            ? resolve(response.data)
+            : reject(response.data)
         )
       );
     },
@@ -51,9 +56,13 @@ export default function useAPI() {
   };
 
   const handleToken = (data) => {
-    token.set(data.payload);
-    notification.success("Success");
-    navigate("/");
+    if (data.status !== "success") {
+      notification.error(data.payload);
+    } else {
+      token.set(data.payload);
+      notification.success("Success");
+      navigate("/");
+    }
   };
 
   return {
@@ -85,11 +94,13 @@ export default function useAPI() {
         })
         .catch(notification.error),
 
-    getConversations: () =>
-      request
+    getConversations: () => {
+      socket.emit(SocketRequest.JOIN_CHATS, { _jwt: token.jwt });
+      return request
         .get("/player/chats", authHeaders)
         .then((data) => dispatch(setConversations(data.payload)))
-        .catch(notification.error),
+        .catch(notification.error);
+    },
 
     createGame: (data) => {
       return request
@@ -123,11 +134,13 @@ export default function useAPI() {
         .then((data) => dispatch(setCurrentUsers(data.payload)))
         .catch(notification.error),
 
-    getGame: (gameId) =>
-      request
+    getGame: (gameId) => {
+      socket.emit(SocketRequest.JOIN_CHAT, { _jwt: token.jwt, gameId: gameId });
+      return request
         .get(`/games/${gameId}`, authHeaders)
         .then((data) => dispatch(setCurrentGame(data.payload)))
-        .catch(() => navigate("/games")),
+        .catch(() => navigate("/games"));
+    },
 
     getLogs: () => request.get(`/admin/logs`, authHeaders),
 

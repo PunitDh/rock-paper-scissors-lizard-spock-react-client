@@ -17,10 +17,10 @@ const Container = styled.div({
 
 const ChatBar = () => {
   const { currentConversation } = useSelector((state) => state.conversation);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(0);
 
   useEffect(() => {
-    setOpen(true);
+    setOpen(1);
   }, [currentConversation?.messages.length]);
 
   return (

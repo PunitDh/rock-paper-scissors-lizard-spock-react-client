@@ -31,9 +31,7 @@ const FullLayout = () => {
 
   useEffect(() => {
     if (token.decoded) {
-      api
-        .getConversations()
-        
+      api.getConversations();
     }
   }, []);
 

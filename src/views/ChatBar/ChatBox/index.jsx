@@ -31,13 +31,12 @@ const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
 
 const StyledPaper = styled(Paper)(({ maximized, toolbarheight }) => ({
   width: "80vw",
-  height: maximized ? "80dvh" : toolbarheight,
+  height: maximized > 0 ? "80dvh" : toolbarheight,
   maxWidth: "300px",
   maxHeight: "500px",
   display: "flex",
   alignItems: "center",
   flexDirection: "column",
-  // zIndex: "999999",
   boxShadow: "-1rem -1rem 3rem -1rem rgba(0,0,0,0.7)",
   borderTopRightRadius: "0.5rem",
   borderTopLeftRadius: "0.5rem",
@@ -63,10 +62,10 @@ function ChatBox({ open, conversation }) {
 
   const closeChatBox = () => {
     dispatch(setCurrentConversation(null));
-    setMaximized(false);
+    setMaximized(0);
   };
 
-  const maximize = () => setMaximized((maximized) => !maximized);
+  const maximize = () => setMaximized((maximized) => Math.abs(maximized - 1));
 
   useEffect(() => {
     if (toolbarRef.current) {
@@ -76,7 +75,7 @@ function ChatBox({ open, conversation }) {
 
   useEffect(() => {
     scrollToBottomRef.current?.scrollIntoView();
-    setMaximized(true);
+    setMaximized(1);
   }, [conversation.messages?.length]);
 
   const formatDate = (date) =>

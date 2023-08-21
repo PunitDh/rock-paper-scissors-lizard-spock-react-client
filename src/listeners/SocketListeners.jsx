@@ -67,9 +67,9 @@ const SocketListeners = () => {
     socket.on(SocketResponse.START_CONVERSATION, (response) =>
       handleResponse(response, setCurrentConversation)
     );
-    socket.on(SocketResponse.SEND_MESSAGE, (response) =>
-      handleResponse(response, setCurrentConversation)
-    );
+    socket.on(SocketResponse.SEND_MESSAGE, (response) => {
+      return handleResponse(response, setCurrentConversation);
+    });
 
     socket.on(SocketResponse.RENAME_GAME, updateGame);
     socket.on(SocketResponse.CHANGE_ICON, updateGame);
@@ -82,10 +82,7 @@ const SocketListeners = () => {
     );
 
     return () => {
-      Object.values(SocketResponse).forEach((event) => {
-        socket.off(event);
-        console.log("Turning off:", event);
-      });
+      Object.values(SocketResponse).forEach(socket.off);
     };
   }, []);
 
