@@ -1,12 +1,11 @@
 import { DoneOutline } from "@mui/icons-material";
 import { List, ListItem, ListItemAvatar } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSocket } from "src/hooks";
 import InputGroup from "./InputGroup";
 import { SocketResponse } from "src/utils/constants";
 
-const ProgressUpdate = () => {
-  const [updates, setUpdates] = useState([]);
+const ProgressUpdate = ({ updates, setUpdates }) => {
   const socket = useSocket();
 
   useEffect(() => {

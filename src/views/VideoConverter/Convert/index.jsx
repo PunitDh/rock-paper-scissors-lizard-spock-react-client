@@ -1,11 +1,10 @@
 import { useState } from "react";
 import DashboardCard from "src/components/shared/DashboardCard";
 import { useLoading } from "src/hooks";
-import { ResponsiveFlexBox } from "./styles";
+import { ResponsiveFlexBox } from "../styles";
 import useAPI from "src/hooks/useAPI";
-import ProgressUpdate from "./components/ProgressUpdate";
-import Output from "./components/Output";
-import UploadForm from "./components/UploadForm";
+import UploadForm from "./UploadForm";
+import OutputGroup from "./OutputGroup";
 
 const Convert = () => {
   const [subtitles, setSubtitles] = useState({});
@@ -27,8 +26,7 @@ const Convert = () => {
           onSubmit={translateSubtitles}
           loading={loading}
         />
-        {(loading || subtitles.translation) && <ProgressUpdate />}
-        {subtitles.translation && <Output subtitles={subtitles} />}
+        <OutputGroup subtitles={subtitles} loading={loading} />
       </ResponsiveFlexBox>
     </DashboardCard>
   );

@@ -8,7 +8,7 @@ import {
   ResponsiveTypography,
 } from "../styles";
 
-const Output = ({ subtitles }) => (
+const Subtitles = ({ subtitles }) => (
   <ResponsiveFlexBox flexDirection="column" gap="1rem" width="100%">
     <ResponsiveTypography variant="subtitle1">Output:</ResponsiveTypography>
     <IndentedBox>
@@ -43,4 +43,4 @@ const Output = ({ subtitles }) => (
   </ResponsiveFlexBox>
 );
 
-export default Output;
+export default Subtitles;

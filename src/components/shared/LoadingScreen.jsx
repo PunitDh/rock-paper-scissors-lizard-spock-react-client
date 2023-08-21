@@ -1,5 +1,4 @@
 import { CircularProgress } from "@mui/material";
-import React from "react";
 import { FlexBox } from "./styles";
 
 const LoadingScreen = () => {

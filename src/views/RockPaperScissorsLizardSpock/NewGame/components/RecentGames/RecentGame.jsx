@@ -6,7 +6,6 @@ import {
   TimelineOppositeContent,
   TimelineSeparator,
 } from "@mui/lab";
-import React from "react";
 import { Bold } from "src/components/shared/styles";
 import { calculateScore } from "src/utils";
 

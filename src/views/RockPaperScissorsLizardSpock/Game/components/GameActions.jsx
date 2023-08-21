@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import MaxRoundsSelect from "./MaxRoundsSelect";
 import { Tooltip } from "@mui/material";
 import { useConversation, useGame } from "src/hooks";

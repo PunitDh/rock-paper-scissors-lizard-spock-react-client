@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { Avatar, TableCell, Typography } from "@mui/material";
-import React from "react";
 import { FlexBox } from "src/components/shared/styles";
 import { getAvatar } from "src/assets";
 
