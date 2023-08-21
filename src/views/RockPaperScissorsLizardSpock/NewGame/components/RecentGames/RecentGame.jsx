@@ -12,10 +12,13 @@ import { calculateScore } from "src/utils";
 
 const RecentGame = ({ game }) => {
   const formatDate = (date) =>
-    new Intl.DateTimeFormat("en-AU", {
-      dateStyle: "long",
-      timeStyle: "short",
-      timeZone: "Australia/Sydney",
+    new Intl.DateTimeFormat(undefined, {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
     }).format(new Date(date));
 
   const score = calculateScore(game);

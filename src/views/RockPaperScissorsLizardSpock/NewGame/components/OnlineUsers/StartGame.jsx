@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Tooltip } from "@mui/material";
+import { CircularProgress, Tooltip } from "@mui/material";
 import styled from "@emotion/styled";
 import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
-import { useAPI } from "src/hooks";
+import { useAPI, useLoading } from "src/hooks";
 import { icons } from "src/assets";
 import { sample } from "lodash";
 import { PlayCircleFilled } from "@mui/icons-material";
@@ -11,19 +11,22 @@ const GameButton = styled(PlayCircleFilled)(({ theme }) => ({
   backgroundColor: "primary.main",
   color: theme.palette.primary.main,
   cursor: "pointer",
+  width: "1.5rem",
+  height: "1.5rem",
 }));
 
 export default function StartGame({ user }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [value, setValue] = useState();
   const api = useAPI();
+  const [createGame, loading] = useLoading(api.createGame);
 
   const handleStartGame = (opponent) => {
     const payload = {
       opponent,
       icon: sample(icons.map((it) => it.id)),
     };
-    api.createGame(payload);
+    createGame(payload);
   };
 
   const handleClose = (newValue) => {
@@ -36,7 +39,11 @@ export default function StartGame({ user }) {
   return (
     <>
       <Tooltip title={`Play with ${user.firstName}`}>
-        <GameButton onClick={() => setConfirmOpen(true)} />
+        {loading ? (
+          <CircularProgress sx={{ width: "1.5rem", height: "1.5rem" }} />
+        ) : (
+          <GameButton onClick={() => setConfirmOpen(true)} />
+        )}
       </Tooltip>
       <ConfirmationDialog
         id="new-game-confirmation-dialog"
@@ -46,7 +53,7 @@ export default function StartGame({ user }) {
         onConfirm={() => handleStartGame(user.id)}
         value={value}
         title="Play"
-        confirmBtnText="Start Game"
+        confirmBtnText="Play Game"
         content={`Play with ${user.firstName}?`}
       />
     </>

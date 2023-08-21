@@ -14,7 +14,7 @@ const MessageBlue = styled.div({
   marginLeft: "20px",
   marginBottom: "10px",
   padding: "10px 10px 5px 10px",
-  width: "80%",
+  width: "100%",
   backgroundColor: "#A8DDFD",
   textAlign: "left",
   font: "400 .9em 'Open Sans', sans-serif",

@@ -82,7 +82,6 @@ function ChatBox({ open, conversation }) {
     new Intl.DateTimeFormat("en-AU", {
       dateStyle: "short",
       timeStyle: "short",
-      timeZone: "Australia/Sydney",
     }).format(new Date(date));
 
   return (
