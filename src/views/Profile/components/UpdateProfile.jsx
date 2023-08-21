@@ -1,5 +1,5 @@
 import DashboardCard from "../../../components/shared/DashboardCard";
-import { Box, Stack } from "@mui/material";
+import { Box } from "@mui/material";
 import FormField from "src/components/shared/FormField";
 import AvatarSelectField from "../../../components/shared/AvatarSelectField";
 import { FlexBox, TitledButton } from "src/components/shared/styles";
@@ -24,7 +24,7 @@ const UpdateProfile = ({ player }) => {
     <DashboardCard title="Update Profile">
       <Box>
         <form onSubmit={handleSubmit}>
-          <FlexBox flexDirection="column" alignItems="flex-start" gap="0.5rem">
+          <FlexBox flexDirection="column" alignItems="flex-start">
             <FormField label="First Name" value={token.decoded.firstName} />
             <FormField label="Last Name" value={token.decoded.lastName} />
             <FormField

@@ -9,9 +9,10 @@ const WideTextField = styled(CustomTextField)({
 });
 
 const Container = styled.div({
-  marginTop: "1rem",
-  marginBottom: "1rem",
-})
+  width: "100%",
+  display: "flex",
+  flexDirection: "column"
+});
 
 const FormField = ({
   value,

@@ -17,20 +17,20 @@ import {
   IconGoGame,
   IconTrophy,
 } from "@tabler/icons";
-import astronaut from "./images/profile/astronaut.png";
-import bear from "./images/profile/bear.png";
-import cat from "./images/profile/cat.png";
-import dog from "./images/profile/dog.png";
-import hacker from "./images/profile/hacker.png";
-import happyMan from "./images/profile/happy-man.png";
-import manWinking from "./images/profile/man-winking.png";
-import man from "./images/profile/man.png";
-import panda from "./images/profile/panda.png";
-import prideFemale from "./images/profile/pride-female.png";
-import rabbit from "./images/profile/rabbit.png";
-import user1 from "./images/profile/user-1.jpg";
-import winkingFemale from "./images/profile/winking-female.png";
-import woman from "./images/profile/woman.png";
+import astronaut from "./images/avatar/astronaut.png";
+import bear from "./images/avatar/bear.png";
+import cat from "./images/avatar/cat.png";
+import dog from "./images/avatar/dog.png";
+import hacker from "./images/avatar/hacker.png";
+import happyMan from "./images/avatar/happy-man.png";
+import manWinking from "./images/avatar/man-winking.png";
+import man from "./images/avatar/man.png";
+import panda from "./images/avatar/panda.png";
+import prideFemale from "./images/avatar/pride-female.png";
+import rabbit from "./images/avatar/rabbit.png";
+import user1 from "./images/avatar/user-1.jpg";
+import winkingFemale from "./images/avatar/winking-female.png";
+import woman from "./images/avatar/woman.png";
 import rock from "./images/entities/rock.png";
 import paper from "./images/entities/paper.png";
 import scissors from "./images/entities/scissors.png";
@@ -41,7 +41,7 @@ import Product1 from "./images/products/s4.jpg";
 import Product2 from "./images/products/s5.jpg";
 import Product3 from "./images/products/s7.jpg";
 import Product4 from "./images/products/s11.jpg";
-import ProfileImg from "./images/profile/user-1.jpg";
+import ProfileImg from "./images/avatar/user-1.jpg";
 import LogoImage from "./images/logos/logo.png";
 
 const avatars = [

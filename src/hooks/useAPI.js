@@ -13,7 +13,7 @@ import { setCurrentGamesNav, updateCurrentGameMenu } from "src/redux/menuSlice";
 import { useNavigate } from "react-router";
 import { setSiteSettings } from "src/redux/siteSlice";
 import useSocket from "./useSocket";
-import { SocketRequest, SocketResponse } from "src/utils/constants";
+import { SocketRequest } from "src/utils/constants";
 
 export default function useAPI() {
   const token = useToken();
@@ -35,9 +35,7 @@ export default function useAPI() {
           `${process.env.REACT_APP_SERVER_URL}${endpoint}`,
           ...args
         ).then((response) =>
-          response.status < 400 && response.data.status === "success"
-            ? resolve(response.data)
-            : reject(response.data)
+          response.status < 400 ? resolve(response.data) : reject(response.data)
         )
       );
     },
@@ -56,7 +54,7 @@ export default function useAPI() {
   };
 
   const handleToken = (data) => {
-    if (data.status !== "success") {
+    if (data.code !== 200) {
       notification.error(data.payload);
     } else {
       token.set(data.payload);
