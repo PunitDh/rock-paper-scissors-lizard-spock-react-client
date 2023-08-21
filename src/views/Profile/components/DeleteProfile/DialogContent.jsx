@@ -9,7 +9,7 @@ const RedBox = styled(Box)({
 
 const DialogContent = ({ password, setPassword }) => (
   <Stack>
-    <FlexBox gap="0.5rem" direction="column" alignItems="stretch">
+    <FlexBox gap="0.5rem" flexDirection="column" alignItems="stretch">
       <Box>
         Permanently delete profile? This action will delete your player profile
         and all associated games. This action is irreversible.
