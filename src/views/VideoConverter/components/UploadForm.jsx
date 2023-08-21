@@ -22,6 +22,27 @@ const FileInput = styled(TextField)({
   display: "none",
 });
 
+const Video = styled.video(({ theme }) => ({
+  width: "80%",
+  [theme.breakpoints.up("md")]: {
+    width: 360,
+    height: 288,
+    aspectRatio: "auto",
+  },
+}));
+
+const ResponsiveBox = styled(Box)(({ theme }) => ({
+  marginTop: "1rem",
+  width: "100%",
+  margin: "auto",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  [theme.breakpoints.up("lg")]: {
+    justifyContent: "flex-start",
+  },
+}));
+
 const UploadForm = ({ setSubtitles, onSubmit, loading }) => {
   const fileRef = useRef();
   const handleUpload = () => fileRef.current?.click();
@@ -66,7 +87,7 @@ const UploadForm = ({ setSubtitles, onSubmit, loading }) => {
 
       {video && (
         <InputGroup title="Preview:">
-          <video src={URL.createObjectURL(video)} controls height={200} />
+          <Video src={URL.createObjectURL(video)} controls />
         </InputGroup>
       )}
 
@@ -88,7 +109,7 @@ const UploadForm = ({ setSubtitles, onSubmit, loading }) => {
         </Select>
       </InputGroup>
 
-      <Box sx={{ marginTop: "0.5rem" }}>
+      <ResponsiveBox>
         {loading ? (
           <CircularProgress />
         ) : (
@@ -100,7 +121,7 @@ const UploadForm = ({ setSubtitles, onSubmit, loading }) => {
             Generate Subtitles in {language}
           </TitledButton>
         )}
-      </Box>
+      </ResponsiveBox>
     </ResponsiveForm>
   );
 };
