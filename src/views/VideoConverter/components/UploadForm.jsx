@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { UploadFile } from "@mui/icons-material";
 import {
+  Box,
   CircularProgress,
   Fab,
   FormLabel,
@@ -87,7 +88,7 @@ const UploadForm = ({ setSubtitles, onSubmit, loading }) => {
         </Select>
       </InputGroup>
 
-      <InputGroup>
+      <Box sx={{ marginTop: "0.5rem" }}>
         {loading ? (
           <CircularProgress />
         ) : (
@@ -99,7 +100,7 @@ const UploadForm = ({ setSubtitles, onSubmit, loading }) => {
             Generate Subtitles in {language}
           </TitledButton>
         )}
-      </InputGroup>
+      </Box>
     </ResponsiveForm>
   );
 };
