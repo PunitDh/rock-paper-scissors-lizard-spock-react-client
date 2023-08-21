@@ -17,9 +17,12 @@ const Notification = ({
       autoHideDuration={notification.duration}
       open={notification.open}
       onClose={handleClose}
-      key={vertical + horizontal}
     >
-      <WideAlert onClose={handleClose} severity={notification.type}>
+      <WideAlert
+        onClose={handleClose}
+        variant="filled"
+        severity={notification.type}
+      >
         {String(notification.message)}
       </WideAlert>
     </Snackbar>
