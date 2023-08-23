@@ -16,10 +16,10 @@ export const IndentedBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-export const ResponsiveFlexBox = styled(FlexBox)(({ theme }) => ({
-  alignItems: "center",
+export const ResponsiveFlexBox = styled(FlexBox)(({ theme, reversed }) => ({
+  alignItems: reversed ? "flex-start" : "center",
   [theme.breakpoints.up("lg")]: {
-    alignItems: "flex-start",
+    alignItems: reversed ? "center" : "flex-start",
   },
 }));
 

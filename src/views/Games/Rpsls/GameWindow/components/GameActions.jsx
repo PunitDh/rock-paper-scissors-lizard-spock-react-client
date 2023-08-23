@@ -1,5 +1,5 @@
 import { useState } from "react";
-import LimitSelect from "../../../../components/shared/LimitSelect";
+import LimitSelect from "../../../../../components/shared/LimitSelect";
 import { Tooltip } from "@mui/material";
 import { useConversation, useGame } from "src/hooks";
 import { FlexBox } from "src/components/shared/styles";

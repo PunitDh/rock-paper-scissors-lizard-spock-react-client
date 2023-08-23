@@ -23,6 +23,7 @@ export default function StartGame({ user }) {
 
   const handleStartGame = (opponent) => {
     const payload = {
+      game: "rpsls",
       opponent,
       icon: sample(icons.map((it) => it.id)),
     };

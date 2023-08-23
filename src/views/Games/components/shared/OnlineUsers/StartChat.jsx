@@ -11,7 +11,6 @@ const GameButton = styled(Chat)(({ theme }) => ({
 
 export default function StartChat({ user }) {
   const conversation = useConversation();
-
   const handleStartChat = () => conversation.start({ player: user.id });
 
   return (

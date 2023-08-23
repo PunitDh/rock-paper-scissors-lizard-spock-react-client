@@ -1,9 +1,11 @@
-import { VideoCall } from "@mui/icons-material";
+import { ContentCut, VideoCall } from "@mui/icons-material";
 import { createSlice } from "@reduxjs/toolkit";
 import {
   IconDashboard,
+  IconDeviceGamepad,
   IconDeviceGamepad2,
   IconLogout,
+  IconTicTac,
   IconUser,
 } from "@tabler/icons";
 import { uniqueId } from "lodash";
@@ -36,9 +38,22 @@ export const menuSlice = createSlice({
     Home: [
       {
         id: uniqueId(),
-        title: "New Game",
-        icon: IconDeviceGamepad2,
+        title: "Games",
+        icon: IconDeviceGamepad,
         href: "/games",
+      },
+      {
+        id: uniqueId(),
+        title: "Rock Paper Scissors",
+        icon: ContentCut,
+        href: "/games/rpsls",
+      },
+      {
+        id: uniqueId(),
+        title: "Tic Tac Toe",
+        icon: IconTicTac,
+        href: "/games/tictactoe",
+        restricted: true
       },
     ],
 
@@ -48,7 +63,7 @@ export const menuSlice = createSlice({
         id: uniqueId(),
         title: "Video Subtitles",
         icon: VideoCall,
-        href: "/video",
+        href: "/utils/video",
       },
     ],
     Settings: [

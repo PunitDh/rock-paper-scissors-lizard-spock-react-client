@@ -10,12 +10,17 @@ const BlankLayout = Loadable(
 
 /* ****Pages***** */
 const Dashboard = Loadable(lazy(() => import("../views/Dashboard")));
-const VideoConverter = Loadable(lazy(() => import("../views/VideoConverter")));
-const NewGame = Loadable(
-  lazy(() => import("../views/RockPaperScissorsLizardSpock/NewGame"))
+const VideoConverter = Loadable(
+  lazy(() => import("../views/Utils/VideoConverter"))
 );
-const Game = Loadable(
-  lazy(() => import("../views/RockPaperScissorsLizardSpock/Game"))
+const RpslsHome = Loadable(lazy(() => import("../views/Games/Rpsls")));
+const TicTacToeHome = Loadable(
+  lazy(() => import("../views/Games/TicTacToe"))
+);
+const Games = Loadable(lazy(() => import("../views/Games")));
+const Utils = Loadable(lazy(() => import("../views/Utils")));
+const RpslsGameWindow = Loadable(
+  lazy(() => import("../views/Games/Rpsls/GameWindow"))
 );
 const Profile = Loadable(lazy(() => import("../views/Profile")));
 
@@ -32,31 +37,46 @@ const Logout = Loadable(lazy(() => import("../views/authentication/Logout")));
 
 const Router = [
   {
-    path: "/",
+    path: "",
     element: <FullLayout />,
     children: [
-      { path: "/", element: <Navigate to="/games" /> },
-      { path: "/dashboard", exact: true, element: <Dashboard /> },
-      { path: "/video", exact: true, element: <VideoConverter /> },
-      { path: "/games", exact: true, element: <NewGame /> },
-      { path: "/games/:gameId", exact: true, element: <Game /> },
-      { path: "/profile", exact: true, element: <Profile /> },
-      { path: "/ui/typography", exact: true, element: <TypographyPage /> },
-      { path: "/ui/shadow", exact: true, element: <Shadow /> },
-      { path: "*", element: <Navigate to="/auth/404" /> },
+      { path: "", element: <Navigate to="/games" /> },
+      { path: "dashboard", exact: true, element: <Dashboard /> },
+      { path: "video", exact: true, element: <VideoConverter /> },
+      { path: "profile", exact: true, element: <Profile /> },
+      { path: "ui/typography", exact: true, element: <TypographyPage /> },
+      { path: "ui/shadow", exact: true, element: <Shadow /> },
     ],
   },
   {
-    path: "/auth",
+    path: "games",
+    element: <FullLayout />,
+    children: [
+      { path: "", element: <Games /> },
+      { path: "rpsls", exact: true, element: <RpslsHome /> },
+      { path: "tictactoe", exact: true, element: <TicTacToeHome /> },
+      { path: ":gameId", exact: true, element: <RpslsGameWindow /> },
+    ],
+  },
+  {
+    path: "utils",
+    element: <FullLayout />,
+    children: [
+      { path: "", element: <Utils /> },
+      { path: "video", exact: true, element: <VideoConverter /> },
+    ],
+  },
+  {
+    path: "auth",
     element: <BlankLayout />,
     children: [
       { path: "404", element: <Error /> },
-      { path: "/auth/register", element: <Register /> },
-      { path: "/auth/login", element: <Login /> },
-      { path: "/auth/logout", element: <Logout /> },
-      { path: "*", element: <Navigate to="/auth/404" /> },
+      { path: "register", element: <Register /> },
+      { path: "login", element: <Login /> },
+      { path: "logout", element: <Logout /> },
     ],
   },
+  { path: "*", element: <Navigate to="/auth/404" /> },
 ];
 
 export default Router;

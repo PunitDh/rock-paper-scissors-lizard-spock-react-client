@@ -7,6 +7,7 @@ export const FlexBox = ({
   alignItems = "center",
   flexDirection = "row",
   flexWrap,
+  flexGrow,
   height,
   width,
   ...styles
@@ -18,6 +19,7 @@ export const FlexBox = ({
       alignItems,
       flexWrap,
       flexDirection,
+      flexGrow,
       height,
       width,
       ...styles,
