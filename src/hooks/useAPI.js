@@ -146,7 +146,8 @@ export default function useAPI() {
         });
     },
 
-    getLogs: () => request.get(`/admin/logs`, authHeaders),
+    getLogs: (limit) =>
+      request.get(`/admin/logs`, { ...authHeaders, params: { limit } }),
 
     translateSubtitles: (formData) =>
       request.post("/video/subtitles/translate", formData, authHeaders),

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import MaxRoundsSelect from "./MaxRoundsSelect";
+import LimitSelect from "../../../../components/shared/LimitSelect";
 import { Tooltip } from "@mui/material";
 import { useConversation, useGame } from "src/hooks";
 import { FlexBox } from "src/components/shared/styles";
@@ -22,6 +22,7 @@ const GameActions = ({ onMaxRoundsChange, maxRounds, gameId, opponent }) => {
   const [confirmReset, setConfirmReset] = useState(false);
   const game = useGame();
   const conversation = useConversation();
+  const limits = [3, 5, 8];
 
   const handleStartChat = () => conversation.start({ player: opponent.id });
   const handleResetRounds = () => game.resetRounds({ gameId });
@@ -43,7 +44,11 @@ const GameActions = ({ onMaxRoundsChange, maxRounds, gameId, opponent }) => {
       <Tooltip title="Reset rounds in this game">
         <RestartGameIcon onClick={() => setConfirmReset(true)} />
       </Tooltip>
-      <MaxRoundsSelect onChange={onMaxRoundsChange} value={maxRounds} />
+      <LimitSelect
+        onChange={onMaxRoundsChange}
+        value={maxRounds}
+        limits={limits}
+      />
     </FlexBox>
   );
 };

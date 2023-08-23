@@ -3,6 +3,7 @@ import DashboardCard from "../../../../components/shared/DashboardCard";
 import { useAPI, useNotification } from "src/hooks";
 import { useEffect, useRef, useState } from "react";
 import { Typography } from "@mui/material";
+import LimitSelect from "src/components/shared/LimitSelect";
 
 const LogTable = styled.div({
   display: "flex",
@@ -25,13 +26,15 @@ const APILogs = () => {
   const notification = useNotification();
   const scrollRef = useRef();
   const api = useAPI();
+  const [limit, setLimit] = useState(50);
+  const limits = [50, 100, 200];
 
   useEffect(() => {
     api
-      .getLogs()
+      .getLogs(limit)
       .then((data) => setLogs(data.payload))
       .catch((data) => notification.error(data.payload));
-  }, []);
+  }, [limit]);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView();
@@ -41,6 +44,29 @@ const APILogs = () => {
     <DashboardCard
       title="API Logs"
       sx={{ backgroundColor: "#222", color: "white" }}
+      action={
+        <LimitSelect
+          sx={{
+            color: "white",
+            backgroundColor: "#555",
+            ".MuiOutlinedInput-notchedOutline": {
+              borderColor: "rgba(228, 219, 233, 0.25)",
+            },
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              borderColor: "rgba(228, 219, 233, 0.25)",
+            },
+            "&:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: "rgba(228, 219, 233, 0.25)",
+            },
+            ".MuiSvgIcon-root ": {
+              fill: "white",
+            },
+          }}
+          onChange={setLimit}
+          value={limit}
+          limits={limits}
+        />
+      }
     >
       <LogTable>
         {logs.map((message, idx) => (
