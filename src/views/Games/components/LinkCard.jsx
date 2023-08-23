@@ -8,8 +8,8 @@ const CardLink = styled(Link)(({ theme }) => ({
   display: "flex",
   transform: "scale(1.0)",
   transition: "transform 250ms ease-in",
-  background:
-    "radial-gradient(circle farthest-side at bottom center, #1b00ff22 0%, #00e9ff22 90%)",
+  // background:
+  //   "radial-gradient(circle farthest-side at bottom center, #1b00ff22 0%, #00e9ff22 90%)",
   border: "1px solid rgba(0,0,0,0.1)",
   boxShadow: "10px 10px 10px -10px rgba(0,0,0,0.8)",
   borderRadius: "0.5rem",
