@@ -6,7 +6,9 @@ export const FlexBox = ({
   justifyContent = "center",
   alignItems = "center",
   flexDirection = "row",
-  wrap,
+  flexWrap,
+  height,
+  width,
   ...styles
 }) => (
   <Box
@@ -14,8 +16,10 @@ export const FlexBox = ({
       display: "flex",
       justifyContent,
       alignItems,
-      flexWrap: wrap,
+      flexWrap,
       flexDirection,
+      height,
+      width,
       ...styles,
     }}
   >
