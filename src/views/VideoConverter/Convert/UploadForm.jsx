@@ -63,7 +63,9 @@ const UploadForm = ({ setSubtitles, onSubmit, loading }) => {
     formData.append("language", language);
     formData.append("sessionId", sessionId);
 
-    return onSubmit(formData).then(setSubtitles).catch(notification.error);
+    return onSubmit(formData)
+      .then((data) => setSubtitles(data.payload))
+      .catch(notification.error);
   };
 
   return (

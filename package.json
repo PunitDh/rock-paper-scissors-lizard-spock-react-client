@@ -19,6 +19,7 @@
     "@tabler/icons": "^1.84.0",
     "apexcharts": "^3.23.1",
     "axios": "^1.4.0",
+    "buffer": "^6.0.3",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "react": "^17.0.2",

@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Avatar, TableCell, TableRow } from "@mui/material";
 import ResponsiveTableCell from "src/components/shared/ResponsiveTableCell";
-import { entities } from "src/assets";
+import { getEntity } from "src/assets";
 
 const StyledAvatar = styled(Avatar)({
   borderRadius: 0,
@@ -16,13 +16,8 @@ const MoveRow = ({ firstPlayer, secondPlayer, moves, winner }) => {
   const secondPlayerMove = moves.find(
     (move) => move.player === secondPlayer.id
   );
-
   const getImage = (move) =>
-    move && (
-      <StyledAvatar
-        src={entities.find((entity) => entity.name === move).image}
-      />
-    );
+    move && <StyledAvatar src={getEntity(move).image} />;
 
   const otherPlayerPlayed = moves.length === 1 && secondPlayerMove;
 

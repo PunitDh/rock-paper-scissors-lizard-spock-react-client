@@ -27,7 +27,10 @@ const APILogs = () => {
   const api = useAPI();
 
   useEffect(() => {
-    api.getLogs().then(setLogs).catch(notification.error);
+    api
+      .getLogs()
+      .then((data) => setLogs(data.payload))
+      .catch((data) => notification.error(data.payload));
   }, []);
 
   useEffect(() => {

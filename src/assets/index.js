@@ -31,11 +31,11 @@ import rabbit from "./images/avatar/rabbit.png";
 import user1 from "./images/avatar/user-1.jpg";
 import winkingFemale from "./images/avatar/winking-female.png";
 import woman from "./images/avatar/woman.png";
-import rock from "./images/entities/rock.png";
-import paper from "./images/entities/paper.png";
-import scissors from "./images/entities/scissors.png";
-import lizard from "./images/entities/lizard.png";
-import spock from "./images/entities/spock.png";
+import Rock from "./images/entities/rock.png";
+import Paper from "./images/entities/paper.png";
+import Scissors from "./images/entities/scissors.png";
+import Lizard from "./images/entities/lizard.png";
+import Spock from "./images/entities/spock.png";
 import ErrorImg from "./images/backgrounds/404-error-idea.gif";
 import Product1 from "./images/products/s4.jpg";
 import Product2 from "./images/products/s5.jpg";
@@ -43,6 +43,7 @@ import Product3 from "./images/products/s7.jpg";
 import Product4 from "./images/products/s11.jpg";
 import ProfileImg from "./images/avatar/user-1.jpg";
 import LogoImage from "./images/logos/logo.png";
+import encoder from "../utils/encoder";
 
 const avatars = [
   { id: 1, image: astronaut, name: "Astronaut" },
@@ -86,12 +87,20 @@ const icons = [
 const getIcon = (id) => icons.find((it) => it.id === id);
 
 const entities = [
-  { color: "brown", name: "Rock", image: rock },
-  { color: "gray", name: "Paper", image: paper },
-  { color: "silver", name: "Scissors", image: scissors },
-  { color: "green", name: "Lizard", image: lizard },
-  { color: "blue", name: "Spock", image: spock },
+  { id: 1, color: "brown", name: "Rock", image: Rock },
+  { id: 2, color: "gray", name: "Paper", image: Paper },
+  { id: 3, color: "silver", name: "Scissors", image: Scissors },
+  { id: 4, color: "green", name: "Lizard", image: Lizard },
+  { id: 5, color: "blue", name: "Spock", image: Spock },
 ];
+
+const getEntity = (entity) => {
+  const decoded = encoder.decodeString(
+    entity,
+    process.env.REACT_APP_GAME_ENCRYPTION_KEY
+  );
+  return entities.find((it) => decoded === it.name);
+};
 
 const languages = [
   "Arabic",
@@ -126,6 +135,7 @@ export {
   icons,
   getIcon,
   entities,
+  getEntity,
   ErrorImg,
   Product1,
   Product2,
@@ -133,5 +143,5 @@ export {
   Product4,
   ProfileImg,
   LogoImage,
-  languages
+  languages,
 };

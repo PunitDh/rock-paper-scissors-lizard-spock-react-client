@@ -52,7 +52,7 @@ const ResultTable = ({ rounds, maxRounds, players = [], score }) => {
         <TableBody sx={{ overflow: "scroll" }}>
           {rounds.slice(-maxRounds).map((round) => (
             <MoveRow
-              key={round._id}
+              key={round.id}
               firstPlayer={firstPlayer}
               secondPlayer={secondPlayer}
               moves={round.moves}

@@ -35,10 +35,13 @@ export default function useAPI() {
           `${process.env.REACT_APP_SERVER_URL}${endpoint}`,
           ...args
         ).then((response) =>
-          response.status < 400 ? resolve(response.data) : reject(response.data)
+          response.data.code < 400
+            ? resolve(response.data)
+            : reject(response.data)
         )
       );
     },
+
     get: function (...args) {
       return this.send("get", ...args);
     },
@@ -53,12 +56,12 @@ export default function useAPI() {
     },
   };
 
-  const handleToken = (data) => {
+  const handleToken = (data, successMessage) => {
     if (data.code !== 200) {
       notification.error(data.payload);
     } else {
       token.set(data.payload);
-      notification.success("Success");
+      notification.success(successMessage);
       navigate("/");
     }
   };
@@ -67,20 +70,20 @@ export default function useAPI() {
     registerPlayer: (formData) =>
       request
         .post("/player/register", formData)
-        .then(handleToken)
-        .catch(notification.error),
+        .then((response) => handleToken(response, "Registration successful!"))
+        .catch((data) => notification.error(data.payload)),
 
     loginPlayer: (formData) =>
       request
         .post("/player/login", formData)
-        .then(handleToken)
-        .catch(notification.error),
+        .then((response) => handleToken(response, "Login successful!"))
+        .catch((data) => notification.error(data.payload)),
 
     getSiteSettings: () =>
       request
         .get("/admin/settings")
         .then((data) => dispatch(setSiteSettings(data.payload)))
-        .catch(notification.error),
+        .catch((data) => notification.error(data.payload)),
 
     updateProfile: (formData) =>
       request
@@ -90,14 +93,14 @@ export default function useAPI() {
           notification.success("Profile updated!");
           navigate("/profile");
         })
-        .catch(notification.error),
+        .catch((data) => notification.error(data.payload)),
 
     getConversations: () => {
       socket.emit(SocketRequest.JOIN_CHATS, { _jwt: token.jwt });
       return request
         .get("/player/chats", authHeaders)
         .then((data) => dispatch(setConversations(data.payload)))
-        .catch(notification.error);
+        .catch((data) => notification.error(data.payload));
     },
 
     createGame: (data) => {
@@ -108,7 +111,7 @@ export default function useAPI() {
           dispatch(updateCurrentGameMenu(data.payload));
           navigate(`/games/${data.payload.id}`);
         })
-        .catch(notification.error);
+        .catch((data) => notification.error(data.payload));
     },
 
     getCurrentGames: () =>
@@ -118,26 +121,29 @@ export default function useAPI() {
           dispatch(setCurrentGames(data.payload));
           dispatch(setCurrentGamesNav(data.payload));
         })
-        .catch(notification.error),
+        .catch((data) => notification.error(data.payload)),
 
     getRecentGames: (limit) =>
       request
         .get("/games/recent", { ...authHeaders, params: { limit } })
         .then((data) => dispatch(setRecentGames(data.payload)))
-        .catch(notification.error),
+        .catch((data) => notification.error(data.payload)),
 
     getCurrentUsers: () =>
       request
         .get("/player/players", authHeaders)
         .then((data) => dispatch(setCurrentUsers(data.payload)))
-        .catch(notification.error),
+        .catch((data) => notification.error(data.payload)),
 
     getGame: (gameId) => {
       socket.emit(SocketRequest.JOIN_CHAT, { _jwt: token.jwt, gameId: gameId });
       return request
         .get(`/games/${gameId}`, authHeaders)
         .then((data) => dispatch(setCurrentGame(data.payload)))
-        .catch(() => navigate("/games"));
+        .catch((data) => {
+          navigate("/games");
+          notification.error(data.payload);
+        });
     },
 
     getLogs: () => request.get(`/admin/logs`, authHeaders),

@@ -20,7 +20,7 @@ const PlayButtons = ({ id, playerId, lastRound, opponent }) =>
       ) : (
         <FlexBox flexDirection="column" gap="0.5rem">
           <Bold>Your turn!</Bold>
-          <FlexBox>
+          <FlexBox gap="0.5rem">
             {entities.map((entity) => (
               <EntityButton key={entity.name} gameId={id} entity={entity} />
             ))}
