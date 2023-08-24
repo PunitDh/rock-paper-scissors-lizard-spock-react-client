@@ -1,11 +1,11 @@
 import { lazy } from "react";
 import { Navigate } from "react-router-dom";
-import Loadable from "../layouts/full/shared/loadable/Loadable";
+import Loadable from "../components/shared/Loadable";
 
 /* ***Layouts**** */
-const FullLayout = Loadable(lazy(() => import("../layouts/full/FullLayout")));
+const FullLayout = Loadable(lazy(() => import("../layouts/FullLayout")));
 const BlankLayout = Loadable(
-  lazy(() => import("../layouts/blank/BlankLayout"))
+  lazy(() => import("../layouts/BlankLayout"))
 );
 
 /* ****Pages***** */

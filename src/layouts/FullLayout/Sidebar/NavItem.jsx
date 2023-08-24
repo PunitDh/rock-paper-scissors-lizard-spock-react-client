@@ -7,9 +7,9 @@ import {
   ListItemText,
   useTheme,
 } from "@mui/material";
-import ContextMenu from "../ContextMenu";
-import RenameGameModal from "../ContextMenu/RenameGameModal";
-import DeleteConfirmation from "../ContextMenu/DeleteConfirmation";
+import ContextMenu from "./ContextMenu";
+import RenameGameModal from "./ContextMenu/RenameGameModal";
+import DeleteConfirmation from "./ContextMenu/DeleteConfirmation";
 import { FlexBox } from "src/components/shared/styles";
 import { NavLink } from "react-router-dom";
 

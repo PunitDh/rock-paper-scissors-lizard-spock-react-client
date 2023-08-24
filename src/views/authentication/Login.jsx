@@ -1,12 +1,12 @@
-import { Grid, Box, Card, Typography, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
+import { Grid, Box, Card, Stack, Typography } from "@mui/material";
 import PageContainer from "src/components/container/PageContainer";
-import Logo from "src/layouts/full/shared/logo/Logo";
-import AuthRegister from "./auth/AuthRegister";
+import Logo from "src/components/shared/Logo";
+import AuthLogin from "./auth/AuthLogin";
 import { AuthBox } from "./styles";
 
-const Register = () => (
-  <PageContainer title="Register" description="Register page">
+const Login = () => (
+  <PageContainer title="Login" description="Login page">
     <AuthBox>
       <Grid
         container
@@ -31,31 +31,31 @@ const Register = () => (
             <Box display="flex" alignItems="center" justifyContent="center">
               <Logo />
             </Box>
-            <AuthRegister
+            <AuthLogin
               subtitle={
                 <Stack
                   direction="row"
-                  justifyContent="center"
                   spacing={1}
+                  justifyContent="center"
                   mt={3}
                 >
                   <Typography
                     color="textSecondary"
                     variant="h6"
-                    fontWeight="400"
+                    fontWeight="500"
                   >
-                    Already have an Account?
+                    Don't have an account?
                   </Typography>
                   <Typography
                     component={Link}
-                    to="/auth/login"
+                    to="/auth/register"
                     fontWeight="500"
                     sx={{
                       textDecoration: "none",
                       color: "primary.main",
                     }}
                   >
-                    Sign In
+                    Create an account
                   </Typography>
                 </Stack>
               }
@@ -67,4 +67,4 @@ const Register = () => (
   </PageContainer>
 );
 
-export default Register;
+export default Login;

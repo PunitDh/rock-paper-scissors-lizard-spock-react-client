@@ -1,12 +1,12 @@
+import { Grid, Box, Card, Typography, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
-import { Grid, Box, Card, Stack, Typography } from "@mui/material";
 import PageContainer from "src/components/container/PageContainer";
-import Logo from "src/layouts/full/shared/logo/Logo";
-import AuthLogin from "./auth/AuthLogin";
+import Logo from "src/components/shared/Logo";
+import AuthRegister from "./auth/AuthRegister";
 import { AuthBox } from "./styles";
 
-const Login = () => (
-  <PageContainer title="Login" description="Login page">
+const Register = () => (
+  <PageContainer title="Register" description="Register page">
     <AuthBox>
       <Grid
         container
@@ -31,31 +31,31 @@ const Login = () => (
             <Box display="flex" alignItems="center" justifyContent="center">
               <Logo />
             </Box>
-            <AuthLogin
+            <AuthRegister
               subtitle={
                 <Stack
                   direction="row"
-                  spacing={1}
                   justifyContent="center"
+                  spacing={1}
                   mt={3}
                 >
                   <Typography
                     color="textSecondary"
                     variant="h6"
-                    fontWeight="500"
+                    fontWeight="400"
                   >
-                    Don't have an account?
+                    Already have an Account?
                   </Typography>
                   <Typography
                     component={Link}
-                    to="/auth/register"
+                    to="/auth/login"
                     fontWeight="500"
                     sx={{
                       textDecoration: "none",
                       color: "primary.main",
                     }}
                   >
-                    Create an account
+                    Sign In
                   </Typography>
                 </Stack>
               }
@@ -67,4 +67,4 @@ const Login = () => (
   </PageContainer>
 );
 
-export default Login;
+export default Register;

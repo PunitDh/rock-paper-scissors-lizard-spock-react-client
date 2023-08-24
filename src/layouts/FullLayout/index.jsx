@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { styled, Container, Box } from "@mui/material";
 import { Navigate, Outlet } from "react-router-dom";
 import Header from "./Header";
-import Sidebar from "./sidebar/Sidebar";
+import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import { useAPI, useNotification, useToken } from "src/hooks";
 import Notification from "src/components/shared/Notification";
@@ -29,6 +29,8 @@ const FullLayout = () => {
   const notification = useNotification();
   const api = useAPI();
 
+  const closeSideBar = () => setMobileSidebarOpen(false);
+
   useEffect(() => {
     if (token.decoded) {
       api.getConversations();
@@ -46,7 +48,7 @@ const FullLayout = () => {
         <Sidebar
           isSidebarOpen={isSidebarOpen}
           isMobileSidebarOpen={isMobileSidebarOpen}
-          onSidebarClose={() => setMobileSidebarOpen(false)}
+          onSidebarClose={closeSideBar}
         />
         <PageWrapper className="page-wrapper">
           <Header

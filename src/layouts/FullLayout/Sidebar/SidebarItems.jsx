@@ -1,0 +1,33 @@
+import { useLocation } from "react-router";
+import { useSelector } from "react-redux";
+import { Box, List } from "@mui/material";
+import { useToken } from "src/hooks";
+import NavGroup from "./NavGroup";
+
+const SidebarItems = ({ closeSideBar }) => {
+  const { pathname } = useLocation();
+  const pathDirect = pathname;
+  const menuItems = useSelector((state) => state.menu);
+  const token = useToken();
+  const navGroups = Object.keys(menuItems);
+
+  return (
+    <Box sx={{ px: 3 }}>
+      <List sx={{ pt: 0 }} className="sidebarNav">
+        {navGroups.map((group) => (
+          <NavGroup
+            groupName={group}
+            key={group}
+            navItems={menuItems[group].filter(
+              (navItem) => !navItem.restricted || token.decoded.isAdmin
+            )}
+            pathDirect={pathDirect}
+            closeSideBar={closeSideBar}
+          />
+        ))}
+      </List>
+    </Box>
+  );
+};
+
+export default SidebarItems;
