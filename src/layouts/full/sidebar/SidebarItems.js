@@ -4,7 +4,7 @@ import NavGroup from "./NavGroup";
 import { useSelector } from "react-redux";
 import { useToken } from "src/hooks";
 
-const SidebarItems = () => {
+const SidebarItems = ({ closeSideBar }) => {
   const { pathname } = useLocation();
   const pathDirect = pathname;
   const menuItems = useSelector((state) => state.menu);
@@ -24,6 +24,7 @@ const SidebarItems = () => {
                 key={groupName}
                 navItems={navItems}
                 pathDirect={pathDirect}
+                closeSideBar={closeSideBar}
               />
             )
           );

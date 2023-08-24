@@ -1,5 +1,4 @@
 import { ListSubheader, styled } from "@mui/material";
-import ContextNavItem from "./ContextNavItem";
 import NavItem from "./NavItem";
 
 const ListSubheaderStyle = styled((props) => (
@@ -14,25 +13,19 @@ const ListSubheaderStyle = styled((props) => (
   padding: "3px 12px",
 }));
 
-const NavGroup = ({ groupName, navItems, pathDirect }) => (
+const NavGroup = ({ groupName, navItems, pathDirect, closeSideBar }) => (
   <>
     <ListSubheaderStyle>{groupName}</ListSubheaderStyle>
-    {navItems.map((navItem) =>
-      navItem.gameContext ? (
-        <ContextNavItem
-          item={navItem}
-          key={navItem.id}
-          pathDirect={pathDirect}
-        />
-      ) : (
-        <NavItem
-          onClick={navItem.onClick}
-          item={navItem}
-          key={navItem.id}
-          pathDirect={pathDirect}
-        />
-      )
-    )}
+    {navItems.map((navItem) => (
+      <NavItem
+        item={navItem}
+        key={navItem.id}
+        pathDirect={pathDirect}
+        closeSideBar={closeSideBar}
+        onClick={navItem.onClick}
+        hasContextMenu={navItem.gameContext}
+      />
+    ))}
   </>
 );
 

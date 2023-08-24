@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
 import {
   ListItemIcon,
   ListItem,
@@ -12,6 +11,7 @@ import ContextMenu from "../ContextMenu";
 import RenameGameModal from "../ContextMenu/RenameGameModal";
 import DeleteConfirmation from "../ContextMenu/DeleteConfirmation";
 import { FlexBox } from "src/components/shared/styles";
+import { NavLink } from "react-router-dom";
 
 const ListItemStyled = styled(ListItem)(({ theme, level }) => ({
   whiteSpace: "nowrap",
@@ -44,7 +44,14 @@ const MovePlayedNotification = styled(FlexBox)({
   borderRadius: "0.5rem",
 });
 
-const ContextNavItem = ({ item, level, pathDirect, onClick }) => {
+const NavItem = ({
+  item,
+  level,
+  pathDirect,
+  onClick,
+  closeSideBar,
+  hasContextMenu = false,
+}) => {
   const [anchorEl, setAnchorEl] = useState(false);
   const [rename, showRename] = useState(false);
   const [deleteConfirmation, showDeleteConfirmation] = useState(false);
@@ -67,13 +74,18 @@ const ContextNavItem = ({ item, level, pathDirect, onClick }) => {
   const handleRenameClose = () => showRename(false);
   const handleDeleteConfirmationClose = () => showDeleteConfirmation(false);
 
+  const handleClick = () => {
+    if (onClick) onClick();
+    if (closeSideBar) closeSideBar();
+  };
+
   const Icon = item.icon;
   const theme = useTheme();
   const itemIcon = <Icon stroke={1.5} size="1.3rem" />;
 
   return (
     <>
-      {anchorEl && (
+      {hasContextMenu && anchorEl && (
         <ContextMenu
           open={anchorEl}
           setOpen={setAnchorEl}
@@ -115,7 +127,7 @@ const ContextNavItem = ({ item, level, pathDirect, onClick }) => {
           disabled={item.disabled}
           selected={pathDirect === item.href}
           target={item.external ? "_blank" : ""}
-          onClick={onClick}
+          onClick={handleClick}
           aria-controls={anchorEl ? "demo-positioned-menu" : undefined}
           aria-haspopup="true"
           aria-expanded={anchorEl ? "true" : undefined}
@@ -141,4 +153,4 @@ const ContextNavItem = ({ item, level, pathDirect, onClick }) => {
   );
 };
 
-export default ContextNavItem;
+export default NavItem;

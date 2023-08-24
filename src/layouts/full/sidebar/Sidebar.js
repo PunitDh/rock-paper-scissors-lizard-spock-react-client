@@ -10,7 +10,7 @@ const WideBox = styled(Box)(({ width }) => ({
   flexShrink: 0,
 }));
 
-const Sidebar = (props) => {
+const Sidebar = ({ isSidebarOpen, isMobileSidebarOpen, onSidebarClose }) => {
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
   const api = useAPI();
   const sidebarWidth = "270px";
@@ -24,7 +24,7 @@ const Sidebar = (props) => {
       <WideBox width={sidebarWidth}>
         <Drawer
           anchor="left"
-          open={props.isSidebarOpen}
+          open={isSidebarOpen}
           variant="permanent"
           PaperProps={{
             sx: {
@@ -53,8 +53,8 @@ const Sidebar = (props) => {
   return (
     <Drawer
       anchor="left"
-      open={props.isMobileSidebarOpen}
-      onClose={props.onSidebarClose}
+      open={isMobileSidebarOpen}
+      onClose={onSidebarClose}
       variant="temporary"
       PaperProps={{
         sx: {
@@ -66,7 +66,7 @@ const Sidebar = (props) => {
       <Box px={2}>
         <Logo />
       </Box>
-      <SidebarItems />
+      <SidebarItems closeSideBar={onSidebarClose} />
     </Drawer>
   );
 };
