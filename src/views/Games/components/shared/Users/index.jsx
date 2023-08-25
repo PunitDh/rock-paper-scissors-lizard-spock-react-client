@@ -16,7 +16,7 @@ import { useAPI, useLoading } from "src/hooks";
 import { useSelector } from "react-redux";
 import LoadingComponent from "src/components/shared/LoadingComponent";
 
-const OnlineUsers = ({ search }) => {
+const Users = ({ search }) => {
   const { currentUsers } = useSelector((state) => state.player);
   const api = useAPI();
   const [getCurrentUsers, loading] = useLoading(api.getCurrentUsers);
@@ -35,7 +35,7 @@ const OnlineUsers = ({ search }) => {
       : currentUsers;
 
   return (
-    <DashboardCard title="Current Online Users">
+    <DashboardCard title="Users">
       <Box>
         {loading ? (
           <LoadingComponent />
@@ -66,4 +66,4 @@ const OnlineUsers = ({ search }) => {
   );
 };
 
-export default OnlineUsers;
+export default Users;

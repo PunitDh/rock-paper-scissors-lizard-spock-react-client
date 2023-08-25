@@ -96,11 +96,13 @@ export default function useAPI() {
         .catch((data) => notification.error(data.payload)),
 
     getConversations: () => {
-      socket.emit(SocketRequest.JOIN_CHATS, { _jwt: token.jwt });
-      return request
-        .get("/player/chats", authHeaders)
-        .then((data) => dispatch(setConversations(data.payload)))
-        .catch((data) => notification.error(data.payload));
+      if (token.jwt) {
+        socket.emit(SocketRequest.JOIN_CHATS, { _jwt: token.jwt });
+        return request
+          .get("/player/chats", authHeaders)
+          .then((data) => dispatch(setConversations(data.payload)))
+          .catch((data) => notification.error(data.payload));
+      }
     },
 
     createGame: (data) => {
@@ -115,6 +117,7 @@ export default function useAPI() {
     },
 
     getCurrentGames: () =>
+      token.jwt &&
       request
         .get("/player/games", authHeaders)
         .then((data) => {

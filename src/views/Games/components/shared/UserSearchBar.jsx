@@ -22,11 +22,12 @@ const FloatingFab = styled.div({
   cursor: "pointer",
 });
 
-const UserSearch = ({ search, setSearch }) => (
+const UserSearchBar = ({ search, setSearch }) => (
   <DashboardCard title="Search User">
     <SearchGroup>
       <SearchField
         type="search"
+        name="search"
         autoComplete="off"
         placeholder="Search for a user"
         search={search}
@@ -39,4 +40,4 @@ const UserSearch = ({ search, setSearch }) => (
   </DashboardCard>
 );
 
-export default UserSearch;
+export default UserSearchBar;

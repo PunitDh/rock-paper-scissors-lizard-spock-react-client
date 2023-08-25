@@ -41,7 +41,7 @@ export default function StartGame({ user }) {
     <>
       <Tooltip title={`Play with ${user.firstName}`}>
         {loading ? (
-          <CircularProgress sx={{ width: "1.5rem", height: "1.5rem" }} />
+          <CircularProgress size="1.25rem" />
         ) : (
           <GameButton onClick={() => setConfirmOpen(true)} />
         )}

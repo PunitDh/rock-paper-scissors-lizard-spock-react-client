@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Grid, Box } from "@mui/material";
 import PageContainer from "src/components/container/PageContainer";
-import UserSearch from "../components/shared/SearchUser";
-import OnlineUsers from "../components/shared/OnlineUsers";
+import UserSearchBar from "../components/shared/UserSearchBar";
+import Users from "../components/shared/Users";
 import RecentGames from "../components/shared/RecentGames";
 
 const NewGame = () => {
@@ -12,10 +12,10 @@ const NewGame = () => {
       <Box>
         <Grid container spacing={3}>
           <Grid item xs={12} lg={12}>
-            <UserSearch search={search} setSearch={setSearch} />
+            <UserSearchBar search={search} setSearch={setSearch} />
           </Grid>
           <Grid item xs={12} lg={8}>
-            <OnlineUsers search={search} />
+            <Users search={search} />
           </Grid>
           <Grid item xs={12} lg={4}>
             <RecentGames />
