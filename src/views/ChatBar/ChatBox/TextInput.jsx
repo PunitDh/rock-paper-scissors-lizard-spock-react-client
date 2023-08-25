@@ -1,9 +1,10 @@
 import { Button, TextField } from "@mui/material";
 import { Send } from "@mui/icons-material";
 import styled from "@emotion/styled";
-import { usePlayer } from "src/hooks";
+import { useConversation, useNotification, usePlayer } from "src/hooks";
+import { useState } from "react";
 
-const WrapForm = styled.form(({ theme }) => ({
+const Form = styled.form(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
   width: "95%",
@@ -12,40 +13,54 @@ const WrapForm = styled.form(({ theme }) => ({
   padding: "0 0 0.5rem 0",
 }));
 
-const WrapText = styled(TextField)({
+const MessageField = styled(TextField)({
   width: "100%",
 });
 
-export const TextInput = ({
-  conversationId,
-  receiver,
-  token,
-}) => {
+export const TextInput = ({ conversationId, receiver, token, allRead }) => {
   const player = usePlayer();
+  const [messageLength, setMessageLength] = useState(0);
+  const conversation = useConversation();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const message = e.target.message.value;
     const request = {
       conversationId,
       receiver,
-      message: e.target.message.value,
+      message,
       sender: token.decoded.id,
     };
     player.sendMessage(request);
     e.target.reset();
+    setMessageLength(0);
+  };
+
+  const handleMarkAsRead = () => {
+    console.log({ allRead });
+    console.log("Marking " + conversationId + " as read");
+    // conversation.markAsRead(conversationId);
   };
 
   return (
-    <WrapForm noValidate autoComplete="off" onSubmit={handleSubmit}>
-      <WrapText
-        id="standard-text"
+    <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
+      <MessageField
+        id="message-content"
         name="message"
         placeholder="Enter a message"
         required
+        autoFocus
+        onFocus={handleMarkAsRead}
+        onChange={(e) => setMessageLength(e.target.value.length)}
       />
-      <Button variant="contained" color="primary" type="submit">
+      <Button
+        disabled={!messageLength}
+        variant="contained"
+        color="primary"
+        type="submit"
+      >
         <Send />
       </Button>
-    </WrapForm>
+    </Form>
   );
 };

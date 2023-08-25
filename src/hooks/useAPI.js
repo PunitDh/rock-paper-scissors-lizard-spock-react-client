@@ -152,6 +152,8 @@ export default function useAPI() {
     getLogs: (limit, type) =>
       request.get(`/admin/logs`, { ...authHeaders, params: { limit, type } }),
 
+    clearLogs: () => request.delete(`/admin/logs`, authHeaders),
+
     translateSubtitles: (formData) =>
       request.post("/video/subtitles/translate", formData, authHeaders),
   };

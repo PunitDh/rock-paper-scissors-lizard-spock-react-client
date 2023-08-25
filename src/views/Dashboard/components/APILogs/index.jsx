@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import { useAPI, useNotification } from "src/hooks";
 import { useEffect, useRef, useState } from "react";
-import { Typography } from "@mui/material";
+import { Typography, useTheme } from "@mui/material";
 import LogActions from "./LogActions";
 import { FlexBox } from "src/components/shared/styles";
 
@@ -21,16 +21,24 @@ const LogMessage = styled(Typography)(({ color }) => ({
   borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
   marginTop: "0.5rem",
   display: "block",
-  overflowWrap: "anywhere"
+  overflowWrap: "anywhere",
 }));
 
 const APILogs = () => {
+  const theme = useTheme();
   const [logs, setLogs] = useState([]);
   const notification = useNotification();
   const scrollRef = useRef();
   const api = useAPI();
   const [limit, setLimit] = useState(50);
   const [logType, setLogType] = useState("ALL");
+
+  const handleClearLogs = () => {
+    api
+      .clearLogs()
+      .then((data) => setLogs(data.payload))
+      .catch((data) => notification.error(data.payload));
+  };
 
   useEffect(() => {
     api
@@ -53,17 +61,24 @@ const APILogs = () => {
           setLimit={setLimit}
           logType={logType}
           setLogType={setLogType}
+          onClearLogs={handleClearLogs}
         />
       }
     >
-      <LogTable flexDirection="column" alignItems="flex-start" flexWrap="wrap">
-        {logs.map((message, idx) => (
-          <LogMessage color={message.color} key={idx}>
-            {message.content}
-          </LogMessage>
-        ))}
-        <div ref={scrollRef} />
-      </LogTable>
+      {
+        <LogTable
+          flexDirection="column"
+          alignItems="flex-start"
+          flexWrap="wrap"
+        >
+          {logs.map((message, idx) => (
+            <LogMessage color={theme.palette[message.type].main} key={idx}>
+              {message.content}
+            </LogMessage>
+          ))}
+          <div ref={scrollRef} />
+        </LogTable>
+      }
     </DashboardCard>
   );
 };

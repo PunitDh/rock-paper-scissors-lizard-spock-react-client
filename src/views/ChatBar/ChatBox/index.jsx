@@ -59,6 +59,7 @@ function ChatBox({ open, conversation }) {
   const receiver = conversation.players.find(
     (player) => player.id !== token.decoded.id
   );
+  const allRead = conversation.messages.every((message) => message.read);
 
   const closeChatBox = () => {
     dispatch(setCurrentConversation(null));
@@ -119,8 +120,8 @@ function ChatBox({ open, conversation }) {
       <TextInput
         conversationId={conversation.id}
         receiver={receiver.id}
-        autoFocus
         token={token}
+        allRead={allRead}
       />
     </StyledPaper>
   );

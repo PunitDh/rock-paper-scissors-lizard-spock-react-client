@@ -6,14 +6,13 @@ import NavGroup from "./NavGroup";
 
 const SidebarItems = ({ closeSideBar }) => {
   const { pathname } = useLocation();
-  const pathDirect = pathname;
   const menuItems = useSelector((state) => state.menu);
   const token = useToken();
   const navGroups = Object.keys(menuItems);
 
   return (
     <Box sx={{ px: 3 }}>
-      <List sx={{ pt: 0 }} className="sidebarNav">
+      <List sx={{ pt: 0 }}>
         {navGroups.map((group) => (
           <NavGroup
             groupName={group}
@@ -21,7 +20,7 @@ const SidebarItems = ({ closeSideBar }) => {
             navItems={menuItems[group].filter(
               (navItem) => !navItem.restricted || token.decoded.isAdmin
             )}
-            pathDirect={pathDirect}
+            pathDirect={pathname}
             closeSideBar={closeSideBar}
           />
         ))}

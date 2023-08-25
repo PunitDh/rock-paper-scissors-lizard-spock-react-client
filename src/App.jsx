@@ -9,10 +9,9 @@ import { TokenProvider } from "./context/TokenContext";
 
 function App() {
   const routing = useRoutes(Router);
-  const theme = baselightTheme;
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={baselightTheme}>
       <NotificationProvider>
         <SocketProvider>
           <TokenProvider>
