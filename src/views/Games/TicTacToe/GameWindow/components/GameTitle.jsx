@@ -45,7 +45,7 @@ const GameTitle = () => {
   };
 
   useEffect(() => {
-    setGameName(currentGame.currentGame.name);
+    setGameName(currentGame.name);
   }, [currentGame?.id]);
 
   return (

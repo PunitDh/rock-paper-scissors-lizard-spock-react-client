@@ -12,8 +12,10 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const { email, password, confirmPassword, firstName, lastName, avatar } =
       e.target;
+
     const payload = {
       firstName: firstName.value,
       lastName: lastName.value,
@@ -22,6 +24,7 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
       confirmPassword: confirmPassword.value,
       avatar: avatar.value,
     };
+
     registerPlayer(payload);
   };
 

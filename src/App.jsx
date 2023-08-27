@@ -6,7 +6,6 @@ import { SocketProvider } from "./context/SocketContext";
 import { NotificationProvider } from "./context/NotificationContext";
 import SocketListeners from "./listeners/SocketListeners";
 import { TokenProvider } from "./context/TokenContext";
-import { APIProvider } from "./context/APIContext";
 
 function App() {
   const routing = useRoutes(Router);
@@ -16,11 +15,11 @@ function App() {
       <NotificationProvider>
         <SocketProvider>
           <TokenProvider>
-            <APIProvider>
+            {/* <APIProvider> */}
               <SocketListeners />
               <CssBaseline />
               {routing}
-            </APIProvider>
+            {/* </APIProvider> */}
           </TokenProvider>
         </SocketProvider>
       </NotificationProvider>

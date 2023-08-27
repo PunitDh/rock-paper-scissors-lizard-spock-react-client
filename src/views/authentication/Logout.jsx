@@ -3,6 +3,7 @@ import { useAPI } from "src/hooks";
 
 const Logout = () => {
   const api = useAPI();
+
   useEffect(() => {
     api.logoutPlayer();
   }, []);
