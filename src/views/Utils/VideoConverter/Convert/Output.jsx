@@ -1,5 +1,4 @@
-import axios from "axios";
-import { useSocket } from "src/hooks";
+import { useAPI, useSocket } from "src/hooks";
 import { SocketResponse } from "src/utils/constants";
 import { useEffect, useState } from "react";
 import InputGroup from "./InputGroup";
@@ -17,14 +16,13 @@ import {
 
 const Output = ({ updates, setUpdates, subtitles, loading, debugMode }) => {
   const socket = useSocket();
+  const api = useAPI();
   const [downloadBlob, setDownloadBlob] = useState();
 
   useEffect(() => {
     if (subtitles.location && !debugMode) {
-      axios
-        .get(`${process.env.REACT_APP_SERVER_URL}/${subtitles.location}`, {
-          responseType: "blob",
-        })
+      api
+        .getDownloadFile(subtitles.location)
         .then((response) =>
           setDownloadBlob(URL.createObjectURL(response.data))
         );

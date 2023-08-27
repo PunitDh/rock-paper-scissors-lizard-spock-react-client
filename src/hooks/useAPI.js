@@ -158,5 +158,10 @@ export default function useAPI() {
 
     translateSubtitles: (formData) =>
       request.post("/video/subtitles/translate", formData, authHeaders),
+
+    getDownloadFile: (location) =>
+      request.get(`/${location}`, {
+        responseType: "blob",
+      }),
   };
 }
