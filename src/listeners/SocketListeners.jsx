@@ -27,7 +27,7 @@ const SocketListeners = () => {
   const handleResponse = (response, dispatchFunction) =>
     isSuccess(response)
       .then((payload) => dispatch(dispatchFunction(payload)))
-      .catch(notification.error);
+      .catch(console.log);
 
   const handleToken = (response, successMessage, navigateTo = "/") =>
     isSuccess(response)
@@ -52,7 +52,7 @@ const SocketListeners = () => {
 
   useEffect(() => {
     api.getSiteSettings();
-
+    socket.on("online-status-changed", (player) => console.log({ player }));
     socket.on(SocketResponse.UPDATE_SITE_SETTINGS, handleSiteSettings);
     socket.on(SocketResponse.UPDATE_PROFILE, (response) =>
       handleToken(response, "Profile updated!", "/profile")
@@ -67,10 +67,12 @@ const SocketListeners = () => {
     socket.on(SocketResponse.START_CONVERSATION, (response) =>
       handleResponse(response, setCurrentConversation)
     );
-    socket.on(SocketResponse.SEND_MESSAGE, (response) => {
-      return handleResponse(response, setCurrentConversation);
-    });
-
+    socket.on(SocketResponse.SEND_MESSAGE, (response) =>
+      handleResponse(response, setCurrentConversation)
+    );
+    socket.on(SocketResponse.MARK_AS_READ, (response) =>
+      handleResponse(response, setCurrentConversation)
+    );
     socket.on(SocketResponse.RENAME_GAME, updateGame);
     socket.on(SocketResponse.CHANGE_ICON, updateGame);
     socket.on(SocketResponse.RESET_GAME_ROUNDS, (response) =>

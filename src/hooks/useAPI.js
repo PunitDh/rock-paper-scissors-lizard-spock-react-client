@@ -31,14 +31,16 @@ export default function useAPI() {
   const request = {
     send: function (method, endpoint, ...args) {
       return new Promise((resolve, reject) =>
-        axios[method](
-          `${process.env.REACT_APP_SERVER_URL}${endpoint}`,
-          ...args
-        ).then((response) =>
-          response.data.code < 400
-            ? resolve(response.data)
-            : reject(response.data)
-        )
+        axios[method](`${process.env.REACT_APP_SERVER_URL}${endpoint}`, ...args)
+          .then((response) =>
+            response.data.code < 400
+              ? resolve(response.data)
+              : reject(response.data)
+          )
+          .catch((data) => {
+            navigate("/auth/login");
+            notification.error(data.payload);
+          })
       );
     },
 

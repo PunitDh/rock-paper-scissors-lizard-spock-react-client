@@ -1,23 +1,21 @@
 import styled from "@emotion/styled";
 import DashboardCard from "../../../../components/shared/DashboardCard";
-import { useAPI, useNotification } from "src/hooks";
+import { useAPI } from "src/hooks";
 import { useEffect, useRef, useState } from "react";
 import { Typography, useTheme } from "@mui/material";
 import LogActions from "./LogActions";
 import { FlexBox } from "src/components/shared/styles";
 
 const LogTable = styled(FlexBox)({
-  display: "flex",
-  flexDirection: "column",
-  flexWrap: "nowrap",
-  height: "30rem",
+  minHeight: "10rem",
+  maxHeight: "30rem",
   overflowY: "scroll",
 });
 
 const LogMessage = styled(Typography)(({ color }) => ({
   color,
   fontFamily: "monospace",
-  maxWidth: "100%",
+  Width: "100%",
   borderBottom: "1px solid rgba(255, 255, 255, 0.2)",
   marginTop: "0.5rem",
   display: "block",
@@ -27,24 +25,17 @@ const LogMessage = styled(Typography)(({ color }) => ({
 const APILogs = () => {
   const theme = useTheme();
   const [logs, setLogs] = useState([]);
-  const notification = useNotification();
   const scrollRef = useRef();
   const api = useAPI();
   const [limit, setLimit] = useState(50);
   const [logType, setLogType] = useState("ALL");
 
   const handleClearLogs = () => {
-    api
-      .clearLogs()
-      .then((data) => setLogs(data.payload))
-      .catch((data) => notification.error(data.payload));
+    api.clearLogs().then((data) => setLogs(data.payload));
   };
 
   useEffect(() => {
-    api
-      .getLogs(limit, logType)
-      .then((data) => setLogs(data.payload))
-      .catch((data) => notification.error(data.payload));
+    api.getLogs(limit, logType).then((data) => setLogs(data.payload));
   }, [limit, logType]);
 
   useEffect(() => {
@@ -66,11 +57,7 @@ const APILogs = () => {
       }
     >
       {
-        <LogTable
-          flexDirection="column"
-          alignItems="flex-start"
-          flexWrap="wrap"
-        >
+        <LogTable flexDirection="column" alignItems="flex-start">
           {logs.map((message, idx) => (
             <LogMessage color={theme.palette[message.type].main} key={idx}>
               {message.content}

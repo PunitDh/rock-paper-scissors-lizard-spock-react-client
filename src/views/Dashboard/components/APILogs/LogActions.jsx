@@ -48,8 +48,8 @@ const LogActions = ({ setLimit, limit, logType, setLogType, onClearLogs }) => {
         Clear
       </Button>
       <Select
-        labelId="max-rounds"
-        id="max-rounds"
+        labelId="max-logs"
+        id="max-logs"
         value={logType}
         size="small"
         onChange={(e) => setLogType(e.target.value)}

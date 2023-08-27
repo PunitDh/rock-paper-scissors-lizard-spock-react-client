@@ -3,6 +3,7 @@ import { FlexBox } from "src/components/shared/styles";
 import styled from "@emotion/styled";
 import { deepOrange } from "@mui/material/colors";
 import { MessageContent, TimeStamp } from "./styles";
+import { DoneAll } from "@mui/icons-material";
 
 const DisplayName = styled.div({
   fontSize: "0.85em",
@@ -50,7 +51,13 @@ const MessageAvatar = styled(Avatar)(({ theme }) => ({
   color: theme.palette.getContrastText(deepOrange[500]),
 }));
 
-export const MessageLeft = ({ content, timestamp, photoURL, displayName }) => (
+export const MessageLeft = ({
+  content,
+  timestamp,
+  photoURL,
+  displayName,
+  read,
+}) => (
   <FlexBox alignItems="flex-start" justifyContent="flex-start">
     <MessageAvatar alt={displayName} src={photoURL} />
     <div>
@@ -64,7 +71,16 @@ export const MessageLeft = ({ content, timestamp, photoURL, displayName }) => (
           gap="0.1rem"
         >
           <MessageContent variant="body2">{content}</MessageContent>
-          <TimeStamp>{timestamp}</TimeStamp>
+          <TimeStamp>
+            <span>{timestamp}</span>
+            <span>
+              {read ? (
+                <DoneAll color="primary" fontSize="inherit" />
+              ) : (
+                <DoneAll fontSize="inherit" />
+              )}
+            </span>
+          </TimeStamp>
         </FlexBox>
       </MessageBlue>
     </div>

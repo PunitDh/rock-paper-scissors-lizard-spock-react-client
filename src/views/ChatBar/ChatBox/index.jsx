@@ -30,7 +30,7 @@ const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
 }));
 
 const StyledPaper = styled(Paper)(({ maximized, toolbarheight }) => ({
-  width: "80vw",
+  width: "80dvw",
   height: maximized > 0 ? "80dvh" : toolbarheight,
   maxWidth: "300px",
   maxHeight: "500px",
@@ -59,7 +59,9 @@ function ChatBox({ open, conversation }) {
   const receiver = conversation.players.find(
     (player) => player.id !== token.decoded.id
   );
-  const allRead = conversation.messages.every((message) => message.read);
+  const allRead = conversation.messages
+    .filter((message) => message.sender !== token.decoded.id)
+    .every((message) => message.read);
 
   const closeChatBox = () => {
     dispatch(setCurrentConversation(null));
@@ -99,6 +101,7 @@ function ChatBox({ open, conversation }) {
             <MessageRight
               key={message._id}
               content={message.content}
+              read={message.read}
               timestamp={formatDate(message.createdAt)}
               photoURL={getAvatar(token.decoded.avatar)}
               displayName={token.decoded.firstName}
@@ -108,6 +111,7 @@ function ChatBox({ open, conversation }) {
             <MessageLeft
               key={message._id}
               content={message.content}
+              read={message.read}
               timestamp={formatDate(message.createdAt)}
               photoURL={getAvatar(receiver.avatar)}
               displayName={receiver.firstName}
@@ -120,7 +124,6 @@ function ChatBox({ open, conversation }) {
       <TextInput
         conversationId={conversation.id}
         receiver={receiver.id}
-        token={token}
         allRead={allRead}
       />
     </StyledPaper>

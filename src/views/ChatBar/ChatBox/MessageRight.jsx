@@ -2,12 +2,14 @@ import { Avatar } from "@mui/material";
 import { MessageContent, TimeStamp } from "./styles";
 import { FlexBox } from "src/components/shared/styles";
 import styled from "@emotion/styled";
+import { DoneAll } from "@mui/icons-material";
 
 const MessageOrange = styled.div({
   position: "relative",
   marginRight: "20px",
   marginBottom: "10px",
   padding: "10px",
+  paddingBottom: "2px",
   backgroundColor: "#f8e896",
   width: "60%",
   textAlign: "left",
@@ -48,13 +50,28 @@ const MessageAvatar = styled(Avatar)(({ theme }) => ({
   height: theme.spacing(4),
 }));
 
-export const MessageRight = ({ content, displayName, timestamp, photoURL }) => (
+export const MessageRight = ({
+  content,
+  displayName,
+  timestamp,
+  photoURL,
+  read,
+}) => (
   <FlexBox alignItems="flex-start" justifyContent="flex-end" width="100%">
     <FlexBox alignItems="flex-end" flexDirection="column" width="100%">
       <DisplayName>{displayName}</DisplayName>
       <MessageOrange>
         <MessageContent>{content}</MessageContent>
-        <TimeStamp>{timestamp}</TimeStamp>
+        <TimeStamp>
+          <span>{timestamp}</span>
+          <span>
+            {read ? (
+              <DoneAll color="primary" fontSize="inherit" />
+            ) : (
+              <DoneAll color="inherit" fontSize="inherit" />
+            )}
+          </span>
+        </TimeStamp>
       </MessageOrange>
     </FlexBox>
     <FlexBox justifyContent="flex-start" alignItems="flex-start">

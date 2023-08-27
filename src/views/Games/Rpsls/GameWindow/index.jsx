@@ -40,7 +40,7 @@ const Game = () => {
   return game.currentGame.id ? (
     <PageContainer title={game.currentGame.name}>
       <GameCard
-        title={<GameTitle currentGame={game.currentGame} />}
+        title={<GameTitle />}
         action={
           <GameActions
             onMaxRoundsChange={setMaxRounds}

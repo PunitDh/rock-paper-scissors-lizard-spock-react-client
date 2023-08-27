@@ -1,7 +1,7 @@
 import { Button, TextField } from "@mui/material";
 import { Send } from "@mui/icons-material";
 import styled from "@emotion/styled";
-import { useConversation, useNotification, usePlayer } from "src/hooks";
+import { useConversation, usePlayer } from "src/hooks";
 import { useState } from "react";
 
 const Form = styled.form(({ theme }) => ({
@@ -17,7 +17,7 @@ const MessageField = styled(TextField)({
   width: "100%",
 });
 
-export const TextInput = ({ conversationId, receiver, token, allRead }) => {
+export const TextInput = ({ conversationId, receiver, allRead }) => {
   const player = usePlayer();
   const [messageLength, setMessageLength] = useState(0);
   const conversation = useConversation();
@@ -29,7 +29,6 @@ export const TextInput = ({ conversationId, receiver, token, allRead }) => {
       conversationId,
       receiver,
       message,
-      sender: token.decoded.id,
     };
     player.sendMessage(request);
     e.target.reset();
@@ -37,9 +36,9 @@ export const TextInput = ({ conversationId, receiver, token, allRead }) => {
   };
 
   const handleMarkAsRead = () => {
-    console.log({ allRead });
-    console.log("Marking " + conversationId + " as read");
-    // conversation.markAsRead(conversationId);
+    if (!allRead) {
+      conversation.markAsRead({ conversationId });
+    }
   };
 
   return (

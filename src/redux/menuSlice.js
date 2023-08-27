@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   IconDashboard,
   IconDeviceGamepad,
-  IconDeviceGamepad2,
   IconLogout,
   IconTicTac,
   IconUser,

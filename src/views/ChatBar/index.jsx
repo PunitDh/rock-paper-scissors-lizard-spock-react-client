@@ -6,11 +6,11 @@ import { useEffect, useState } from "react";
 const Container = styled.div({
   position: "fixed",
   bottom: 0,
-  right: "1rem",
+  right: "1dvw",
   display: "flex",
   alignItems: "flex-end",
   justifyContent: "flex-end",
-  width: "100vw",
+  width: "100dvw",
   height: "4rem",
   gap: "0.25rem",
 });
