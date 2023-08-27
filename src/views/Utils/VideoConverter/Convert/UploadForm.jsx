@@ -2,10 +2,14 @@ import styled from "@emotion/styled";
 import { UploadFile } from "@mui/icons-material";
 import {
   Box,
+  Checkbox,
   CircularProgress,
   Fab,
+  FormControlLabel,
   FormLabel,
   MenuItem,
+  Radio,
+  RadioGroup,
   Select,
   TextField,
   Tooltip,
@@ -13,7 +17,7 @@ import {
 import { useRef, useState } from "react";
 import { languages } from "src/assets";
 import { TitledButton } from "src/components/shared/styles";
-import { useNotification, useSocket } from "src/hooks";
+import { useNotification, useSocket, useToken } from "src/hooks";
 import InputGroup from "./InputGroup";
 import { ResponsiveForm } from "../styles";
 import { SocketRequest } from "src/utils/constants";
@@ -43,25 +47,45 @@ const ResponsiveBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-const UploadForm = ({ setSubtitles, onSubmit, loading }) => {
+const UploadForm = ({
+  subtitles,
+  setSubtitles,
+  onSubmit,
+  loading,
+  debugMode,
+  setDebugMode,
+  resetState,
+}) => {
   const fileRef = useRef();
   const handleUpload = () => fileRef.current?.click();
   const [video, setVideo] = useState(null);
-  const [language, setLanguage] = useState("Spanish");
+  const [request, setRequest] = useState({
+    language: "Spanish",
+    format: "vtt",
+  });
   const notification = useNotification();
+  const token = useToken();
   const socket = useSocket();
+
+  const handleChange = (e) =>
+    setRequest((request) => ({ ...request, [e.target.name]: e.target.value }));
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!video || !language) {
-      return notification.error("A video file is required");
-    }
+    if (!video) return notification.error("A video file is required");
+
+    resetState();
     const formData = new FormData();
     const sessionId = Math.random().toString(36).slice(2, 9);
     socket.emit(SocketRequest.PROGRESS_UPDATE, sessionId);
+
     formData.append("file", video);
-    formData.append("language", language);
+    formData.append("language", request.language);
+    formData.append("format", request.format);
     formData.append("sessionId", sessionId);
+    if (debugMode && token.decoded.isAdmin) {
+    formData.append("debug", debugMode);
+    }
 
     return onSubmit(formData)
       .then((data) => setSubtitles(data.payload))
@@ -78,6 +102,7 @@ const UploadForm = ({ setSubtitles, onSubmit, loading }) => {
             </Fab>
           </Tooltip>
           <FileInput
+            name="video"
             type="file"
             id="upload-video-file"
             inputRef={fileRef}
@@ -89,7 +114,13 @@ const UploadForm = ({ setSubtitles, onSubmit, loading }) => {
 
       {video && (
         <InputGroup title="Preview:">
-          <Video src={URL.createObjectURL(video)} controls />
+          <Video src={URL.createObjectURL(video)} controls>
+            <track
+              kind="subtitles"
+              label={request.language}
+              src={`${process.env.REACT_APP_SERVER_URL}/${subtitles.location}`}
+            />
+          </Video>
         </InputGroup>
       )}
 
@@ -99,9 +130,9 @@ const UploadForm = ({ setSubtitles, onSubmit, loading }) => {
           id="subtitle-language"
           name="language"
           size="small"
-          value={language}
+          value={request.language}
           maxRows={6}
-          onChange={(e) => setLanguage(e.target.value)}
+          onChange={handleChange}
         >
           {languages.map((lang) => (
             <MenuItem key={lang} value={lang}>
@@ -111,16 +142,59 @@ const UploadForm = ({ setSubtitles, onSubmit, loading }) => {
         </Select>
       </InputGroup>
 
+      <InputGroup title="Select output format:">
+        <RadioGroup
+          aria-labelledby="subtitle-output-format"
+          defaultValue="vtt"
+          name="format"
+          value={request.format}
+          onChange={handleChange}
+        >
+          <FormControlLabel
+            value="vtt"
+            control={<Radio />}
+            label={
+              <span>
+                <code>.vtt</code> (Recommended)
+              </span>
+            }
+          />
+          <FormControlLabel
+            value="srt"
+            control={<Radio />}
+            label={
+              <span>
+                <code>.srt</code>
+              </span>
+            }
+          />
+        </RadioGroup>
+      </InputGroup>
+
+      {token.decoded.isAdmin && (
+        <InputGroup title="Debug:">
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={debugMode}
+                onChange={(e) => setDebugMode(e.target.checked)}
+              />
+            }
+            label="Debug Mode"
+          />
+        </InputGroup>
+      )}
+
       <ResponsiveBox>
         {loading ? (
           <CircularProgress />
         ) : (
           <TitledButton
-            title={`Generate Subtitles in ${language}`}
+            title={`Generate Subtitles in ${request.language}`}
             variant="contained"
             type="submit"
           >
-            Generate Subtitles in {language}
+            Generate Subtitles
           </TitledButton>
         )}
       </ResponsiveBox>
