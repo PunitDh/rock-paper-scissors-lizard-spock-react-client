@@ -17,10 +17,9 @@ import {
 import { useRef, useState } from "react";
 import { languages } from "src/assets";
 import { TitledButton } from "src/components/shared/styles";
-import { useNotification, useSocket, useToken } from "src/hooks";
+import { useNotification, useToken, useUtils } from "src/hooks";
 import InputGroup from "./InputGroup";
 import { ResponsiveForm } from "../styles";
-import { SocketRequest } from "src/utils/constants";
 
 const FileInput = styled(TextField)({
   display: "none",
@@ -65,7 +64,7 @@ const UploadForm = ({
   });
   const notification = useNotification();
   const token = useToken();
-  const socket = useSocket();
+  const utils = useUtils();
 
   const handleChange = (e) =>
     setRequest((request) => ({ ...request, [e.target.name]: e.target.value }));
@@ -77,8 +76,7 @@ const UploadForm = ({
     resetState();
     const formData = new FormData();
     const sessionId = Math.random().toString(36).slice(2, 9);
-    socket.emit(SocketRequest.PROGRESS_UPDATE, sessionId);
-
+    utils.requestProgressUpdate({ sessionId });
     formData.append("file", video);
     formData.append("language", request.language);
     formData.append("format", request.format);

@@ -7,6 +7,7 @@ import useConversation from "./useConversation";
 import useAdmin from "./useAdmin";
 import useAPI from "./useAPI";
 import useLoading from "./useLoading";
+import useUtils from "./useUtils";
 
 export {
   usePlayer,
@@ -18,4 +19,5 @@ export {
   useConversation,
   useAPI,
   useLoading,
+  useUtils,
 };

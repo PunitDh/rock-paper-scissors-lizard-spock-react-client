@@ -14,6 +14,9 @@ export default function useConversation() {
   return {
     start: (request) =>
       socket.emit(SocketRequest.START_CONVERSATION, secure(request)),
+    joinChats: () => socket.emit(SocketRequest.JOIN_CHATS, secure()),
+    joinChat: (request) =>
+      socket.emit(SocketRequest.JOIN_CHAT, secure(request)),
     markAsRead: (request) =>
       socket.emit(SocketRequest.MARK_AS_READ, secure(request)),
   };

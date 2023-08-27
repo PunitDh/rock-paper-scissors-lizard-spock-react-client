@@ -12,15 +12,14 @@ import {
 import { setCurrentGamesNav, updateCurrentGameMenu } from "src/redux/menuSlice";
 import { useNavigate } from "react-router";
 import { setSiteSettings } from "src/redux/siteSlice";
-import useSocket from "./useSocket";
-import { SocketRequest } from "src/utils/constants";
+import useConversation from "./useConversation";
 
 export default function useAPI() {
   const token = useToken();
   const notification = useNotification();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const socket = useSocket();
+  const conversation = useConversation();
 
   const authHeaders = {
     headers: {
@@ -96,7 +95,7 @@ export default function useAPI() {
 
     getConversations: () => {
       if (token.jwt) {
-        socket.emit(SocketRequest.JOIN_CHATS, { _jwt: token.jwt });
+        conversation.joinChats();
         return request
           .get("/player/chats", authHeaders)
           .then((data) => dispatch(setConversations(data.payload)))
@@ -138,7 +137,7 @@ export default function useAPI() {
         .catch((data) => notification.error(data.payload)),
 
     getGame: (gameId) => {
-      socket.emit(SocketRequest.JOIN_CHAT, { _jwt: token.jwt, gameId: gameId });
+      conversation.joinChat({ gameId });
       return request
         .get(`/games/${gameId}`, authHeaders)
         .then((data) => dispatch(setCurrentGame(data.payload)))
