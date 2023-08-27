@@ -9,7 +9,6 @@ import ResultTable from "./components/ResultTable";
 import GameActions from "./components/GameActions";
 import { FlexBox } from "src/components/shared/styles";
 import GameTitle from "./components/GameTitle";
-import { calculateScore } from "src/utils";
 import LoadingScreen from "src/components/shared/LoadingScreen";
 
 const ResultContainer = styled(FlexBox)({
@@ -20,7 +19,7 @@ const ResultContainer = styled(FlexBox)({
 
 const Game = () => {
   const { gameId } = useParams();
-  const game = useGame();
+  const currentGame = useGame();
   const [maxRounds, setMaxRounds] = useState(3);
   const token = useToken();
   const api = useAPI();
@@ -30,17 +29,16 @@ const Game = () => {
   }, [gameId]);
 
   const lastRound =
-    game.currentGame.rounds &&
-    game.currentGame.rounds[game.currentGame.rounds.length - 1];
+    currentGame.rounds && currentGame.rounds[currentGame.rounds.length - 1];
 
-  const opponent = game.currentGame.players?.find(
+  const opponent = currentGame.players?.find(
     (player) => player.id !== token.decoded.id
   );
 
-  return game.currentGame.id ? (
-    <PageContainer title={game.currentGame.name}>
+  return currentGame.id ? (
+    <PageContainer title={currentGame.name}>
       <GameCard
-        title={<GameTitle currentGame={game.currentGame} />}
+        title={<GameTitle currentGame={currentGame} />}
         action={
           <GameActions
             onMaxRoundsChange={setMaxRounds}
@@ -52,12 +50,10 @@ const Game = () => {
       >
         <ResultContainer>
           <ResultTable
-            rounds={game.currentGame.rounds?.filter(
-              (it) => it.moves.length > 0
-            )}
+            rounds={currentGame.rounds?.filter((it) => it.moves.length > 0)}
             maxRounds={maxRounds}
-            players={game.currentGame.players}
-            score={calculateScore(game.currentGame)}
+            players={currentGame.players}
+            score={currentGame.score}
           />
         </ResultContainer>
         <PlayButtons

@@ -5,7 +5,7 @@ import AvatarSelectField from "../../../components/shared/AvatarSelectField";
 import { FlexBox, TitledButton } from "src/components/shared/styles";
 import { useToken } from "src/hooks";
 
-const UpdateProfile = ({ player }) => {
+const UpdateProfile = ({ api }) => {
   const token = useToken();
 
   const handleSubmit = (e) => {
@@ -17,7 +17,7 @@ const UpdateProfile = ({ player }) => {
       email: email.value,
       avatar: avatar.value,
     };
-    player.updateProfile(payload);
+    api.updateProfile(payload);
   };
 
   return (

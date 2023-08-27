@@ -1,7 +1,7 @@
 import { useState } from "react";
 import LimitSelect from "../../../../../components/shared/LimitSelect";
 import { Tooltip } from "@mui/material";
-import { useConversation, useGame } from "src/hooks";
+import { useAPI } from "src/hooks";
 import { FlexBox } from "src/components/shared/styles";
 import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
@@ -20,12 +20,11 @@ const ChatIcon = styled(Chat)(({ theme }) => ({
 
 const GameActions = ({ onMaxRoundsChange, maxRounds, gameId, opponent }) => {
   const [confirmReset, setConfirmReset] = useState(false);
-  const game = useGame();
-  const conversation = useConversation();
+  const api = useAPI();
   const limits = [3, 5, 8];
 
-  const handleStartChat = () => conversation.start({ player: opponent.id });
-  const handleResetRounds = () => game.resetRounds({ gameId });
+  const handleStartChat = () => api.startChat({ player: opponent.id });
+  const handleResetRounds = () => api.resetGameRounds({ gameId });
 
   return (
     <FlexBox gap="1rem">

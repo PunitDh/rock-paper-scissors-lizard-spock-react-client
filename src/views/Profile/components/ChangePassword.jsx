@@ -3,7 +3,7 @@ import { Box, Stack } from "@mui/material";
 import FormField from "src/components/shared/FormField";
 import { TitledButton } from "src/components/shared/styles";
 
-const ChangePassword = ({ player }) => {
+const ChangePassword = ({ api }) => {
   
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -13,7 +13,7 @@ const ChangePassword = ({ player }) => {
       newPassword: newPassword.value,
       confirmNewPassword: confirmNewPassword.value,
     };
-    player.updatePassword(payload);
+    api.updatePassword(payload);
   };
 
   return (

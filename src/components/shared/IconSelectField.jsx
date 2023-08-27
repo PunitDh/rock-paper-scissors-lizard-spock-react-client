@@ -1,6 +1,6 @@
 import { MenuItem, Select, Tooltip } from "@mui/material";
 import { icons } from "src/assets";
-import { useGame } from "src/hooks";
+import { useAPI, useGame } from "src/hooks";
 
 const selectStyles = {
   ".MuiOutlinedInput-notchedOutline": {
@@ -17,8 +17,8 @@ const selectStyles = {
 };
 
 const IconSelectField = ({ selected = 1, gameId }) => {
-  const game = useGame();
-  const handleChange = (e) => game.changeIcon({ gameId, icon: e.target.value });
+  const api = useAPI();
+  const handleChange = (e) => api.changeGameIcon({ gameId, icon: e.target.value });
 
   return (
     <Tooltip title="Change game icon" disableInteractive>

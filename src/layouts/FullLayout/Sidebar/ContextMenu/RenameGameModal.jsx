@@ -8,15 +8,15 @@ import {
   DialogTitle,
 } from "@mui/material";
 import { Bold } from "src/components/shared/styles";
-import { useGame, useToken } from "src/hooks";
+import { useAPI, useToken } from "src/hooks";
 
 export default function RenameGameModal({ handleClose, open, selectedGame }) {
-  const game = useGame();
+  const api = useAPI();
   const token = useToken();
 
   const handleRename = (e) => {
     e.preventDefault();
-    game.rename({ gameId: selectedGame.id, name: e.target.name.value });
+    api.renameGame({ gameId: selectedGame.id, name: e.target.name.value });
     handleClose();
   };
 

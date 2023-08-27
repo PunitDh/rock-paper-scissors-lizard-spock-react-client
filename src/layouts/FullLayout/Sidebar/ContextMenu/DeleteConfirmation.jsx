@@ -7,19 +7,19 @@ import {
   DialogTitle,
 } from "@mui/material";
 import { Bold } from "src/components/shared/styles";
-import { useGame, useToken } from "src/hooks";
+import { useAPI, useToken } from "src/hooks";
 
 export default function DeleteConfirmation({
   handleClose,
   open,
   selectedGame,
 }) {
-  const game = useGame();
+  const api = useAPI();
   const token = useToken();
 
   const handleDelete = (e) => {
     e.preventDefault();
-    game.delete({ gameId: selectedGame.id });
+    api.deleteGame({ gameId: selectedGame.id });
     handleClose();
   };
 

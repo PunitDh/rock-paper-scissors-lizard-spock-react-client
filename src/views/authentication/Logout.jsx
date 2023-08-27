@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { usePlayer } from "src/hooks";
+import { useAPI } from "src/hooks";
 
 const Logout = () => {
-  const player = usePlayer();
+  const api = useAPI();
   useEffect(() => {
-    player.logout();
+    api.logoutPlayer();
   }, []);
 
   return <></>;

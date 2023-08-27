@@ -1,13 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import {
-  useAPI,
-  useNotification,
-  usePlayer,
-  useSocket,
-  useToken,
-} from "src/hooks";
+import { useAPI, useNotification, useSocket, useToken } from "src/hooks";
 import { setCurrentConversation } from "src/redux/conversationSlice";
 import { deleteGameFromMenu, updateCurrentGameMenu } from "src/redux/menuSlice";
 import { setCurrentGame, updateCurrentGame } from "src/redux/playerSlice";
@@ -20,7 +14,6 @@ const SocketListeners = () => {
   const token = useToken();
   const notification = useNotification();
   const navigate = useNavigate();
-  const player = usePlayer();
   const dispatch = useDispatch();
   const api = useAPI();
 
@@ -58,7 +51,7 @@ const SocketListeners = () => {
       handleToken(response, "Profile updated!", "/profile")
     );
     socket.on(SocketResponse.DELETE_PROFILE, (response) =>
-      isSuccess(response).then(player.logout).catch(notification.error)
+      isSuccess(response).then(api.logoutPlayer).catch(notification.error)
     );
     socket.on(Status.UNAUTHORIZED, () => navigate("/auth/login"));
     socket.on(SocketResponse.PLAY_MOVE, (response) =>

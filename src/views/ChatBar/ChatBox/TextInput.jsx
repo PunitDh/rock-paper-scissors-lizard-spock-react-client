@@ -1,7 +1,7 @@
 import { Button, TextField } from "@mui/material";
 import { Send } from "@mui/icons-material";
 import styled from "@emotion/styled";
-import { useConversation, usePlayer } from "src/hooks";
+import { useAPI } from "src/hooks";
 import { useState } from "react";
 
 const Form = styled.form(({ theme }) => ({
@@ -18,9 +18,8 @@ const MessageField = styled(TextField)({
 });
 
 export const TextInput = ({ conversationId, receiver, allRead }) => {
-  const player = usePlayer();
   const [messageLength, setMessageLength] = useState(0);
-  const conversation = useConversation();
+  const api = useAPI();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,14 +29,14 @@ export const TextInput = ({ conversationId, receiver, allRead }) => {
       receiver,
       message,
     };
-    player.sendMessage(request);
+    api.sendMessage(request);
     e.target.reset();
     setMessageLength(0);
   };
 
   const handleMarkAsRead = () => {
     if (!allRead) {
-      conversation.markAsRead({ conversationId });
+      api.markConversationAsRead({ conversationId });
     }
   };
 

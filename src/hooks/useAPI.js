@@ -12,19 +12,34 @@ import {
 import { setCurrentGamesNav, updateCurrentGameMenu } from "src/redux/menuSlice";
 import { useNavigate } from "react-router";
 import { setSiteSettings } from "src/redux/siteSlice";
-import useConversation from "./useConversation";
+import useSocket from "./useSocket";
+import { SocketRequest } from "src/utils/constants";
 
 export default function useAPI() {
   const token = useToken();
   const notification = useNotification();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const conversation = useConversation();
+  const socket = useSocket();
 
   const authHeaders = {
     headers: {
       Authorization: token.jwt,
     },
+  };
+
+  const secure = (request) => ({
+    ...request,
+    _jwt: token.jwt,
+  });
+
+  const restricted = (request) => {
+    if (token.decoded.isAdmin) {
+      return {
+        ...request,
+        _jwt: token.jwt,
+      };
+    }
   };
 
   const request = {
@@ -83,19 +98,19 @@ export default function useAPI() {
         .then((data) => dispatch(setSiteSettings(data.payload)))
         .catch((data) => notification.error(data.payload)),
 
-    updateProfile: (formData) =>
-      request
-        .put("/player", formData, authHeaders)
-        .then((data) => {
-          token.set(data);
-          notification.success("Profile updated!");
-          navigate("/profile");
-        })
-        .catch((data) => notification.error(data.payload)),
+    // updateProfile: (formData) =>
+    //   request
+    //     .put("/player", formData, authHeaders)
+    //     .then((data) => {
+    //       token.set(data);
+    //       notification.success("Profile updated!");
+    //       navigate("/profile");
+    //     })
+    //     .catch((data) => notification.error(data.payload)),
 
     getConversations: () => {
       if (token.jwt) {
-        conversation.joinChats();
+        socket.emit(SocketRequest.JOIN_CHATS, secure());
         return request
           .get("/player/chats", authHeaders)
           .then((data) => dispatch(setConversations(data.payload)))
@@ -137,7 +152,7 @@ export default function useAPI() {
         .catch((data) => notification.error(data.payload)),
 
     getGame: (gameId) => {
-      conversation.joinChat({ gameId });
+      socket.emit(SocketRequest.JOIN_CHAT, secure({ gameId }));
       return request
         .get(`/games/${gameId}`, authHeaders)
         .then((data) => dispatch(setCurrentGame(data.payload)))
@@ -152,12 +167,63 @@ export default function useAPI() {
 
     clearLogs: () => request.delete(`/admin/logs`, authHeaders),
 
-    translateSubtitles: (formData) =>
-      request.post("/video/subtitles/translate", formData, authHeaders),
+    translateSubtitles: (formData, sessionId) => {
+      socket.emit(SocketRequest.PROGRESS_UPDATE, secure({ sessionId }));
+      return request.post("/video/subtitles/translate", formData, authHeaders);
+    },
 
     getDownloadFile: (location) =>
       request.get(`/${location}`, {
         responseType: "blob",
       }),
+
+    setSiteSettings: (request) =>
+      socket.emit(SocketRequest.UPDATE_SITE_SETTINGS, restricted(request)),
+
+    renameGame: (request) =>
+      socket.emit(SocketRequest.RENAME_GAME, secure(request)),
+
+    deleteGame: (request) =>
+      socket.emit(SocketRequest.DELETE_GAME, secure(request)),
+
+    playMove: (request) =>
+      socket.emit(SocketRequest.PLAY_MOVE, secure(request)),
+
+    resetGameRounds: (request) =>
+      socket.emit(SocketRequest.RESET_GAME_ROUNDS, secure(request)),
+
+    changeGameIcon: (request) =>
+      socket.emit(SocketRequest.CHANGE_ICON, secure(request)),
+
+    logoutPlayer: () => {
+      token.clear();
+      navigate("/auth/login");
+    },
+
+    sendMessage: (request) =>
+      socket.emit(SocketRequest.SEND_MESSAGE, secure(request)),
+
+    updateProfile: (request) =>
+      socket.emit(SocketRequest.UPDATE_PROFILE, secure(request)),
+
+    updatePassword: (request) =>
+      socket.emit(SocketRequest.UPDATE_PASSWORD, secure(request)),
+
+    deleteProfile: (request) =>
+      socket.emit(SocketRequest.DELETE_PROFILE, secure(request)),
+
+    startChat: (request) =>
+      socket.emit(SocketRequest.START_CONVERSATION, secure(request)),
+
+    joinChats: () => socket.emit(SocketRequest.JOIN_CHATS, secure()),
+
+    joinChat: (request) =>
+      socket.emit(SocketRequest.JOIN_CHAT, secure(request)),
+
+    markConversationAsRead: (request) =>
+      socket.emit(SocketRequest.MARK_AS_READ, secure(request)),
+
+    requestProgressUpdate: (request) =>
+      socket.emit(SocketRequest.PROGRESS_UPDATE, secure(request)),
   };
 }

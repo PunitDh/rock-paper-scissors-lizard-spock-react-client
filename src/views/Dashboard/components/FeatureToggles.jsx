@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useSelector } from "react-redux";
-import { useAdmin } from "src/hooks";
+import { useAPI } from "src/hooks";
 
 const Toggle = styled(Typography)({
   cursor: "pointer",
@@ -20,10 +20,10 @@ const Toggle = styled(Typography)({
 
 const FeatureToggles = () => {
   const { siteSettings } = useSelector((state) => state.site);
-  const admin = useAdmin();
+  const api = useAPI();
 
   const handleToggle = (e) => {
-    admin.setSiteSettings({
+    api.setSiteSettings({
       siteSettings: { [e.target.name]: e.target.checked },
     });
   };

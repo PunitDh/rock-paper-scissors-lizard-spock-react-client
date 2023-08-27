@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import IconSelectField from "src/components/shared/IconSelectField";
 import { FlexBox } from "src/components/shared/styles";
 import { getIcon } from "src/assets";
-import { useGame } from "src/hooks";
+import { useAPI, useGame } from "src/hooks";
 
 const InvisibleTextField = withStyles({
   root: {
@@ -29,9 +29,10 @@ const InvisibleTextField = withStyles({
 })(TextField);
 
 const GameTitle = () => {
-  const game = useGame();
-  const [gameName, setGameName] = useState(game.currentGame.name);
-  const icon = getIcon(game.currentGame.icon);
+  const currentGame = useGame();
+  const api = useAPI();
+  const [gameName, setGameName] = useState(currentGame.name);
+  const icon = getIcon(currentGame.icon);
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -40,16 +41,16 @@ const GameTitle = () => {
 
   const handleRename = (e) => {
     e.preventDefault();
-    game.rename({ gameId: game.currentGame.id, name: gameName });
+    api.renameGame({ gameId: currentGame.id, name: gameName });
   };
 
   useEffect(() => {
-    setGameName(game.currentGame.name);
-  }, [game.currentGame?.id]);
+    setGameName(currentGame.currentGame.name);
+  }, [currentGame?.id]);
 
   return (
     <FlexBox gap="0" alignItems="stretch" justifyContent="flex-start">
-      <IconSelectField selected={icon.id} gameId={game.currentGame.id} />
+      <IconSelectField selected={icon.id} gameId={currentGame.id} />
       <form onSubmit={handleRename}>
         <Tooltip title="Rename game">
           <InvisibleTextField

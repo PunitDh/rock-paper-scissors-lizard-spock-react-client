@@ -64,7 +64,6 @@ const UploadForm = ({
   });
   const notification = useNotification();
   const token = useToken();
-  const utils = useUtils();
 
   const handleChange = (e) =>
     setRequest((request) => ({ ...request, [e.target.name]: e.target.value }));
@@ -76,7 +75,6 @@ const UploadForm = ({
     resetState();
     const formData = new FormData();
     const sessionId = Math.random().toString(36).slice(2, 9);
-    utils.requestProgressUpdate({ sessionId });
     formData.append("file", video);
     formData.append("language", request.language);
     formData.append("format", request.format);
@@ -85,7 +83,7 @@ const UploadForm = ({
       formData.append("debug", debugMode);
     }
 
-    return onSubmit(formData)
+    return onSubmit(formData, sessionId)
       .then((data) => setSubtitles(data.payload))
       .catch((data) => notification.error(data.payload));
   };

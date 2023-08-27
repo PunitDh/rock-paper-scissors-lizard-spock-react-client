@@ -13,7 +13,7 @@ const RedButton = styled(TitledButton)({
   },
 });
 
-const DeleteProfile = ({ player }) => {
+const DeleteProfile = ({ api }) => {
   const [confirm, setConfirm] = useState(false);
   const [value, setValue] = useState();
   const [password, setPassword] = useState("");
@@ -27,7 +27,7 @@ const DeleteProfile = ({ player }) => {
   };
 
   const handleConfirm = () => setConfirm(true);
-  const handleSubmit = () => player.deleteProfile({ password });
+  const handleSubmit = () => api.deleteProfile({ password });
 
   return (
     <DashboardCard title="Delete Profile">

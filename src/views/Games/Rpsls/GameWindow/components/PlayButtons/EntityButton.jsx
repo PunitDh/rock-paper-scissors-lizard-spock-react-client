@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Avatar, Button, Tooltip } from "@mui/material";
-import { useGame, useToken } from "src/hooks";
+import { useAPI, useToken } from "src/hooks";
 
 const Entity = styled(Button)(({ btncolor }) => ({
   color: btncolor,
@@ -14,7 +14,7 @@ const ButtonAvatar = styled(Avatar)({
 
 const EntityButton = ({ gameId, entity }) => {
   const token = useToken();
-  const game = useGame();
+  const api = useAPI();
 
   const handleMove = () => {
     const payload = {
@@ -23,7 +23,7 @@ const EntityButton = ({ gameId, entity }) => {
       gameId,
     };
 
-    game.playMove(payload);
+    api.playMove(payload);
   };
 
   return (
