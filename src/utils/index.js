@@ -6,7 +6,7 @@ export const Status = {
 
 export function isSuccess(response) {
   return new Promise((resolve, reject) =>
-    response.status === Status.SUCCESS
+    ![Status.ERROR, Status.UNAUTHORIZED].includes(response.status)
       ? resolve(response.payload)
       : reject(response.payload)
   );
