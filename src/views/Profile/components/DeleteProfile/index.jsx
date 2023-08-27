@@ -5,6 +5,7 @@ import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
 import { useState } from "react";
 import DialogContent from "./DialogContent";
 import { TitledButton } from "src/components/shared/styles";
+import { useAPI } from "src/hooks";
 
 const RedButton = styled(TitledButton)({
   backgroundColor: "red",
@@ -13,7 +14,8 @@ const RedButton = styled(TitledButton)({
   },
 });
 
-const DeleteProfile = ({ api }) => {
+const DeleteProfile = () => {
+  const api = useAPI();
   const [confirm, setConfirm] = useState(false);
   const [value, setValue] = useState();
   const [password, setPassword] = useState("");

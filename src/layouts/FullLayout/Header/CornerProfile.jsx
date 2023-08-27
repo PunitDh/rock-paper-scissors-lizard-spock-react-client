@@ -13,6 +13,7 @@ import {
 import { IconUser, IconUserCheck } from "@tabler/icons";
 import { ProfileImg, getAvatar } from "src/assets";
 import styled from "@emotion/styled";
+import { useAPI } from "src/hooks";
 
 const ProfileAvatar = styled(Avatar)({
   width: 35,
@@ -22,6 +23,7 @@ const ProfileAvatar = styled(Avatar)({
 const CornerProfile = ({ decoded }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
+  const api = useAPI();
   const profileImage = getAvatar(decoded.avatar) || ProfileImg;
 
   const openMenu = (event) => setAnchorEl(event.currentTarget);
@@ -75,7 +77,7 @@ const CornerProfile = ({ decoded }) => {
         </MenuItem>
         <Box mt={1} py={1} px={2}>
           <Button
-            onClick={navigateTo("/auth/logout")}
+            onClick={api.logoutPlayer}
             variant="outlined"
             color="primary"
             type="button"

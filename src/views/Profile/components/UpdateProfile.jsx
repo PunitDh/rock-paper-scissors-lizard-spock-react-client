@@ -3,9 +3,10 @@ import { Box } from "@mui/material";
 import FormField from "src/components/shared/FormField";
 import AvatarSelectField from "../../../components/shared/AvatarSelectField";
 import { FlexBox, TitledButton } from "src/components/shared/styles";
-import { useToken } from "src/hooks";
+import { useAPI, useToken } from "src/hooks";
 
-const UpdateProfile = ({ api }) => {
+const UpdateProfile = () => {
+  const api = useAPI();
   const token = useToken();
 
   const handleSubmit = (e) => {
