@@ -27,7 +27,7 @@ const SocketListeners = () => {
   const handleResponse = (response, dispatchFunction) =>
     isSuccess(response)
       .then((payload) => dispatch(dispatchFunction(payload)))
-      .catch(console.log);
+      .catch(notification.error);
 
   const handleToken = (response, successMessage, navigateTo = "/") =>
     isSuccess(response)

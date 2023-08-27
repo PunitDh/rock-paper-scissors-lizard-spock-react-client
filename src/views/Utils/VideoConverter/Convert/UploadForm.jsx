@@ -84,12 +84,12 @@ const UploadForm = ({
     formData.append("format", request.format);
     formData.append("sessionId", sessionId);
     if (debugMode && token.decoded.isAdmin) {
-    formData.append("debug", debugMode);
+      formData.append("debug", debugMode);
     }
 
     return onSubmit(formData)
       .then((data) => setSubtitles(data.payload))
-      .catch(notification.error);
+      .catch((data) => notification.error(data.payload));
   };
 
   return (
