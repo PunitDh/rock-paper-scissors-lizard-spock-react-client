@@ -6,7 +6,7 @@ import useAPI from "./useAPI";
 import useLoading from "./useLoading";
 
 export {
-  useCurrentGame as useGame,
+  useCurrentGame,
   useSocket,
   useToken,
   useNotification,

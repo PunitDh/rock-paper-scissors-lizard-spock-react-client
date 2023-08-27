@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAPI, useGame, useToken } from "src/hooks";
+import { useAPI, useCurrentGame, useToken } from "src/hooks";
 import { useParams } from "react-router";
 import PageContainer from "src/components/container/PageContainer";
 import GameCard from "src/components/shared/GameCard";
@@ -19,7 +19,7 @@ const ResultContainer = styled(FlexBox)({
 
 const Game = () => {
   const { gameId } = useParams();
-  const currentGame = useGame();
+  const currentGame = useCurrentGame();
   const [maxRounds, setMaxRounds] = useState(3);
   const token = useToken();
   const api = useAPI();

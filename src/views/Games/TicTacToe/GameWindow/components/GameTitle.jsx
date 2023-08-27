@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import IconSelectField from "src/components/shared/IconSelectField";
 import { FlexBox } from "src/components/shared/styles";
 import { getIcon } from "src/assets";
-import { useAPI, useGame } from "src/hooks";
+import { useAPI, useCurrentGame } from "src/hooks";
 
 const InvisibleTextField = withStyles({
   root: {
@@ -29,7 +29,7 @@ const InvisibleTextField = withStyles({
 })(TextField);
 
 const GameTitle = () => {
-  const currentGame = useGame();
+  const currentGame = useCurrentGame();
   const api = useAPI();
   const [gameName, setGameName] = useState(currentGame.name);
   const icon = getIcon(currentGame.icon);
