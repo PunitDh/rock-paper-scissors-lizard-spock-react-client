@@ -76,7 +76,7 @@ const LogActions = ({ request, onSelect, onClearLogs }) => {
         sx={whiteStyle}
       >
         {times.map((time) => (
-          <MenuItem key={time} value={time.value}>
+          <MenuItem key={time.value} value={time.value}>
             {time.label}
           </MenuItem>
         ))}
