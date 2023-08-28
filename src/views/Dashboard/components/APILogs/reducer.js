@@ -1,4 +1,4 @@
-import { APILogAction } from "./actions";
+import { APILogsAction } from "./actions";
 
 export const initialState = {
   type: "ALL",
@@ -9,27 +9,27 @@ export const initialState = {
 
 export const reducer = (state, action) => {
   switch (action.type) {
-    case APILogAction.SET_LIMIT:
+    case APILogsAction.SET_LIMIT:
       return {
         ...state,
         limit: action.payload,
       };
-    case APILogAction.SET_TIME:
+    case APILogsAction.SET_TIME:
       return {
         ...state,
         time: action.payload,
       };
-    case APILogAction.SET_TYPE:
+    case APILogsAction.SET_TYPE:
       return {
         ...state,
         type: action.payload,
       };
-    case APILogAction.SET_LOGS:
+    case APILogsAction.SET_LOGS:
       return {
         ...state,
         logs: action.payload,
       };
-    case APILogAction.RESET_STATE:
+    case APILogsAction.RESET_STATE:
       return initialState;
     default:
       return initialState;

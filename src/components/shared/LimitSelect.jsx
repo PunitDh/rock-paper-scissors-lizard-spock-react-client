@@ -1,7 +1,7 @@
 import { MenuItem, Select } from "@mui/material";
 import { uniqueId } from "lodash";
 
-const LimitSelect = ({ sx = {}, value, onChange, limits }) => {
+const LimitSelect = ({ sx = {}, label, value, onChange, limits }) => {
   const id = uniqueId();
   return (
     <Select
@@ -10,6 +10,7 @@ const LimitSelect = ({ sx = {}, value, onChange, limits }) => {
       value={value}
       name="limit"
       size="small"
+      label={label}
       onChange={onChange}
       sx={sx}
     >

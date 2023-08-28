@@ -35,8 +35,6 @@ const APILogs = () => {
     // scrollRef.current?.scrollIntoView();
   }, [state.logs.length]);
 
-  console.log(state.logs);
-
   return (
     <DashboardCard
       title="API Logs"

@@ -55,6 +55,7 @@ const NavItem = ({
   hasContextMenu = false,
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const theme = useTheme();
 
   const handleContextMenu = (e) => {
     e.preventDefault();
@@ -67,10 +68,7 @@ const NavItem = ({
   };
 
   const Icon = item.icon;
-  const theme = useTheme();
   const itemIcon = <Icon stroke={1.5} size="1.3rem" />;
-
-  console.log({state});
 
   return (
     <>

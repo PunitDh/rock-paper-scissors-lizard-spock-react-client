@@ -1,4 +1,10 @@
-import { Button, MenuItem, Select } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import { useState } from "react";
 import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
 import LimitSelect from "src/components/shared/LimitSelect";
@@ -45,42 +51,54 @@ const LogActions = ({ state, dispatch, onClearLogs }) => {
       >
         Clear
       </Button>
-      <Select
-        labelId="log-time"
-        id="log-time"
-        value={state.time}
-        size="small"
-        name="time"
-        onChange={(e) => dispatch(setTime(e.target.value))}
-        sx={whiteStyle}
-      >
-        {times.map((time) => (
-          <MenuItem key={time.value} value={time.value}>
-            {time.label}
-          </MenuItem>
-        ))}
-      </Select>
-      <Select
-        labelId="log-type"
-        id="log-type"
-        value={state.type}
-        size="small"
-        name="type"
-        onChange={(e) => dispatch(setType(e.target.value))}
-        sx={whiteStyle}
-      >
-        {logTypes.map((type) => (
-          <MenuItem key={type} value={type}>
-            {type}
-          </MenuItem>
-        ))}
-      </Select>
-      <LimitSelect
-        sx={whiteStyle}
-        value={state.limit}
-        limits={limits}
-        onChange={(e) => dispatch(setLimit(e.target.value))}
-      />
+      <FormControl>
+        <InputLabel sx={{ color: "white" }}>Time</InputLabel>
+        <Select
+          labelId="log-time"
+          id="log-time"
+          value={state.time}
+          size="small"
+          name="time"
+          label="Time"
+          onChange={(e) => dispatch(setTime(e.target.value))}
+          sx={whiteStyle}
+        >
+          {times.map((time) => (
+            <MenuItem key={time.value} value={time.value}>
+              {time.label}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <FormControl>
+        <InputLabel sx={{ color: "white" }}>Type</InputLabel>
+        <Select
+          labelId="log-type"
+          id="log-type"
+          value={state.type}
+          size="small"
+          name="type"
+          label="Type"
+          onChange={(e) => dispatch(setType(e.target.value))}
+          sx={whiteStyle}
+        >
+          {logTypes.map((type) => (
+            <MenuItem key={type} value={type}>
+              {type}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <FormControl>
+        <InputLabel sx={{ color: "white" }}>Limit</InputLabel>
+        <LimitSelect
+          sx={whiteStyle}
+          value={state.limit}
+          limits={limits}
+          label="Boa"
+          onChange={(e) => dispatch(setLimit(e.target.value))}
+        />
+      </FormControl>
     </FlexBox>
   );
 };

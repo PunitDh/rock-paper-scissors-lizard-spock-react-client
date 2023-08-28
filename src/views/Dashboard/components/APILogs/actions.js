@@ -1,4 +1,4 @@
-export const APILogAction = Object.freeze({
+export const APILogsAction = Object.freeze({
   RESET_STATE: "RESET_STATE",
   SET_TYPE: "SET_TYPE",
   SET_LIMIT: "SET_LIMIT",
@@ -7,25 +7,25 @@ export const APILogAction = Object.freeze({
 });
 
 export const setType = (payload) => ({
-  type: APILogAction.SET_TYPE,
+  type: APILogsAction.SET_TYPE,
   payload,
 });
 
 export const setLimit = (payload) => ({
-  type: APILogAction.SET_LIMIT,
+  type: APILogsAction.SET_LIMIT,
   payload,
 });
 
 export const setTime = (payload) => ({
-  type: APILogAction.SET_TIME,
+  type: APILogsAction.SET_TIME,
   payload,
 });
 
 export const setLogs = (payload) => ({
-  type: APILogAction.SET_LOGS,
+  type: APILogsAction.SET_LOGS,
   payload,
 });
 
 export const resetState = () => ({
-  type: APILogAction.RESET_STATE,
+  type: APILogsAction.RESET_STATE,
 });
