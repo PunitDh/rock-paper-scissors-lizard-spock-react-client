@@ -20,8 +20,8 @@ const SelectableAvatar = styled(Avatar)(({ selected }) => ({
 }));
 
 const Container = styled.div({
-  marginTop: "1rem",
-  marginBottom: "1rem",
+  marginTop: "1.25rem",
+  marginBottom: "1.25rem",
 });
 
 const AvatarSelectField = ({ selected = 1 }) => {
@@ -38,7 +38,12 @@ const AvatarSelectField = ({ selected = 1 }) => {
       >
         Avatar
       </Typography>
-      <FlexBox justifyContent="center" wrap="wrap" gap="0.5rem">
+      <FlexBox
+        justifyContent="center"
+        flexWrap="wrap"
+        flexGrow={0}
+        gap="0.5rem"
+      >
         {avatars.map((avatar) => (
           <Tooltip key={avatar.id} title={avatar.name}>
             <SelectableAvatar

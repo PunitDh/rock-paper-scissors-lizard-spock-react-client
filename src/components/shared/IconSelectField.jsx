@@ -1,6 +1,6 @@
 import { MenuItem, Select, Tooltip } from "@mui/material";
 import { icons } from "src/assets";
-import { useAPI, useGame } from "src/hooks";
+import { useAPI } from "src/hooks";
 
 const selectStyles = {
   ".MuiOutlinedInput-notchedOutline": {

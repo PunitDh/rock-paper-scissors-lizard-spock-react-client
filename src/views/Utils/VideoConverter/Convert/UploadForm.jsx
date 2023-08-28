@@ -17,7 +17,7 @@ import {
 import { useRef, useState } from "react";
 import { languages } from "src/assets";
 import { TitledButton } from "src/components/shared/styles";
-import { useNotification, useToken, useUtils } from "src/hooks";
+import { useNotification, useToken } from "src/hooks";
 import InputGroup from "./InputGroup";
 import { ResponsiveForm } from "../styles";
 
