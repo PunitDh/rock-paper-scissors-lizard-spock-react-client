@@ -9,17 +9,16 @@ const Notification = ({
   notification,
   vertical = "bottom",
   horizontal = "center",
-}) => {
-  const handleClose = () => notification.setOpen(false);
-  return notification.message ? (
+}) =>
+  notification.message ? (
     <Snackbar
       anchorOrigin={{ vertical, horizontal }}
       autoHideDuration={notification.duration}
       open={notification.open}
-      onClose={handleClose}
+      onClose={notification.close}
     >
       <WideAlert
-        onClose={handleClose}
+        onClose={notification.close}
         variant="filled"
         severity={notification.type}
       >
@@ -27,6 +26,5 @@ const Notification = ({
       </WideAlert>
     </Snackbar>
   ) : null;
-};
 
 export default Notification;

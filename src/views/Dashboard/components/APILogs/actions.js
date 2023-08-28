@@ -3,6 +3,7 @@ export const APILogsAction = Object.freeze({
   SET_TYPE: "SET_TYPE",
   SET_LIMIT: "SET_LIMIT",
   SET_TIME: "SET_TIME",
+  SET_CONFIRM_CLEAR: "SET_CONFIRM_CLEAR",
   SET_LOGS: "SET_LOGS",
 });
 
@@ -18,6 +19,11 @@ export const setLimit = (payload) => ({
 
 export const setTime = (payload) => ({
   type: APILogsAction.SET_TIME,
+  payload,
+});
+
+export const setConfirmClear = (payload) => ({
+  type: APILogsAction.SET_CONFIRM_CLEAR,
   payload,
 });
 

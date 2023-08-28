@@ -1,24 +1,19 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useReducer } from "react";
 import { NotificationType } from "src/utils/constants";
+import { initialState, reducer } from "./reducer";
+import { closeNotification, showNotification, setMessage } from "./actions";
 
 export const NotificationContext = createContext();
 
 export const NotificationProvider = ({ children }) => {
-  const [options, setOptions] = useState({
-    message: null,
-    type: NotificationType.SUCCESS,
-    duration: 6000,
-  });
-
-  const [open, setOpen] = useState(true);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    setOpen(true);
-  }, [options.message]);
+    dispatch(showNotification());
+  }, [state.message]);
 
   const set = (message, type = NotificationType.SUCCESS, duration = 6000) => {
-    setOptions({ message, type, duration });
-    setOpen(true);
+    dispatch(setMessage({ message, type, duration }));
   };
 
   const success = (message, duration = 6000) =>
@@ -27,17 +22,16 @@ export const NotificationProvider = ({ children }) => {
   const error = (message, duration = 6000) =>
     set(message, NotificationType.ERROR, duration);
 
+  const close = () => dispatch(closeNotification());
+
   return (
     <NotificationContext.Provider
       value={{
         set,
         success,
         error,
-        message: options.message,
-        type: options.type,
-        duration: options.duration,
-        open,
-        setOpen,
+        close,
+        ...state,
       }}
     >
       {children}

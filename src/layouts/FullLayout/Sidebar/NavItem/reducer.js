@@ -31,7 +31,6 @@ export const reducer = (state, action) => {
         anchorEl: null,
       };
     case NavItemAction.RESET_STATE:
-      return initialState;
     default:
       return initialState;
   }

@@ -68,7 +68,7 @@ export default function useAPI() {
   };
 
   const handleToken = (data, successMessage) => {
-    if (data.code !== 200) {
+    if (data.code >= 300) {
       notification.error(data.payload);
     } else {
       token.set(data.payload);
