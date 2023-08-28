@@ -1,4 +1,5 @@
 import { Button, MenuItem, Select } from "@mui/material";
+import { uniqueId } from "lodash";
 import React, { useState } from "react";
 import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
 import LimitSelect from "src/components/shared/LimitSelect";
@@ -21,9 +22,27 @@ const whiteStyle = {
   },
 };
 
-const LogActions = ({ setLimit, limit, logType, setLogType, onClearLogs }) => {
+const LogActions = ({ request, onSelect, onClearLogs }) => {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const limits = [50, 100, 200];
+  const times = [
+    {
+      label: "ALL",
+      value: 0,
+    },
+    {
+      label: "Last 15 mins",
+      value: 15 * 60 * 1000,
+    },
+    {
+      label: "Last 1 hour",
+      value: 3600 * 1000,
+    },
+    {
+      label: "Last 1 day",
+      value: 3600 * 1000 * 24,
+    },
+  ];
   const logTypes = ["ALL", "INFO", "ERROR", "WARN"];
 
   const handleClose = () => setConfirmOpen(false);
@@ -36,9 +55,9 @@ const LogActions = ({ setLimit, limit, logType, setLogType, onClearLogs }) => {
         open={confirmOpen}
         onCancel={handleClose}
         onConfirm={onClearLogs}
-        title="Confirm"
+        title="Clear Logs"
         confirmBtnText="Clear"
-        content="Clear all logs?"
+        content="Are you sure you want to clear all logs?"
       />
       <Button
         variant="outlined"
@@ -48,11 +67,27 @@ const LogActions = ({ setLimit, limit, logType, setLogType, onClearLogs }) => {
         Clear
       </Button>
       <Select
-        labelId="max-logs"
-        id="max-logs"
-        value={logType}
+        labelId="log-time"
+        id="log-time"
+        value={request.time}
         size="small"
-        onChange={(e) => setLogType(e.target.value)}
+        name="time"
+        onChange={onSelect}
+        sx={whiteStyle}
+      >
+        {times.map((time) => (
+          <MenuItem key={time} value={time.value}>
+            {time.label}
+          </MenuItem>
+        ))}
+      </Select>
+      <Select
+        labelId="log-type"
+        id="log-type"
+        value={request.type}
+        size="small"
+        name="type"
+        onChange={onSelect}
         sx={whiteStyle}
       >
         {logTypes.map((type) => (
@@ -63,9 +98,9 @@ const LogActions = ({ setLimit, limit, logType, setLogType, onClearLogs }) => {
       </Select>
       <LimitSelect
         sx={whiteStyle}
-        onChange={setLimit}
-        value={limit}
+        value={request.limit}
         limits={limits}
+        onChange={onSelect}
       />
     </FlexBox>
   );

@@ -160,8 +160,11 @@ export default function useAPI() {
         });
     },
 
-    getLogs: (limit, type) =>
-      request.get(`/admin/logs`, { ...authHeaders, params: { limit, type } }),
+    getLogs: ({ limit, type, time }) =>
+      request.get(`/admin/logs`, {
+        ...authHeaders,
+        params: { limit, type, time },
+      }),
 
     clearLogs: () => request.delete(`/admin/logs`, authHeaders),
 

@@ -4,8 +4,6 @@ import { useParams } from "react-router";
 import PageContainer from "src/components/container/PageContainer";
 import GameCard from "src/components/shared/GameCard";
 import styled from "@emotion/styled";
-import PlayButtons from "./components/PlayButtons";
-import ResultTable from "./components/ResultTable";
 import GameActions from "./components/GameActions";
 import { FlexBox } from "src/components/shared/styles";
 import GameTitle from "./components/GameTitle";
@@ -28,9 +26,6 @@ const Game = () => {
     api.getGame(gameId);
   }, [gameId]);
 
-  const lastRound =
-    currentGame.rounds && currentGame.rounds[currentGame.rounds.length - 1];
-
   const opponent = currentGame.players?.find(
     (player) => player.id !== token.decoded.id
   );
@@ -48,20 +43,7 @@ const Game = () => {
           />
         }
       >
-        <ResultContainer>
-          <ResultTable
-            rounds={currentGame.rounds?.filter((it) => it.moves.length > 0)}
-            maxRounds={maxRounds}
-            players={currentGame.players}
-            score={currentGame.score}
-          />
-        </ResultContainer>
-        <PlayButtons
-          id={gameId}
-          playerId={token.decoded.id}
-          lastRound={lastRound}
-          opponent={opponent}
-        />
+        <ResultContainer></ResultContainer>
       </GameCard>
     </PageContainer>
   ) : (

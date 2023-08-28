@@ -1,12 +1,13 @@
 import { MenuItem, Select } from "@mui/material";
 
-const LimitSelect = ({ sx={}, value, onChange, limits }) => (
+const LimitSelect = ({ sx = {}, value, onChange, limits }) => (
   <Select
-    labelId="max-rounds"
-    id="max-rounds"
+    labelId="log-limit"
+    id="log-limit"
     value={value}
+    name="limit"
     size="small"
-    onChange={(e) => onChange(e.target.value)}
+    onChange={onChange}
     sx={sx}
   >
     {limits.map((limit) => (
