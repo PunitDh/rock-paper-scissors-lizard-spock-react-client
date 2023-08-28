@@ -13,34 +13,11 @@ export function isSuccess(response) {
 }
 
 export const formatDate = (date) =>
-    new Intl.DateTimeFormat(undefined, {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-    }).format(new Date(date));
-
-export function calculateScore(game) {
-  const score = {};
-
-  game.players?.forEach((player) => {
-    const { id: playerId } = player;
-    score[playerId] = {
-      name: player.firstName,
-      score: game.rounds?.filter((round) => round.winner.playerId === playerId)
-        .length,
-    };
-  });
-
-  const tieScore = game.rounds?.filter(
-    (round) => round.winner.method?.toLowerCase() === "tie"
-  ).length;
-  score.ties = {
-    name: "Ties",
-    score: tieScore,
-  };
-
-  return score;
-}
+  new Intl.DateTimeFormat(undefined, {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+  }).format(new Date(date));

@@ -7,31 +7,22 @@ import {
   TimelineSeparator,
 } from "@mui/lab";
 import { Bold } from "src/components/shared/styles";
-import { calculateScore, formatDate } from "src/utils";
+import { useCurrentGame } from "src/hooks";
+import { formatDate } from "src/utils";
 
 const RecentGame = ({ game }) => {
-  // const formatDate = (date) =>
-  //   new Intl.DateTimeFormat(undefined, {
-  //     day: "numeric",
-  //     month: "short",
-  //     year: "numeric",
-  //     hour: "numeric",
-  //     minute: "numeric",
-  //     second: "numeric",
-  //   }).format(new Date(date));
+  const currentGame = useCurrentGame(game);
 
-  const score = calculateScore(game);
-
-  const playerScores = Object.values(score)
+  const playerScores = Object.values(currentGame.score)
     .map((player) => `${player.name}: ${player.score}`)
     .join(", ");
 
-  const rounds = game.rounds.filter((it) => it.moves.length > 0).length;
+  const rounds = currentGame.rounds.filter((it) => it.moves.length > 0).length;
 
   return (
     <TimelineItem>
       <TimelineOppositeContent>
-        {formatDate(game.updatedAt)}
+        {formatDate(currentGame.updatedAt)}
       </TimelineOppositeContent>
       <TimelineSeparator>
         <TimelineDot color="primary" variant="outlined" />
@@ -39,7 +30,7 @@ const RecentGame = ({ game }) => {
       </TimelineSeparator>
       <TimelineContent>
         <div>
-          {game.players
+          {currentGame.players
             .map((player) => player.firstName)
             .join(` played ${rounds} round${rounds !== 1 ? "s" : ""} with `)}
         </div>
