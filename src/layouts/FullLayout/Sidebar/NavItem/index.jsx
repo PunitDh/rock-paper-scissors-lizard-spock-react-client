@@ -1,4 +1,4 @@
-import { useReducer, useState } from "react";
+import { useReducer } from "react";
 import {
   ListItemIcon,
   ListItem,
@@ -13,7 +13,7 @@ import DeleteConfirmation from "./ContextMenu/Modal/Delete";
 import { FlexBox } from "src/components/shared/styles";
 import { NavLink } from "react-router-dom";
 import { initialState, reducer } from "./reducer";
-import { resetAnchorEl, setAnchorEl, showConfirmRename } from "./actions";
+import { setAnchorEl } from "./actions";
 
 const ListItemStyled = styled(ListItem)(({ theme, level }) => ({
   whiteSpace: "nowrap",

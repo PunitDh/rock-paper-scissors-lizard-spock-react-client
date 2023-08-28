@@ -10,20 +10,10 @@ export const initialState = {
 
 export const reducer = (state, action) => {
   switch (action.type) {
-    case APILogsAction.SET_LIMIT:
+    case APILogsAction.SET_FILTER:
       return {
         ...state,
-        limit: action.payload,
-      };
-    case APILogsAction.SET_TIME:
-      return {
-        ...state,
-        time: action.payload,
-      };
-    case APILogsAction.SET_TYPE:
-      return {
-        ...state,
-        type: action.payload,
+        [action.payload.name]: action.payload.value,
       };
     case APILogsAction.SET_CONFIRM_CLEAR:
       return {

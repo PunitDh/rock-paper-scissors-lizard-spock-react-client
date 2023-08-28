@@ -22,10 +22,9 @@ import InputGroup from "./InputGroup";
 import { ResponsiveForm } from "../styles";
 import {
   resetOutput,
-  setDebugMode,
-  setFormat,
-  setLanguage,
+  toggleDebugMode,
   setLoading,
+  setOption,
   setSubtitles,
   setVideo,
 } from "./actions";
@@ -83,7 +82,8 @@ const UploadForm = ({ dispatch, state }) => {
       .catch((data) => notification.error(data.payload));
   };
 
-  const handleFileUpload = (e) => dispatch(setVideo(e.target.files[0]));
+  const handleSetOption = (e) => dispatch(setOption(e.target));
+  const handleUpload = (e) => dispatch(setVideo(e.target.files[0]));
 
   return (
     <ResponsiveForm onSubmit={handleSubmit}>
@@ -103,7 +103,7 @@ const UploadForm = ({ dispatch, state }) => {
             type="file"
             id="upload-video-file"
             inputRef={fileRef}
-            onChange={handleFileUpload}
+            onChange={handleUpload}
             InputProps={{ accept: "video/mp4,video/x-m4v,video/*" }}
           />
         </FormLabel>
@@ -129,7 +129,7 @@ const UploadForm = ({ dispatch, state }) => {
           size="small"
           value={state.language}
           maxRows={6}
-          onChange={(e) => dispatch(setLanguage(e.target.value))}
+          onChange={handleSetOption}
         >
           {languages.map((lang) => (
             <MenuItem key={lang} value={lang}>
@@ -145,7 +145,7 @@ const UploadForm = ({ dispatch, state }) => {
           defaultValue="vtt"
           name="format"
           value={state.format}
-          onChange={(e) => dispatch(setFormat(e.target.value))}
+          onChange={handleSetOption}
         >
           <FormControlLabel
             value="vtt"
@@ -169,15 +169,16 @@ const UploadForm = ({ dispatch, state }) => {
       </InputGroup>
 
       {token.decoded.isAdmin && (
-        <InputGroup title="Debug:">
+        <InputGroup title="Admin:">
           <FormControlLabel
             control={
               <Checkbox
                 checked={state.debugMode}
-                onChange={(e) => dispatch(setDebugMode(e.target.checked))}
+                onChange={() => dispatch(toggleDebugMode())}
               />
             }
             label="Debug Mode"
+            sx={{ userSelect: "none" }}
           />
         </InputGroup>
       )}

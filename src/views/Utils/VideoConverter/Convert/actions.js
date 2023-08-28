@@ -1,9 +1,8 @@
 export const ConvertAction = Object.freeze({
   SET_VIDEO: "SET_VIDEO",
   SET_LOADING: "SET_LOADING",
-  SET_LANGUAGE: "SET_LANGUAGE",
-  SET_FORMAT: "SET_FORMAT",
-  SET_DEBUG_MODE: "SET_DEBUG_MODE",
+  SET_OPTION: "SET_OPTION",
+  TOGGLE_DEBUG_MODE: "TOGGLE_DEBUG_MODE",
   SET_SUBTITLES: "SET_SUBTITLES",
   SET_PROGRESS_UPDATE: "SET_PROGRESS_UPDATE",
   SET_DOWNLOAD_BLOB: "SET_DOWNLOAD_BLOB",
@@ -16,19 +15,13 @@ export const setVideo = (payload) => ({
   payload,
 });
 
-export const setLanguage = (payload) => ({
-  type: ConvertAction.SET_LANGUAGE,
+export const setOption = (payload) => ({
+  type: ConvertAction.SET_OPTION,
   payload,
 });
 
-export const setFormat = (payload) => ({
-  type: ConvertAction.SET_FORMAT,
-  payload,
-});
-
-export const setDebugMode = (payload) => ({
-  type: ConvertAction.SET_DEBUG_MODE,
-  payload,
+export const toggleDebugMode = () => ({
+  type: ConvertAction.TOGGLE_DEBUG_MODE,
 });
 
 export const setLoading = (payload) => ({

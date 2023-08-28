@@ -18,15 +18,15 @@ export const reducer = (state, action) => {
         ...state,
         video: action.payload,
       };
-    case ConvertAction.SET_LANGUAGE:
+    case ConvertAction.SET_OPTION:
       return {
         ...state,
-        language: action.payload,
+        [action.payload.name]: action.payload.value,
       };
-    case ConvertAction.SET_FORMAT:
+    case ConvertAction.TOGGLE_DEBUG_MODE:
       return {
         ...state,
-        format: action.payload,
+        debugMode: !state.debugMode,
       };
     case ConvertAction.SET_SUBTITLES:
       return {
