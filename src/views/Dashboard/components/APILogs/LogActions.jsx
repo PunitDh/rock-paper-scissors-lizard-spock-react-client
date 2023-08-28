@@ -1,5 +1,5 @@
 import { Button, MenuItem, Select } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
 import LimitSelect from "src/components/shared/LimitSelect";
 import { FlexBox } from "src/components/shared/styles";
@@ -24,7 +24,6 @@ const whiteStyle = {
 
 const LogActions = ({ request, onSelect, onClearLogs }) => {
   const [confirmOpen, setConfirmOpen] = useState(false);
-
   const handleClose = () => setConfirmOpen(false);
 
   return (

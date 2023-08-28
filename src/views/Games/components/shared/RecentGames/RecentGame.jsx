@@ -7,18 +7,18 @@ import {
   TimelineSeparator,
 } from "@mui/lab";
 import { Bold } from "src/components/shared/styles";
-import { calculateScore } from "src/utils";
+import { calculateScore, formatDate } from "src/utils";
 
 const RecentGame = ({ game }) => {
-  const formatDate = (date) =>
-    new Intl.DateTimeFormat(undefined, {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-    }).format(new Date(date));
+  // const formatDate = (date) =>
+  //   new Intl.DateTimeFormat(undefined, {
+  //     day: "numeric",
+  //     month: "short",
+  //     year: "numeric",
+  //     hour: "numeric",
+  //     minute: "numeric",
+  //     second: "numeric",
+  //   }).format(new Date(date));
 
   const score = calculateScore(game);
 

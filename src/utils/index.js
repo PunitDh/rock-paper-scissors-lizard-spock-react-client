@@ -12,6 +12,16 @@ export function isSuccess(response) {
   );
 }
 
+export const formatDate = (date) =>
+    new Intl.DateTimeFormat(undefined, {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+    }).format(new Date(date));
+
 export function calculateScore(game) {
   const score = {};
 

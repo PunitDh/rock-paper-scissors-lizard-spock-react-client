@@ -4,6 +4,7 @@ import { useAPI } from "src/hooks";
 import { useEffect, useRef, useState } from "react";
 import { Typography } from "@mui/material";
 import LogActions from "./LogActions";
+import { formatDate } from "src/utils";
 
 const LogMessage = styled(Typography)(({ theme, type }) => ({
   color: theme.palette[type].main,
@@ -62,6 +63,7 @@ const APILogs = () => {
     >
       {logs.map((message) => (
         <LogMessage type={message.type} key={message.id}>
+          [{message.type.toUpperCase()}] [{formatDate(message.time)}]{" "}
           {message.content}
         </LogMessage>
       ))}
