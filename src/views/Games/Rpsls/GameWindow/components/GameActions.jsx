@@ -44,7 +44,7 @@ const GameActions = ({ onMaxRoundsChange, maxRounds, gameId, opponent }) => {
         <RestartGameIcon onClick={() => setConfirmReset(true)} />
       </Tooltip>
       <LimitSelect
-        onChange={onMaxRoundsChange}
+        onChange={(e) => onMaxRoundsChange(e.target.value)}
         value={maxRounds}
         limits={limits}
       />

@@ -1,9 +1,9 @@
 import { Button, MenuItem, Select } from "@mui/material";
-import { uniqueId } from "lodash";
 import React, { useState } from "react";
 import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
 import LimitSelect from "src/components/shared/LimitSelect";
 import { FlexBox } from "src/components/shared/styles";
+import { limits, logTypes, times } from "./constants";
 
 const whiteStyle = {
   color: "white",
@@ -24,26 +24,6 @@ const whiteStyle = {
 
 const LogActions = ({ request, onSelect, onClearLogs }) => {
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const limits = [50, 100, 200];
-  const times = [
-    {
-      label: "ALL",
-      value: 0,
-    },
-    {
-      label: "Last 15 mins",
-      value: 15 * 60 * 1000,
-    },
-    {
-      label: "Last 1 hour",
-      value: 3600 * 1000,
-    },
-    {
-      label: "Last 1 day",
-      value: 3600 * 1000 * 24,
-    },
-  ];
-  const logTypes = ["ALL", "INFO", "ERROR", "WARN"];
 
   const handleClose = () => setConfirmOpen(false);
 
