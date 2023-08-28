@@ -54,7 +54,7 @@ const APILogs = () => {
     >
       {state.logs.map((message) => (
         <LogMessage type={message.type} key={message.id}>
-          [{message.type.toUpperCase()}] [{formatDate(message.time)}]{" "}
+          [{message.type.toUpperCase()}] [{formatDate(message.timeStamp)}]{" "}
           {message.content}
         </LogMessage>
       ))}
