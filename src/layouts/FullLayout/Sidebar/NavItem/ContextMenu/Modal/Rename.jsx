@@ -9,10 +9,13 @@ import {
 } from "@mui/material";
 import { Bold } from "src/components/shared/styles";
 import { useAPI, useToken } from "src/hooks";
+import { showConfirmRename } from "../../actions";
 
-export default function RenameGameModal({ handleClose, open, selectedGame }) {
+export default function RenameGameModal({ state, dispatch, selectedGame }) {
   const api = useAPI();
   const token = useToken();
+
+  const handleClose = () => dispatch(showConfirmRename(false));
 
   const handleRename = (e) => {
     e.preventDefault();
@@ -26,7 +29,7 @@ export default function RenameGameModal({ handleClose, open, selectedGame }) {
 
   return (
     <div>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={state.confirmRename} onClose={handleClose}>
         <DialogTitle>Rename Game</DialogTitle>
         <form onSubmit={handleRename}>
           <DialogContent>

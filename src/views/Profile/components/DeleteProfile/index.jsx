@@ -22,10 +22,7 @@ const DeleteProfile = () => {
 
   const handleClose = (newValue) => {
     setConfirm(false);
-
-    if (newValue) {
-      setValue(newValue);
-    }
+    newValue && setValue(newValue);
   };
 
   const handleConfirm = () => setConfirm(true);

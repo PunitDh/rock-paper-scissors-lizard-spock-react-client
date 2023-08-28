@@ -14,12 +14,21 @@ import {
   TextField,
   Tooltip,
 } from "@mui/material";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { languages } from "src/assets";
 import { TitledButton } from "src/components/shared/styles";
-import { useNotification, useToken } from "src/hooks";
+import { useAPI, useNotification, useToken } from "src/hooks";
 import InputGroup from "./InputGroup";
 import { ResponsiveForm } from "../styles";
+import {
+  resetOutput,
+  setDebugMode,
+  setFormat,
+  setLanguage,
+  setLoading,
+  setSubtitles,
+  setVideo,
+} from "./actions";
 
 const FileInput = styled(TextField)({
   display: "none",
@@ -46,54 +55,46 @@ const ResponsiveBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-const UploadForm = ({
-  subtitles,
-  setSubtitles,
-  onSubmit,
-  loading,
-  debugMode,
-  setDebugMode,
-  resetState,
-}) => {
+const UploadForm = ({ dispatch, state }) => {
   const fileRef = useRef();
-  const handleUpload = () => fileRef.current?.click();
-  const [video, setVideo] = useState(null);
-  const [request, setRequest] = useState({
-    language: "Spanish",
-    format: "vtt",
-  });
   const notification = useNotification();
   const token = useToken();
-
-  const handleChange = (e) =>
-    setRequest((request) => ({ ...request, [e.target.name]: e.target.value }));
+  const api = useAPI();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!video) return notification.error("A video file is required");
+    if (!state.video) return notification.error("A video file is required");
+    dispatch(resetOutput());
 
-    resetState();
     const formData = new FormData();
     const sessionId = Math.random().toString(36).slice(2, 9);
-    formData.append("file", video);
-    formData.append("language", request.language);
-    formData.append("format", request.format);
+    formData.append("file", state.video);
+    formData.append("language", state.language);
+    formData.append("format", state.format);
     formData.append("sessionId", sessionId);
-    if (debugMode && token.decoded.isAdmin) {
-      formData.append("debug", debugMode);
+    if (state.debugMode && token.decoded.isAdmin) {
+      formData.append("debug", state.debugMode);
     }
 
-    return onSubmit(formData, sessionId)
-      .then((data) => setSubtitles(data.payload))
+    dispatch(setLoading(true));
+    return api
+      .translateSubtitles(formData, sessionId)
+      .then((data) => dispatch(setSubtitles(data.payload)))
       .catch((data) => notification.error(data.payload));
   };
+
+  const handleFileUpload = (e) => dispatch(setVideo(e.target.files[0]));
 
   return (
     <ResponsiveForm onSubmit={handleSubmit}>
       <InputGroup title="Upload a video:">
         <FormLabel htmlFor="upload-video-file">
           <Tooltip title="Select a video file to upload">
-            <Fab color="primary" aria-label="add" onClick={handleUpload}>
+            <Fab
+              color="primary"
+              aria-label="add"
+              onClick={() => fileRef.current?.click()}
+            >
               <UploadFile />
             </Fab>
           </Tooltip>
@@ -102,19 +103,19 @@ const UploadForm = ({
             type="file"
             id="upload-video-file"
             inputRef={fileRef}
-            onChange={(e) => setVideo(e.target.files[0])}
+            onChange={handleFileUpload}
             InputProps={{ accept: "video/mp4,video/x-m4v,video/*" }}
           />
         </FormLabel>
       </InputGroup>
 
-      {video && (
+      {state.video && (
         <InputGroup title="Preview:">
-          <Video src={URL.createObjectURL(video)} controls>
+          <Video src={URL.createObjectURL(state.video)} controls>
             <track
               kind="subtitles"
-              label={request.language}
-              src={`${process.env.REACT_APP_SERVER_URL}/${subtitles.location}`}
+              label={state.language}
+              src={`${process.env.REACT_APP_SERVER_URL}/${state.subtitles.location}`}
             />
           </Video>
         </InputGroup>
@@ -126,9 +127,9 @@ const UploadForm = ({
           id="subtitle-language"
           name="language"
           size="small"
-          value={request.language}
+          value={state.language}
           maxRows={6}
-          onChange={handleChange}
+          onChange={(e) => dispatch(setLanguage(e.target.value))}
         >
           {languages.map((lang) => (
             <MenuItem key={lang} value={lang}>
@@ -143,8 +144,8 @@ const UploadForm = ({
           aria-labelledby="subtitle-output-format"
           defaultValue="vtt"
           name="format"
-          value={request.format}
-          onChange={handleChange}
+          value={state.format}
+          onChange={(e) => dispatch(setFormat(e.target.value))}
         >
           <FormControlLabel
             value="vtt"
@@ -172,8 +173,8 @@ const UploadForm = ({
           <FormControlLabel
             control={
               <Checkbox
-                checked={debugMode}
-                onChange={(e) => setDebugMode(e.target.checked)}
+                checked={state.debugMode}
+                onChange={(e) => dispatch(setDebugMode(e.target.checked))}
               />
             }
             label="Debug Mode"
@@ -182,11 +183,11 @@ const UploadForm = ({
       )}
 
       <ResponsiveBox>
-        {loading ? (
+        {state.loading ? (
           <CircularProgress />
         ) : (
           <TitledButton
-            title={`Generate Subtitles in ${request.language}`}
+            title={`Generate Subtitles in ${state.language}`}
             variant="contained"
             type="submit"
           >

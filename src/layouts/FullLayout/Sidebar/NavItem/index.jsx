@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import {
   ListItemIcon,
   ListItem,
@@ -8,10 +8,12 @@ import {
   useTheme,
 } from "@mui/material";
 import ContextMenu from "./ContextMenu";
-import RenameGameModal from "./ContextMenu/RenameGameModal";
-import DeleteConfirmation from "./ContextMenu/DeleteConfirmation";
+import RenameGameModal from "./ContextMenu/Modal/Rename";
+import DeleteConfirmation from "./ContextMenu/Modal/Delete";
 import { FlexBox } from "src/components/shared/styles";
 import { NavLink } from "react-router-dom";
+import { initialState, reducer } from "./reducer";
+import { resetAnchorEl, setAnchorEl, showConfirmRename } from "./actions";
 
 const ListItemStyled = styled(ListItem)(({ theme, level }) => ({
   whiteSpace: "nowrap",
@@ -52,27 +54,12 @@ const NavItem = ({
   closeSideBar,
   hasContextMenu = false,
 }) => {
-  const [anchorEl, setAnchorEl] = useState(false);
-  const [rename, showRename] = useState(false);
-  const [deleteConfirmation, showDeleteConfirmation] = useState(false);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const handleContextMenu = (e) => {
     e.preventDefault();
-    setAnchorEl(e.currentTarget);
+    dispatch(setAnchorEl(e.currentTarget));
   };
-
-  const handleRenameOpen = () => {
-    showRename(true);
-    setAnchorEl(null);
-  };
-
-  const handleDeleteConfirm = () => {
-    showDeleteConfirmation(true);
-    setAnchorEl(null);
-  };
-
-  const handleRenameClose = () => showRename(false);
-  const handleDeleteConfirmationClose = () => showDeleteConfirmation(false);
 
   const handleClick = () => {
     if (onClick) onClick();
@@ -83,29 +70,28 @@ const NavItem = ({
   const theme = useTheme();
   const itemIcon = <Icon stroke={1.5} size="1.3rem" />;
 
+  console.log({state});
+
   return (
     <>
-      {hasContextMenu && anchorEl && (
+      {hasContextMenu && state.anchorEl && (
         <ContextMenu
-          open={anchorEl}
-          setOpen={setAnchorEl}
-          handleRenameOpen={handleRenameOpen}
-          handleDeleteConfirm={handleDeleteConfirm}
+          state={state}
+          dispatch={dispatch}
           ariaLabelledBy={item.id}
-          anchorEl={anchorEl}
         />
       )}
-      {rename && (
+      {state.confirmRename && (
         <RenameGameModal
-          open={rename}
-          handleClose={handleRenameClose}
+          state={state}
+          dispatch={dispatch}
           selectedGame={item}
         />
       )}
-      {deleteConfirmation && (
+      {state.confirmDelete && (
         <DeleteConfirmation
-          open={deleteConfirmation}
-          handleClose={handleDeleteConfirmationClose}
+          state={state}
+          dispatch={dispatch}
           selectedGame={item}
         />
       )}
@@ -128,9 +114,9 @@ const NavItem = ({
           selected={pathDirect === item.href}
           target={item.external ? "_blank" : ""}
           onClick={handleClick}
-          aria-controls={anchorEl ? "demo-positioned-menu" : undefined}
+          aria-controls={state.anchorEl ? "demo-positioned-menu" : undefined}
           aria-haspopup="true"
-          aria-expanded={anchorEl ? "true" : undefined}
+          aria-expanded={state.anchorEl ? "true" : undefined}
         >
           <ListItemIcon
             sx={{

@@ -1,6 +1,6 @@
 import { useAPI, useSocket } from "src/hooks";
 import { SocketResponse } from "src/utils/constants";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import InputGroup from "./InputGroup";
 import { List, ListItem, ListItemAvatar } from "@mui/material";
 import { DoneOutline } from "@mui/icons-material";
@@ -13,25 +13,23 @@ import {
   ResponsiveTextField,
   ResponsiveTypography,
 } from "../styles";
+import { setDownloadBlob, setProgressUpdate } from "./actions";
 
-const Output = ({ updates, setUpdates, subtitles, loading, debugMode }) => {
+const Output = ({ state, dispatch }) => {
   const socket = useSocket();
   const api = useAPI();
-  const [downloadBlob, setDownloadBlob] = useState();
 
   useEffect(() => {
-    if (subtitles.location && !debugMode) {
+    if (state.subtitles.location && !state.debugMode) {
       api
-        .getDownloadFile(subtitles.location)
-        .then((response) =>
-          setDownloadBlob(URL.createObjectURL(response.data))
-        );
+        .getDownloadFile(state.subtitles.location)
+        .then((response) => dispatch(setDownloadBlob(response.data)));
     }
-  }, [subtitles.location]);
+  }, [state.subtitles.location]);
 
   useEffect(() => {
     socket.on(SocketResponse.PROGRESS_UPDATE, (update) =>
-      setUpdates((updates) => updates.concat(update))
+      dispatch(setProgressUpdate(update))
     );
 
     return () => {
@@ -41,10 +39,10 @@ const Output = ({ updates, setUpdates, subtitles, loading, debugMode }) => {
 
   return (
     <>
-      {(loading || subtitles.translation) && (
+      {(state.loading || state.subtitles.translation) && (
         <InputGroup title="Progress Update:">
           <List dense={false}>
-            {updates.map((update) => (
+            {state.updates.map((update) => (
               <ListItem key={update} variant="body-2">
                 <ListItemAvatar>
                   <DoneOutline sx={{ color: "green" }} />
@@ -56,7 +54,7 @@ const Output = ({ updates, setUpdates, subtitles, loading, debugMode }) => {
         </InputGroup>
       )}
 
-      {subtitles.translation && (
+      {state.subtitles.translation && (
         <ResponsiveFlexBox flexDirection="column" gap="1rem" width="100%">
           <ResponsiveTypography variant="subtitle1">
             Output:
@@ -67,21 +65,26 @@ const Output = ({ updates, setUpdates, subtitles, loading, debugMode }) => {
               multiline
               minRows={15}
               InputProps={{ style: { fontFamily: "monospace" } }}
-              defaultValue={subtitles.translation}
+              defaultValue={state.subtitles.translation}
             />
           </IndentedBox>
 
           <ResponsiveTypography variant="subtitle1">
-            Download Subtitles as a <code>.{subtitles.format}</code> file
+            Download Subtitles as a <code>.{state.subtitles.format}</code> file
           </ResponsiveTypography>
           <IndentedBox>
             <Tooltip title="Download subtitles file">
-              {downloadBlob && (
-                <a href={downloadBlob} download={subtitles.location}>
+              {state.downloadBlob ? (
+                <a
+                  href={state.downloadBlob}
+                  download={state.subtitles.location}
+                >
                   <Fab color="primary" aria-label="add">
                     <Download />
                   </Fab>
                 </a>
+              ) : (
+                <></>
               )}
             </Tooltip>
           </IndentedBox>

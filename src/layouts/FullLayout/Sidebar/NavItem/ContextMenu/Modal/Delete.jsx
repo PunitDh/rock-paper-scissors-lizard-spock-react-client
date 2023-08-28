@@ -8,14 +8,13 @@ import {
 } from "@mui/material";
 import { Bold } from "src/components/shared/styles";
 import { useAPI, useToken } from "src/hooks";
+import { showConfirmDelete } from "../../actions";
 
-export default function DeleteConfirmation({
-  handleClose,
-  open,
-  selectedGame,
-}) {
+export default function DeleteConfirmation({ state, dispatch, selectedGame }) {
   const api = useAPI();
   const token = useToken();
+
+  const handleClose = () => dispatch(showConfirmDelete(false));
 
   const handleDelete = (e) => {
     e.preventDefault();
@@ -29,7 +28,7 @@ export default function DeleteConfirmation({
 
   return (
     <div>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={state.confirmDelete} onClose={handleClose}>
         <DialogTitle>Delete Game</DialogTitle>
         <form onSubmit={handleDelete}>
           <DialogContent>

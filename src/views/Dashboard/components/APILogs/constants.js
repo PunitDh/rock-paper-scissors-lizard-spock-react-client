@@ -1,6 +1,6 @@
-export const limits = [50, 100, 200];
+export const limits = Object.freeze([50, 100, 200]);
 
-export const times = [
+export const times = Object.freeze([
   {
     label: "ALL",
     value: 0,
@@ -17,6 +17,6 @@ export const times = [
     label: "Last 1 day",
     value: 3600 * 1000 * 24,
   },
-];
+]);
 
-export const logTypes = ["ALL", "INFO", "ERROR", "WARN"];
+export const logTypes = Object.freeze(["ALL", "INFO", "ERROR", "WARN"]);

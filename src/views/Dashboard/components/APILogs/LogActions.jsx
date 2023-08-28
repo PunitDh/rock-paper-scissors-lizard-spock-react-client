@@ -4,6 +4,7 @@ import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
 import LimitSelect from "src/components/shared/LimitSelect";
 import { FlexBox } from "src/components/shared/styles";
 import { limits, logTypes, times } from "./constants";
+import { setLimit, setTime, setType } from "./actions";
 
 const whiteStyle = {
   color: "white",
@@ -22,9 +23,8 @@ const whiteStyle = {
   },
 };
 
-const LogActions = ({ request, onSelect, onClearLogs }) => {
+const LogActions = ({ state, dispatch, onClearLogs }) => {
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const handleClose = () => setConfirmOpen(false);
 
   return (
     <FlexBox gap="0.5rem">
@@ -32,7 +32,7 @@ const LogActions = ({ request, onSelect, onClearLogs }) => {
         id="clear-logs-confirmation-dialog"
         keepMounted
         open={confirmOpen}
-        onCancel={handleClose}
+        onCancel={() => setConfirmOpen(false)}
         onConfirm={onClearLogs}
         title="Clear Logs"
         confirmBtnText="Clear"
@@ -48,10 +48,10 @@ const LogActions = ({ request, onSelect, onClearLogs }) => {
       <Select
         labelId="log-time"
         id="log-time"
-        value={request.time}
+        value={state.time}
         size="small"
         name="time"
-        onChange={onSelect}
+        onChange={(e) => dispatch(setTime(e.target.value))}
         sx={whiteStyle}
       >
         {times.map((time) => (
@@ -63,10 +63,10 @@ const LogActions = ({ request, onSelect, onClearLogs }) => {
       <Select
         labelId="log-type"
         id="log-type"
-        value={request.type}
+        value={state.type}
         size="small"
         name="type"
-        onChange={onSelect}
+        onChange={(e) => dispatch(setType(e.target.value))}
         sx={whiteStyle}
       >
         {logTypes.map((type) => (
@@ -77,9 +77,9 @@ const LogActions = ({ request, onSelect, onClearLogs }) => {
       </Select>
       <LimitSelect
         sx={whiteStyle}
-        value={request.limit}
+        value={state.limit}
         limits={limits}
-        onChange={onSelect}
+        onChange={(e) => dispatch(setLimit(e.target.value))}
       />
     </FlexBox>
   );

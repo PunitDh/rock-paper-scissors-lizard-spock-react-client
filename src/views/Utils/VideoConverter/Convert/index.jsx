@@ -1,21 +1,12 @@
-import { useState } from "react";
+import { useReducer } from "react";
 import DashboardCard from "src/components/shared/DashboardCard";
-import { useLoading } from "src/hooks";
 import { ResponsiveFlexBox } from "../styles";
-import useAPI from "src/hooks/useAPI";
 import UploadForm from "./UploadForm";
 import Output from "./Output";
+import { reducer, initialState } from "./reducer";
 
 const Convert = () => {
-  const [subtitles, setSubtitles] = useState({});
-  const [debugMode, setDebugMode] = useState(true);
-  const [updates, setUpdates] = useState([]);
-  const api = useAPI();
-  const [translateSubtitles, loading] = useLoading(api.translateSubtitles);
-  const resetState = () => {
-    setUpdates([]);
-    setSubtitles({});
-  };
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
     <DashboardCard
@@ -27,22 +18,8 @@ const Convert = () => {
         gap="2rem"
         alignItems="flex-start"
       >
-        <UploadForm
-          subtitles={subtitles}
-          setSubtitles={setSubtitles}
-          onSubmit={translateSubtitles}
-          loading={loading}
-          debugMode={debugMode}
-          setDebugMode={setDebugMode}
-          resetState={resetState}
-        />
-        <Output
-          subtitles={subtitles}
-          loading={loading}
-          debugMode={debugMode}
-          updates={updates}
-          setUpdates={setUpdates}
-        />
+        <UploadForm state={state} dispatch={dispatch} />
+        <Output state={state} dispatch={dispatch} />
       </ResponsiveFlexBox>
     </DashboardCard>
   );

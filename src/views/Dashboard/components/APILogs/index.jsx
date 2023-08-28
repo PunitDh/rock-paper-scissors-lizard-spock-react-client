@@ -1,10 +1,12 @@
 import styled from "@emotion/styled";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import { useAPI } from "src/hooks";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import { Typography } from "@mui/material";
 import LogActions from "./LogActions";
 import { formatDate } from "src/utils";
+import { reducer, initialState } from "./reducer";
+import { setLogs } from "./actions";
 
 const LogMessage = styled(Typography)(({ theme, type }) => ({
   color: theme.palette[type].main,
@@ -17,32 +19,23 @@ const LogMessage = styled(Typography)(({ theme, type }) => ({
 }));
 
 const APILogs = () => {
-  const [request, setRequest] = useState({
-    type: "ALL",
-    limit: 50,
-    time: 0,
-  });
-  const [logs, setLogs] = useState([]);
+  const [state, dispatch] = useReducer(reducer, initialState);
   const scrollRef = useRef();
   const api = useAPI();
 
   const handleClearLogs = () => {
-    api.clearLogs().then((data) => setLogs(data.payload));
-  };
-
-  const handleRequestChange = (e) => {
-    setRequest((request) => ({ ...request, [e.target.name]: e.target.value }));
+    api.clearLogs().then((data) => dispatch(setLogs(data.payload)));
   };
 
   useEffect(() => {
-    api.getLogs(request).then((data) => setLogs(data.payload));
-  }, [request]);
+    api.getLogs(state).then((data) => dispatch(setLogs(data.payload)));
+  }, [state.type, state.time, state.limit]);
 
   useEffect(() => {
     // scrollRef.current?.scrollIntoView();
-  }, [logs.length]);
+  }, [state.logs.length]);
 
-  console.log(logs);
+  console.log(state.logs);
 
   return (
     <DashboardCard
@@ -55,13 +48,13 @@ const APILogs = () => {
       }}
       action={
         <LogActions
-          request={request}
-          onSelect={handleRequestChange}
+          state={state}
+          dispatch={dispatch}
           onClearLogs={handleClearLogs}
         />
       }
     >
-      {logs.map((message) => (
+      {state.logs.map((message) => (
         <LogMessage type={message.type} key={message.id}>
           [{message.type.toUpperCase()}] [{formatDate(message.time)}]{" "}
           {message.content}
