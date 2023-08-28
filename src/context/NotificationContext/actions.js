@@ -1,8 +1,8 @@
 export const NotificationAction = Object.freeze({
   RESET_STATE: "RESET_STATE",
   SET_MESSAGE: "SET_MESSAGE",
-  OPEN_MESSAGE: "OPEN_MESSAGE",
-  CLOSE_MESSAGE: "CLOSE_MESSAGE",
+  SHOW_NOTIFICATION: "SHOW_NOTIFICATION",
+  CLOSE_NOTIFICATION: "CLOSE_NOTIFICATION",
 });
 
 export const setMessage = (payload) => ({
@@ -11,11 +11,11 @@ export const setMessage = (payload) => ({
 });
 
 export const showNotification = () => ({
-  type: NotificationAction.OPEN_MESSAGE,
+  type: NotificationAction.SHOW_NOTIFICATION,
 });
 
 export const closeNotification = () => ({
-  type: NotificationAction.CLOSE_MESSAGE,
+  type: NotificationAction.CLOSE_NOTIFICATION,
 });
 
 export const resetState = () => ({

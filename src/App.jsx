@@ -15,11 +15,9 @@ function App() {
       <NotificationProvider>
         <SocketProvider>
           <TokenProvider>
-            {/* <APIProvider> */}
-              <SocketListeners />
-              <CssBaseline />
-              {routing}
-            {/* </APIProvider> */}
+            <SocketListeners />
+            <CssBaseline />
+            {routing}
           </TokenProvider>
         </SocketProvider>
       </NotificationProvider>

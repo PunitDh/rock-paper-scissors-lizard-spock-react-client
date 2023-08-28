@@ -15,12 +15,12 @@ export const reducer = (state, action) => {
         ...action.payload,
         open: true,
       };
-    case NotificationAction.OPEN_MESSAGE:
+    case NotificationAction.SHOW_NOTIFICATION:
       return {
         ...state,
         open: true,
       };
-    case NotificationAction.CLOSE_MESSAGE:
+    case NotificationAction.CLOSE_NOTIFICATION:
     case NotificationAction.RESET_STATE:
     default:
       return initialState;
