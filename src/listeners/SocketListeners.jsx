@@ -2,7 +2,10 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { useAPI, useNotification, useSocket, useToken } from "src/hooks";
-import { setCurrentConversation } from "src/redux/conversationSlice";
+import {
+  openConversation,
+  startConversation,
+} from "src/redux/conversationSlice";
 import { deleteGameFromMenu, updateCurrentGameMenu } from "src/redux/menuSlice";
 import { setCurrentGame, updateCurrentGame } from "src/redux/playerSlice";
 import { setSiteSettings } from "src/redux/siteSlice";
@@ -20,6 +23,18 @@ const SocketListeners = () => {
   const handleResponse = (response, dispatchFunction) =>
     isSuccess(response)
       .then((payload) => dispatch(dispatchFunction(payload)))
+      .catch(notification.error);
+
+  const handleStartConversation = (response) =>
+    isSuccess(response)
+      .then((payload) =>
+        dispatch(
+          startConversation({
+            ...payload,
+            opener: payload.opener === token.decoded.id,
+          })
+        )
+      )
       .catch(notification.error);
 
   const handleToken = (response, successMessage, navigateTo = "/") =>
@@ -57,14 +72,12 @@ const SocketListeners = () => {
     socket.on(SocketResponse.PLAY_MOVE, (response) =>
       handleResponse(response, setCurrentGame)
     );
-    socket.on(SocketResponse.START_CONVERSATION, (response) =>
-      handleResponse(response, setCurrentConversation)
-    );
+    socket.on(SocketResponse.START_CONVERSATION, handleStartConversation);
     socket.on(SocketResponse.SEND_MESSAGE, (response) =>
-      handleResponse(response, setCurrentConversation)
+      handleResponse(response, openConversation)
     );
     socket.on(SocketResponse.MARK_AS_READ, (response) =>
-      handleResponse(response, setCurrentConversation)
+      handleResponse(response, openConversation)
     );
     socket.on(SocketResponse.RENAME_GAME, updateGame);
     socket.on(SocketResponse.CHANGE_ICON, updateGame);

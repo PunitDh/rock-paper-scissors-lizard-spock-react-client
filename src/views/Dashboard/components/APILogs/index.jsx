@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import { useAPI } from "src/hooks";
-import { useEffect, useReducer, useRef } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { Typography } from "@mui/material";
 import LogActions from "./LogActions";
 import { formatDate } from "src/utils";
@@ -20,20 +20,19 @@ const LogMessage = styled(Typography)(({ theme, type }) => ({
 
 const APILogs = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const scrollRef = useRef();
   const api = useAPI();
 
   const handleClearLogs = () => {
     api.clearLogs().then((data) => dispatch(setLogs(data.payload)));
   };
 
+  const scrollRef = useCallback((scrollNode) => {
+    scrollNode?.scrollIntoView();
+  }, [state.logs.length]);
+
   useEffect(() => {
     api.getLogs(state).then((data) => dispatch(setLogs(data.payload)));
   }, [state.type, state.time, state.limit]);
-
-  useEffect(() => {
-    // scrollRef.current?.scrollIntoView();
-  }, [state.logs.length]);
 
   return (
     <DashboardCard

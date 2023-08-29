@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useSelector } from "react-redux";
 import ChatBox from "./ChatBox";
-import { useEffect, useState } from "react";
+import { ConversationState } from "./constants";
 
 const Container = styled.div({
   position: "fixed",
@@ -16,21 +16,16 @@ const Container = styled.div({
 });
 
 const ChatBar = () => {
-  const { currentConversation } = useSelector((state) => state.conversation);
-  const [open, setOpen] = useState(0);
-
-  useEffect(() => {
-    setOpen(1);
-  }, [currentConversation?.messages.length]);
+  const { conversations } = useSelector((state) => state.conversation);
 
   return (
     <Container>
-      {currentConversation && (
-        <ChatBox open={open} conversation={currentConversation} />
+      {conversations.map(
+        (conversation) =>
+          conversation.state !== ConversationState.CLOSED && (
+            <ChatBox key={conversation.id} conversation={conversation} />
+          )
       )}
-      {/* {conversations.map((conversation) => (
-        <ChatBox key={conversation.id} conversation={conversation} />
-      ))} */}
     </Container>
   );
 };

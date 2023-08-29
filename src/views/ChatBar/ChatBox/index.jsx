@@ -2,20 +2,27 @@ import { Paper, Toolbar, Tooltip, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import { TextInput } from "./TextInput";
 import { Close } from "@mui/icons-material";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { useToken } from "src/hooks";
 import { MessageRight } from "./MessageRight";
 import { MessageLeft } from "./MessageLeft";
 import { getAvatar } from "src/assets";
 import { useDispatch } from "react-redux";
-import { setCurrentConversation } from "src/redux/conversationSlice";
+import {
+  closeConversation,
+  minimizeConversation,
+  openConversation,
+} from "src/redux/conversationSlice";
+import { ConversationState, formatDate } from "../constants";
 
-const CloseButton = styled(Close)({
+const CloseButton = styled(Close)(({ theme }) => ({
   cursor: "pointer",
+  backgroundColor: theme.palette.primary.main,
+  borderRadius: "50%",
   "&:hover": {
-    color: "#777",
+    backgroundColor: theme.palette.primary.dark,
   },
-});
+}));
 
 const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
@@ -49,54 +56,61 @@ const MessageBody = styled(Paper)({
   height: "calc( 100% - 80px )",
 });
 
-function ChatBox({ open, conversation }) {
-  const [maximized, setMaximized] = useState(open);
+function ChatBox({ conversation }) {
   const dispatch = useDispatch();
   const [toolbarHeight, setToolbarHeight] = useState();
-  const toolbarRef = useRef();
-  const scrollToBottomRef = useRef();
   const token = useToken();
+  const { messages } = conversation;
+
+  const toolbarRef = useCallback((toolbarNode) => {
+    const rect = toolbarNode?.getBoundingClientRect();
+    if (rect) {
+      setToolbarHeight(rect.bottom - rect.top);
+    }
+  }, []);
+
+  const scrollToBottomRef = useCallback(
+    (node) => {
+      node?.scrollIntoView();
+    },
+    [messages.length]
+  );
+
+  const isMinimized = conversation.state === ConversationState.MINIMIZED;
+  const isOpen = conversation.state === ConversationState.OPEN;
+
+  const closeChatBox = (e) => {
+    e.stopPropagation();
+    dispatch(closeConversation(conversation));
+  };
+
+  const toggleMinimize = () => {
+    if (isOpen) return dispatch(minimizeConversation(conversation));
+    if (isMinimized) return dispatch(openConversation(conversation));
+  };
+
   const receiver = conversation.players.find(
     (player) => player.id !== token.decoded.id
   );
-  const allRead = conversation.messages
+
+  const allRead = messages
     .filter((message) => message.sender !== token.decoded.id)
     .every((message) => message.read);
 
-  const closeChatBox = () => {
-    dispatch(setCurrentConversation(null));
-    setMaximized(0);
-  };
-
-  const maximize = () => setMaximized((maximized) => Math.abs(maximized - 1));
-
-  useEffect(() => {
-    if (toolbarRef.current) {
-      setToolbarHeight(getComputedStyle(toolbarRef.current));
-    }
-  }, [maximized]);
-
-  useEffect(() => {
-    scrollToBottomRef.current?.scrollIntoView();
-    setMaximized(1);
-  }, [conversation.messages?.length]);
-
-  const formatDate = (date) =>
-    new Intl.DateTimeFormat("en-AU", {
-      dateStyle: "short",
-      timeStyle: "short",
-    }).format(new Date(date));
-
   return (
-    <StyledPaper maximized={maximized} toolbarheight={toolbarHeight?.height}>
-      <ToolbarStyled ref={toolbarRef} id="chat-toolbar" onClick={maximize}>
-        <Typography>Chat</Typography>
+    <StyledPaper maximized={Number(isOpen)} toolbarheight={toolbarHeight}>
+      <ToolbarStyled
+        ref={toolbarRef}
+        id="chat-toolbar"
+        onClick={toggleMinimize}
+      >
+        <Typography>Chat with {receiver.firstName}</Typography>
         <Tooltip title="Close chat">
           <CloseButton onClick={closeChatBox} />
         </Tooltip>
       </ToolbarStyled>
       <MessageBody>
-        {conversation.messages.map((message) =>
+        {messages.map((message) =>
           message.sender === token.decoded.id ? (
             <MessageRight
               key={message._id}
