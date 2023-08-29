@@ -79,7 +79,10 @@ const UploadForm = ({ dispatch, state }) => {
     return api
       .translateSubtitles(formData, sessionId)
       .then((data) => dispatch(setSubtitles(data.payload)))
-      .catch((data) => notification.error(data.payload));
+      .catch((data) => {
+        dispatch(setLoading(false));
+        notification.error(data.payload);
+      });
   };
 
   const handleSetOption = (e) => dispatch(setOption(e.target));

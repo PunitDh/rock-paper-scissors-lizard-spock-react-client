@@ -22,7 +22,9 @@ const Notification = ({
         variant="filled"
         severity={notification.type}
       >
-        {String(notification.message)}
+        {typeof notification.message === "object"
+          ? JSON.stringify(notification.message)
+          : notification.message}
       </WideAlert>
     </Snackbar>
   ) : null;
