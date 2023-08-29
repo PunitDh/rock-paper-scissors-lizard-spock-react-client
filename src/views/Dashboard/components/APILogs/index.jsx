@@ -26,9 +26,12 @@ const APILogs = () => {
     api.clearLogs().then((data) => dispatch(setLogs(data.payload)));
   };
 
-  const scrollRef = useCallback((scrollNode) => {
-    scrollNode?.scrollIntoView();
-  }, [state.logs.length]);
+  const scrollRef = useCallback(
+    (scrollNode) => {
+      scrollNode?.scrollIntoView();
+    },
+    [state.logs.length]
+  );
 
   useEffect(() => {
     api.getLogs(state).then((data) => dispatch(setLogs(data.payload)));

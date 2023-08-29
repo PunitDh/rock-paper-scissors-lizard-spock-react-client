@@ -76,8 +76,8 @@ function ChatBox({ conversation }) {
     [messages.length]
   );
 
-  const isMinimized = conversation.state === ConversationState.MINIMIZED;
-  const isOpen = conversation.state === ConversationState.OPEN;
+  const isMinimized = conversation.status === ConversationState.MINIMIZED;
+  const isOpen = conversation.status === ConversationState.OPEN;
 
   const closeChatBox = (e) => {
     e.stopPropagation();
