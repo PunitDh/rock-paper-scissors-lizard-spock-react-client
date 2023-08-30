@@ -1,4 +1,4 @@
-import { ColorLens, ContentCut, VideoCall } from "@mui/icons-material";
+import { Calculate, ColorLens, ContentCut, VideoCall } from "@mui/icons-material";
 import { createSlice } from "@reduxjs/toolkit";
 import {
   IconDashboard,
@@ -58,6 +58,12 @@ export const menuSlice = createSlice({
 
     [CURRENT_GAMES]: [],
     Utilities: [
+      {
+        id: uniqueId(),
+        title: "Calculator",
+        icon: Calculate,
+        href: "/utils/calculator",
+      },
       {
         id: uniqueId(),
         title: "Color Picker",

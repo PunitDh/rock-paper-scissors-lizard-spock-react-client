@@ -11,8 +11,9 @@ const Dashboard = Loadable(lazy(() => import("../views/Dashboard")));
 const VideoConverter = Loadable(
   lazy(() => import("../views/Utils/VideoConverter"))
 );
-const ColorConverter = Loadable(
-  lazy(() => import("../views/Utils/ColorPicker"))
+const ColorPicker = Loadable(lazy(() => import("../views/Utils/ColorPicker")));
+const ReactCalculator = Loadable(
+  lazy(() => import("../views/Utils/ReactCalculator"))
 );
 const RpslsHome = Loadable(lazy(() => import("../views/Games/Rpsls")));
 const TicTacToeHome = Loadable(lazy(() => import("../views/Games/TicTacToe")));
@@ -63,7 +64,8 @@ const Router = [
     children: [
       { path: "", element: <Utils /> },
       { path: "video", exact: true, element: <VideoConverter /> },
-      { path: "color", exact: true, element: <ColorConverter /> },
+      { path: "color", exact: true, element: <ColorPicker /> },
+      { path: "calculator", exact: true, element: <ReactCalculator /> },
     ],
   },
   {

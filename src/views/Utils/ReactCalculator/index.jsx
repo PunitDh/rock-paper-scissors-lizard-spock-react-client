@@ -1,14 +1,14 @@
 import { Box, Grid } from "@mui/material";
 import PageContainer from "src/components/container/PageContainer";
-import Picker from "./Picker";
+import Calculator from "./Calculator";
 
-export default function ColorPicker() {
+export default function ReactCalculator() {
   return (
-    <PageContainer title="Color Picker">
+    <PageContainer title="React Calculator">
       <Box>
         <Grid container spacing={3}>
           <Grid item xs={12} lg={12}>
-            <Picker />
+            <Calculator />
           </Grid>
         </Grid>
       </Box>

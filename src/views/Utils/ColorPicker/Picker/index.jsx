@@ -97,7 +97,7 @@ const Picker = () => {
         alignItems="flex-start"
       >
         <Container>
-          <canvas ref={canvas} onClick={handleClick}></canvas>
+          <canvas ref={canvas} onClick={handleClick} />
           <Carat caratposition={(state.carat / state.maxCarat) * maxWidth} />
         </Container>
         <Slider
