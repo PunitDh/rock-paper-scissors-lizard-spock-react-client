@@ -18,4 +18,9 @@ export const CalculatorButton = styled(Button)({
   maxWidth: "1rem",
   textAlign: "center",
   border: "1px solid gray",
+  textTransform: "none",
+});
+
+export const Sup = styled("sup")({
+  fontSize: "0.4rem",
 });

@@ -1,10 +1,12 @@
 import { FlexBox } from "src/components/shared/styles";
-import CalcButton from "./CalcButton";
+import CalcButton from "./components/CalcButton";
+import ClearButton from "./components/ClearButton";
 
 function OperationsBox({ state, dispatch }) {
-  const operations = ["+", "-", "x", "/"];
+  const operations = ["+", "-", "×", "÷"];
   return (
     <FlexBox flexDirection="column">
+      <ClearButton dispatch={dispatch} />
       {operations.map((operation) => (
         <CalcButton
           key={operation}

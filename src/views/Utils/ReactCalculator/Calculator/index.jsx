@@ -9,14 +9,14 @@ import { FlexBox } from "src/components/shared/styles";
 const Calculator = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const mdUp = useMediaQuery((theme) => theme.breakpoints.up("md"));
-
+  console.log(state);
   return (
     <DashboardCard sx={{ height: "100%" }} title="Calculator">
       <FlexBox
         flexDirection="column"
         gap="2rem"
         alignItems="flex-start"
-        width={mdUp ? "40%" : "100%"}
+        width={mdUp ? "45%" : "100%"}
       >
         <IOBox state={state} />
         <ButtonsBox state={state} dispatch={dispatch} />

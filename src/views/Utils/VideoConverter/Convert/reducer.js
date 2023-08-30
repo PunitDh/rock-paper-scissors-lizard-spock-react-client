@@ -52,8 +52,8 @@ export const reducer = (state, action) => {
     case ConvertAction.RESET_OUTPUT:
       return {
         ...state,
-        updates: [],
-        subtitles: {},
+        updates: initialState.updates,
+        subtitles: initialState.subtitles,
       };
     case ConvertAction.RESET_STATE:
     default:

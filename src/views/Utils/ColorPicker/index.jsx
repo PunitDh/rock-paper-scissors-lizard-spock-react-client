@@ -6,7 +6,7 @@ export default function ColorPicker() {
   return (
     <PageContainer title="Color Picker">
       <Box>
-        <Grid container spacing={3}>
+        <Grid>
           <Grid item xs={12} lg={12}>
             <Picker />
           </Grid>

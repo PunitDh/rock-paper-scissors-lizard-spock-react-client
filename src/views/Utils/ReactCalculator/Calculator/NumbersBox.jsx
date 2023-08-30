@@ -1,13 +1,13 @@
 import { FlexBox } from "src/components/shared/styles";
-import CalcButton from "./CalcButton";
-import ClearButton from "./ClearButton";
-import EvalButton from "./EvalButton";
+import CalcButton from "./components/CalcButton";
+import EvalButton from "./components/EvalButton";
 
 const NumbersBox = ({ state, dispatch }) => {
   const numberGroups = [
-    [9, 8, 7],
-    [6, 5, 4],
-    [3, 2, 1],
+    ["(", ")", "%"],
+    [7, 8, 9],
+    [4, 5, 6],
+    [1, 2, 3],
   ];
 
   return (
@@ -25,8 +25,8 @@ const NumbersBox = ({ state, dispatch }) => {
         </FlexBox>
       ))}
       <FlexBox justifyContent="flex-end">
-        <ClearButton dispatch={dispatch} />
         <CalcButton state={state} dispatch={dispatch} value="0" />
+        <CalcButton state={state} dispatch={dispatch} value="." />
         <EvalButton state={state} dispatch={dispatch} />
       </FlexBox>
     </FlexBox>

@@ -1,12 +1,10 @@
-import { Tooltip } from "@mui/material";
-import { resetOutput, setEvaled, setInput } from "./actions";
-import { CalculatorButton } from "./styles";
+import { resetOutput, setInput } from "../actions";
+import { CalculatorButton } from "../styles";
 
 function CalcButton({ value, state, dispatch, operation }) {
   const handleClick = () => {
     if (state.evaled) {
       dispatch(resetOutput());
-      dispatch(setEvaled(false));
       if (operation) {
         dispatch(setInput(state.output.toString().concat(value)));
       } else {
@@ -17,13 +15,7 @@ function CalcButton({ value, state, dispatch, operation }) {
     }
   };
 
-  return (
-    <Tooltip title={value} disableInteractive>
-      <CalculatorButton onClick={handleClick} type="button">
-        {value}
-      </CalculatorButton>
-    </Tooltip>
-  );
+  return <CalculatorButton onClick={handleClick}>{value}</CalculatorButton>;
 }
 
 export default CalcButton;
