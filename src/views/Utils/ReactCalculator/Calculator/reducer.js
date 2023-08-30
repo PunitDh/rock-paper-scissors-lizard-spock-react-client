@@ -1,7 +1,7 @@
 import { CalculatorAction } from "./actions";
 
 export const initialState = {
-  input: "",
+  input: "4sin(90)+8cos(10)+9tan(80)+4log(4)+2.5ln(5)+24atan(4)+14Ans+14E-4π-2√3",
   output: 0,
   evaled: false,
   deg: false,

@@ -13,7 +13,7 @@ function EvalButton({ state, dispatch }) {
         .replaceAll(")(", ")*(")
         .replaceAll(
           /(\d+)(?=\s*(atan|acos|asin|sin|cos|tan|log|ln|Ans|E|π|√))/g,
-          "$&*"
+          "$&* "
         )
         .replaceAll("ππ", "π*π")
         .replaceAll("π", "Math.PI")
