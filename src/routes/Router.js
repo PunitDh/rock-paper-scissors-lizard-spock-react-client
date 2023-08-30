@@ -4,19 +4,18 @@ import Loadable from "../components/shared/Loadable";
 
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import("../layouts/FullLayout")));
-const BlankLayout = Loadable(
-  lazy(() => import("../layouts/BlankLayout"))
-);
+const BlankLayout = Loadable(lazy(() => import("../layouts/BlankLayout")));
 
 /* ****Pages***** */
 const Dashboard = Loadable(lazy(() => import("../views/Dashboard")));
 const VideoConverter = Loadable(
   lazy(() => import("../views/Utils/VideoConverter"))
 );
-const RpslsHome = Loadable(lazy(() => import("../views/Games/Rpsls")));
-const TicTacToeHome = Loadable(
-  lazy(() => import("../views/Games/TicTacToe"))
+const ColorConverter = Loadable(
+  lazy(() => import("../views/Utils/ColorPicker"))
 );
+const RpslsHome = Loadable(lazy(() => import("../views/Games/Rpsls")));
+const TicTacToeHome = Loadable(lazy(() => import("../views/Games/TicTacToe")));
 const Games = Loadable(lazy(() => import("../views/Games")));
 const Utils = Loadable(lazy(() => import("../views/Utils")));
 const RpslsGameWindow = Loadable(
@@ -64,6 +63,7 @@ const Router = [
     children: [
       { path: "", element: <Utils /> },
       { path: "video", exact: true, element: <VideoConverter /> },
+      { path: "color", exact: true, element: <ColorConverter /> },
     ],
   },
   {

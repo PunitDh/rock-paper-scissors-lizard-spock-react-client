@@ -1,4 +1,4 @@
-import { ContentCut, VideoCall } from "@mui/icons-material";
+import { ColorLens, ContentCut, VideoCall } from "@mui/icons-material";
 import { createSlice } from "@reduxjs/toolkit";
 import {
   IconDashboard,
@@ -10,7 +10,7 @@ import {
 import { uniqueId } from "lodash";
 import { getIcon } from "src/assets";
 
-const CURRENT_GAMES_NAV_GROUP = "Current Games";
+const CURRENT_GAMES = "Current Games";
 
 const menuMapper = (game) => ({
   id: game.id,
@@ -52,12 +52,18 @@ export const menuSlice = createSlice({
         title: "Tic Tac Toe",
         icon: IconTicTac,
         href: "/games/tictactoe",
-        restricted: true
+        restricted: true,
       },
     ],
 
-    [CURRENT_GAMES_NAV_GROUP]: [],
+    [CURRENT_GAMES]: [],
     Utilities: [
+      {
+        id: uniqueId(),
+        title: "Color Picker",
+        icon: ColorLens,
+        href: "/utils/color",
+      },
       {
         id: uniqueId(),
         title: "Video Subtitles",
@@ -82,20 +88,20 @@ export const menuSlice = createSlice({
   },
   reducers: {
     setCurrentGamesNav: (state, { payload = [] }) => {
-      state[CURRENT_GAMES_NAV_GROUP] = payload.map(menuMapper);
+      state[CURRENT_GAMES] = payload.map(menuMapper);
     },
     updateCurrentGameMenu: (state, action) => {
-      const gameIndex = state[CURRENT_GAMES_NAV_GROUP].findIndex(
+      const gameIndex = state[CURRENT_GAMES].findIndex(
         (it) => it.id === action.payload.id
       );
       if (gameIndex > -1) {
-        state[CURRENT_GAMES_NAV_GROUP][gameIndex] = menuMapper(action.payload);
+        state[CURRENT_GAMES][gameIndex] = menuMapper(action.payload);
       } else {
-        state[CURRENT_GAMES_NAV_GROUP].push(menuMapper(action.payload));
+        state[CURRENT_GAMES].push(menuMapper(action.payload));
       }
     },
     deleteGameFromMenu: (state, action) => {
-      state[CURRENT_GAMES_NAV_GROUP] = state[CURRENT_GAMES_NAV_GROUP].filter(
+      state[CURRENT_GAMES] = state[CURRENT_GAMES].filter(
         (game) => game.id !== action.payload.id
       );
     },

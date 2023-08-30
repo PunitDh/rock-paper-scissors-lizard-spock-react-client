@@ -57,4 +57,6 @@ export const SocketResponse = Object.freeze({
   PROGRESS_UPDATE: "update-progress",
 });
 
-export const tokenKey = "rpsls-token";
+export const TOKEN_KEY = "rpsls-token";
+export const LOGIN_PAGE = "/auth/login";
+export const REGISTER_PAGE = "/auth/login";

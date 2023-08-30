@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useSelector } from "react-redux";
 import ChatBox from "./ChatBox";
-import { ConversationState, formatDate } from "./constants";
+import { Status } from "./constants";
 import { useMediaQuery } from "@mui/material";
 
 const Container = styled.div({
@@ -18,10 +18,11 @@ const Container = styled.div({
 
 const ChatBar = () => {
   const mdUp = useMediaQuery((theme) => theme.breakpoints.up("md"));
-  const limit = mdUp ? 4 : 1;
   const { conversations } = useSelector((state) => state.conversation);
+  const limit = mdUp ? 4 : 1;
+  
   const openConversations = [...conversations].filter(
-    (conversation) => conversation.status !== ConversationState.CLOSED
+    (conversation) => conversation.status !== Status.CLOSED
   );
 
   return (

@@ -10,7 +10,7 @@ import {
 } from "src/redux/playerSlice";
 import { setCurrentGamesNav, updateCurrentGameMenu } from "src/redux/menuSlice";
 import { setSiteSettings } from "src/redux/siteSlice";
-import { SocketRequest } from "src/utils/constants";
+import { LOGIN_PAGE, SocketRequest } from "src/utils/constants";
 import { useNotification, useSocket, useToken } from "src/hooks";
 
 export default function useAPI() {
@@ -37,6 +37,13 @@ export default function useAPI() {
         ...request,
         _jwt: token.jwt,
       };
+    }
+  };
+
+  const handleError = (data) => {
+    notification.error(data.payload);
+    if (data.code === 401) {
+      navigate(LOGIN_PAGE);
     }
   };
 
@@ -69,7 +76,7 @@ export default function useAPI() {
 
   const handleToken = (data, successMessage) => {
     if (data.code >= 300) {
-      notification.error(data.payload);
+      handleError(data);
     } else {
       token.set(data.payload);
       notification.success(successMessage);
@@ -82,19 +89,19 @@ export default function useAPI() {
       request
         .post("/player/register", formData)
         .then((response) => handleToken(response, "Registration successful!"))
-        .catch((data) => notification.error(data.payload)),
+        .catch(handleError),
 
     loginPlayer: (formData) =>
       request
         .post("/player/login", formData)
         .then((response) => handleToken(response, "Login successful!"))
-        .catch((data) => notification.error(data.payload)),
+        .catch(handleError),
 
     getSiteSettings: () =>
       request
         .get("/admin/settings")
         .then((data) => dispatch(setSiteSettings(data.payload)))
-        .catch((data) => notification.error(data.payload)),
+        .catch(handleError),
 
     // updateProfile: (formData) =>
     //   request
@@ -104,7 +111,7 @@ export default function useAPI() {
     //       notification.success("Profile updated!");
     //       navigate("/profile");
     //     })
-    //     .catch((data) => notification.error(data.payload)),
+    //     .catch(handleError),
 
     getConversations: () => {
       if (token.jwt) {
@@ -112,7 +119,7 @@ export default function useAPI() {
         return request
           .get("/player/chats", authHeaders)
           .then((data) => dispatch(setConversations(data.payload)))
-          .catch((data) => notification.error(data.payload));
+          .catch(handleError);
       }
     },
 
@@ -124,7 +131,7 @@ export default function useAPI() {
           dispatch(updateCurrentGameMenu(data.payload));
           navigate(`/games/${data.payload.id}`);
         })
-        .catch((data) => notification.error(data.payload));
+        .catch(handleError);
     },
 
     getCurrentGames: () =>
@@ -135,19 +142,19 @@ export default function useAPI() {
           dispatch(setCurrentGames(data.payload));
           dispatch(setCurrentGamesNav(data.payload));
         })
-        .catch((data) => notification.error(data.payload)),
+        .catch(handleError),
 
     getRecentGames: (limit) =>
       request
         .get("/games/recent", { ...authHeaders, params: { limit } })
         .then((data) => dispatch(setRecentGames(data.payload)))
-        .catch((data) => notification.error(data.payload)),
+        .catch(handleError),
 
     getCurrentUsers: () =>
       request
         .get("/player/players", authHeaders)
         .then((data) => dispatch(setCurrentUsers(data.payload)))
-        .catch((data) => notification.error(data.payload)),
+        .catch(handleError),
 
     getGame: (gameId) => {
       socket.emit(SocketRequest.JOIN_CHAT, secure({ gameId }));
@@ -198,7 +205,7 @@ export default function useAPI() {
 
     logoutPlayer: () => {
       token.clear();
-      navigate("/auth/login");
+      navigate(LOGIN_PAGE);
     },
 
     sendMessage: (request) =>

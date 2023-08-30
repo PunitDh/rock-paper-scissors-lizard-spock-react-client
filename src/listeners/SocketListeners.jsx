@@ -10,7 +10,7 @@ import { deleteGameFromMenu, updateCurrentGameMenu } from "src/redux/menuSlice";
 import { setCurrentGame, updateCurrentGame } from "src/redux/playerSlice";
 import { setSiteSettings } from "src/redux/siteSlice";
 import { Status, isSuccess } from "src/utils";
-import { SocketResponse } from "src/utils/constants";
+import { LOGIN_PAGE, SocketResponse } from "src/utils/constants";
 
 const SocketListeners = () => {
   const socket = useSocket();
@@ -68,7 +68,7 @@ const SocketListeners = () => {
     socket.on(SocketResponse.DELETE_PROFILE, (response) =>
       isSuccess(response).then(api.logoutPlayer).catch(notification.error)
     );
-    socket.on(Status.UNAUTHORIZED, () => navigate("/auth/login"));
+    socket.on(Status.UNAUTHORIZED, () => navigate(LOGIN_PAGE));
     socket.on(SocketResponse.PLAY_MOVE, (response) =>
       handleResponse(response, setCurrentGame)
     );

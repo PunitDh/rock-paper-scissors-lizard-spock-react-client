@@ -1,4 +1,4 @@
-export const ConversationState = {
+export const Status = {
   OPEN: "OPEN",
   CLOSED: "CLOSED",
   MINIMIZED: "MINIMIZED",

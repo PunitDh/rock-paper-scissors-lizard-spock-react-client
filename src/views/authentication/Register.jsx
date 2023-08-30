@@ -4,6 +4,7 @@ import PageContainer from "src/components/container/PageContainer";
 import Logo from "src/components/shared/Logo";
 import AuthRegister from "./auth/AuthRegister";
 import { AuthBox } from "./styles";
+import { LOGIN_PAGE } from "src/utils/constants";
 
 const Register = () => (
   <PageContainer title="Register" description="Register page">
@@ -48,7 +49,7 @@ const Register = () => (
                   </Typography>
                   <Typography
                     component={Link}
-                    to="/auth/login"
+                    to={LOGIN_PAGE}
                     fontWeight="500"
                     sx={{
                       textDecoration: "none",

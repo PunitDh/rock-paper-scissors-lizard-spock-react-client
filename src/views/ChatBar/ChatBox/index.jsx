@@ -13,7 +13,7 @@ import {
   minimizeConversation,
   openConversation,
 } from "src/redux/conversationSlice";
-import { ConversationState, formatDate } from "../constants";
+import { Status, formatDate } from "../constants";
 
 const CloseButton = styled(Close)(({ theme }) => ({
   cursor: "pointer",
@@ -50,10 +50,10 @@ const StyledPaper = styled(Paper)(({ maximized, toolbarheight }) => ({
 }));
 
 const MessageBody = styled(Paper)({
-  width: "calc( 100% - 20px )",
+  width: "calc(100% - 20px)",
   margin: 10,
   overflowY: "scroll",
-  height: "calc( 100% - 80px )",
+  height: "calc(100% - 80px)",
 });
 
 function ChatBox({ conversation }) {
@@ -62,22 +62,18 @@ function ChatBox({ conversation }) {
   const token = useToken();
   const { messages } = conversation;
 
-  const toolbarRef = useCallback((toolbarNode) => {
-    const rect = toolbarNode?.getBoundingClientRect();
-    if (rect) {
-      setToolbarHeight(rect.bottom - rect.top);
-    }
+  const toolbarRef = useCallback((node) => {
+    const rect = node?.getBoundingClientRect();
+    rect && setToolbarHeight(rect.bottom - rect.top);
   }, []);
 
   const scrollToBottomRef = useCallback(
-    (node) => {
-      node?.scrollIntoView();
-    },
+    (node) => node?.scrollIntoView(),
     [messages.length]
   );
 
-  const isMinimized = conversation.status === ConversationState.MINIMIZED;
-  const isOpen = conversation.status === ConversationState.OPEN;
+  const isMinimized = conversation.status === Status.MINIMIZED;
+  const isOpen = conversation.status === Status.OPEN;
 
   const closeChatBox = (e) => {
     e.stopPropagation();
@@ -99,11 +95,7 @@ function ChatBox({ conversation }) {
 
   return (
     <StyledPaper maximized={Number(isOpen)} toolbarheight={toolbarHeight}>
-      <ToolbarStyled
-        ref={toolbarRef}
-        id="chat-toolbar"
-        onClick={toggleMinimize}
-      >
+      <ToolbarStyled ref={toolbarRef} onClick={toggleMinimize}>
         <Typography>Chat with {receiver.firstName}</Typography>
         <Tooltip title="Close chat">
           <CloseButton onClick={closeChatBox} />

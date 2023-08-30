@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ConversationState } from "src/views/ChatBar/constants";
+import { Status } from "src/views/ChatBar/constants";
 
 const findIndex = (state, action) =>
   state.conversations.findIndex((it) => it.id === action.payload.id);
@@ -25,7 +25,7 @@ export const conversationSlice = createSlice({
           delete conversation.opener;
           return {
             ...conversation,
-            status: ConversationState.CLOSED,
+            status: Status.CLOSED,
           };
         })
         .sort(
@@ -43,7 +43,7 @@ export const conversationSlice = createSlice({
 
       const conversation = {
         ...action.payload,
-        status: opener ? ConversationState.OPEN : ConversationState.CLOSED,
+        status: opener ? Status.OPEN : Status.CLOSED,
       };
 
       if (index !== -1) state.conversations[index] = conversation;
@@ -51,15 +51,15 @@ export const conversationSlice = createSlice({
     },
 
     openConversation: (state, action) => {
-      setConversation(state, action)(ConversationState.OPEN);
+      setConversation(state, action)(Status.OPEN);
     },
 
     closeConversation: (state, action) => {
-      setConversation(state, action)(ConversationState.CLOSED);
+      setConversation(state, action)(Status.CLOSED);
     },
 
     minimizeConversation: (state, action) => {
-      setConversation(state, action)(ConversationState.MINIMIZED);
+      setConversation(state, action)(Status.MINIMIZED);
     },
   },
 });
