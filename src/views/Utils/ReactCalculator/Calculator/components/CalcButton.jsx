@@ -23,9 +23,7 @@ function CalcButton({
         dispatch(addInput(value));
       }
     } else {
-      if (operation) {
-        if (state.input.length) dispatch(addInput(value));
-      } else dispatch(addInput(value));
+      dispatch(addInput(value));
     }
   };
 

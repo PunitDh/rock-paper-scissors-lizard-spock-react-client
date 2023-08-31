@@ -31,7 +31,7 @@ const ScientificBox = ({ state, dispatch }) => (
         }
         state={state}
         dispatch={dispatch}
-        value={"ln("}
+        value={"ln "}
         invertedValue={"E^"}
       />
     </FlexBox>
@@ -42,13 +42,13 @@ const ScientificBox = ({ state, dispatch }) => (
         display={"log"}
         state={state}
         dispatch={dispatch}
-        value={"log("}
+        value={"log "}
         invertedDisplay={
           <span>
             10<Sup>x</Sup>
           </span>
         }
-        invertedValue={"e"}
+        invertedValue={"(10^"}
       />
     </FlexBox>
     <FlexBox justifyContent="flex-end">

@@ -17,7 +17,7 @@ export const evaluateExpression = (state) => {
       .replaceAll(/(\d+)(?=\()/g, "$&*")
       .replaceAll(/(?<=\))(\d+)/g, "*$&")
       .replaceAll(
-        /(\d+)(?=\s*(atan|acos|asin|sin|cos|tan|log|ln|Ans|Rnd|E|π))/g,
+        /(\d+|\))(?=\s*(atan|acos|asin| sin| cos| tan|log|ln|Ans|Rnd|E|π))/g,
         "$&* "
       )
       .replaceAll(
@@ -43,14 +43,14 @@ export const evaluateExpression = (state) => {
       .replaceAll("M6", `(${state.memory.M6.value})`)
       .replaceAll("M7", `(${state.memory.M7.value})`)
       .replaceAll("M8", `(${state.memory.M8.value})`)
-      .replaceAll("asin(", `${state.degrees ? "180/Math.PI*" : ""}Math.asin(`)
-      .replaceAll("acos(", `${state.degrees ? "180/Math.PI*" : ""}Math.acos(`)
-      .replaceAll("atan(", `${state.degrees ? "180/Math.PI*" : ""}Math.atan(`)
-      .replaceAll(" sin(", `Math.sin(${state.degrees ? "Math.PI/180*" : ""}`)
-      .replaceAll(" cos(", `Math.cos(${state.degrees ? "Math.PI/180*" : ""}`)
-      .replaceAll(" tan(", `Math.tan(${state.degrees ? "Math.PI/180*" : ""}`)
-      .replaceAll("log(", "1/Math.log(10)*Math.log(")
-      .replaceAll("ln(", " Math.log(")
+      .replaceAll("asin ", `${state.degrees ? "180/Math.PI*" : ""}Math.asin(`)
+      .replaceAll("acos ", `${state.degrees ? "180/Math.PI*" : ""}Math.acos(`)
+      .replaceAll("atan ", `${state.degrees ? "180/Math.PI*" : ""}Math.atan(`)
+      .replaceAll(" sin ", `Math.sin(${state.degrees ? "Math.PI/180*" : ""}`)
+      .replaceAll(" cos ", `Math.cos(${state.degrees ? "Math.PI/180*" : ""}`)
+      .replaceAll(" tan ", `Math.tan(${state.degrees ? "Math.PI/180*" : ""}`)
+      .replaceAll("log ", "1/Math.log(10)*Math.log(")
+      .replaceAll("ln ", " Math.log(")
       .replaceAll(")(", ")*(")
       .replaceAll(")Math", ")*Math");
 
