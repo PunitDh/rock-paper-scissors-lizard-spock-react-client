@@ -12,10 +12,10 @@ const InvertedButton = ({
 }) => {
   return (
     <CalcButton
-      display={state.inv ? invertedDisplay : display}
+      display={state.inverse ? invertedDisplay : display}
       state={state}
       dispatch={dispatch}
-      value={state.inv ? invertedValue : value}
+      value={state.inverse ? invertedValue : value}
       operation={operation}
       invertedOperation={invertedOperation}
     />

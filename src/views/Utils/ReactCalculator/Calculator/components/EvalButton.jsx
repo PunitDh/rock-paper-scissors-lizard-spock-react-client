@@ -1,11 +1,12 @@
 import { setDebugValue, setEvaled, setOutput } from "../actions";
+import { Calc } from "../constants";
 import { CalculatorButton } from "../styles";
 
-function EvalButton({ state, dispatch }) {
-  const evaluateExpression = () => {
-    let value;
+const EvalButton = ({ state, dispatch }) => {
+  const evaluateExpression = (input) => {
+    let output;
     try {
-      let parsedInput = state.input
+      let parsedInput = input
         .join("")
         .replaceAll("×", "*")
         .replaceAll("÷", "/")
@@ -28,13 +29,13 @@ function EvalButton({ state, dispatch }) {
         .replaceAll("E", "(Math.E)")
         .replaceAll("√", "")
         .replaceAll("Rnd", `(Math.random())`)
-        .replaceAll("Ans", `(${state.ans})`)
-        .replaceAll("asin(", `${state.deg ? "180/Math.PI*" : ""}Math.asin(`)
-        .replaceAll("acos(", `${state.deg ? "180/Math.PI*" : ""}Math.acos(`)
-        .replaceAll("atan(", `${state.deg ? "180/Math.PI*" : ""}Math.atan(`)
-        .replaceAll(" sin(", `Math.sin(${state.deg ? "Math.PI/180*" : ""}`)
-        .replaceAll(" cos(", `Math.cos(${state.deg ? "Math.PI/180*" : ""}`)
-        .replaceAll(" tan(", `Math.tan(${state.deg ? "Math.PI/180*" : ""}`)
+        .replaceAll("Ans", `(${state.answer})`)
+        .replaceAll("asin(", `${state.degrees ? "180/Math.PI*" : ""}Math.asin(`)
+        .replaceAll("acos(", `${state.degrees ? "180/Math.PI*" : ""}Math.acos(`)
+        .replaceAll("atan(", `${state.degrees ? "180/Math.PI*" : ""}Math.atan(`)
+        .replaceAll(" sin(", `Math.sin(${state.degrees ? "Math.PI/180*" : ""}`)
+        .replaceAll(" cos(", `Math.cos(${state.degrees ? "Math.PI/180*" : ""}`)
+        .replaceAll(" tan(", `Math.tan(${state.degrees ? "Math.PI/180*" : ""}`)
         .replaceAll("log(", "1/Math.log(10)*Math.log(")
         .replaceAll("ln(", " Math.log(")
         .replaceAll(")(", ")*(")
@@ -44,20 +45,22 @@ function EvalButton({ state, dispatch }) {
       const closeBrackets = parsedInput.match(/\)/g)?.length || 0;
 
       const diffBrackets = openBrackets - closeBrackets;
-      console.log(diffBrackets);
       if (diffBrackets > 0) parsedInput += ")".repeat(diffBrackets);
 
       dispatch(setDebugValue(parsedInput));
-      value = eval(parsedInput);
+      output = eval(parsedInput);
     } catch (error) {
-      console.log(error);
-      value = "Syntax Error";
+      output = "Syntax Error";
     }
-    return value;
+    return output;
   };
 
   const handleClick = () => {
-    dispatch(setOutput(evaluateExpression()));
+    if (Calc.OPERATIONS.includes(state.input[state.input.length - 1])) {
+      dispatch(setOutput(evaluateExpression(state.input.concat(Calc.ANS))));
+    } else {
+      dispatch(setOutput(evaluateExpression(state.input)));
+    }
     dispatch(setEvaled(true));
   };
 
@@ -66,6 +69,6 @@ function EvalButton({ state, dispatch }) {
       =
     </CalculatorButton>
   );
-}
+};
 
 export default EvalButton;

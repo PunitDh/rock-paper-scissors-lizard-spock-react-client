@@ -1,14 +1,15 @@
 import { setDegMode } from "../actions";
+import { Calc } from "../constants";
 import { CalculatorButton } from "../styles";
 
 function AngleButton({ state, dispatch, value }) {
-  const isDeg = value === "Deg";
+  const isDeg = value === Calc.DEG;
   const handleClick = () => dispatch(setDegMode(isDeg));
 
   return (
     <CalculatorButton
-      color={state.deg === isDeg ? "primary" : "inherit"}
-      variant={state.deg === isDeg ? "contained" : "outlined"}
+      color={state.degrees === isDeg ? "primary" : "inherit"}
+      variant={state.degrees === isDeg ? "contained" : "outlined"}
       onClick={handleClick}
     >
       {value}

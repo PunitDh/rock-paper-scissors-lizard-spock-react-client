@@ -1,20 +1,14 @@
 export const CalculatorAction = Object.freeze({
-  SET_INPUT: "SET_INPUT",
+  ADD_INPUT: "ADD_INPUT",
   SET_OUTPUT: "SET_OUTPUT",
   SET_EVALED: "SET_EVALED",
   SET_DEBUG_VALUE: "SET_DEBUG_VALUE",
   SET_ANS: "SET_ANS",
-  ADD_INPUT: "ADD_INPUT",
   BACKSPACE: "BACKSPACE",
   TOGGLE_DEG_MODE: "TOGGLE_DEG_MODE",
   TOGGLE_INVERSE_MODE: "TOGGLE_INVERSE_MODE",
   RESET_OUTPUT: "RESET_OUTPUT",
   RESET_STATE: "RESET_STATE",
-});
-
-export const setInput = (payload) => ({
-  type: CalculatorAction.SET_INPUT,
-  payload,
 });
 
 export const addInput = (...payload) => ({

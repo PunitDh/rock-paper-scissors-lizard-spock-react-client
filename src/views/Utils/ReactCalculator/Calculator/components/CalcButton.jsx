@@ -1,4 +1,5 @@
-import { addInput, resetOutput, setInput } from "../actions";
+import { addInput, resetOutput } from "../actions";
+import { Calc } from "../constants";
 import { CalculatorButton } from "../styles";
 
 function CalcButton({
@@ -12,15 +13,19 @@ function CalcButton({
   const handleClick = () => {
     if (state.evaled) {
       dispatch(resetOutput());
-      if (!state.inv && operation) {
-        dispatch(addInput("Ans", value));
-      } else if (state.inv && invertedOperation) {
-        dispatch(addInput(value, "Ans"));
+      if (!state.inverse && operation) {
+        dispatch(addInput(Calc.ANS, value));
+      } else if (state.inverse && invertedOperation) {
+        dispatch(addInput(value, Calc.ANS));
+      } else if (state.inverse && !invertedOperation) {
+        dispatch(addInput(Calc.ANS, value));
       } else {
         dispatch(addInput(value));
       }
     } else {
-      dispatch(addInput(value));
+      if (operation) {
+        if (state.input.length) dispatch(addInput(value));
+      } else dispatch(addInput(value));
     }
   };
 

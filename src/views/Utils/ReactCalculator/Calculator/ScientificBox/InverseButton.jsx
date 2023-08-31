@@ -6,8 +6,8 @@ function InvButton({ state, dispatch }) {
 
   return (
     <CalculatorButton
-      color={state.inv ? "primary" : "inherit"}
-      variant={state.inv ? "contained" : "outlined"}
+      color={state.inverse ? "primary" : "inherit"}
+      variant={state.inverse ? "contained" : "outlined"}
       onClick={handleClick}
     >
       Inv

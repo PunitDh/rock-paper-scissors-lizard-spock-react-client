@@ -5,19 +5,14 @@ export const initialState = {
   input: [],
   output: 0,
   evaled: false,
-  deg: false,
-  inv: false,
-  ans: 0,
+  degrees: false,
+  inverse: false,
+  answer: 0,
   debugValue: "",
 };
 
 export const reducer = (state, action) => {
   switch (action.type) {
-    case CalculatorAction.SET_INPUT:
-      return {
-        ...state,
-        input: action.payload,
-      };
     case CalculatorAction.ADD_INPUT:
       return {
         ...state,
@@ -27,7 +22,7 @@ export const reducer = (state, action) => {
       return {
         ...state,
         output: action.payload,
-        ans: action.payload,
+        answer: action.payload,
       };
     case CalculatorAction.SET_EVALED:
       return {
@@ -42,17 +37,17 @@ export const reducer = (state, action) => {
     case CalculatorAction.SET_ANS:
       return {
         ...state,
-        ans: state.output,
+        answer: state.output,
       };
     case CalculatorAction.TOGGLE_DEG_MODE:
       return {
         ...state,
-        deg: action.payload,
+        degrees: action.payload,
       };
     case CalculatorAction.TOGGLE_INVERSE_MODE:
       return {
         ...state,
-        inv: !state.inv,
+        inverse: !state.inverse,
       };
     case CalculatorAction.BACKSPACE:
       return {
@@ -62,14 +57,13 @@ export const reducer = (state, action) => {
     case CalculatorAction.RESET_OUTPUT:
       return {
         ...state,
-        // output: initialState.output,
         evaled: initialState.evaled,
         input: initialState.input,
       };
     case CalculatorAction.RESET_STATE:
       return {
         ...initialState,
-        deg: state.deg,
+        degrees: state.degrees,
       };
     default:
       return initialState;

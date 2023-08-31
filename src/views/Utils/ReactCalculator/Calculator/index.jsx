@@ -9,7 +9,7 @@ import { FlexBox } from "src/components/shared/styles";
 const Calculator = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const mdUp = useMediaQuery((theme) => theme.breakpoints.up("md"));
-  console.log(state);
+
   return (
     <DashboardCard sx={{ height: "100%" }} title="Calculator">
       <FlexBox
