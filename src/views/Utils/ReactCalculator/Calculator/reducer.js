@@ -1,7 +1,8 @@
 import { CalculatorAction } from "./actions";
 
 export const initialState = {
-  input: "4sin(90)+8cos(10)+9tan(80)+4log(4)+2.5ln(5)+24atan(4)+14Ans+14E-4π-2√3",
+  // input: "4sin(90)+8cos(10)+9tan(80)+4log(4)+2.5ln(5)+24atan(4)+14Ans+14E-4π-2√3",
+  input: [],
   output: 0,
   evaled: false,
   deg: false,
@@ -16,6 +17,11 @@ export const reducer = (state, action) => {
       return {
         ...state,
         input: action.payload,
+      };
+    case CalculatorAction.ADD_INPUT:
+      return {
+        ...state,
+        input: [...state.input, ...action.payload],
       };
     case CalculatorAction.SET_OUTPUT:
       return {
@@ -48,11 +54,17 @@ export const reducer = (state, action) => {
         ...state,
         inv: !state.inv,
       };
+    case CalculatorAction.BACKSPACE:
+      return {
+        ...state,
+        input: state.input.slice(0, -1),
+      };
     case CalculatorAction.RESET_OUTPUT:
       return {
         ...state,
-        output: initialState.output,
+        // output: initialState.output,
         evaled: initialState.evaled,
+        input: initialState.input,
       };
     case CalculatorAction.RESET_STATE:
       return {

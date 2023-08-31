@@ -9,6 +9,7 @@ const ButtonsBox = ({ state, dispatch }) => (
     width="100%"
     justifyContent="flex-end"
     gap="0.5rem"
+    alignItems="flex-end"
   >
     <ScientificBox state={state} dispatch={dispatch} />
     <NumbersBox state={state} dispatch={dispatch} />

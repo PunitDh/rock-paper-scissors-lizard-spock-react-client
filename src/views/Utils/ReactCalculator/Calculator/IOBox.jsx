@@ -11,9 +11,8 @@ const IOBox = ({ state }) => {
         <TextField
           autoComplete="off"
           sx={{ width: "100%" }}
-          value={state.input}
+          value={state.input.join("")}
           inputProps={{ style: { textAlign: "right" } }}
-          autoFocus={true}
         />
         {token.decoded.isAdmin && (
           <TextField
@@ -21,7 +20,6 @@ const IOBox = ({ state }) => {
             sx={{ width: "100%" }}
             value={state.debugValue}
             inputProps={{ style: { textAlign: "right" } }}
-            autoFocus={true}
           />
         )}
         <TextField

@@ -1,21 +1,34 @@
-import { resetOutput, setInput } from "../actions";
+import { addInput, resetOutput, setInput } from "../actions";
 import { CalculatorButton } from "../styles";
 
-function CalcButton({ value, state, dispatch, operation }) {
+function CalcButton({
+  value,
+  display,
+  state,
+  dispatch,
+  operation,
+  invertedOperation,
+}) {
   const handleClick = () => {
     if (state.evaled) {
       dispatch(resetOutput());
-      if (operation) {
-        dispatch(setInput(state.output.toString().concat(value)));
+      if (!state.inv && operation) {
+        dispatch(addInput("Ans", value));
+      } else if (state.inv && invertedOperation) {
+        dispatch(addInput(value, "Ans"));
       } else {
-        dispatch(setInput(value));
+        dispatch(addInput(value));
       }
     } else {
-      dispatch(setInput(state.input.concat(value)));
+      dispatch(addInput(value));
     }
   };
 
-  return <CalculatorButton onClick={handleClick}>{value}</CalculatorButton>;
+  return (
+    <CalculatorButton onClick={handleClick}>
+      {display ?? value}
+    </CalculatorButton>
+  );
 }
 
 export default CalcButton;

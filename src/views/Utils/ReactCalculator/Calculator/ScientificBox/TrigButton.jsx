@@ -1,20 +1,20 @@
 import { Sup } from "../styles";
-import ScientificButton from "./ScientificButton";
+import InvertedButton from "./InvertedButton";
 
-const TrigButton = ({ value, state, dispatch }) => {
-  return (
-    <ScientificButton
-      display={
-        <span>
-          {value}
-          {state.inv && <Sup>-1</Sup>}
-        </span>
-      }
-      state={state}
-      dispatch={dispatch}
-      value={`${state.inv ? "a" : " "}${value}(`}
-    />
-  );
-};
+const TrigButton = ({ value, state, dispatch }) => (
+  <InvertedButton
+    display={<span>{value}</span>}
+    state={state}
+    dispatch={dispatch}
+    value={`${" "}${value}(`}
+    invertedValue={`a${value}(`}
+    invertedDisplay={
+      <span>
+        {value}
+        {<Sup>-1</Sup>}
+      </span>
+    }
+  />
+);
 
 export default TrigButton;

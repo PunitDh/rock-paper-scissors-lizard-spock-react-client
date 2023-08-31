@@ -4,6 +4,8 @@ export const CalculatorAction = Object.freeze({
   SET_EVALED: "SET_EVALED",
   SET_DEBUG_VALUE: "SET_DEBUG_VALUE",
   SET_ANS: "SET_ANS",
+  ADD_INPUT: "ADD_INPUT",
+  BACKSPACE: "BACKSPACE",
   TOGGLE_DEG_MODE: "TOGGLE_DEG_MODE",
   TOGGLE_INVERSE_MODE: "TOGGLE_INVERSE_MODE",
   RESET_OUTPUT: "RESET_OUTPUT",
@@ -12,6 +14,11 @@ export const CalculatorAction = Object.freeze({
 
 export const setInput = (payload) => ({
   type: CalculatorAction.SET_INPUT,
+  payload,
+});
+
+export const addInput = (...payload) => ({
+  type: CalculatorAction.ADD_INPUT,
   payload,
 });
 
@@ -37,6 +44,10 @@ export const toggleInverseMode = () => ({
 export const setDebugValue = (payload) => ({
   type: CalculatorAction.SET_DEBUG_VALUE,
   payload,
+});
+
+export const backspace = () => ({
+  type: CalculatorAction.BACKSPACE,
 });
 
 export const resetOutput = () => ({
