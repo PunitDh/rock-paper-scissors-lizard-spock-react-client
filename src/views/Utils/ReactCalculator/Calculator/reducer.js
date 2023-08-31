@@ -32,7 +32,7 @@ export const reducer = (state, action) => {
     case CalculatorAction.SET_OUTPUT:
       return {
         ...state,
-        output: action.payload.value,
+        output: Math.round(action.payload.value * 10 ** 15) / 10 ** 15,
         answer: action.payload.value,
         parsedInput: action.payload.parsedInput,
         evaled: true,
