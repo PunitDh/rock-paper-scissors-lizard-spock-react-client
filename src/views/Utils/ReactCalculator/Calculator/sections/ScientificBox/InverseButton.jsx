@@ -1,5 +1,5 @@
-import { toggleInverseMode } from "../actions";
-import { CalculatorButton } from "../styles";
+import { toggleInverseMode } from "../../actions";
+import { CalculatorButton } from "../../styles";
 
 function InvButton({ state, dispatch }) {
   const handleClick = () => dispatch(toggleInverseMode());

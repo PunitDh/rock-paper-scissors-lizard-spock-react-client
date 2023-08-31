@@ -19,6 +19,7 @@ export const CalculatorButton = styled(Button)({
   textAlign: "center",
   border: "1px solid gray",
   textTransform: "none",
+  padding: 0
 });
 
 export const Sup = styled("sup")({

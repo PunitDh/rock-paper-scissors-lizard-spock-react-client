@@ -1,10 +1,10 @@
-import { setDegMode } from "../actions";
-import { Calc } from "../constants";
-import { CalculatorButton } from "../styles";
+import { setDegreesMode } from "../../actions";
+import { Calc } from "../../constants";
+import { CalculatorButton } from "../../styles";
 
 function AngleButton({ state, dispatch, value }) {
   const isDeg = value === Calc.DEG;
-  const handleClick = () => dispatch(setDegMode(isDeg));
+  const handleClick = () => dispatch(setDegreesMode(isDeg));
 
   return (
     <CalculatorButton

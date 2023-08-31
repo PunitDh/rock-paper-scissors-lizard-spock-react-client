@@ -1,7 +1,8 @@
 import NumbersBox from "./NumbersBox";
 import OperationsBox from "./OperationsBox";
 import ScientificBox from "./ScientificBox";
-import { CalculatorBox } from "./styles";
+import { CalculatorBox } from "../styles";
+import MemoryBox from "./MemoryBox";
 
 const ButtonsBox = ({ state, dispatch }) => (
   <CalculatorBox
@@ -9,8 +10,9 @@ const ButtonsBox = ({ state, dispatch }) => (
     width="100%"
     justifyContent="flex-end"
     gap="0.5rem"
-    alignItems="flex-end"
+    alignItems="flex-start"
   >
+    <MemoryBox state={state} dispatch={dispatch} />
     <ScientificBox state={state} dispatch={dispatch} />
     <NumbersBox state={state} dispatch={dispatch} />
     <OperationsBox state={state} dispatch={dispatch} />

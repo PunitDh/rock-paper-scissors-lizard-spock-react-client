@@ -8,7 +8,18 @@ export const initialState = {
   degrees: false,
   inverse: false,
   answer: 0,
-  debugValue: "",
+  parsedInput: "",
+  memory: {
+    M1: { value: 0, filled: false },
+    M2: { value: 0, filled: false },
+    M3: { value: 0, filled: false },
+    M4: { value: 0, filled: false },
+    M5: { value: 0, filled: false },
+    M6: { value: 0, filled: false },
+    M7: { value: 0, filled: false },
+    M8: { value: 0, filled: false },
+  },
+  history: [],
 };
 
 export const reducer = (state, action) => {
@@ -21,8 +32,17 @@ export const reducer = (state, action) => {
     case CalculatorAction.SET_OUTPUT:
       return {
         ...state,
-        output: action.payload,
-        answer: action.payload,
+        output: action.payload.value,
+        answer: action.payload.value,
+        parsedInput: action.payload.parsedInput,
+        evaled: true,
+        history: [
+          ...state.history,
+          {
+            input: state.input,
+            output: action.payload.value,
+          },
+        ],
       };
     case CalculatorAction.SET_EVALED:
       return {
@@ -32,9 +52,9 @@ export const reducer = (state, action) => {
     case CalculatorAction.SET_DEBUG_VALUE:
       return {
         ...state,
-        debugValue: action.payload,
+        parsedInput: action.payload,
       };
-    case CalculatorAction.SET_ANS:
+    case CalculatorAction.SET_ANSWER:
       return {
         ...state,
         answer: state.output,
@@ -49,10 +69,36 @@ export const reducer = (state, action) => {
         ...state,
         inverse: !state.inverse,
       };
+
     case CalculatorAction.BACKSPACE:
       return {
         ...state,
         input: state.input.slice(0, -1),
+        evaled: false,
+      };
+    case CalculatorAction.ADD_MEMORY:
+      return {
+        ...state,
+        memory: {
+          ...state.memory,
+          [action.payload.address]: {
+            value: action.payload.value,
+            filled: true,
+          },
+        },
+      };
+    case CalculatorAction.REMOVE_MEMORY:
+      return {
+        ...state,
+        memory: {
+          ...state.memory,
+          [action.payload]: { filled: false, value: 0 },
+        },
+      };
+    case CalculatorAction.CLEAR_MEMORY:
+      return {
+        ...state,
+        memory: initialState.memory,
       };
     case CalculatorAction.RESET_OUTPUT:
       return {
@@ -63,6 +109,8 @@ export const reducer = (state, action) => {
     case CalculatorAction.RESET_STATE:
       return {
         ...initialState,
+        history: state.history,
+        memory: state.memory,
         degrees: state.degrees,
       };
     default:

@@ -1,4 +1,4 @@
-import { Sup } from "../styles";
+import { Sup } from "../../styles";
 import InvertedButton from "./InvertedButton";
 
 const TrigButton = ({ value, state, dispatch }) => (

@@ -4,7 +4,7 @@ import Calculator from "./Calculator";
 
 const ReactCalculator = () => (
   <PageContainer title="React Calculator">
-    <Grid>
+    <Grid gap={3}>
       <Grid item xs={12} lg={12}>
         <Calculator />
       </Grid>

@@ -1,10 +1,6 @@
 import { Box, Menu, MenuItem, ListItemIcon, ListItemText } from "@mui/material";
 import { IconMail, IconUser } from "@tabler/icons";
-import {
-  setAnchorEl,
-  showConfirmDelete,
-  showConfirmRename,
-} from "../actions";
+import { setAnchorEl, showConfirmDelete, showConfirmRename } from "../actions";
 
 const ContextMenu = ({ state, dispatch, ariaLabelledBy }) => (
   <Box>

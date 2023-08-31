@@ -3,3 +3,10 @@ export const Calc = {
   DEG: "Deg",
   OPERATIONS: ["+", "-", "×", "÷", "^"],
 };
+
+export const MemoryOperation = {
+  ADD: "M+",
+  REMOVE: "M-",
+  RECALL: "MR",
+  CLEAR: "MC",
+};

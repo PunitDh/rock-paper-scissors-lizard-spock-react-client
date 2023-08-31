@@ -3,7 +3,10 @@ export const CalculatorAction = Object.freeze({
   SET_OUTPUT: "SET_OUTPUT",
   SET_EVALED: "SET_EVALED",
   SET_DEBUG_VALUE: "SET_DEBUG_VALUE",
-  SET_ANS: "SET_ANS",
+  SET_ANSWER: "SET_ANSWER",
+  ADD_MEMORY: "ADD_MEMORY",
+  REMOVE_MEMORY: "REMOVE_MEMORY",
+  CLEAR_MEMORY: "CLEAR_MEMORY",
   BACKSPACE: "BACKSPACE",
   TOGGLE_DEG_MODE: "TOGGLE_DEG_MODE",
   TOGGLE_INVERSE_MODE: "TOGGLE_INVERSE_MODE",
@@ -21,23 +24,28 @@ export const setOutput = (payload) => ({
   payload,
 });
 
-export const setEvaled = (payload) => ({
-  type: CalculatorAction.SET_EVALED,
+export const setDegreesMode = (payload) => ({
+  type: CalculatorAction.TOGGLE_DEG_MODE,
   payload,
 });
 
-export const setDegMode = (payload) => ({
-  type: CalculatorAction.TOGGLE_DEG_MODE,
+export const addMemory = (payload) => ({
+  type: CalculatorAction.ADD_MEMORY,
+  payload,
+});
+
+export const removeMemory = (payload) => ({
+  type: CalculatorAction.REMOVE_MEMORY,
+  payload,
+});
+
+export const clearMemory = (payload) => ({
+  type: CalculatorAction.CLEAR_MEMORY,
   payload,
 });
 
 export const toggleInverseMode = () => ({
   type: CalculatorAction.TOGGLE_INVERSE_MODE,
-});
-
-export const setDebugValue = (payload) => ({
-  type: CalculatorAction.SET_DEBUG_VALUE,
-  payload,
 });
 
 export const backspace = () => ({

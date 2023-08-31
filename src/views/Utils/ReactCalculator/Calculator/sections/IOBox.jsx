@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material";
 import { FlexBox } from "src/components/shared/styles";
-import { CalculatorBox } from "./styles";
+import { CalculatorBox } from "../styles";
 import { useToken } from "src/hooks";
 
 const IOBox = ({ state }) => {
@@ -18,7 +18,7 @@ const IOBox = ({ state }) => {
           <TextField
             autoComplete="off"
             sx={{ width: "100%" }}
-            value={state.debugValue}
+            value={state.parsedInput}
             inputProps={{ style: { textAlign: "right" } }}
           />
         )}

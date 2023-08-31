@@ -1,4 +1,4 @@
-import CalcButton from "../components/CalcButton";
+import CalcButton from "../../components/CalcButton";
 
 const InvertedButton = ({
   value,

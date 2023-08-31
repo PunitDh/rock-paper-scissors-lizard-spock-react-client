@@ -2,8 +2,8 @@ import { FlexBox } from "src/components/shared/styles";
 import AngleButton from "./AngleButton";
 import InvButton from "./InverseButton";
 import TrigButton from "./TrigButton";
-import { Sup } from "../styles";
-import CalcButton from "../components/CalcButton";
+import { Sup } from "../../styles";
+import CalcButton from "../../components/CalcButton";
 import InvertedButton from "./InvertedButton";
 
 const ScientificBox = ({ state, dispatch }) => (
@@ -16,6 +16,7 @@ const ScientificBox = ({ state, dispatch }) => (
         state={state}
         dispatch={dispatch}
         value={"!"}
+        operation={true}
       />
     </FlexBox>
     <FlexBox justifyContent="flex-end">
