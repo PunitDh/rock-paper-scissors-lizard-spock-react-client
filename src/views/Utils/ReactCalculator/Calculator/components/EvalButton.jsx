@@ -18,6 +18,10 @@ function EvalButton({ state, dispatch }) {
           /(\d+)(?=\s*(atan|acos|asin|sin|cos|tan|log|ln|Ans|Rnd|E|π))/g,
           "$&* "
         )
+        .replaceAll(
+          /(\d+)(!+)/g,
+          "(Array($1).fill(0).map((_,i)=>i+1).reduce((a,c)=>a*c,1))"
+        )
         .replaceAll(/(\d+)(√)(\d+)/g, "(Math.pow($3, 1/$1))")
         .replaceAll("√", "(Math.sqrt(")
         .replaceAll("π", "(Math.PI)")

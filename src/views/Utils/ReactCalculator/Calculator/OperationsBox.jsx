@@ -7,12 +7,12 @@ function OperationsBox({ state, dispatch }) {
   const operations = ["+", "-", "×", "÷"];
   return (
     <FlexBox flexDirection="column">
-      <ClearButton
+      {/* <ClearButton
         state={state}
         dispatch={dispatch}
         fn={backspace}
         display={"DEL"}
-      />
+      /> */}
       <ClearButton
         state={state}
         dispatch={dispatch}
