@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   IconDashboard,
   IconDeviceGamepad,
+  IconFileSpreadsheet,
   IconLogout,
   IconTicTac,
   IconUser,
@@ -69,6 +70,12 @@ export const menuSlice = createSlice({
         title: "Color Picker",
         icon: ColorLens,
         href: "/utils/color",
+      },
+      {
+        id: uniqueId(),
+        title: "Spreadsheet",
+        icon: IconFileSpreadsheet,
+        href: "/utils/sheets",
       },
       {
         id: uniqueId(),
