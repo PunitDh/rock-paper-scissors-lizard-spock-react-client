@@ -1,5 +1,6 @@
 export const SheetAction = Object.freeze({
   SET_SELECTED: "SET_SELECTED",
+  SET_CURRENT_EDITING: "SET_CURRENT_EDITING",
   SET_HIGHLIGHTED_CELLS: "SET_HIGHLIGHTED_CELLS",
   SET_HIGHLIGHTED_ANCHOR: "SET_HIGHLIGHTED_ANCHOR",
   SET_HIGHLIGHTED_CURRENT: "SET_HIGHLIGHTED_CURRENT",
@@ -12,6 +13,11 @@ export const SheetAction = Object.freeze({
 
 export const setSelected = (payload) => ({
   type: SheetAction.SET_SELECTED,
+  payload,
+});
+
+export const setCurrentEditing = (payload) => ({
+  type: SheetAction.SET_CURRENT_EDITING,
   payload,
 });
 

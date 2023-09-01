@@ -63,7 +63,6 @@ export const evaluateExpression = (state) => {
     value = eval(parsedInput);
     return { value, parsedInput };
   } catch (error) {
-    console.log({ error });
     return { value: "Syntax Error", parsedInput };
   }
 };

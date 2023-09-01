@@ -15,23 +15,28 @@ export const Item = styled(Paper)(({ theme, selected }) => ({
   alignItems: "center",
   marginRight: "2px",
   marginTop: "2px",
+  overflowX: "visible",
   "&:hover": {
     outline: "2px solid blue",
   },
 }));
 
-export const CellInput = styled.input({
+export const CellInput = styled.div({
   width: "100%",
   height: "100%",
   borderRadius: 0,
   outline: "none",
   border: "none",
   cursor: "cell",
+  textAlign: "right",
   backgroundColor: "transparent",
   "&:focus": {
     cursor: "text",
   },
   "&:disabled": {
-    backgroundColor: "transparent"
-  }
+    backgroundColor: "transparent",
+  },
+  "&:hover": {
+    outline: "2px solid blue",
+  },
 });

@@ -2,6 +2,7 @@ import { SheetAction } from "./actions";
 
 export const initialState = {
   selected: "A1",
+  currentEditing: "",
   highlighted: { anchor: null, destination: null, current: null, cells: [] },
   content: {},
   mouseDown: false,
@@ -13,6 +14,11 @@ export const reducer = (state, action) => {
       return {
         ...state,
         selected: action.payload,
+      };
+    case SheetAction.SET_CURRENT_EDITING:
+      return {
+        ...state,
+        currentEditing: action.payload,
       };
     case SheetAction.SET_HIGHLIGHTED_ANCHOR:
       return {
@@ -38,6 +44,7 @@ export const reducer = (state, action) => {
           destination: action.payload,
         },
       };
+
     case SheetAction.SET_HIGHLIGHTED_CELLS:
       return {
         ...state,

@@ -4,13 +4,10 @@ export const getId = (id) => ({
   columnCharCode: id?.match(/[A-Z]/g)[0].charCodeAt(0),
 });
 
-export const getMinMax = (highlighted) => {
-  console.log({highlighted});
+export const getCellMinMax = (highlighted) => {
   const ids = highlighted.map(getId);
   const columnCharCodes = ids.map((it) => it.columnCharCode);
   const rows = ids.map((it) => Number(it.row));
-
-  console.log({ columnCharCodes, rows });
   const minC = Math.min(...columnCharCodes);
   const maxC = Math.max(...columnCharCodes);
   const minR = Math.min(...rows);
