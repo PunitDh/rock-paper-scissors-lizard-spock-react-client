@@ -20,3 +20,15 @@ export const getCellMinMax = (highlighted) => {
     maxR,
   };
 };
+
+export const getHighlightedCells = (anchor, current) => {
+  const { minC, maxC, minR, maxR } = getCellMinMax([anchor, current]);
+
+  let currentHighlightedCells = [];
+  for (let c = minC; c <= maxC; c++) {
+    for (let r = minR; r <= maxR; r++) {
+      currentHighlightedCells.push(`${String.fromCharCode(c)}${r}`);
+    }
+  }
+  return currentHighlightedCells;
+};

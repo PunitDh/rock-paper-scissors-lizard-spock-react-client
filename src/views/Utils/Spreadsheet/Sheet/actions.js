@@ -1,10 +1,12 @@
 export const SheetAction = Object.freeze({
   SET_SELECTED: "SET_SELECTED",
-  SET_CURRENT_EDITING: "SET_CURRENT_EDITING",
+  SET_INPUT_TEXT: "SET_INPUT_TEXT",
+  SET_EDIT_MODE: "SET_EDIT_MODE",
+  SET_SHIFT_KEY: "SET_SHIFT_KEY",
+  SET_HOVERED: "SET_HOVERED",
   SET_HIGHLIGHTED_CELLS: "SET_HIGHLIGHTED_CELLS",
   SET_HIGHLIGHTED_ANCHOR: "SET_HIGHLIGHTED_ANCHOR",
   SET_HIGHLIGHTED_CURRENT: "SET_HIGHLIGHTED_CURRENT",
-  SET_HIGHLIGHTED_DESTINATION: "SET_HIGHLIGHTED_DESTINATION",
   RESET_HIGHLIGHTED: "RESET_HIGHLIGHTED",
   SET_MOUSEDOWN: "SET_MOUSEDOWN",
   SET_CONTENT: "SET_CONTENT",
@@ -16,18 +18,28 @@ export const setSelected = (payload) => ({
   payload,
 });
 
-export const setCurrentEditing = (payload) => ({
-  type: SheetAction.SET_CURRENT_EDITING,
+export const setInputText = (payload) => ({
+  type: SheetAction.SET_INPUT_TEXT,
+  payload,
+});
+
+export const setEditMode = (payload) => ({
+  type: SheetAction.SET_EDIT_MODE,
+  payload,
+});
+
+export const setShiftKey = (payload) => ({
+  type: SheetAction.SET_SHIFT_KEY,
+  payload,
+});
+
+export const setHovered = (payload) => ({
+  type: SheetAction.SET_HOVERED,
   payload,
 });
 
 export const setHighlightedAnchor = (payload) => ({
   type: SheetAction.SET_HIGHLIGHTED_ANCHOR,
-  payload,
-});
-
-export const setHighlightedDestination = (payload) => ({
-  type: SheetAction.SET_HIGHLIGHTED_DESTINATION,
   payload,
 });
 

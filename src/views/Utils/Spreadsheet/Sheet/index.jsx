@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer } from "react";
 import DashboardCard from "src/components/shared/DashboardCard";
 import { Item } from "../styles";
 import { initialState, reducer } from "./reducer";
@@ -6,13 +6,18 @@ import { Grid } from "@mui/material";
 import styled from "@emotion/styled";
 import Cell from "./Cell";
 import {
-  setCurrentEditing,
+  resetHighlighted,
+  setContent,
+  setHighlightedAnchor,
   setHighlightedCells,
+  setHighlightedCurrent,
+  setInputText,
   setMouseDown,
   setSelected,
+  setShiftKey,
 } from "./actions";
-import { getId, getCellMinMax } from "../utils";
-import { SheetConfig } from "../constants";
+import { getId, getHighlightedCells } from "../utils";
+import { KeyboardEvent, SheetConfig } from "../constants";
 
 const HeaderItem = styled(Item)({
   backgroundColor: "#ccc",
@@ -22,13 +27,92 @@ const HeaderItem = styled(Item)({
 
 const Sheet = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const columns = "ABCDEFGHIJKL";
-  const [inputText, setInputText] = useState();
+
+  const handleKeyUp = (e) => {
+    switch (e.key) {
+      case KeyboardEvent.SHIFT:
+        console.log("Shift up");
+
+        dispatch(setShiftKey(false));
+        break;
+      default:
+        break;
+    }
+  };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      const { row, column } = getId(state.selected);
-      dispatch(setSelected(`${column}${+row + 1}`));
+    const { row, column, columnCharCode } = getId(state.selected);
+    const minColumn = SheetConfig.COLUMNS[0].charCodeAt(0);
+    const maxColumn =
+      SheetConfig.COLUMNS[SheetConfig.MAX_COLUMNS].charCodeAt(0);
+    let nextRow, nextCell;
+
+    switch (e.key) {
+      case KeyboardEvent.SHIFT:
+        dispatch(setHighlightedAnchor(state.selected));
+        dispatch(setShiftKey(true));
+        nextCell = state.selected;
+        break;
+
+      case KeyboardEvent.ENTER:
+      case KeyboardEvent.ARROW_DOWN:
+        e.preventDefault();
+        !state.shiftKey && dispatch(resetHighlighted());
+        nextCell = `${column}${
+          +row === SheetConfig.MAX_ROWS ? +row : +row + 1
+        }`;
+        break;
+
+      case KeyboardEvent.TAB:
+      case KeyboardEvent.ARROW_RIGHT:
+        e.preventDefault();
+        !state.shiftKey && dispatch(resetHighlighted());
+        nextRow =
+          columnCharCode + 1 === maxColumn
+            ? parseInt(row) === SheetConfig.MAX_ROWS
+              ? 1
+              : +row + 1
+            : row;
+        nextCell = `${
+          columnCharCode + 1 === maxColumn
+            ? String.fromCharCode(minColumn)
+            : String.fromCharCode(columnCharCode + 1)
+        }${nextRow}`;
+        break;
+
+      case KeyboardEvent.ARROW_LEFT:
+        e.preventDefault();
+        !state.shiftKey && dispatch(resetHighlighted());
+        nextRow =
+          columnCharCode === minColumn ? (+row === 1 ? row : row - 1) : row;
+        nextCell = `${
+          columnCharCode === minColumn
+            ? String.fromCharCode(maxColumn - 1)
+            : String.fromCharCode(columnCharCode - 1)
+        }${nextRow}`;
+        break;
+
+      case KeyboardEvent.ARROW_UP:
+        e.preventDefault();
+        !state.shiftKey && dispatch(resetHighlighted());
+        nextCell = `${column}${+row === 1 ? +row : +row - 1}`;
+        break;
+      default:
+        nextCell = state.selected;
+        break;
+    }
+
+    dispatch(setSelected(nextCell));
+
+    if (state.shiftKey) {
+      dispatch(setHighlightedCurrent(nextCell));
+      const currentHighlightedCells = getHighlightedCells(
+        state.highlighted.anchor,
+        nextCell
+      );
+      dispatch(setHighlightedCells(currentHighlightedCells));
+    } else {
+      // dispatch(resetHighlighted());
     }
   };
 
@@ -42,52 +126,43 @@ const Sheet = () => {
 
   const handleMouseMove = () => {
     if (state.mouseDown) {
-      const { minC, maxC, minR, maxR } = getCellMinMax([
+      const currentHighlightedCells = getHighlightedCells(
         state.highlighted.anchor,
-        state.highlighted.current,
-      ]);
-
-      let currentHighlightedCells = [];
-      for (let c = minC; c <= maxC; c++) {
-        for (let r = minR; r <= maxR; r++) {
-          currentHighlightedCells.push(`${String.fromCharCode(c)}${r}`);
-        }
-      }
+        state.highlighted.current
+      );
       dispatch(setHighlightedCells(currentHighlightedCells));
     }
   };
 
-  const handleContextMenu = (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    dispatch(setInputText(state.content[state.selected] || ""));
+  }, [state.selected, state.content[state.selected]]);
+
+  const handleInputTextChange = (e) => {
+    dispatch(setContent({ cell: state.selected, value: e.target.value }));
   };
 
   const handleFocusGuard = (e) => {
     e.preventDefault();
     e.target.blur();
     dispatch(setSelected("A1"));
-    dispatch(setCurrentEditing("A1"));
   };
-
-  console.log({ selected: state.selected });
-
-  useEffect(() => {
-    setInputText(state.content[state.selected] || "");
-  }, [state.selected, state.content[state.selected]]);
 
   return (
     <DashboardCard sx={{ height: "100%" }} title="Spreadsheet">
       <Grid
         container
+        onKeyUp={handleKeyUp}
         onKeyDown={handleKeyDown}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
-        // onContextMenu={handleContextMenu}
       >
         <input
           type="text"
           style={{ width: "100%", marginBottom: "0.2rem" }}
-          value={inputText}
+          value={state.inputText}
+          onChange={handleInputTextChange}
         />
         {Array(SheetConfig.MAX_COLUMNS)
           .fill(0)

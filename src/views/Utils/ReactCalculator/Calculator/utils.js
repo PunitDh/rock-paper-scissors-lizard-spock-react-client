@@ -49,7 +49,7 @@ export const evaluateExpression = (state) => {
       .replaceAll(" sin ", `Math.sin(${state.degrees ? "Math.PI/180*" : ""}`)
       .replaceAll(" cos ", `Math.cos(${state.degrees ? "Math.PI/180*" : ""}`)
       .replaceAll(" tan ", `Math.tan(${state.degrees ? "Math.PI/180*" : ""}`)
-      .replaceAll("log ", "1/Math.log(10)*Math.log(")
+      .replaceAll("log ", "Math.log10(")
       .replaceAll("ln ", " Math.log(")
       .replaceAll(")(", ")*(")
       .replaceAll(")Math", ")*Math");
@@ -60,9 +60,9 @@ export const evaluateExpression = (state) => {
     const diffBrackets = openBrackets - closeBrackets;
     if (diffBrackets > 0) parsedInput += ")".repeat(diffBrackets);
 
-    value = eval(parsedInput);
+    value = Math.round(eval(parsedInput) * 10 ** 15) / 10 ** 15;
     return { value, parsedInput };
   } catch (error) {
-    return { value: "Syntax Error", parsedInput };
+    return { value: "Syntax Error", parsedInput, error };
   }
 };

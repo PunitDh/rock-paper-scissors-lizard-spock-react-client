@@ -49,6 +49,8 @@ const ScientificBox = ({ state, dispatch }) => (
           </span>
         }
         invertedValue={"(10^"}
+        // operation={true}
+        // invertedOperation={true}
       />
     </FlexBox>
     <FlexBox justifyContent="flex-end">

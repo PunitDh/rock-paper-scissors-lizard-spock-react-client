@@ -2,10 +2,13 @@ import { SheetAction } from "./actions";
 
 export const initialState = {
   selected: "A1",
-  currentEditing: "",
-  highlighted: { anchor: null, destination: null, current: null, cells: [] },
+  editMode: false,
+  shiftKey: false,
+  hovered: "",
+  highlighted: { anchor: null, current: null, cells: [] },
   content: {},
   mouseDown: false,
+  inputText: "",
 };
 
 export const reducer = (state, action) => {
@@ -15,10 +18,25 @@ export const reducer = (state, action) => {
         ...state,
         selected: action.payload,
       };
-    case SheetAction.SET_CURRENT_EDITING:
+    case SheetAction.SET_INPUT_TEXT:
       return {
         ...state,
-        currentEditing: action.payload,
+        inputText: action.payload,
+      };
+    case SheetAction.SET_EDIT_MODE:
+      return {
+        ...state,
+        editMode: action.payload,
+      };
+    case SheetAction.SET_SHIFT_KEY:
+      return {
+        ...state,
+        shiftKey: action.payload,
+      };
+    case SheetAction.SET_HOVERED:
+      return {
+        ...state,
+        hovered: action.payload,
       };
     case SheetAction.SET_HIGHLIGHTED_ANCHOR:
       return {
@@ -36,14 +54,7 @@ export const reducer = (state, action) => {
           current: action.payload,
         },
       };
-    case SheetAction.SET_HIGHLIGHTED_DESTINATION:
-      return {
-        ...state,
-        highlighted: {
-          ...state.highlighted,
-          destination: action.payload,
-        },
-      };
+    
 
     case SheetAction.SET_HIGHLIGHTED_CELLS:
       return {

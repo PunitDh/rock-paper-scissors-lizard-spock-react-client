@@ -21,7 +21,7 @@ export const Item = styled(Paper)(({ theme, selected }) => ({
   },
 }));
 
-export const CellInput = styled.div({
+export const CellInput = styled.input(({ contentEditable }) => ({
   width: "100%",
   height: "100%",
   borderRadius: 0,
@@ -30,8 +30,10 @@ export const CellInput = styled.div({
   cursor: "cell",
   textAlign: "right",
   backgroundColor: "transparent",
+  padding: "1px",
+  userSelect: contentEditable ? "auto" : "none",
   "&:focus": {
-    cursor: "text",
+    cursor: contentEditable ? "text" : "cell",
   },
   "&:disabled": {
     backgroundColor: "transparent",
@@ -39,4 +41,4 @@ export const CellInput = styled.div({
   "&:hover": {
     outline: "2px solid blue",
   },
-});
+}));

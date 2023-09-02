@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CellInput, Item } from "../styles";
 import {
   resetHighlighted,
@@ -6,51 +6,51 @@ import {
   setHighlightedCells,
   setSelected,
   setHighlightedAnchor,
-  setHighlightedDestination,
   setHighlightedCurrent,
-  setCurrentEditing,
+  setHovered,
+  setEditMode,
 } from "./actions";
 import { MouseButton, SheetConfig } from "../constants";
 import { getId } from "../utils";
 
 const Cell = ({ id, state, dispatch }) => {
-  const [editMode] = useState(false);
+  const containerRef = useRef();
+  const [focused, setFocused] = useState(false);
+  const ref = useRef();
   const { row, columnCharCode } = getId(id);
 
-  const ref = useRef();
+  // const focusTextArea = () =>
+  //   setTimeout(function () {
+  //     ref.current.focus();
+  //   }, 0);
+
+  const focusTextArea = () => ref.current.focus();
 
   const handleClick = (e) => {
     if (e.button === MouseButton.LEFT_CLICK) {
-      e.stopPropagation();
       if (!state.mouseDown) dispatch(resetHighlighted());
       dispatch(setSelected(id));
     }
   };
 
   const handleFocus = (e) => {
-    // e.stopPropagation();
-    if (!state.mouseDown) dispatch(resetHighlighted());
-    dispatch(setSelected(id));
+    // if (!state.mouseDown) dispatch(resetHighlighted());
+    setFocused(true);
   };
 
   useEffect(() => {
-    if (id === state.selected && id === state.currentEditing) {
-      ref.current.focus();
+    if (id === state.selected && !focused) {
+      focusTextArea();
     } else {
       ref.current.blur();
     }
-  }, [state.selected, state.currentEditing]);
+  }, [state.selected]);
 
-  useEffect(() => {}, [editMode]);
-
-  useEffect(() => {
-    console.log(ref.current?.textContent, id);
-  }, [ref.current?.textContent]);
-
-  const handleChange = (e) =>
-    dispatch(setContent({ cell: id, value: e.target.textContent }));
+  const handleInput = (e) =>
+    dispatch(setContent({ cell: id, value: e.target.value }));
 
   const handleMouseOver = (e) => {
+    dispatch(setHovered(id));
     if (state.mouseDown) {
       dispatch(setHighlightedCells(id));
     }
@@ -58,62 +58,46 @@ const Cell = ({ id, state, dispatch }) => {
 
   const handleMouseDown = (e) => {
     if (e.button === MouseButton.LEFT_CLICK) {
-      if (!state.mouseDown) dispatch(resetHighlighted());
+      // e.preventDefault();
+      if (!state.mouseDown && !state.shiftKey) dispatch(resetHighlighted());
       dispatch(setSelected(id));
-      dispatch(resetHighlighted());
       dispatch(setHighlightedAnchor(id));
       dispatch(setHighlightedCells(id));
     } else {
     }
   };
 
-  const handleMouseUp = () => {
-    dispatch(setHighlightedDestination(id));
-  };
-
   const handleMouseMove = () => {
     dispatch(setHighlightedCurrent(id));
-  };
-
-  const handleContextMenu = (e) => {
-    // e.preventDefault();
   };
 
   const handleDoubleClick = () => {
     if (!state.mouseDown) dispatch(resetHighlighted());
     dispatch(setSelected(id));
-    dispatch(setCurrentEditing(id));
-    ref.current.focus();
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key !== "Enter" || e.key !== "Escape") {
-      dispatch(setCurrentEditing(id));
-      ref.current.focus();
-    }
+    // dispatch(setCurrentEditing(id));
+    dispatch(setEditMode(true));
+    focusTextArea();
   };
 
   return (
     <Item
+      ref={containerRef}
       onClick={handleClick}
       selected={id === state.selected || state.highlighted.cells.includes(id)}
       onMouseOver={handleMouseOver}
       onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
       onDoubleClick={handleDoubleClick}
-      onKeyDown={handleKeyDown}
     >
       <CellInput
         ref={ref}
         onFocus={handleFocus}
+        onChange={handleInput}
+        onBlur={() => setFocused(false)}
+        type="text"
         tabIndex={row * SheetConfig.MAX_ROWS + (columnCharCode - 65)}
-        contentEditable={true}
-        onContextMenu={handleContextMenu}
-        onInput={handleChange}
-      >
-        {state.content[id]?.value}
-      </CellInput>
+        value={state.content[id]}
+      />
     </Item>
   );
 };
