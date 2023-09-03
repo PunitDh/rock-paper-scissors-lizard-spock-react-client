@@ -24,11 +24,11 @@ export const getCellMinMax = (highlighted) => {
 export const createCellRange = (anchor, current) => {
   const { minC, maxC, minR, maxR } = getCellMinMax([anchor, current]);
 
-  let currentHighlightedCells = [];
+  let range = [];
   for (let c = minC; c <= maxC; c++) {
     for (let r = minR; r <= maxR; r++) {
-      currentHighlightedCells.push(`${String.fromCharCode(c)}${r}`);
+      range.push(`${String.fromCharCode(c)}${r}`);
     }
   }
-  return currentHighlightedCells;
+  return range;
 };

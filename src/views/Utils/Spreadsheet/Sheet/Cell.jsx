@@ -90,7 +90,9 @@ const Cell = ({ id, state, dispatch }) => {
     <Item
       ref={containerRef}
       onClick={handleClick}
-      selected={id === state.selected.cell || state.highlighted.cells.includes(id)}
+      selected={
+        id === state.selected.cell || state.highlighted.cells.includes(id)
+      }
       onMouseOver={handleMouseOver}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
