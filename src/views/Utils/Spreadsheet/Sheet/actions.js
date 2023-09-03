@@ -4,12 +4,15 @@ export const SheetAction = Object.freeze({
   SET_EDIT_MODE: "SET_EDIT_MODE",
   SET_SHIFT_KEY: "SET_SHIFT_KEY",
   SET_HOVERED: "SET_HOVERED",
+  SET_SELECTED_ROW: "SET_SELECTED_ROW",
+  SET_SELECTED_COLUMN: "SET_SELECTED_COLUMN",
   SET_HIGHLIGHTED_CELLS: "SET_HIGHLIGHTED_CELLS",
   SET_HIGHLIGHTED_ANCHOR: "SET_HIGHLIGHTED_ANCHOR",
   SET_HIGHLIGHTED_CURRENT: "SET_HIGHLIGHTED_CURRENT",
   RESET_HIGHLIGHTED: "RESET_HIGHLIGHTED",
   SET_MOUSEDOWN: "SET_MOUSEDOWN",
   SET_CONTENT: "SET_CONTENT",
+  SET_MENU_ANCHOR_ELEMENT: "SET_MENU_ANCHOR_ELEMENT",
   RESET_STATE: "RESET_STATE",
 });
 
@@ -48,8 +51,23 @@ export const setHighlightedCurrent = (payload) => ({
   payload,
 });
 
+export const setSelectedRow = (payload) => ({
+  type: SheetAction.SET_SELECTED_ROW,
+  payload,
+});
+
+export const setSelectedColumn = (payload) => ({
+  type: SheetAction.SET_SELECTED_COLUMN,
+  payload,
+});
+
 export const setHighlightedCells = (payload) => ({
   type: SheetAction.SET_HIGHLIGHTED_CELLS,
+  payload,
+});
+
+export const setMenuAnchorElement = (payload) => ({
+  type: SheetAction.SET_MENU_ANCHOR_ELEMENT,
   payload,
 });
 

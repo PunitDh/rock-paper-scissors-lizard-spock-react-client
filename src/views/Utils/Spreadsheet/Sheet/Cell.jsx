@@ -9,6 +9,7 @@ import {
   setHighlightedCurrent,
   setHovered,
   setEditMode,
+  setMenuAnchorElement,
 } from "./actions";
 import { MouseButton, SheetConfig } from "../constants";
 import { getId } from "../utils";
@@ -39,12 +40,12 @@ const Cell = ({ id, state, dispatch }) => {
   };
 
   useEffect(() => {
-    if (id === state.selected && !focused) {
+    if (id === state.selected.cell && !focused) {
       focusTextArea();
     } else {
       ref.current.blur();
     }
-  }, [state.selected]);
+  }, [state.selected.cell]);
 
   const handleInput = (e) => {
     dispatch(setContent({ cell: id, value: e.target.value }));
@@ -80,15 +81,21 @@ const Cell = ({ id, state, dispatch }) => {
     focusTextArea();
   };
 
+  const handleContextMenu = (e) => {
+    e.preventDefault();
+    dispatch(setMenuAnchorElement(e.currentTarget));
+  };
+
   return (
     <Item
       ref={containerRef}
       onClick={handleClick}
-      selected={id === state.selected || state.highlighted.cells.includes(id)}
+      selected={id === state.selected.cell || state.highlighted.cells.includes(id)}
       onMouseOver={handleMouseOver}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onDoubleClick={handleDoubleClick}
+      onContextMenu={handleContextMenu}
     >
       <CellInput
         ref={ref}
@@ -98,7 +105,9 @@ const Cell = ({ id, state, dispatch }) => {
         type="text"
         tabIndex={row * SheetConfig.MAX_ROWS + (columnCharCode - 65)}
         value={
-          state.editMode && id === state.selected ? state.content[id]?.formula : state.content[id]?.value
+          state.editMode && id === state.selected.cell
+            ? state.content[id]?.formula
+            : state.content[id]?.value
         }
       />
     </Item>

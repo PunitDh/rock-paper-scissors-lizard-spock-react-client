@@ -1,8 +1,9 @@
-import { createCellRange } from "../utils";
+import { SheetConfig } from "../constants";
+import { createCellRange, getId } from "../utils";
 import { SheetAction } from "./actions";
 
 export const initialState = {
-  selected: "A1",
+  selected: { cell: "A1", row: 1, column: "A" },
   editMode: false,
   shiftKey: false,
   hovered: "",
@@ -10,14 +11,20 @@ export const initialState = {
   content: {},
   mouseDown: false,
   inputText: "",
+  menuAnchorElement: null,
 };
 
 export const reducer = (state, action) => {
   switch (action.type) {
     case SheetAction.SET_SELECTED:
+      const { row, column } = getId(action.payload);
       return {
         ...state,
-        selected: action.payload,
+        selected: {
+          cell: action.payload,
+          row: Number(row),
+          column,
+        },
       };
     case SheetAction.SET_INPUT_TEXT:
       return {
@@ -64,6 +71,45 @@ export const reducer = (state, action) => {
           cells: [...new Set(action.payload)].flat().sort(),
         },
       };
+    case SheetAction.SET_MENU_ANCHOR_ELEMENT:
+      return {
+        ...state,
+        menuAnchorElement: action.payload,
+      };
+    case SheetAction.SET_SELECTED_ROW: {
+      const cells = createCellRange(
+        `${SheetConfig.COLUMNS[0]}${action.payload}`,
+        `${SheetConfig.COLUMNS[SheetConfig.MAX_COLUMNS]}${action.payload}`
+      );
+      return {
+        ...state,
+        selected: {
+          ...state.selected,
+          row: Number(action.payload),
+        },
+        highlighted: {
+          ...state.highlighted,
+          cells,
+        },
+      };
+    }
+    case SheetAction.SET_SELECTED_COLUMN: {
+      const cells = createCellRange(
+        `${action.payload}1`,
+        `${action.payload}${SheetConfig.MAX_ROWS}`
+      );
+      return {
+        ...state,
+        selected: {
+          ...state.selected,
+          column: action.payload,
+        },
+        highlighted: {
+          ...state.highlighted,
+          cells,
+        },
+      };
+    }
     case SheetAction.RESET_HIGHLIGHTED:
       return {
         ...state,
@@ -83,12 +129,13 @@ export const reducer = (state, action) => {
           let str = "";
           str += [...simpleFormula]
             .map((group) => {
-              return `${state.content[group[1]]?.value || 0}${group[2]}`;
+              return `${parseFloat(state.content[group[1]]?.value || 0)}${
+                group[2]
+              }`;
             })
             .join("");
 
           try {
-            console.log({str});
             const value = eval(str);
             return {
               ...state,

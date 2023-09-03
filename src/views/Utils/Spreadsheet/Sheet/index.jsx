@@ -2,7 +2,6 @@ import { useEffect, useReducer } from "react";
 import DashboardCard from "src/components/shared/DashboardCard";
 import { Item } from "../styles";
 import { initialState, reducer } from "./reducer";
-import { Grid } from "@mui/material";
 import styled from "@emotion/styled";
 import Cell from "./Cell";
 import {
@@ -12,17 +11,31 @@ import {
   setHighlightedCells,
   setHighlightedCurrent,
   setInputText,
+  setMenuAnchorElement,
   setMouseDown,
   setSelected,
+  setSelectedColumn,
+  setSelectedRow,
   setShiftKey,
 } from "./actions";
 import { getId, createCellRange } from "../utils";
 import { KeyboardEvent, SheetConfig } from "../constants";
+import ContextMenu from "./ContextMenu";
+import { FlexBox } from "src/components/shared/styles";
 
-const HeaderItem = styled(Item)({
-  backgroundColor: "#ccc",
+const ColumnHeader = styled(Item)(({ selected }) => ({
+  backgroundColor: selected ? "#eee" : "#ddd",
   outline: "2px solid black",
   fontWeight: "700",
+  width: "4.5rem",
+}));
+
+const RowHeader = styled(Item)(({ selected }) => {
+  return {
+    backgroundColor: selected ? "#eee" : "#ddd",
+    outline: "2px solid black",
+    fontWeight: "700",
+  };
 });
 
 const Sheet = () => {
@@ -39,7 +52,7 @@ const Sheet = () => {
   };
 
   const handleKeyDown = (e) => {
-    const { row, column, columnCharCode } = getId(state.selected);
+    const { row, column, columnCharCode } = getId(state.selected.cell);
     const minColumn = SheetConfig.COLUMNS[0].charCodeAt(0);
     const maxColumn =
       SheetConfig.COLUMNS[SheetConfig.MAX_COLUMNS].charCodeAt(0);
@@ -47,9 +60,9 @@ const Sheet = () => {
 
     switch (e.key) {
       case KeyboardEvent.SHIFT:
-        dispatch(setHighlightedAnchor(state.selected));
+        dispatch(setHighlightedAnchor(state.selected.cell));
         dispatch(setShiftKey(true));
-        nextCell = state.selected;
+        nextCell = state.selected.cell;
         break;
 
       case KeyboardEvent.ENTER:
@@ -96,7 +109,7 @@ const Sheet = () => {
         nextCell = `${column}${+row === 1 ? +row : +row - 1}`;
         break;
       default:
-        nextCell = state.selected;
+        nextCell = state.selected.cell;
         break;
     }
 
@@ -135,15 +148,15 @@ const Sheet = () => {
   useEffect(() => {
     dispatch(
       setInputText(
-        state.content[state.selected]?.formula ||
-          state.content[state.selected]?.value ||
+        state.content[state.selected.cell]?.formula ||
+          state.content[state.selected.cell]?.value ||
           ""
       )
     );
-  }, [state.selected, state.content[state.selected]?.value]);
+  }, [state.selected.cell, state.content[state.selected.cell]?.value]);
 
   const handleInputTextChange = (e) => {
-    dispatch(setContent({ cell: state.selected, value: e.target.value }));
+    dispatch(setContent({ cell: state.selected.cell, value: e.target.value }));
   };
 
   const handleFocusGuard = (e) => {
@@ -152,52 +165,106 @@ const Sheet = () => {
     dispatch(setSelected("A1"));
   };
 
+  const handleContextMenu = (e) => {
+    e.preventDefault();
+    dispatch(setMenuAnchorElement(e.currentTarget));
+  };
+
+  const handleRowHeaderClick = (e, row) => {
+    dispatch(setSelectedRow(row));
+  };
+
+  const handleColumnHeaderClick = (e, column) => {
+    dispatch(setSelectedColumn(column));
+  };
+
   return (
     <DashboardCard sx={{ height: "100%" }} title="Spreadsheet">
-      <Grid
-        container
+      <input
+        type="text"
+        style={{ width: "100%", marginBottom: "0.2rem" }}
+        value={state.inputText}
+        onChange={handleInputTextChange}
+        onContextMenu={handleContextMenu}
+      />
+      <div
         onKeyUp={handleKeyUp}
         onKeyDown={handleKeyDown}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
       >
-        <input
-          type="text"
-          style={{ width: "100%", marginBottom: "0.2rem" }}
-          value={state.inputText}
-          onChange={handleInputTextChange}
-        />
-        {Array(SheetConfig.MAX_COLUMNS)
-          .fill(0)
-          .map((_, column) => (
-            <Grid item key={SheetConfig.COLUMNS[column]} xs={1} md={1}>
-              <HeaderItem>{SheetConfig.COLUMNS[column]}</HeaderItem>
-            </Grid>
-          ))}
-        {Array(SheetConfig.MAX_COLUMNS)
-          .fill(0)
-          .map((_, column) => (
-            <Grid item xs={1} md={1} key={SheetConfig.COLUMNS[column]}>
-              {Array(SheetConfig.MAX_ROWS)
+        <FlexBox justifyContent="flex-start" alignItems="flex-start">
+          <FlexBox flexDirection="column" alignItems="stretch">
+            {Array(SheetConfig.MAX_ROWS + 1)
+              .fill(0)
+              .map((_, row) =>
+                row === 0 ? (
+                  <Item key={row}>/\</Item>
+                ) : (
+                  <RowHeader
+                    key={row}
+                    onClick={(e) => handleRowHeaderClick(e, row)}
+                    selected={state.selected.row === row}
+                  >
+                    {row}
+                  </RowHeader>
+                )
+              )}
+          </FlexBox>
+          <FlexBox flexDirection="column" width="100%">
+            {state.menuAnchorElement && (
+              <ContextMenu state={state} dispatch={dispatch} />
+            )}
+
+            <FlexBox width="100%" justifyContent="stretch" alignItems="stretch">
+              {Array(SheetConfig.MAX_COLUMNS)
                 .fill(0)
-                .map((_, row) => (
-                  <Cell
-                    dispatch={dispatch}
-                    state={state}
-                    key={SheetConfig.COLUMNS[column] + (row + 1)}
-                    id={SheetConfig.COLUMNS[column] + (row + 1)}
-                  />
+                .map((_, column) => (
+                  <ColumnHeader
+                    key={SheetConfig.COLUMNS[column]}
+                    selected={
+                      state.selected.column === SheetConfig.COLUMNS[column]
+                    }
+                    onClick={(e) =>
+                      handleColumnHeaderClick(e, SheetConfig.COLUMNS[column])
+                    }
+                    onContextMenu={handleContextMenu}
+                  >
+                    {SheetConfig.COLUMNS[column]}
+                  </ColumnHeader>
                 ))}
-            </Grid>
-          ))}
-        <input
-          type="text"
-          style={{ opacity: "0", width: "1px", height: "1px" }}
-          tabIndex={(SheetConfig.MAX_ROWS + 1) * SheetConfig.MAX_COLUMNS}
-          onFocus={handleFocusGuard}
-        />
-      </Grid>
+            </FlexBox>
+            <FlexBox>
+              {Array(SheetConfig.MAX_COLUMNS)
+                .fill(0)
+                .map((_, column) => (
+                  <FlexBox
+                    key={SheetConfig.COLUMNS[column]}
+                    flexDirection="column"
+                  >
+                    {Array(SheetConfig.MAX_ROWS)
+                      .fill(0)
+                      .map((_, row) => (
+                        <Cell
+                          dispatch={dispatch}
+                          state={state}
+                          key={SheetConfig.COLUMNS[column] + (row + 1)}
+                          id={SheetConfig.COLUMNS[column] + (row + 1)}
+                        />
+                      ))}
+                  </FlexBox>
+                ))}
+            </FlexBox>
+            <input
+              type="text"
+              style={{ opacity: "0", width: "1px", height: "1px" }}
+              tabIndex={(SheetConfig.MAX_ROWS + 1) * SheetConfig.MAX_COLUMNS}
+              onFocus={handleFocusGuard}
+            />
+          </FlexBox>
+        </FlexBox>
+      </div>
     </DashboardCard>
   );
 };
