@@ -24,7 +24,7 @@ export const evaluateExpression = (state) => {
         /(\d+)(!+)/g,
         "(Array($1).fill(0).map((_,i)=>i+1).reduce((a,c)=>a*c,1))"
       )
-      .replaceAll(/(\d+)(√)(\d+)/g, "(Math.pow($3, 1/$1))")
+      .replaceAll(/(\d+)(√\()(\d+)/g, "(Math.pow($3, 1/$1))")
       .replaceAll("√(", "(Math.sqrt(")
       .replaceAll("π", "(Math.PI)")
       .replaceAll("E", "(Math.E)")
@@ -54,7 +54,7 @@ export const evaluateExpression = (state) => {
       .replaceAll(/(?:log)\(([^)]*)(\)|)/g, "Math.log10($1)")
       .replaceAll(/(?:ln)\(([^)]*)(\)|)/g, " Math.log($1)")
       .replaceAll(")(", ")*(")
-      .replaceAll(/(\d+)(\(|)Math/g, "($1)*Math")
+      .replaceAll(/(\d+|\))Math/g, "$1*Math")
       .replaceAll(")Math", ")*Math");
 
     const openBrackets = parsedInput.match(/\(/g)?.length || 0;

@@ -23,7 +23,7 @@ const ScientificBox = ({ state, dispatch }) => (
       <InvButton state={state} dispatch={dispatch} />
       <TrigButton value="sin" state={state} dispatch={dispatch} />
       <InvertedButton
-        display={"ln("}
+        display={"ln"}
         invertedDisplay={
           <span>
             e<Sup>x</Sup>
