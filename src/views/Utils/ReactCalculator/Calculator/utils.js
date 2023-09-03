@@ -14,6 +14,7 @@ export const evaluateExpression = (state) => {
       .replaceAll("%", "/100")
       .replaceAll("²", "**2")
       .replaceAll("^", "**")
+      .replaceAll(/(\b)e(\b|\B)/g, "1e0")
       .replaceAll(/(\d+)(?=\()/g, "$&*")
       .replaceAll(/(?<=\))(\d+)/g, "*$&")
       .replaceAll(
@@ -44,12 +45,12 @@ export const evaluateExpression = (state) => {
       .replaceAll("M7", `(${state.memory.M7.value})`)
       .replaceAll("M8", `(${state.memory.M8.value})`)
       .replaceAll(
-        /(asin|acos|atan)\(([^)]*)(\)|)/g,
-        `${state.degrees ? "(180/Math.PI*" : "(1*"}Math.$1($2))`
+        /(asin|acos|atan)/g,
+        `${state.degrees ? "(180/Math.PI*" : "(1*"}Math.$1(`
       )
       .replaceAll(
-        /(?: )(sin|cos|tan)\(([^)]*)(\)|)/g,
-        `Math.$1(${state.degrees ? `Math.PI/180*` : `1*`}($2))`
+        /(?: )(sin|cos|tan)/g,
+        `Math.$1(${state.degrees ? `Math.PI/180*` : `1*`}`
       )
       .replaceAll(/(?:log)\(([^)]*)(\)|)/g, "Math.log10($1)")
       .replaceAll(/(?:ln)\(([^)]*)(\)|)/g, " Math.log($1)")
@@ -63,7 +64,7 @@ export const evaluateExpression = (state) => {
     const diffBrackets = openBrackets - closeBrackets;
     if (diffBrackets > 0) parsedInput += ")".repeat(diffBrackets);
 
-    value = Math.round(eval(parsedInput) * 10 ** 15) / 10 ** 15;
+    value = Math.round(eval(parsedInput) * 10 ** 13) / 10 ** 13;
     return { value, parsedInput };
   } catch (error) {
     return { value: "Syntax Error", parsedInput, error };

@@ -1,10 +1,12 @@
 import { FlexBox } from "src/components/shared/styles";
 import MemoryButton from "../components/MemoryButton";
 import { MemoryOperation } from "../constants";
+import InvButton from "./ScientificBox/InverseButton";
 
 function MemoryBox({ state, dispatch }) {
   return (
     <FlexBox flexDirection="column" justifyContent="flex-start">
+      <InvButton state={state} dispatch={dispatch} />
       {Object.values(MemoryOperation).map((operation) => (
         <MemoryButton
           key={operation}

@@ -20,7 +20,14 @@ const ScientificBox = ({ state, dispatch }) => (
       />
     </FlexBox>
     <FlexBox justifyContent="flex-end">
-      <InvButton state={state} dispatch={dispatch} />
+      {/* <InvButton state={state} dispatch={dispatch} /> */}
+      <CalcButton
+        display={"%"}
+        state={state}
+        dispatch={dispatch}
+        value={"%"}
+        operation={true}
+      />
       <TrigButton value="sin" state={state} dispatch={dispatch} />
       <InvertedButton
         display={"ln"}

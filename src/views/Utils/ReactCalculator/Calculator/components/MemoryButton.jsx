@@ -24,7 +24,9 @@ function MemoryButton({ value, state, dispatch }) {
         if (state.evaled) {
           dispatch(addMemory({ address, value: state.output }));
         } else {
-          const output = evaluateExpression(state);
+          const output = evaluateExpression(
+            state.input.length === 0 ? { ...state, input: ["0"] } : state
+          );
           dispatch(setOutput(output));
           dispatch(addMemory({ address, value: output.value }));
         }
