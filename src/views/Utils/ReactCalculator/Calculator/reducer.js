@@ -54,10 +54,10 @@ export const reducer = (state, action) => {
         ...state,
         parsedInput: action.payload,
       };
-    case CalculatorAction.SET_ANSWER:
+    case CalculatorAction.SET_INVERSE_MODE:
       return {
         ...state,
-        answer: state.output,
+        inverse: action.payload,
       };
     case CalculatorAction.TOGGLE_DEG_MODE:
       return {

@@ -64,7 +64,7 @@ export const evaluateExpression = (state) => {
     const diffBrackets = openBrackets - closeBrackets;
     if (diffBrackets > 0) parsedInput += ")".repeat(diffBrackets);
 
-    value = Math.round(eval(parsedInput) * 10 ** 13) / 10 ** 13;
+    value = String(Math.round(eval(parsedInput) * 10 ** 13) / 10 ** 13);
     return { value, parsedInput };
   } catch (error) {
     return { value: "Syntax Error", parsedInput, error };

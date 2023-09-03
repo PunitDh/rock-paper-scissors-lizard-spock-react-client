@@ -16,7 +16,7 @@ import {
   setSelected,
   setShiftKey,
 } from "./actions";
-import { getId, getHighlightedCells } from "../utils";
+import { getId, createCellRange } from "../utils";
 import { KeyboardEvent, SheetConfig } from "../constants";
 
 const HeaderItem = styled(Item)({
@@ -31,8 +31,6 @@ const Sheet = () => {
   const handleKeyUp = (e) => {
     switch (e.key) {
       case KeyboardEvent.SHIFT:
-        console.log("Shift up");
-
         dispatch(setShiftKey(false));
         break;
       default:
@@ -106,7 +104,7 @@ const Sheet = () => {
 
     if (state.shiftKey) {
       dispatch(setHighlightedCurrent(nextCell));
-      const currentHighlightedCells = getHighlightedCells(
+      const currentHighlightedCells = createCellRange(
         state.highlighted.anchor,
         nextCell
       );
@@ -126,7 +124,7 @@ const Sheet = () => {
 
   const handleMouseMove = () => {
     if (state.mouseDown) {
-      const currentHighlightedCells = getHighlightedCells(
+      const currentHighlightedCells = createCellRange(
         state.highlighted.anchor,
         state.highlighted.current
       );
@@ -135,8 +133,14 @@ const Sheet = () => {
   };
 
   useEffect(() => {
-    dispatch(setInputText(state.content[state.selected] || ""));
-  }, [state.selected, state.content[state.selected]]);
+    dispatch(
+      setInputText(
+        state.content[state.selected]?.formula ||
+          state.content[state.selected]?.value ||
+          ""
+      )
+    );
+  }, [state.selected, state.content[state.selected]?.value]);
 
   const handleInputTextChange = (e) => {
     dispatch(setContent({ cell: state.selected, value: e.target.value }));

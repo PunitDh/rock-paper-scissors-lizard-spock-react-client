@@ -3,7 +3,7 @@ export const CalculatorAction = Object.freeze({
   SET_OUTPUT: "SET_OUTPUT",
   SET_EVALED: "SET_EVALED",
   SET_DEBUG_VALUE: "SET_DEBUG_VALUE",
-  SET_ANSWER: "SET_ANSWER",
+  SET_INVERSE_MODE: "SET_INVERSE_MODE",
   ADD_MEMORY: "ADD_MEMORY",
   REMOVE_MEMORY: "REMOVE_MEMORY",
   CLEAR_MEMORY: "CLEAR_MEMORY",
@@ -42,6 +42,10 @@ export const removeMemory = (payload) => ({
 export const clearMemory = (payload) => ({
   type: CalculatorAction.CLEAR_MEMORY,
   payload,
+});
+
+export const setInverseMode = () => ({
+  type: CalculatorAction.SET_INVERSE_MODE,
 });
 
 export const toggleInverseMode = () => ({

@@ -1,4 +1,4 @@
-import { addInput, resetOutput } from "../actions";
+import { addInput, resetOutput, setInverseMode } from "../actions";
 import { Calc } from "../constants";
 import { CalculatorButton } from "../styles";
 
@@ -15,9 +15,9 @@ function CalcButton({
       dispatch(resetOutput());
       if (!state.inverse && operation) {
         dispatch(addInput(Calc.ANS, value));
-      } else if (state.inverse && invertedOperation) {
+      } else if (state.inverse && operation && invertedOperation) {
         dispatch(addInput(value, Calc.ANS));
-      } else if (state.inverse && !invertedOperation) {
+      } else if (state.inverse && operation && !invertedOperation) {
         dispatch(addInput(Calc.ANS, value));
       } else {
         dispatch(addInput(value));
@@ -25,6 +25,7 @@ function CalcButton({
     } else {
       dispatch(addInput(value));
     }
+    dispatch(setInverseMode(false));
   };
 
   return (

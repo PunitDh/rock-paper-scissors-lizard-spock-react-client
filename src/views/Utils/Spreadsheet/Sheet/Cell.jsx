@@ -46,8 +46,9 @@ const Cell = ({ id, state, dispatch }) => {
     }
   }, [state.selected]);
 
-  const handleInput = (e) =>
+  const handleInput = (e) => {
     dispatch(setContent({ cell: id, value: e.target.value }));
+  };
 
   const handleMouseOver = (e) => {
     dispatch(setHovered(id));
@@ -96,7 +97,9 @@ const Cell = ({ id, state, dispatch }) => {
         onBlur={() => setFocused(false)}
         type="text"
         tabIndex={row * SheetConfig.MAX_ROWS + (columnCharCode - 65)}
-        value={state.content[id]}
+        value={
+          state.editMode && id === state.selected ? state.content[id]?.formula : state.content[id]?.value
+        }
       />
     </Item>
   );

@@ -14,6 +14,8 @@ const TrigButton = ({ value, state, dispatch }) => (
         {<Sup>-1</Sup>}
       </span>
     }
+    // operation={true}
+    // invertedOperation={true}
   />
 );
 

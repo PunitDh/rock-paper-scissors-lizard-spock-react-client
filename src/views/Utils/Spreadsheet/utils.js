@@ -21,7 +21,7 @@ export const getCellMinMax = (highlighted) => {
   };
 };
 
-export const getHighlightedCells = (anchor, current) => {
+export const createCellRange = (anchor, current) => {
   const { minC, maxC, minR, maxR } = getCellMinMax([anchor, current]);
 
   let currentHighlightedCells = [];
