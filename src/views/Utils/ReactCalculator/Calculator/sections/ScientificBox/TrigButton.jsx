@@ -6,8 +6,8 @@ const TrigButton = ({ value, state, dispatch }) => (
     display={<span>{value}</span>}
     state={state}
     dispatch={dispatch}
-    value={`${" "}${value} `}
-    invertedValue={`a${value} `}
+    value={`${" "}${value}(`}
+    invertedValue={`a${value}(`}
     invertedDisplay={
       <span>
         {value}

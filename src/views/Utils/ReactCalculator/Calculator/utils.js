@@ -25,10 +25,10 @@ export const evaluateExpression = (state) => {
         "(Array($1).fill(0).map((_,i)=>i+1).reduce((a,c)=>a*c,1))"
       )
       .replaceAll(/(\d+)(√)(\d+)/g, "(Math.pow($3, 1/$1))")
-      .replaceAll("√", "(Math.sqrt(")
+      .replaceAll("√(", "(Math.sqrt(")
       .replaceAll("π", "(Math.PI)")
       .replaceAll("E", "(Math.E)")
-      .replaceAll("√", "")
+      .replaceAll("√(", "")
       .replaceAll("Rnd", `(Math.random())`)
       .replaceAll("Ans", `(${state.answer})`)
       .replaceAll(
@@ -43,15 +43,18 @@ export const evaluateExpression = (state) => {
       .replaceAll("M6", `(${state.memory.M6.value})`)
       .replaceAll("M7", `(${state.memory.M7.value})`)
       .replaceAll("M8", `(${state.memory.M8.value})`)
-      .replaceAll("asin ", `${state.degrees ? "180/Math.PI*" : ""}Math.asin(`)
-      .replaceAll("acos ", `${state.degrees ? "180/Math.PI*" : ""}Math.acos(`)
-      .replaceAll("atan ", `${state.degrees ? "180/Math.PI*" : ""}Math.atan(`)
-      .replaceAll(" sin ", `Math.sin(${state.degrees ? "Math.PI/180*" : ""}`)
-      .replaceAll(" cos ", `Math.cos(${state.degrees ? "Math.PI/180*" : ""}`)
-      .replaceAll(" tan ", `Math.tan(${state.degrees ? "Math.PI/180*" : ""}`)
-      .replaceAll("log ", "Math.log10(")
-      .replaceAll("ln ", " Math.log(")
+      .replaceAll(
+        /(asin|acos|atan)\(([^)]*)(\)|)/g,
+        `${state.degrees ? "(180/Math.PI*" : "(1*"}Math.$1($2))`
+      )
+      .replaceAll(
+        /(?: )(sin|cos|tan)\(([^)]*)(\)|)/g,
+        `Math.$1(${state.degrees ? `Math.PI/180*` : `1*`}($2))`
+      )
+      .replaceAll(/(?:log)\(([^)]*)(\)|)/g, "Math.log10($1)")
+      .replaceAll(/(?:ln)\(([^)]*)(\)|)/g, " Math.log($1)")
       .replaceAll(")(", ")*(")
+      .replaceAll(/(\d+)(\(|)Math/g, "($1)*Math")
       .replaceAll(")Math", ")*Math");
 
     const openBrackets = parsedInput.match(/\(/g)?.length || 0;

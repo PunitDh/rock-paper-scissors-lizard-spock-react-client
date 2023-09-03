@@ -23,7 +23,7 @@ const ScientificBox = ({ state, dispatch }) => (
       <InvButton state={state} dispatch={dispatch} />
       <TrigButton value="sin" state={state} dispatch={dispatch} />
       <InvertedButton
-        display={"ln"}
+        display={"ln("}
         invertedDisplay={
           <span>
             e<Sup>x</Sup>
@@ -31,7 +31,7 @@ const ScientificBox = ({ state, dispatch }) => (
         }
         state={state}
         dispatch={dispatch}
-        value={"ln "}
+        value={"ln("}
         invertedValue={"E^"}
       />
     </FlexBox>
@@ -42,7 +42,7 @@ const ScientificBox = ({ state, dispatch }) => (
         display={"log"}
         state={state}
         dispatch={dispatch}
-        value={"log "}
+        value={"log("}
         invertedDisplay={
           <span>
             10<Sup>x</Sup>
@@ -65,7 +65,7 @@ const ScientificBox = ({ state, dispatch }) => (
         }
         state={state}
         dispatch={dispatch}
-        invertedValue={"√"}
+        invertedValue={"√("}
         value={"²"}
         operation={true}
         invertedOperation={true}
@@ -100,7 +100,7 @@ const ScientificBox = ({ state, dispatch }) => (
         state={state}
         dispatch={dispatch}
         value={"^"}
-        invertedValue={"√"}
+        invertedValue={"√("}
         operation={true}
       />
     </FlexBox>
