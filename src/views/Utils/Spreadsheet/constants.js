@@ -5,7 +5,7 @@ export const MouseButton = {
 
 export const SheetConfig = {
   COLUMNS: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-  MAX_ROWS: 12,
+  MAX_ROWS: 24,
   MAX_COLUMNS: 12,
 };
 

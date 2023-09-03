@@ -27,7 +27,7 @@ const ColumnHeader = styled(Item)(({ selected }) => ({
   backgroundColor: selected ? "#eee" : "#ddd",
   outline: "2px solid black",
   fontWeight: "700",
-  width: "4.5rem",
+  width: "100%",
 }));
 
 const RowHeader = styled(Item)(({ selected }) => {
