@@ -1,5 +1,4 @@
 import { FlexBox } from "src/components/shared/styles";
-
 const { Button } = require("@mui/material");
 const { styled } = require("@mui/styles");
 
@@ -11,15 +10,16 @@ export const CalculatorBox = styled(FlexBox)({
 });
 
 export const CalculatorButton = styled(Button)({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
   cursor: "pointer",
-  minWidth: "3rem",
-  height: "3rem",
+  minWidth: "2.5rem",
   margin: "1px",
-  maxWidth: "1rem",
-  textAlign: "center",
+  aspectRatio: "1/1",
   border: "1px solid gray",
   textTransform: "none",
-  padding: 0
+  padding: 0,
 });
 
 export const Sup = styled("sup")({
