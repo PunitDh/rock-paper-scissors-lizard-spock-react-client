@@ -9,7 +9,23 @@ const HeaderItem = styled(Item)(({ selected }) => ({
   fontWeight: "700",
 }));
 
-const SelectAll = ({ state, dispatch, onContextMenu, children }) => {
+const Corner = styled.div({
+  width: "100%",
+  height: "100%",
+  backgroundColor: "transparent",
+  position: "relative",
+  "&:after": {
+    content: '""',
+    position: "absolute",
+    bottom: "0",
+    right: "0",
+    border: "0.5rem solid transparent",
+    borderRightColor: "#AAA",
+    borderBottomColor: "#AAA",
+  },
+});
+
+const SelectAll = ({ state, dispatch, onContextMenu }) => {
   const handleClick = () => {
     dispatch(setSelectAll());
   };
@@ -23,12 +39,10 @@ const SelectAll = ({ state, dispatch, onContextMenu, children }) => {
   };
 
   const selected =
-    state.highlighted.rows.length > 0 &&
     Array(SheetConfig.MAX_ROWS)
       .fill(0)
       .map((_, it) => it + 1)
       .every((row) => state.highlighted.rows.includes(row)) &&
-    state.highlighted.columns.length > 0 &&
     Array(SheetConfig.MAX_COLUMNS)
       .fill(0)
       .map((_, it) => SheetConfig.COLUMNS[it])
@@ -42,7 +56,7 @@ const SelectAll = ({ state, dispatch, onContextMenu, children }) => {
       onMouseUp={handleMouseUp}
       onContextMenu={onContextMenu}
     >
-      {children}
+      <Corner />
     </HeaderItem>
   );
 };

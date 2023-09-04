@@ -17,6 +17,7 @@ export const SheetAction = Object.freeze({
   RESET_HIGHLIGHTED: "RESET_HIGHLIGHTED",
   SET_MOUSEDOWN: "SET_MOUSEDOWN",
   SET_CONTENT: "SET_CONTENT",
+  CALCULATE_CONTENT_FORMULA: "CALCULATE_CONTENT_FORMULA",
   SET_MENU_ANCHOR_ELEMENT: "SET_MENU_ANCHOR_ELEMENT",
   RESET_STATE: "RESET_STATE",
 });
@@ -89,7 +90,7 @@ export const setSelectAll = () => ({
 export const highlightCells = (start, end) => ({
   type: SheetAction.HIGHLIGHT_CELLS,
   start,
-  end
+  end,
 });
 
 export const setMenuAnchorElement = (payload) => ({
@@ -108,6 +109,11 @@ export const setMouseDown = (payload) => ({
 
 export const setContent = (payload) => ({
   type: SheetAction.SET_CONTENT,
+  payload,
+});
+
+export const calculateContentFormula = (payload) => ({
+  type: SheetAction.CALCULATE_CONTENT_FORMULA,
   payload,
 });
 

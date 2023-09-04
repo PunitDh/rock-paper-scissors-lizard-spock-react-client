@@ -80,6 +80,7 @@ export const reducer = (state, action) => {
           rows: range.rows,
           columns: range.columns,
         },
+        editMode: false,
       };
     }
     case SheetAction.DELETE_CELL_CONTENT: {
@@ -164,7 +165,9 @@ export const reducer = (state, action) => {
     case SheetAction.SET_SELECT_ALL: {
       const range = Range.create(
         `A1`,
-        `${SheetConfig.COLUMNS[SheetConfig.MAX_COLUMNS-1]}${SheetConfig.MAX_ROWS}`
+        `${SheetConfig.COLUMNS[SheetConfig.MAX_COLUMNS - 1]}${
+          SheetConfig.MAX_ROWS
+        }`
       );
       return {
         ...state,
@@ -179,40 +182,49 @@ export const reducer = (state, action) => {
         },
       };
     }
-    case SheetAction.RESET_HIGHLIGHTED:
+    case SheetAction.RESET_HIGHLIGHTED: {
       return {
         ...state,
         highlighted: initialState.highlighted,
       };
-    case SheetAction.SET_MOUSEDOWN:
+    }
+    case SheetAction.SET_MOUSEDOWN: {
       return {
         ...state,
         mouseDown: action.payload,
       };
-    case SheetAction.SET_CONTENT:
-      if (action.payload.value.startsWith("=")) {
-        const simpleReg = /(\w+\d+)([+-/*]|$)/g;
-        const simpleFormula = action.payload.value.matchAll(simpleReg);
+    }
+    case SheetAction.CALCULATE_CONTENT_FORMULA: {
+      const { cell, value: cellValue } = action.payload;
+      if (cellValue?.startsWith("=")) {
+        const simpleReg = /(\w+\d+)/gi;
+        const simpleFormula = cellValue.matchAll(simpleReg);
 
-        if (simpleReg.exec(action.payload.value)) {
-          let str = "";
-          str += [...simpleFormula]
-            .map((group) => {
-              return `${parseFloat(state.content[group[1]]?.value || 0)}${
-                group[2]
-              }`;
-            })
-            .join("");
+        if (simpleReg.exec(cellValue)) {
+          const str = [...simpleFormula]
+            .map((group) => group[1])
+            .reduce(
+              (acc, cur) =>
+                acc.replace(
+                  cur,
+                  `(${parseFloat(
+                    state.content[cur.toUpperCase()]?.value || 0
+                  )})`
+                ),
+              cellValue
+            )
+            .replace("=", "");
 
           try {
-            const value = eval(str);
+            const evaluatedValue = eval(str);
             return {
               ...state,
               content: {
                 ...state.content,
-                [action.payload.cell]: {
-                  formula: action.payload.value,
-                  value,
+                [cell]: {
+                  formula: cellValue.toUpperCase(),
+                  value: evaluatedValue,
+                  display: evaluatedValue,
                 },
               },
             };
@@ -221,7 +233,7 @@ export const reducer = (state, action) => {
 
         const formulaTest = /(SUM|AVG)+(?:\()(\w+):(\w+)\)/g;
         const [string, formula, start, end] = [
-          ...action.payload.value.matchAll(formulaTest),
+          ...cellValue.matchAll(formulaTest),
         ].flat();
 
         if (string && formula && start && end) {
@@ -235,12 +247,30 @@ export const reducer = (state, action) => {
             content: {
               ...state.content,
               [action.payload.cell]: {
-                formula: action.payload.value,
+                ...state.content[action.payload.cell],
                 value,
+                display: value,
               },
             },
           };
         }
+      }
+
+      return {
+        ...state,
+      };
+    }
+    case SheetAction.SET_CONTENT:
+      if (action.payload.value.startsWith("=")) {
+        return {
+          ...state,
+          content: {
+            ...state.content,
+            [action.payload.cell]: {
+              formula: action.payload.value,
+            },
+          },
+        };
       }
       // SUM(A1:A3)
       return {

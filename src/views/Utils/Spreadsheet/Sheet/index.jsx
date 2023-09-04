@@ -19,7 +19,6 @@ import { getId } from "../utils";
 import { KeyboardEvent, SheetConfig } from "../constants";
 import ContextMenu from "./ContextMenu";
 import { FlexBox } from "src/components/shared/styles";
-import Range from "../models/Range";
 import RowHeader from "./components/RowHeader";
 import ColumnHeader from "./components/ColumnHeader";
 import SelectAll from "./components/SelectAll";
@@ -123,7 +122,9 @@ const Sheet = () => {
 
   const handleMouseMove = () => {
     if (state.mouseDown) {
-      dispatch(highlightCells(state.highlighted.anchor, state.highlighted.current));
+      dispatch(
+        highlightCells(state.highlighted.anchor, state.highlighted.current)
+      );
     }
   };
 
@@ -154,6 +155,9 @@ const Sheet = () => {
 
   return (
     <DashboardCard sx={{ height: "100%" }} title="Spreadsheet">
+      {state.menuAnchorElement && (
+        <ContextMenu state={state} dispatch={dispatch} />
+      )}
       <input
         type="text"
         style={{ width: "100%", marginBottom: "0.2rem" }}
@@ -179,9 +183,7 @@ const Sheet = () => {
                     dispatch={dispatch}
                     onContextMenu={handleContextMenu}
                     key={row}
-                  >
-                    /\
-                  </SelectAll>
+                  />
                 ) : (
                   <RowHeader
                     state={state}
@@ -194,10 +196,6 @@ const Sheet = () => {
               )}
           </FlexBox>
           <FlexBox flexDirection="column" width="100%">
-            {state.menuAnchorElement && (
-              <ContextMenu state={state} dispatch={dispatch} />
-            )}
-
             <FlexBox width="100%" justifyContent="stretch" alignItems="stretch">
               {Array(SheetConfig.MAX_COLUMNS)
                 .fill(0)

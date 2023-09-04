@@ -1,6 +1,12 @@
 import { Box, ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
 import { IconCopy, IconCut } from "@tabler/icons";
-import { deleteCellContent, setMenuAnchorElement } from "../actions";
+import {
+  copyCellContent,
+  cutCellContent,
+  deleteCellContent,
+  pasteCellContent,
+  setMenuAnchorElement,
+} from "../actions";
 import { ContentPaste, Delete } from "@mui/icons-material";
 
 const ContextMenu = ({ state, dispatch }) => {
@@ -8,9 +14,24 @@ const ContextMenu = ({ state, dispatch }) => {
     dispatch(setMenuAnchorElement(false));
   };
 
-  const handleDelete = () => {
+  const handleCut = () => {
+    dispatch(cutCellContent());
     handleClose();
+  };
+
+  const handleCopy = () => {
+    dispatch(copyCellContent());
+    handleClose();
+  };
+
+  const handlePaste = () => {
+    dispatch(pasteCellContent());
+    handleClose();
+  };
+
+  const handleDelete = () => {
     dispatch(deleteCellContent());
+    handleClose();
   };
 
   return (
@@ -36,19 +57,19 @@ const ContextMenu = ({ state, dispatch }) => {
           },
         }}
       >
-        <MenuItem onClick={() => {}}>
+        <MenuItem onClick={handleCut}>
           <ListItemIcon>
             <IconCut width={20} />
           </ListItemIcon>
           <ListItemText>Cut</ListItemText>
         </MenuItem>
-        <MenuItem onClick={() => {}}>
+        <MenuItem onClick={handleCopy}>
           <ListItemIcon>
             <IconCopy width={20} />
           </ListItemIcon>
           <ListItemText>Copy</ListItemText>
         </MenuItem>
-        <MenuItem onClick={() => {}}>
+        <MenuItem onClick={handlePaste}>
           <ListItemIcon>
             <ContentPaste width={20} />
           </ListItemIcon>

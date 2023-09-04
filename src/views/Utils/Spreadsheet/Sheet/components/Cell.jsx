@@ -10,8 +10,9 @@ import {
   setHovered,
   setEditMode,
   setMenuAnchorElement,
+  calculateContentFormula,
 } from "../actions";
-import { MouseButton, SheetConfig } from "../../constants";
+import { KeyboardEvent, MouseButton, SheetConfig } from "../../constants";
 import { getId } from "../../utils";
 
 const Cell = ({ id, state, dispatch }) => {
@@ -47,8 +48,20 @@ const Cell = ({ id, state, dispatch }) => {
     }
   }, [state.selected.cell]);
 
-  const handleInput = (e) => {
+  const handleChange = (e) => {
     dispatch(setContent({ cell: id, value: e.target.value }));
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === KeyboardEvent.BACKSPACE) {
+      state.editMode && e.stopPropagation();
+    }
+  };
+
+  const handleBlur = (e) => {
+    setEditMode(false);
+    setFocused(false);
+    dispatch(calculateContentFormula({ cell: id, value: e.target.value }));
   };
 
   const handleMouseOver = (e) => {
@@ -100,8 +113,9 @@ const Cell = ({ id, state, dispatch }) => {
       <CellInput
         ref={ref}
         onFocus={handleFocus}
-        onChange={handleInput}
-        onBlur={() => setFocused(false)}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
         type="text"
         tabIndex={row * SheetConfig.MAX_ROWS + (columnCharCode - 65)}
         value={
