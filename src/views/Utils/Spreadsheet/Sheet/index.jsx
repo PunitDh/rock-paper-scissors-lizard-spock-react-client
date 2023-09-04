@@ -3,7 +3,7 @@ import DashboardCard from "src/components/shared/DashboardCard";
 import { Item } from "../styles";
 import { initialState, reducer } from "./reducer";
 import styled from "@emotion/styled";
-import Cell from "./Cell";
+import Cell from "./components/Cell";
 import {
   resetHighlighted,
   setContent,
@@ -15,28 +15,15 @@ import {
   setMouseDown,
   setSelected,
   setSelectedColumn,
-  setSelectedRow,
   setShiftKey,
 } from "./actions";
-import { getId, createCellRange } from "../utils";
+import { getId } from "../utils";
 import { KeyboardEvent, SheetConfig } from "../constants";
 import ContextMenu from "./ContextMenu";
 import { FlexBox } from "src/components/shared/styles";
-
-const ColumnHeader = styled(Item)(({ selected }) => ({
-  backgroundColor: selected ? "#eee" : "#ddd",
-  outline: "2px solid black",
-  fontWeight: "700",
-  width: "100%",
-}));
-
-const RowHeader = styled(Item)(({ selected }) => {
-  return {
-    backgroundColor: selected ? "#eee" : "#ddd",
-    outline: "2px solid black",
-    fontWeight: "700",
-  };
-});
+import Range from "../models/Range";
+import RowHeader from "./components/RowHeader";
+import ColumnHeader from "./components/ColumnHeader";
 
 const Sheet = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -117,7 +104,7 @@ const Sheet = () => {
 
     if (state.shiftKey) {
       dispatch(setHighlightedCurrent(nextCell));
-      const currentHighlightedCells = createCellRange(
+      const currentHighlightedCells = Range.create(
         state.highlighted.anchor,
         nextCell
       );
@@ -137,7 +124,7 @@ const Sheet = () => {
 
   const handleMouseMove = () => {
     if (state.mouseDown) {
-      const currentHighlightedCells = createCellRange(
+      const currentHighlightedCells = Range.create(
         state.highlighted.anchor,
         state.highlighted.current
       );
@@ -170,14 +157,6 @@ const Sheet = () => {
     dispatch(setMenuAnchorElement(e.currentTarget));
   };
 
-  const handleRowHeaderClick = (e, row) => {
-    dispatch(setSelectedRow(row));
-  };
-
-  const handleColumnHeaderClick = (e, column) => {
-    dispatch(setSelectedColumn(column));
-  };
-
   return (
     <DashboardCard sx={{ height: "100%" }} title="Spreadsheet">
       <input
@@ -203,12 +182,11 @@ const Sheet = () => {
                   <Item key={row}>/\</Item>
                 ) : (
                   <RowHeader
+                    state={state}
+                    dispatch={dispatch}
                     key={row}
-                    onClick={(e) => handleRowHeaderClick(e, row)}
-                    selected={state.selected.row === row}
-                  >
-                    {row}
-                  </RowHeader>
+                    row={row}
+                  />
                 )
               )}
           </FlexBox>
@@ -222,17 +200,11 @@ const Sheet = () => {
                 .fill(0)
                 .map((_, column) => (
                   <ColumnHeader
-                    key={SheetConfig.COLUMNS[column]}
-                    selected={
-                      state.selected.column === SheetConfig.COLUMNS[column]
-                    }
-                    onClick={(e) =>
-                      handleColumnHeaderClick(e, SheetConfig.COLUMNS[column])
-                    }
-                    onContextMenu={handleContextMenu}
-                  >
-                    {SheetConfig.COLUMNS[column]}
-                  </ColumnHeader>
+                    key={column}
+                    state={state}
+                    dispatch={dispatch}
+                    column={column}
+                  />
                 ))}
             </FlexBox>
             <FlexBox>

@@ -1,5 +1,6 @@
 import { SheetConfig } from "../constants";
-import { createCellRange, getId } from "../utils";
+import Range from "../models/Range";
+import { getId } from "../utils";
 import { SheetAction } from "./actions";
 
 export const initialState = {
@@ -7,7 +8,13 @@ export const initialState = {
   editMode: false,
   shiftKey: false,
   hovered: "",
-  highlighted: { anchor: null, current: null, cells: [] },
+  highlighted: {
+    anchor: null,
+    current: null,
+    cells: [],
+    rows: [],
+    columns: [],
+  },
   content: {},
   mouseDown: false,
   inputText: "",
@@ -63,24 +70,36 @@ export const reducer = (state, action) => {
         },
       };
 
-    case SheetAction.SET_HIGHLIGHTED_CELLS:
+    case SheetAction.SET_HIGHLIGHTED_CELLS: {
+      const range = action.payload;
+      const cells = [...new Set(range.map((it) => it.id))].flat().sort();
+      const rows = [...new Set(range.map((it) => Number(it.row)))];
+      const columns = [...new Set(range.map((it) => it.column))];
       return {
         ...state,
         highlighted: {
           ...state.highlighted,
-          cells: [...new Set(action.payload)].flat().sort(),
+          cells,
+          rows,
+          columns,
         },
       };
-    case SheetAction.SET_MENU_ANCHOR_ELEMENT:
+    }
+    case SheetAction.SET_MENU_ANCHOR_ELEMENT: {
       return {
         ...state,
         menuAnchorElement: action.payload,
       };
+    }
     case SheetAction.SET_SELECTED_ROW: {
-      const cells = createCellRange(
+      const range = Range.create(
         `${SheetConfig.COLUMNS[0]}${action.payload}`,
         `${SheetConfig.COLUMNS[SheetConfig.MAX_COLUMNS]}${action.payload}`
       );
+      const cells = range.map((it) => it.id);
+      const rows = [...new Set(range.map((it) => Number(it.row)))];
+      const columns = [...new Set(range.map((it) => it.column))];
+
       return {
         ...state,
         selected: {
@@ -90,14 +109,19 @@ export const reducer = (state, action) => {
         highlighted: {
           ...state.highlighted,
           cells,
+          rows,
+          columns,
         },
       };
     }
     case SheetAction.SET_SELECTED_COLUMN: {
-      const cells = createCellRange(
+      const range = Range.create(
         `${action.payload}1`,
         `${action.payload}${SheetConfig.MAX_ROWS}`
       );
+      const cells = range.map((it) => it.id);
+      const rows = [...new Set(range.map((it) => Number(it.row)))];
+      const columns = [...new Set(range.map((it) => it.column))];
       return {
         ...state,
         selected: {
@@ -107,6 +131,8 @@ export const reducer = (state, action) => {
         highlighted: {
           ...state.highlighted,
           cells,
+          rows,
+          columns,
         },
       };
     }
@@ -156,9 +182,9 @@ export const reducer = (state, action) => {
         ].flat();
 
         if (string && formula && start && end) {
-          const range = createCellRange(start, end);
+          const range = Range.create(start, end);
           const value = range.reduce(
-            (a, c) => +a + parseFloat(state.content[c]?.value) || 0,
+            (a, c) => +a + parseFloat(state.content[c.id]?.value) || 0,
             0
           );
           return {

@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { CellInput, Item } from "../styles";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { CellInput, Item } from "../../styles";
 import {
   resetHighlighted,
   setContent,
@@ -10,15 +10,15 @@ import {
   setHovered,
   setEditMode,
   setMenuAnchorElement,
-} from "./actions";
-import { MouseButton, SheetConfig } from "../constants";
-import { getId } from "../utils";
+} from "../actions";
+import { MouseButton, SheetConfig } from "../../constants";
+import { getId } from "../../utils";
 
 const Cell = ({ id, state, dispatch }) => {
   const containerRef = useRef();
   const [focused, setFocused] = useState(false);
   const ref = useRef();
-  const { row, columnCharCode } = getId(id);
+  const { row, columnCharCode } = useMemo(() => getId(id), [id]);
 
   // const focusTextArea = () =>
   //   setTimeout(function () {
@@ -54,7 +54,7 @@ const Cell = ({ id, state, dispatch }) => {
   const handleMouseOver = (e) => {
     dispatch(setHovered(id));
     if (state.mouseDown) {
-      dispatch(setHighlightedCells(id));
+      dispatch(setHighlightedCells([id]));
     }
   };
 
@@ -64,8 +64,7 @@ const Cell = ({ id, state, dispatch }) => {
       if (!state.mouseDown && !state.shiftKey) dispatch(resetHighlighted());
       dispatch(setSelected(id));
       dispatch(setHighlightedAnchor(id));
-      dispatch(setHighlightedCells(id));
-    } else {
+      dispatch(setHighlightedCells([id]));
     }
   };
 
@@ -76,7 +75,6 @@ const Cell = ({ id, state, dispatch }) => {
   const handleDoubleClick = () => {
     if (!state.mouseDown) dispatch(resetHighlighted());
     dispatch(setSelected(id));
-    // dispatch(setCurrentEditing(id));
     dispatch(setEditMode(true));
     focusTextArea();
   };

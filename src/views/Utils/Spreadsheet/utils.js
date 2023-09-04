@@ -20,15 +20,3 @@ export const getCellMinMax = (highlighted) => {
     maxR,
   };
 };
-
-export const createCellRange = (anchor, current) => {
-  const { minC, maxC, minR, maxR } = getCellMinMax([anchor, current]);
-
-  let range = [];
-  for (let c = minC; c <= maxC; c++) {
-    for (let r = minR; r <= maxR; r++) {
-      range.push(`${String.fromCharCode(c)}${r}`);
-    }
-  }
-  return range;
-};
