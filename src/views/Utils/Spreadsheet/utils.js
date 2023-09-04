@@ -80,15 +80,13 @@ export const getPreviousRow = (id) => {
 };
 
 export const evaluateFormula = (stateContent, cell, cellValue) => {
-  const simpleReg = /([a-zA-Z]\d+)|(?:\d+)/gi;
-  const simpleFormula = [...cellValue.matchAll(simpleReg)]
-    .map((group) => group.filter(Boolean))
-    .flat();
+  const simpleReg = /([a-zA-Z]\d+|\d+)/gi;
+  const simpleFormulaMatches = [...cellValue.matchAll(simpleReg)].flat();
 
-  if (simpleFormula.length > 0) {
-    const evaluatedValue = simpleFormula.reduce((acc, cur) => {
+  if (simpleFormulaMatches.length > 0) {
+    const evaluatedValue = simpleFormulaMatches.reduce((acc, cur) => {
       const numericValue = parseFloat(
-        stateContent[String(cur).toUpperCase()]?.value || 0
+        stateContent[cur.toUpperCase()]?.value || 0
       );
       return acc.replace(cur, isNaN(cur) ? `(${numericValue})` : cur);
     }, cellValue.replace("=", ""));
@@ -117,11 +115,10 @@ export const evaluateFormula = (stateContent, cell, cellValue) => {
   }
 
   const formulaTest = /(SUM|AVG)+(?:\()(\w+):(\w+)\)/g;
-  const [string, formula, start, end] = [
-    ...cellValue.matchAll(formulaTest),
-  ].flat();
+  const formulaMatches = [...cellValue.matchAll(formulaTest)].flat();
 
-  if (string && formula && start && end) {
+  if (formulaMatches.length === 3) {
+    const [formula, start, end] = formulaMatches;
     const range = Range.createFlat(start, end);
     const value = range.ids.reduce(
       (acc, current) => acc + parseFloat(stateContent[current.id]?.value) || 0,
@@ -182,7 +179,7 @@ const evaluateExpression = (input) => {
 
     return { value, parsedInput };
   } catch (error) {
-    console.log(error);
+    console.log(error, parsedInput);
     return { value: "Syntax Error", parsedInput, error };
   }
 };
