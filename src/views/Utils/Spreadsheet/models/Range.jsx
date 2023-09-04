@@ -1,5 +1,5 @@
 import Cell from "./Cell";
-const { getCellMinMax } = require("../utils");
+const { getCellMinMax } = require("../Sheet/utils/cellUtils");
 
 export default class Range {
   constructor(cells, ids, rows, columns) {

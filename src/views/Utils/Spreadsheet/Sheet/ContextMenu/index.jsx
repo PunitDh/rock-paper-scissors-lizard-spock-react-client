@@ -7,7 +7,7 @@ import {
 } from "../actions";
 import { ContentPaste, Delete } from "@mui/icons-material";
 import { useClipboard } from "src/hooks";
-import { generateClipboardContent } from "../../utils";
+import { generateClipboardContent } from "../utils/cellUtils";
 
 const ContextMenu = ({ state, dispatch }) => {
   const clipboard = useClipboard();

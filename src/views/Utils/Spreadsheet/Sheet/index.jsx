@@ -21,7 +21,7 @@ import {
   getNextRow,
   getPreviousColumn,
   getPreviousRow,
-} from "../utils";
+} from "./utils/cellUtils";
 import { KeyboardEvent, SheetConfig } from "../constants";
 import ContextMenu from "./ContextMenu";
 import { FlexBox } from "src/components/shared/styles";

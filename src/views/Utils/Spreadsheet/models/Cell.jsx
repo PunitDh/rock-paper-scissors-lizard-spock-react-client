@@ -1,4 +1,4 @@
-const { getId } = require("../utils");
+const { getId } = require("../Sheet/utils/cellUtils");
 
 export default class Cell {
   constructor(id) {

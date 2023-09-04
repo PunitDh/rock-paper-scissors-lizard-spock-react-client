@@ -1,7 +1,8 @@
 import { SheetConfig } from "../constants";
+import { updateStateContent } from "./utils/evalUtils";
 import Cell from "../models/Cell";
 import Range from "../models/Range";
-import { evaluateFormula, getCellOffset, getId } from "../utils";
+import { getCellOffset, getId } from "./utils/cellUtils";
 import { SheetAction } from "./actions";
 
 export const initialState = {
@@ -241,8 +242,13 @@ export const reducer = (state, action) => {
         (it) => state.content[it].formula?.length > 0
       );
 
+      // const recalculatedValues = formulaCells.reduce((acc, cur) => {
+      //   const result = evaluateFormula(acc, cur, acc[cur].formula);
+      //   return result ? { ...acc, [cur]: result[cur] } : acc;
+      // }, state.content);
+
       const recalculatedValues = formulaCells.reduce((acc, cur) => {
-        const result = evaluateFormula(acc, cur, acc[cur].formula);
+        const result = updateStateContent(acc, cur, acc[cur].formula);
         return result ? { ...acc, [cur]: result[cur] } : acc;
       }, state.content);
 

@@ -13,7 +13,7 @@ import {
   recalculateFormulae,
 } from "../actions";
 import { KeyboardEvent, MouseButton, SheetConfig } from "../../constants";
-import { getId } from "../../utils";
+import { getId } from "../utils/cellUtils";
 
 const Cell = ({ id, state, dispatch }) => {
   const containerRef = useRef();
