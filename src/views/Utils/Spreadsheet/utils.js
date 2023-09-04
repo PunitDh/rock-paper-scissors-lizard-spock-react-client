@@ -88,6 +88,14 @@ export const evaluateFormula = (stateContent, cell, cellValue) => {
       };
     } catch (e) {
       console.error(e);
+      return {
+        ...stateContent,
+        [cell]: {
+          formula: cellValue.toUpperCase(),
+          value: "Syntax Error",
+          display: "Syntax Error",
+        },
+      };
     }
   }
 

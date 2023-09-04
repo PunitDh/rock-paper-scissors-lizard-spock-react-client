@@ -202,7 +202,7 @@ export const reducer = (state, action) => {
 
       const recalculatedValues = formulaCells.reduce((acc, cur) => {
         const result = evaluateFormula(acc, cur, acc[cur].formula);
-        return { ...acc, [cur]: result[cur] };
+        return result ? { ...acc, [cur]: result[cur] } : acc;
       }, state.content);
 
       if (cellValue?.startsWith("=")) {
