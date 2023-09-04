@@ -70,19 +70,50 @@ export const reducer = (state, action) => {
         },
       };
 
-    case SheetAction.SET_HIGHLIGHTED_CELLS: {
-      const range = action.payload;
-      const cells = [...new Set(range.map((it) => it.id))].flat().sort();
-      const rows = [...new Set(range.map((it) => Number(it.row)))];
-      const columns = [...new Set(range.map((it) => it.column))];
+    case SheetAction.HIGHLIGHT_CELLS: {
+      const range = Range.create(action.start, action.end);
       return {
         ...state,
         highlighted: {
           ...state.highlighted,
-          cells,
-          rows,
-          columns,
+          cells: range.ids,
+          rows: range.rows,
+          columns: range.columns,
         },
+      };
+    }
+    case SheetAction.DELETE_CELL_CONTENT: {
+      const content = Object.keys(state.content)
+        .filter((cell) => state.highlighted.cells.includes(cell))
+        .reduce(
+          (acc, cur) => ({
+            ...acc,
+            [cur]: { value: "", display: "" },
+          }),
+          state.content
+        );
+
+      return {
+        ...state,
+        content,
+      };
+    }
+    case SheetAction.CUT_CELL_CONTENT: {
+      // TODO
+      return {
+        ...state,
+      };
+    }
+    case SheetAction.COPY_CELL_CONTENT: {
+      // TODO
+      return {
+        ...state,
+      };
+    }
+    case SheetAction.PASTE_CELL_CONTENT: {
+      // TODO
+      return {
+        ...state,
       };
     }
     case SheetAction.SET_MENU_ANCHOR_ELEMENT: {
@@ -96,9 +127,6 @@ export const reducer = (state, action) => {
         `${SheetConfig.COLUMNS[0]}${action.payload}`,
         `${SheetConfig.COLUMNS[SheetConfig.MAX_COLUMNS]}${action.payload}`
       );
-      const cells = range.map((it) => it.id);
-      const rows = [...new Set(range.map((it) => Number(it.row)))];
-      const columns = [...new Set(range.map((it) => it.column))];
 
       return {
         ...state,
@@ -108,9 +136,9 @@ export const reducer = (state, action) => {
         },
         highlighted: {
           ...state.highlighted,
-          cells,
-          rows,
-          columns,
+          cells: range.ids,
+          rows: range.rows,
+          columns: range.columns,
         },
       };
     }
@@ -119,9 +147,6 @@ export const reducer = (state, action) => {
         `${action.payload}1`,
         `${action.payload}${SheetConfig.MAX_ROWS}`
       );
-      const cells = range.map((it) => it.id);
-      const rows = [...new Set(range.map((it) => Number(it.row)))];
-      const columns = [...new Set(range.map((it) => it.column))];
       return {
         ...state,
         selected: {
@@ -130,9 +155,27 @@ export const reducer = (state, action) => {
         },
         highlighted: {
           ...state.highlighted,
-          cells,
-          rows,
-          columns,
+          cells: range.ids,
+          rows: range.rows,
+          columns: range.columns,
+        },
+      };
+    }
+    case SheetAction.SET_SELECT_ALL: {
+      const range = Range.create(
+        `A1`,
+        `${SheetConfig.COLUMNS[SheetConfig.MAX_COLUMNS-1]}${SheetConfig.MAX_ROWS}`
+      );
+      return {
+        ...state,
+        selected: {
+          ...state.selected,
+        },
+        highlighted: {
+          ...state.highlighted,
+          cells: range.ids,
+          rows: range.rows,
+          columns: range.columns,
         },
       };
     }
@@ -183,7 +226,7 @@ export const reducer = (state, action) => {
 
         if (string && formula && start && end) {
           const range = Range.create(start, end);
-          const value = range.reduce(
+          const value = range.ids.reduce(
             (a, c) => +a + parseFloat(state.content[c.id]?.value) || 0,
             0
           );

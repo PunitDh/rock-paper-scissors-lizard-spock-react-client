@@ -18,4 +18,5 @@ export const KeyboardEvent = {
   ARROW_LEFT: "ArrowLeft",
   ARROW_RIGHT: "ArrowRight",
   SHIFT: "Shift",
+  BACKSPACE: "Backspace",
 };

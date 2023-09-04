@@ -1,20 +1,18 @@
 import { useEffect, useReducer } from "react";
 import DashboardCard from "src/components/shared/DashboardCard";
-import { Item } from "../styles";
 import { initialState, reducer } from "./reducer";
-import styled from "@emotion/styled";
 import Cell from "./components/Cell";
 import {
+  deleteCellContent,
   resetHighlighted,
   setContent,
   setHighlightedAnchor,
-  setHighlightedCells,
+  highlightCells,
   setHighlightedCurrent,
   setInputText,
   setMenuAnchorElement,
   setMouseDown,
   setSelected,
-  setSelectedColumn,
   setShiftKey,
 } from "./actions";
 import { getId } from "../utils";
@@ -24,6 +22,7 @@ import { FlexBox } from "src/components/shared/styles";
 import Range from "../models/Range";
 import RowHeader from "./components/RowHeader";
 import ColumnHeader from "./components/ColumnHeader";
+import SelectAll from "./components/SelectAll";
 
 const Sheet = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -46,6 +45,10 @@ const Sheet = () => {
     let nextRow, nextCell;
 
     switch (e.key) {
+      case KeyboardEvent.BACKSPACE:
+        dispatch(deleteCellContent());
+        break;
+
       case KeyboardEvent.SHIFT:
         dispatch(setHighlightedAnchor(state.selected.cell));
         dispatch(setShiftKey(true));
@@ -104,11 +107,7 @@ const Sheet = () => {
 
     if (state.shiftKey) {
       dispatch(setHighlightedCurrent(nextCell));
-      const currentHighlightedCells = Range.create(
-        state.highlighted.anchor,
-        nextCell
-      );
-      dispatch(setHighlightedCells(currentHighlightedCells));
+      dispatch(highlightCells(state.highlighted.anchor, nextCell));
     } else {
       // dispatch(resetHighlighted());
     }
@@ -124,11 +123,7 @@ const Sheet = () => {
 
   const handleMouseMove = () => {
     if (state.mouseDown) {
-      const currentHighlightedCells = Range.create(
-        state.highlighted.anchor,
-        state.highlighted.current
-      );
-      dispatch(setHighlightedCells(currentHighlightedCells));
+      dispatch(highlightCells(state.highlighted.anchor, state.highlighted.current));
     }
   };
 
@@ -140,7 +135,7 @@ const Sheet = () => {
           ""
       )
     );
-  }, [state.selected.cell, state.content[state.selected.cell]?.value]);
+  }, [state.selected.cell, state.content]);
 
   const handleInputTextChange = (e) => {
     dispatch(setContent({ cell: state.selected.cell, value: e.target.value }));
@@ -179,13 +174,21 @@ const Sheet = () => {
               .fill(0)
               .map((_, row) =>
                 row === 0 ? (
-                  <Item key={row}>/\</Item>
+                  <SelectAll
+                    state={state}
+                    dispatch={dispatch}
+                    onContextMenu={handleContextMenu}
+                    key={row}
+                  >
+                    /\
+                  </SelectAll>
                 ) : (
                   <RowHeader
                     state={state}
                     dispatch={dispatch}
                     key={row}
                     row={row}
+                    onContextMenu={handleContextMenu}
                   />
                 )
               )}
@@ -204,6 +207,7 @@ const Sheet = () => {
                     state={state}
                     dispatch={dispatch}
                     column={column}
+                    onContextMenu={handleContextMenu}
                   />
                 ))}
             </FlexBox>

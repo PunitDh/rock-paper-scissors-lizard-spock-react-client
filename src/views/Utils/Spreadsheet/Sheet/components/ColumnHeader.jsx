@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Item } from "../../styles";
 import { SheetConfig } from "../../constants";
-import { setMenuAnchorElement, setSelectedColumn } from "../actions";
+import { setSelectedColumn } from "../actions";
 
 const HeaderItem = styled(Item)(({ selected }) => ({
   backgroundColor: selected ? "#eee" : "#ddd",
@@ -10,7 +10,7 @@ const HeaderItem = styled(Item)(({ selected }) => ({
   width: "100%",
 }));
 
-const ColumnHeader = ({ state, dispatch, column }) => {
+const ColumnHeader = ({ state, dispatch, column, onContextMenu }) => {
   const handleClick = (e, column) => {
     dispatch(setSelectedColumn(column));
   };
@@ -25,7 +25,6 @@ const ColumnHeader = ({ state, dispatch, column }) => {
 
   return (
     <HeaderItem
-      key={SheetConfig.COLUMNS[column]}
       selected={
         state.selected.column === SheetConfig.COLUMNS[column] ||
         state.highlighted.columns.includes(SheetConfig.COLUMNS[column])
@@ -33,7 +32,7 @@ const ColumnHeader = ({ state, dispatch, column }) => {
       onClick={(e) => handleClick(e, SheetConfig.COLUMNS[column])}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
-      onContextMenu={(e) => dispatch(setMenuAnchorElement(e.currentTarget))}
+      onContextMenu={onContextMenu}
     >
       {SheetConfig.COLUMNS[column]}
     </HeaderItem>

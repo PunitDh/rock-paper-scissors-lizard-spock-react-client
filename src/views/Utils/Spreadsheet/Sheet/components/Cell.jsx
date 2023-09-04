@@ -3,7 +3,7 @@ import { CellInput, Item } from "../../styles";
 import {
   resetHighlighted,
   setContent,
-  setHighlightedCells,
+  highlightCells,
   setSelected,
   setHighlightedAnchor,
   setHighlightedCurrent,
@@ -54,7 +54,7 @@ const Cell = ({ id, state, dispatch }) => {
   const handleMouseOver = (e) => {
     dispatch(setHovered(id));
     if (state.mouseDown) {
-      dispatch(setHighlightedCells([id]));
+      dispatch(highlightCells(id, id));
     }
   };
 
@@ -64,7 +64,7 @@ const Cell = ({ id, state, dispatch }) => {
       if (!state.mouseDown && !state.shiftKey) dispatch(resetHighlighted());
       dispatch(setSelected(id));
       dispatch(setHighlightedAnchor(id));
-      dispatch(setHighlightedCells([id]));
+      dispatch(highlightCells(id, id));
     }
   };
 

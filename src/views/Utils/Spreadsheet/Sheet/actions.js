@@ -6,9 +6,14 @@ export const SheetAction = Object.freeze({
   SET_HOVERED: "SET_HOVERED",
   SET_SELECTED_ROW: "SET_SELECTED_ROW",
   SET_SELECTED_COLUMN: "SET_SELECTED_COLUMN",
-  SET_HIGHLIGHTED_CELLS: "SET_HIGHLIGHTED_CELLS",
+  SET_SELECT_ALL: "SET_SELECT_ALL",
+  HIGHLIGHT_CELLS: "HIGHLIGHT_CELLS",
   SET_HIGHLIGHTED_ANCHOR: "SET_HIGHLIGHTED_ANCHOR",
   SET_HIGHLIGHTED_CURRENT: "SET_HIGHLIGHTED_CURRENT",
+  DELETE_CELL_CONTENT: "DELETE_CELL_CONTENT",
+  CUT_CELL_CONTENT: "CUT_CELL_CONTENT",
+  COPY_CELL_CONTENT: "COPY_CELL_CONTENT",
+  PASTE_CELL_CONTENT: "PASTE_CELL_CONTENT",
   RESET_HIGHLIGHTED: "RESET_HIGHLIGHTED",
   SET_MOUSEDOWN: "SET_MOUSEDOWN",
   SET_CONTENT: "SET_CONTENT",
@@ -51,6 +56,22 @@ export const setHighlightedCurrent = (payload) => ({
   payload,
 });
 
+export const cutCellContent = () => ({
+  type: SheetAction.CUT_CELL_CONTENT,
+});
+
+export const copyCellContent = () => ({
+  type: SheetAction.COPY_CELL_CONTENT,
+});
+
+export const pasteCellContent = () => ({
+  type: SheetAction.PASTE_CELL_CONTENT,
+});
+
+export const deleteCellContent = () => ({
+  type: SheetAction.DELETE_CELL_CONTENT,
+});
+
 export const setSelectedRow = (payload) => ({
   type: SheetAction.SET_SELECTED_ROW,
   payload,
@@ -61,9 +82,14 @@ export const setSelectedColumn = (payload) => ({
   payload,
 });
 
-export const setHighlightedCells = (payload) => ({
-  type: SheetAction.SET_HIGHLIGHTED_CELLS,
-  payload,
+export const setSelectAll = () => ({
+  type: SheetAction.SET_SELECT_ALL,
+});
+
+export const highlightCells = (start, end) => ({
+  type: SheetAction.HIGHLIGHT_CELLS,
+  start,
+  end
 });
 
 export const setMenuAnchorElement = (payload) => ({
