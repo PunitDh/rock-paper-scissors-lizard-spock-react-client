@@ -80,30 +80,27 @@ export const getPreviousRow = (id) => {
 };
 
 export const evaluateFormula = (stateContent, cell, cellValue) => {
-  const simpleReg = /([a-zA-Z]\d+)/gi;
-  const simpleFormula = cellValue.matchAll(simpleReg);
+  const simpleReg = /([a-zA-Z]\d+)|(?:\d+)/gi;
+  const simpleFormula = [...cellValue.matchAll(simpleReg)]
+    .map((group) => group.filter(Boolean))
+    .flat();
 
-  if (simpleReg.exec(cellValue)) {
-    const str = [...simpleFormula]
-      .map((group) => group[1])
-      .reduce(
-        (acc, cur) =>
-          acc.replace(
-            cur,
-            `(${parseFloat(stateContent[cur.toUpperCase()]?.value || 0)})`
-          ),
-        cellValue
-      )
-      .replace("=", "");
+  if (simpleFormula.length > 0) {
+    const evaluatedValue = simpleFormula.reduce((acc, cur) => {
+      const numericValue = parseFloat(
+        stateContent[String(cur).toUpperCase()]?.value || 0
+      );
+      return acc.replace(cur, isNaN(cur) ? `(${numericValue})` : cur);
+    }, cellValue.replace("=", ""));
 
     try {
-      const evaluatedValue = evaluateExpression(str);
+      const evaluatedExpression = evaluateExpression(evaluatedValue);
       return {
         ...stateContent,
         [cell]: {
           formula: cellValue.toUpperCase(),
-          value: evaluatedValue.value,
-          display: evaluatedValue.value,
+          value: evaluatedExpression.value,
+          display: evaluatedExpression.value,
         },
       };
     } catch (e) {
@@ -127,7 +124,7 @@ export const evaluateFormula = (stateContent, cell, cellValue) => {
   if (string && formula && start && end) {
     const range = Range.createFlat(start, end);
     const value = range.ids.reduce(
-      (a, c) => +a + parseFloat(stateContent[c.id]?.value) || 0,
+      (acc, current) => acc + parseFloat(stateContent[current.id]?.value) || 0,
       0
     );
     return {
