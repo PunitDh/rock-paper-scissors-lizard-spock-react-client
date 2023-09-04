@@ -4,13 +4,13 @@ import {
   resetHighlighted,
   setContent,
   highlightCells,
-  setSelected,
+  selectCell,
   setHighlightedAnchor,
   setHighlightedCurrent,
   setHovered,
   setEditMode,
   setMenuAnchorElement,
-  calculateContentFormula,
+  recalculateFormulae,
 } from "../actions";
 import { KeyboardEvent, MouseButton, SheetConfig } from "../../constants";
 import { getId } from "../../utils";
@@ -31,7 +31,7 @@ const Cell = ({ id, state, dispatch }) => {
   const handleClick = (e) => {
     if (e.button === MouseButton.LEFT_CLICK) {
       if (!state.mouseDown) dispatch(resetHighlighted());
-      dispatch(setSelected(id));
+      dispatch(selectCell(id));
     }
   };
 
@@ -61,7 +61,7 @@ const Cell = ({ id, state, dispatch }) => {
   const handleBlur = (e) => {
     setEditMode(false);
     setFocused(false);
-    dispatch(calculateContentFormula({ cell: id, value: e.target.value }));
+    dispatch(recalculateFormulae());
   };
 
   const handleMouseOver = (e) => {
@@ -75,7 +75,7 @@ const Cell = ({ id, state, dispatch }) => {
     if (e.button === MouseButton.LEFT_CLICK) {
       // e.preventDefault();
       if (!state.mouseDown && !state.shiftKey) dispatch(resetHighlighted());
-      dispatch(setSelected(id));
+      dispatch(selectCell(id));
       dispatch(setHighlightedAnchor(id));
       dispatch(highlightCells(id, id));
     }
@@ -87,7 +87,7 @@ const Cell = ({ id, state, dispatch }) => {
 
   const handleDoubleClick = () => {
     if (!state.mouseDown) dispatch(resetHighlighted());
-    dispatch(setSelected(id));
+    dispatch(selectCell(id));
     dispatch(setEditMode(true));
     focusTextArea();
   };
@@ -109,6 +109,7 @@ const Cell = ({ id, state, dispatch }) => {
       onMouseMove={handleMouseMove}
       onDoubleClick={handleDoubleClick}
       onContextMenu={handleContextMenu}
+      id={id}
     >
       <CellInput
         ref={ref}

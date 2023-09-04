@@ -1,10 +1,11 @@
 import { SheetConfig } from "../constants";
+import Cell from "../models/Cell";
 import Range from "../models/Range";
-import { evaluateFormula, getId } from "../utils";
+import { evaluateFormula, getCellOffset, getId } from "../utils";
 import { SheetAction } from "./actions";
 
 export const initialState = {
-  selected: { cell: "A1", row: 1, column: "A" },
+  selected: { cell: "A1", row: 1, column: "A", columnCharCode: 65 },
   editMode: false,
   shiftKey: false,
   hovered: "",
@@ -71,7 +72,7 @@ export const reducer = (state, action) => {
       };
 
     case SheetAction.HIGHLIGHT_CELLS: {
-      const range = Range.create(action.start, action.end);
+      const range = Range.createFlat(action.start, action.end);
       return {
         ...state,
         highlighted: {
@@ -112,7 +113,48 @@ export const reducer = (state, action) => {
       };
     }
     case SheetAction.PASTE_CELL_CONTENT: {
-      // TODO
+      const data = action.payload;
+      try {
+        const parsed = JSON.parse(data);
+        if (parsed.type === "_sheet") {
+          const cellOffset = getCellOffset(
+            new Cell(state.menuAnchorElement.id),
+            parsed.content[0].length - 1,
+            parsed.content.length - 1
+          );
+          const range = Range.create(state.menuAnchorElement.id, cellOffset);
+          const updateObj = {};
+          range.cells.forEach((row, rowIndex) =>
+            row.forEach((cell, cellIndex) => {
+              updateObj[cell.id] = parsed.content[rowIndex][cellIndex];
+            })
+          );
+          const newContent = Object.keys(updateObj).reduce((acc, cur) => {
+            return {
+              ...acc,
+              [cur]: {
+                value: updateObj[cur].value,
+                display: updateObj[cur].display,
+                formula: updateObj[cur].formula,
+              },
+            };
+          }, state.content);
+
+          console.log({
+            ...state,
+            content: newContent,
+          });
+          return {
+            ...state,
+            content: newContent,
+          };
+        }
+      } catch (e) {
+        console.error(e);
+        return {
+          ...state,
+        };
+      }
       return {
         ...state,
       };
@@ -124,7 +166,7 @@ export const reducer = (state, action) => {
       };
     }
     case SheetAction.SET_SELECTED_ROW: {
-      const range = Range.create(
+      const range = Range.createFlat(
         `${SheetConfig.COLUMNS[0]}${action.payload}`,
         `${SheetConfig.COLUMNS[SheetConfig.MAX_COLUMNS]}${action.payload}`
       );
@@ -144,7 +186,7 @@ export const reducer = (state, action) => {
       };
     }
     case SheetAction.SET_SELECTED_COLUMN: {
-      const range = Range.create(
+      const range = Range.createFlat(
         `${action.payload}1`,
         `${action.payload}${SheetConfig.MAX_ROWS}`
       );
@@ -163,7 +205,7 @@ export const reducer = (state, action) => {
       };
     }
     case SheetAction.SET_SELECT_ALL: {
-      const range = Range.create(
+      const range = Range.createFlat(
         `A1`,
         `${SheetConfig.COLUMNS[SheetConfig.MAX_COLUMNS - 1]}${
           SheetConfig.MAX_ROWS
@@ -194,25 +236,15 @@ export const reducer = (state, action) => {
         mouseDown: action.payload,
       };
     }
-    case SheetAction.CALCULATE_CONTENT_FORMULA: {
-      const { cell, value: cellValue } = action.payload;
+    case SheetAction.RECALCULATE_FORMULAE: {
       const formulaCells = Object.keys(state.content).filter(
-        (it) => state.content[it].formula
+        (it) => state.content[it].formula?.length > 0
       );
 
       const recalculatedValues = formulaCells.reduce((acc, cur) => {
         const result = evaluateFormula(acc, cur, acc[cur].formula);
         return result ? { ...acc, [cur]: result[cur] } : acc;
       }, state.content);
-
-      if (cellValue?.startsWith("=")) {
-        const newContent = evaluateFormula(state.content, cell, cellValue);
-
-        return {
-          ...state,
-          content: { ...recalculatedValues, ...newContent },
-        };
-      }
 
       return {
         ...state,
@@ -231,7 +263,7 @@ export const reducer = (state, action) => {
           },
         };
       }
-      // SUM(A1:A3)
+
       return {
         ...state,
         content: {

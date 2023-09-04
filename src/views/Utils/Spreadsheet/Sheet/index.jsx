@@ -12,12 +12,11 @@ import {
   setInputText,
   setMenuAnchorElement,
   setMouseDown,
-  setSelected,
+  selectCell,
   setShiftKey,
-  calculateContentFormula,
+  recalculateFormulae,
 } from "./actions";
 import {
-  getId,
   getNextColumn,
   getNextRow,
   getPreviousColumn,
@@ -87,7 +86,7 @@ const Sheet = () => {
         break;
     }
 
-    dispatch(setSelected(nextCell));
+    dispatch(selectCell(nextCell));
 
     if (state.shiftKey) {
       dispatch(setHighlightedCurrent(nextCell));
@@ -131,19 +130,14 @@ const Sheet = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(setInputText(e.target.inputText.value));
-    dispatch(
-      calculateContentFormula({
-        cell: state.selected.cell,
-        value: e.target.inputText.value,
-      })
-    );
-    dispatch(setSelected(getNextRow(state.selected.cell)));
+    dispatch(recalculateFormulae());
+    dispatch(selectCell(getNextRow(state.selected.cell)));
   };
 
   const handleFocusGuard = (e) => {
     e.preventDefault();
     e.target.blur();
-    dispatch(setSelected("A1"));
+    dispatch(selectCell("A1"));
   };
 
   const handleContextMenu = (e) => {

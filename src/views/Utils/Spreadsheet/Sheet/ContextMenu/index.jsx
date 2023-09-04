@@ -1,31 +1,37 @@
 import { Box, ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
 import { IconCopy, IconCut } from "@tabler/icons";
 import {
-  copyCellContent,
-  cutCellContent,
   deleteCellContent,
   pasteCellContent,
   setMenuAnchorElement,
 } from "../actions";
 import { ContentPaste, Delete } from "@mui/icons-material";
+import { useClipboard } from "src/hooks";
+import { generateClipboardContent } from "../../utils";
 
 const ContextMenu = ({ state, dispatch }) => {
+  const clipboard = useClipboard();
+
   const handleClose = () => {
     dispatch(setMenuAnchorElement(false));
   };
 
-  const handleCut = () => {
-    dispatch(cutCellContent());
+  const handleCut = async () => {
+    const content = generateClipboardContent(state);
+    await clipboard.copy(content);
+    dispatch(deleteCellContent());
     handleClose();
   };
 
-  const handleCopy = () => {
-    dispatch(copyCellContent());
+  const handleCopy = async () => {
+    const content = generateClipboardContent(state);
+    await clipboard.copy(content);
     handleClose();
   };
 
-  const handlePaste = () => {
-    dispatch(pasteCellContent());
+  const handlePaste = async () => {
+    const data = await clipboard.get();
+    dispatch(pasteCellContent(data));
     handleClose();
   };
 

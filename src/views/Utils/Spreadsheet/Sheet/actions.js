@@ -17,12 +17,12 @@ export const SheetAction = Object.freeze({
   RESET_HIGHLIGHTED: "RESET_HIGHLIGHTED",
   SET_MOUSEDOWN: "SET_MOUSEDOWN",
   SET_CONTENT: "SET_CONTENT",
-  CALCULATE_CONTENT_FORMULA: "CALCULATE_CONTENT_FORMULA",
+  RECALCULATE_FORMULAE: "RECALCULATE_FORMULAE",
   SET_MENU_ANCHOR_ELEMENT: "SET_MENU_ANCHOR_ELEMENT",
   RESET_STATE: "RESET_STATE",
 });
 
-export const setSelected = (payload) => ({
+export const selectCell = (payload) => ({
   type: SheetAction.SET_SELECTED,
   payload,
 });
@@ -65,8 +65,9 @@ export const copyCellContent = () => ({
   type: SheetAction.COPY_CELL_CONTENT,
 });
 
-export const pasteCellContent = () => ({
+export const pasteCellContent = (payload) => ({
   type: SheetAction.PASTE_CELL_CONTENT,
+  payload,
 });
 
 export const deleteCellContent = () => ({
@@ -112,9 +113,8 @@ export const setContent = (payload) => ({
   payload,
 });
 
-export const calculateContentFormula = (payload) => ({
-  type: SheetAction.CALCULATE_CONTENT_FORMULA,
-  payload,
+export const recalculateFormulae = () => ({
+  type: SheetAction.RECALCULATE_FORMULAE,
 });
 
 export const resetState = () => ({

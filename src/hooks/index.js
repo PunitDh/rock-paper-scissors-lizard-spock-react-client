@@ -4,6 +4,7 @@ import useToken from "./useToken";
 import useNotification from "./useNotification";
 import useAPI from "./useAPI";
 import useLoading from "./useLoading";
+import useClipboard from "./useClipboard";
 
 export {
   useCurrentGame,
@@ -12,4 +13,5 @@ export {
   useNotification,
   useAPI,
   useLoading,
+  useClipboard,
 };

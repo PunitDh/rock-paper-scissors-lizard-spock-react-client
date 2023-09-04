@@ -1,4 +1,5 @@
-import { Calc, MAX_COLUMN, MIN_COLUMN, SheetConfig } from "./constants";
+import { MAX_COLUMN, MIN_COLUMN, SheetConfig } from "./constants";
+import Cell from "./models/Cell";
 
 export const getId = (id) => ({
   row: id?.match(/\d+/g)[0],
@@ -21,6 +22,25 @@ export const getCellMinMax = (highlighted) => {
     minR,
     maxR,
   };
+};
+
+export const getCellOffset = (cell, offsetX, offsetY) => {
+  const offsetRow = +cell.row + offsetY;
+  const offsetColumn =
+    SheetConfig.COLUMNS[+SheetConfig.COLUMNS.indexOf(cell.column) + offsetX];
+  return `${offsetColumn}${offsetRow}`;
+};
+
+export const generateClipboardContent = (state) => {
+  const content = state.highlighted.rows.map((row) =>
+    state.highlighted.columns.map((column) => ({
+      value: state.content[`${column}${row}`]?.value || "",
+      display: state.content[`${column}${row}`]?.display || "",
+      formula: state.content[`${column}${row}`]?.formula || "",
+    }))
+  );
+  const type = "_sheet";
+  return JSON.stringify({ type, content });
 };
 
 export const getNextColumn = (id) => {
@@ -105,7 +125,7 @@ export const evaluateFormula = (stateContent, cell, cellValue) => {
   ].flat();
 
   if (string && formula && start && end) {
-    const range = Range.create(start, end);
+    const range = Range.createFlat(start, end);
     const value = range.ids.reduce(
       (a, c) => +a + parseFloat(stateContent[c.id]?.value) || 0,
       0
@@ -121,7 +141,7 @@ export const evaluateFormula = (stateContent, cell, cellValue) => {
   }
 };
 
-export const evaluateExpression = (input) => {
+const evaluateExpression = (input) => {
   let parsedInput, value;
   try {
     parsedInput = input
