@@ -1,6 +1,6 @@
 import { SheetConfig } from "../constants";
 import Range from "../models/Range";
-import { getId } from "../utils";
+import { evaluateFormula, getId } from "../utils";
 import { SheetAction } from "./actions";
 
 export const initialState = {
@@ -196,72 +196,34 @@ export const reducer = (state, action) => {
     }
     case SheetAction.CALCULATE_CONTENT_FORMULA: {
       const { cell, value: cellValue } = action.payload;
+      const formulaCells = Object.keys(state.content).filter(
+        (it) => state.content[it].formula
+      );
+
+      const recalculatedValues = formulaCells.reduce((acc, cur) => {
+        const result = evaluateFormula(acc, cur, acc[cur].formula);
+        return { ...acc, [cur]: result[cur] };
+      }, state.content);
+
+      console.log({ recalculatedValues });
+
       if (cellValue?.startsWith("=")) {
-        const simpleReg = /(\w+\d+)/gi;
-        const simpleFormula = cellValue.matchAll(simpleReg);
+        const newContent = evaluateFormula(state.content, cell, cellValue);
+        console.log({ ...recalculatedValues, ...newContent });
 
-        if (simpleReg.exec(cellValue)) {
-          const str = [...simpleFormula]
-            .map((group) => group[1])
-            .reduce(
-              (acc, cur) =>
-                acc.replace(
-                  cur,
-                  `(${parseFloat(
-                    state.content[cur.toUpperCase()]?.value || 0
-                  )})`
-                ),
-              cellValue
-            )
-            .replace("=", "");
-
-          try {
-            const evaluatedValue = eval(str);
-            return {
-              ...state,
-              content: {
-                ...state.content,
-                [cell]: {
-                  formula: cellValue.toUpperCase(),
-                  value: evaluatedValue,
-                  display: evaluatedValue,
-                },
-              },
-            };
-          } catch {}
-        }
-
-        const formulaTest = /(SUM|AVG)+(?:\()(\w+):(\w+)\)/g;
-        const [string, formula, start, end] = [
-          ...cellValue.matchAll(formulaTest),
-        ].flat();
-
-        if (string && formula && start && end) {
-          const range = Range.create(start, end);
-          const value = range.ids.reduce(
-            (a, c) => +a + parseFloat(state.content[c.id]?.value) || 0,
-            0
-          );
-          return {
-            ...state,
-            content: {
-              ...state.content,
-              [action.payload.cell]: {
-                ...state.content[action.payload.cell],
-                value,
-                display: value,
-              },
-            },
-          };
-        }
+        return {
+          ...state,
+          content: { ...recalculatedValues, ...newContent },
+        };
       }
 
       return {
         ...state,
+        content: recalculatedValues,
       };
     }
     case SheetAction.SET_CONTENT:
-      if (action.payload.value.startsWith("=")) {
+      if (action.payload.value?.startsWith("=")) {
         return {
           ...state,
           content: {

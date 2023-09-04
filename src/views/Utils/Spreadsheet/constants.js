@@ -20,3 +20,19 @@ export const KeyboardEvent = {
   SHIFT: "Shift",
   BACKSPACE: "Backspace",
 };
+
+export const Calc = {
+  ANS: "Ans",
+  DEG: "Deg",
+  OPERATIONS: ["+", "-", "*", "/", "^"],
+};
+
+export const Formula = [
+  "SUM(",
+  "AVG(",
+  
+]
+
+export const MIN_COLUMN = SheetConfig.COLUMNS[0].charCodeAt(0);
+export const MAX_COLUMN =
+  SheetConfig.COLUMNS[SheetConfig.MAX_COLUMNS].charCodeAt(0);

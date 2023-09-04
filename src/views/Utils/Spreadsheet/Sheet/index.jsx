@@ -14,8 +14,15 @@ import {
   setMouseDown,
   setSelected,
   setShiftKey,
+  calculateContentFormula,
 } from "./actions";
-import { getId } from "../utils";
+import {
+  getId,
+  getNextColumn,
+  getNextRow,
+  getPreviousColumn,
+  getPreviousRow,
+} from "../utils";
 import { KeyboardEvent, SheetConfig } from "../constants";
 import ContextMenu from "./ContextMenu";
 import { FlexBox } from "src/components/shared/styles";
@@ -37,15 +44,11 @@ const Sheet = () => {
   };
 
   const handleKeyDown = (e) => {
-    const { row, column, columnCharCode } = getId(state.selected.cell);
-    const minColumn = SheetConfig.COLUMNS[0].charCodeAt(0);
-    const maxColumn =
-      SheetConfig.COLUMNS[SheetConfig.MAX_COLUMNS].charCodeAt(0);
-    let nextRow, nextCell;
+    let nextCell;
 
     switch (e.key) {
       case KeyboardEvent.BACKSPACE:
-        dispatch(deleteCellContent());
+        !state.editMode && dispatch(deleteCellContent());
         break;
 
       case KeyboardEvent.SHIFT:
@@ -58,44 +61,26 @@ const Sheet = () => {
       case KeyboardEvent.ARROW_DOWN:
         e.preventDefault();
         !state.shiftKey && dispatch(resetHighlighted());
-        nextCell = `${column}${
-          +row === SheetConfig.MAX_ROWS ? +row : +row + 1
-        }`;
+        nextCell = getNextRow(state.selected.cell);
         break;
 
       case KeyboardEvent.TAB:
       case KeyboardEvent.ARROW_RIGHT:
         e.preventDefault();
         !state.shiftKey && dispatch(resetHighlighted());
-        nextRow =
-          columnCharCode + 1 === maxColumn
-            ? parseInt(row) === SheetConfig.MAX_ROWS
-              ? 1
-              : +row + 1
-            : row;
-        nextCell = `${
-          columnCharCode + 1 === maxColumn
-            ? String.fromCharCode(minColumn)
-            : String.fromCharCode(columnCharCode + 1)
-        }${nextRow}`;
+        nextCell = getNextColumn(state.selected.cell);
         break;
 
       case KeyboardEvent.ARROW_LEFT:
         e.preventDefault();
         !state.shiftKey && dispatch(resetHighlighted());
-        nextRow =
-          columnCharCode === minColumn ? (+row === 1 ? row : row - 1) : row;
-        nextCell = `${
-          columnCharCode === minColumn
-            ? String.fromCharCode(maxColumn - 1)
-            : String.fromCharCode(columnCharCode - 1)
-        }${nextRow}`;
+        nextCell = getPreviousColumn(state.selected.cell);
         break;
 
       case KeyboardEvent.ARROW_UP:
         e.preventDefault();
         !state.shiftKey && dispatch(resetHighlighted());
-        nextCell = `${column}${+row === 1 ? +row : +row - 1}`;
+        nextCell = getPreviousRow(state.selected.cell);
         break;
       default:
         nextCell = state.selected.cell;
@@ -139,7 +124,20 @@ const Sheet = () => {
   }, [state.selected.cell, state.content]);
 
   const handleInputTextChange = (e) => {
+    dispatch(setInputText(e.target.value));
     dispatch(setContent({ cell: state.selected.cell, value: e.target.value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(setInputText(e.target.inputText.value));
+    dispatch(
+      calculateContentFormula({
+        cell: state.selected.cell,
+        value: e.target.inputText.value,
+      })
+    );
+    dispatch(setSelected(getNextRow(state.selected.cell)));
   };
 
   const handleFocusGuard = (e) => {
@@ -158,13 +156,17 @@ const Sheet = () => {
       {state.menuAnchorElement && (
         <ContextMenu state={state} dispatch={dispatch} />
       )}
-      <input
-        type="text"
-        style={{ width: "100%", marginBottom: "0.2rem" }}
-        value={state.inputText}
-        onChange={handleInputTextChange}
-        onContextMenu={handleContextMenu}
-      />
+      <form onSubmit={handleSubmit}>
+        <input
+          name="inputText"
+          type="text"
+          style={{ width: "100%", marginBottom: "0.2rem" }}
+          value={state.inputText}
+          onChange={handleInputTextChange}
+          onContextMenu={handleContextMenu}
+          autoComplete="off"
+        />
+      </form>
       <div
         onKeyUp={handleKeyUp}
         onKeyDown={handleKeyDown}
