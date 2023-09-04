@@ -205,11 +205,8 @@ export const reducer = (state, action) => {
         return { ...acc, [cur]: result[cur] };
       }, state.content);
 
-      console.log({ recalculatedValues });
-
       if (cellValue?.startsWith("=")) {
         const newContent = evaluateFormula(state.content, cell, cellValue);
-        console.log({ ...recalculatedValues, ...newContent });
 
         return {
           ...state,
