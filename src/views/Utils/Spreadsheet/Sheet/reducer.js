@@ -1,9 +1,10 @@
 import { SheetConfig } from "../constants";
-import { updateStateContent } from "./utils/evalUtils";
+// import { updateStateContent } from "./utils/evalUtils";
 import Cell from "../models/Cell";
 import Range from "../models/Range";
 import { getCellOffset, getId } from "./utils/cellUtils";
 import { SheetAction } from "./actions";
+import { updateStateContent } from "./utils/evalUtils2";
 
 export const initialState = {
   selected: { cell: "A1", row: 1, column: "A", columnCharCode: 65 },
