@@ -4,8 +4,11 @@ import { setSelectedRow } from "../actions";
 
 const HeaderItem = styled(Item)(({ selected }) => ({
   backgroundColor: selected ? "#eee" : "#ddd",
-  outline: "2px solid black",
+  outline: "1px solid black",
+  // border: "2px solid black",
+  borderRight: "1px solid black",
   fontWeight: "700",
+  userSelect: "none",
 }));
 
 const RowHeader = ({ state, dispatch, row, onContextMenu }) => {
@@ -25,8 +28,7 @@ const RowHeader = ({ state, dispatch, row, onContextMenu }) => {
     <HeaderItem
       onClick={(e) => handleRowHeaderClick(e, row)}
       selected={
-        state.selected.row === row ||
-        state.highlighted.rows.includes(row)
+        state.selected.row === row || state.highlighted.rows.includes(row)
       }
       onMouseDown={handleRowHeaderMouseDown}
       onMouseUp={handleRowHeaderMouseUp}

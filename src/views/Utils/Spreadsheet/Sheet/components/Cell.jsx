@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
-import { CellInput, Item } from "../../styles";
+import { CellInput, Item, Resize } from "../../styles";
 import {
   resetHighlight,
   setContent,
@@ -22,6 +22,8 @@ const Cell = ({ id, state, dispatch }) => {
   const { row, columnCharCode } = useMemo(() => getId(id), [id]);
   const isSelected =
     id === state.selected.cell || state.highlighted.cells.includes(id);
+  const isLastHighlighted =
+    id === state.highlighted.cells[state.highlighted.cells.length - 1];
 
   const value =
     state.editMode && id === state.selected.cell
@@ -86,6 +88,8 @@ const Cell = ({ id, state, dispatch }) => {
         dispatch(setContent(id, e.target.value));
         dispatch(recalculateFormulae());
         dispatch(setFormulaMode(false));
+        dispatch(highlightCells(id));
+        console.log(state.highlighted.cells);
         break;
       default:
         break;
@@ -130,6 +134,14 @@ const Cell = ({ id, state, dispatch }) => {
     dispatch(setMenuAnchorElement(e.currentTarget));
   };
 
+  const handleDragStart = (e) => {
+    console.log("drag start");
+  };
+
+  const handleDragEnd = (e) => {
+    console.log("drag end");
+  };
+
   return (
     <Item
       ref={containerRef}
@@ -141,22 +153,28 @@ const Cell = ({ id, state, dispatch }) => {
       onDoubleClick={handleDoubleClick}
       onContextMenu={handleContextMenu}
       id={id}
+      tabIndex={row * SheetConfig.MAX_ROWS + (columnCharCode - 65)}
       justifyContent={
         isNaN(state.content[id]?.value) ? "flex-start" : "flex-end"
       }
     >
-      {isSelected ? (
-        <CellInput
-          ref={textRef}
-          onFocus={handleFocus}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          onKeyDown={handleKeyDown}
-          type="text"
-          tabIndex={row * SheetConfig.MAX_ROWS + (columnCharCode - 65)}
-          value={value}
-          id={`${id}-input`}
-        />
+      {id === state.selected.cell ? (
+        <>
+          <CellInput
+            ref={textRef}
+            onFocus={handleFocus}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            onKeyDown={handleKeyDown}
+            type="text"
+            // tabIndex={row * SheetConfig.MAX_ROWS + (columnCharCode - 65)}
+            value={value}
+            id={`${id}-input`}
+          />
+          {isLastHighlighted &&
+            // <Resize draggable={true} onDragStart={handleDragStart} />
+            null}
+        </>
       ) : (
         state.content[id]?.value
       )}

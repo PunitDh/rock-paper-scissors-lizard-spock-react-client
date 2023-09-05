@@ -22,7 +22,6 @@ export const Item = styled(Paper)(
     position: "relative",
     whiteSpace: "nowrap",
     zIndex: "50",
-    userSelect: "none",
     "&:hover": {
       outline: "2px solid blue",
     },
@@ -40,7 +39,6 @@ export const Resize = styled.div({
     width: "1px",
     height: "1px",
     cursor: "crosshair",
-    boxSizing: "border-box",
   },
 });
 

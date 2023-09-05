@@ -8,6 +8,7 @@ const HeaderItem = styled(Item)(({ selected }) => ({
   outline: "2px solid black",
   fontWeight: "700",
   width: "100%",
+  userSelect: "none",
 }));
 
 const ColumnHeader = ({ state, dispatch, column, onContextMenu }) => {

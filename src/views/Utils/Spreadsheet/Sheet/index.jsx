@@ -37,16 +37,11 @@ import ColumnHeader from "./components/ColumnHeader";
 import SelectAll from "./components/SelectAll";
 import { useClipboard } from "src/hooks";
 import Cell2 from "./components/Cell2";
+import FormulaField from "./components/FormulaField";
 
 const Sheet = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const clipboard = useClipboard();
-
-  const eventRef = useCallback((node) => {
-    node?.addEventListener("selectionchange", (e) => {
-      console.log("selection change");
-    });
-  }, []);
 
   const handleKeyUp = (e) => {
     switch (e.key) {
@@ -160,18 +155,6 @@ const Sheet = () => {
     );
   }, [state.selected.cell, state.content]);
 
-  const handleInputTextChange = (e) => {
-    dispatch(setInputText(e.target.value));
-    dispatch(setContent(state.selected.cell, e.target.value));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(setInputText(e.target.inputText.value));
-    dispatch(recalculateFormulae());
-    dispatch(selectCell(getNextRow(state.selected.cell)));
-  };
-
   const handleFocusGuard = (e) => {
     e.preventDefault();
     e.target.blur();
@@ -200,25 +183,24 @@ const Sheet = () => {
     dispatch(pasteCellContent(data, { id: state.selected.cell }));
   };
 
+  const handleDragStart = (e) => {
+    console.log("dragstart", e.currentTarget);
+  };
+
   return (
     <DashboardCard sx={{ height: "100%" }} title="Spreadsheet">
       {state.menuAnchorElement && (
         <ContextMenu state={state} dispatch={dispatch} />
       )}
-      <div ref={eventRef}>Test</div>
-      <form onSubmit={handleSubmit}>
-        <input
-          name="inputText"
-          type="text"
-          style={{ width: "100%", marginBottom: "0.2rem" }}
-          value={state.inputText}
-          onChange={handleInputTextChange}
-          onContextMenu={handleContextMenu}
-          autoComplete="off"
-        />
-      </form>
+      <FormulaField
+        state={state}
+        dispatch={dispatch}
+        onContextMenu={handleContextMenu}
+      />
       <div
-        onKeyUp={handleKeyUp}
+        onKeyUp={() => console.log("Keyup")}
+        // onKeyUp={handleKeyUp}
+
         onKeyDown={handleKeyDown}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
@@ -226,6 +208,8 @@ const Sheet = () => {
         onCopyCapture={handleCopyCapture}
         onPasteCapture={handlePasteCapture}
         onCutCapture={handleCutCapture}
+        onDrag={handleDragStart}
+        tabIndex={0}
       >
         <FlexBox justifyContent="flex-start" alignItems="flex-start">
           <FlexBox flexDirection="column" alignItems="stretch">
