@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import DashboardCard from "src/components/shared/DashboardCard";
 import { initialState, reducer } from "./reducer";
 import Cell from "./components/Cell";
@@ -16,6 +16,11 @@ import {
   setShiftKey,
   recalculateFormulae,
   pasteCellContent,
+  setCommandKey,
+  setControlKey,
+  setAltKey,
+  selectAll,
+  setEditMode,
 } from "./actions";
 import {
   generateClipboardContent,
@@ -31,15 +36,32 @@ import RowHeader from "./components/RowHeader";
 import ColumnHeader from "./components/ColumnHeader";
 import SelectAll from "./components/SelectAll";
 import { useClipboard } from "src/hooks";
+import Cell2 from "./components/Cell2";
 
 const Sheet = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const clipboard = useClipboard();
 
+  const eventRef = useCallback((node) => {
+    console.log(node);
+    node?.addEventListener("selectionchange", (e) => {
+      console.log("selection change");
+    });
+  }, []);
+
   const handleKeyUp = (e) => {
     switch (e.key) {
       case KeyboardEvent.SHIFT:
         dispatch(setShiftKey(false));
+        break;
+      case KeyboardEvent.COMMAND:
+        dispatch(setCommandKey(false));
+        break;
+      case KeyboardEvent.CONTROL:
+        dispatch(setControlKey(false));
+        break;
+      case KeyboardEvent.ALT:
+        dispatch(setAltKey(false));
         break;
       default:
         break;
@@ -49,7 +71,21 @@ const Sheet = () => {
   const handleKeyDown = (e) => {
     let nextCell;
 
+    console.log(e.key);
+
     switch (e.key) {
+      case KeyboardEvent.COMMAND:
+        return dispatch(setCommandKey(true));
+      case KeyboardEvent.CONTROL:
+        return dispatch(setControlKey(true));
+      case KeyboardEvent.ALT:
+        return dispatch(setAltKey(true));
+      case KeyboardEvent.LOWERCASE_A:
+        if (state.commandKey) {
+          e.preventDefault();
+          dispatch(selectAll());
+        }
+        break;
       case KeyboardEvent.BACKSPACE:
         !state.editMode && dispatch(deleteCellContent());
         break;
@@ -87,6 +123,7 @@ const Sheet = () => {
         break;
       default:
         nextCell = state.selected.cell;
+        dispatch(setEditMode(true));
         break;
     }
 
@@ -172,6 +209,7 @@ const Sheet = () => {
       {state.menuAnchorElement && (
         <ContextMenu state={state} dispatch={dispatch} />
       )}
+      <div ref={eventRef}>Test</div>
       <form onSubmit={handleSubmit}>
         <input
           name="inputText"
@@ -241,7 +279,7 @@ const Sheet = () => {
                     {Array(SheetConfig.MAX_ROWS)
                       .fill(0)
                       .map((_, row) => (
-                        <Cell
+                        <Cell2
                           dispatch={dispatch}
                           state={state}
                           key={SheetConfig.COLUMNS[column] + (row + 1)}

@@ -19,6 +19,10 @@ export const KeyboardEvent = {
   ARROW_RIGHT: "ArrowRight",
   SHIFT: "Shift",
   BACKSPACE: "Backspace",
+  COMMAND: "Meta",
+  CONTROL: "Control",
+  ALT: "Alt",
+  LOWERCASE_A: "a",
 };
 
 export const Calc = {
@@ -27,11 +31,7 @@ export const Calc = {
   OPERATIONS: ["+", "-", "*", "/", "^"],
 };
 
-export const Formula = [
-  "SUM(",
-  "AVG(",
-  
-]
+export const Formula = ["SUM(", "AVG("];
 
 export const MIN_COLUMN = SheetConfig.COLUMNS[0].charCodeAt(0);
 export const MAX_COLUMN =

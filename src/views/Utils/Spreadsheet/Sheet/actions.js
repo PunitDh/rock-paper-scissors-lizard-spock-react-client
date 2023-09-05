@@ -3,10 +3,13 @@ export const SheetAction = Object.freeze({
   SET_INPUT_TEXT: "SET_INPUT_TEXT",
   SET_EDIT_MODE: "SET_EDIT_MODE",
   SET_SHIFT_KEY: "SET_SHIFT_KEY",
+  SET_COMMAND_KEY: "SET_COMMAND_KEY",
+  SET_CONTROL_KEY: "SET_CONTROL_KEY",
+  SET_ALT_KEY: "SET_ALT_KEY",
   SET_HOVERED: "SET_HOVERED",
   SET_SELECTED_ROW: "SET_SELECTED_ROW",
   SET_SELECTED_COLUMN: "SET_SELECTED_COLUMN",
-  SET_SELECT_ALL: "SET_SELECT_ALL",
+  SELECT_ALL: "SELECT_ALL",
   HIGHLIGHT_CELLS: "HIGHLIGHT_CELLS",
   SET_HIGHLIGHTED_ANCHOR: "SET_HIGHLIGHTED_ANCHOR",
   SET_HIGHLIGHTED_CURRENT: "SET_HIGHLIGHTED_CURRENT",
@@ -39,6 +42,21 @@ export const setEditMode = (payload) => ({
 
 export const setShiftKey = (payload) => ({
   type: SheetAction.SET_SHIFT_KEY,
+  payload,
+});
+
+export const setCommandKey = (payload) => ({
+  type: SheetAction.SET_COMMAND_KEY,
+  payload,
+});
+
+export const setControlKey = (payload) => ({
+  type: SheetAction.SET_CONTROL_KEY,
+  payload,
+});
+
+export const setAltKey = (payload) => ({
+  type: SheetAction.SET_ALT_KEY,
   payload,
 });
 
@@ -87,8 +105,8 @@ export const setSelectedColumn = (payload) => ({
   payload,
 });
 
-export const setSelectAll = () => ({
-  type: SheetAction.SET_SELECT_ALL,
+export const selectAll = () => ({
+  type: SheetAction.SELECT_ALL,
 });
 
 export const highlightCells = (start, end) => ({

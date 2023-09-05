@@ -1,6 +1,6 @@
 import { Item } from "../../styles";
 import { SheetConfig } from "../../constants";
-import { setSelectAll } from "../actions";
+import { selectAll } from "../actions";
 import styled from "@emotion/styled";
 
 const HeaderItem = styled(Item)(({ selected }) => ({
@@ -27,7 +27,7 @@ const Corner = styled.div({
 
 const SelectAll = ({ state, dispatch, onContextMenu }) => {
   const handleClick = () => {
-    dispatch(setSelectAll());
+    dispatch(selectAll());
   };
 
   const handleMouseDown = (e, column) => {
@@ -36,6 +36,10 @@ const SelectAll = ({ state, dispatch, onContextMenu }) => {
 
   const handleMouseUp = (e, column) => {
     // TODO
+  };
+
+  const handleKeyDown = (e) => {
+    console.log(e.key);
   };
 
   const selected =
@@ -55,6 +59,7 @@ const SelectAll = ({ state, dispatch, onContextMenu }) => {
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onContextMenu={onContextMenu}
+      onKeyDown={handleKeyDown}
     >
       <Corner />
     </HeaderItem>

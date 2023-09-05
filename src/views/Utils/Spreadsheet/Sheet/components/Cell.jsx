@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { CellInput, Item } from "../../styles";
+import { CellDiv, CellInput, DivItem, Item } from "../../styles";
 import {
   resetHighlighted,
   setContent,
@@ -38,15 +38,26 @@ const Cell = ({ id, state, dispatch }) => {
   const handleFocus = (e) => {
     // if (!state.mouseDown) dispatch(resetHighlighted());
     setFocused(true);
+    dispatch(setEditMode(true));
   };
 
+  // useEffect(() => {
+  //   if (id === state.selected.cell && !focused) {
+  //     focusTextArea();
+  //   } else {
+  //     ref.current.blur();
+  //     if (state.editMode) dispatch(setEditMode(false));
+  //   }
+  // }, [state.selected.cell]);
+
   useEffect(() => {
-    if (id === state.selected.cell && !focused) {
-      focusTextArea();
-    } else {
-      ref.current.blur();
+    if (state.editMode && id === state.selected.cell) {
+      ref.current.focus();
     }
-  }, [state.selected.cell]);
+    // } else {
+    //   ref.current.blur();
+    // }
+  }, [state.editMode]);
 
   const handleChange = (e) => {
     dispatch(setContent({ cell: id, value: e.target.value }));
@@ -59,7 +70,7 @@ const Cell = ({ id, state, dispatch }) => {
   };
 
   const handleBlur = (e) => {
-    setEditMode(false);
+    dispatch(setEditMode(false));
     setFocused(false);
     dispatch(recalculateFormulae());
   };
@@ -96,6 +107,8 @@ const Cell = ({ id, state, dispatch }) => {
     e.preventDefault();
     dispatch(setMenuAnchorElement(e.currentTarget));
   };
+
+  console.log(state.editMode);
 
   return (
     <Item

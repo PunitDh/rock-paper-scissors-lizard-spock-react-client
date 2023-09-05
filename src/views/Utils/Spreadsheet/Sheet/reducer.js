@@ -10,6 +10,9 @@ export const initialState = {
   selected: { cell: "A1", row: 1, column: "A", columnCharCode: 65 },
   editMode: false,
   shiftKey: false,
+  commandKey: false,
+  controlKey: false,
+  altKey: false,
   hovered: "",
   highlighted: {
     anchor: null,
@@ -51,6 +54,21 @@ export const reducer = (state, action) => {
         ...state,
         shiftKey: action.payload,
       };
+    case SheetAction.SET_COMMAND_KEY:
+      return {
+        ...state,
+        commandKey: action.payload,
+      };
+    case SheetAction.SET_CONTROL_KEY:
+      return {
+        ...state,
+        controlKey: action.payload,
+      };
+    case SheetAction.SET_ALT_KEY:
+      return {
+        ...state,
+        altKey: action.payload,
+      };
     case SheetAction.SET_HOVERED:
       return {
         ...state,
@@ -75,6 +93,7 @@ export const reducer = (state, action) => {
 
     case SheetAction.HIGHLIGHT_CELLS: {
       const range = Range.createFlat(action.start, action.end);
+      console.log("Here");
       return {
         ...state,
         highlighted: {
@@ -206,7 +225,7 @@ export const reducer = (state, action) => {
         },
       };
     }
-    case SheetAction.SET_SELECT_ALL: {
+    case SheetAction.SELECT_ALL: {
       const range = Range.createFlat(
         `A1`,
         `${SheetConfig.COLUMNS[SheetConfig.MAX_COLUMNS - 1]}${
@@ -215,6 +234,7 @@ export const reducer = (state, action) => {
       );
       return {
         ...state,
+        editMode: false,
         selected: {
           ...state.selected,
         },
