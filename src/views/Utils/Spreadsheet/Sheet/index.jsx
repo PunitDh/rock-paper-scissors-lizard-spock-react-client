@@ -198,9 +198,7 @@ const Sheet = () => {
         onContextMenu={handleContextMenu}
       />
       <div
-        onKeyUp={() => console.log("Keyup")}
-        // onKeyUp={handleKeyUp}
-
+        onKeyUp={handleKeyUp}
         onKeyDown={handleKeyDown}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
@@ -208,7 +206,6 @@ const Sheet = () => {
         onCopyCapture={handleCopyCapture}
         onPasteCapture={handlePasteCapture}
         onCutCapture={handleCutCapture}
-        onDrag={handleDragStart}
         tabIndex={0}
       >
         <FlexBox justifyContent="flex-start" alignItems="flex-start">
