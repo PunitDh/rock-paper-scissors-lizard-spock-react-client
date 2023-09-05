@@ -26,21 +26,26 @@ const FlexForm = styled.form({
   backgroundColor: "rgba(0,0,0,0.1)",
 });
 
-const FieldButton = styled.button(({ color, variant, theme }) => ({
+const FieldButton = styled.button(({ variant, theme }) => ({
   width: "1.5rem",
   outline: "none",
-  border: "1px solid rgba(0,0,0,0.5)",
+  border: "1px solid rgba(0,0,0,0.3)",
   height: "1.75rem",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  borderRadius: "1px",
+  borderRadius: "3px",
   cursor: "pointer",
   color: theme.palette[variant]?.dark || "black",
   "&:hover": {
     color: "blue",
     backgroundColor: "#eee",
     border: "1px solid blue",
+  },
+  "&:active": {
+    color: theme.palette[variant]?.main || "black",
+    backgroundColor: "#999",
+    border: "1px solid black",
   },
   "&:disabled": {
     color: "rgba(0,0,0,0.6)",

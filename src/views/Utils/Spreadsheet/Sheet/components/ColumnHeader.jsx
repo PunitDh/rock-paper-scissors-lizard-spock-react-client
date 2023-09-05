@@ -1,6 +1,15 @@
 import { SheetConfig } from "../../constants";
 import { setSelectedColumn } from "../actions";
 import { HeaderItem } from "../../styles";
+import styled from "@emotion/styled";
+
+const ColumnHeaderItem = styled(HeaderItem)({
+  cursor: "s-resize",
+  "&:active": {
+    backgroundColor: "#555",
+    color: "white"
+  }
+});
 
 const ColumnHeader = ({ state, dispatch, column, onContextMenu }) => {
   const handleClick = (e, column) => {
@@ -16,7 +25,7 @@ const ColumnHeader = ({ state, dispatch, column, onContextMenu }) => {
   };
 
   return (
-    <HeaderItem
+    <ColumnHeaderItem
       colSpan={1}
       selected={
         state.selected.column === SheetConfig.COLUMNS[column] ||
@@ -28,7 +37,7 @@ const ColumnHeader = ({ state, dispatch, column, onContextMenu }) => {
       onContextMenu={onContextMenu}
     >
       {SheetConfig.COLUMNS[column]}
-    </HeaderItem>
+    </ColumnHeaderItem>
   );
 };
 

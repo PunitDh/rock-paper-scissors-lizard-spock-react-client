@@ -4,6 +4,11 @@ import { HeaderItem } from "../../styles";
 
 const RowHeaderItem = styled(HeaderItem)({
   width: "3%",
+  cursor: "e-resize",
+  "&:active": {
+    backgroundColor: "#555",
+    color: "white"
+  }
 });
 
 const RowHeader = ({ state, dispatch, row, onContextMenu }) => {
