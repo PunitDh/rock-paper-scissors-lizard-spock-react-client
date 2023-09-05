@@ -51,11 +51,11 @@ export function typeInTextField(id, newText) {
   return el.value;
 }
 
-export const getNextColumn = (id) => {
+export const getNextColumn = (id, maxRows = SheetConfig.MAX_ROWS) => {
   const { row, columnCharCode } = getId(id);
   const nextRow =
     columnCharCode + 1 === MAX_COLUMN
-      ? parseInt(row) === SheetConfig.MAX_ROWS
+      ? parseInt(row) === maxRows
         ? 1
         : +row + 1
       : row;
@@ -66,10 +66,11 @@ export const getNextColumn = (id) => {
   }${nextRow}`;
 };
 
-export const getNextRow = (id) => {
+export const getNextRow = (id, maxRows = SheetConfig.MAX_ROWS) => {
   const { row, column } = getId(id);
-  return `${column}${+row === SheetConfig.MAX_ROWS ? +row : +row + 1}`;
+  return `${column}${+row === maxRows ? +row : +row + 1}`;
 };
+
 export const getPreviousColumn = (id) => {
   const { row, columnCharCode } = getId(id);
 

@@ -8,7 +8,7 @@ import {
   setHighlightAnchor,
   highlightCells,
   setHighlightCurrent,
-  setInputText,
+  setFormulaFieldText,
   setMenuAnchorElement,
   setMouseDown,
   selectCell,
@@ -40,6 +40,7 @@ import { Table, TableBody, TableHead, TableRow } from "@mui/material";
 const Sheet = ({
   maxRows = SheetConfig.MAX_ROWS,
   maxColumns = SheetConfig.MAX_COLUMNS,
+  formulaField = true,
 }) => {
   const [state, dispatch] = useReducer(reducer, {
     ...initialState,
@@ -97,14 +98,14 @@ const Sheet = ({
       case KeyboardEvent.ARROW_DOWN:
         e.preventDefault();
         !state.shiftKey && !state.formulaMode && dispatch(resetHighlight());
-        nextCell = getNextRow(state.selected.cell);
+        nextCell = getNextRow(state.selected.cell, maxRows);
         break;
 
       case KeyboardEvent.TAB:
       case KeyboardEvent.ARROW_RIGHT:
         e.preventDefault();
         !state.shiftKey && !state.formulaMode && dispatch(resetHighlight());
-        nextCell = getNextColumn(state.selected.cell);
+        nextCell = getNextColumn(state.selected.cell, maxRows);
         break;
 
       case KeyboardEvent.ARROW_LEFT:
@@ -152,7 +153,7 @@ const Sheet = ({
 
   useEffect(() => {
     dispatch(
-      setInputText(
+      setFormulaFieldText(
         state.content[state.selected.cell]?.formula ||
           state.content[state.selected.cell]?.value ||
           ""
@@ -193,11 +194,13 @@ const Sheet = ({
       {state.menuAnchorElement && (
         <ContextMenu state={state} dispatch={dispatch} />
       )}
-      <FormulaField
-        state={state}
-        dispatch={dispatch}
-        onContextMenu={handleContextMenu}
-      />
+      {formulaField && (
+        <FormulaField
+          state={state}
+          dispatch={dispatch}
+          onContextMenu={handleContextMenu}
+        />
+      )}
       <div
         onKeyUp={handleKeyUp}
         onKeyDown={handleKeyDown}

@@ -1,7 +1,7 @@
 export const SheetAction = Object.freeze({
   SET_SELECTED: "SET_SELECTED",
-  SET_INPUT_TEXT: "SET_INPUT_TEXT",
-  SET_INPUT_TEXT_FOCUSED: "SET_INPUT_TEXT_FOCUSED",
+  SET_FORMULA_FIELD_TEXT: "SET_FORMULA_FIELD_TEXT",
+  SET_FORMULA_FIELD_FOCUSED: "SET_FORMULA_FIELD_FOCUSED",
   SET_EDIT_MODE: "SET_EDIT_MODE",
   SET_FORMULA_MODE: "SET_FORMULA_MODE",
   SET_SHIFT_KEY: "SET_SHIFT_KEY",
@@ -32,13 +32,13 @@ export const selectCell = (payload) => ({
   payload,
 });
 
-export const setInputText = (payload) => ({
-  type: SheetAction.SET_INPUT_TEXT,
+export const setFormulaFieldText = (payload) => ({
+  type: SheetAction.SET_FORMULA_FIELD_TEXT,
   payload,
 });
 
 export const setInputTextFocused = (payload) => ({
-  type: SheetAction.SET_INPUT_TEXT_FOCUSED,
+  type: SheetAction.SET_FORMULA_FIELD_FOCUSED,
   payload,
 });
 

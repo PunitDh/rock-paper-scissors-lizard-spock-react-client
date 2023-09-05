@@ -7,6 +7,8 @@ import { SheetAction } from "./actions";
 import { updateStateContent } from "./utils/evalUtils2";
 
 export const initialState = {
+  maxRows: SheetConfig.MAX_ROWS,
+  maxColumns: SheetConfig.MAX_COLUMNS,
   selected: { cell: "A1", row: 1, column: "A", columnCharCode: 65 },
   editMode: false,
   formulaMode: false,
@@ -41,12 +43,12 @@ export const reducer = (state, action) => {
           column,
         },
       };
-    case SheetAction.SET_INPUT_TEXT:
+    case SheetAction.SET_FORMULA_FIELD_TEXT:
       return {
         ...state,
         inputText: action.payload,
       };
-    case SheetAction.SET_INPUT_TEXT_FOCUSED:
+    case SheetAction.SET_FORMULA_FIELD_FOCUSED:
       return {
         ...state,
         inputTextFocused: action.payload,

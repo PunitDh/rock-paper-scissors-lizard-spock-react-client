@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { CellInput, Item, Resize } from "../../styles";
+import { CellInput, Item } from "../../styles";
 import {
   resetHighlight,
   setContent,
@@ -13,7 +13,7 @@ import {
   recalculateFormulae,
   setFormulaMode,
 } from "../actions";
-import { KeyboardEvent, MouseButton, SheetConfig } from "../../constants";
+import { KeyboardEvent, MouseButton } from "../../constants";
 import { getId, typeInTextField } from "../utils/cellUtils";
 
 const Cell = ({ id, state, dispatch }) => {
