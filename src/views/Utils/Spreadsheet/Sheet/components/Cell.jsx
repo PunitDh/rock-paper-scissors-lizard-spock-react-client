@@ -18,7 +18,7 @@ import { getId } from "../utils/cellUtils";
 const Cell = ({ id, state, dispatch }) => {
   const containerRef = useRef();
   const [focused, setFocused] = useState(false);
-  const ref = useRef();
+  const textRef = useRef();
   const { row, columnCharCode } = useMemo(() => getId(id), [id]);
 
   // const focusTextArea = () =>
@@ -26,7 +26,7 @@ const Cell = ({ id, state, dispatch }) => {
   //     ref.current.focus();
   //   }, 0);
 
-  const focusTextArea = () => ref.current.focus();
+  const focusTextArea = () => textRef.current.focus();
 
   const handleClick = (e) => {
     if (e.button === MouseButton.LEFT_CLICK) {
@@ -38,7 +38,6 @@ const Cell = ({ id, state, dispatch }) => {
   const handleFocus = (e) => {
     // if (!state.mouseDown) dispatch(resetHighlighted());
     setFocused(true);
-    dispatch(setEditMode(true));
   };
 
   // useEffect(() => {
@@ -51,8 +50,14 @@ const Cell = ({ id, state, dispatch }) => {
   // }, [state.selected.cell]);
 
   useEffect(() => {
+    if (state.selected.cell === id) {
+      setTimeout(() => textRef.current?.focus(), 0);
+    }
+  }, [state.selected.cell, id]);
+
+  useEffect(() => {
     if (state.editMode && id === state.selected.cell) {
-      ref.current.focus();
+      textRef.current.focus();
     }
     // } else {
     //   ref.current.blur();
@@ -64,8 +69,17 @@ const Cell = ({ id, state, dispatch }) => {
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === KeyboardEvent.BACKSPACE) {
-      state.editMode && e.stopPropagation();
+    switch (e.key) {
+      case KeyboardEvent.BACKSPACE:
+        state.editMode && e.stopPropagation();
+        break;
+      case KeyboardEvent.ENTER:
+        dispatch(setContent({ cell: id, value: e.target.value }));
+        dispatch(recalculateFormulae());
+        // setCellContent(state.content[id]?.value);
+        break;
+      default:
+        break;
     }
   };
 
@@ -123,7 +137,7 @@ const Cell = ({ id, state, dispatch }) => {
       id={id}
     >
       <CellInput
-        ref={ref}
+        ref={textRef}
         onFocus={handleFocus}
         onChange={handleChange}
         onBlur={handleBlur}

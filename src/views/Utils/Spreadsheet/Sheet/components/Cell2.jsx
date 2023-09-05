@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { CellDiv, DivItem } from "../../styles";
 import {
   resetHighlighted,
@@ -17,30 +17,37 @@ const Cell2 = ({ id, state, dispatch }) => {
   const containerRef = useRef();
   const cellContentRef = useRef(state.content[id]?.value);
 
-  const textRef = useCallback((node) => {
-    if (node) {
-      const focusInListener = node.addEventListener("focusin", () => {
-        if (state.content[id]?.formula) {
-          // setTimeout(() => setCellContent(state.content[id]?.formula), 0);
-          cellContentRef.current = state.content[id]?.formula;
-        }
-      });
+  const textRef = useCallback(
+    (node) => {
+      if (node) {
+        const focusInListener = node.addEventListener("focusin", () => {
+          if (state.content[id]?.formula) {
+            // setTimeout(() => setCellContent(state.content[id]?.formula), 0);
+            cellContentRef.current = state.content[id]?.formula;
+          }
+        });
 
-      const focusOutListener = node.addEventListener("focusout", () => {
-        dispatch(setContent({ cell: id, value: cellContentRef.current }));
-        dispatch(recalculateFormulae());
-        cellContentRef.current = state.content[id]?.value;
-        setTimeout(() => console.log(state.content[id]), 0);
-      });
+        const focusOutListener = node.addEventListener("focusout", () => {
+          dispatch(setContent({ cell: id, value: cellContentRef.current }));
+          dispatch(recalculateFormulae());
+          cellContentRef.current = state.content[id]?.value;
+          setTimeout(() => console.log(state.content[id]), 0);
+        });
 
-      return () => {
-        if (node) {
-          node.removeEventListener("focusin", focusInListener);
-          node.removeEventListener("focusout", focusOutListener);
+        if (state.selected.cell === id) {
+          setTimeout(() => node.focus(), 0);
         }
-      };
-    }
-  }, []);
+
+        return () => {
+          if (node) {
+            node.removeEventListener("focusin", focusInListener);
+            node.removeEventListener("focusout", focusOutListener);
+          }
+        };
+      }
+    },
+    [state.selected.cell]
+  );
 
   const handleClick = (e) => {
     if (e.button === MouseButton.LEFT_CLICK) {

@@ -110,7 +110,7 @@ export const reducer = (state, action) => {
         .reduce(
           (acc, cur) => ({
             ...acc,
-            [cur]: { value: "", display: "", formula: "" },
+            [cur]: { value: null, display: null, formula: null },
           }),
           state.content
         );
