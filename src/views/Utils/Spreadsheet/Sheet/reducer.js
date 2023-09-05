@@ -25,6 +25,7 @@ export const initialState = {
   content: {},
   mouseDown: false,
   inputText: "",
+  inputTextFocused: false,
   menuAnchorElement: null,
 };
 
@@ -44,6 +45,11 @@ export const reducer = (state, action) => {
       return {
         ...state,
         inputText: action.payload,
+      };
+    case SheetAction.SET_INPUT_TEXT_FOCUSED:
+      return {
+        ...state,
+        inputTextFocused: action.payload,
       };
     case SheetAction.SET_EDIT_MODE:
       return {

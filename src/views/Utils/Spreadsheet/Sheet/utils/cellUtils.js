@@ -42,6 +42,16 @@ export const generateClipboardContent = (state) => {
   return JSON.stringify({ type, content });
 };
 
+export function typeInTextField(id, newText) {
+  const el = document.getElementById(id);
+  console.log(el);
+  if (!el) return;
+  const [start, end] = [el.selectionStart, el.selectionEnd];
+  el.focus();
+  el.setRangeText(newText, start, end, "end");
+  return el.value;
+}
+
 export const getNextColumn = (id) => {
   const { row, columnCharCode } = getId(id);
   const nextRow =

@@ -12,9 +12,10 @@ import {
   setMenuAnchorElement,
   recalculateFormulae,
   setFormulaMode,
+  setInputText,
 } from "../actions";
 import { KeyboardEvent, MouseButton, SheetConfig } from "../../constants";
-import { getId } from "../utils/cellUtils";
+import { getId, typeInTextField } from "../utils/cellUtils";
 
 const Cell = ({ id, state, dispatch }) => {
   const containerRef = useRef();
@@ -32,22 +33,17 @@ const Cell = ({ id, state, dispatch }) => {
 
   const focusTextArea = () => textRef.current.focus();
 
-  function typeInTextField(
-    newText,
-    el = document.getElementById(state.selected.cell + "-input")
-  ) {
-    if (!el) return;
-    const [start, end] = [el.selectionStart, el.selectionEnd];
-    el.focus();
-    el.setRangeText(newText, start, end, "end");
-    return el.value;
-  }
-
   const handleClick = (e) => {
     if (e.button === MouseButton.LEFT_CLICK) {
-      if (state.formulaMode && id !== state.selected.cell) {
-        const value = typeInTextField(id);
-        dispatch(setContent(state.selected.cell, value));
+      const formulaMode = state.formulaMode && id !== state.selected.cell;
+      if (formulaMode) {
+        if (state.inputTextFocused) {
+          const value = typeInTextField("input-text", id);
+          dispatch(setContent(state.selected.cell, value));
+        } else {
+          const value = typeInTextField(`${state.selected.cell}-input`, id);
+          dispatch(setContent(state.selected.cell, value));
+        }
       } else {
         if (!state.mouseDown) dispatch(resetHighlight());
         dispatch(selectCell(id));
@@ -170,6 +166,7 @@ const Cell = ({ id, state, dispatch }) => {
             // tabIndex={row * SheetConfig.MAX_ROWS + (columnCharCode - 65)}
             value={value}
             id={`${id}-input`}
+            autoComplete="off"
           />
           {isLastHighlighted &&
             // <Resize draggable={true} onDragStart={handleDragStart} />

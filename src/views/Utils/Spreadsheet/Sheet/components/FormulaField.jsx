@@ -1,14 +1,18 @@
+import { useEffect, useRef } from "react";
 import {
   recalculateFormulae,
   selectCell,
   setContent,
   setFormulaMode,
   setInputText,
+  setInputTextFocused,
 } from "../actions";
 import { getNextRow } from "../utils/cellUtils";
 
 const FormulaField = ({ state, dispatch, onContextMenu }) => {
-  const handleInputTextChange = (e) => {
+  const inputRef = useRef();
+  const handleChange = (e) => {
+    e.preventDefault();
     dispatch(setInputText(e.target.value));
     dispatch(setContent(state.selected.cell, e.target.value));
   };
@@ -17,22 +21,32 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
     e.preventDefault();
     dispatch(setInputText(e.target.inputText.value));
     dispatch(recalculateFormulae());
+    dispatch(setInputTextFocused(false));
     dispatch(selectCell(getNextRow(state.selected.cell)));
     dispatch(setFormulaMode(false));
   };
 
-  const handleInputTextFocus = (e) => {};
+  const handleFocus = (e) => {
+    dispatch(setInputTextFocused(true));
+  };
+
+  useEffect(() => {
+    if (state.inputTextFocused) {
+      inputRef.current?.focus();
+    }
+  }, [state.inputTextFocused]);
 
   return (
     <form onSubmit={handleSubmit}>
       <input
+        ref={inputRef}
         name="inputText"
         type="text"
         style={{ width: "100%", marginBottom: "0.2rem" }}
         value={state.inputText}
-        onChange={handleInputTextChange}
+        onChange={handleChange}
         onContextMenu={onContextMenu}
-        onFocus={handleInputTextFocus}
+        onFocus={handleFocus}
         autoComplete="off"
         id="input-text"
       />
