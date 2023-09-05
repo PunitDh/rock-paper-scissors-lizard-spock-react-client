@@ -28,17 +28,13 @@ const Cell = ({ id, state, dispatch }) => {
       ? state.content[id]?.formula
       : state.content[id]?.value;
 
-  // const focusTextArea = () =>
-  //   setTimeout(function () {
-  //     ref.current.focus();
-  //   }, 0);
-
   const focusTextArea = () => textRef.current.focus();
 
   function typeInTextField(
     newText,
     el = document.getElementById(state.selected.cell + "-input")
   ) {
+    if (!el) return;
     const [start, end] = [el.selectionStart, el.selectionEnd];
     el.focus();
     el.setRangeText(newText, start, end, "end");
@@ -47,7 +43,7 @@ const Cell = ({ id, state, dispatch }) => {
 
   const handleClick = (e) => {
     if (e.button === MouseButton.LEFT_CLICK) {
-      if (state.formulaMode) {
+      if (state.formulaMode && id !== state.selected.cell) {
         const value = typeInTextField(id);
         dispatch(setContent(state.selected.cell, value));
       } else {
@@ -90,7 +86,6 @@ const Cell = ({ id, state, dispatch }) => {
         dispatch(setContent(id, e.target.value));
         dispatch(recalculateFormulae());
         dispatch(setFormulaMode(false));
-        // setCellContent(state.content[id]?.value);
         break;
       default:
         break;
