@@ -7,8 +7,8 @@ const RowHeaderItem = styled(HeaderItem)({
   cursor: "e-resize",
   "&:active": {
     backgroundColor: "#555",
-    color: "white"
-  }
+    color: "white",
+  },
 });
 
 const RowHeader = ({ state, dispatch, row, onContextMenu }) => {

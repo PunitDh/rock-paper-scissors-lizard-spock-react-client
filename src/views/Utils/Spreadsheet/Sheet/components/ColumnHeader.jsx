@@ -7,8 +7,8 @@ const ColumnHeaderItem = styled(HeaderItem)({
   cursor: "s-resize",
   "&:active": {
     backgroundColor: "#555",
-    color: "white"
-  }
+    color: "white",
+  },
 });
 
 const ColumnHeader = ({ state, dispatch, column, onContextMenu }) => {

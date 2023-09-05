@@ -1,10 +1,18 @@
 import { MAX_COLUMN, MIN_COLUMN, SheetConfig } from "../../constants";
 
-export const getId = (id) => ({
-  row: id?.match(/\d+/g)[0],
-  column: id?.match(/[A-Z]/g)[0],
-  columnCharCode: id?.match(/[A-Z]/g)[0].charCodeAt(0),
-});
+export const getId = (id) => {
+  const row = id?.match(/\d+/g);
+  const column = id?.match(/[A-Z]/g);
+  const columnCharCode = id?.match(/[A-Z]/g);
+
+  if (row && column && columnCharCode)
+    return {
+      row: row[0],
+      column: column[0],
+      columnCharCode: columnCharCode[0].charCodeAt(0),
+    };
+  return {};
+};
 
 export const getCellMinMax = (highlighted) => {
   const ids = highlighted.map(getId);

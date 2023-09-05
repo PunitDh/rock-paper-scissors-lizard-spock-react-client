@@ -6,7 +6,7 @@ import styled from "@emotion/styled";
 const SelectAllItem = styled(HeaderItem)({
   height: "1.5rem",
   width: "3%",
-  cursor: "se-resize"
+  cursor: "se-resize",
 });
 
 const Corner = styled.div({

@@ -5,7 +5,12 @@ import TestSheet from "./TestSheet";
 export default function Spreadsheet() {
   return (
     <PageContainer title="Spreadsheet">
-      <Sheet maxColumns={12} maxRows={12} formulaField={true} />
+      <Sheet
+        maxColumns={12}
+        maxRows={12}
+        formulaField={true}
+        statusField={false}
+      />
       <TestSheet />
     </PageContainer>
   );

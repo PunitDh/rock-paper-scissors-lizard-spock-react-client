@@ -10,6 +10,7 @@ import {
 import { getNextRow } from "../utils/cellUtils";
 import styled from "@emotion/styled";
 import { Check, Clear } from "@mui/icons-material";
+import Cell from "../../models/Cell";
 
 const InputField = styled.input({
   width: "100%",
@@ -17,6 +18,11 @@ const InputField = styled.input({
   borderRadius: 0,
   border: "1px solid rgba(0,0,0,0.2)",
   lineHeight: "1.5rem",
+});
+
+const SmallInputField = styled(InputField)({
+  width: "2rem",
+  textAlign: "center",
 });
 
 const FlexForm = styled.form({
@@ -102,11 +108,29 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
     inputRef.current?.focus();
   };
 
+  const handleSelectCell = (e) => {
+    e.preventDefault();
+    const cell = new Cell(e.target.value.toUpperCase());
+    if (cell.id) {
+      dispatch(selectCell(cell.id));
+    }
+  };
+
   console.log(state.inputTextFocused);
 
   return (
     <div tabIndex="1" onBlur={handleBlur}>
       <FlexForm onSubmit={handleSubmit}>
+        <SmallInputField
+          ref={inputRef}
+          name="currentCell"
+          type="text"
+          value={state.selected.cell}
+          onChange={handleSelectCell}
+          autoComplete="off"
+          id="current-cell"
+          tabIndex={2}
+        />
         <FieldButton
           type="button"
           disabled={!state.inputTextFocused}
@@ -139,7 +163,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
           onFocus={handleFocus}
           autoComplete="off"
           id="input-text"
-          tabIndex={2}
+          tabIndex={3}
         />
       </FlexForm>
     </div>
