@@ -9,6 +9,7 @@ import { updateStateContent } from "./utils/evalUtils2";
 export const initialState = {
   selected: { cell: "A1", row: 1, column: "A", columnCharCode: 65 },
   editMode: false,
+  formulaMode: false,
   shiftKey: false,
   commandKey: false,
   controlKey: false,
@@ -49,6 +50,11 @@ export const reducer = (state, action) => {
         ...state,
         editMode: action.payload,
       };
+    case SheetAction.SET_FORMULA_MODE:
+      return {
+        ...state,
+        formulaMode: action.payload,
+      };
     case SheetAction.SET_SHIFT_KEY:
       return {
         ...state,
@@ -74,7 +80,7 @@ export const reducer = (state, action) => {
         ...state,
         hovered: action.payload,
       };
-    case SheetAction.SET_HIGHLIGHTED_ANCHOR:
+    case SheetAction.SET_HIGHLIGHT_ANCHOR:
       return {
         ...state,
         highlighted: {
@@ -82,7 +88,7 @@ export const reducer = (state, action) => {
           anchor: action.payload,
         },
       };
-    case SheetAction.SET_HIGHLIGHTED_CURRENT:
+    case SheetAction.SET_HIGHLIGHT_CURRENT:
       return {
         ...state,
         highlighted: {
@@ -245,7 +251,7 @@ export const reducer = (state, action) => {
         },
       };
     }
-    case SheetAction.RESET_HIGHLIGHTED: {
+    case SheetAction.RESET_HIGHLIGHT: {
       return {
         ...state,
         highlighted: initialState.highlighted,
@@ -279,8 +285,11 @@ export const reducer = (state, action) => {
     }
     case SheetAction.SET_CONTENT:
       if (action.payload.value?.startsWith("=")) {
+        console.log("Formula mode activated", action.payload.value);
+
         return {
           ...state,
+          formulaMode: true,
           content: {
             ...state.content,
             [action.payload.cell]: {

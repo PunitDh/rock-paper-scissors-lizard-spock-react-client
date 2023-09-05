@@ -1,25 +1,32 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { CellDiv, CellInput, DivItem, Item } from "../../styles";
+import { useEffect, useMemo, useRef } from "react";
+import { CellInput, Item } from "../../styles";
 import {
-  resetHighlighted,
+  resetHighlight,
   setContent,
   highlightCells,
   selectCell,
-  setHighlightedAnchor,
-  setHighlightedCurrent,
+  setHighlightAnchor,
+  setHighlightCurrent,
   setHovered,
   setEditMode,
   setMenuAnchorElement,
   recalculateFormulae,
+  setFormulaMode,
 } from "../actions";
 import { KeyboardEvent, MouseButton, SheetConfig } from "../../constants";
 import { getId } from "../utils/cellUtils";
 
 const Cell = ({ id, state, dispatch }) => {
   const containerRef = useRef();
-  const [focused, setFocused] = useState(false);
   const textRef = useRef();
   const { row, columnCharCode } = useMemo(() => getId(id), [id]);
+  const isSelected =
+    id === state.selected.cell || state.highlighted.cells.includes(id);
+
+  const value =
+    state.editMode && id === state.selected.cell
+      ? state.content[id]?.formula
+      : state.content[id]?.value;
 
   // const focusTextArea = () =>
   //   setTimeout(function () {
@@ -28,30 +35,39 @@ const Cell = ({ id, state, dispatch }) => {
 
   const focusTextArea = () => textRef.current.focus();
 
+  function typeInTextField(
+    newText,
+    el = document.getElementById(state.selected.cell + "-input")
+  ) {
+    const [start, end] = [el.selectionStart, el.selectionEnd];
+    el.focus();
+    el.setRangeText(newText, start, end, "end");
+    return el.value;
+  }
+
   const handleClick = (e) => {
     if (e.button === MouseButton.LEFT_CLICK) {
-      if (!state.mouseDown) dispatch(resetHighlighted());
-      dispatch(selectCell(id));
+      if (state.formulaMode) {
+        const value = typeInTextField(id);
+        dispatch(setContent(state.selected.cell, value));
+      } else {
+        if (!state.mouseDown) dispatch(resetHighlight());
+        dispatch(selectCell(id));
+      }
     }
   };
 
   const handleFocus = (e) => {
     // if (!state.mouseDown) dispatch(resetHighlighted());
-    setFocused(true);
+    dispatch(setEditMode(true));
   };
-
-  // useEffect(() => {
-  //   if (id === state.selected.cell && !focused) {
-  //     focusTextArea();
-  //   } else {
-  //     ref.current.blur();
-  //     if (state.editMode) dispatch(setEditMode(false));
-  //   }
-  // }, [state.selected.cell]);
 
   useEffect(() => {
     if (state.selected.cell === id) {
-      setTimeout(() => textRef.current?.focus(), 0);
+      setTimeout(() => {
+        textRef.current?.focus();
+        dispatch(setEditMode(true));
+      }, 0);
     }
   }, [state.selected.cell, id]);
 
@@ -59,13 +75,10 @@ const Cell = ({ id, state, dispatch }) => {
     if (state.editMode && id === state.selected.cell) {
       textRef.current.focus();
     }
-    // } else {
-    //   ref.current.blur();
-    // }
-  }, [state.editMode]);
+  }, [id, state.editMode, state.selected.cell]);
 
   const handleChange = (e) => {
-    dispatch(setContent({ cell: id, value: e.target.value }));
+    dispatch(setContent(id, e.target.value));
   };
 
   const handleKeyDown = (e) => {
@@ -74,8 +87,9 @@ const Cell = ({ id, state, dispatch }) => {
         state.editMode && e.stopPropagation();
         break;
       case KeyboardEvent.ENTER:
-        dispatch(setContent({ cell: id, value: e.target.value }));
+        dispatch(setContent(id, e.target.value));
         dispatch(recalculateFormulae());
+        dispatch(setFormulaMode(false));
         // setCellContent(state.content[id]?.value);
         break;
       default:
@@ -85,8 +99,7 @@ const Cell = ({ id, state, dispatch }) => {
 
   const handleBlur = (e) => {
     dispatch(setEditMode(false));
-    setFocused(false);
-    dispatch(recalculateFormulae());
+    !state.formulaMode && dispatch(recalculateFormulae());
   };
 
   const handleMouseOver = (e) => {
@@ -99,19 +112,19 @@ const Cell = ({ id, state, dispatch }) => {
   const handleMouseDown = (e) => {
     if (e.button === MouseButton.LEFT_CLICK) {
       // e.preventDefault();
-      if (!state.mouseDown && !state.shiftKey) dispatch(resetHighlighted());
-      dispatch(selectCell(id));
-      dispatch(setHighlightedAnchor(id));
+      if (!state.mouseDown && !state.shiftKey) dispatch(resetHighlight());
+      // dispatch(selectCell(id));
+      dispatch(setHighlightAnchor(id));
       dispatch(highlightCells(id, id));
     }
   };
 
   const handleMouseMove = () => {
-    dispatch(setHighlightedCurrent(id));
+    dispatch(setHighlightCurrent(id));
   };
 
   const handleDoubleClick = () => {
-    if (!state.mouseDown) dispatch(resetHighlighted());
+    if (!state.mouseDown) dispatch(resetHighlight());
     dispatch(selectCell(id));
     dispatch(setEditMode(true));
     focusTextArea();
@@ -126,30 +139,32 @@ const Cell = ({ id, state, dispatch }) => {
     <Item
       ref={containerRef}
       onClick={handleClick}
-      selected={
-        id === state.selected.cell || state.highlighted.cells.includes(id)
-      }
+      selected={isSelected}
       onMouseOver={handleMouseOver}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onDoubleClick={handleDoubleClick}
       onContextMenu={handleContextMenu}
       id={id}
+      justifyContent={
+        isNaN(state.content[id]?.value) ? "flex-start" : "flex-end"
+      }
     >
-      <CellInput
-        ref={textRef}
-        onFocus={handleFocus}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        onKeyDown={handleKeyDown}
-        type="text"
-        tabIndex={row * SheetConfig.MAX_ROWS + (columnCharCode - 65)}
-        value={
-          state.editMode && id === state.selected.cell
-            ? state.content[id]?.formula
-            : state.content[id]?.value
-        }
-      />
+      {isSelected ? (
+        <CellInput
+          ref={textRef}
+          onFocus={handleFocus}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
+          type="text"
+          tabIndex={row * SheetConfig.MAX_ROWS + (columnCharCode - 65)}
+          value={value}
+          id={`${id}-input`}
+        />
+      ) : (
+        state.content[id]?.value
+      )}
     </Item>
   );
 };

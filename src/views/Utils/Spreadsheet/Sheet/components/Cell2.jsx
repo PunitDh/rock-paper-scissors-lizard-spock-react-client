@@ -1,12 +1,12 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { CellDiv, DivItem } from "../../styles";
 import {
-  resetHighlighted,
+  resetHighlight,
   setContent,
   highlightCells,
   selectCell,
-  setHighlightedAnchor,
-  setHighlightedCurrent,
+  setHighlightAnchor,
+  setHighlightCurrent,
   setHovered,
   setMenuAnchorElement,
   recalculateFormulae,
@@ -28,7 +28,7 @@ const Cell2 = ({ id, state, dispatch }) => {
         });
 
         const focusOutListener = node.addEventListener("focusout", () => {
-          dispatch(setContent({ cell: id, value: cellContentRef.current }));
+          dispatch(setContent(id, cellContentRef.current));
           dispatch(recalculateFormulae());
           cellContentRef.current = state.content[id]?.value;
           setTimeout(() => console.log(state.content[id]), 0);
@@ -51,7 +51,7 @@ const Cell2 = ({ id, state, dispatch }) => {
 
   const handleClick = (e) => {
     if (e.button === MouseButton.LEFT_CLICK) {
-      if (!state.mouseDown) dispatch(resetHighlighted());
+      if (!state.mouseDown) dispatch(resetHighlight());
       dispatch(selectCell(id));
     }
   };
@@ -66,7 +66,7 @@ const Cell2 = ({ id, state, dispatch }) => {
         state.editMode && e.stopPropagation();
         break;
       case KeyboardEvent.ENTER:
-        dispatch(setContent({ cell: id, value: cellContentRef.current }));
+        dispatch(setContent(id, cellContentRef.current));
         dispatch(recalculateFormulae());
         // setCellContent(state.content[id]?.value);
         break;
@@ -85,19 +85,19 @@ const Cell2 = ({ id, state, dispatch }) => {
   const handleMouseDown = (e) => {
     if (e.button === MouseButton.LEFT_CLICK) {
       // e.preventDefault();
-      if (!state.mouseDown && !state.shiftKey) dispatch(resetHighlighted());
+      if (!state.mouseDown && !state.shiftKey) dispatch(resetHighlight());
       dispatch(selectCell(id));
-      dispatch(setHighlightedAnchor(id));
+      dispatch(setHighlightAnchor(id));
       dispatch(highlightCells(id, id));
     }
   };
 
   const handleMouseMove = () => {
-    dispatch(setHighlightedCurrent(id));
+    dispatch(setHighlightCurrent(id));
   };
 
   const handleDoubleClick = () => {
-    if (!state.mouseDown) dispatch(resetHighlighted());
+    if (!state.mouseDown) dispatch(resetHighlight());
     dispatch(selectCell(id));
   };
 

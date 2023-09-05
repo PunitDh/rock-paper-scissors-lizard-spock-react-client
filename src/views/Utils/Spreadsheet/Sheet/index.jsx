@@ -4,11 +4,11 @@ import { initialState, reducer } from "./reducer";
 import Cell from "./components/Cell";
 import {
   deleteCellContent,
-  resetHighlighted,
+  resetHighlight,
   setContent,
-  setHighlightedAnchor,
+  setHighlightAnchor,
   highlightCells,
-  setHighlightedCurrent,
+  setHighlightCurrent,
   setInputText,
   setMenuAnchorElement,
   setMouseDown,
@@ -88,7 +88,7 @@ const Sheet = () => {
         break;
 
       case KeyboardEvent.SHIFT:
-        dispatch(setHighlightedAnchor(state.selected.cell));
+        dispatch(setHighlightAnchor(state.selected.cell));
         dispatch(setShiftKey(true));
         nextCell = state.selected.cell;
         break;
@@ -96,26 +96,26 @@ const Sheet = () => {
       case KeyboardEvent.ENTER:
       case KeyboardEvent.ARROW_DOWN:
         e.preventDefault();
-        !state.shiftKey && dispatch(resetHighlighted());
+        !state.shiftKey && !state.formulaMode && dispatch(resetHighlight());
         nextCell = getNextRow(state.selected.cell);
         break;
 
       case KeyboardEvent.TAB:
       case KeyboardEvent.ARROW_RIGHT:
         e.preventDefault();
-        !state.shiftKey && dispatch(resetHighlighted());
+        !state.shiftKey && !state.formulaMode && dispatch(resetHighlight());
         nextCell = getNextColumn(state.selected.cell);
         break;
 
       case KeyboardEvent.ARROW_LEFT:
         e.preventDefault();
-        !state.shiftKey && dispatch(resetHighlighted());
+        !state.shiftKey && !state.formulaMode && dispatch(resetHighlight());
         nextCell = getPreviousColumn(state.selected.cell);
         break;
 
       case KeyboardEvent.ARROW_UP:
         e.preventDefault();
-        !state.shiftKey && dispatch(resetHighlighted());
+        !state.shiftKey && !state.formulaMode && dispatch(resetHighlight());
         nextCell = getPreviousRow(state.selected.cell);
         break;
       default:
@@ -127,7 +127,7 @@ const Sheet = () => {
     dispatch(selectCell(nextCell));
 
     if (state.shiftKey) {
-      dispatch(setHighlightedCurrent(nextCell));
+      dispatch(setHighlightCurrent(nextCell));
       dispatch(highlightCells(state.highlighted.anchor, nextCell));
     } else {
       // dispatch(resetHighlighted());
@@ -162,7 +162,7 @@ const Sheet = () => {
 
   const handleInputTextChange = (e) => {
     dispatch(setInputText(e.target.value));
-    dispatch(setContent({ cell: state.selected.cell, value: e.target.value }));
+    dispatch(setContent(state.selected.cell, e.target.value));
   };
 
   const handleSubmit = (e) => {

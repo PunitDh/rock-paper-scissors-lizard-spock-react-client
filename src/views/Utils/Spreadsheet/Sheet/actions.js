@@ -2,6 +2,7 @@ export const SheetAction = Object.freeze({
   SET_SELECTED: "SET_SELECTED",
   SET_INPUT_TEXT: "SET_INPUT_TEXT",
   SET_EDIT_MODE: "SET_EDIT_MODE",
+  SET_FORMULA_MODE: "SET_FORMULA_MODE",
   SET_SHIFT_KEY: "SET_SHIFT_KEY",
   SET_COMMAND_KEY: "SET_COMMAND_KEY",
   SET_CONTROL_KEY: "SET_CONTROL_KEY",
@@ -11,13 +12,13 @@ export const SheetAction = Object.freeze({
   SET_SELECTED_COLUMN: "SET_SELECTED_COLUMN",
   SELECT_ALL: "SELECT_ALL",
   HIGHLIGHT_CELLS: "HIGHLIGHT_CELLS",
-  SET_HIGHLIGHTED_ANCHOR: "SET_HIGHLIGHTED_ANCHOR",
-  SET_HIGHLIGHTED_CURRENT: "SET_HIGHLIGHTED_CURRENT",
+  SET_HIGHLIGHT_ANCHOR: "SET_HIGHLIGHT_ANCHOR",
+  SET_HIGHLIGHT_CURRENT: "SET_HIGHLIGHT_CURRENT",
   DELETE_CELL_CONTENT: "DELETE_CELL_CONTENT",
   CUT_CELL_CONTENT: "CUT_CELL_CONTENT",
   COPY_CELL_CONTENT: "COPY_CELL_CONTENT",
   PASTE_CELL_CONTENT: "PASTE_CELL_CONTENT",
-  RESET_HIGHLIGHTED: "RESET_HIGHLIGHTED",
+  RESET_HIGHLIGHT: "RESET_HIGHLIGHT",
   SET_MOUSEDOWN: "SET_MOUSEDOWN",
   SET_CONTENT: "SET_CONTENT",
   RECALCULATE_FORMULAE: "RECALCULATE_FORMULAE",
@@ -37,6 +38,11 @@ export const setInputText = (payload) => ({
 
 export const setEditMode = (payload) => ({
   type: SheetAction.SET_EDIT_MODE,
+  payload,
+});
+
+export const setFormulaMode = (payload) => ({
+  type: SheetAction.SET_FORMULA_MODE,
   payload,
 });
 
@@ -65,13 +71,13 @@ export const setHovered = (payload) => ({
   payload,
 });
 
-export const setHighlightedAnchor = (payload) => ({
-  type: SheetAction.SET_HIGHLIGHTED_ANCHOR,
+export const setHighlightAnchor = (payload) => ({
+  type: SheetAction.SET_HIGHLIGHT_ANCHOR,
   payload,
 });
 
-export const setHighlightedCurrent = (payload) => ({
-  type: SheetAction.SET_HIGHLIGHTED_CURRENT,
+export const setHighlightCurrent = (payload) => ({
+  type: SheetAction.SET_HIGHLIGHT_CURRENT,
   payload,
 });
 
@@ -120,8 +126,8 @@ export const setMenuAnchorElement = (payload) => ({
   payload,
 });
 
-export const resetHighlighted = () => ({
-  type: SheetAction.RESET_HIGHLIGHTED,
+export const resetHighlight = () => ({
+  type: SheetAction.RESET_HIGHLIGHT,
 });
 
 export const setMouseDown = (payload) => ({
@@ -129,9 +135,9 @@ export const setMouseDown = (payload) => ({
   payload,
 });
 
-export const setContent = (payload) => ({
+export const setContent = (cell, value) => ({
   type: SheetAction.SET_CONTENT,
-  payload,
+  payload: { cell, value },
 });
 
 export const recalculateFormulae = () => ({
