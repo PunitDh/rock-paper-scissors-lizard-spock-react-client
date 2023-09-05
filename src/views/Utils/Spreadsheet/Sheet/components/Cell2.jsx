@@ -31,7 +31,6 @@ const Cell2 = ({ id, state, dispatch }) => {
           dispatch(setContent(id, cellContentRef.current));
           dispatch(recalculateFormulae());
           cellContentRef.current = state.content[id]?.value;
-          setTimeout(() => console.log(state.content[id]), 0);
         });
 
         if (state.selected.cell === id) {

@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import DashboardCard from "src/components/shared/DashboardCard";
 import { initialState, reducer } from "./reducer";
 import Cell from "./components/Cell";
 import {
   deleteCellContent,
   resetHighlight,
-  setContent,
   setHighlightAnchor,
   highlightCells,
   setHighlightCurrent,
@@ -14,7 +13,6 @@ import {
   setMouseDown,
   selectCell,
   setShiftKey,
-  recalculateFormulae,
   pasteCellContent,
   setCommandKey,
   setControlKey,
@@ -181,10 +179,6 @@ const Sheet = () => {
     e.preventDefault();
     const data = await clipboard.get();
     dispatch(pasteCellContent(data, { id: state.selected.cell }));
-  };
-
-  const handleDragStart = (e) => {
-    console.log("dragstart", e.currentTarget);
   };
 
   return (

@@ -11,10 +11,10 @@ export const evaluateExpression = (state) => {
       .join("")
       .replaceAll("×", "*")
       .replaceAll("÷", "/")
-      .replaceAll("%", "/100")
-      .replaceAll("²", "**2")
+      .replaceAll("%", "/(100)")
+      .replaceAll("²", "**(2)")
       .replaceAll("^", "**")
-      .replaceAll(/(\b)e(\b|\B)/g, "1e0")
+      .replaceAll(/(\b)e(\b|\B)/g, "(1e0)")
       .replaceAll(/(\d+)(?=\()/g, "$&*")
       .replaceAll(/(?<=\))(\d+)/g, "*$&")
       .replaceAll(

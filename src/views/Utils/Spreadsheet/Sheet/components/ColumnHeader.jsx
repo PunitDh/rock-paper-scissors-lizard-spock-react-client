@@ -9,6 +9,7 @@ const HeaderItem = styled(Item)(({ selected }) => ({
   fontWeight: "700",
   width: "100%",
   userSelect: "none",
+  overflowY: "hidden"
 }));
 
 const ColumnHeader = ({ state, dispatch, column, onContextMenu }) => {

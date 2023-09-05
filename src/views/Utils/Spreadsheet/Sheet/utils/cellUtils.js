@@ -44,7 +44,6 @@ export const generateClipboardContent = (state) => {
 
 export function typeInTextField(id, newText) {
   const el = document.getElementById(id);
-  console.log(el);
   if (!el) return;
   const [start, end] = [el.selectionStart, el.selectionEnd];
   el.focus();
