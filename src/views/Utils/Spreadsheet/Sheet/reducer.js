@@ -4,7 +4,7 @@ import Cell from "../models/Cell";
 import Range from "../models/Range";
 import { getCellOffset, getId } from "./utils/cellUtils";
 import { SheetAction } from "./actions";
-import { updateStateContent } from "./utils/evalUtils2";
+import { updateStateContent } from "./utils/evalUtils";
 
 export const initialState = {
   selected: { cell: "A1", row: 1, column: "A", columnCharCode: 65 },
@@ -93,7 +93,6 @@ export const reducer = (state, action) => {
 
     case SheetAction.HIGHLIGHT_CELLS: {
       const range = Range.createFlat(action.start, action.end);
-      console.log("Here");
       return {
         ...state,
         highlighted: {

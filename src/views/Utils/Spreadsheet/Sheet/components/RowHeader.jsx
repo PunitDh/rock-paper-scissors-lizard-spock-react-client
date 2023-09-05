@@ -25,7 +25,8 @@ const RowHeader = ({ state, dispatch, row, onContextMenu }) => {
     <HeaderItem
       onClick={(e) => handleRowHeaderClick(e, row)}
       selected={
-        state.selected.row === row || state.highlighted.rows.includes(row)
+        state.selected.row === row ||
+        state.highlighted.rows.includes(row)
       }
       onMouseDown={handleRowHeaderMouseDown}
       onMouseUp={handleRowHeaderMouseUp}

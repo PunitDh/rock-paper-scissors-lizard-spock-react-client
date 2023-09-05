@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { CellDiv, DivItem } from "../../styles";
 import {
   resetHighlighted,
@@ -14,91 +8,39 @@ import {
   setHighlightedAnchor,
   setHighlightedCurrent,
   setHovered,
-  setEditMode,
   setMenuAnchorElement,
   recalculateFormulae,
 } from "../actions";
 import { KeyboardEvent, MouseButton } from "../../constants";
 
 const Cell2 = ({ id, state, dispatch }) => {
-  const [offset, setOffset] = useState();
-  const [focused, setFocused] = useState(false);
-  const [cellContent, setCellContent] = useState("");
   const containerRef = useRef();
+  const cellContentRef = useRef(state.content[id]?.value);
 
-  const textRef = useRef();
-
-  useEffect(() => {
-    const node = textRef.current;
-
+  const textRef = useCallback((node) => {
     if (node) {
       const focusInListener = node.addEventListener("focusin", () => {
-        setFocused(true);
-        const formula = state.content[id]?.formula;
-        if (formula) setCellContent(formula);
+        if (state.content[id]?.formula) {
+          // setTimeout(() => setCellContent(state.content[id]?.formula), 0);
+          cellContentRef.current = state.content[id]?.formula;
+        }
       });
 
       const focusOutListener = node.addEventListener("focusout", () => {
-        setFocused(false);
+        dispatch(setContent({ cell: id, value: cellContentRef.current }));
         dispatch(recalculateFormulae());
-        const value = state.content[id]?.value;
-        if (value) setCellContent(value);
+        cellContentRef.current = state.content[id]?.value;
+        setTimeout(() => console.log(state.content[id]), 0);
       });
 
       return () => {
-        node.removeEventListener("focusin", focusInListener);
-        node.removeEventListener("focusout", focusOutListener);
+        if (node) {
+          node.removeEventListener("focusin", focusInListener);
+          node.removeEventListener("focusout", focusOutListener);
+        }
       };
     }
-  }, [state.content, id, dispatch]);
-
-  useEffect(() => {
-    const node = textRef.current;
-    if (node) {
-      if (id === state.selected.cell) {
-        const selection = window.getSelection(),
-          range = document.createRange();
-        range.setStart(node, 0);
-        range.setEnd(node, 0);
-        selection.removeAllRanges();
-        selection.addRange(range);
-      }
-    }
-  }, [state.selected.cell]);
-
-  useEffect(() => {
-    setCellContent(state.content[id]?.value || "");
-  }, [state.content, id]);
-
-  useLayoutEffect(() => {
-    if (offset !== undefined && focused) {
-      const newRange = document.createRange();
-      console.log(newRange);
-      // var startNode = textRef.current.childNodes[1].firstChild;
-      // var endNode = textRef.current.childNodes[5].firstChild;
-
-      if (textRef.current) {
-        // Get the last child node
-        const lastChild = textRef.current.lastChild;
-
-        if (lastChild && lastChild.nodeType === Node.TEXT_NODE) {
-          newRange.setStart(lastChild, lastChild.nodeValue.length);
-          newRange.setEnd(lastChild, lastChild.nodeValue.length);
-        } else if (!lastChild) {
-          // Handle case where the contenteditable is empty
-          newRange.setStart(textRef.current, 0);
-          newRange.setEnd(textRef.current, 0);
-        }
-        const selection = window.getSelection();
-        selection.removeAllRanges();
-        selection.addRange(newRange);
-      }
-
-      const selection = document.getSelection();
-      selection.removeAllRanges();
-      selection.addRange(newRange);
-    }
-  });
+  }, []);
 
   const handleClick = (e) => {
     if (e.button === MouseButton.LEFT_CLICK) {
@@ -107,26 +49,27 @@ const Cell2 = ({ id, state, dispatch }) => {
     }
   };
 
-  const handleChange = (e) => {
-    const range = document.getSelection().getRangeAt(0);
-    setOffset(range.startOffset);
-    const newValue = e.target.textContent;
-    setCellContent(newValue);
-    dispatch(setContent({ cell: id, value: newValue }));
+  const handleInput = (e) => {
+    cellContentRef.current = e.target.textContent; // Using a ref to avoid re-renders
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === KeyboardEvent.BACKSPACE) {
-      state.editMode && e.stopPropagation();
-    } else {
-      console.log("keydown", e.key, id);
-      setFocused(true);
+    switch (e.key) {
+      case KeyboardEvent.BACKSPACE:
+        state.editMode && e.stopPropagation();
+        break;
+      case KeyboardEvent.ENTER:
+        dispatch(setContent({ cell: id, value: cellContentRef.current }));
+        dispatch(recalculateFormulae());
+        // setCellContent(state.content[id]?.value);
+        break;
+      default:
+        break;
     }
   };
 
   const handleMouseOver = (e) => {
     dispatch(setHovered(id));
-    console.log(id, state.content[id]?.value);
     if (state.mouseDown) {
       dispatch(highlightCells(id, id));
     }
@@ -149,8 +92,6 @@ const Cell2 = ({ id, state, dispatch }) => {
   const handleDoubleClick = () => {
     if (!state.mouseDown) dispatch(resetHighlighted());
     dispatch(selectCell(id));
-    // dispatch(setEditMode(true));
-    setFocused(true);
   };
 
   const handleContextMenu = (e) => {
@@ -175,13 +116,14 @@ const Cell2 = ({ id, state, dispatch }) => {
     >
       <CellDiv
         ref={textRef}
-        onInput={handleChange}
+        onInput={handleInput}
         onKeyDown={handleKeyDown}
         contentEditable={true}
         suppressContentEditableWarning={true}
-        focused={focused}
       >
-        {cellContent}
+        {id === state.selected.cell
+          ? state.content[id]?.formula || state.content[id]?.value
+          : state.content[id]?.value}
       </CellDiv>
     </DivItem>
   );

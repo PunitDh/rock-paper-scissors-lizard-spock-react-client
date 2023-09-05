@@ -43,7 +43,6 @@ const Sheet = () => {
   const clipboard = useClipboard();
 
   const eventRef = useCallback((node) => {
-    console.log(node);
     node?.addEventListener("selectionchange", (e) => {
       console.log("selection change");
     });
@@ -70,8 +69,6 @@ const Sheet = () => {
 
   const handleKeyDown = (e) => {
     let nextCell;
-
-    console.log(e.key);
 
     switch (e.key) {
       case KeyboardEvent.COMMAND:
@@ -100,26 +97,26 @@ const Sheet = () => {
       case KeyboardEvent.ARROW_DOWN:
         e.preventDefault();
         !state.shiftKey && dispatch(resetHighlighted());
-        nextCell = getNextRow(state.selected.cell);
+        nextCell = getNextColumn(state.selected.cell);
         break;
 
       case KeyboardEvent.TAB:
       case KeyboardEvent.ARROW_RIGHT:
         e.preventDefault();
         !state.shiftKey && dispatch(resetHighlighted());
-        nextCell = getNextColumn(state.selected.cell);
+        nextCell = getNextRow(state.selected.cell);
         break;
 
       case KeyboardEvent.ARROW_LEFT:
         e.preventDefault();
         !state.shiftKey && dispatch(resetHighlighted());
-        nextCell = getPreviousColumn(state.selected.cell);
+        nextCell = getPreviousRow(state.selected.cell);
         break;
 
       case KeyboardEvent.ARROW_UP:
         e.preventDefault();
         !state.shiftKey && dispatch(resetHighlighted());
-        nextCell = getPreviousRow(state.selected.cell);
+        nextCell = getPreviousColumn(state.selected.cell);
         break;
       default:
         nextCell = state.selected.cell;
@@ -190,7 +187,6 @@ const Sheet = () => {
     e.preventDefault();
     const content = generateClipboardContent(state);
     await clipboard.copy(content);
-    console.log(content);
   };
 
   const handleCutCapture = (e) => {
@@ -268,17 +264,14 @@ const Sheet = () => {
                   />
                 ))}
             </FlexBox>
-            <FlexBox>
-              {Array(SheetConfig.MAX_COLUMNS)
+            <FlexBox flexDirection="column" width="100%" height="100%">
+              {Array(SheetConfig.MAX_ROWS)
                 .fill(0)
-                .map((_, column) => (
-                  <FlexBox
-                    key={SheetConfig.COLUMNS[column]}
-                    flexDirection="column"
-                  >
-                    {Array(SheetConfig.MAX_ROWS)
+                .map((_, row) => (
+                  <FlexBox key={row} flexDirection="row" width="100%">
+                    {Array(SheetConfig.MAX_COLUMNS)
                       .fill(0)
-                      .map((_, row) => (
+                      .map((_, column) => (
                         <Cell2
                           dispatch={dispatch}
                           state={state}

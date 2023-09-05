@@ -52,13 +52,14 @@ export const DivItem = styled(Paper)(({ theme, selected }) => ({
   borderRadius: 0,
   cursor: "cell",
   height: "1.5rem",
-  width: "4.5rem",
+  width: "100%",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
   marginRight: "2px",
   marginTop: "2px",
   overflowX: "visible",
+  position: "relative",
   "&:hover": {
     outline: "2px solid blue",
   },
@@ -79,7 +80,11 @@ export const CellDiv = styled.div(({ contentEditable, focused }) => ({
   "&:focus": {
     cursor: contentEditable ? "text" : "cell",
     zIndex: "999",
-    overflowX: "visible"
+    overflowX: "auto",
+    position: "absolute",
+    width: "auto",
+    top: 0,
+    left: 0
   },
   "&:disabled": {
     backgroundColor: "transparent",
