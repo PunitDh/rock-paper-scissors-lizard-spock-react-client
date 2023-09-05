@@ -5,7 +5,7 @@ import {
   setContent,
   setFormulaMode,
   setFormulaFieldText,
-  setInputTextFocused,
+  setFormulaFieldFocused,
 } from "../actions";
 import { getNextRow } from "../utils/cellUtils";
 import styled from "@emotion/styled";
@@ -13,7 +13,6 @@ import { Check, Clear } from "@mui/icons-material";
 
 const InputField = styled.input({
   width: "100%",
-  marginBottom: "0.2rem",
   outline: "none",
   borderRadius: 0,
   border: "1px solid rgba(0,0,0,0.2)",
@@ -23,9 +22,7 @@ const InputField = styled.input({
 const FlexForm = styled.form({
   display: "flex",
   gap: "0.2rem",
-  padding: "0.2rem",
-  paddingTop: "0.5rem",
-  paddingRight: "0.5rem",
+  padding: "0.5rem",
   backgroundColor: "rgba(0,0,0,0.1)",
 });
 
@@ -63,13 +60,13 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
     e.preventDefault();
     dispatch(setFormulaFieldText(e.target.inputText.value));
     dispatch(recalculateFormulae());
-    dispatch(setInputTextFocused(false));
+    dispatch(setFormulaFieldFocused(false));
     dispatch(selectCell(getNextRow(state.selected.cell)));
     dispatch(setFormulaMode(false));
   };
 
   const handleFocus = (e) => {
-    dispatch(setInputTextFocused(true));
+    dispatch(setFormulaFieldFocused(true));
   };
 
   const handleBlur = (e) => {
@@ -85,13 +82,13 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
   const resetInputField = () => {
     dispatch(setFormulaFieldText(""));
     dispatch(setFormulaMode(false));
-    dispatch(setInputTextFocused(false));
+    dispatch(setFormulaFieldFocused(false));
   };
 
   const acceptInputField = () => {
     dispatch(recalculateFormulae());
     dispatch(setFormulaMode(false));
-    dispatch(setInputTextFocused(false));
+    dispatch(setFormulaFieldFocused(false));
   };
 
   const handleFunction = () => {

@@ -293,8 +293,6 @@ export const reducer = (state, action) => {
     }
     case SheetAction.SET_CONTENT:
       if (action.payload.value?.startsWith("=")) {
-        console.log("Formula mode activated", action.payload.value);
-
         return {
           ...state,
           formulaMode: true,

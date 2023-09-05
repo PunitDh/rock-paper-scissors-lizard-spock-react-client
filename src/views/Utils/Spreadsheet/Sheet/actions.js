@@ -37,7 +37,7 @@ export const setFormulaFieldText = (payload) => ({
   payload,
 });
 
-export const setInputTextFocused = (payload) => ({
+export const setFormulaFieldFocused = (payload) => ({
   type: SheetAction.SET_FORMULA_FIELD_FOCUSED,
   payload,
 });

@@ -19,6 +19,7 @@ import {
   setAltKey,
   selectAll,
   setEditMode,
+  setFormulaFieldFocused,
 } from "./actions";
 import {
   generateClipboardContent,
@@ -136,6 +137,7 @@ const Sheet = ({
   };
 
   const handleMouseDown = (e) => {
+    // dispatch(setFormulaFieldFocused(false));
     dispatch(setMouseDown(true));
   };
 
