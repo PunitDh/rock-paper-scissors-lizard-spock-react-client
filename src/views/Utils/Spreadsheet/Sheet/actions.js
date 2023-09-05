@@ -65,9 +65,12 @@ export const copyCellContent = () => ({
   type: SheetAction.COPY_CELL_CONTENT,
 });
 
-export const pasteCellContent = (payload) => ({
+export const pasteCellContent = (data, anchor) => ({
   type: SheetAction.PASTE_CELL_CONTENT,
-  payload,
+  payload: {
+    data,
+    anchor,
+  },
 });
 
 export const deleteCellContent = () => ({

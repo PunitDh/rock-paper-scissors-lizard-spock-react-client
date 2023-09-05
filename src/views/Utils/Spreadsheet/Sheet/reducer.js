@@ -92,7 +92,7 @@ export const reducer = (state, action) => {
         .reduce(
           (acc, cur) => ({
             ...acc,
-            [cur]: { value: "", display: "" },
+            [cur]: { value: "", display: "", formula: "" },
           }),
           state.content
         );
@@ -115,16 +115,16 @@ export const reducer = (state, action) => {
       };
     }
     case SheetAction.PASTE_CELL_CONTENT: {
-      const data = action.payload;
+      const { data, anchor } = action.payload;
       try {
         const parsed = JSON.parse(data);
         if (parsed.type === "_sheet") {
           const cellOffset = getCellOffset(
-            new Cell(state.menuAnchorElement.id),
+            new Cell(anchor.id),
             parsed.content[0].length - 1,
             parsed.content.length - 1
           );
-          const range = Range.create(state.menuAnchorElement.id, cellOffset);
+          const range = Range.create(anchor.id, cellOffset);
           const updateObj = {};
           range.cells.forEach((row, rowIndex) =>
             row.forEach((cell, cellIndex) => {

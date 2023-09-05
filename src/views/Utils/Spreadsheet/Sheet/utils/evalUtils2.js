@@ -1,77 +1,18 @@
 import Range from "../../models/Range";
 
-function evaluate(str, stateContent) {
-  const parsedStrings = evaluateFormula(str);
-  const substitutedValues = parsedStrings.map((it) => ({
-    [Object.keys(it)[0]]: substituteValues(
-      Object.values(it)[0],
-      stateContent,
-      it.zeroValue
-    ),
-  }));
-
-  const evaluatedExpressions = substitutedValues.map((it) => ({
-    [Object.keys(it)[0]]: evaluateExpression(Object.values(it)[0]),
-  }));
-
-  const replacedString = evaluatedExpressions.reduce((acc, cur) => {
-    return acc.replaceAll(
-      Object.keys(cur)[0],
-      `(${Object.values(cur)[0].value})`
-    );
-  }, str.toUpperCase());
-
-  const substitutedString = substituteValues(replacedString, stateContent, 0);
-  const evaluated = evaluateExpression(substitutedString);
-  return evaluated;
-}
-
-const evaluateFormula = function (cellValue) {
-  let str = cellValue.toUpperCase();
-
-  const processMatches = function (str, reg, formulaCreator, zeroValue) {
-    const matches = [...str.matchAll(reg)];
-    const ranges = matches.map(([_, start, end]) =>
-      Range.createFlat(start.toUpperCase(), end.toUpperCase())
-    );
-
-    const formulas = ranges
-      .map((it) => it.ids)
-      .map((it, idx) => ({ [matches[idx][0]]: formulaCreator(it), zeroValue }));
-
-    return formulas;
-  };
-
-  const sumReg = /(?:SUM)\(([a-z]\d+):([a-z]\d+)\)/gi;
-  const sumMatches = processMatches(
-    str,
-    sumReg,
-    (it) => `(${it.join("+")})`,
-    null
+// Utility functions
+const processMatches = (str, reg, formulaCreator, zeroValue) => {
+  const matches = [...str.matchAll(reg)];
+  const ranges = matches.map(([_, start, end]) =>
+    Range.createFlat(start.toUpperCase(), end.toUpperCase())
   );
 
-  const avgReg = /(?:AVERAGE)\(([a-z]\d+):([a-z]\d+)\)/gi;
-  const avgMatches = processMatches(
-    str,
-    avgReg,
-    (it) => `((${it.join("+")})/${it.length})`,
-    null
-  );
-
-  str = str.replaceAll("^", "**");
-
-  const countReg = /(?:COUNT)\(([a-z]\d+):([a-z]\d+)\)/gi;
-  const countMatches = processMatches(
-    str,
-    countReg,
-    (it) => `(${it.map((i) => `Number(!isNaN(${i}))`).join("+")})`,
-    undefined
-  );
-
-  return [sumMatches, avgMatches, countMatches].flat();
+  return ranges
+    .map((it) => it.ids)
+    .map((it, idx) => ({ [matches[idx][0]]: formulaCreator(it), zeroValue }));
 };
 
-const substituteValues = function (str, stateContent, blankValue) {
+const replaceFormulaWithValues = (str, stateContent, blankValue) => {
   const cellReg = /([A-Z]\d+)/g;
   const cellMatches = [...new Set([...str.matchAll(cellReg)].flat())].sort(
     (a, b) => {
@@ -79,25 +20,80 @@ const substituteValues = function (str, stateContent, blankValue) {
       const [bLetters, bNumbers] = b.match(/([A-Z]+)(\d+)/).slice(1);
 
       const lettersComparison = bLetters.localeCompare(aLetters);
+      if (lettersComparison !== 0) return lettersComparison;
 
-      if (lettersComparison !== 0) {
-        return lettersComparison;
-      }
-
-      const aNumber = parseInt(aNumbers);
-      const bNumber = parseInt(bNumbers);
-      return bNumber - aNumber;
+      return parseInt(bNumbers) - parseInt(aNumbers);
     }
   );
 
-  const substitutedCells = cellMatches.reduce((acc, cur) => {
-    return acc.replaceAll(cur, `(${stateContent[cur]?.value || blankValue})`);
-  }, str.replace("=", ""));
-
-  return substitutedCells;
+  return cellMatches.reduce(
+    (acc, cur) =>
+      acc.replaceAll(cur, `(${stateContent[cur]?.value || blankValue})`),
+    str.replace("=", "")
+  );
 };
 
-export const updateStateContent = function (stateContent, cell, formula) {
+// Core evaluation functions
+const evaluateFormula = (cellValue) => {
+  let str = cellValue.toUpperCase().replaceAll("^", "**");
+
+  const sumMatches = processMatches(
+    str,
+    /(?:SUM)\(([a-z]\d+):([a-z]\d+)\)/gi,
+    (it) => `(${it.join("+")})`,
+    null
+  );
+
+  const avgMatches = processMatches(
+    str,
+    /(?:AVERAGE)\(([a-z]\d+):([a-z]\d+)\)/gi,
+    (it) => `((${it.join("+")})/${it.length})`,
+    null
+  );
+
+  const countMatches = processMatches(
+    str,
+    /(?:COUNT)\(([a-z]\d+):([a-z]\d+)\)/gi,
+    (it) => `(${it.map((i) => `Number(!isNaN(${i}))`).join("+")})`,
+    undefined
+  );
+
+  return [sumMatches, avgMatches, countMatches].flat();
+};
+
+const evaluate = (str, stateContent) => {
+  const parsedStrings = evaluateFormula(str);
+  const substitutedValues = parsedStrings.map((it) => {
+    const key = Object.keys(it)[0];
+    return {
+      [key]: replaceFormulaWithValues(
+        Object.values(it)[0],
+        stateContent,
+        it.zeroValue
+      ),
+    };
+  });
+
+  const evaluatedExpressions = substitutedValues.map((it) => {
+    const key = Object.keys(it)[0];
+    return { [key]: evaluateExpression(Object.values(it)[0]) };
+  });
+
+  const replacedString = evaluatedExpressions.reduce(
+    (acc, cur) =>
+      acc.replaceAll(Object.keys(cur)[0], `(${Object.values(cur)[0].value})`),
+    str.toUpperCase()
+  );
+
+  const substitutedString = replaceFormulaWithValues(
+    replacedString,
+    stateContent,
+    0
+  );
+  return evaluateExpression(substitutedString);
+};
+
+export const updateStateContent = (stateContent, cell, formula) => {
   try {
     const evaluated = evaluate(formula, stateContent);
     return {

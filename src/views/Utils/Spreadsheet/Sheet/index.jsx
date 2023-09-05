@@ -15,8 +15,10 @@ import {
   selectCell,
   setShiftKey,
   recalculateFormulae,
+  pasteCellContent,
 } from "./actions";
 import {
+  generateClipboardContent,
   getNextColumn,
   getNextRow,
   getPreviousColumn,
@@ -28,9 +30,11 @@ import { FlexBox } from "src/components/shared/styles";
 import RowHeader from "./components/RowHeader";
 import ColumnHeader from "./components/ColumnHeader";
 import SelectAll from "./components/SelectAll";
+import { useClipboard } from "src/hooks";
 
 const Sheet = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const clipboard = useClipboard();
 
   const handleKeyUp = (e) => {
     switch (e.key) {
@@ -145,6 +149,24 @@ const Sheet = () => {
     dispatch(setMenuAnchorElement(e.currentTarget));
   };
 
+  const handleCopyCapture = async (e) => {
+    e.preventDefault();
+    const content = generateClipboardContent(state);
+    await clipboard.copy(content);
+    console.log(content);
+  };
+
+  const handleCutCapture = (e) => {
+    handleCopyCapture(e);
+    dispatch(deleteCellContent());
+  };
+
+  const handlePasteCapture = async (e) => {
+    e.preventDefault();
+    const data = await clipboard.get();
+    dispatch(pasteCellContent(data, { id: state.selected.cell }));
+  };
+
   return (
     <DashboardCard sx={{ height: "100%" }} title="Spreadsheet">
       {state.menuAnchorElement && (
@@ -167,6 +189,9 @@ const Sheet = () => {
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
+        onCopyCapture={handleCopyCapture}
+        onPasteCapture={handlePasteCapture}
+        onCutCapture={handleCutCapture}
       >
         <FlexBox justifyContent="flex-start" alignItems="flex-start">
           <FlexBox flexDirection="column" alignItems="stretch">
