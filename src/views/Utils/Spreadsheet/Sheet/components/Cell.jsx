@@ -108,8 +108,6 @@ const Cell = ({ id, state, dispatch }) => {
     dispatch(setMenuAnchorElement(e.currentTarget));
   };
 
-  console.log(state.editMode);
-
   return (
     <Item
       ref={containerRef}

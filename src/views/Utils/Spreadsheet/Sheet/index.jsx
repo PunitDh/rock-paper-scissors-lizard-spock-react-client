@@ -97,26 +97,26 @@ const Sheet = () => {
       case KeyboardEvent.ARROW_DOWN:
         e.preventDefault();
         !state.shiftKey && dispatch(resetHighlighted());
-        nextCell = getNextColumn(state.selected.cell);
+        nextCell = getNextRow(state.selected.cell);
         break;
 
       case KeyboardEvent.TAB:
       case KeyboardEvent.ARROW_RIGHT:
         e.preventDefault();
         !state.shiftKey && dispatch(resetHighlighted());
-        nextCell = getNextRow(state.selected.cell);
+        nextCell = getNextColumn(state.selected.cell);
         break;
 
       case KeyboardEvent.ARROW_LEFT:
         e.preventDefault();
         !state.shiftKey && dispatch(resetHighlighted());
-        nextCell = getPreviousRow(state.selected.cell);
+        nextCell = getPreviousColumn(state.selected.cell);
         break;
 
       case KeyboardEvent.ARROW_UP:
         e.preventDefault();
         !state.shiftKey && dispatch(resetHighlighted());
-        nextCell = getPreviousColumn(state.selected.cell);
+        nextCell = getPreviousRow(state.selected.cell);
         break;
       default:
         nextCell = state.selected.cell;
@@ -272,7 +272,7 @@ const Sheet = () => {
                     {Array(SheetConfig.MAX_COLUMNS)
                       .fill(0)
                       .map((_, column) => (
-                        <Cell2
+                        <Cell
                           dispatch={dispatch}
                           state={state}
                           key={SheetConfig.COLUMNS[column] + (row + 1)}
