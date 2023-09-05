@@ -102,8 +102,8 @@ const Cell = ({ id, state, dispatch }) => {
           e.stopPropagation();
         }
         break;
-      case KeyboardEvent.ARROW_DOWN:
-      case KeyboardEvent.ARROW_UP:
+      // case KeyboardEvent.ARROW_DOWN:
+      // case KeyboardEvent.ARROW_UP:
       case KeyboardEvent.ARROW_LEFT:
       case KeyboardEvent.ARROW_RIGHT:
         if (selectInputBox) e.stopPropagation();
@@ -161,6 +161,7 @@ const Cell = ({ id, state, dispatch }) => {
 
   return (
     <Item
+      colSpan={1}
       ref={containerRef}
       onClick={handleClick}
       selected={isSelected}
@@ -170,10 +171,9 @@ const Cell = ({ id, state, dispatch }) => {
       onDoubleClick={handleDoubleClick}
       onContextMenu={handleContextMenu}
       id={id}
-      tabIndex={row * SheetConfig.MAX_ROWS + (columnCharCode - 65)}
-      justifyContent={
-        isNaN(state.content[id]?.value) ? "flex-start" : "flex-end"
-      }
+      tabIndex={row * state.maxRows + (columnCharCode - 65)}
+      textAlign={isNaN(state.content[id]?.value) ? "left" : "right"}
+      width={`${Math.floor((100 - 3) / state.maxColumns)}%`}
     >
       {id === state.selected.cell && selectInputBox ? (
         <>
@@ -184,7 +184,6 @@ const Cell = ({ id, state, dispatch }) => {
             onBlur={handleBlur}
             onKeyDown={handleKeyDown}
             type="text"
-            // tabIndex={row * SheetConfig.MAX_ROWS + (columnCharCode - 65)}
             value={value}
             id={`${id}-input`}
             autoComplete="off"

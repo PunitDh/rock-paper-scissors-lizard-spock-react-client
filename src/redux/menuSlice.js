@@ -1,4 +1,9 @@
-import { Calculate, ColorLens, ContentCut, VideoCall } from "@mui/icons-material";
+import {
+  Calculate,
+  ColorLens,
+  ContentCut,
+  VideoCall,
+} from "@mui/icons-material";
 import { createSlice } from "@reduxjs/toolkit";
 import {
   IconDashboard,

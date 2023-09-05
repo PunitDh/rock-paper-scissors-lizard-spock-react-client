@@ -1,30 +1,42 @@
 import styled from "@emotion/styled";
-import { Paper } from "@mui/material";
+import { Paper, TableCell } from "@mui/material";
 
-export const Item = styled(Paper)(
-  ({ theme, selected, justifyContent = "center" }) => ({
+export const HeaderItem = styled(TableCell)(({ selected, theme }) => ({
+  backgroundColor: selected ? "#eee" : "#f5f6f7",
+  fontWeight: "700",
+  color: theme.palette.text.secondary,
+  textAlign: "center",
+  border: selected ? "2px solid blue" : "1px solid rgba(0,0,0,0.2)",
+  borderRadius: 0,
+  cursor: "cell",
+  padding: "2px",
+  userSelect: "none",
+  overflowY: "hidden",
+  "&:hover": {
+    border: "2px solid blue",
+  },
+}));
+
+export const Item = styled(TableCell)(
+  ({ theme, selected, textAlign, width }) => ({
     backgroundColor: selected ? theme.palette.primary.light : "#fff",
     color: theme.palette.text.secondary,
-    boxSizing: "border-box",
-    border: "none",
-    outline: selected ? "2px solid blue" : "1px solid rgba(0,0,0,0.2)",
+    border: selected ? "2px solid blue" : "1px solid rgba(0,0,0,0.2)",
+    // border: selected ? "2px solid blue" : "1px solid rgba(0,0,0,0.2)",
     borderRadius: 0,
     cursor: "cell",
     height: "1.5rem",
-    display: "flex",
-    justifyContent,
     padding: "2px",
-    alignItems: "center",
-    marginRight: "2px",
-    marginTop: "2px",
-    width: "100%",
     overflowX: "hidden",
     position: "relative",
     whiteSpace: "nowrap",
     zIndex: "50",
     userSelect: "none",
+    width,
+    textAlign,
     "&:hover": {
-      outline: "2px solid blue",
+      // border: "2px solid blue",
+      border: "2px solid blue",
     },
   })
 );
@@ -48,14 +60,12 @@ export const CellInput = styled.input(({ selected }) => ({
   width: "100%",
   height: "100%",
   borderRadius: 0,
-  boxSizing: "border-box",
   position: "absolute",
   top: "0",
   left: "0",
   outline: "none",
   border: "none",
   cursor: "cell",
-  // textAlign: "right",
   backgroundColor: "transparent",
   padding: "1px",
   font: "inherit",
@@ -64,14 +74,9 @@ export const CellInput = styled.input(({ selected }) => ({
   "&:focus": {
     zIndex: "4 !important",
     cursor: "text",
-    overflowX: "auto",
-    width: "auto",
-  },
-  "&:disabled": {
-    backgroundColor: "transparent",
   },
   "&:hover": {
-    outline: "2px solid blue",
+    // border: "1px solid blue",
   },
 }));
 

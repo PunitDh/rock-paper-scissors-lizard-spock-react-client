@@ -29,16 +29,23 @@ import {
 } from "./utils/cellUtils";
 import { KeyboardEvent, SheetConfig } from "../constants";
 import ContextMenu from "./ContextMenu";
-import { FlexBox } from "src/components/shared/styles";
 import RowHeader from "./components/RowHeader";
 import ColumnHeader from "./components/ColumnHeader";
 import SelectAll from "./components/SelectAll";
 import { useClipboard } from "src/hooks";
 import Cell2 from "./components/Cell2";
 import FormulaField from "./components/FormulaField";
+import { Table, TableBody, TableHead, TableRow } from "@mui/material";
 
-const Sheet = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+const Sheet = ({
+  maxRows = SheetConfig.MAX_ROWS,
+  maxColumns = SheetConfig.MAX_COLUMNS,
+}) => {
+  const [state, dispatch] = useReducer(reducer, {
+    ...initialState,
+    maxRows,
+    maxColumns,
+  });
   const clipboard = useClipboard();
 
   const handleKeyUp = (e) => {
@@ -202,69 +209,60 @@ const Sheet = () => {
         onCutCapture={handleCutCapture}
         tabIndex={0}
       >
-        <FlexBox justifyContent="flex-start" alignItems="flex-start">
-          <FlexBox flexDirection="column" alignItems="stretch">
-            {Array(SheetConfig.MAX_ROWS + 1)
+        <Table width="100%">
+          <TableHead width="100%">
+            <SelectAll
+              state={state}
+              dispatch={dispatch}
+              onContextMenu={handleContextMenu}
+            />
+            {Array(maxColumns)
               .fill(0)
-              .map((_, row) =>
-                row === 0 ? (
-                  <SelectAll
-                    state={state}
-                    dispatch={dispatch}
-                    onContextMenu={handleContextMenu}
-                    key={row}
-                  />
-                ) : (
-                  <RowHeader
-                    state={state}
-                    dispatch={dispatch}
-                    key={row}
-                    row={row}
-                    onContextMenu={handleContextMenu}
-                  />
-                )
-              )}
-          </FlexBox>
-          <FlexBox flexDirection="column" width="100%">
-            <FlexBox width="100%" justifyContent="stretch" alignItems="stretch">
-              {Array(SheetConfig.MAX_COLUMNS)
-                .fill(0)
-                .map((_, column) => (
-                  <ColumnHeader
-                    key={column}
-                    state={state}
-                    dispatch={dispatch}
-                    column={column}
-                    onContextMenu={handleContextMenu}
-                  />
-                ))}
-            </FlexBox>
-            <FlexBox flexDirection="column" width="100%" height="100%">
-              {Array(SheetConfig.MAX_ROWS)
-                .fill(0)
-                .map((_, row) => (
-                  <FlexBox key={row} flexDirection="row" width="100%">
-                    {Array(SheetConfig.MAX_COLUMNS)
-                      .fill(0)
-                      .map((_, column) => (
+              .map((_, column) => (
+                <ColumnHeader
+                  key={column}
+                  state={state}
+                  dispatch={dispatch}
+                  column={column}
+                  onContextMenu={handleContextMenu}
+                />
+              ))}
+          </TableHead>
+          <TableBody>
+            {Array(maxRows)
+              .fill(0)
+              .map((_, row) => (
+                <TableRow key={row}>
+                  {Array(maxColumns + 1)
+                    .fill(0)
+                    .map((_, column) =>
+                      column === 0 ? (
+                        <RowHeader
+                          state={state}
+                          dispatch={dispatch}
+                          key={row}
+                          row={row + 1}
+                          onContextMenu={handleContextMenu}
+                        />
+                      ) : (
                         <Cell
                           dispatch={dispatch}
                           state={state}
-                          key={SheetConfig.COLUMNS[column] + (row + 1)}
-                          id={SheetConfig.COLUMNS[column] + (row + 1)}
+                          key={SheetConfig.COLUMNS[column - 1] + (row + 1)}
+                          id={SheetConfig.COLUMNS[column - 1] + (row + 1)}
                         />
-                      ))}
-                  </FlexBox>
-                ))}
-            </FlexBox>
+                      )
+                    )}
+                </TableRow>
+              ))}
             <input
               type="text"
               style={{ opacity: "0", width: "1px", height: "1px" }}
-              tabIndex={(SheetConfig.MAX_ROWS + 1) * SheetConfig.MAX_COLUMNS}
+              tabIndex={(maxRows + 1) * maxColumns}
               onFocus={handleFocusGuard}
             />
-          </FlexBox>
-        </FlexBox>
+          </TableBody>
+        </Table>
       </div>
     </DashboardCard>
   );

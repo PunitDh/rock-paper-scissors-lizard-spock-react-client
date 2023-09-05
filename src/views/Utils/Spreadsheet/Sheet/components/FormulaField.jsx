@@ -8,6 +8,16 @@ import {
   setInputTextFocused,
 } from "../actions";
 import { getNextRow } from "../utils/cellUtils";
+import styled from "@emotion/styled";
+
+const InputField = styled.input({
+  width: "100%",
+  marginBottom: "0.2rem",
+  outline: "none",
+  borderRadius: 0,
+  border: "1px solid rgba(0,0,0,0.2)",
+  lineHeight: "1.5rem",
+});
 
 const FormulaField = ({ state, dispatch, onContextMenu }) => {
   const inputRef = useRef();
@@ -38,11 +48,10 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input
+      <InputField
         ref={inputRef}
         name="inputText"
         type="text"
-        style={{ width: "100%", marginBottom: "0.2rem" }}
         value={state.inputText}
         onChange={handleChange}
         onContextMenu={onContextMenu}

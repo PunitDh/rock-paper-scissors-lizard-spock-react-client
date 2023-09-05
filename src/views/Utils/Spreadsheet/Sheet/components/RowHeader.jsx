@@ -1,16 +1,10 @@
 import styled from "@emotion/styled";
-import { Item } from "../../styles";
 import { setSelectedRow } from "../actions";
+import { HeaderItem } from "../../styles";
 
-const HeaderItem = styled(Item)(({ selected }) => ({
-  backgroundColor: selected ? "#eee" : "#ddd",
-  outline: "1px solid black",
-  // border: "2px solid black",
-  borderRight: "1px solid black",
-  fontWeight: "700",
-  userSelect: "none",
-  overflowY: "hidden"
-}));
+const RowHeaderItem = styled(HeaderItem)({
+  width: "3%",
+});
 
 const RowHeader = ({ state, dispatch, row, onContextMenu }) => {
   const handleRowHeaderMouseDown = (e, row) => {
@@ -26,7 +20,7 @@ const RowHeader = ({ state, dispatch, row, onContextMenu }) => {
   };
 
   return (
-    <HeaderItem
+    <RowHeaderItem
       onClick={(e) => handleRowHeaderClick(e, row)}
       selected={
         state.selected.row === row || state.highlighted.rows.includes(row)
@@ -36,7 +30,7 @@ const RowHeader = ({ state, dispatch, row, onContextMenu }) => {
       onContextMenu={onContextMenu}
     >
       {row}
-    </HeaderItem>
+    </RowHeaderItem>
   );
 };
 
