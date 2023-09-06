@@ -27,7 +27,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(setFormulaFieldText(e.target.inputText.value));
+    dispatch(setFormulaFieldText(e.target.formulaFieldText.value));
     dispatch(recalculateFormulae());
     dispatch(setFormulaFieldFocused(false));
     dispatch(selectCell(getNextRow(state.selectedCell.id, state.maxRows)));
@@ -35,7 +35,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
   };
 
   const handleBlur = (e) => {
-    // if (!state.formulaMode) dispatch(setInputTextFocused(false));
+    // if (!state.formulaMode) dispatch(setformulaFieldFocused(false));
   };
 
   const resetInputField = () => {
@@ -93,7 +93,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
         />
         <FieldButton
           type="reset"
-          // disabled={!state.inputTextFocused}
+          // disabled={!state.formulaFieldFocused}
           color="red"
           variant="error"
           onClick={resetInputField}
@@ -105,7 +105,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
           color="green"
           variant="success"
           onClick={acceptInputField}
-          // disabled={!state.inputTextFocused}
+          // disabled={!state.formulaFieldFocused}
         >
           <Check sx={{ width: "1rem" }} />
         </FieldButton>
@@ -115,9 +115,9 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
         <input type="submit" style={{ display: "none" }} />
         <InputTextField
           ref={inputRef}
-          name="inputText"
+          name="formulaFieldText"
           type="text"
-          value={state.inputText}
+          value={state.formulaFieldText}
           defaultValue={defaultValue}
           onChange={handleChange}
           onContextMenu={onContextMenu}

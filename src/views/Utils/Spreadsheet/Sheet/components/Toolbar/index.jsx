@@ -1,30 +1,26 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { FieldButton, FlexForm } from "../styles";
 import { Download, Save } from "@mui/icons-material";
 import { Tooltip } from "@mui/material";
 import { SheetConfig } from "../../../constants";
 import Range from "../../../models/Range";
-import { useNavigate } from "react-router";
 
-const Toolbar = ({ state, dispatch }) => {
+const Toolbar = ({ state }) => {
   const inputRef = useRef();
-  const [csvHref, setCsvHref] = useState(null);
-  const csvRef = useRef();
-  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
   };
 
   const handleBlur = (e) => {
-    // if (!state.formulaMode) dispatch(setInputTextFocused(false));
+    // if (!state.formulaMode) dispatch(setformulaFieldFocused(false));
   };
 
   useEffect(() => {
-    if (state.inputTextFocused) {
+    if (state.formulaFieldFocused) {
       inputRef.current?.focus();
     }
-  }, [state.inputTextFocused]);
+  }, [state.formulaFieldFocused]);
 
   const handleExportAsCsv = (e) => {
     const range = Range.create(

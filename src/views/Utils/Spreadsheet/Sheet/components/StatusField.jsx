@@ -59,14 +59,14 @@ const StatusField = ({ state, dispatch }) => {
   };
 
   const handleBlur = (e) => {
-    // if (!state.formulaMode) dispatch(setInputTextFocused(false));
+    // if (!state.formulaMode) dispatch(setformulaFieldFocused(false));
   };
 
   useEffect(() => {
-    if (state.inputTextFocused) {
+    if (state.formulaFieldFocused) {
       inputRef.current?.focus();
     }
-  }, [state.inputTextFocused]);
+  }, [state.formulaFieldFocused]);
 
   const handleSelectCell = (e) => {
     e.preventDefault();

@@ -15,7 +15,7 @@ import {
   addCellsToHighlight,
 } from "../actions";
 import { KeyEvent, MouseButton } from "../../constants";
-import { getId, typeInTextField } from "../utils/cellUtils";
+import { getCtrlKey, getId, typeInTextField } from "../utils/cellUtils";
 
 const Cell = ({ id, state, dispatch }) => {
   const containerRef = useRef();
@@ -38,13 +38,13 @@ const Cell = ({ id, state, dispatch }) => {
 
   const handleClick = (e) => {
     if (e.button === MouseButton.LEFT_CLICK) {
-      if (e.shiftKey || e.metaKey) {
+      if (e.shiftKey || getCtrlKey(e)) {
         e.shiftKey && dispatch(highlightCells(state.selectedCell.id, id));
-        e.metaKey && dispatch(addCellsToHighlight([id]));
+        (getCtrlKey(e)) && dispatch(addCellsToHighlight([id]));
       } else {
         const formulaMode = state.formulaMode && id !== state.selectedCell.id;
         if (formulaMode) {
-          if (state.inputTextFocused) {
+          if (state.formulaFieldFocused) {
             const value = typeInTextField("input-text", id);
             dispatch(setContent(state.selectedCell.id, value));
           } else {
@@ -103,7 +103,7 @@ const Cell = ({ id, state, dispatch }) => {
         setSelectInputBox(false);
         break;
       case KeyEvent.LOWERCASE_A:
-        if (e.metaKey) {
+        if (getCtrlKey(e)) {
           e.stopPropagation();
         }
         break;
@@ -134,11 +134,11 @@ const Cell = ({ id, state, dispatch }) => {
   const handleMouseDown = (e) => {
     if (e.button === MouseButton.LEFT_CLICK) {
       // e.preventDefault();
-      if (!state.mouseDown && !e.shiftKey && !e.metaKey)
+      if (!state.mouseDown && !e.shiftKey && !getCtrlKey(e))
         dispatch(resetHighlight());
       // dispatch(selectCell(id));
       dispatch(setHighlightAnchor(id));
-      if (!e.metaKey) dispatch(highlightCells(id));
+      if (!getCtrlKey(e)) dispatch(highlightCells(id));
     }
   };
 

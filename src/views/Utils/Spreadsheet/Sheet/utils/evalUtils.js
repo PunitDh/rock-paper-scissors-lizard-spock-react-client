@@ -3,8 +3,6 @@ import Range from "../../models/Range";
 // Utility functions
 const processMatches = (str, reg, formulaCreator, zeroValue) => {
   const matches = [...str.matchAll(reg)];
-
-  const cells = matches.flat()[1];
   const ranges = matches.map(([_, match]) =>
     match
       .split(",")

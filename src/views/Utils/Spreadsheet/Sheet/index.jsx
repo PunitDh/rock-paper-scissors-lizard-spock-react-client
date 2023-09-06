@@ -105,6 +105,24 @@ const Sheet = ({
     dispatch(recalculateFormulae());
   }, []);
 
+  // const cellsToTrack = [
+  //   ...new Set(
+  //     Object.keys(state.content)
+  //       .filter((it) => state.content[it].formula?.length > 0)
+  //       .map((it) => state.content[it].formula)
+  //       .map((it) => it.match(/(\w+\d+)/gi))
+  //       .flat()
+  //   ),
+  // ].map((it) => state.content[it]?.value);
+
+  // useEffect(() => {
+  //   if (!state.formulaMode) {
+  //     dispatch(recalculateFormulae())
+  //   }
+  // }, [...cellsToTrack])
+
+  // console.log(cellsToTrack);
+
   return (
     <DashboardCard sx={{ height: "100%" }} title="Spreadsheet">
       {state.menuAnchorElement && (

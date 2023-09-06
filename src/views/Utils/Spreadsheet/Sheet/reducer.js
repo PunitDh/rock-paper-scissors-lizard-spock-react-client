@@ -21,8 +21,8 @@ export const initialState = {
   },
   content: {},
   mouseDown: false,
-  inputText: "",
-  inputTextFocused: false,
+  formulaFieldText: "",
+  formulaFieldFocused: false,
   menuAnchorElement: null,
 };
 
@@ -36,12 +36,12 @@ export const reducer = (state, action) => {
     case SheetAction.SET_FORMULA_FIELD_TEXT:
       return {
         ...state,
-        inputText: action.payload,
+        formulaFieldText: action.payload,
       };
     case SheetAction.SET_FORMULA_FIELD_FOCUSED:
       return {
         ...state,
-        inputTextFocused: action.payload,
+        formulaFieldFocused: action.payload,
       };
     case SheetAction.SET_EDIT_MODE:
       return {
@@ -268,11 +268,6 @@ export const reducer = (state, action) => {
       const formulaCells = Object.keys(state.content).filter(
         (it) => state.content[it].formula?.length > 0
       );
-
-      // const recalculatedValues = formulaCells.reduce((acc, cur) => {
-      //   const result = evaluateFormula(acc, cur, acc[cur].formula);
-      //   return result ? { ...acc, [cur]: result[cur] } : acc;
-      // }, state.content);
 
       const recalculatedValues = formulaCells.reduce((acc, cur) => {
         const result = updateStateContent(acc, cur, acc[cur].formula);
