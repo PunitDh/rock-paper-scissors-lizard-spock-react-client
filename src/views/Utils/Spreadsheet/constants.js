@@ -9,7 +9,7 @@ export const SheetConfig = {
   MAX_COLUMNS: 12,
 };
 
-export const KeyboardEvent = {
+export const KeyEvent = {
   ENTER: "Enter",
   ESCAPE: "Escape",
   TAB: "Tab",

@@ -4,30 +4,15 @@ import { initialState, reducer } from "./reducer";
 import Cell from "./components/Cell";
 import {
   deleteCellContent,
-  resetHighlight,
-  setHighlightAnchor,
   highlightCells,
-  setHighlightCurrent,
   setFormulaFieldText,
   setMenuAnchorElement,
   setMouseDown,
   selectCell,
-  setShiftKey,
   pasteCellContent,
-  setCommandKey,
-  setControlKey,
-  setAltKey,
-  selectAll,
-  setEditMode,
 } from "./actions";
-import {
-  generateClipboardContent,
-  getNextColumn,
-  getNextRow,
-  getPreviousColumn,
-  getPreviousRow,
-} from "./utils/cellUtils";
-import { KeyboardEvent, SheetConfig } from "../constants";
+import { generateClipboardContent } from "./utils/cellUtils";
+import { SheetConfig } from "../constants";
 import ContextMenu from "./ContextMenu";
 import RowHeader from "./components/RowHeader";
 import ColumnHeader from "./components/ColumnHeader";
@@ -37,6 +22,7 @@ import Cell2 from "./components/Cell2";
 import FormulaField from "./components/FormulaField";
 import { Table, TableBody, TableHead, TableRow } from "@mui/material";
 import StatusField from "./components/StatusField";
+import { handleKeyDown, handleKeyUp } from "./eventHandlers/keyboardHandlers";
 
 const Sheet = ({
   maxRows = SheetConfig.MAX_ROWS,
@@ -50,150 +36,6 @@ const Sheet = ({
     maxColumns,
   });
   const clipboard = useClipboard();
-
-  const keyUpActions = {
-    [KeyboardEvent.SHIFT]: setShiftKey,
-    [KeyboardEvent.COMMAND]: setCommandKey,
-    [KeyboardEvent.CONTROL]: setControlKey,
-    [KeyboardEvent.ALT]: setAltKey,
-  };
-
-  const handleKeyUp = (e) => {
-    const keyAction = keyUpActions[e.key];
-    if (keyAction) {
-      dispatch(keyAction(false));
-    }
-  };
-
-  const handleSpecialKey = (keyAction) => {
-    dispatch(keyAction(true));
-  };
-
-  const handleNavigation = (e, getNextFunction, ...args) => {
-    e.preventDefault();
-    if (!state.shiftKey && !state.formulaMode) {
-      dispatch(resetHighlight());
-    }
-    return getNextFunction(...args);
-  };
-
-  const handleShiftRelatedNavigation = (e, getNextFunction, ...args) => {
-    e.preventDefault();
-    if (!state.formulaMode) {
-      dispatch(resetHighlight());
-    }
-    return getNextFunction(...args);
-  };
-
-  const handleKeyDown = (e) => {
-    let nextCell;
-
-    switch (e.key) {
-      case KeyboardEvent.COMMAND:
-        return handleSpecialKey(setCommandKey);
-      case KeyboardEvent.CONTROL:
-        return handleSpecialKey(setControlKey);
-      case KeyboardEvent.ALT:
-        return handleSpecialKey(setAltKey);
-      case KeyboardEvent.LOWERCASE_A:
-        if (state.commandKey) {
-          e.preventDefault();
-          dispatch(selectAll());
-        }
-        break;
-      case KeyboardEvent.BACKSPACE:
-        if (!state.editMode) {
-          dispatch(deleteCellContent());
-        }
-        break;
-      case KeyboardEvent.SHIFT:
-        console.log(state.highlighted.cells);
-        if (state.highlighted.cells.length === 0)
-          dispatch(setHighlightAnchor(state.selectedCell.id));
-        dispatch(setShiftKey(true));
-        break;
-      case KeyboardEvent.ENTER:
-        if (state.shiftKey) {
-          nextCell = handleShiftRelatedNavigation(
-            e,
-            getPreviousRow,
-            state.selectedCell.id
-          );
-          dispatch(selectCell(nextCell));
-        } else {
-          nextCell = handleNavigation(
-            e,
-            getNextRow,
-            state.selectedCell.id,
-            maxRows
-          );
-          dispatch(selectCell(nextCell));
-        }
-        break;
-      case KeyboardEvent.TAB:
-        if (state.shiftKey) {
-          nextCell = handleShiftRelatedNavigation(
-            e,
-            getPreviousColumn,
-            state.selectedCell.id,
-            maxColumns
-          );
-          dispatch(selectCell(nextCell));
-        } else {
-          nextCell = handleNavigation(
-            e,
-            getNextColumn,
-            state.selectedCell.id,
-            maxRows,
-            maxColumns
-          );
-          dispatch(selectCell(nextCell));
-        }
-        break;
-      case KeyboardEvent.ARROW_DOWN:
-        nextCell = handleNavigation(
-          e,
-          getNextRow,
-          state.selectedCell.id,
-          maxRows
-        );
-        dispatch(selectCell(nextCell));
-        break;
-      case KeyboardEvent.ARROW_RIGHT:
-        nextCell = handleNavigation(
-          e,
-          getNextColumn,
-          state.selectedCell.id,
-          maxRows,
-          maxColumns
-        );
-        dispatch(selectCell(nextCell));
-        break;
-      case KeyboardEvent.ARROW_LEFT:
-        nextCell = handleNavigation(
-          e,
-          getPreviousColumn,
-          state.selectedCell.id,
-          maxColumns
-        );
-        dispatch(selectCell(nextCell));
-        break;
-      case KeyboardEvent.ARROW_UP:
-        nextCell = handleNavigation(e, getPreviousRow, state.selectedCell.id);
-        dispatch(selectCell(nextCell));
-        break;
-      default:
-        dispatch(setEditMode(true));
-        break;
-    }
-
-    if (state.shiftKey) {
-      dispatch(setHighlightCurrent(nextCell));
-      dispatch(highlightCells(state.highlighted.anchor, nextCell));
-    } else {
-      // dispatch(resetHighlighted());
-    }
-  };
 
   const handleMouseDown = (e) => {
     // dispatch(setFormulaFieldFocused(false));
@@ -264,8 +106,10 @@ const Sheet = ({
           />
         )}
         <div
-          onKeyUp={handleKeyUp}
-          onKeyDown={handleKeyDown}
+          onKeyUp={(e) => handleKeyUp(e, dispatch)}
+          onKeyDown={(e) =>
+            handleKeyDown(e, state, dispatch, maxRows, maxColumns)
+          }
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
           onMouseMove={handleMouseMove}

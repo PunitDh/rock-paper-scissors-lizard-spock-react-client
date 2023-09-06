@@ -11,7 +11,7 @@ import { getNextRow } from "../utils/cellUtils";
 import styled from "@emotion/styled";
 import { Check, Clear } from "@mui/icons-material";
 import Cell from "../../models/Cell";
-import { KeyboardEvent } from "../../constants";
+import { KeyEvent } from "../../constants";
 
 const InputField = styled.input({
   width: "100%",

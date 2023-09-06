@@ -11,7 +11,7 @@ import {
   setMenuAnchorElement,
   recalculateFormulae,
 } from "../actions";
-import { KeyboardEvent, MouseButton } from "../../constants";
+import { KeyEvent, MouseButton } from "../../constants";
 
 const Cell2 = ({ id, state, dispatch }) => {
   const containerRef = useRef();
@@ -61,10 +61,10 @@ const Cell2 = ({ id, state, dispatch }) => {
 
   const handleKeyDown = (e) => {
     switch (e.key) {
-      case KeyboardEvent.BACKSPACE:
+      case KeyEvent.BACKSPACE:
         state.editMode && e.stopPropagation();
         break;
-      case KeyboardEvent.ENTER:
+      case KeyEvent.ENTER:
         dispatch(setContent(id, cellContentRef.current));
         dispatch(recalculateFormulae());
         // setCellContent(state.content[id]?.value);

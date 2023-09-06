@@ -14,7 +14,7 @@ import {
   setFormulaMode,
   addCellsToHighlight,
 } from "../actions";
-import { KeyboardEvent, MouseButton } from "../../constants";
+import { KeyEvent, MouseButton } from "../../constants";
 import { getId, typeInTextField } from "../utils/cellUtils";
 
 const Cell = ({ id, state, dispatch }) => {
@@ -94,29 +94,29 @@ const Cell = ({ id, state, dispatch }) => {
 
   const handleKeyDown = (e) => {
     switch (e.key) {
-      case KeyboardEvent.ESCAPE:
+      case KeyEvent.ESCAPE:
         setSelectInputBox(false);
         containerRef.current?.focus();
         break;
-      case KeyboardEvent.BACKSPACE:
+      case KeyEvent.BACKSPACE:
         state.editMode && e.stopPropagation();
         break;
-      case KeyboardEvent.ENTER:
+      case KeyEvent.ENTER:
         dispatch(setContent(id, e.target.value));
         dispatch(recalculateFormulae());
         dispatch(setFormulaMode(false));
         dispatch(highlightCells(id));
         setSelectInputBox(false);
         break;
-      case KeyboardEvent.LOWERCASE_A:
+      case KeyEvent.LOWERCASE_A:
         if (state.commandKey) {
           e.stopPropagation();
         }
         break;
       // case KeyboardEvent.ARROW_DOWN:
       // case KeyboardEvent.ARROW_UP:
-      case KeyboardEvent.ARROW_LEFT:
-      case KeyboardEvent.ARROW_RIGHT:
+      case KeyEvent.ARROW_LEFT:
+      case KeyEvent.ARROW_RIGHT:
         if (selectInputBox && textRef.current?.value.length > 0)
           e.stopPropagation();
         break;
