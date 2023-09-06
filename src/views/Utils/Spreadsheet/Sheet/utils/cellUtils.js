@@ -1,4 +1,4 @@
-import { MAX_COLUMN, MIN_COLUMN, SheetConfig } from "../../constants";
+import { SheetConfig, getMaxColumn, getMinColumn } from "../../constants";
 
 export const getId = (id) => {
   const row = id?.match(/\d+/g);
@@ -59,17 +59,22 @@ export function typeInTextField(id, newText) {
   return el.value;
 }
 
-export const getNextColumn = (id, maxRows = SheetConfig.MAX_ROWS) => {
+export const getNextColumn = (
+  id,
+  maxRows = SheetConfig.MAX_ROWS,
+  maxColumns = SheetConfig.MAX_COLUMNS
+) => {
   const { row, columnCharCode } = getId(id);
+  const maxColumn = getMaxColumn(maxColumns);
   const nextRow =
-    columnCharCode + 1 === MAX_COLUMN
+    columnCharCode + 1 === maxColumn
       ? parseInt(row) === maxRows
         ? 1
         : +row + 1
       : row;
   return `${
-    columnCharCode + 1 === MAX_COLUMN
-      ? String.fromCharCode(MIN_COLUMN)
+    columnCharCode + 1 === maxColumn
+      ? String.fromCharCode(getMinColumn())
       : String.fromCharCode(columnCharCode + 1)
   }${nextRow}`;
 };
@@ -79,14 +84,14 @@ export const getNextRow = (id, maxRows = SheetConfig.MAX_ROWS) => {
   return `${column}${+row === maxRows ? +row : +row + 1}`;
 };
 
-export const getPreviousColumn = (id) => {
+export const getPreviousColumn = (id, maxColumns = SheetConfig.MAX_COLUMNS) => {
   const { row, columnCharCode } = getId(id);
 
   const nextRow =
-    columnCharCode === MIN_COLUMN ? (+row === 1 ? row : row - 1) : row;
+    columnCharCode === getMinColumn() ? (+row === 1 ? row : row - 1) : row;
   return `${
-    columnCharCode === MIN_COLUMN
-      ? String.fromCharCode(MAX_COLUMN - 1)
+    columnCharCode === getMinColumn()
+      ? String.fromCharCode(getMaxColumn(maxColumns) - 1)
       : String.fromCharCode(columnCharCode - 1)
   }${nextRow}`;
 };

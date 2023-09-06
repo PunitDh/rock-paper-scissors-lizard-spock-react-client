@@ -2,7 +2,7 @@ import { SheetConfig } from "../constants";
 // import { updateStateContent } from "./utils/evalUtils";
 import Cell from "../models/Cell";
 import Range from "../models/Range";
-import { getCellOffset, getId } from "./utils/cellUtils";
+import { getCellOffset, getId, typeInTextField } from "./utils/cellUtils";
 import { SheetAction } from "./actions";
 import { updateStateContent } from "./utils/evalUtils2";
 
@@ -173,26 +173,29 @@ export const reducer = (state, action) => {
               },
             };
           }, state.content);
-
-          console.log({
-            ...state,
-            content: newContent,
-          });
           return {
             ...state,
             content: newContent,
           };
         }
       } catch (e) {
-        console.error(e);
+        const value = typeInTextField(
+          `${action.payload.anchor.id}-input`,
+          action.payload.data
+        );
         return {
           ...state,
+          content: {
+            ...state.content,
+            [action.payload.anchor.id]: {
+              value,
+            },
+          },
         };
       }
-      return {
-        ...state,
-      };
+      break;
     }
+
     case SheetAction.SET_MENU_ANCHOR_ELEMENT: {
       return {
         ...state,
@@ -202,7 +205,7 @@ export const reducer = (state, action) => {
     case SheetAction.SET_SELECTED_ROW: {
       const range = Range.createFlat(
         `${SheetConfig.COLUMNS[0]}${action.payload}`,
-        `${SheetConfig.COLUMNS[SheetConfig.MAX_COLUMNS]}${action.payload}`
+        `${SheetConfig.COLUMNS[state.maxColumns]}${action.payload}`
       );
 
       return {
@@ -222,7 +225,7 @@ export const reducer = (state, action) => {
     case SheetAction.SET_SELECTED_COLUMN: {
       const range = Range.createFlat(
         `${action.payload}1`,
-        `${action.payload}${SheetConfig.MAX_ROWS}`
+        `${action.payload}${state.maxRows}`
       );
       return {
         ...state,
@@ -241,9 +244,7 @@ export const reducer = (state, action) => {
     case SheetAction.SELECT_ALL: {
       const range = Range.createFlat(
         `A1`,
-        `${SheetConfig.COLUMNS[SheetConfig.MAX_COLUMNS - 1]}${
-          SheetConfig.MAX_ROWS
-        }`
+        `${SheetConfig.COLUMNS[state.maxColumns - 1]}${state.maxRows}`
       );
       return {
         ...state,

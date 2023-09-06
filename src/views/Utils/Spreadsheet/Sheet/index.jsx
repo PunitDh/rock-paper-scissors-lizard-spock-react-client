@@ -19,7 +19,6 @@ import {
   setAltKey,
   selectAll,
   setEditMode,
-  setFormulaFieldFocused,
 } from "./actions";
 import {
   generateClipboardContent,
@@ -94,7 +93,6 @@ const Sheet = ({
       case KeyboardEvent.SHIFT:
         dispatch(setHighlightAnchor(state.selected.cell));
         dispatch(setShiftKey(true));
-        nextCell = state.selected.cell;
         break;
 
       case KeyboardEvent.ENTER:
@@ -102,33 +100,35 @@ const Sheet = ({
         e.preventDefault();
         !state.shiftKey && !state.formulaMode && dispatch(resetHighlight());
         nextCell = getNextRow(state.selected.cell, maxRows);
+        dispatch(selectCell(nextCell));
         break;
 
       case KeyboardEvent.TAB:
       case KeyboardEvent.ARROW_RIGHT:
         e.preventDefault();
         !state.shiftKey && !state.formulaMode && dispatch(resetHighlight());
-        nextCell = getNextColumn(state.selected.cell, maxRows);
+        nextCell = getNextColumn(state.selected.cell, maxRows, maxColumns);
+        dispatch(selectCell(nextCell));
         break;
 
       case KeyboardEvent.ARROW_LEFT:
         e.preventDefault();
         !state.shiftKey && !state.formulaMode && dispatch(resetHighlight());
-        nextCell = getPreviousColumn(state.selected.cell);
+        nextCell = getPreviousColumn(state.selected.cell, maxColumns);
+        dispatch(selectCell(nextCell));
         break;
 
       case KeyboardEvent.ARROW_UP:
         e.preventDefault();
         !state.shiftKey && !state.formulaMode && dispatch(resetHighlight());
         nextCell = getPreviousRow(state.selected.cell);
+        dispatch(selectCell(nextCell));
         break;
+
       default:
-        nextCell = state.selected.cell;
         dispatch(setEditMode(true));
         break;
     }
-
-    dispatch(selectCell(nextCell));
 
     if (state.shiftKey) {
       dispatch(setHighlightCurrent(nextCell));

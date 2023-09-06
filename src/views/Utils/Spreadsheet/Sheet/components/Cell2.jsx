@@ -77,7 +77,7 @@ const Cell2 = ({ id, state, dispatch }) => {
   const handleMouseOver = (e) => {
     dispatch(setHovered(id));
     if (state.mouseDown) {
-      dispatch(highlightCells(id, id));
+      dispatch(highlightCells(id));
     }
   };
 
@@ -87,7 +87,7 @@ const Cell2 = ({ id, state, dispatch }) => {
       if (!state.mouseDown && !state.shiftKey) dispatch(resetHighlight());
       dispatch(selectCell(id));
       dispatch(setHighlightAnchor(id));
-      dispatch(highlightCells(id, id));
+      dispatch(highlightCells(id));
     }
   };
 

@@ -11,6 +11,7 @@ import { getNextRow } from "../utils/cellUtils";
 import styled from "@emotion/styled";
 import { Check, Clear } from "@mui/icons-material";
 import Cell from "../../models/Cell";
+import { KeyboardEvent } from "../../constants";
 
 const InputField = styled.input({
   width: "100%",
@@ -60,10 +61,20 @@ const FieldButton = styled.button(({ variant, theme }) => ({
 }));
 
 const FormulaField = ({ state, dispatch, onContextMenu }) => {
+  const formRef = useRef();
   const inputRef = useRef();
+  const defaultValue =
+    state.content[state.selected.cell]?.formula ||
+    state.content[state.selected.cell]?.value;
+
   const handleChange = (e) => {
     e.preventDefault();
     dispatch(setFormulaFieldText(e.target.value));
+    if (e.target.value.startsWith("=")) {
+      dispatch(setFormulaMode(true));
+    } else {
+      dispatch(setFormulaMode(false));
+    }
     dispatch(setContent(state.selected.cell, e.target.value));
   };
 
@@ -72,7 +83,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
     dispatch(setFormulaFieldText(e.target.inputText.value));
     dispatch(recalculateFormulae());
     dispatch(setFormulaFieldFocused(false));
-    dispatch(selectCell(getNextRow(state.selected.cell)));
+    dispatch(selectCell(getNextRow(state.selected.cell, state.maxRows)));
     dispatch(setFormulaMode(false));
   };
 
@@ -116,11 +127,9 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
     }
   };
 
-  console.log(state.inputTextFocused);
-
   return (
     <div tabIndex="1" onBlur={handleBlur}>
-      <FlexForm onSubmit={handleSubmit}>
+      <FlexForm onSubmit={handleSubmit} ref={formRef}>
         <SmallInputField
           ref={inputRef}
           name="currentCell"
@@ -132,8 +141,8 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
           tabIndex={2}
         />
         <FieldButton
-          type="button"
-          disabled={!state.inputTextFocused}
+          type="reset"
+          // disabled={!state.inputTextFocused}
           color="red"
           variant="error"
           onClick={resetInputField}
@@ -145,19 +154,23 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
           color="green"
           variant="success"
           onClick={acceptInputField}
-          disabled={!state.inputTextFocused}
+          // disabled={!state.inputTextFocused}
         >
           <Check sx={{ width: "1rem" }} />
         </FieldButton>
         <FieldButton type="button" color="black" onClick={handleFunction}>
           <span style={{ fontFamily: "cursive" }}>fx</span>
         </FieldButton>
-
+        <input
+          type="submit"
+          style={{ width: 0, height: 0, outline: "none", border: "none" }}
+        />
         <InputField
           ref={inputRef}
           name="inputText"
           type="text"
           value={state.inputText}
+          defaultValue={defaultValue}
           onChange={handleChange}
           onContextMenu={onContextMenu}
           onFocus={handleFocus}
