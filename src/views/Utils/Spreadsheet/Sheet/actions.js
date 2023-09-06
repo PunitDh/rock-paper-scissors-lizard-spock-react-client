@@ -13,6 +13,7 @@ export const SheetAction = Object.freeze({
   SET_SELECTED_COLUMN: "SET_SELECTED_COLUMN",
   SELECT_ALL: "SELECT_ALL",
   HIGHLIGHT_CELLS: "HIGHLIGHT_CELLS",
+  ADD_CELLS_TO_HIGHLIGHT: "ADD_CELLS_TO_HIGHLIGHT",
   SET_HIGHLIGHT_ANCHOR: "SET_HIGHLIGHT_ANCHOR",
   SET_HIGHLIGHT_CURRENT: "SET_HIGHLIGHT_CURRENT",
   DELETE_CELL_CONTENT: "DELETE_CELL_CONTENT",
@@ -95,7 +96,7 @@ export const copyCellContent = () => ({
   type: SheetAction.COPY_CELL_CONTENT,
 });
 
-export const pasteCellContent = (data, anchor) => ({
+export const pasteCellContent = (anchor, data) => ({
   type: SheetAction.PASTE_CELL_CONTENT,
   payload: {
     data,
@@ -125,6 +126,11 @@ export const highlightCells = (start, end) => ({
   type: SheetAction.HIGHLIGHT_CELLS,
   start,
   end,
+});
+
+export const addCellsToHighlight = (payload) => ({
+  type: SheetAction.ADD_CELLS_TO_HIGHLIGHT,
+  payload,
 });
 
 export const setMenuAnchorElement = (payload) => ({

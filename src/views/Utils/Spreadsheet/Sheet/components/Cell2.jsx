@@ -33,7 +33,7 @@ const Cell2 = ({ id, state, dispatch }) => {
           cellContentRef.current = state.content[id]?.value;
         });
 
-        if (state.selected.cell === id) {
+        if (state.selectedCell.id === id) {
           setTimeout(() => node.focus(), 0);
         }
 
@@ -45,7 +45,7 @@ const Cell2 = ({ id, state, dispatch }) => {
         };
       }
     },
-    [state.selected.cell]
+    [state.selectedCell.id]
   );
 
   const handleClick = (e) => {
@@ -110,7 +110,7 @@ const Cell2 = ({ id, state, dispatch }) => {
       ref={containerRef}
       onClick={handleClick}
       selected={
-        id === state.selected.cell || state.highlighted.cells.includes(id)
+        id === state.selectedCell.id || state.highlighted.cells.includes(id)
       }
       onMouseOver={handleMouseOver}
       onMouseDown={handleMouseDown}
@@ -127,7 +127,7 @@ const Cell2 = ({ id, state, dispatch }) => {
         contentEditable={true}
         suppressContentEditableWarning={true}
       >
-        {id === state.selected.cell
+        {id === state.selectedCell.id
           ? state.content[id]?.formula || state.content[id]?.value
           : state.content[id]?.value}
       </CellDiv>

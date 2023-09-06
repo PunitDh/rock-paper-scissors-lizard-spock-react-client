@@ -126,7 +126,7 @@ const StatusField = ({ state, dispatch }) => {
           ref={inputRef}
           name="currentCell"
           type="text"
-          value={state.selected.cell}
+          value={state.selectedCell.id}
           onChange={handleSelectCell}
           autoComplete="off"
           id="current-cell"

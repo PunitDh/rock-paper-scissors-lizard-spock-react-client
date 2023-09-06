@@ -9,7 +9,7 @@ import { updateStateContent } from "./utils/evalUtils2";
 export const initialState = {
   maxRows: SheetConfig.MAX_ROWS,
   maxColumns: SheetConfig.MAX_COLUMNS,
-  selected: { cell: "A1", row: 1, column: "A", columnCharCode: 65 },
+  selectedCell: new Cell("A1"), //{ cell: "A1", row: 1, column: "A", columnCharCode: 65 },
   editMode: false,
   formulaMode: false,
   shiftKey: false,
@@ -34,14 +34,9 @@ export const initialState = {
 export const reducer = (state, action) => {
   switch (action.type) {
     case SheetAction.SET_SELECTED:
-      const { row, column } = getId(action.payload);
       return {
         ...state,
-        selected: {
-          cell: action.payload,
-          row: Number(row),
-          column,
-        },
+        selectedCell: new Cell(action.payload),
       };
     case SheetAction.SET_FORMULA_FIELD_TEXT:
       return {
@@ -114,6 +109,21 @@ export const reducer = (state, action) => {
           cells: range.ids,
           rows: range.rows,
           columns: range.columns,
+        },
+        editMode: false,
+      };
+    }
+    case SheetAction.ADD_CELLS_TO_HIGHLIGHT: {
+      const cells = action.payload.map((id) => new Cell(id));
+      const rows = [...new Set(cells.map((it) => it.row))];
+      const columns = [...new Set(cells.map((it) => it.column))];
+      return {
+        ...state,
+        highlighted: {
+          ...state.highlighted,
+          cells: state.highlighted.cells.concat(action.payload),
+          rows: state.highlighted.rows.concat(rows),
+          columns: state.highlighted.columns.concat(columns),
         },
         editMode: false,
       };
@@ -210,8 +220,8 @@ export const reducer = (state, action) => {
 
       return {
         ...state,
-        selected: {
-          ...state.selected,
+        selectedCell: {
+          ...state.selectedCell,
           row: Number(action.payload),
         },
         highlighted: {
@@ -229,8 +239,8 @@ export const reducer = (state, action) => {
       );
       return {
         ...state,
-        selected: {
-          ...state.selected,
+        selectedCell: {
+          ...state.selectedCell,
           column: action.payload,
         },
         highlighted: {
@@ -249,9 +259,6 @@ export const reducer = (state, action) => {
       return {
         ...state,
         editMode: false,
-        selected: {
-          ...state.selected,
-        },
         highlighted: {
           ...state.highlighted,
           cells: range.ids,

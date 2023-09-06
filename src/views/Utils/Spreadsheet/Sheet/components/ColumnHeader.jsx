@@ -28,7 +28,7 @@ const ColumnHeader = ({ state, dispatch, column, onContextMenu }) => {
     <ColumnHeaderItem
       colSpan={1}
       selected={
-        state.selected.column === SheetConfig.COLUMNS[column] ||
+        state.selectedCell.column === SheetConfig.COLUMNS[column] ||
         state.highlighted.columns.includes(SheetConfig.COLUMNS[column])
       }
       onClick={(e) => handleClick(e, SheetConfig.COLUMNS[column])}

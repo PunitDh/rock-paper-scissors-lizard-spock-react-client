@@ -51,23 +51,38 @@ const Sheet = ({
   });
   const clipboard = useClipboard();
 
+  const keyUpActions = {
+    [KeyboardEvent.SHIFT]: setShiftKey,
+    [KeyboardEvent.COMMAND]: setCommandKey,
+    [KeyboardEvent.CONTROL]: setControlKey,
+    [KeyboardEvent.ALT]: setAltKey,
+  };
+
   const handleKeyUp = (e) => {
-    switch (e.key) {
-      case KeyboardEvent.SHIFT:
-        dispatch(setShiftKey(false));
-        break;
-      case KeyboardEvent.COMMAND:
-        dispatch(setCommandKey(false));
-        break;
-      case KeyboardEvent.CONTROL:
-        dispatch(setControlKey(false));
-        break;
-      case KeyboardEvent.ALT:
-        dispatch(setAltKey(false));
-        break;
-      default:
-        break;
+    const keyAction = keyUpActions[e.key];
+    if (keyAction) {
+      dispatch(keyAction(false));
     }
+  };
+
+  const handleSpecialKey = (keyAction) => {
+    dispatch(keyAction(true));
+  };
+
+  const handleNavigation = (e, getNextFunction, ...args) => {
+    e.preventDefault();
+    if (!state.shiftKey && !state.formulaMode) {
+      dispatch(resetHighlight());
+    }
+    return getNextFunction(...args);
+  };
+
+  const handleShiftRelatedNavigation = (e, getNextFunction, ...args) => {
+    e.preventDefault();
+    if (!state.formulaMode) {
+      dispatch(resetHighlight());
+    }
+    return getNextFunction(...args);
   };
 
   const handleKeyDown = (e) => {
@@ -75,11 +90,11 @@ const Sheet = ({
 
     switch (e.key) {
       case KeyboardEvent.COMMAND:
-        return dispatch(setCommandKey(true));
+        return handleSpecialKey(setCommandKey);
       case KeyboardEvent.CONTROL:
-        return dispatch(setControlKey(true));
+        return handleSpecialKey(setControlKey);
       case KeyboardEvent.ALT:
-        return dispatch(setAltKey(true));
+        return handleSpecialKey(setAltKey);
       case KeyboardEvent.LOWERCASE_A:
         if (state.commandKey) {
           e.preventDefault();
@@ -87,44 +102,86 @@ const Sheet = ({
         }
         break;
       case KeyboardEvent.BACKSPACE:
-        !state.editMode && dispatch(deleteCellContent());
+        if (!state.editMode) {
+          dispatch(deleteCellContent());
+        }
         break;
-
       case KeyboardEvent.SHIFT:
-        dispatch(setHighlightAnchor(state.selected.cell));
+        console.log(state.highlighted.cells);
+        if (state.highlighted.cells.length === 0)
+          dispatch(setHighlightAnchor(state.selectedCell.id));
         dispatch(setShiftKey(true));
         break;
-
       case KeyboardEvent.ENTER:
-      case KeyboardEvent.ARROW_DOWN:
-        e.preventDefault();
-        !state.shiftKey && !state.formulaMode && dispatch(resetHighlight());
-        nextCell = getNextRow(state.selected.cell, maxRows);
-        dispatch(selectCell(nextCell));
+        if (state.shiftKey) {
+          nextCell = handleShiftRelatedNavigation(
+            e,
+            getPreviousRow,
+            state.selectedCell.id
+          );
+          dispatch(selectCell(nextCell));
+        } else {
+          nextCell = handleNavigation(
+            e,
+            getNextRow,
+            state.selectedCell.id,
+            maxRows
+          );
+          dispatch(selectCell(nextCell));
+        }
         break;
-
       case KeyboardEvent.TAB:
+        if (state.shiftKey) {
+          nextCell = handleShiftRelatedNavigation(
+            e,
+            getPreviousColumn,
+            state.selectedCell.id,
+            maxColumns
+          );
+          dispatch(selectCell(nextCell));
+        } else {
+          nextCell = handleNavigation(
+            e,
+            getNextColumn,
+            state.selectedCell.id,
+            maxRows,
+            maxColumns
+          );
+          dispatch(selectCell(nextCell));
+        }
+        break;
+      case KeyboardEvent.ARROW_DOWN:
+        nextCell = handleNavigation(
+          e,
+          getNextRow,
+          state.selectedCell.id,
+          maxRows
+        );
+        dispatch(selectCell(nextCell));
+        break;
       case KeyboardEvent.ARROW_RIGHT:
-        e.preventDefault();
-        !state.shiftKey && !state.formulaMode && dispatch(resetHighlight());
-        nextCell = getNextColumn(state.selected.cell, maxRows, maxColumns);
+        nextCell = handleNavigation(
+          e,
+          getNextColumn,
+          state.selectedCell.id,
+          maxRows,
+          maxColumns
+        );
         dispatch(selectCell(nextCell));
         break;
-
       case KeyboardEvent.ARROW_LEFT:
-        e.preventDefault();
-        !state.shiftKey && !state.formulaMode && dispatch(resetHighlight());
-        nextCell = getPreviousColumn(state.selected.cell, maxColumns);
+        nextCell = handleNavigation(
+          e,
+          getPreviousColumn,
+          state.selectedCell.id,
+          maxColumns
+        );
         dispatch(selectCell(nextCell));
         break;
-
       case KeyboardEvent.ARROW_UP:
-        e.preventDefault();
-        !state.shiftKey && !state.formulaMode && dispatch(resetHighlight());
-        nextCell = getPreviousRow(state.selected.cell);
+        nextCell = handleNavigation(e, getPreviousRow, state.selectedCell.id);
         dispatch(selectCell(nextCell));
         break;
-
       default:
         dispatch(setEditMode(true));
         break;
@@ -148,7 +205,7 @@ const Sheet = ({
   };
 
   const handleMouseMove = () => {
-    if (state.mouseDown) {
+    if (state.mouseDown && !state.commandKey) {
       dispatch(
         highlightCells(state.highlighted.anchor, state.highlighted.current)
       );
@@ -158,12 +215,12 @@ const Sheet = ({
   useEffect(() => {
     dispatch(
       setFormulaFieldText(
-        state.content[state.selected.cell]?.formula ||
-          state.content[state.selected.cell]?.value ||
+        state.content[state.selectedCell.id]?.formula ||
+          state.content[state.selectedCell.id]?.value ||
           ""
       )
     );
-  }, [state.selected.cell, state.content]);
+  }, [state.selectedCell.id, state.content]);
 
   const handleFocusGuard = (e) => {
     e.preventDefault();
@@ -190,7 +247,7 @@ const Sheet = ({
   const handlePasteCapture = async (e) => {
     e.preventDefault();
     const data = await clipboard.get();
-    dispatch(pasteCellContent(data, { id: state.selected.cell }));
+    dispatch(pasteCellContent({ id: state.selectedCell.id }, data));
   };
 
   return (

@@ -64,8 +64,8 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
   const formRef = useRef();
   const inputRef = useRef();
   const defaultValue =
-    state.content[state.selected.cell]?.formula ||
-    state.content[state.selected.cell]?.value;
+    state.content[state.selectedCell.id]?.formula ||
+    state.content[state.selectedCell.id]?.value;
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -75,7 +75,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
     } else {
       dispatch(setFormulaMode(false));
     }
-    dispatch(setContent(state.selected.cell, e.target.value));
+    dispatch(setContent(state.selectedCell.id, e.target.value));
   };
 
   const handleSubmit = (e) => {
@@ -83,7 +83,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
     dispatch(setFormulaFieldText(e.target.inputText.value));
     dispatch(recalculateFormulae());
     dispatch(setFormulaFieldFocused(false));
-    dispatch(selectCell(getNextRow(state.selected.cell, state.maxRows)));
+    dispatch(selectCell(getNextRow(state.selectedCell.id, state.maxRows)));
     dispatch(setFormulaMode(false));
   };
 
@@ -134,7 +134,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
           ref={inputRef}
           name="currentCell"
           type="text"
-          value={state.selected.cell}
+          value={state.selectedCell.id}
           onChange={handleSelectCell}
           autoComplete="off"
           id="current-cell"
@@ -161,10 +161,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
         <FieldButton type="button" color="black" onClick={handleFunction}>
           <span style={{ fontFamily: "cursive" }}>fx</span>
         </FieldButton>
-        <input
-          type="submit"
-          style={{ width: 0, height: 0, outline: "none", border: "none" }}
-        />
+        <input type="submit" style={{ display: "none" }} />
         <InputField
           ref={inputRef}
           name="inputText"

@@ -31,7 +31,7 @@ const ContextMenu = ({ state, dispatch }) => {
 
   const handlePaste = async () => {
     const data = await clipboard.get();
-    dispatch(pasteCellContent(data, state.menuAnchorElement));
+    dispatch(pasteCellContent(state.menuAnchorElement, data));
     handleClose();
   };
 
@@ -48,7 +48,7 @@ const ContextMenu = ({ state, dispatch }) => {
         open={Boolean(state.menuAnchorElement)}
         onClose={handleClose}
         anchorEl={state.menuAnchorElement}
-        MenuListProps={{ "aria-labelledby": state.selected.cell }}
+        MenuListProps={{ "aria-labelledby": state.selectedCell.id }}
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "left",
