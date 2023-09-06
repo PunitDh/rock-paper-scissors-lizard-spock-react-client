@@ -1,3 +1,4 @@
+import CellContent from "../../models/CellContent";
 import Range from "../../models/Range";
 
 // Utility functions
@@ -98,21 +99,21 @@ export const updateStateContent = (stateContent, cell, formula) => {
     const evaluated = evaluate(formula, stateContent);
     return {
       ...stateContent,
-      [cell]: {
+      [cell]: new CellContent({
         formula: formula.toUpperCase(),
         value: evaluated.value,
         display: evaluated.value,
-      },
+      }),
     };
   } catch (e) {
     console.error(e);
     return {
       ...stateContent,
-      [cell]: {
+      [cell]: new CellContent({
         formula: formula.toUpperCase(),
         value: "Syntax Error",
         display: "Syntax Error",
-      },
+      }),
     };
   }
 };

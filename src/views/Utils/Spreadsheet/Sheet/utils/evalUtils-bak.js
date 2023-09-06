@@ -1,3 +1,4 @@
+import CellContent from "../../models/CellContent";
 import Range from "../../models/Range";
 
 const evaluateFormula = (cellValue) => {
@@ -67,11 +68,11 @@ export const updateStateContent = (stateContent, cell, formula) => {
     const evaluatedExpression = evaluateExpression(substitutedValues);
     return {
       ...stateContent,
-      [cell]: {
+      [cell]: new CellContent({
         formula: formula.toUpperCase(),
         value: evaluatedExpression.value,
         display: evaluatedExpression.value,
-      },
+      }),
     };
   } catch (e) {
     console.error(e);

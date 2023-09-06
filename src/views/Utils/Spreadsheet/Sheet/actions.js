@@ -14,12 +14,11 @@ export const SheetAction = Object.freeze({
   SET_HIGHLIGHT_ANCHOR: "SET_HIGHLIGHT_ANCHOR",
   SET_HIGHLIGHT_CURRENT: "SET_HIGHLIGHT_CURRENT",
   DELETE_CELL_CONTENT: "DELETE_CELL_CONTENT",
-  CUT_CELL_CONTENT: "CUT_CELL_CONTENT",
-  COPY_CELL_CONTENT: "COPY_CELL_CONTENT",
   PASTE_CELL_CONTENT: "PASTE_CELL_CONTENT",
   RESET_HIGHLIGHT: "RESET_HIGHLIGHT",
   SET_MOUSEDOWN: "SET_MOUSEDOWN",
   SET_CONTENT: "SET_CONTENT",
+  SET_CONTENT_BULK: "SET_CONTENT_BULK",
   RECALCULATE_FORMULAE: "RECALCULATE_FORMULAE",
   SET_MENU_ANCHOR_ELEMENT: "SET_MENU_ANCHOR_ELEMENT",
   RESET_STATE: "RESET_STATE",
@@ -67,14 +66,6 @@ export const setHighlightAnchor = (payload) => ({
 export const setHighlightCurrent = (payload) => ({
   type: SheetAction.SET_HIGHLIGHT_CURRENT,
   payload,
-});
-
-export const cutCellContent = () => ({
-  type: SheetAction.CUT_CELL_CONTENT,
-});
-
-export const copyCellContent = () => ({
-  type: SheetAction.COPY_CELL_CONTENT,
 });
 
 export const pasteCellContent = (anchor, data) => ({
@@ -132,6 +123,11 @@ export const setMouseDown = (payload) => ({
 export const setContent = (cell, value) => ({
   type: SheetAction.SET_CONTENT,
   payload: { cell, value },
+});
+
+export const setContentBulk = (payload) => ({
+  type: SheetAction.SET_CONTENT_BULK,
+  payload,
 });
 
 export const recalculateFormulae = () => ({

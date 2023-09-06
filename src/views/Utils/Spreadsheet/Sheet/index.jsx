@@ -55,6 +55,7 @@ const Sheet = ({
     if (!state.formulaMode) {
       console.log("Recalculation triggered");
       dispatch(recalculateFormulae());
+      console.log(state.content);
     }
   }, [cellsToTrack, state.formulaMode]);
 

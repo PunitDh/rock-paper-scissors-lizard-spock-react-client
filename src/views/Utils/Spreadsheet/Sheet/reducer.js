@@ -4,6 +4,7 @@ import Range from "../models/Range";
 import { getCellOffset, typeInTextField } from "./utils/cellUtils";
 import { SheetAction } from "./actions";
 import { updateStateContent } from "./utils/evalUtils";
+import CellContent from "../models/CellContent";
 
 export const initialState = {
   maxRows: SheetConfig.MAX_ROWS,
@@ -116,7 +117,7 @@ export const reducer = (state, action) => {
           ...state,
           content: {
             ...state.content,
-            [action.payload]: { value: null, display: null, formula: null },
+            [action.payload]: new CellContent(),
           },
         };
       }
@@ -126,7 +127,7 @@ export const reducer = (state, action) => {
         .reduce(
           (acc, cur) => ({
             ...acc,
-            [cur]: { value: null, display: null, formula: null },
+            [cur]: new CellContent(),
           }),
           state.content
         );
@@ -134,18 +135,6 @@ export const reducer = (state, action) => {
       return {
         ...state,
         content,
-      };
-    }
-    case SheetAction.CUT_CELL_CONTENT: {
-      // TODO
-      return {
-        ...state,
-      };
-    }
-    case SheetAction.COPY_CELL_CONTENT: {
-      // TODO
-      return {
-        ...state,
       };
     }
     case SheetAction.PASTE_CELL_CONTENT: {
@@ -168,11 +157,7 @@ export const reducer = (state, action) => {
           const newContent = Object.keys(updateObj).reduce((acc, cur) => {
             return {
               ...acc,
-              [cur]: {
-                value: updateObj[cur].value,
-                display: updateObj[cur].display,
-                formula: updateObj[cur].formula,
-              },
+              [cur]: new CellContent(updateObj[cur]),
             };
           }, state.content);
           return {
@@ -304,11 +289,17 @@ export const reducer = (state, action) => {
         ...state,
         content: {
           ...state.content,
-          [action.payload.cell]: {
+          [action.payload.cell]: new CellContent({
             value: action.payload.value,
             display: action.payload.value,
-          },
+          }),
         },
+      };
+
+    case SheetAction.SET_CONTENT_BULK:
+      return {
+        ...state,
+        content: action.payload,
       };
     case SheetAction.RESET_STATE:
     default:

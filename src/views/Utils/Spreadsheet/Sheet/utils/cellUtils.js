@@ -1,4 +1,5 @@
 import { SheetConfig, getMaxColumn, getMinColumn } from "../../constants";
+import CellContent from "../../models/CellContent";
 
 export const getId = (id) => {
   const row = id?.match(/\d+/g);
@@ -40,11 +41,14 @@ export const getCellOffset = (cell, offsetX, offsetY) => {
 
 export const generateClipboardContent = (state) => {
   const content = state.highlighted.rows.map((row) =>
-    state.highlighted.columns.map((column) => ({
-      value: state.content[`${column}${row}`]?.value || "",
-      display: state.content[`${column}${row}`]?.display || "",
-      formula: state.content[`${column}${row}`]?.formula || "",
-    }))
+    state.highlighted.columns.map(
+      (column) =>
+        new CellContent({
+          value: state.content[`${column}${row}`]?.value || "",
+          display: state.content[`${column}${row}`]?.display || "",
+          formula: state.content[`${column}${row}`]?.formula || "",
+        })
+    )
   );
   const type = "_sheet";
   return JSON.stringify({ type, content });
