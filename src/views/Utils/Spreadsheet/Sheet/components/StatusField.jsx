@@ -2,14 +2,7 @@ import { useEffect, useRef } from "react";
 import { selectCell } from "../actions";
 import styled from "@emotion/styled";
 import Cell from "../../models/Cell";
-
-const InputField = styled.input({
-  width: "100%",
-  outline: "none",
-  borderRadius: 0,
-  border: "1px solid rgba(0,0,0,0.2)",
-  lineHeight: "1.5rem",
-});
+import { FlexForm, InputTextField } from "./styles";
 
 const SheetTab = styled.div({
   width: "4rem",
@@ -52,47 +45,11 @@ const SheetTab = styled.div({
   },
 });
 
-const SmallInputField = styled(InputField)({
+const SmallInputField = styled(InputTextField)({
   width: "2rem",
   textAlign: "center",
   opacity: 0,
 });
-
-const FlexForm = styled.form({
-  display: "flex",
-  gap: "0.2rem",
-  padding: "0.5rem",
-  paddingTop: "0",
-  marginTop: "0",
-  backgroundColor: "rgba(0,0,0,0.1)",
-});
-
-const FieldButton = styled.button(({ variant, theme }) => ({
-  width: "1.5rem",
-  outline: "none",
-  border: "1px solid rgba(0,0,0,0.3)",
-  height: "1.75rem",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  borderRadius: "3px",
-  cursor: "pointer",
-  color: theme.palette[variant]?.dark || "black",
-  "&:hover": {
-    color: "blue",
-    backgroundColor: "#eee",
-    border: "1px solid blue",
-  },
-  "&:active": {
-    color: theme.palette[variant]?.main || "black",
-    backgroundColor: "#999",
-    border: "1px solid black",
-  },
-  "&:disabled": {
-    color: "rgba(0,0,0,0.6)",
-    backgroundColor: "#eee",
-  },
-}));
 
 const StatusField = ({ state, dispatch }) => {
   const inputRef = useRef();

@@ -28,19 +28,21 @@ import FormulaField from "./components/FormulaField";
 import { Table, TableBody, TableHead, TableRow } from "@mui/material";
 import StatusField from "./components/StatusField";
 import { handleKeyDown } from "./eventHandlers/keyboardHandlers";
+import Toolbar from "./components/Toolbar";
 
 const Sheet = ({
   maxRows = SheetConfig.MAX_ROWS,
   maxColumns = SheetConfig.MAX_COLUMNS,
+  toolbar = true,
   formulaField = true,
   statusField = true,
-  content = {},
+  initalContent = {},
 }) => {
   const [state, dispatch] = useReducer(reducer, {
     ...initialState,
     maxRows,
     maxColumns,
-    content: parseInitialStateContent(content),
+    content: parseInitialStateContent(initalContent),
   });
   const clipboard = useClipboard();
 
@@ -109,6 +111,13 @@ const Sheet = ({
         <ContextMenu state={state} dispatch={dispatch} />
       )}
       <div style={{ boxShadow: "8px 8px 18px -10px rgba(0,0,0,0.5)" }}>
+        {toolbar && (
+          <Toolbar
+            state={state}
+            dispatch={dispatch}
+            onContextMenu={handleContextMenu}
+          />
+        )}
         {formulaField && (
           <FormulaField
             state={state}
