@@ -1,12 +1,12 @@
-import { useRef } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import {
-  recalculateFormulae,
   selectCell,
   setContent,
   setFormulaMode,
   setFormulaFieldText,
   setFormulaFieldFocused,
   deleteCellContent,
+  resetFormulaField,
 } from "../actions";
 import { getNextRow } from "../utils/cellUtils";
 import { Check, Clear } from "@mui/icons-material";
@@ -21,32 +21,34 @@ import {
 const FormulaField = ({ state, dispatch, onContextMenu }) => {
   const formRef = useRef();
   const inputRef = useRef();
-  const defaultValue =
-    state.content[state.selectedCell.id]?.formula ||
-    state.content[state.selectedCell.id]?.value;
+  const defaultValue = useMemo(
+    () =>
+      state.content[state.selectedCell.id]?.formula ||
+      state.content[state.selectedCell.id]?.value,
+    [state.content, state.selectedCell.id]
+  );
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(setFormulaFieldText(e.target.formulaFieldText.value));
-    // dispatch(recalculateFormulae());
-    dispatch(setFormulaFieldFocused(false));
-    dispatch(selectCell(getNextRow(state.selectedCell.id, state.maxRows)));
-    dispatch(setFormulaMode(false));
-  };
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      dispatch(setFormulaFieldText(e.target.formulaFieldText.value));
+      dispatch(setFormulaFieldFocused(false));
+      dispatch(selectCell(getNextRow(state.selectedCell.id, state.maxRows)));
+      dispatch(setFormulaMode(false));
+    },
+    [dispatch, state.maxRows, state.selectedCell.id]
+  );
 
   const handleBlur = (e) => {
     // if (!state.formulaMode) dispatch(setformulaFieldFocused(false));
   };
 
-  const resetInputField = () => {
-    dispatch(setFormulaFieldText(""));
-    dispatch(setFormulaMode(false));
-    dispatch(setFormulaFieldFocused(false));
+  const resetField = () => {
+    dispatch(resetFormulaField());
     dispatch(deleteCellContent(state.selectedCell.id));
   };
 
-  const acceptInputField = () => {
-    // dispatch(recalculateFormulae());
+  const acceptInput = () => {
     dispatch(setFormulaMode(false));
     dispatch(setFormulaFieldFocused(false));
   };
@@ -65,12 +67,15 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
     }
   };
 
-  const handleChange = (e) => {
-    e.preventDefault();
-    dispatch(setFormulaFieldText(e.target.value));
-    dispatch(setFormulaMode(e.target.value.startsWith("=")));
-    dispatch(setContent(state.selectedCell.id, e.target.value));
-  };
+  const handleChange = useCallback(
+    (e) => {
+      e.preventDefault();
+      dispatch(setFormulaFieldText(e.target.value));
+      dispatch(setFormulaMode(e.target.value.startsWith("=")));
+      dispatch(setContent(state.selectedCell.id, e.target.value));
+    },
+    [dispatch, state.selectedCell.id]
+  );
 
   const handleFocus = (e) => {
     if (e.target.value.startsWith("=")) {
@@ -96,7 +101,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
           // disabled={!state.formulaFieldFocused}
           color="red"
           variant="error"
-          onClick={resetInputField}
+          onClick={resetField}
         >
           <Clear sx={{ width: "1rem" }} />
         </FieldButton>
@@ -104,7 +109,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
           type="button"
           color="green"
           variant="success"
-          onClick={acceptInputField}
+          onClick={acceptInput}
           // disabled={!state.formulaFieldFocused}
         >
           <Check sx={{ width: "1rem" }} />

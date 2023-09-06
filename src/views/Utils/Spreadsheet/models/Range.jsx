@@ -55,10 +55,10 @@ export default class Range {
     return new Range(cells, ids, rows, columns);
   }
 
-  static getCellsToTrackForFormulaRecalculation = (state) => {
-    const formulae = Object.keys(state.content)
-      .filter((it) => state.content[it].formula?.length > 0)
-      .map((it) => state.content[it].formula);
+  static getFormulaCellsToTrack = (stateContent) => {
+    const formulae = Object.keys(stateContent)
+      .filter((it) => stateContent[it].formula?.length > 0)
+      .map((it) => stateContent[it].formula);
 
     return [
       ...new Set(
@@ -69,7 +69,7 @@ export default class Range {
           .map((it) => Range.createFlat(it.split(":")[0], it.split(":")[1]).ids)
           .concat(formulae.map((it) => it.match(/(\w+\d+)/gi)))
           .flat()
-          .map((it) => state.content[it]?.value || "")
+          .map((it) => stateContent[it]?.value || "")
       ),
     ];
   };

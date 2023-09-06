@@ -43,6 +43,13 @@ export const reducer = (state, action) => {
         ...state,
         formulaFieldFocused: action.payload,
       };
+    case SheetAction.RESET_FORMULA_FIELD:
+      return {
+        ...state,
+        formulaFieldText: "",
+        formulaFieldFocused: false,
+        formulaMode: false,
+      };
     case SheetAction.SET_EDIT_MODE:
       return {
         ...state,

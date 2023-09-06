@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CellInput, Item } from "../../styles";
 import {
   resetHighlight,
@@ -10,7 +10,6 @@ import {
   setHovered,
   setEditMode,
   setMenuAnchorElement,
-  recalculateFormulae,
   setFormulaMode,
   addCellsToHighlight,
 } from "../actions";
@@ -36,30 +35,43 @@ const Cell = ({ id, state, dispatch }) => {
 
   const focusTextArea = () => textRef.current?.focus();
 
-  const handleClick = (e) => {
-    if (e.button === MouseButton.LEFT_CLICK) {
-      if (e.shiftKey || getCtrlKey(e)) {
-        e.shiftKey && dispatch(highlightCells(state.selectedCell.id, id));
-        (getCtrlKey(e)) && dispatch(addCellsToHighlight([id]));
-      } else {
-        const formulaMode = state.formulaMode && id !== state.selectedCell.id;
-        if (formulaMode) {
-          if (state.formulaFieldFocused) {
-            const value = typeInTextField("input-text", id);
-            dispatch(setContent(state.selectedCell.id, value));
-          } else {
-            const value = typeInTextField(`${state.selectedCell.id}-input`, id);
-            dispatch(setContent(state.selectedCell.id, value));
-          }
+  const handleClick = useCallback(
+    (e) => {
+      if (e.button === MouseButton.LEFT_CLICK) {
+        if (e.shiftKey || getCtrlKey(e)) {
+          e.shiftKey && dispatch(highlightCells(state.selectedCell.id, id));
+          getCtrlKey(e) && dispatch(addCellsToHighlight([id]));
         } else {
-          if (!state.mouseDown) dispatch(resetHighlight());
-          dispatch(selectCell(id));
-          dispatch(highlightCells(id));
-          setSelectInputBox(true);
+          const formulaMode = state.formulaMode && id !== state.selectedCell.id;
+          if (formulaMode) {
+            if (state.formulaFieldFocused) {
+              const value = typeInTextField("input-text", id);
+              dispatch(setContent(state.selectedCell.id, value));
+            } else {
+              const value = typeInTextField(
+                `${state.selectedCell.id}-input`,
+                id
+              );
+              dispatch(setContent(state.selectedCell.id, value));
+            }
+          } else {
+            if (!state.mouseDown) dispatch(resetHighlight());
+            dispatch(selectCell(id));
+            dispatch(highlightCells(id));
+            setSelectInputBox(true);
+          }
         }
       }
-    }
-  };
+    },
+    [
+      dispatch,
+      id,
+      state.formulaFieldFocused,
+      state.formulaMode,
+      state.mouseDown,
+      state.selectedCell.id,
+    ]
+  );
 
   const handleFocus = (e) => {
     dispatch(setEditMode(true));
@@ -86,38 +98,41 @@ const Cell = ({ id, state, dispatch }) => {
     dispatch(setContent(id, e.target.value));
   };
 
-  const handleKeyDown = (e) => {
-    switch (e.key) {
-      case KeyEvent.ESCAPE:
-        setSelectInputBox(false);
-        containerRef.current?.focus();
-        break;
-      case KeyEvent.BACKSPACE:
-        state.editMode && e.stopPropagation();
-        break;
-      case KeyEvent.ENTER:
-        dispatch(setContent(id, e.target.value));
-        // dispatch(recalculateFormulae());
-        dispatch(setFormulaMode(false));
-        dispatch(highlightCells(id));
-        setSelectInputBox(false);
-        break;
-      case KeyEvent.LOWERCASE_A:
-        if (getCtrlKey(e)) {
-          e.stopPropagation();
-        }
-        break;
-      // case KeyboardEvent.ARROW_DOWN:
-      // case KeyboardEvent.ARROW_UP:
-      case KeyEvent.ARROW_LEFT:
-      case KeyEvent.ARROW_RIGHT:
-        if (selectInputBox && textRef.current?.value.length > 0)
-          e.stopPropagation();
-        break;
-      default:
-        break;
-    }
-  };
+  const handleKeyDown = useCallback(
+    (e) => {
+      switch (e.key) {
+        case KeyEvent.ESCAPE:
+          setSelectInputBox(false);
+          containerRef.current?.focus();
+          break;
+        case KeyEvent.BACKSPACE:
+          state.editMode && e.stopPropagation();
+          break;
+        case KeyEvent.ENTER:
+          dispatch(setContent(id, e.target.value));
+          // dispatch(recalculateFormulae());
+          dispatch(setFormulaMode(false));
+          dispatch(highlightCells(id));
+          setSelectInputBox(false);
+          break;
+        case KeyEvent.LOWERCASE_A:
+          if (getCtrlKey(e)) {
+            e.stopPropagation();
+          }
+          break;
+        // case KeyboardEvent.ARROW_DOWN:
+        // case KeyboardEvent.ARROW_UP:
+        case KeyEvent.ARROW_LEFT:
+        case KeyEvent.ARROW_RIGHT:
+          if (selectInputBox && textRef.current?.value.length > 0)
+            e.stopPropagation();
+          break;
+        default:
+          break;
+      }
+    },
+    [dispatch, id, selectInputBox, state.editMode]
+  );
 
   const handleBlur = (e) => {
     dispatch(setEditMode(false));

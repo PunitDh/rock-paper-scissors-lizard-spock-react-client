@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useReducer } from "react";
+import { useCallback, useEffect, useMemo, useReducer } from "react";
 import DashboardCard from "src/components/shared/DashboardCard";
 import { initialState, reducer } from "./reducer";
 import Cell from "./components/Cell";
@@ -48,7 +48,7 @@ const Sheet = ({
   const clipboard = useClipboard();
 
   const cellsToTrack = useMemo(() => {
-    return Range.getCellsToTrackForFormulaRecalculation(state).join("~");
+    return Range.getFormulaCellsToTrack(state.content).join("~");
   }, [state.content]);
 
   useEffect(() => {
@@ -77,13 +77,16 @@ const Sheet = ({
     dispatch(setMouseDown(false));
   };
 
-  const handleMouseMove = (e) => {
-    if (state.mouseDown && !getCtrlKey(e)) {
-      dispatch(
-        highlightCells(state.highlighted.anchor, state.highlighted.current)
-      );
-    }
-  };
+  const handleMouseMove = useCallback(
+    (e) => {
+      if (state.mouseDown && !getCtrlKey(e)) {
+        return dispatch(
+          highlightCells(state.highlighted.anchor, state.highlighted.current)
+        );
+      }
+    },
+    [state.mouseDown, state.highlighted]
+  );
 
   const handleFocusGuard = (e) => {
     e.preventDefault();
