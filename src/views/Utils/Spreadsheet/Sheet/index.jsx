@@ -14,7 +14,6 @@ import {
 } from "./actions";
 import {
   generateClipboardContent,
-  getCellsToTrackForFormulaRecalculation,
   getCtrlKey,
   parseInitialStateContent,
 } from "./utils/cellUtils";
@@ -49,7 +48,7 @@ const Sheet = ({
   const clipboard = useClipboard();
 
   const cellsToTrack = useMemo(() => {
-    return Range.getCellsToTrackForFormulaRecalculation(state).join("-");
+    return Range.getCellsToTrackForFormulaRecalculation(state).join("~");
   }, [state.content]);
 
   useEffect(() => {

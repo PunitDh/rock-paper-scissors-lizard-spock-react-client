@@ -110,7 +110,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
           <Check sx={{ width: "1rem" }} />
         </FieldButton>
         <FieldButton type="button" color="black" onClick={handleFunction}>
-          <span style={{ fontFamily: "cursive" }}>fx</span>
+          <span style={{ fontFamily: "'Courgette', cursive" }}>fx</span>
         </FieldButton>
         <input type="submit" style={{ display: "none" }} />
         <InputTextField
