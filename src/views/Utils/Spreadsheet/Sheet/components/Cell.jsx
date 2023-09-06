@@ -38,9 +38,9 @@ const Cell = ({ id, state, dispatch }) => {
 
   const handleClick = (e) => {
     if (e.button === MouseButton.LEFT_CLICK) {
-      if (state.shiftKey || state.commandKey) {
-        state.shiftKey && dispatch(highlightCells(state.selectedCell.id, id));
-        state.commandKey && dispatch(addCellsToHighlight([id]));
+      if (e.shiftKey || e.metaKey) {
+        e.shiftKey && dispatch(highlightCells(state.selectedCell.id, id));
+        e.metaKey && dispatch(addCellsToHighlight([id]));
       } else {
         const formulaMode = state.formulaMode && id !== state.selectedCell.id;
         if (formulaMode) {
@@ -103,7 +103,7 @@ const Cell = ({ id, state, dispatch }) => {
         setSelectInputBox(false);
         break;
       case KeyEvent.LOWERCASE_A:
-        if (state.commandKey) {
+        if (e.metaKey) {
           e.stopPropagation();
         }
         break;
@@ -134,11 +134,11 @@ const Cell = ({ id, state, dispatch }) => {
   const handleMouseDown = (e) => {
     if (e.button === MouseButton.LEFT_CLICK) {
       // e.preventDefault();
-      if (!state.mouseDown && !state.shiftKey && !state.commandKey)
+      if (!state.mouseDown && !e.shiftKey && !e.metaKey)
         dispatch(resetHighlight());
       // dispatch(selectCell(id));
       dispatch(setHighlightAnchor(id));
-      if (!state.commandKey) dispatch(highlightCells(id));
+      if (!e.metaKey) dispatch(highlightCells(id));
     }
   };
 

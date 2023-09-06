@@ -84,7 +84,7 @@ const Cell2 = ({ id, state, dispatch }) => {
   const handleMouseDown = (e) => {
     if (e.button === MouseButton.LEFT_CLICK) {
       // e.preventDefault();
-      if (!state.mouseDown && !state.shiftKey) dispatch(resetHighlight());
+      if (!state.mouseDown && !e.shiftKey) dispatch(resetHighlight());
       dispatch(selectCell(id));
       dispatch(setHighlightAnchor(id));
       dispatch(highlightCells(id));

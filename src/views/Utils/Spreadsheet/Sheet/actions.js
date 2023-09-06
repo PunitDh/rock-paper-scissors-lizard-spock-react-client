@@ -4,10 +4,6 @@ export const SheetAction = Object.freeze({
   SET_FORMULA_FIELD_FOCUSED: "SET_FORMULA_FIELD_FOCUSED",
   SET_EDIT_MODE: "SET_EDIT_MODE",
   SET_FORMULA_MODE: "SET_FORMULA_MODE",
-  SET_SHIFT_KEY: "SET_SHIFT_KEY",
-  SET_COMMAND_KEY: "SET_COMMAND_KEY",
-  SET_CONTROL_KEY: "SET_CONTROL_KEY",
-  SET_ALT_KEY: "SET_ALT_KEY",
   SET_HOVERED: "SET_HOVERED",
   SET_SELECTED_ROW: "SET_SELECTED_ROW",
   SET_SELECTED_COLUMN: "SET_SELECTED_COLUMN",
@@ -50,26 +46,6 @@ export const setEditMode = (payload) => ({
 
 export const setFormulaMode = (payload) => ({
   type: SheetAction.SET_FORMULA_MODE,
-  payload,
-});
-
-export const setShiftKey = (payload) => ({
-  type: SheetAction.SET_SHIFT_KEY,
-  payload,
-});
-
-export const setCommandKey = (payload) => ({
-  type: SheetAction.SET_COMMAND_KEY,
-  payload,
-});
-
-export const setControlKey = (payload) => ({
-  type: SheetAction.SET_CONTROL_KEY,
-  payload,
-});
-
-export const setAltKey = (payload) => ({
-  type: SheetAction.SET_ALT_KEY,
   payload,
 });
 

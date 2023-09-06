@@ -5,45 +5,23 @@ import {
   resetHighlight,
   selectAll,
   selectCell,
-  setAltKey,
-  setCommandKey,
-  setControlKey,
   setEditMode,
   setHighlightCurrent,
-  setShiftKey,
 } from "../actions";
 import {
+  getCtrlKey,
   getNextColumn,
   getNextRow,
   getPreviousColumn,
   getPreviousRow,
 } from "../utils/cellUtils";
 
-const keyActions = {
-  [KeyEvent.SHIFT]: setShiftKey,
-  [KeyEvent.COMMAND]: setCommandKey,
-  [KeyEvent.CONTROL]: setControlKey,
-  [KeyEvent.ALT]: setAltKey,
-};
-
-export const handleKeyUp = (e, dispatch) => {
-  const action = keyActions[e.key];
-  if (action) {
-    dispatch(action(false));
-  }
-};
-
 export const handleKeyDown = (e, state, dispatch, maxRows, maxColumns) => {
-  const action = keyActions[e.key];
   let nextCell;
-
-  if (action) {
-    return dispatch(action(true));
-  }
 
   switch (e.key) {
     case KeyEvent.LOWERCASE_A:
-      if (state.commandKey) {
+      if (getCtrlKey(e)) {
         e.preventDefault();
         dispatch(selectAll());
       }
@@ -68,18 +46,18 @@ export const handleKeyDown = (e, state, dispatch, maxRows, maxColumns) => {
       break;
   }
 
-  if (state.shiftKey) {
+  if (e.shiftKey) {
     dispatch(setHighlightCurrent(nextCell));
     dispatch(highlightCells(state.highlighted.anchor, nextCell));
   }
 };
 
 const determineNextCell = (e, state, dispatch, maxRows, maxColumns) => {
-  const { commandKey, shiftKey, selectedCell } = state;
+  const { selectedCell } = state;
 
   switch (e.key) {
     case KeyEvent.ENTER:
-      return shiftKey
+      return e.shiftKey
         ? handleNavigation(e, state, dispatch, getPreviousRow, selectedCell.id)
         : handleNavigation(
             e,
@@ -90,7 +68,7 @@ const determineNextCell = (e, state, dispatch, maxRows, maxColumns) => {
             maxRows
           );
     case KeyEvent.TAB:
-      return shiftKey
+      return e.shiftKey
         ? handleNavigation(
             e,
             state,
@@ -109,7 +87,7 @@ const determineNextCell = (e, state, dispatch, maxRows, maxColumns) => {
             maxColumns
           );
     case KeyEvent.ARROW_DOWN:
-      return commandKey
+      return getCtrlKey(e)
         ? `${selectedCell.column}${maxRows}`
         : handleNavigation(
             e,
@@ -120,7 +98,7 @@ const determineNextCell = (e, state, dispatch, maxRows, maxColumns) => {
             maxRows
           );
     case KeyEvent.ARROW_RIGHT:
-      return commandKey
+      return getCtrlKey(e)
         ? `${SheetConfig.COLUMNS[maxColumns - 1]}${selectedCell.row}`
         : handleNavigation(
             e,
@@ -132,7 +110,7 @@ const determineNextCell = (e, state, dispatch, maxRows, maxColumns) => {
             maxColumns
           );
     case KeyEvent.ARROW_LEFT:
-      return commandKey
+      return getCtrlKey(e)
         ? `${SheetConfig.COLUMNS[0]}${selectedCell.row}`
         : handleNavigation(
             e,
@@ -143,7 +121,7 @@ const determineNextCell = (e, state, dispatch, maxRows, maxColumns) => {
             maxColumns
           );
     case KeyEvent.ARROW_UP:
-      return commandKey
+      return getCtrlKey(e)
         ? `${selectedCell.column}${1}`
         : handleNavigation(e, state, dispatch, getPreviousRow, selectedCell.id);
     default:
@@ -153,7 +131,7 @@ const determineNextCell = (e, state, dispatch, maxRows, maxColumns) => {
 
 const handleNavigation = (e, state, dispatch, getNextFunction, ...args) => {
   e.preventDefault();
-  if (!state.shiftKey && !state.formulaMode) {
+  if (!e.shiftKey && !state.formulaMode) {
     dispatch(resetHighlight());
   }
   return getNextFunction(...args);

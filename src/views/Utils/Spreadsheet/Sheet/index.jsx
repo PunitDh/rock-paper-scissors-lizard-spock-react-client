@@ -11,7 +11,7 @@ import {
   selectCell,
   pasteCellContent,
 } from "./actions";
-import { generateClipboardContent } from "./utils/cellUtils";
+import { generateClipboardContent, getCtrlKey } from "./utils/cellUtils";
 import { SheetConfig } from "../constants";
 import ContextMenu from "./ContextMenu";
 import RowHeader from "./components/RowHeader";
@@ -22,7 +22,7 @@ import Cell2 from "./components/Cell2";
 import FormulaField from "./components/FormulaField";
 import { Table, TableBody, TableHead, TableRow } from "@mui/material";
 import StatusField from "./components/StatusField";
-import { handleKeyDown, handleKeyUp } from "./eventHandlers/keyboardHandlers";
+import { handleKeyDown } from "./eventHandlers/keyboardHandlers";
 
 const Sheet = ({
   maxRows = SheetConfig.MAX_ROWS,
@@ -46,8 +46,8 @@ const Sheet = ({
     dispatch(setMouseDown(false));
   };
 
-  const handleMouseMove = () => {
-    if (state.mouseDown && !state.commandKey) {
+  const handleMouseMove = (e) => {
+    if (state.mouseDown && !getCtrlKey(e)) {
       dispatch(
         highlightCells(state.highlighted.anchor, state.highlighted.current)
       );
@@ -106,7 +106,6 @@ const Sheet = ({
           />
         )}
         <div
-          onKeyUp={(e) => handleKeyUp(e, dispatch)}
           onKeyDown={(e) =>
             handleKeyDown(e, state, dispatch, maxRows, maxColumns)
           }

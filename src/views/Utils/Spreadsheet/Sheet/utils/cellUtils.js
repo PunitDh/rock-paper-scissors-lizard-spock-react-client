@@ -113,6 +113,10 @@ export const getNextRow = (id, maxRows = SheetConfig.MAX_ROWS) => {
   return `${column}${+row === maxRows ? +row : +row + 1}`;
 };
 
+export const getCtrlKey = (e) => {
+  return /mac/i.test(navigator.platform) ? e.metaKey : e.ctrlKey;
+};
+
 export const getPreviousColumn = (id, maxColumns = SheetConfig.MAX_COLUMNS) => {
   const { row, columnCharCode } = getId(id);
 

@@ -1,8 +1,7 @@
 import { SheetConfig } from "../constants";
-// import { updateStateContent } from "./utils/evalUtils";
 import Cell from "../models/Cell";
 import Range from "../models/Range";
-import { getCellOffset, getId, typeInTextField } from "./utils/cellUtils";
+import { getCellOffset, typeInTextField } from "./utils/cellUtils";
 import { SheetAction } from "./actions";
 import { updateStateContent } from "./utils/evalUtils";
 
@@ -12,10 +11,6 @@ export const initialState = {
   selectedCell: new Cell("A1"), //{ cell: "A1", row: 1, column: "A", columnCharCode: 65 },
   editMode: false,
   formulaMode: false,
-  shiftKey: false,
-  commandKey: false,
-  controlKey: false,
-  altKey: false,
   hovered: "",
   highlighted: {
     anchor: null,
@@ -57,26 +52,6 @@ export const reducer = (state, action) => {
       return {
         ...state,
         formulaMode: action.payload,
-      };
-    case SheetAction.SET_SHIFT_KEY:
-      return {
-        ...state,
-        shiftKey: action.payload,
-      };
-    case SheetAction.SET_COMMAND_KEY:
-      return {
-        ...state,
-        commandKey: action.payload,
-      };
-    case SheetAction.SET_CONTROL_KEY:
-      return {
-        ...state,
-        controlKey: action.payload,
-      };
-    case SheetAction.SET_ALT_KEY:
-      return {
-        ...state,
-        altKey: action.payload,
       };
     case SheetAction.SET_HOVERED:
       return {
