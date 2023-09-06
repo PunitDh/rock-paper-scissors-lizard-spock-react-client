@@ -1,28 +1,40 @@
 import Range from "../../models/Range";
 
-// Utility functions
-const processMatches = (str, reg, formulaCreator, zeroValue) => {
-  const matches = [...str.matchAll(reg)];
+const evaluateFormula = (cellValue) => {
+  let str = cellValue.toUpperCase();
 
-  const cells = matches.flat()[1];
-  const ranges = matches.map(([_, match]) =>
-    match
-      .split(",")
-      .map((it) =>
-        it.includes(":")
-          ? Range.createFlat(it.split(":")[0], it.split(":")[1]).ids
-          : it
-      )
-      .flat()
+  const processMatches = (reg, formulaCreator) => {
+    const matches = [...str.matchAll(reg)];
+    const ranges = matches.map(([_, start, end]) =>
+      Range.createFlat(start.toUpperCase(), end.toUpperCase())
+    );
+
+    const formulas = ranges.map((it) => it.ids).map(formulaCreator);
+
+    str = formulas.reduce((a, c, idx) => {
+      const key = matches[idx][0];
+      return a.replaceAll(key, c);
+    }, str);
+  };
+
+  const sumReg = /(?:SUM)\(([a-z]\d+):([a-z]\d+)\)/gi;
+  processMatches(sumReg, (it) => `(${it.join("+")})`);
+
+  const avgReg = /(?:AVERAGE)\(([a-z]\d+):([a-z]\d+)\)/gi;
+  processMatches(avgReg, (it) => `((${it.join("+")})/${it.length})`);
+
+  str = str.replaceAll("^", "**");
+
+  const countReg = /(?:COUNT)\(([a-z]\d+):([a-z]\d+)\)/gi;
+  processMatches(
+    countReg,
+    (it) => `(${it.map((i) => `Number(!isNaN(${i}))`).join("+")})`
   );
 
-  return ranges.map((it, idx) => ({
-    [matches[idx][0]]: formulaCreator(it),
-    zeroValue,
-  }));
+  return str;
 };
 
-const replaceFormulaWithValues = (str, stateContent, blankValue) => {
+const substituteValues = (str, stateContent) => {
   const cellReg = /([A-Z]\d+)/g;
   const cellMatches = [...new Set([...str.matchAll(cellReg)].flat())].sort(
     (a, b) => {
@@ -30,88 +42,35 @@ const replaceFormulaWithValues = (str, stateContent, blankValue) => {
       const [bLetters, bNumbers] = b.match(/([A-Z]+)(\d+)/).slice(1);
 
       const lettersComparison = bLetters.localeCompare(aLetters);
-      if (lettersComparison !== 0) return lettersComparison;
 
-      return parseInt(bNumbers) - parseInt(aNumbers);
+      if (lettersComparison !== 0) {
+        return lettersComparison;
+      }
+
+      const aNumber = parseInt(aNumbers);
+      const bNumber = parseInt(bNumbers);
+      return bNumber - aNumber;
     }
   );
 
-  return cellMatches.reduce(
-    (acc, cur) =>
-      acc.replaceAll(cur, `(${stateContent[cur]?.value || blankValue})`),
-    str.replace("=", "")
-  );
-};
+  const substitutedCells = cellMatches.reduce((acc, cur) => {
+    return acc.replaceAll(cur, `(${stateContent[cur]?.value})`);
+  }, str.replace("=", ""));
 
-// Core evaluation functions
-const evaluateFormula = (cellValue) => {
-  let str = cellValue.toUpperCase().replaceAll("^", "**");
-
-  const sumMatches = processMatches(
-    str,
-    /(?:SUM)\(([^)]+)\)/gi,
-    (it) => `(${it.join("+")})`,
-    null
-  );
-
-  const avgMatches = processMatches(
-    str,
-    /(?:AVERAGE)\(([^)]+)\)/gi,
-    (it) => `((${it.join("+")})/${it.filter((it) => it !== null).length})`,
-    null
-  );
-
-  const countMatches = processMatches(
-    str,
-    /(?:COUNT)\(([^)]+)\)/gi,
-    (it) => `(${it.map((i) => `Number(!isNaN(${i}))`).join("+")})`,
-    undefined
-  );
-
-  return [sumMatches, avgMatches, countMatches].flat();
-};
-
-const evaluate = (str, stateContent) => {
-  const parsedStrings = evaluateFormula(str);
-  const substitutedValues = parsedStrings.map((it) => {
-    const key = Object.keys(it)[0];
-    return {
-      [key]: replaceFormulaWithValues(
-        Object.values(it)[0],
-        stateContent,
-        it.zeroValue
-      ),
-    };
-  });
-
-  const evaluatedExpressions = substitutedValues.map((it) => {
-    const key = Object.keys(it)[0];
-    return { [key]: evaluateExpression(Object.values(it)[0]) };
-  });
-
-  const replacedString = evaluatedExpressions.reduce(
-    (acc, cur) =>
-      acc.replaceAll(Object.keys(cur)[0], `(${Object.values(cur)[0].value})`),
-    str.toUpperCase()
-  );
-
-  const substitutedString = replaceFormulaWithValues(
-    replacedString,
-    stateContent,
-    0
-  );
-  return evaluateExpression(substitutedString);
+  return substitutedCells;
 };
 
 export const updateStateContent = (stateContent, cell, formula) => {
   try {
-    const evaluated = evaluate(formula, stateContent);
+    const parsedString = evaluateFormula(formula);
+    const substitutedValues = substituteValues(parsedString, stateContent);
+    const evaluatedExpression = evaluateExpression(substitutedValues);
     return {
       ...stateContent,
       [cell]: {
         formula: formula.toUpperCase(),
-        value: evaluated.value,
-        display: evaluated.value,
+        value: evaluatedExpression.value,
+        display: evaluatedExpression.value,
       },
     };
   } catch (e) {

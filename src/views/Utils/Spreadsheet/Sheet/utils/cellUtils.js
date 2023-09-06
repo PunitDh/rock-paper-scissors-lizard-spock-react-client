@@ -55,8 +55,37 @@ export function typeInTextField(id, newText) {
   if (!el) return;
   const [start, end] = [el.selectionStart, el.selectionEnd];
   el.focus();
-  el.setRangeText(newText, start, end, "end");
+  el.setRangeText(newText, start, end, "preserve");
   return el.value;
+}
+
+export function setCaretPosition(elemId, caretPos) {
+  const elem = document.getElementById(elemId);
+
+  if (elem != null) {
+    if (elem.createTextRange) {
+      const range = elem.createTextRange();
+      range.move("character", caretPos);
+      range.select();
+    } else {
+      if (elem.selectionStart) {
+        elem.focus();
+        elem.setSelectionRange(caretPos, caretPos);
+      } else elem.focus();
+    }
+  }
+}
+
+export function getCaretPosition(input) {
+  // Internet Explorer Caret Position (TextArea)
+  if (document.selection && document.selection.createRange) {
+    const range = document.selection.createRange();
+    const bookmark = range.getBookmark();
+    return bookmark.charCodeAt(2) - 2;
+  } else {
+    // Firefox Caret Position (TextArea)
+    if (input.setSelectionRange) return input.selectionEnd;
+  }
 }
 
 export const getNextColumn = (

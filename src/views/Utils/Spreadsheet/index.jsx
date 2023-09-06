@@ -9,7 +9,7 @@ export default function Spreadsheet() {
         maxColumns={12}
         maxRows={12}
         formulaField={true}
-        statusField={false}
+        statusField={true}
       />
       <TestSheet />
     </PageContainer>

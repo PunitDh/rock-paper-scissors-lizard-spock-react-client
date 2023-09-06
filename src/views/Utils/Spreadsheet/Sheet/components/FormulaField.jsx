@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import {
   recalculateFormulae,
   selectCell,
@@ -11,9 +11,8 @@ import { getNextRow } from "../utils/cellUtils";
 import styled from "@emotion/styled";
 import { Check, Clear } from "@mui/icons-material";
 import Cell from "../../models/Cell";
-import { KeyEvent } from "../../constants";
 
-const InputField = styled.input({
+export const InputTextField = styled.input({
   width: "100%",
   outline: "none",
   borderRadius: 0,
@@ -21,7 +20,7 @@ const InputField = styled.input({
   lineHeight: "1.5rem",
 });
 
-const SmallInputField = styled(InputField)({
+const SmallInputField = styled(InputTextField)({
   width: "2rem",
   textAlign: "center",
 });
@@ -67,17 +66,6 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
     state.content[state.selectedCell.id]?.formula ||
     state.content[state.selectedCell.id]?.value;
 
-  const handleChange = (e) => {
-    e.preventDefault();
-    dispatch(setFormulaFieldText(e.target.value));
-    if (e.target.value.startsWith("=")) {
-      dispatch(setFormulaMode(true));
-    } else {
-      dispatch(setFormulaMode(false));
-    }
-    dispatch(setContent(state.selectedCell.id, e.target.value));
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(setFormulaFieldText(e.target.inputText.value));
@@ -87,19 +75,9 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
     dispatch(setFormulaMode(false));
   };
 
-  const handleFocus = (e) => {
-    dispatch(setFormulaFieldFocused(true));
-  };
-
   const handleBlur = (e) => {
     // if (!state.formulaMode) dispatch(setInputTextFocused(false));
   };
-
-  useEffect(() => {
-    if (state.inputTextFocused) {
-      inputRef.current?.focus();
-    }
-  }, [state.inputTextFocused]);
 
   const resetInputField = () => {
     dispatch(setFormulaFieldText(""));
@@ -127,11 +105,24 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
     }
   };
 
+  const handleChange = (e) => {
+    e.preventDefault();
+    dispatch(setFormulaFieldText(e.target.value));
+    dispatch(setFormulaMode(e.target.value.startsWith("=")));
+    dispatch(setContent(state.selectedCell.id, e.target.value));
+  };
+
+  const handleFocus = (e) => {
+    if (e.target.value.startsWith("=")) {
+      dispatch(setFormulaMode(true));
+    }
+    dispatch(setFormulaFieldFocused(true));
+  };
+
   return (
     <div tabIndex="1" onBlur={handleBlur}>
       <FlexForm onSubmit={handleSubmit} ref={formRef}>
         <SmallInputField
-          ref={inputRef}
           name="currentCell"
           type="text"
           value={state.selectedCell.id}
@@ -162,7 +153,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
           <span style={{ fontFamily: "cursive" }}>fx</span>
         </FieldButton>
         <input type="submit" style={{ display: "none" }} />
-        <InputField
+        <InputTextField
           ref={inputRef}
           name="inputText"
           type="text"

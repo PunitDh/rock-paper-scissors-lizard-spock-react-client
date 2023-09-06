@@ -4,7 +4,7 @@ import Cell from "../models/Cell";
 import Range from "../models/Range";
 import { getCellOffset, getId, typeInTextField } from "./utils/cellUtils";
 import { SheetAction } from "./actions";
-import { updateStateContent } from "./utils/evalUtils2";
+import { updateStateContent } from "./utils/evalUtils";
 
 export const initialState = {
   maxRows: SheetConfig.MAX_ROWS,
