@@ -117,6 +117,28 @@ export const getCtrlKey = (e) => {
   return /mac/i.test(navigator.platform) ? e.metaKey : e.ctrlKey;
 };
 
+export const parseInitialStateContent = (content) => {
+  return Object.keys(content).reduce((finalObject, it) => {
+    const cell = it.toUpperCase();
+    finalObject[cell] = {};
+    if (content[cell] !== null && typeof content[cell] !== "object") {
+      const isString =
+        typeof content[cell] === "string" || content[cell] instanceof String;
+      if (isString && content[cell].startsWith("=")) {
+        finalObject[cell].formula = content[cell];
+      } else {
+        finalObject[cell].value = content[cell];
+      }
+      finalObject[cell].display = content[cell];
+    } else {
+      finalObject[cell].value = content[cell].value;
+      finalObject[cell].formula = content[cell].formula;
+      finalObject[cell].display = content[cell].display;
+    }
+    return finalObject;
+  }, {});
+};
+
 export const getPreviousColumn = (id, maxColumns = SheetConfig.MAX_COLUMNS) => {
   const { row, columnCharCode } = getId(id);
 

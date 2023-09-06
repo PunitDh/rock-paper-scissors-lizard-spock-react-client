@@ -10,8 +10,13 @@ import {
   setMouseDown,
   selectCell,
   pasteCellContent,
+  recalculateFormulae,
 } from "./actions";
-import { generateClipboardContent, getCtrlKey } from "./utils/cellUtils";
+import {
+  generateClipboardContent,
+  getCtrlKey,
+  parseInitialStateContent,
+} from "./utils/cellUtils";
 import { SheetConfig } from "../constants";
 import ContextMenu from "./ContextMenu";
 import RowHeader from "./components/RowHeader";
@@ -29,11 +34,13 @@ const Sheet = ({
   maxColumns = SheetConfig.MAX_COLUMNS,
   formulaField = true,
   statusField = true,
+  content = {},
 }) => {
   const [state, dispatch] = useReducer(reducer, {
     ...initialState,
     maxRows,
     maxColumns,
+    content: parseInitialStateContent(content),
   });
   const clipboard = useClipboard();
 
@@ -91,6 +98,10 @@ const Sheet = ({
     const data = await clipboard.get();
     dispatch(pasteCellContent({ id: state.selectedCell.id }, data));
   };
+
+  useEffect(() => {
+    dispatch(recalculateFormulae());
+  }, []);
 
   return (
     <DashboardCard sx={{ height: "100%" }} title="Spreadsheet">
