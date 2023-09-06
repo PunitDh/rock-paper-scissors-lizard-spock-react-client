@@ -120,22 +120,24 @@ const Sheet = ({
         >
           <Table width="100%" sx={{ mb: 0 }}>
             <TableHead width="100%">
-              <SelectAll
-                state={state}
-                dispatch={dispatch}
-                onContextMenu={handleContextMenu}
-              />
-              {Array(maxColumns)
-                .fill(0)
-                .map((_, column) => (
-                  <ColumnHeader
-                    key={column}
-                    state={state}
-                    dispatch={dispatch}
-                    column={column}
-                    onContextMenu={handleContextMenu}
-                  />
-                ))}
+              <TableRow>
+                <SelectAll
+                  state={state}
+                  dispatch={dispatch}
+                  onContextMenu={handleContextMenu}
+                />
+                {Array(maxColumns)
+                  .fill(0)
+                  .map((_, column) => (
+                    <ColumnHeader
+                      key={column}
+                      state={state}
+                      dispatch={dispatch}
+                      column={column}
+                      onContextMenu={handleContextMenu}
+                    />
+                  ))}
+              </TableRow>
             </TableHead>
             <TableBody>
               {Array(maxRows)
@@ -164,19 +166,19 @@ const Sheet = ({
                       )}
                   </TableRow>
                 ))}
-              <input
-                type="text"
-                style={{
-                  opacity: "0",
-                  width: "1px",
-                  height: "1px",
-                  position: "absolute",
-                }}
-                tabIndex={(maxRows + 1) * maxColumns}
-                onFocus={handleFocusGuard}
-              />
             </TableBody>
           </Table>
+          <input
+            type="text"
+            style={{
+              opacity: "0",
+              width: "1px",
+              height: "1px",
+              position: "absolute",
+            }}
+            tabIndex={(maxRows + 1) * maxColumns}
+            onFocus={handleFocusGuard}
+          />
           {statusField && <StatusField state={state} dispatch={dispatch} />}
         </div>
       </div>

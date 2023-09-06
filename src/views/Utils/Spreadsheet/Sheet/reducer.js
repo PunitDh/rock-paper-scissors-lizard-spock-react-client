@@ -129,6 +129,16 @@ export const reducer = (state, action) => {
       };
     }
     case SheetAction.DELETE_CELL_CONTENT: {
+      if (action.payload) {
+        return {
+          ...state,
+          content: {
+            ...state.content,
+            [action.payload]: { value: null, display: null, formula: null },
+          },
+        };
+      }
+
       const content = Object.keys(state.content)
         .filter((cell) => state.highlighted.cells.includes(cell))
         .reduce(

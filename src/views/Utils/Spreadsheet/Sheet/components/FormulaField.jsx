@@ -6,6 +6,7 @@ import {
   setFormulaMode,
   setFormulaFieldText,
   setFormulaFieldFocused,
+  deleteCellContent,
 } from "../actions";
 import { getNextRow } from "../utils/cellUtils";
 import styled from "@emotion/styled";
@@ -83,6 +84,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
     dispatch(setFormulaFieldText(""));
     dispatch(setFormulaMode(false));
     dispatch(setFormulaFieldFocused(false));
+    dispatch(deleteCellContent(state.selectedCell.id));
   };
 
   const acceptInputField = () => {

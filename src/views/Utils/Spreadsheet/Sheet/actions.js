@@ -104,8 +104,9 @@ export const pasteCellContent = (anchor, data) => ({
   },
 });
 
-export const deleteCellContent = () => ({
+export const deleteCellContent = (payload) => ({
   type: SheetAction.DELETE_CELL_CONTENT,
+  payload,
 });
 
 export const setSelectedRow = (payload) => ({

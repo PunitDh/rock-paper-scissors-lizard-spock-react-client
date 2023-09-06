@@ -55,7 +55,7 @@ export function typeInTextField(id, newText) {
   if (!el) return;
   const [start, end] = [el.selectionStart, el.selectionEnd];
   el.focus();
-  el.setRangeText(newText, start, end, "preserve");
+  el.setRangeText(newText, start, end, "end");
   return el.value;
 }
 

@@ -21,9 +21,7 @@ const Cell = ({ id, state, dispatch }) => {
   const containerRef = useRef();
   const textRef = useRef();
   const { row, columnCharCode } = useMemo(() => getId(id), [id]);
-  // const [isSelected, setIsSelected] = useState(
-  //   id === state.selectedCell.id || state.highlighted.cells.includes(id)
-  // );
+
   const isSelected =
     id === state.selectedCell.id || state.highlighted.cells.includes(id);
   const [selectInputBox, setSelectInputBox] = useState(false);
@@ -56,10 +54,6 @@ const Cell = ({ id, state, dispatch }) => {
         } else {
           if (!state.mouseDown) dispatch(resetHighlight());
           dispatch(selectCell(id));
-          console.log(
-            "It's coming from the click else",
-            state.highlighted.cells
-          );
           dispatch(highlightCells(id));
           setSelectInputBox(true);
         }
@@ -68,7 +62,6 @@ const Cell = ({ id, state, dispatch }) => {
   };
 
   const handleFocus = (e) => {
-    // if (!state.mouseDown) dispatch(resetHighlighted());
     dispatch(setEditMode(true));
   };
 
@@ -89,6 +82,7 @@ const Cell = ({ id, state, dispatch }) => {
   }, [id, state.editMode, state.selectedCell.id]);
 
   const handleChange = (e) => {
+    e.preventDefault();
     dispatch(setContent(id, e.target.value));
   };
 
@@ -164,14 +158,6 @@ const Cell = ({ id, state, dispatch }) => {
     dispatch(setMenuAnchorElement(e.currentTarget));
   };
 
-  const handleDragStart = (e) => {
-    // TODO
-  };
-
-  const handleDragEnd = (e) => {
-    // TODO
-  };
-
   const handleCellFocus = (e) => {
     // console.log("focused", id);
     // containerRef.current?.click();
@@ -191,7 +177,7 @@ const Cell = ({ id, state, dispatch }) => {
       onFocus={handleCellFocus}
       id={id}
       tabIndex={row * state.maxRows + (columnCharCode - 65)}
-      textAlign={isNaN(state.content[id]?.value) ? "left" : "right"}
+      textalign={isNaN(state.content[id]?.value) ? "left" : "right"}
       width={`${Math.floor((100 - 3) / state.maxColumns)}%`}
     >
       {id === state.selectedCell.id && selectInputBox ? (
@@ -204,6 +190,7 @@ const Cell = ({ id, state, dispatch }) => {
             onKeyDown={handleKeyDown}
             type="text"
             value={value}
+            suppressHydrationWarning={true}
             id={`${id}-input`}
             autoComplete="off"
           />
