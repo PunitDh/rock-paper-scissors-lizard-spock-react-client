@@ -121,19 +121,19 @@ export const parseInitialStateContent = (content) => {
   return Object.keys(content).reduce((finalObject, it) => {
     const cell = it.toUpperCase();
     finalObject[cell] = {};
-    if (content[cell] !== null && typeof content[cell] !== "object") {
+    if (content[it] !== null && typeof content[it] !== "object") {
       const isString =
-        typeof content[cell] === "string" || content[cell] instanceof String;
-      if (isString && content[cell].startsWith("=")) {
-        finalObject[cell].formula = content[cell];
+        typeof content[it] === "string" || content[it] instanceof String;
+      if (isString && content[it].startsWith("=")) {
+        finalObject[cell].formula = content[it];
       } else {
-        finalObject[cell].value = content[cell];
+        finalObject[cell].value = content[it];
       }
-      finalObject[cell].display = content[cell];
+      finalObject[cell].display = content[it];
     } else {
-      finalObject[cell].value = content[cell].value;
-      finalObject[cell].formula = content[cell].formula;
-      finalObject[cell].display = content[cell].display;
+      finalObject[cell].value = content[it].value;
+      finalObject[cell].formula = content[it].formula;
+      finalObject[cell].display = content[it].display;
     }
     return finalObject;
   }, {});
