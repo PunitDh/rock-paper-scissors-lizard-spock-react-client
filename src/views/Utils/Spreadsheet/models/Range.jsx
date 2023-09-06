@@ -55,6 +55,25 @@ export default class Range {
     return new Range(cells, ids, rows, columns);
   }
 
+  static getCellsToTrackForFormulaRecalculation = (state) => {
+    const formulae = Object.keys(state.content)
+      .filter((it) => state.content[it].formula?.length > 0)
+      .map((it) => state.content[it].formula);
+
+    return [
+      ...new Set(
+        formulae
+          .map((it) => it.match(/(\w+\d+):(\w+\d+)/gi))
+          .filter(Boolean)
+          .flat()
+          .map((it) => Range.createFlat(it.split(":")[0], it.split(":")[1]).ids)
+          .concat(formulae.map((it) => it.match(/(\w+\d+)/gi)))
+          .flat()
+          .map((it) => state.content[it]?.value || "")
+      ),
+    ];
+  };
+
   static createFromCell(startCell, endCell) {
     const { minC, maxC, minR, maxR } = getCellMinMax([
       startCell.id,

@@ -29,7 +29,7 @@ const Cell2 = ({ id, state, dispatch }) => {
 
         const focusOutListener = node.addEventListener("focusout", () => {
           dispatch(setContent(id, cellContentRef.current));
-          dispatch(recalculateFormulae());
+          // dispatch(recalculateFormulae());
           cellContentRef.current = state.content[id]?.value;
         });
 
@@ -66,7 +66,7 @@ const Cell2 = ({ id, state, dispatch }) => {
         break;
       case KeyEvent.ENTER:
         dispatch(setContent(id, cellContentRef.current));
-        dispatch(recalculateFormulae());
+        // dispatch(recalculateFormulae());
         // setCellContent(state.content[id]?.value);
         break;
       default:

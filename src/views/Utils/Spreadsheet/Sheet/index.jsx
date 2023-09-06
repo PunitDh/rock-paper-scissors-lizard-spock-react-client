@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useMemo, useReducer } from "react";
 import DashboardCard from "src/components/shared/DashboardCard";
 import { initialState, reducer } from "./reducer";
 import Cell from "./components/Cell";
@@ -14,6 +14,7 @@ import {
 } from "./actions";
 import {
   generateClipboardContent,
+  getCellsToTrackForFormulaRecalculation,
   getCtrlKey,
   parseInitialStateContent,
 } from "./utils/cellUtils";
@@ -29,6 +30,7 @@ import { Table, TableBody, TableHead, TableRow } from "@mui/material";
 import StatusField from "./components/StatusField";
 import { handleKeyDown } from "./eventHandlers/keyboardHandlers";
 import Toolbar from "./components/Toolbar";
+import Range from "../models/Range";
 
 const Sheet = ({
   maxRows = SheetConfig.MAX_ROWS,
@@ -46,6 +48,27 @@ const Sheet = ({
   });
   const clipboard = useClipboard();
 
+  const cellsToTrack = useMemo(() => {
+    return Range.getCellsToTrackForFormulaRecalculation(state).join("-");
+  }, [state.content]);
+
+  useEffect(() => {
+    if (!state.formulaMode) {
+      console.log("Recalculation triggered");
+      dispatch(recalculateFormulae());
+    }
+  }, [cellsToTrack, state.formulaMode]);
+
+  useEffect(() => {
+    dispatch(
+      setFormulaFieldText(
+        state.content[state.selectedCell.id]?.formula ||
+          state.content[state.selectedCell.id]?.value ||
+          ""
+      )
+    );
+  }, [state.selectedCell.id, state.content]);
+
   const handleMouseDown = (e) => {
     // dispatch(setFormulaFieldFocused(false));
     dispatch(setMouseDown(true));
@@ -62,16 +85,6 @@ const Sheet = ({
       );
     }
   };
-
-  useEffect(() => {
-    dispatch(
-      setFormulaFieldText(
-        state.content[state.selectedCell.id]?.formula ||
-          state.content[state.selectedCell.id]?.value ||
-          ""
-      )
-    );
-  }, [state.selectedCell.id, state.content]);
 
   const handleFocusGuard = (e) => {
     e.preventDefault();
@@ -100,28 +113,6 @@ const Sheet = ({
     const data = await clipboard.get();
     dispatch(pasteCellContent({ id: state.selectedCell.id }, data));
   };
-
-  useEffect(() => {
-    dispatch(recalculateFormulae());
-  }, []);
-
-  // const cellsToTrack = [
-  //   ...new Set(
-  //     Object.keys(state.content)
-  //       .filter((it) => state.content[it].formula?.length > 0)
-  //       .map((it) => state.content[it].formula)
-  //       .map((it) => it.match(/(\w+\d+)/gi))
-  //       .flat()
-  //   ),
-  // ].map((it) => state.content[it]?.value);
-
-  // useEffect(() => {
-  //   if (!state.formulaMode) {
-  //     dispatch(recalculateFormulae())
-  //   }
-  // }, [...cellsToTrack])
-
-  // console.log(cellsToTrack);
 
   return (
     <DashboardCard sx={{ height: "100%" }} title="Spreadsheet">

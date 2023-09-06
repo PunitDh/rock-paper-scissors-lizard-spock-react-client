@@ -97,7 +97,7 @@ const Cell = ({ id, state, dispatch }) => {
         break;
       case KeyEvent.ENTER:
         dispatch(setContent(id, e.target.value));
-        dispatch(recalculateFormulae());
+        // dispatch(recalculateFormulae());
         dispatch(setFormulaMode(false));
         dispatch(highlightCells(id));
         setSelectInputBox(false);
@@ -121,7 +121,7 @@ const Cell = ({ id, state, dispatch }) => {
 
   const handleBlur = (e) => {
     dispatch(setEditMode(false));
-    !state.formulaMode && dispatch(recalculateFormulae());
+    // !state.formulaMode && dispatch(recalculateFormulae());
   };
 
   const handleMouseOver = (e) => {

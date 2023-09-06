@@ -28,7 +28,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(setFormulaFieldText(e.target.formulaFieldText.value));
-    dispatch(recalculateFormulae());
+    // dispatch(recalculateFormulae());
     dispatch(setFormulaFieldFocused(false));
     dispatch(selectCell(getNextRow(state.selectedCell.id, state.maxRows)));
     dispatch(setFormulaMode(false));
@@ -46,7 +46,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
   };
 
   const acceptInputField = () => {
-    dispatch(recalculateFormulae());
+    // dispatch(recalculateFormulae());
     dispatch(setFormulaMode(false));
     dispatch(setFormulaFieldFocused(false));
   };
