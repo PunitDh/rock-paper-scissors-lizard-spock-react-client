@@ -1,5 +1,5 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
-import { CellDiv, DivItem } from "../../styles";
+import { CellDiv, DivItem } from "../styles";
 import {
   resetHighlight,
   setContent,
@@ -11,7 +11,7 @@ import {
   setMenuAnchorElement,
   recalculateFormulae,
 } from "../actions";
-import { KeyEvent, MouseButton } from "../../constants";
+import { KeyEvent, MouseButton } from "../constants";
 
 const Cell2 = ({ id, state, dispatch }) => {
   const containerRef = useRef();

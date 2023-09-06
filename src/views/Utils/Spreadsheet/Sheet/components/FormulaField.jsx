@@ -10,13 +10,13 @@ import {
 } from "../actions";
 import { getNextRow } from "../utils/cellUtils";
 import { Check, Clear } from "@mui/icons-material";
-import Cell from "../../models/Cell";
 import {
   FieldButton,
   FlexForm,
   InputTextField,
   SmallInputField,
 } from "./styles";
+import Cell from "../models/Cell";
 
 const FormulaField = ({ state, dispatch, onContextMenu }) => {
   const formRef = useRef();

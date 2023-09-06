@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { setSelectedRow } from "../actions";
-import { HeaderItem } from "../../styles";
+import { HeaderItem } from "../styles";
 
 const RowHeaderItem = styled(HeaderItem)({
   width: "3%",

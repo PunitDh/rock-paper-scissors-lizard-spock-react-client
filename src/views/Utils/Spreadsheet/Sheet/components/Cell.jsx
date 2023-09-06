@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { CellInput, Item } from "../../styles";
+import { CellInput, Item } from "../styles";
 import {
   resetHighlight,
   setContent,
@@ -13,7 +13,7 @@ import {
   setFormulaMode,
   addCellsToHighlight,
 } from "../actions";
-import { KeyEvent, MouseButton } from "../../constants";
+import { KeyEvent, MouseButton } from "../constants";
 import { getCtrlKey, getId, typeInTextField } from "../utils/cellUtils";
 
 const Cell = ({ id, state, dispatch }) => {

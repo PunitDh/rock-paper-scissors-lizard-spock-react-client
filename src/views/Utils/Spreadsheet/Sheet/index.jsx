@@ -17,7 +17,7 @@ import {
   getCtrlKey,
   parseInitialStateContent,
 } from "./utils/cellUtils";
-import { SheetConfig } from "../constants";
+import { SheetConfig } from "./constants";
 import ContextMenu from "./ContextMenu";
 import RowHeader from "./components/RowHeader";
 import ColumnHeader from "./components/ColumnHeader";
@@ -29,7 +29,7 @@ import { Table, TableBody, TableHead, TableRow } from "@mui/material";
 import StatusField from "./components/StatusField";
 import { handleKeyDown } from "./eventHandlers/keyboardHandlers";
 import Toolbar from "./components/Toolbar";
-import Range from "../models/Range";
+import Range from "./models/Range";
 
 const Sheet = ({
   maxRows = SheetConfig.MAX_ROWS,
@@ -51,11 +51,12 @@ const Sheet = ({
     return Range.getFormulaCellsToTrack(state.content).join("~");
   }, [state.content]);
 
+  useEffect(() => {}, [state.content]);
+
   useEffect(() => {
     if (!state.formulaMode) {
       console.log("Recalculation triggered");
       dispatch(recalculateFormulae());
-      console.log(state.content);
     }
   }, [cellsToTrack, state.formulaMode]);
 

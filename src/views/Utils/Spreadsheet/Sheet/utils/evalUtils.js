@@ -1,4 +1,4 @@
-import Range from "../../models/Range";
+import Range from "../models/Range";
 
 // Utility functions
 const processMatches = (str, reg, formulaCreator, zeroValue) => {

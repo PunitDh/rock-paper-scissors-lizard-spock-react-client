@@ -1,5 +1,5 @@
-import { SheetConfig, getMaxColumn, getMinColumn } from "../../constants";
-import CellContent from "../../models/CellContent";
+import { SheetConfig, getMaxColumn, getMinColumn } from "../constants";
+import CellContent from "../models/CellContent";
 
 export const getId = (id) => {
   const row = id?.match(/\d+/g);

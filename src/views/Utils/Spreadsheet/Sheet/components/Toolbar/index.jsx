@@ -1,11 +1,11 @@
 import { useEffect, useRef } from "react";
 import { FieldButton, FlexForm } from "../styles";
-import { Download, FolderOpenSharp, Save } from "@mui/icons-material";
+import { FolderOpenSharp, Redo, Save, Undo } from "@mui/icons-material";
 import { Tooltip } from "@mui/material";
-import { SheetConfig } from "../../../constants";
-import Range from "../../../models/Range";
+import { SheetConfig } from "../../constants";
 import { setContentBulk } from "../../actions";
-import CellContent from "../../../models/CellContent";
+import CellContent from "../../models/CellContent";
+import Range from "../../models/Range";
 
 const Toolbar = ({ state, dispatch }) => {
   const inputRef = useRef();
@@ -24,6 +24,9 @@ const Toolbar = ({ state, dispatch }) => {
       inputRef.current?.focus();
     }
   }, [state.formulaFieldFocused]);
+
+  const handleUndo = (e) => {};
+  const handleRedo = (e) => {};
 
   const handleExportAsCsv = (e) => {
     const range = Range.create(
@@ -102,6 +105,16 @@ const Toolbar = ({ state, dispatch }) => {
           <FieldButton type="button" onClick={handleExportAsCsv}>
             <Save sx={{ width: "1rem" }} />
             {/* <Download sx={{ width: "1rem" }} /> */}
+          </FieldButton>
+        </Tooltip>
+        <Tooltip title="Undo">
+          <FieldButton type="button" onClick={handleUndo}>
+            <Undo sx={{ width: "1rem" }} />
+          </FieldButton>
+        </Tooltip>
+        <Tooltip title="Redo">
+          <FieldButton type="button" onClick={handleRedo}>
+            <Redo sx={{ width: "1rem" }} />
           </FieldButton>
         </Tooltip>
       </FlexForm>

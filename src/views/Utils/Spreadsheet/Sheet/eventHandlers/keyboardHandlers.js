@@ -1,4 +1,4 @@
-import { KeyEvent, SheetConfig } from "../../constants";
+import { KeyEvent, SheetConfig } from "../constants";
 import {
   deleteCellContent,
   highlightCells,

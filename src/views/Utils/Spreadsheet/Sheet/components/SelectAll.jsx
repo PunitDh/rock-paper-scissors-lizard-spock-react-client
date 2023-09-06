@@ -1,5 +1,5 @@
-import { SheetConfig } from "../../constants";
-import { HeaderItem } from "../../styles";
+import { SheetConfig } from "../constants";
+import { HeaderItem } from "../styles";
 import { selectAll } from "../actions";
 import styled from "@emotion/styled";
 

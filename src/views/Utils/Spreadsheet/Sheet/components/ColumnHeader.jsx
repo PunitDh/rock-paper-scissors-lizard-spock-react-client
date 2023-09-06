@@ -1,6 +1,6 @@
-import { SheetConfig } from "../../constants";
+import { SheetConfig } from "../constants";
 import { setSelectedColumn } from "../actions";
-import { HeaderItem } from "../../styles";
+import { HeaderItem } from "../styles";
 import styled from "@emotion/styled";
 
 const ColumnHeaderItem = styled(HeaderItem)({

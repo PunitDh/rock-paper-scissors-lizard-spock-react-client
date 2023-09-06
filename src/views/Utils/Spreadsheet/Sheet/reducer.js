@@ -1,10 +1,10 @@
-import { SheetConfig } from "../constants";
-import Cell from "../models/Cell";
-import Range from "../models/Range";
+import { SheetConfig } from "./constants";
 import { getCellOffset, typeInTextField } from "./utils/cellUtils";
 import { SheetAction } from "./actions";
 import { updateStateContent } from "./utils/evalUtils";
-import CellContent from "../models/CellContent";
+import Cell from "./models/Cell";
+import CellContent from "./models/CellContent";
+import Range from "./models/Range";
 
 export const initialState = {
   maxRows: SheetConfig.MAX_ROWS,
