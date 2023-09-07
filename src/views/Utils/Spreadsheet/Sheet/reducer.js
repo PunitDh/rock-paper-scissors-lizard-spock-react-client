@@ -27,6 +27,7 @@ export const initialState = {
   formulaFieldText: "",
   formulaFieldFocused: false,
   menuAnchorElement: null,
+  maxUndos: 32,
   memento: [],
   currentMementoId: null,
 };
@@ -331,13 +332,19 @@ export const reducer = (state, action) => {
       }
 
       const id = uniqueId();
-      const memento = [
+      let memento = [
         ...state.memento.slice(
           0,
           state.memento.findIndex((m) => m.id === state.currentMementoId) + 1
         ),
         { id, content: state.content },
       ];
+
+      // Limit the number of mementos to 32. If there are more, remove the oldest.
+      if (memento.length > state.maxUndos) {
+        memento = memento.slice(1);
+      }
+
       return {
         ...state,
         memento,

@@ -34,7 +34,6 @@ import { Table, TableBody, TableHead, TableRow } from "@mui/material";
 import StatusField from "./components/StatusField";
 import { handleKeyDown } from "./eventHandlers/keyboardHandlers";
 import Toolbar from "./components/Toolbar";
-import Range from "./models/Range";
 import AbsoluteCellInput from "./components/AbsoluteCellInput";
 
 const Sheet = ({

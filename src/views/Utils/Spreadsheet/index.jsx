@@ -8,6 +8,7 @@ export default function Spreadsheet() {
       <Sheet
         maxColumns={12}
         maxRows={12}
+        maxUndos={32}
         toolbar={true}
         formulaField={true}
         statusField={true}
