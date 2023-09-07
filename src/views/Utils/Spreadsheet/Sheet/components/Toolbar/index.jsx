@@ -1,11 +1,19 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { FieldButton, FlexForm } from "../styles";
 import { FolderOpenSharp, Redo, Save, Undo } from "@mui/icons-material";
-import { Tooltip } from "@mui/material";
+import { MenuItem, Select, Tooltip } from "@mui/material";
 import { SheetConfig } from "../../constants";
-import { redoState, setContentBulk, undoState } from "../../actions";
+import {
+  redoState,
+  setSelectedCellFormatting,
+  setContentBulk,
+  undoState,
+  setCellFormattingBulk,
+} from "../../actions";
 import CellContent from "../../models/CellContent";
 import Range from "../../models/Range";
+import { getFonts } from "../../utils/fontUtils";
+import { fontSelectStyle } from "./styles";
 
 const Toolbar = ({ state, dispatch }) => {
   const inputRef = useRef();
@@ -13,6 +21,25 @@ const Toolbar = ({ state, dispatch }) => {
   const canUndo = state.currentMementoId !== state.memento[0]?.id;
   const canRedo =
     state.currentMementoId !== state.memento[state.memento.length - 1]?.id;
+  const [fonts, setFonts] = useState([]);
+
+  const getFont = useMemo(
+    () => state.content[state.selectedCell.id]?.formatting || {},
+    [state.content, state.selectedCell.id]
+  );
+
+  const [selectedFormatting, setSelectedFormatting] = useState(getFont);
+
+  useEffect(() => {
+    getFonts()
+      .then((data) => setFonts([...data, "Sans-serif"].sort()))
+      .catch(() => console.error);
+  }, []);
+
+  useEffect(() => {
+    console.log("triggered");
+    setSelectedFormatting(getFont);
+  }, [getFont]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -89,6 +116,56 @@ const Toolbar = ({ state, dispatch }) => {
     }
   };
 
+  const handleFontFamilyChange = (e) => {
+    dispatch(setSelectedCellFormatting({ fontFamily: e.target.value }));
+    dispatch(setCellFormattingBulk({ fontFamily: e.target.value }));
+  };
+
+  const handleFontSizeChange = (e) => {
+    dispatch(setSelectedCellFormatting({ fontSize: e.target.value }));
+    dispatch(setCellFormattingBulk({ fontSize: e.target.value }));
+  };
+
+  const [bold, setBold] = useState(selectedFormatting.fontWeight === "bold");
+  const [italic, setItalic] = useState(
+    selectedFormatting.fontStyle === "italic"
+  );
+  const [underline, setUnderline] = useState(
+    selectedFormatting.textDecoration === "underline"
+  );
+
+  const handleBold = (e) => {
+    setBold((bold) => !bold);
+    dispatch(
+      setSelectedCellFormatting({ fontWeight: bold ? "bold" : "normal" })
+    );
+    dispatch(setCellFormattingBulk({ fontWeight: bold ? "bold" : "normal" }));
+  };
+
+  const handleItalics = (e) => {
+    setItalic((italic) => !italic);
+    dispatch(
+      setSelectedCellFormatting({ fontStyle: italic ? "italic" : "normal" })
+    );
+    dispatch(
+      setCellFormattingBulk({ fontStyle: italic ? "italic" : "normal" })
+    );
+  };
+
+  const handleUnderline = (e) => {
+    setUnderline((underline) => !underline);
+    dispatch(
+      setSelectedCellFormatting({
+        textDecoration: underline ? "underline" : "none",
+      })
+    );
+    dispatch(
+      setCellFormattingBulk({
+        textDecoration: underline ? "underline" : "none",
+      })
+    );
+  };
+
   return (
     <div tabIndex="1000" onBlur={handleBlur}>
       <FlexForm onSubmit={handleSubmit}>
@@ -126,6 +203,87 @@ const Toolbar = ({ state, dispatch }) => {
           <span>
             <FieldButton type="button" onClick={handleRedo} disabled={!canRedo}>
               <Redo sx={{ width: "1rem" }} />
+            </FieldButton>
+          </span>
+        </Tooltip>
+        <Tooltip title={"Select font"}>
+          <span>
+            <Select
+              labelId={"font-selector"}
+              id={"font-selector"}
+              name="fontSelector"
+              onChange={handleFontFamilyChange}
+              value={selectedFormatting.fontFamily || "Sans-serif"}
+              size="small"
+              sx={fontSelectStyle({ font: selectedFormatting.fontFamily })}
+            >
+              {fonts.map((font) => (
+                <MenuItem
+                  sx={{ fontFamily: font }}
+                  selected={selectedFormatting.fontFamily === font}
+                  key={font}
+                  value={font}
+                >
+                  {font}
+                </MenuItem>
+              ))}
+            </Select>
+          </span>
+        </Tooltip>
+        <Tooltip title={"Select font size"}>
+          <span>
+            <Select
+              labelId={"font-size-selector"}
+              id={"font-size-selector"}
+              name="fontSizeSelector"
+              onChange={handleFontSizeChange}
+              value={selectedFormatting.fontSize || 12}
+              size="small"
+              sx={fontSelectStyle({ font: selectedFormatting.fontSize })}
+            >
+              {[8, 10, 12, 14, 16, 18, 20, 24].map((size) => (
+                <MenuItem
+                  sx={{ fontSize: size }}
+                  selected={selectedFormatting.fontSize === size}
+                  key={size}
+                  value={size}
+                >
+                  {size}
+                </MenuItem>
+              ))}
+            </Select>
+          </span>
+        </Tooltip>
+        <Tooltip title={"Bold"}>
+          <span>
+            <FieldButton
+              type="button"
+              isactive={selectedFormatting.fontWeight === "bold"}
+              onClick={handleBold}
+            >
+              <strong>B</strong>
+            </FieldButton>
+          </span>
+        </Tooltip>
+        <Tooltip title={"Italics"}>
+          <span>
+            <FieldButton
+              type="button"
+              isactive={selectedFormatting.fontStyle === "italic"}
+              onClick={handleItalics}
+            >
+              <span style={{ fontStyle: "italic" }}>I</span>
+            </FieldButton>
+          </span>
+        </Tooltip>
+        <Tooltip title={"Underline"}>
+          <span>
+            <FieldButton
+              type="button"
+              isactive={selectedFormatting.textDecoration === "underline"}
+              onClick={handleUnderline}
+            >
+              <span style={{ textDecoration: "underline" }}>U</span>
             </FieldButton>
           </span>
         </Tooltip>

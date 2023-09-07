@@ -305,9 +305,10 @@ export const reducer = (state, action) => {
           formulaMode: true,
           content: {
             ...state.content,
-            [action.payload.cell]: {
+            [action.payload.cell]: new CellContent({
+              ...state.content[action.payload.cell],
               formula: action.payload.value,
-            },
+            }),
           },
         };
       }
@@ -317,6 +318,7 @@ export const reducer = (state, action) => {
         content: {
           ...state.content,
           [action.payload.cell]: new CellContent({
+            ...state.content[action.payload.cell],
             value: action.payload.value,
             display: action.payload.value,
           }),
@@ -328,7 +330,40 @@ export const reducer = (state, action) => {
         ...state,
         content: action.payload,
       };
+    case SheetAction.SET_CELL_FORMATTING:
+      return {
+        ...state,
+        content: {
+          ...state.content,
+          [state.selectedCell.id]: {
+            ...state.content[state.selectedCell.id],
+            formatting: {
+              ...state.content[state.selectedCell.id]?.formatting,
+              ...action.payload,
+            },
+          },
+        },
+      };
+    case SheetAction.SET_CELL_FORMATTING_BULK:
+      const formattedContent = state.highlighted.cells.reduce((acc, cur) => {
+        return {
+          ...acc,
+          [cur]: {
+            ...acc[cur],
+            formatting: {
+              ...acc[cur]?.formatting,
+              ...action.payload,
+            },
+          },
+        };
+      }, state.content);
 
+      console.log(formattedContent);
+
+      return {
+        ...state,
+        content: formattedContent,
+      };
     case SheetAction.ADD_MEMENTO: {
       const currentMemento = state.memento.find(
         (m) => m.id === state.currentMementoId

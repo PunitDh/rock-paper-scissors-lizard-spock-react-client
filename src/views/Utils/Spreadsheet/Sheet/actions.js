@@ -22,6 +22,8 @@ export const SheetAction = Object.freeze({
   SET_MOUSEDOWN: "SET_MOUSEDOWN",
   SET_CONTENT: "SET_CONTENT",
   SET_CONTENT_BULK: "SET_CONTENT_BULK",
+  SET_CELL_FORMATTING: "SET_CELL_FORMATTING",
+  SET_CELL_FORMATTING_BULK: "SET_CELL_FORMATTING_BULK",
   RECALCULATE_FORMULAE: "RECALCULATE_FORMULAE",
   OPEN_CONTEXT_MENU: "OPEN_CONTEXT_MENU",
   ADD_MEMENTO: "ADD_MEMENTO",
@@ -151,6 +153,16 @@ export const setContent = (cell, value) => ({
 
 export const setContentBulk = (payload) => ({
   type: SheetAction.SET_CONTENT_BULK,
+  payload,
+});
+
+export const setSelectedCellFormatting = (payload) => ({
+  type: SheetAction.SET_CELL_FORMATTING,
+  payload,
+});
+
+export const setCellFormattingBulk = (payload) => ({
+  type: SheetAction.SET_CELL_FORMATTING_BULK,
   payload,
 });
 

@@ -22,7 +22,7 @@ const Container = styled.div(({ top, left }) => ({
   zIndex: "50000",
 }));
 
-const InputField = styled.input(({ width, height, isfocused }) => ({
+const InputField = styled.input(({ width, height, isfocused, formatting }) => ({
   width: `${width}px`,
   height: `${height}px`,
   borderRadius: 0,
@@ -32,6 +32,7 @@ const InputField = styled.input(({ width, height, isfocused }) => ({
   padding: "1px",
   backgroundColor: isfocused ? "white" : "transparent",
   color: isfocused ? "black" : "transparent",
+  ...formatting,
   "&:focus": {
     // zIndex: "4 !important",
     cursor: "text",
@@ -167,6 +168,11 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
         onKeyDown={handleKeyDown}
         onFocus={handleFocus}
         onContextMenu={handleContextMenu}
+        formatting={
+          state.content[cell.id]?.formula?.length > 0
+            ? undefined
+            : state.content[cell.id]?.formatting
+        }
       />
     </Container>
   );

@@ -130,6 +130,7 @@ export const updateStateContent = (stateContent, cell, formula) => {
     return {
       ...stateContent,
       [cell]: {
+        ...stateContent[cell],
         formula: formula.toUpperCase(),
         referenceCells: [...new Set(evaluated.referenceCells)],
         value: evaluated.value,

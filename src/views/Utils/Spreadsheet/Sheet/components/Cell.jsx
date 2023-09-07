@@ -117,6 +117,7 @@ const Cell = ({ id, state, dispatch }) => {
       tabIndex={row * state.maxRows + (columnCharCode - 65)}
       textalign={isNaN(state.content[id]?.value) ? "left" : "right"}
       width={`${Math.floor((100 - 3) / state.maxColumns)}%`}
+      formatting={state.content[id]?.formatting}
     >
       {state.content[id]?.value}
       {/* {id === state.selectedCell.id && inputBoxFocused ? (
