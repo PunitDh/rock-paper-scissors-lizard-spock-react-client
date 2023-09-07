@@ -8,7 +8,7 @@ import {
   setHighlightAnchor,
   setHighlightCurrent,
   setHovered,
-  setMenuAnchorElement,
+  openContextMenu,
   recalculateFormulae,
 } from "../actions";
 import { KeyEvent, MouseButton } from "../constants";
@@ -102,7 +102,7 @@ const Cell2 = ({ id, state, dispatch }) => {
 
   const handleContextMenu = (e) => {
     e.preventDefault();
-    dispatch(setMenuAnchorElement(e.currentTarget));
+    dispatch(openContextMenu(e.currentTarget));
   };
 
   return (

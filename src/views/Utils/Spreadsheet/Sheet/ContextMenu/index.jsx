@@ -3,7 +3,7 @@ import { IconCopy, IconCut } from "@tabler/icons";
 import {
   deleteCellContent,
   pasteCellContent,
-  setMenuAnchorElement,
+  openContextMenu,
 } from "../actions";
 import { ContentPaste, Delete } from "@mui/icons-material";
 import { useClipboard } from "src/hooks";
@@ -13,7 +13,7 @@ const ContextMenu = ({ state, dispatch }) => {
   const clipboard = useClipboard();
 
   const handleClose = () => {
-    dispatch(setMenuAnchorElement(false));
+    dispatch(openContextMenu(false));
   };
 
   const handleCut = async () => {
