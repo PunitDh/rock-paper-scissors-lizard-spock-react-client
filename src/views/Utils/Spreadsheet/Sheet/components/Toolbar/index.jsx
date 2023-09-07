@@ -14,10 +14,13 @@ import CellContent from "../../models/CellContent";
 import Range from "../../models/Range";
 import { getFonts } from "../../utils/fontUtils";
 import { fontSelectStyle } from "./styles";
+import OpenFile from "./OpenFile";
+import SaveFile from "./SaveFile";
+import FormattingToggleButton from "./FormattingButton";
+import HistoryButton from "./HistoryButton";
 
 const Toolbar = ({ state, dispatch }) => {
   const inputRef = useRef();
-  const fileRef = useRef();
   const canUndo = state.currentMementoId !== state.memento[0]?.id;
   const canRedo =
     state.currentMementoId !== state.memento[state.memento.length - 1]?.id;
@@ -32,7 +35,7 @@ const Toolbar = ({ state, dispatch }) => {
 
   useEffect(() => {
     getFonts()
-      .then((data) => setFonts([...fonts, ...data].sort()))
+      .then((data) => setFonts(fonts.concat(data).sort()))
       .catch(() => console.error);
   }, []);
 
@@ -60,59 +63,6 @@ const Toolbar = ({ state, dispatch }) => {
 
   const handleRedo = (e) => {
     canRedo && dispatch(redoState());
-  };
-
-  const handleExportAsCsv = (e) => {
-    const range = Range.create(
-      `A1`,
-      `${SheetConfig.COLUMNS[state.maxColumns - 1]}${state.maxRows}`
-    );
-    const content = range.cells
-      .map((row) =>
-        row.map((cell) => state.content[cell.id]?.value || "").join(",")
-      )
-      .join("\n");
-    const blob = new Blob([content], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", `Sheet1.csv`);
-    document.body.appendChild(link);
-    link.click();
-    link.parentNode.removeChild(link);
-  };
-
-  const handleOpenFile = (e) => {
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      const text = e.target.result;
-      const content = csvToStateContent(text);
-      const filtered = Object.keys(content).reduce((acc, cur) => {
-        if (content[cur]?.value.length > 0) {
-          acc[cur] = new CellContent({
-            value: content[cur].value,
-          });
-        }
-        return acc;
-      }, {});
-      dispatch(setContentBulk(filtered));
-    };
-    reader.readAsText(e.target.files[0]);
-
-    function csvToStateContent(csvString) {
-      const rows = csvString.trim().split("\n");
-      let content = {};
-
-      rows.forEach((row, rowIndex) => {
-        row.split(",").forEach((cellValue, colIndex) => {
-          const colLabel = SheetConfig.COLUMNS[colIndex];
-          const cellId = `${colLabel}${rowIndex + 1}`;
-          content[cellId] = new CellContent({ value: cellValue, formula: "" });
-        });
-      });
-
-      return content;
-    }
   };
 
   const handleFontFamilyChange = (e) => {
@@ -168,124 +118,85 @@ const Toolbar = ({ state, dispatch }) => {
   return (
     <div tabIndex="1000" onBlur={handleBlur}>
       <FlexForm onSubmit={handleSubmit}>
-        <Tooltip title="Open a CSV File">
-          <FieldButton type="button">
-            <label style={{ cursor: "pointer" }} htmlFor="csv-file-upload">
-              <FolderOpenSharp sx={{ width: "1rem" }} />
-            </label>
-            <input
-              type="file"
-              id="csv-file-upload"
-              style={{ display: "none" }}
-              ref={fileRef}
-              onChange={handleOpenFile}
-            />
-          </FieldButton>
-        </Tooltip>
-        {/* <FieldButton type="button">
-          <Save sx={{ width: "1rem" }} />
-        </FieldButton> */}
-        <Tooltip title="Export as CSV">
-          <FieldButton type="button" onClick={handleExportAsCsv}>
-            <Save sx={{ width: "1rem" }} />
-            {/* <Download sx={{ width: "1rem" }} /> */}
-          </FieldButton>
-        </Tooltip>
-        <Tooltip title={canUndo ? "Undo" : "Undo (disabled)"}>
-          <span>
-            <FieldButton type="button" onClick={handleUndo} disabled={!canUndo}>
-              <Undo sx={{ width: "1rem" }} />
-            </FieldButton>
-          </span>
-        </Tooltip>
-        <Tooltip title={canRedo ? "Redo" : "Redo (disabled)"}>
-          <span>
-            <FieldButton type="button" onClick={handleRedo} disabled={!canRedo}>
-              <Redo sx={{ width: "1rem" }} />
-            </FieldButton>
-          </span>
-        </Tooltip>
-        <Tooltip title={"Select font"}>
-          <span>
-            <Select
-              labelId={"font-selector"}
-              id={"font-selector"}
-              name="fontSelector"
-              onChange={handleFontFamilyChange}
-              value={selectedFormatting.fontFamily || "Sans-serif"}
-              size="small"
-              sx={fontSelectStyle({ font: selectedFormatting.fontFamily })}
+        <OpenFile dispatch={dispatch} />
+        <SaveFile state={state} />
+        <HistoryButton
+          title="Undo"
+          Icon={Undo}
+          onClick={handleUndo}
+          disabled={!canUndo}
+        />
+        <HistoryButton
+          title="Redo"
+          Icon={Redo}
+          onClick={handleRedo}
+          disabled={!canRedo}
+        />
+
+        <Select
+          labelId={"font-selector"}
+          id={"font-selector"}
+          name="fontSelector"
+          onChange={handleFontFamilyChange}
+          value={selectedFormatting.fontFamily || "Sans-serif"}
+          size="small"
+          sx={fontSelectStyle({ font: selectedFormatting.fontFamily })}
+        >
+          {fonts.map((font) => (
+            <MenuItem
+              sx={{ fontFamily: font }}
+              selected={selectedFormatting.fontFamily === font}
+              key={font}
+              value={font}
             >
-              {fonts.map((font) => (
-                <MenuItem
-                  sx={{ fontFamily: font }}
-                  selected={selectedFormatting.fontFamily === font}
-                  key={font}
-                  value={font}
-                >
-                  {font}
-                </MenuItem>
-              ))}
-            </Select>
-          </span>
-        </Tooltip>
-        <Tooltip title={"Select font size"}>
-          <span>
-            <Select
-              labelId={"font-size-selector"}
-              id={"font-size-selector"}
-              name="fontSizeSelector"
-              onChange={handleFontSizeChange}
-              value={selectedFormatting.fontSize || 12}
-              size="small"
-              sx={fontSelectStyle({ font: selectedFormatting.fontSize })}
+              {font}
+            </MenuItem>
+          ))}
+        </Select>
+
+        <Select
+          labelId={"font-size-selector"}
+          id={"font-size-selector"}
+          name="fontSizeSelector"
+          onChange={handleFontSizeChange}
+          value={selectedFormatting.fontSize || 12}
+          size="small"
+          sx={fontSelectStyle({ font: selectedFormatting.fontSize })}
+        >
+          {[8, 10, 12, 14, 16, 18, 20, 24].map((size) => (
+            <MenuItem
+              sx={{ fontSize: size }}
+              selected={selectedFormatting.fontSize === size}
+              key={size}
+              value={size}
             >
-              {[8, 10, 12, 14, 16, 18, 20, 24].map((size) => (
-                <MenuItem
-                  sx={{ fontSize: size }}
-                  selected={selectedFormatting.fontSize === size}
-                  key={size}
-                  value={size}
-                >
-                  {size}
-                </MenuItem>
-              ))}
-            </Select>
-          </span>
-        </Tooltip>
-        <Tooltip title={"Bold"}>
-          <span>
-            <FieldButton
-              type="button"
-              isactive={selectedFormatting.fontWeight === "bold"}
-              onClick={handleBold}
-            >
-              <strong>B</strong>
-            </FieldButton>
-          </span>
-        </Tooltip>
-        <Tooltip title={"Italics"}>
-          <span>
-            <FieldButton
-              type="button"
-              isactive={selectedFormatting.fontStyle === "italic"}
-              onClick={handleItalics}
-            >
-              <span style={{ fontStyle: "italic" }}>I</span>
-            </FieldButton>
-          </span>
-        </Tooltip>
-        <Tooltip title={"Underline"}>
-          <span>
-            <FieldButton
-              type="button"
-              isactive={selectedFormatting.textDecoration === "underline"}
-              onClick={handleUnderline}
-            >
-              <span style={{ textDecoration: "underline" }}>U</span>
-            </FieldButton>
-          </span>
-        </Tooltip>
+              {size}
+            </MenuItem>
+          ))}
+        </Select>
+
+        <FormattingToggleButton
+          title={"Bold"}
+          isActive={selectedFormatting.fontWeight === "bold"}
+          onClick={handleBold}
+        >
+          <strong>B</strong>
+        </FormattingToggleButton>
+        <FormattingToggleButton
+          title={"Italics"}
+          isActive={selectedFormatting.fontStyle === "italic"}
+          onClick={handleItalics}
+        >
+          <span style={{ fontStyle: "italic" }}>I</span>
+        </FormattingToggleButton>
+
+        <FormattingToggleButton
+          title={"Underline"}
+          isActive={selectedFormatting.textDecoration === "underline"}
+          onClick={handleUnderline}
+        >
+          <span style={{ textDecoration: "underline" }}>U</span>
+        </FormattingToggleButton>
       </FlexForm>
     </div>
   );
