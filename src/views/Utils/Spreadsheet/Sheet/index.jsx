@@ -39,17 +39,29 @@ import AbsoluteCellInput from "./components/AbsoluteCellInput";
 const Sheet = ({
   maxRows = SheetConfig.MAX_ROWS,
   maxColumns = SheetConfig.MAX_COLUMNS,
+  maxUndos = 32,
   toolbar = true,
   formulaField = true,
   statusField = true,
   initalContent = {},
 }) => {
-  const [state, dispatch] = useReducer(reducer, {
-    ...initialState,
-    maxRows,
-    maxColumns,
-    content: parseInitialStateContent(initalContent),
-  });
+  const createInitialState = useCallback(
+    () => ({
+      ...initialState,
+      maxRows,
+      maxColumns,
+      maxUndos,
+      content: parseInitialStateContent(initalContent),
+    }),
+    [initalContent, maxColumns, maxRows, maxUndos]
+  );
+
+  const [state, dispatch] = useReducer(
+    reducer,
+    initialState,
+    createInitialState
+  );
+
   const token = useToken();
   const clipboard = useClipboard();
 
