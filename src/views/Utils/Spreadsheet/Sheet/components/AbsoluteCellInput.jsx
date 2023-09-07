@@ -42,6 +42,7 @@ const InputField = styled.input(({ width, height, isfocused, formatting }) => ({
 const AbsoluteCellInput = ({ state, dispatch }) => {
   const textRef = useRef();
   const cell = useMemo(() => state.selectedCell, [state.selectedCell]);
+  const rowHeight = state.content.rowHeights[cell.row];
   const getValue = useCallback(
     () =>
       state.content[cell.id]?.formula || state.content[cell.id]?.value || "",
@@ -64,7 +65,8 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
       width: rect.width,
       height: rect.height,
     });
-  }, [cell.id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cell.id, rowHeight]);
 
   useEffect(() => {
     setValue(getValue());

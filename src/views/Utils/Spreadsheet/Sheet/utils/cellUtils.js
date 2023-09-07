@@ -1,4 +1,5 @@
 import { SheetConfig, getMaxColumn, getMinColumn } from "../constants";
+import Cell from "../models/Cell";
 import CellContent from "../models/CellContent";
 
 export const getId = (id) => {
@@ -121,26 +122,54 @@ export const getCtrlKey = (e) => {
   return /mac/i.test(navigator.platform) ? e.metaKey : e.ctrlKey;
 };
 
-export const parseInitialStateContent = (content) => {
-  return Object.keys(content).reduce((finalObject, it) => {
-    const cell = it.toUpperCase();
-    finalObject[cell] = {};
-    if (content[it] !== null && typeof content[it] !== "object") {
-      const isString =
-        typeof content[it] === "string" || content[it] instanceof String;
-      if (isString && content[it].startsWith("=")) {
-        finalObject[cell].formula = content[it];
+export const parseInitialStateContent = (
+  content,
+  defaultRowHeight,
+  defaultColumnWidth,
+  maxRows,
+  maxColumns
+) => {
+  const defaultColumnWidthsSet = Array(maxColumns)
+    .fill()
+    .reduce(
+      (acc, _, idx) => {
+        acc.columnWidths[SheetConfig.COLUMNS[idx]] = defaultColumnWidth;
+        return acc;
+      },
+      { columnWidths: {} }
+    );
+
+  const defaultRowHeightsSet = Array(maxRows + 1)
+    .fill()
+    .reduce(
+      (acc, _, idx) => {
+        acc.rowHeights[idx] = defaultRowHeight;
+        return acc;
+      },
+      { ...defaultColumnWidthsSet, rowHeights: {} }
+    );
+
+  return Object.keys(content).reduce(
+    (stateContent, it) => {
+      const cell = it.toUpperCase();
+      stateContent[cell] = {};
+      if (content[it] !== null && typeof content[it] !== "object") {
+        const isString =
+          typeof content[it] === "string" || content[it] instanceof String;
+        if (isString && content[it].startsWith("=")) {
+          stateContent[cell].formula = content[it];
+        } else {
+          stateContent[cell].value = content[it];
+        }
+        stateContent[cell].display = content[it];
       } else {
-        finalObject[cell].value = content[it];
+        stateContent[cell].value = new CellContent(content[it]);
       }
-      finalObject[cell].display = content[it];
-    } else {
-      finalObject[cell].value = content[it].value;
-      finalObject[cell].formula = content[it].formula;
-      finalObject[cell].display = content[it].display;
-    }
-    return finalObject;
-  }, {});
+
+      return stateContent;
+    },
+    { ...defaultRowHeightsSet }
+  );
 };
 
 export const getPreviousColumn = (id, maxColumns = SheetConfig.MAX_COLUMNS) => {

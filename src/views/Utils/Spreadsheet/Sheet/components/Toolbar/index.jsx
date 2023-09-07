@@ -21,7 +21,7 @@ const Toolbar = ({ state, dispatch }) => {
   const canUndo = state.currentMementoId !== state.memento[0]?.id;
   const canRedo =
     state.currentMementoId !== state.memento[state.memento.length - 1]?.id;
-  const [fonts, setFonts] = useState([]);
+  const [fonts, setFonts] = useState(["Sans-serif"]);
 
   const getFont = useMemo(
     () => state.content[state.selectedCell.id]?.formatting || {},
@@ -32,12 +32,11 @@ const Toolbar = ({ state, dispatch }) => {
 
   useEffect(() => {
     getFonts()
-      .then((data) => setFonts([...data, "Sans-serif"].sort()))
+      .then((data) => setFonts([...fonts, ...data].sort()))
       .catch(() => console.error);
   }, []);
 
   useEffect(() => {
-    console.log("triggered");
     setSelectedFormatting(getFont);
   }, [getFont]);
 

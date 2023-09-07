@@ -35,6 +35,7 @@ import StatusField from "./components/StatusField";
 import { handleKeyDown } from "./eventHandlers/keyboardHandlers";
 import Toolbar from "./components/Toolbar";
 import AbsoluteCellInput from "./components/AbsoluteCellInput";
+import { FlexBox } from "src/components/shared/styles";
 
 const Sheet = ({
   maxRows = SheetConfig.MAX_ROWS,
@@ -44,6 +45,8 @@ const Sheet = ({
   formulaField = true,
   statusField = true,
   initalContent = {},
+  defaultRowHeight = 24,
+  defaultColumnWidth = 50,
 }) => {
   const createInitialState = useCallback(
     () => ({
@@ -51,9 +54,22 @@ const Sheet = ({
       maxRows,
       maxColumns,
       maxUndos,
-      content: parseInitialStateContent(initalContent),
+      content: parseInitialStateContent(
+        initalContent,
+        defaultRowHeight,
+        defaultColumnWidth,
+        maxRows,
+        maxColumns
+      ),
     }),
-    [initalContent, maxColumns, maxRows, maxUndos]
+    [
+      defaultColumnWidth,
+      defaultRowHeight,
+      initalContent,
+      maxColumns,
+      maxRows,
+      maxUndos,
+    ]
   );
 
   const [state, dispatch] = useReducer(

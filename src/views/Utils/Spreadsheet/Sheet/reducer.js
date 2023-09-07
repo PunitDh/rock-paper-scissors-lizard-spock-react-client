@@ -22,7 +22,10 @@ export const initialState = {
     columns: [],
   },
   formulaHighlighted: [],
-  content: {},
+  content: {
+    rowHeights: {},
+    columnWidths: {},
+  },
   mouseDown: false,
   inputBoxFocused: false,
   formulaFieldText: "",
@@ -236,6 +239,18 @@ export const reducer = (state, action) => {
         },
       };
     }
+    case SheetAction.SET_ROW_HEIGHT: {
+      return {
+        ...state,
+        content: {
+          ...state.content,
+          rowHeights: {
+            ...state.content.rowHeights,
+            [action.payload.row]: action.payload.height,
+          },
+        },
+      };
+    }
     case SheetAction.SET_SELECTED_COLUMN: {
       const range = Range.createFlat(
         `${action.payload}1`,
@@ -252,6 +267,18 @@ export const reducer = (state, action) => {
           cells: range.cellIds,
           rows: range.rows,
           columns: range.columns,
+        },
+      };
+    }
+    case SheetAction.SET_COLUMN_WIDTH: {
+      return {
+        ...state,
+        content: {
+          ...state.content,
+          columnWidths: {
+            ...state.content.columnWidths,
+            [action.payload.column]: action.payload.width,
+          },
         },
       };
     }

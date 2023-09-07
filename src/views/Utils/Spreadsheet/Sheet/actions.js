@@ -8,7 +8,9 @@ export const SheetAction = Object.freeze({
   SET_FORMULA_MODE: "SET_FORMULA_MODE",
   SET_HOVERED: "SET_HOVERED",
   SET_SELECTED_ROW: "SET_SELECTED_ROW",
+  SET_ROW_HEIGHT: "SET_ROW_HEIGHT",
   SET_SELECTED_COLUMN: "SET_SELECTED_COLUMN",
+  SET_COLUMN_WIDTH: "SET_COLUMN_WIDTH",
   SELECT_ALL: "SELECT_ALL",
   HIGHLIGHT_CELLS: "HIGHLIGHT_CELLS",
   FORMULA_HIGHLIGHT_CELL_RANGE: "FORMULA_HIGHLIGHT_CELL_RANGE",
@@ -99,9 +101,25 @@ export const setSelectedRow = (payload) => ({
   payload,
 });
 
+export const setRowHeight = (row, height) => ({
+  type: SheetAction.SET_ROW_HEIGHT,
+  payload: {
+    row,
+    height,
+  },
+});
+
 export const setSelectedColumn = (payload) => ({
   type: SheetAction.SET_SELECTED_COLUMN,
   payload,
+});
+
+export const setColumnWidth = (column, width) => ({
+  type: SheetAction.SET_COLUMN_WIDTH,
+  payload: {
+    column,
+    width,
+  },
 });
 
 export const selectAll = () => ({
