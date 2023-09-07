@@ -45,7 +45,7 @@ const Cell = ({ id, state, dispatch }) => {
           const formulaMode = state.formulaMode && id !== state.selectedCell.id;
           if (formulaMode) {
             if (state.formulaFieldFocused) {
-              const value = typeInTextField("input-text", id);
+              const value = typeInTextField("formula-field", id);
               dispatch(setContent(state.selectedCell.id, value));
             } else {
               const value = typeInTextField(

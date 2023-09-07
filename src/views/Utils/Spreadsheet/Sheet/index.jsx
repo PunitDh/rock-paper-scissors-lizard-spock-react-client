@@ -11,11 +11,13 @@ import {
   selectCell,
   pasteCellContent,
   recalculateFormulae,
+  setContent,
 } from "./actions";
 import {
   generateClipboardContent,
   getCtrlKey,
   parseInitialStateContent,
+  typeInTextField,
 } from "./utils/cellUtils";
 import { SheetConfig } from "./constants";
 import ContextMenu from "./ContextMenu";
@@ -76,6 +78,19 @@ const Sheet = ({
 
   const handleMouseUp = (e) => {
     dispatch(setMouseDown(false));
+    if (state.formulaMode && state.highlighted.cells.length > 0) {
+      const range = `${state.highlighted.anchor}:${state.highlighted.current}`;
+      if (state.formulaFieldFocused) {
+        const value = typeInTextField("formula-field", range);
+        dispatch(setContent(state.selectedCell.id, value));
+      } else {
+        const value = typeInTextField(
+          `${state.selectedCell.id}-input`,
+          range
+        );
+        dispatch(setContent(state.selectedCell.id, value));
+      }
+    }
   };
 
   const handleMouseMove = useCallback(

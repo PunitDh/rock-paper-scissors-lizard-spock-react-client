@@ -128,7 +128,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
           onContextMenu={onContextMenu}
           onFocus={handleFocus}
           autoComplete="off"
-          id="input-text"
+          id="formula-field"
           tabIndex={3}
         />
       </FlexForm>
