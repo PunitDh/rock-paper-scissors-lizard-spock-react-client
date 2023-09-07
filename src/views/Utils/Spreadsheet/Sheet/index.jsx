@@ -30,6 +30,7 @@ import StatusField from "./components/StatusField";
 import { handleKeyDown } from "./eventHandlers/keyboardHandlers";
 import Toolbar from "./components/Toolbar";
 import Range from "./models/Range";
+import AbsoluteCellInput from "./components/AbsoluteCellInput";
 
 const Sheet = ({
   maxRows = SheetConfig.MAX_ROWS,
@@ -50,8 +51,6 @@ const Sheet = ({
   const cellsToTrack = useMemo(() => {
     return Range.getFormulaCellsToTrack(state.content).join("~");
   }, [state.content]);
-
-  useEffect(() => {}, [state.content]);
 
   useEffect(() => {
     if (!state.formulaMode) {
@@ -123,7 +122,11 @@ const Sheet = ({
       {state.menuAnchorElement && (
         <ContextMenu state={state} dispatch={dispatch} />
       )}
-      <div style={{ boxShadow: "8px 8px 18px -10px rgba(0,0,0,0.5)" }}>
+      <div
+        style={{
+          boxShadow: "8px 8px 18px -10px rgba(0,0,0,0.5)",
+        }}
+      >
         {toolbar && (
           <Toolbar
             state={state}
@@ -138,6 +141,7 @@ const Sheet = ({
             onContextMenu={handleContextMenu}
           />
         )}
+        {/* <AbsoluteCellInput state={state} /> */}
         <div
           onKeyDown={(e) =>
             handleKeyDown(e, state, dispatch, maxRows, maxColumns)
@@ -158,6 +162,7 @@ const Sheet = ({
                   dispatch={dispatch}
                   onContextMenu={handleContextMenu}
                 />
+
                 {Array(maxColumns)
                   .fill(0)
                   .map((_, column) => (

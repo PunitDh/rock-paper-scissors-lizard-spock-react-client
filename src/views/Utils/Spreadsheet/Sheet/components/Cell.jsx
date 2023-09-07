@@ -101,6 +101,9 @@ const Cell = ({ id, state, dispatch }) => {
   const handleKeyDown = useCallback(
     (e) => {
       switch (e.key) {
+        case KeyEvent.SHIFT:
+          dispatch(setHighlightAnchor(id));
+          break;
         case KeyEvent.ESCAPE:
           setSelectInputBox(false);
           containerRef.current?.focus();
