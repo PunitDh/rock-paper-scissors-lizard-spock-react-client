@@ -7,6 +7,7 @@ import {
   selectAll,
   selectCell,
   setEditMode,
+  setHighlightAnchor,
   setHighlightCurrent,
   undoState,
 } from "../actions";
@@ -45,6 +46,10 @@ export const handleKeyDown = (e, state, dispatch, maxRows, maxColumns) => {
     case KeyEvent.ARROW_RIGHT:
     case KeyEvent.ARROW_LEFT:
     case KeyEvent.ARROW_UP:
+      e.shiftKey &&
+        !state.highlighted.anchor &&
+        dispatch(setHighlightAnchor(state.selectedCell.id));
+      console.log(state.highlighted.anchor, state.highlighted.current);
       nextCell = determineNextCell(e, state, dispatch, maxRows, maxColumns);
       e.preventDefault();
       dispatch(selectCell(nextCell));

@@ -19,6 +19,7 @@ import {
   SmallInputField,
 } from "./styles";
 import Cell from "../models/Cell";
+import { KeyEvent } from "../constants";
 
 const FormulaField = ({ state, dispatch, onContextMenu }) => {
   const formRef = useRef();
@@ -28,6 +29,19 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
       state.content[state.selectedCell.id]?.formula ||
       state.content[state.selectedCell.id]?.value,
     [state.content, state.selectedCell.id]
+  );
+
+  const handleKeyDown = useCallback(
+    (e) => {
+      switch (e.key) {
+        case KeyEvent.ESCAPE:
+          dispatch(setFormulaMode(false));
+          break;
+        default:
+          break;
+      }
+    },
+    [dispatch]
   );
 
   const handleSubmit = useCallback(
@@ -92,7 +106,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
     if (state.formulaFieldFocused) {
       inputRef.current?.focus();
     }
-  }, [state.formulaFieldFocused])
+  }, [state.formulaFieldFocused]);
 
   return (
     <div tabIndex="1" onBlur={handleBlur}>
@@ -108,7 +122,6 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
         />
         <FieldButton
           type="reset"
-          // disabled={!state.formulaFieldFocused}
           color="red"
           variant="error"
           onClick={resetField}
@@ -120,7 +133,6 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
           color="green"
           variant="success"
           onClick={acceptInput}
-          // disabled={!state.formulaFieldFocused}
         >
           <Check sx={{ width: "1rem" }} />
         </FieldButton>
@@ -136,6 +148,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
           defaultValue={defaultValue}
           onChange={handleChange}
           onContextMenu={onContextMenu}
+          onKeyDown={handleKeyDown}
           onFocus={handleFocus}
           autoComplete="off"
           id="formula-field"

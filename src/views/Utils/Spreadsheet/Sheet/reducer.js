@@ -24,6 +24,7 @@ export const initialState = {
   formulaHighlighted: [],
   content: {},
   mouseDown: false,
+  inputBoxFocused: false,
   formulaFieldText: "",
   formulaFieldFocused: false,
   menuAnchorElement: null,
@@ -48,6 +49,11 @@ export const reducer = (state, action) => {
       return {
         ...state,
         formulaFieldFocused: action.payload,
+      };
+    case SheetAction.SET_INPUT_BOX_FOCUSED:
+      return {
+        ...state,
+        inputBoxFocused: action.payload,
       };
     case SheetAction.RESET_FORMULA_FIELD:
       return {
@@ -204,7 +210,7 @@ export const reducer = (state, action) => {
       break;
     }
 
-    case SheetAction.SET_MENU_ANCHOR_ELEMENT: {
+    case SheetAction.OPEN_CONTEXT_MENU: {
       return {
         ...state,
         menuAnchorElement: action.payload,

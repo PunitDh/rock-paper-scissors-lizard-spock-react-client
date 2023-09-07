@@ -6,7 +6,7 @@ import {
   deleteCellContent,
   highlightCells,
   setFormulaFieldText,
-  setMenuAnchorElement,
+  openContextMenu,
   setMouseDown,
   selectCell,
   pasteCellContent,
@@ -140,7 +140,7 @@ const Sheet = ({
 
   const handleContextMenu = (e) => {
     e.preventDefault();
-    dispatch(setMenuAnchorElement(e.currentTarget));
+    dispatch(openContextMenu(e.currentTarget));
   };
 
   const handleCopyCapture = async (e) => {
@@ -184,7 +184,7 @@ const Sheet = ({
             onContextMenu={handleContextMenu}
           />
         )}
-        {/* <AbsoluteCellInput state={state} /> */}
+        <AbsoluteCellInput state={state} dispatch={dispatch} />
         <div
           onKeyDown={(e) =>
             handleKeyDown(e, state, dispatch, maxRows, maxColumns)

@@ -2,6 +2,7 @@ export const SheetAction = Object.freeze({
   SET_SELECTED: "SET_SELECTED",
   SET_FORMULA_FIELD_TEXT: "SET_FORMULA_FIELD_TEXT",
   SET_FORMULA_FIELD_FOCUSED: "SET_FORMULA_FIELD_FOCUSED",
+  SET_INPUT_BOX_FOCUSED: "SET_INPUT_BOX_FOCUSED",
   RESET_FORMULA_FIELD: "RESET_FORMULA_FIELD",
   SET_EDIT_MODE: "SET_EDIT_MODE",
   SET_FORMULA_MODE: "SET_FORMULA_MODE",
@@ -22,7 +23,7 @@ export const SheetAction = Object.freeze({
   SET_CONTENT: "SET_CONTENT",
   SET_CONTENT_BULK: "SET_CONTENT_BULK",
   RECALCULATE_FORMULAE: "RECALCULATE_FORMULAE",
-  SET_MENU_ANCHOR_ELEMENT: "SET_MENU_ANCHOR_ELEMENT",
+  OPEN_CONTEXT_MENU: "OPEN_CONTEXT_MENU",
   ADD_MEMENTO: "ADD_MEMENTO",
   UNDO_STATE: "UNDO_STATE",
   REDO_STATE: "REDO_STATE",
@@ -45,6 +46,11 @@ export const resetFormulaField = () => ({
 
 export const setFormulaFieldFocused = (payload) => ({
   type: SheetAction.SET_FORMULA_FIELD_FOCUSED,
+  payload,
+});
+
+export const setInputBoxFocused = (payload) => ({
+  type: SheetAction.SET_INPUT_BOX_FOCUSED,
   payload,
 });
 
@@ -124,8 +130,8 @@ export const addCellsToHighlight = (payload) => ({
   payload,
 });
 
-export const setMenuAnchorElement = (payload) => ({
-  type: SheetAction.SET_MENU_ANCHOR_ELEMENT,
+export const openContextMenu = (payload) => ({
+  type: SheetAction.OPEN_CONTEXT_MENU,
   payload,
 });
 
