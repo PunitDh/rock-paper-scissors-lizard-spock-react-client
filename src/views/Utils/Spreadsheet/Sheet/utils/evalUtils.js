@@ -3,20 +3,21 @@ import Range from "../models/Range";
 // Utility functions
 const processMatches = (str, reg, formulaCreator, zeroValue) => {
   const matches = [...str.matchAll(reg)];
-  const ranges = matches.map(([_, match]) =>
+  const referenceCells = matches.map(([_, match]) =>
     match
       .split(",")
       .map((it) =>
         it.includes(":")
-          ? Range.createFlat(it.split(":")[0], it.split(":")[1]).ids
+          ? Range.createFlat(it.split(":")[0], it.split(":")[1]).cellIds
           : it
       )
       .flat()
   );
 
-  return ranges.map((it, idx) => ({
+  return referenceCells.map((it, idx) => ({
     [matches[idx][0]]: formulaCreator(it),
     zeroValue,
+    referenceCells,
   }));
 };
 
@@ -43,7 +44,7 @@ const replaceFormulaWithValues = (str, stateContent, blankValue) => {
 
 // Core evaluation functions
 const evaluateFormula = (cellValue) => {
-  let str = cellValue.toUpperCase().replaceAll("^", "**");
+  let str = cellValue.toUpperCase();
 
   const sumMatches = processMatches(
     str,
@@ -71,43 +72,66 @@ const evaluateFormula = (cellValue) => {
 
 const evaluate = (str, stateContent) => {
   const parsedStrings = evaluateFormula(str);
+
   const substitutedValues = parsedStrings.map((it) => {
     const key = Object.keys(it)[0];
     return {
-      [key]: replaceFormulaWithValues(
-        Object.values(it)[0],
-        stateContent,
-        it.zeroValue
-      ),
+      [key]: {
+        value: replaceFormulaWithValues(
+          Object.values(it)[0],
+          stateContent,
+          it.zeroValue
+        ),
+        referenceCells: it.referenceCells,
+      },
     };
   });
 
   const evaluatedExpressions = substitutedValues.map((it) => {
     const key = Object.keys(it)[0];
-    return { [key]: evaluateExpression(Object.values(it)[0]) };
+    return {
+      [key]: {
+        ...evaluateExpression(Object.values(it)[0].value),
+        referenceCells: Object.values(it)[0].referenceCells,
+      },
+    };
   });
 
   const replacedString = evaluatedExpressions.reduce(
-    (acc, cur) =>
-      acc.replaceAll(Object.keys(cur)[0], `(${Object.values(cur)[0].value})`),
-    str.toUpperCase()
+    (acc, cur) => {
+      const curKey = Object.keys(cur)[0];
+      const curValue = Object.values(cur)[0];
+      return {
+        stringValue: acc.stringValue.replaceAll(curKey, `(${curValue.value})`),
+        referenceCells: [...acc.referenceCells, ...curValue.referenceCells],
+      };
+    },
+    { stringValue: str.toUpperCase(), referenceCells: [] }
   );
 
   const substitutedString = replaceFormulaWithValues(
-    replacedString,
+    replacedString.stringValue,
     stateContent,
     0
   );
-  return evaluateExpression(substitutedString);
+
+  const finalEvaluation = evaluateExpression(substitutedString);
+
+  return {
+    ...finalEvaluation,
+    referenceCells: replacedString.referenceCells,
+  };
 };
 
 export const updateStateContent = (stateContent, cell, formula) => {
   try {
+    // const referenceCells = getReferenceCells(formula);
     const evaluated = evaluate(formula, stateContent);
     return {
       ...stateContent,
       [cell]: {
         formula: formula.toUpperCase(),
+        referenceCells: [...new Set(evaluated.referenceCells)],
         value: evaluated.value,
         display: evaluated.value,
       },
@@ -144,9 +168,12 @@ const evaluateExpression = (input) => {
       )
       .replaceAll(/(\d+)(√\()(\d+)/g, "(Math.pow($3, 1/$1))")
       .replaceAll(/SQRT\(/gi, "(Math.sqrt(")
+      .replaceAll(/FLOOR\(/gi, "(Math.floor(")
+      .replaceAll(/CEIL\(/gi, "(Math.ceil(")
+      .replaceAll(/ROUND\(/gi, "(Math.round(")
       .replaceAll(/PI\(\)/gi, "(Math.PI)")
       .replaceAll(/E\(\)/gi, "(Math.E)")
-      .replaceAll(/RND\(\)/gi, `(Math.random())`)
+      .replaceAll(/RND\(\)/gi, `(${Math.random()})`)
       .replaceAll(
         /\((\d+)\)!/g,
         "(Array($1).fill(0).map((_,i)=>i+1).reduce((a,c)=>a*c,1))"

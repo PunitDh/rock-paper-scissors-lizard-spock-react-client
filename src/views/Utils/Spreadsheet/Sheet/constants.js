@@ -23,6 +23,7 @@ export const KeyEvent = {
   CONTROL: "Control",
   ALT: "Alt",
   LOWERCASE_A: "a",
+  LOWERCASE_Z: "z",
 };
 
 export const Calc = {

@@ -2,11 +2,13 @@ import { KeyEvent, SheetConfig } from "../constants";
 import {
   deleteCellContent,
   highlightCells,
+  redoState,
   resetHighlight,
   selectAll,
   selectCell,
   setEditMode,
   setHighlightCurrent,
+  undoState,
 } from "../actions";
 import {
   getCtrlKey,
@@ -24,6 +26,12 @@ export const handleKeyDown = (e, state, dispatch, maxRows, maxColumns) => {
       if (getCtrlKey(e)) {
         e.preventDefault();
         dispatch(selectAll());
+      }
+      break;
+    case KeyEvent.LOWERCASE_Z:
+      if (getCtrlKey(e)) {
+        e.preventDefault();
+        e.shiftKey ? dispatch(redoState()) : dispatch(undoState());
       }
       break;
     case KeyEvent.BACKSPACE:

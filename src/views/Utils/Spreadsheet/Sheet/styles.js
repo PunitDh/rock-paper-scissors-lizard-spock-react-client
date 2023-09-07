@@ -18,11 +18,14 @@ export const HeaderItem = styled(TableCell)(({ selected, theme }) => ({
 }));
 
 export const Item = styled(TableCell)(
-  ({ theme, selected, textalign, width }) => ({
+  ({ theme, selected, textalign, width, formulacell }) => ({
     backgroundColor: selected ? theme.palette.primary.light : "#fff",
     color: theme.palette.text.secondary,
-    border: selected ? "2px solid blue" : "1px solid rgba(0,0,0,0.2)",
-    // border: selected ? "2px solid blue" : "1px solid rgba(0,0,0,0.2)",
+    border: selected
+      ? "2px solid blue"
+      : formulacell
+      ? "2px dashed blue"
+      : "1px solid rgba(0,0,0,0.2)",
     borderRadius: 0,
     cursor: "cell",
     height: "1.5rem",

@@ -3,13 +3,16 @@ import { FieldButton, FlexForm } from "../styles";
 import { FolderOpenSharp, Redo, Save, Undo } from "@mui/icons-material";
 import { Tooltip } from "@mui/material";
 import { SheetConfig } from "../../constants";
-import { setContentBulk } from "../../actions";
+import { redoState, setContentBulk, undoState } from "../../actions";
 import CellContent from "../../models/CellContent";
 import Range from "../../models/Range";
 
 const Toolbar = ({ state, dispatch }) => {
   const inputRef = useRef();
   const fileRef = useRef();
+  const canUndo = state.currentMementoId !== state.memento[0]?.id;
+  const canRedo =
+    state.currentMementoId !== state.memento[state.memento.length - 1]?.id;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -25,8 +28,13 @@ const Toolbar = ({ state, dispatch }) => {
     }
   }, [state.formulaFieldFocused]);
 
-  const handleUndo = (e) => {};
-  const handleRedo = (e) => {};
+  const handleUndo = (e) => {
+    canUndo && dispatch(undoState());
+  };
+
+  const handleRedo = (e) => {
+    canRedo && dispatch(redoState());
+  };
 
   const handleExportAsCsv = (e) => {
     const range = Range.create(
@@ -86,7 +94,7 @@ const Toolbar = ({ state, dispatch }) => {
       <FlexForm onSubmit={handleSubmit}>
         <Tooltip title="Open a CSV File">
           <FieldButton type="button">
-            <label style={{ cursor: "pointer" }} for="csv-file-upload">
+            <label style={{ cursor: "pointer" }} htmlFor="csv-file-upload">
               <FolderOpenSharp sx={{ width: "1rem" }} />
             </label>
             <input
@@ -107,15 +115,19 @@ const Toolbar = ({ state, dispatch }) => {
             {/* <Download sx={{ width: "1rem" }} /> */}
           </FieldButton>
         </Tooltip>
-        <Tooltip title="Undo">
-          <FieldButton type="button" onClick={handleUndo}>
-            <Undo sx={{ width: "1rem" }} />
-          </FieldButton>
+        <Tooltip title={canUndo ? "Undo" : "Undo (disabled)"}>
+          <span>
+            <FieldButton type="button" onClick={handleUndo} disabled={!canUndo}>
+              <Undo sx={{ width: "1rem" }} />
+            </FieldButton>
+          </span>
         </Tooltip>
-        <Tooltip title="Redo">
-          <FieldButton type="button" onClick={handleRedo}>
-            <Redo sx={{ width: "1rem" }} />
-          </FieldButton>
+        <Tooltip title={canRedo ? "Redo" : "Redo (disabled)"}>
+          <span>
+            <FieldButton type="button" onClick={handleRedo} disabled={!canRedo}>
+              <Redo sx={{ width: "1rem" }} />
+            </FieldButton>
+          </span>
         </Tooltip>
       </FlexForm>
     </div>

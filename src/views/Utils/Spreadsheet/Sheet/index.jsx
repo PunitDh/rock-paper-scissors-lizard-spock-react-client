@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import DashboardCard from "src/components/shared/DashboardCard";
 import { initialState, reducer } from "./reducer";
 import Cell from "./components/Cell";
@@ -12,6 +12,9 @@ import {
   pasteCellContent,
   recalculateFormulae,
   setContent,
+  addMemento,
+  formulaHighlightCells,
+  formulaHighlightCellRange,
 } from "./actions";
 import {
   generateClipboardContent,
@@ -24,7 +27,7 @@ import ContextMenu from "./ContextMenu";
 import RowHeader from "./components/RowHeader";
 import ColumnHeader from "./components/ColumnHeader";
 import SelectAll from "./components/SelectAll";
-import { useClipboard } from "src/hooks";
+import { useClipboard, useToken } from "src/hooks";
 import Cell2 from "./components/Cell2";
 import FormulaField from "./components/FormulaField";
 import { Table, TableBody, TableHead, TableRow } from "@mui/material";
@@ -48,18 +51,19 @@ const Sheet = ({
     maxColumns,
     content: parseInitialStateContent(initalContent),
   });
+  const token = useToken();
   const clipboard = useClipboard();
 
-  const cellsToTrack = useMemo(() => {
-    return Range.getFormulaCellsToTrack(state.content).join("~");
-  }, [state.content]);
+  // const cellsToTrack = useMemo(() => {
+  //   return Range.getFormulaCellsToTrack(state.content).join("~");
+  // }, [state.content]);
 
-  useEffect(() => {
-    if (!state.formulaMode) {
-      console.log("Recalculation triggered");
-      dispatch(recalculateFormulae());
-    }
-  }, [cellsToTrack, state.formulaMode]);
+  // useEffect(() => {
+  //   if (!state.formulaMode) {
+  //     console.log("Recalculation triggered");
+  //     dispatch(recalculateFormulae());
+  //   }
+  // }, [cellsToTrack, state.formulaMode]);
 
   useEffect(() => {
     dispatch(
@@ -69,7 +73,14 @@ const Sheet = ({
           ""
       )
     );
+    const referenceCells = state.content[state.selectedCell.id]?.referenceCells;
+    dispatch(formulaHighlightCells(referenceCells || []));
   }, [state.selectedCell.id, state.content]);
+
+  useEffect(() => {
+    dispatch(recalculateFormulae());
+    dispatch(addMemento());
+  }, []);
 
   const handleMouseDown = (e) => {
     // dispatch(setFormulaFieldFocused(false));
@@ -78,16 +89,13 @@ const Sheet = ({
 
   const handleMouseUp = (e) => {
     dispatch(setMouseDown(false));
-    if (state.formulaMode && state.highlighted.cells.length > 0) {
+    if (state.formulaMode && state.formulaHighlighted.length > 0) {
       const range = `${state.highlighted.anchor}:${state.highlighted.current}`;
       if (state.formulaFieldFocused) {
         const value = typeInTextField("formula-field", range);
         dispatch(setContent(state.selectedCell.id, value));
       } else {
-        const value = typeInTextField(
-          `${state.selectedCell.id}-input`,
-          range
-        );
+        const value = typeInTextField(`${state.selectedCell.id}-input`, range);
         dispatch(setContent(state.selectedCell.id, value));
       }
     }
@@ -96,9 +104,18 @@ const Sheet = ({
   const handleMouseMove = useCallback(
     (e) => {
       if (state.mouseDown && !getCtrlKey(e)) {
-        return dispatch(
-          highlightCells(state.highlighted.anchor, state.highlighted.current)
-        );
+        if (state.formulaMode) {
+          dispatch(
+            formulaHighlightCellRange(
+              state.highlighted.anchor,
+              state.highlighted.current
+            )
+          );
+        } else {
+          dispatch(
+            highlightCells(state.highlighted.anchor, state.highlighted.current)
+          );
+        }
       }
     },
     [state.mouseDown, state.highlighted]
@@ -231,6 +248,19 @@ const Sheet = ({
             tabIndex={(maxRows + 1) * maxColumns}
             onFocus={handleFocusGuard}
           />
+          {token.decoded.isAdmin && (
+            <>
+              <button onClick={() => console.log(state.content)}>
+                Show Content
+              </button>
+              <button
+                onClick={() => console.log(state.formulaHighlighted.length)}
+              >
+                Show FormulaHighlighted
+              </button>
+              <button onClick={() => console.log(state)}>Show State</button>
+            </>
+          )}
           {statusField && <StatusField state={state} dispatch={dispatch} />}
         </div>
       </div>

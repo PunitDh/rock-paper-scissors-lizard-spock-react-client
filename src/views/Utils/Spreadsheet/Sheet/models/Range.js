@@ -4,7 +4,7 @@ const { getCellMinMax } = require("../utils/cellUtils");
 export default class Range {
   constructor(cells, ids, rows, columns) {
     this.cells = cells;
-    this.ids = [...new Set(ids)];
+    this.cellIds = [...new Set(ids)];
     this.rows = [...new Set(rows)];
     this.columns = [...new Set(columns)];
   }
@@ -66,7 +66,7 @@ export default class Range {
           .map((it) => it.match(/(\w+\d+):(\w+\d+)/gi))
           .filter(Boolean)
           .flat()
-          .map((it) => Range.createFlat(it.split(":")[0], it.split(":")[1]).ids)
+          .map((it) => Range.createFlat(it.split(":")[0], it.split(":")[1]).cellIds)
           .concat(formulae.map((it) => it.match(/(\w+\d+)/gi)))
           .flat()
           .map((it) => stateContent[it]?.value || "")

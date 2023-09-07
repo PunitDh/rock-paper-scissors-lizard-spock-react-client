@@ -42,7 +42,7 @@ export const FieldButton = styled.button(({ variant, theme }) => ({
     border: "1px solid black",
   },
   "&:disabled": {
-    color: "rgba(0,0,0,0.6)",
+    color: "#bbb",
     backgroundColor: "#eee",
   },
 }));

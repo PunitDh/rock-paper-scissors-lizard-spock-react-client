@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import {
   selectCell,
   setContent,
@@ -7,6 +7,8 @@ import {
   setFormulaFieldFocused,
   deleteCellContent,
   resetFormulaField,
+  recalculateFormulae,
+  addMemento,
 } from "../actions";
 import { getNextRow } from "../utils/cellUtils";
 import { Check, Clear } from "@mui/icons-material";
@@ -35,6 +37,8 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
       dispatch(setFormulaFieldFocused(false));
       dispatch(selectCell(getNextRow(state.selectedCell.id, state.maxRows)));
       dispatch(setFormulaMode(false));
+      dispatch(recalculateFormulae());
+      dispatch(addMemento());
     },
     [dispatch, state.maxRows, state.selectedCell.id]
   );
@@ -69,7 +73,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
 
   const handleChange = useCallback(
     (e) => {
-      e.preventDefault();
+      // e.preventDefault();
       dispatch(setFormulaFieldText(e.target.value));
       dispatch(setFormulaMode(e.target.value.startsWith("=")));
       dispatch(setContent(state.selectedCell.id, e.target.value));
@@ -83,6 +87,12 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
     }
     dispatch(setFormulaFieldFocused(true));
   };
+
+  useEffect(() => {
+    if (state.formulaFieldFocused) {
+      inputRef.current?.focus();
+    }
+  }, [state.formulaFieldFocused])
 
   return (
     <div tabIndex="1" onBlur={handleBlur}>

@@ -9,7 +9,7 @@ const processMatches = (str, reg, formulaCreator, zeroValue) => {
   );
 
   return ranges
-    .map((it) => it.ids)
+    .map((it) => it.cellIds)
     .map((it, idx) => ({ [matches[idx][0]]: formulaCreator(it), zeroValue }));
 };
 

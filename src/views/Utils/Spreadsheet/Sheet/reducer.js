@@ -5,6 +5,7 @@ import { updateStateContent } from "./utils/evalUtils";
 import Cell from "./models/Cell";
 import CellContent from "./models/CellContent";
 import Range from "./models/Range";
+import { isEqual, uniqueId } from "lodash";
 
 export const initialState = {
   maxRows: SheetConfig.MAX_ROWS,
@@ -20,11 +21,14 @@ export const initialState = {
     rows: [],
     columns: [],
   },
+  formulaHighlighted: [],
   content: {},
   mouseDown: false,
   formulaFieldText: "",
   formulaFieldFocused: false,
   menuAnchorElement: null,
+  memento: [],
+  currentMementoId: null,
 };
 
 export const reducer = (state, action) => {
@@ -89,13 +93,29 @@ export const reducer = (state, action) => {
         ...state,
         highlighted: {
           ...state.highlighted,
-          cells: range.ids,
+          cells: range.cellIds,
           rows: range.rows,
           columns: range.columns,
         },
         editMode: false,
       };
     }
+
+    case SheetAction.FORMULA_HIGHLIGHT_CELLS: {
+      return {
+        ...state,
+        formulaHighlighted: action.payload.flat(),
+      };
+    }
+
+    case SheetAction.FORMULA_HIGHLIGHT_CELL_RANGE: {
+      const range = Range.createFlat(action.payload.start, action.payload.end);
+      return {
+        ...state,
+        formulaHighlighted: range.cellIds,
+      };
+    }
+
     case SheetAction.ADD_CELLS_TO_HIGHLIGHT: {
       const cells = action.payload.map((id) => new Cell(id));
       const rows = [...new Set(cells.map((it) => it.row))];
@@ -203,7 +223,7 @@ export const reducer = (state, action) => {
         },
         highlighted: {
           ...state.highlighted,
-          cells: range.ids,
+          cells: range.cellIds,
           rows: range.rows,
           columns: range.columns,
         },
@@ -222,7 +242,7 @@ export const reducer = (state, action) => {
         },
         highlighted: {
           ...state.highlighted,
-          cells: range.ids,
+          cells: range.cellIds,
           rows: range.rows,
           columns: range.columns,
         },
@@ -238,7 +258,7 @@ export const reducer = (state, action) => {
         editMode: false,
         highlighted: {
           ...state.highlighted,
-          cells: range.ids,
+          cells: range.cellIds,
           rows: range.rows,
           columns: range.columns,
         },
@@ -301,6 +321,71 @@ export const reducer = (state, action) => {
         ...state,
         content: action.payload,
       };
+
+    case SheetAction.ADD_MEMENTO: {
+      const currentMemento = state.memento.find(
+        (m) => m.id === state.currentMementoId
+      );
+      if (currentMemento && isEqual(currentMemento.content, state.content)) {
+        return state;
+      }
+
+      const id = uniqueId();
+      const memento = [
+        ...state.memento.slice(
+          0,
+          state.memento.findIndex((m) => m.id === state.currentMementoId) + 1
+        ),
+        { id, content: state.content },
+      ];
+      return {
+        ...state,
+        memento,
+        currentMementoId: id,
+      };
+    }
+
+    case SheetAction.UNDO_STATE: {
+      // Find the index of the current memento by ID.
+      const currentIndex = state.memento.findIndex(
+        (m) => m.id === state.currentMementoId
+      );
+
+      // If we're at the start of the memento list or couldn't find the current memento, just return the state.
+      if (currentIndex <= 0) return state;
+
+      // Get the previous memento.
+      const previousMemento = state.memento[currentIndex - 1];
+
+      return {
+        ...state,
+        content: {
+          ...previousMemento.content,
+        },
+        currentMementoId: previousMemento.id,
+      };
+    }
+
+    case SheetAction.REDO_STATE: {
+      const currentIndex = state.memento.findIndex(
+        (m) => m.id === state.currentMementoId
+      );
+
+      // If we're at the end of the memento list or couldn't find the current memento, just return the state.
+      if (currentIndex === -1 || currentIndex >= state.memento.length - 1)
+        return state;
+
+      // Get the next memento.
+      const nextMemento = state.memento[currentIndex + 1];
+
+      return {
+        ...state,
+        content: {
+          ...nextMemento.content,
+        },
+        currentMementoId: nextMemento.id,
+      };
+    }
     case SheetAction.RESET_STATE:
     default:
       return initialState;

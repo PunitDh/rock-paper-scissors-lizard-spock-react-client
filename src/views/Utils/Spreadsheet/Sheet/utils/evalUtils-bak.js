@@ -10,7 +10,7 @@ const evaluateFormula = (cellValue) => {
       Range.createFlat(start.toUpperCase(), end.toUpperCase())
     );
 
-    const formulas = ranges.map((it) => it.ids).map(formulaCreator);
+    const formulas = ranges.map((it) => it.cellIds).map(formulaCreator);
 
     str = formulas.reduce((a, c, idx) => {
       const key = matches[idx][0];

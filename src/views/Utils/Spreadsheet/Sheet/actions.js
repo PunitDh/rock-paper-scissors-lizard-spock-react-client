@@ -10,6 +10,8 @@ export const SheetAction = Object.freeze({
   SET_SELECTED_COLUMN: "SET_SELECTED_COLUMN",
   SELECT_ALL: "SELECT_ALL",
   HIGHLIGHT_CELLS: "HIGHLIGHT_CELLS",
+  FORMULA_HIGHLIGHT_CELL_RANGE: "FORMULA_HIGHLIGHT_CELL_RANGE",
+  FORMULA_HIGHLIGHT_CELLS: "FORMULA_HIGHLIGHT_CELLS",
   ADD_CELLS_TO_HIGHLIGHT: "ADD_CELLS_TO_HIGHLIGHT",
   SET_HIGHLIGHT_ANCHOR: "SET_HIGHLIGHT_ANCHOR",
   SET_HIGHLIGHT_CURRENT: "SET_HIGHLIGHT_CURRENT",
@@ -21,6 +23,9 @@ export const SheetAction = Object.freeze({
   SET_CONTENT_BULK: "SET_CONTENT_BULK",
   RECALCULATE_FORMULAE: "RECALCULATE_FORMULAE",
   SET_MENU_ANCHOR_ELEMENT: "SET_MENU_ANCHOR_ELEMENT",
+  ADD_MEMENTO: "ADD_MEMENTO",
+  UNDO_STATE: "UNDO_STATE",
+  REDO_STATE: "REDO_STATE",
   RESET_STATE: "RESET_STATE",
 });
 
@@ -101,6 +106,19 @@ export const highlightCells = (start, end) => ({
   end,
 });
 
+export const formulaHighlightCellRange = (start, end) => ({
+  type: SheetAction.FORMULA_HIGHLIGHT_CELL_RANGE,
+  payload: {
+    start,
+    end,
+  },
+});
+
+export const formulaHighlightCells = (payload) => ({
+  type: SheetAction.FORMULA_HIGHLIGHT_CELLS,
+  payload,
+});
+
 export const addCellsToHighlight = (payload) => ({
   type: SheetAction.ADD_CELLS_TO_HIGHLIGHT,
   payload,
@@ -132,6 +150,18 @@ export const setContentBulk = (payload) => ({
 
 export const recalculateFormulae = () => ({
   type: SheetAction.RECALCULATE_FORMULAE,
+});
+
+export const addMemento = () => ({
+  type: SheetAction.ADD_MEMENTO,
+});
+
+export const undoState = () => ({
+  type: SheetAction.UNDO_STATE,
+});
+
+export const redoState = () => ({
+  type: SheetAction.REDO_STATE,
 });
 
 export const resetState = () => ({
