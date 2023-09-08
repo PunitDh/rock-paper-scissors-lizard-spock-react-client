@@ -201,3 +201,29 @@ const evaluateExpression = (input) => {
     return { value: "Syntax Error", parsedInput, error };
   }
 };
+
+export function getReferenceCells(formula) {
+  const cells = formula.toUpperCase().match(/([a-z]+[0-9]+)/gi) || [];
+  const cellRanges =
+    formula.toUpperCase().match(/([a-z]+[0-9]+):([a-z]+[0-9]+)/gi) || [];
+
+  // Expand cell ranges into individual cells
+  const expandedRanges = cellRanges
+    .map((range) => {
+      const [start, end] = range.split(":");
+      return Range.createFlat(start, end).cellIds;
+    })
+    .flat();
+
+  // Combine all cell references without duplicates
+  return [...new Set(expandedRanges.concat(cells))];
+}
+
+export function getFormulaTrackedCells(formula, stateFormulaTrackedCells) {
+  const referenceCells = getReferenceCells(formula);
+
+  const formulaTrackedCells = [
+    ...new Set(referenceCells.concat(stateFormulaTrackedCells)),
+  ];
+  return formulaTrackedCells;
+}

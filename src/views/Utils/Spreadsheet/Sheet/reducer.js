@@ -1,7 +1,11 @@
 import { SheetConfig } from "./constants";
 import { getCellOffset, typeInInputBox } from "./utils/cellUtils";
 import { SheetAction } from "./actions";
-import { getUpdatedStateContent } from "./utils/evalUtils";
+import {
+  getFormulaTrackedCells,
+  getReferenceCells,
+  getUpdatedStateContent,
+} from "./utils/evalUtils";
 import Cell from "./models/Cell";
 import CellContent from "./models/CellContent";
 import Range from "./models/Range";
@@ -329,11 +333,17 @@ export const reducer = (state, action) => {
         (it) => state.content[it].formula?.length > 0
       );
 
+      const formulaTrackedCells = [];
+
       const content = formulaCells.reduce((stateContent, cell) => {
         const result = getUpdatedStateContent(
           stateContent,
           cell,
           stateContent[cell].formula
+        );
+
+        formulaTrackedCells.push(
+          getFormulaTrackedCells(stateContent[cell].formula)
         );
 
         return result
@@ -343,33 +353,20 @@ export const reducer = (state, action) => {
 
       return {
         ...state,
+        formulaTrackedCells: [...new Set(formulaTrackedCells.flat())],
         content,
       };
     }
     case SheetAction.SET_CONTENT: {
       const { value, cell } = action.payload;
-      const formula = action.payload.value.toUpperCase();
-
-      // Check if the first character is an equal sign
-      const isFirstValueEqualSign = formula.startsWith("=");
-
-      const cells = formula.toUpperCase().match(/([a-z]+[0-9]+)/gi) || [];
-      const cellRanges =
-        formula.toUpperCase().match(/([a-z]+[0-9]+):([a-z]+[0-9]+)/gi) || [];
-
-      // Expand cell ranges into individual cells
-      const expandedRanges = cellRanges
-        .map((range) => {
-          const [start, end] = range.split(":");
-          return Range.createFlat(start, end).cellIds;
-        })
-        .flat();
-
       // Combine all cell references without duplicates
-      const referenceCells = [...new Set(expandedRanges.concat(cells))];
-      const formulaTrackedCells = [
-        ...new Set(referenceCells.concat(state.formulaTrackedCells)),
-      ];
+      const formula = value.toUpperCase();
+      const isFirstValueEqualSign = value.startsWith("=");
+      const referenceCells = getReferenceCells(formula);
+      const formulaTrackedCells = getFormulaTrackedCells(
+        formula,
+        state.formulaTrackedCells
+      );
 
       const commonState = {
         ...state,
