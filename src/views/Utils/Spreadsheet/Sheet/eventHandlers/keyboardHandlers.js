@@ -1,5 +1,6 @@
 import { KeyEvent, SheetConfig } from "../constants";
 import {
+  addMemento,
   deleteCellContent,
   highlightCells,
   redoState,
@@ -7,37 +8,50 @@ import {
   selectAll,
   selectCell,
   setEditMode,
-  setHighlightAnchor,
-  setHighlightCurrent,
+  setHighlightCellAnchor,
   undoState,
 } from "../actions";
 import {
-  getCtrlKey,
+  isCtrlKeyPressed,
   getNextColumn,
   getNextRow,
   getPreviousColumn,
   getPreviousRow,
 } from "../utils/cellUtils";
 
+export const handleKeyUp = (e, dispatch) => {
+  switch (e.key) {
+    case KeyEvent.SHIFT:
+      dispatch(setHighlightCellAnchor(null));
+      break;
+    default:
+      break;
+  }
+};
+
 export const handleKeyDown = (e, state, dispatch, maxRows, maxColumns) => {
   let nextCell;
 
   switch (e.key) {
     case KeyEvent.LOWERCASE_A:
-      if (getCtrlKey(e)) {
+      if (isCtrlKeyPressed(e)) {
         e.preventDefault();
         dispatch(selectAll());
       }
       break;
     case KeyEvent.LOWERCASE_Z:
-      if (getCtrlKey(e)) {
+      if (isCtrlKeyPressed(e)) {
         e.preventDefault();
         e.shiftKey ? dispatch(redoState()) : dispatch(undoState());
       }
       break;
+    case KeyEvent.SHIFT:
+      dispatch(setHighlightCellAnchor(state.selectedCell.id));
+      break;
     case KeyEvent.BACKSPACE:
       if (!state.editMode) {
         dispatch(deleteCellContent());
+        dispatch(addMemento());
       }
       break;
     case KeyEvent.ENTER:
@@ -47,9 +61,9 @@ export const handleKeyDown = (e, state, dispatch, maxRows, maxColumns) => {
     case KeyEvent.ARROW_LEFT:
     case KeyEvent.ARROW_UP:
       e.shiftKey &&
-        !state.highlighted.anchor &&
-        dispatch(setHighlightAnchor(state.selectedCell.id));
-      console.log(state.highlighted.anchor, state.highlighted.current);
+        !state.highlighted.cellAnchor &&
+        dispatch(setHighlightCellAnchor(state.selectedCell.id));
+      console.log(state.highlighted.cellAnchor, state.hovered);
       nextCell = determineNextCell(e, state, dispatch, maxRows, maxColumns);
       e.preventDefault();
       dispatch(selectCell(nextCell));
@@ -60,8 +74,8 @@ export const handleKeyDown = (e, state, dispatch, maxRows, maxColumns) => {
   }
 
   if (e.shiftKey) {
-    dispatch(setHighlightCurrent(nextCell));
-    dispatch(highlightCells(state.highlighted.anchor, nextCell));
+    console.log(state.highlighted);
+    dispatch(highlightCells(state.highlighted.cellAnchor, nextCell));
   }
 };
 
@@ -81,6 +95,7 @@ const determineNextCell = (e, state, dispatch, maxRows, maxColumns) => {
             maxRows
           );
     case KeyEvent.TAB:
+      e.preventDefault();
       return e.shiftKey
         ? handleNavigation(
             e,
@@ -100,7 +115,7 @@ const determineNextCell = (e, state, dispatch, maxRows, maxColumns) => {
             maxColumns
           );
     case KeyEvent.ARROW_DOWN:
-      return getCtrlKey(e)
+      return isCtrlKeyPressed(e)
         ? `${selectedCell.column}${maxRows}`
         : handleNavigation(
             e,
@@ -111,7 +126,7 @@ const determineNextCell = (e, state, dispatch, maxRows, maxColumns) => {
             maxRows
           );
     case KeyEvent.ARROW_RIGHT:
-      return getCtrlKey(e)
+      return isCtrlKeyPressed(e)
         ? `${SheetConfig.COLUMNS[maxColumns - 1]}${selectedCell.row}`
         : handleNavigation(
             e,
@@ -123,7 +138,7 @@ const determineNextCell = (e, state, dispatch, maxRows, maxColumns) => {
             maxColumns
           );
     case KeyEvent.ARROW_LEFT:
-      return getCtrlKey(e)
+      return isCtrlKeyPressed(e)
         ? `${SheetConfig.COLUMNS[0]}${selectedCell.row}`
         : handleNavigation(
             e,
@@ -134,7 +149,7 @@ const determineNextCell = (e, state, dispatch, maxRows, maxColumns) => {
             maxColumns
           );
     case KeyEvent.ARROW_UP:
-      return getCtrlKey(e)
+      return isCtrlKeyPressed(e)
         ? `${selectedCell.column}${1}`
         : handleNavigation(e, state, dispatch, getPreviousRow, selectedCell.id);
     default:

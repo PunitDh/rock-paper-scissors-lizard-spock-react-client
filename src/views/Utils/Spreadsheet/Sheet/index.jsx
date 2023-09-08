@@ -18,8 +18,8 @@ import {
 } from "./actions";
 import {
   generateClipboardContent,
-  getCtrlKey,
-  parseInitialStateContent,
+  isCtrlKeyPressed,
+  generateInitialContent,
   typeInTextField,
 } from "./utils/cellUtils";
 import { SheetConfig } from "./constants";
@@ -32,7 +32,7 @@ import Cell2 from "./components/Cell2";
 import FormulaField from "./components/FormulaField";
 import { Table, TableBody, TableHead, TableRow } from "@mui/material";
 import StatusField from "./components/StatusField";
-import { handleKeyDown } from "./eventHandlers/keyboardHandlers";
+import { handleKeyDown, handleKeyUp } from "./eventHandlers/keyboardHandlers";
 import Toolbar from "./components/Toolbar";
 import AbsoluteCellInput from "./components/AbsoluteCellInput";
 
@@ -44,16 +44,33 @@ const Sheet = ({
   formulaField = true,
   statusField = true,
   initalContent = {},
+  defaultRowHeight = 24,
+  defaultColumnWidth = 50,
 }) => {
   const createInitialState = useCallback(
     () => ({
       ...initialState,
+      defaultRowHeight,
+      defaultColumnWidth,
       maxRows,
       maxColumns,
       maxUndos,
-      content: parseInitialStateContent(initalContent),
+      content: generateInitialContent(
+        initalContent,
+        defaultRowHeight,
+        defaultColumnWidth,
+        maxRows,
+        maxColumns
+      ),
     }),
-    [initalContent, maxColumns, maxRows, maxUndos]
+    [
+      defaultColumnWidth,
+      defaultRowHeight,
+      initalContent,
+      maxColumns,
+      maxRows,
+      maxUndos,
+    ]
   );
 
   const [state, dispatch] = useReducer(
@@ -101,7 +118,7 @@ const Sheet = ({
   const handleMouseUp = (e) => {
     dispatch(setMouseDown(false));
     if (state.formulaMode && state.formulaHighlighted.length > 0) {
-      const range = `${state.highlighted.anchor}:${state.highlighted.current}`;
+      const range = `${state.highlighted.cellAnchor}:${state.hovered}`;
       if (state.formulaFieldFocused) {
         const value = typeInTextField("formula-field", range);
         dispatch(setContent(state.selectedCell.id, value));
@@ -114,22 +131,26 @@ const Sheet = ({
 
   const handleMouseMove = useCallback(
     (e) => {
-      if (state.mouseDown && !getCtrlKey(e)) {
+      if (state.mouseDown && !isCtrlKeyPressed(e)) {
         if (state.formulaMode) {
           dispatch(
             formulaHighlightCellRange(
-              state.highlighted.anchor,
-              state.highlighted.current
+              state.highlighted.cellAnchor,
+              state.hovered
             )
           );
         } else {
-          dispatch(
-            highlightCells(state.highlighted.anchor, state.highlighted.current)
-          );
+          console.log(state.highlighted.cellAnchor, state.hovered);
+          dispatch(highlightCells(state.highlighted.cellAnchor, state.hovered));
         }
       }
     },
-    [state.mouseDown, state.highlighted]
+    [
+      state.mouseDown,
+      state.formulaMode,
+      state.highlighted.cellAnchor,
+      state.hovered,
+    ]
   );
 
   const handleFocusGuard = (e) => {
@@ -152,6 +173,7 @@ const Sheet = ({
   const handleCutCapture = (e) => {
     handleCopyCapture(e);
     dispatch(deleteCellContent());
+    dispatch(addMemento());
   };
 
   const handlePasteCapture = async (e) => {
@@ -189,6 +211,7 @@ const Sheet = ({
           onKeyDown={(e) =>
             handleKeyDown(e, state, dispatch, maxRows, maxColumns)
           }
+          onKeyUp={(e) => handleKeyUp(e, dispatch)}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
           onMouseMove={handleMouseMove}
@@ -210,10 +233,10 @@ const Sheet = ({
                   .fill(0)
                   .map((_, column) => (
                     <ColumnHeader
-                      key={column}
+                      key={SheetConfig.COLUMNS[column]}
                       state={state}
                       dispatch={dispatch}
-                      column={column}
+                      column={SheetConfig.COLUMNS[column]}
                       onContextMenu={handleContextMenu}
                     />
                   ))}

@@ -20,10 +20,10 @@ export const FlexForm = styled.form({
   backgroundColor: "rgba(0,0,0,0.1)",
 });
 
-export const FieldButton = styled.button(({ variant, theme }) => ({
-  width: "1.5rem",
+export const FieldButton = styled.button(({ variant, theme, isactive }) => ({
+  width: "1.75rem",
   outline: "none",
-  border: "1px solid rgba(0,0,0,0.3)",
+  border: isactive ? "1px solid blue" : "1px solid rgba(0,0,0,0.3)",
   height: "1.75rem",
   display: "flex",
   alignItems: "center",
@@ -31,6 +31,7 @@ export const FieldButton = styled.button(({ variant, theme }) => ({
   borderRadius: "3px",
   cursor: "pointer",
   color: theme.palette[variant]?.dark || "black",
+  backgroundColor: isactive ? "#eeeeee" : "inherit",
   "&:hover": {
     color: "blue",
     backgroundColor: "#eee",

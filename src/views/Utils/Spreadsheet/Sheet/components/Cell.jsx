@@ -5,15 +5,14 @@ import {
   setContent,
   highlightCells,
   selectCell,
-  setHighlightAnchor,
-  setHighlightCurrent,
+  setHighlightCellAnchor,
   setHovered,
   setEditMode,
   openContextMenu,
   addCellsToHighlight,
 } from "../actions";
 import { MouseButton } from "../constants";
-import { getCtrlKey, getId, typeInTextField } from "../utils/cellUtils";
+import { isCtrlKeyPressed, getId, typeInTextField } from "../utils/cellUtils";
 
 const Cell = ({ id, state, dispatch }) => {
   const containerRef = useRef();
@@ -35,9 +34,9 @@ const Cell = ({ id, state, dispatch }) => {
   const handleClick = useCallback(
     (e) => {
       if (e.button === MouseButton.LEFT_CLICK) {
-        if (e.shiftKey || getCtrlKey(e)) {
+        if (e.shiftKey || isCtrlKeyPressed(e)) {
           e.shiftKey && dispatch(highlightCells(state.selectedCell.id, id));
-          getCtrlKey(e) && dispatch(addCellsToHighlight([id]));
+          isCtrlKeyPressed(e) && dispatch(addCellsToHighlight([id]));
         } else {
           const formulaMode = state.formulaMode && id !== state.selectedCell.id;
           if (formulaMode) {
@@ -45,7 +44,6 @@ const Cell = ({ id, state, dispatch }) => {
               const value = typeInTextField("formula-field", id);
               dispatch(setContent(state.selectedCell.id, value));
             } else {
-              console.log("Herer12123");
               const value = typeInTextField(
                 `${state.selectedCell.id}-input`,
                 id
@@ -79,15 +77,12 @@ const Cell = ({ id, state, dispatch }) => {
 
   const handleMouseDown = (e) => {
     if (e.button === MouseButton.LEFT_CLICK) {
-      if (!state.mouseDown && !e.shiftKey && !getCtrlKey(e))
+      // dispatch(selectCell(id));
+      if (!state.mouseDown && !e.shiftKey && !isCtrlKeyPressed(e))
         dispatch(resetHighlight());
-      dispatch(setHighlightAnchor(id));
-      if (!getCtrlKey(e)) dispatch(highlightCells(id));
+      dispatch(setHighlightCellAnchor(id));
+      if (!isCtrlKeyPressed(e)) dispatch(highlightCells(id));
     }
-  };
-
-  const handleMouseMove = () => {
-    dispatch(setHighlightCurrent(id));
   };
 
   const handleDoubleClick = () => {
@@ -107,16 +102,16 @@ const Cell = ({ id, state, dispatch }) => {
       ref={containerRef}
       onClick={handleClick}
       selected={isSelected}
-      formulacell={isFormulaHighLighted}
+      formulacell={isFormulaHighLighted || undefined}
       onMouseOver={handleMouseOver}
       onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
       onDoubleClick={handleDoubleClick}
       onContextMenu={handleContextMenu}
       id={id}
       tabIndex={row * state.maxRows + (columnCharCode - 65)}
       textalign={isNaN(state.content[id]?.value) ? "left" : "right"}
       width={`${Math.floor((100 - 3) / state.maxColumns)}%`}
+      formatting={state.content[id]?.formatting}
     >
       {state.content[id]?.value}
       {/* {id === state.selectedCell.id && inputBoxFocused ? (

@@ -1,15 +1,13 @@
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useRef } from "react";
 import { CellDiv, DivItem } from "../styles";
 import {
   resetHighlight,
   setContent,
   highlightCells,
   selectCell,
-  setHighlightAnchor,
-  setHighlightCurrent,
+  setHighlightCellAnchor,
   setHovered,
   openContextMenu,
-  recalculateFormulae,
 } from "../actions";
 import { KeyEvent, MouseButton } from "../constants";
 
@@ -86,13 +84,9 @@ const Cell2 = ({ id, state, dispatch }) => {
       // e.preventDefault();
       if (!state.mouseDown && !e.shiftKey) dispatch(resetHighlight());
       dispatch(selectCell(id));
-      dispatch(setHighlightAnchor(id));
+      dispatch(setHighlightCellAnchor(id));
       dispatch(highlightCells(id));
     }
-  };
-
-  const handleMouseMove = () => {
-    dispatch(setHighlightCurrent(id));
   };
 
   const handleDoubleClick = () => {
@@ -114,7 +108,6 @@ const Cell2 = ({ id, state, dispatch }) => {
       }
       onMouseOver={handleMouseOver}
       onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
       onDoubleClick={handleDoubleClick}
       onContextMenu={handleContextMenu}
       onKeyDown={handleKeyDown}

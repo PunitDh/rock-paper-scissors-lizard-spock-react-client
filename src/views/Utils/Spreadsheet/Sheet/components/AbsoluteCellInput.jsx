@@ -8,11 +8,17 @@ import {
   selectCell,
   setContent,
   setFormulaMode,
-  setHighlightAnchor,
+  setHighlightCellAnchor,
   setInputBoxFocused,
 } from "../actions";
 import { KeyEvent } from "../constants";
-import { getCtrlKey, getNextRow, getPreviousRow } from "../utils/cellUtils";
+import {
+  isCtrlKeyPressed,
+  getNextColumn,
+  getNextRow,
+  getPreviousColumn,
+  getPreviousRow,
+} from "../utils/cellUtils";
 
 const Container = styled.div(({ top, left }) => ({
   position: "absolute",
@@ -22,7 +28,7 @@ const Container = styled.div(({ top, left }) => ({
   zIndex: "50000",
 }));
 
-const InputField = styled.input(({ width, height, isfocused }) => ({
+const InputField = styled.input(({ width, height, isfocused, formatting }) => ({
   width: `${width}px`,
   height: `${height}px`,
   borderRadius: 0,
@@ -32,6 +38,7 @@ const InputField = styled.input(({ width, height, isfocused }) => ({
   padding: "1px",
   backgroundColor: isfocused ? "white" : "transparent",
   color: isfocused ? "black" : "transparent",
+  ...formatting,
   "&:focus": {
     // zIndex: "4 !important",
     cursor: "text",
@@ -41,6 +48,13 @@ const InputField = styled.input(({ width, height, isfocused }) => ({
 const AbsoluteCellInput = ({ state, dispatch }) => {
   const textRef = useRef();
   const cell = useMemo(() => state.selectedCell, [state.selectedCell]);
+  const rowHeight = useMemo(
+    () =>
+      (state.content.rowHeights && state.content.rowHeights[cell.row]) ||
+      state.defaultRowHeight,
+    [cell.row, state.content.rowHeights, state.defaultRowHeight]
+  );
+
   const getValue = useCallback(
     () =>
       state.content[cell.id]?.formula || state.content[cell.id]?.value || "",
@@ -63,7 +77,8 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
       width: rect.width,
       height: rect.height,
     });
-  }, [cell.id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cell.id, rowHeight]);
 
   useEffect(() => {
     setValue(getValue());
@@ -84,11 +99,16 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
     }
   }, [dispatch, state.highlighted.cells]);
 
-  const handleBlur = () => {
+  const handleBlur = (e) => {
+    const triggerRecalculation =
+      state.formulaTrackedCells.includes(cell.id) ||
+      e.target.value.startsWith("=");
     dispatch(setInputBoxFocused(false));
     if (!state.formulaMode) {
-      dispatch(addMemento());
-      dispatch(recalculateFormulae());
+      if (triggerRecalculation) {
+        dispatch(recalculateFormulae());
+        dispatch(addMemento());
+      }
     }
   };
 
@@ -102,7 +122,8 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
     (e) => {
       switch (e.key) {
         case KeyEvent.SHIFT:
-          dispatch(setHighlightAnchor(cell.id));
+          console.log("Here");
+          dispatch(setHighlightCellAnchor(cell.id));
           break;
         case KeyEvent.ESCAPE:
           dispatch(setInputBoxFocused(false));
@@ -112,10 +133,13 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
           state.inputBoxFocused && e.stopPropagation();
           break;
         case KeyEvent.ENTER:
+          const triggerRecalculation =
+            state.formulaTrackedCells.includes(cell.id) ||
+            e.target.value.startsWith("=");
           dispatch(setInputBoxFocused(false));
           dispatch(setContent(cell.id, e.target.value));
           dispatch(setFormulaMode(false));
-          dispatch(recalculateFormulae());
+          triggerRecalculation && dispatch(recalculateFormulae());
           dispatch(addMemento());
           dispatch(highlightCells(cell.id));
           dispatch(
@@ -127,21 +151,49 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
           );
           break;
         case KeyEvent.LOWERCASE_A:
-          if (getCtrlKey(e)) {
+          if (isCtrlKeyPressed(e)) {
             e.stopPropagation();
           }
           break;
-        case KeyEvent.ARROW_LEFT:
-        case KeyEvent.ARROW_RIGHT:
-          if (state.inputBoxFocused && textRef.current?.value.length > 0)
-            e.stopPropagation();
+        case KeyEvent.TAB: {
+          e.preventDefault();
+          e.shiftKey
+            ? dispatch(selectCell(getPreviousColumn(cell.id, state.maxColumns)))
+            : dispatch(selectCell(getNextColumn(cell.id, state.maxRows)));
           break;
+        }
+        case KeyEvent.ARROW_LEFT: {
+          if (textRef.current?.value.length === 0)
+            dispatch(selectCell(getPreviousColumn(cell.id, state.maxColumns)));
+          break;
+        }
+        case KeyEvent.ARROW_RIGHT: {
+          if (textRef.current?.value.length === 0)
+            dispatch(selectCell(getNextColumn(cell.id, state.maxRows)));
+          break;
+        }
+        case KeyEvent.ARROW_UP: {
+          dispatch(selectCell(getPreviousRow(cell.id)));
+          break;
+        }
+        case KeyEvent.ARROW_DOWN: {
+          dispatch(selectCell(getNextRow(cell.id, state.maxRows)));
+          break;
+        }
         default:
           dispatch(setInputBoxFocused(true));
           break;
       }
     },
-    [dispatch, cell.id, state.inputBoxFocused, state.maxRows]
+    [
+      dispatch,
+      cell.id,
+      state.inputBoxFocused,
+      state.formulaTrackedCells,
+      state.formulaMode,
+      state.maxRows,
+      state.maxColumns,
+    ]
   );
 
   const handleFocus = () => dispatch(setInputBoxFocused(true));
@@ -167,6 +219,11 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
         onKeyDown={handleKeyDown}
         onFocus={handleFocus}
         onContextMenu={handleContextMenu}
+        formatting={
+          state.content[cell.id]?.formula?.length > 0
+            ? undefined
+            : state.content[cell.id]?.formatting
+        }
       />
     </Container>
   );

@@ -1,7 +1,7 @@
 import { SheetConfig } from "./constants";
 import { getCellOffset, typeInTextField } from "./utils/cellUtils";
 import { SheetAction } from "./actions";
-import { updateStateContent } from "./utils/evalUtils";
+import { getUpdatedStateContent } from "./utils/evalUtils";
 import Cell from "./models/Cell";
 import CellContent from "./models/CellContent";
 import Range from "./models/Range";
@@ -10,25 +10,32 @@ import { isEqual, uniqueId } from "lodash";
 export const initialState = {
   maxRows: SheetConfig.MAX_ROWS,
   maxColumns: SheetConfig.MAX_COLUMNS,
+  defaultRowHeight: 24,
+  defaultColumnWidth: 50,
+  maxUndos: 32,
   selectedCell: new Cell("A1"), //{ cell: "A1", row: 1, column: "A", columnCharCode: 65 },
   editMode: false,
   formulaMode: false,
   hovered: "",
   highlighted: {
-    anchor: null,
-    current: null,
+    rowAnchor: null,
+    columnAnchor: null,
+    cellAnchor: null,
     cells: [],
     rows: [],
     columns: [],
   },
+  formulaTrackedCells: [],
   formulaHighlighted: [],
-  content: {},
+  content: {
+    rowHeights: {},
+    columnWidths: {},
+  },
   mouseDown: false,
   inputBoxFocused: false,
   formulaFieldText: "",
   formulaFieldFocused: false,
   menuAnchorElement: null,
-  maxUndos: 32,
   memento: [],
   currentMementoId: null,
 };
@@ -72,25 +79,37 @@ export const reducer = (state, action) => {
         ...state,
         formulaMode: action.payload,
       };
-    case SheetAction.SET_HOVERED:
+    case SheetAction.SET_HOVERED_CELL:
       return {
         ...state,
         hovered: action.payload,
       };
-    case SheetAction.SET_HIGHLIGHT_ANCHOR:
+    case SheetAction.SET_HIGHLIGHT_CELL_ANCHOR:
       return {
         ...state,
         highlighted: {
           ...state.highlighted,
-          anchor: action.payload,
+          cellAnchor: action.payload,
         },
       };
-    case SheetAction.SET_HIGHLIGHT_CURRENT:
+
+    case SheetAction.SET_HIGHLIGHT_ROW_ANCHOR:
       return {
         ...state,
         highlighted: {
           ...state.highlighted,
-          current: action.payload,
+          rowAnchor: action.payload,
+          cellAnchor: null,
+        },
+      };
+
+    case SheetAction.SET_HIGHLIGHT_COLUMN_ANCHOR:
+      return {
+        ...state,
+        highlighted: {
+          ...state.highlighted,
+          columnAnchor: action.payload,
+          cellAnchor: null,
         },
       };
 
@@ -124,6 +143,7 @@ export const reducer = (state, action) => {
     }
 
     case SheetAction.ADD_CELLS_TO_HIGHLIGHT: {
+      console.log(action.payload);
       const cells = action.payload.map((id) => new Cell(id));
       const rows = [...new Set(cells.map((it) => it.row))];
       const columns = [...new Set(cells.map((it) => it.column))];
@@ -236,7 +256,20 @@ export const reducer = (state, action) => {
         },
       };
     }
+    case SheetAction.SET_ROW_HEIGHT: {
+      return {
+        ...state,
+        content: {
+          ...state.content,
+          rowHeights: {
+            ...state.content.rowHeights,
+            [action.payload.row]: action.payload.height,
+          },
+        },
+      };
+    }
     case SheetAction.SET_SELECTED_COLUMN: {
+      console.log(action.payload);
       const range = Range.createFlat(
         `${action.payload}1`,
         `${action.payload}${state.maxRows}`
@@ -252,6 +285,18 @@ export const reducer = (state, action) => {
           cells: range.cellIds,
           rows: range.rows,
           columns: range.columns,
+        },
+      };
+    }
+    case SheetAction.SET_COLUMN_WIDTH: {
+      return {
+        ...state,
+        content: {
+          ...state.content,
+          columnWidths: {
+            ...state.content.columnWidths,
+            [action.payload.column]: action.payload.width,
+          },
         },
       };
     }
@@ -284,18 +329,31 @@ export const reducer = (state, action) => {
       };
     }
     case SheetAction.RECALCULATE_FORMULAE: {
+      console.log("Recalculation triggered");
       const formulaCells = Object.keys(state.content).filter(
         (it) => state.content[it].formula?.length > 0
       );
 
-      const recalculatedValues = formulaCells.reduce((acc, cur) => {
-        const result = updateStateContent(acc, cur, acc[cur].formula);
-        return result ? { ...acc, [cur]: result[cur] } : acc;
+      const formulaTrackedCells = [];
+
+      const content = formulaCells.reduce((stateContent, cell) => {
+        const result = getUpdatedStateContent(
+          stateContent,
+          cell,
+          stateContent[cell].formula
+        );
+
+        formulaTrackedCells.push(result[cell].referenceCells);
+
+        return result
+          ? { ...stateContent, [cell]: result[cell] }
+          : stateContent;
       }, state.content);
 
       return {
         ...state,
-        content: recalculatedValues,
+        formulaTrackedCells: [...new Set(formulaTrackedCells.flat())],
+        content,
       };
     }
     case SheetAction.SET_CONTENT:
@@ -305,9 +363,10 @@ export const reducer = (state, action) => {
           formulaMode: true,
           content: {
             ...state.content,
-            [action.payload.cell]: {
+            [action.payload.cell]: new CellContent({
+              ...state.content[action.payload.cell],
               formula: action.payload.value,
-            },
+            }),
           },
         };
       }
@@ -317,6 +376,7 @@ export const reducer = (state, action) => {
         content: {
           ...state.content,
           [action.payload.cell]: new CellContent({
+            ...state.content[action.payload.cell],
             value: action.payload.value,
             display: action.payload.value,
           }),
@@ -326,9 +386,43 @@ export const reducer = (state, action) => {
     case SheetAction.SET_CONTENT_BULK:
       return {
         ...state,
-        content: action.payload,
+        content: {
+          rowHeights: state.rowHeights,
+          columnWidths: state.columnWidths,
+          ...action.payload,
+        },
       };
-
+    case SheetAction.SET_CELL_FORMATTING:
+      return {
+        ...state,
+        content: {
+          ...state.content,
+          [state.selectedCell.id]: {
+            ...state.content[state.selectedCell.id],
+            formatting: {
+              ...state.content[state.selectedCell.id]?.formatting,
+              ...action.payload,
+            },
+          },
+        },
+      };
+    case SheetAction.SET_CELL_FORMATTING_BULK:
+      const formattedContent = state.highlighted.cells.reduce((acc, cur) => {
+        return {
+          ...acc,
+          [cur]: {
+            ...acc[cur],
+            formatting: {
+              ...acc[cur]?.formatting,
+              ...action.payload,
+            },
+          },
+        };
+      }, state.content);
+      return {
+        ...state,
+        content: formattedContent,
+      };
     case SheetAction.ADD_MEMENTO: {
       const currentMemento = state.memento.find(
         (m) => m.id === state.currentMementoId

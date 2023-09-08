@@ -18,7 +18,7 @@ export const HeaderItem = styled(TableCell)(({ selected, theme }) => ({
 }));
 
 export const Item = styled(TableCell)(
-  ({ theme, selected, textalign, width, formulacell }) => ({
+  ({ theme, selected, textalign, width, formulacell, formatting }) => ({
     backgroundColor: selected ? theme.palette.primary.light : "#fff",
     color: theme.palette.text.secondary,
     border: selected
@@ -37,6 +37,7 @@ export const Item = styled(TableCell)(
     userSelect: "none",
     width,
     textAlign: textalign,
+    ...formatting,
     "&:hover": {
       // border: "2px solid blue",
       border: "2px solid blue",

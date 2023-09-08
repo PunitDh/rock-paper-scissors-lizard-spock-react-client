@@ -24,11 +24,13 @@ import { KeyEvent } from "../constants";
 const FormulaField = ({ state, dispatch, onContextMenu }) => {
   const formRef = useRef();
   const inputRef = useRef();
-  const defaultValue = useMemo(
+  const value = useMemo(
     () =>
+      state.formulaFieldText ||
       state.content[state.selectedCell.id]?.formula ||
-      state.content[state.selectedCell.id]?.value,
-    [state.content, state.selectedCell.id]
+      state.content[state.selectedCell.id]?.value ||
+      "",
+    [state.content, state.formulaFieldText, state.selectedCell.id]
   );
 
   const handleKeyDown = useCallback(
@@ -46,24 +48,33 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
 
   const handleSubmit = useCallback(
     (e) => {
+      const triggerRecalculation =
+        e.target.formulaFieldText.value.startsWith("=") ||
+        state.formulaTrackedCells.includes(state.selectedCell.id);
       e.preventDefault();
       dispatch(setFormulaFieldText(e.target.formulaFieldText.value));
       dispatch(setFormulaFieldFocused(false));
       dispatch(selectCell(getNextRow(state.selectedCell.id, state.maxRows)));
       dispatch(setFormulaMode(false));
-      dispatch(recalculateFormulae());
+      triggerRecalculation && dispatch(recalculateFormulae());
       dispatch(addMemento());
     },
-    [dispatch, state.maxRows, state.selectedCell.id]
+    [dispatch, state.formulaTrackedCells, state.maxRows, state.selectedCell.id]
   );
 
   const handleBlur = (e) => {
-    // if (!state.formulaMode) dispatch(setformulaFieldFocused(false));
+    const triggerRecalculation =
+      e.target.value.startsWith("=") ||
+      state.formulaTrackedCells.includes(state.selectedCell.id);
+    if (!state.formulaMode) {
+      triggerRecalculation && dispatch(recalculateFormulae());
+    }
   };
 
   const resetField = () => {
     dispatch(resetFormulaField());
     dispatch(deleteCellContent(state.selectedCell.id));
+    dispatch(addMemento());
   };
 
   const acceptInput = () => {
@@ -144,8 +155,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
           ref={inputRef}
           name="formulaFieldText"
           type="text"
-          value={state.formulaFieldText}
-          defaultValue={defaultValue}
+          value={value}
           onChange={handleChange}
           onContextMenu={onContextMenu}
           onKeyDown={handleKeyDown}

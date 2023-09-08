@@ -4,6 +4,7 @@ import {
   deleteCellContent,
   pasteCellContent,
   openContextMenu,
+  addMemento,
 } from "../actions";
 import { ContentPaste, Delete } from "@mui/icons-material";
 import { useClipboard } from "src/hooks";
@@ -20,6 +21,7 @@ const ContextMenu = ({ state, dispatch }) => {
     const content = generateClipboardContent(state);
     await clipboard.copy(content);
     dispatch(deleteCellContent());
+    dispatch(addMemento());
     handleClose();
   };
 
@@ -37,6 +39,7 @@ const ContextMenu = ({ state, dispatch }) => {
 
   const handleDelete = () => {
     dispatch(deleteCellContent());
+    dispatch(addMemento());
     handleClose();
   };
 
