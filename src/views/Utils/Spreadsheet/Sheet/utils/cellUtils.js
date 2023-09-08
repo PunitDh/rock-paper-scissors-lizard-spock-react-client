@@ -137,7 +137,7 @@ export function parseCSV(csvString) {
   return content;
 }
 
-export const parseInitialStateContent = (
+export const generateInitialContent = (
   content,
   defaultRowHeight,
   defaultColumnWidth,

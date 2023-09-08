@@ -25,7 +25,7 @@ const ColumnHeader = ({ state, dispatch, column, onContextMenu }) => {
       console.log(
         state.highlighted.cells,
         state.highlighted.cellAnchor,
-        state.highlighted.hovered
+        state.hovered
       );
       const range = Range.createFlat(
         `${column}1`,

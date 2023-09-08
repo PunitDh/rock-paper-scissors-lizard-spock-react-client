@@ -1,5 +1,11 @@
 import styled from "@emotion/styled";
-import { addMemento, setRowHeight, setSelectedRow } from "../actions";
+import {
+  addMemento,
+  setHighlightRowAnchor,
+  setHovered,
+  setRowHeight,
+  setSelectedRow,
+} from "../actions";
 import { HeaderItem } from "../styles";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -56,8 +62,8 @@ const RowHeader = ({ state, dispatch, row, onContextMenu }) => {
 
   const resetHeight = () => dispatch(setRowHeight(row, 24));
 
-  const handleMouseDown = (e) => {
-    console.log("mouse down", row);
+  const handleMouseDown = () => {
+    dispatch(setHighlightRowAnchor(row));
   };
   const handleMouseMove = (e) => {
     console.log("mouse move", row);
@@ -65,15 +71,19 @@ const RowHeader = ({ state, dispatch, row, onContextMenu }) => {
   const handleMouseUp = (e) => {
     console.log("mouse up", row);
   };
+  const handleMouseOver = (e) => {
+    dispatch(setHovered(row));
+  };
 
   return (
     <RowHeaderItem
       selected={selected}
       onContextMenu={onContextMenu}
-      height={`${Math.floor(rowHeight)}px`}
+      height={`${Math.round(rowHeight)}px`}
       onMouseDown={handleRowHeaderClick}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
+      onMouseOver={handleMouseOver}
       id={`row-${row}`}
       ref={headerRef}
     >

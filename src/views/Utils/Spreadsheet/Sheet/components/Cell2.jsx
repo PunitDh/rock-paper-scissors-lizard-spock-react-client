@@ -5,7 +5,7 @@ import {
   setContent,
   highlightCells,
   selectCell,
-  setHighlightAnchor,
+  setHighlightCellAnchor,
   setHovered,
   openContextMenu,
 } from "../actions";
@@ -84,7 +84,7 @@ const Cell2 = ({ id, state, dispatch }) => {
       // e.preventDefault();
       if (!state.mouseDown && !e.shiftKey) dispatch(resetHighlight());
       dispatch(selectCell(id));
-      dispatch(setHighlightAnchor(id));
+      dispatch(setHighlightCellAnchor(id));
       dispatch(highlightCells(id));
     }
   };

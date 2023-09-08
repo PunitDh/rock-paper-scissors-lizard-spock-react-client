@@ -1,5 +1,6 @@
 import { KeyEvent, SheetConfig } from "../constants";
 import {
+  addMemento,
   deleteCellContent,
   highlightCells,
   redoState,
@@ -7,7 +8,7 @@ import {
   selectAll,
   selectCell,
   setEditMode,
-  setHighlightAnchor,
+  setHighlightCellAnchor,
   undoState,
 } from "../actions";
 import {
@@ -17,6 +18,16 @@ import {
   getPreviousColumn,
   getPreviousRow,
 } from "../utils/cellUtils";
+
+export const handleKeyUp = (e, dispatch) => {
+  switch (e.key) {
+    case KeyEvent.SHIFT:
+      dispatch(setHighlightCellAnchor(null));
+      break;
+    default:
+      break;
+  }
+};
 
 export const handleKeyDown = (e, state, dispatch, maxRows, maxColumns) => {
   let nextCell;
@@ -34,9 +45,13 @@ export const handleKeyDown = (e, state, dispatch, maxRows, maxColumns) => {
         e.shiftKey ? dispatch(redoState()) : dispatch(undoState());
       }
       break;
+    case KeyEvent.SHIFT:
+      dispatch(setHighlightCellAnchor(state.selectedCell.id));
+      break;
     case KeyEvent.BACKSPACE:
       if (!state.editMode) {
         dispatch(deleteCellContent());
+        dispatch(addMemento());
       }
       break;
     case KeyEvent.ENTER:
@@ -47,8 +62,8 @@ export const handleKeyDown = (e, state, dispatch, maxRows, maxColumns) => {
     case KeyEvent.ARROW_UP:
       e.shiftKey &&
         !state.highlighted.cellAnchor &&
-        dispatch(setHighlightAnchor(state.selectedCell.id));
-      console.log(state.highlighted.cellAnchor, state.highlighted.hovered);
+        dispatch(setHighlightCellAnchor(state.selectedCell.id));
+      console.log(state.highlighted.cellAnchor, state.hovered);
       nextCell = determineNextCell(e, state, dispatch, maxRows, maxColumns);
       e.preventDefault();
       dispatch(selectCell(nextCell));

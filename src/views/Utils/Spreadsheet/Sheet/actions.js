@@ -6,17 +6,19 @@ export const SheetAction = Object.freeze({
   RESET_FORMULA_FIELD: "RESET_FORMULA_FIELD",
   SET_EDIT_MODE: "SET_EDIT_MODE",
   SET_FORMULA_MODE: "SET_FORMULA_MODE",
-  SET_HOVERED: "SET_HOVERED",
+  SET_HOVERED_CELL: "SET_HOVERED_CELL",
   SET_SELECTED_ROW: "SET_SELECTED_ROW",
-  SET_ROW_HEIGHT: "SET_ROW_HEIGHT",
   SET_SELECTED_COLUMN: "SET_SELECTED_COLUMN",
+  SET_ROW_HEIGHT: "SET_ROW_HEIGHT",
   SET_COLUMN_WIDTH: "SET_COLUMN_WIDTH",
   SELECT_ALL: "SELECT_ALL",
   HIGHLIGHT_CELLS: "HIGHLIGHT_CELLS",
   FORMULA_HIGHLIGHT_CELL_RANGE: "FORMULA_HIGHLIGHT_CELL_RANGE",
   FORMULA_HIGHLIGHT_CELLS: "FORMULA_HIGHLIGHT_CELLS",
   ADD_CELLS_TO_HIGHLIGHT: "ADD_CELLS_TO_HIGHLIGHT",
-  SET_HIGHLIGHT_ANCHOR: "SET_HIGHLIGHT_ANCHOR",
+  SET_HIGHLIGHT_CELL_ANCHOR: "SET_HIGHLIGHT_CELL_ANCHOR",
+  SET_HIGHLIGHT_ROW_ANCHOR: "SET_HIGHLIGHT_ROW_ANCHOR",
+  SET_HIGHLIGHT_COLUMN_ANCHOR: "SET_HIGHLIGHT_COLUMN_ANCHOR",
   DELETE_CELL_CONTENT: "DELETE_CELL_CONTENT",
   PASTE_CELL_CONTENT: "PASTE_CELL_CONTENT",
   RESET_HIGHLIGHT: "RESET_HIGHLIGHT",
@@ -68,12 +70,22 @@ export const setFormulaMode = (payload) => ({
 });
 
 export const setHovered = (payload) => ({
-  type: SheetAction.SET_HOVERED,
+  type: SheetAction.SET_HOVERED_CELL,
   payload,
 });
 
-export const setHighlightAnchor = (payload) => ({
-  type: SheetAction.SET_HIGHLIGHT_ANCHOR,
+export const setHighlightCellAnchor = (payload) => ({
+  type: SheetAction.SET_HIGHLIGHT_CELL_ANCHOR,
+  payload,
+});
+
+export const setHighlightRowAnchor = (payload) => ({
+  type: SheetAction.SET_HIGHLIGHT_ROW_ANCHOR,
+  payload,
+});
+
+export const setHighlightColumnAnchor = (payload) => ({
+  type: SheetAction.SET_HIGHLIGHT_COLUMN_ANCHOR,
   payload,
 });
 

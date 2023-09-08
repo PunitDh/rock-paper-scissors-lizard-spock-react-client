@@ -5,7 +5,7 @@ import {
   setContent,
   highlightCells,
   selectCell,
-  setHighlightAnchor,
+  setHighlightCellAnchor,
   setHovered,
   setEditMode,
   openContextMenu,
@@ -44,7 +44,6 @@ const Cell = ({ id, state, dispatch }) => {
               const value = typeInTextField("formula-field", id);
               dispatch(setContent(state.selectedCell.id, value));
             } else {
-              console.log("Herer12123");
               const value = typeInTextField(
                 `${state.selectedCell.id}-input`,
                 id
@@ -78,9 +77,10 @@ const Cell = ({ id, state, dispatch }) => {
 
   const handleMouseDown = (e) => {
     if (e.button === MouseButton.LEFT_CLICK) {
+      // dispatch(selectCell(id));
       if (!state.mouseDown && !e.shiftKey && !isCtrlKeyPressed(e))
         dispatch(resetHighlight());
-      dispatch(setHighlightAnchor(id));
+      dispatch(setHighlightCellAnchor(id));
       if (!isCtrlKeyPressed(e)) dispatch(highlightCells(id));
     }
   };

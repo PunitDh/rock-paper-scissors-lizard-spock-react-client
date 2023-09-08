@@ -19,7 +19,7 @@ import {
 import {
   generateClipboardContent,
   isCtrlKeyPressed,
-  parseInitialStateContent,
+  generateInitialContent,
   typeInTextField,
 } from "./utils/cellUtils";
 import { SheetConfig } from "./constants";
@@ -32,7 +32,7 @@ import Cell2 from "./components/Cell2";
 import FormulaField from "./components/FormulaField";
 import { Table, TableBody, TableHead, TableRow } from "@mui/material";
 import StatusField from "./components/StatusField";
-import { handleKeyDown } from "./eventHandlers/keyboardHandlers";
+import { handleKeyDown, handleKeyUp } from "./eventHandlers/keyboardHandlers";
 import Toolbar from "./components/Toolbar";
 import AbsoluteCellInput from "./components/AbsoluteCellInput";
 
@@ -55,7 +55,7 @@ const Sheet = ({
       maxRows,
       maxColumns,
       maxUndos,
-      content: parseInitialStateContent(
+      content: generateInitialContent(
         initalContent,
         defaultRowHeight,
         defaultColumnWidth,
@@ -118,7 +118,7 @@ const Sheet = ({
   const handleMouseUp = (e) => {
     dispatch(setMouseDown(false));
     if (state.formulaMode && state.formulaHighlighted.length > 0) {
-      const range = `${state.highlighted.cellAnchor}:${state.highlighted.hovered}`;
+      const range = `${state.highlighted.cellAnchor}:${state.hovered}`;
       if (state.formulaFieldFocused) {
         const value = typeInTextField("formula-field", range);
         dispatch(setContent(state.selectedCell.id, value));
@@ -136,16 +136,12 @@ const Sheet = ({
           dispatch(
             formulaHighlightCellRange(
               state.highlighted.cellAnchor,
-              state.highlighted.hovered
+              state.hovered
             )
           );
         } else {
-          dispatch(
-            highlightCells(
-              state.highlighted.cellAnchor,
-              state.highlighted.hovered
-            )
-          );
+          console.log(state.highlighted.cellAnchor, state.hovered);
+          dispatch(highlightCells(state.highlighted.cellAnchor, state.hovered));
         }
       }
     },
@@ -153,7 +149,7 @@ const Sheet = ({
       state.mouseDown,
       state.formulaMode,
       state.highlighted.cellAnchor,
-      state.highlighted.hovered,
+      state.hovered,
     ]
   );
 
@@ -177,6 +173,7 @@ const Sheet = ({
   const handleCutCapture = (e) => {
     handleCopyCapture(e);
     dispatch(deleteCellContent());
+    dispatch(addMemento());
   };
 
   const handlePasteCapture = async (e) => {
@@ -214,6 +211,7 @@ const Sheet = ({
           onKeyDown={(e) =>
             handleKeyDown(e, state, dispatch, maxRows, maxColumns)
           }
+          onKeyUp={(e) => handleKeyUp(e, dispatch)}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
           onMouseMove={handleMouseMove}

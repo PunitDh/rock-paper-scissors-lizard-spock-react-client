@@ -123,7 +123,7 @@ const evaluate = (str, stateContent) => {
   };
 };
 
-export const updateStateContent = (stateContent, cell, formula) => {
+export const getUpdatedStateContent = (stateContent, cell, formula) => {
   try {
     // const referenceCells = getReferenceCells(formula);
     const evaluated = evaluate(formula, stateContent);
@@ -132,7 +132,7 @@ export const updateStateContent = (stateContent, cell, formula) => {
       [cell]: {
         ...stateContent[cell],
         formula: formula.toUpperCase(),
-        referenceCells: [...new Set(evaluated.referenceCells)],
+        referenceCells: [...new Set(evaluated.referenceCells)].flat(),
         value: evaluated.value,
         display: evaluated.value,
       },

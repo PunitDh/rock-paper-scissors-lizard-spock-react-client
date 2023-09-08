@@ -48,24 +48,33 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
 
   const handleSubmit = useCallback(
     (e) => {
+      const triggerRecalculation =
+        e.target.formulaFieldText.value.startsWith("=") ||
+        state.formulaTrackedCells.includes(state.selectedCell.id);
       e.preventDefault();
       dispatch(setFormulaFieldText(e.target.formulaFieldText.value));
       dispatch(setFormulaFieldFocused(false));
       dispatch(selectCell(getNextRow(state.selectedCell.id, state.maxRows)));
       dispatch(setFormulaMode(false));
-      dispatch(recalculateFormulae());
+      triggerRecalculation && dispatch(recalculateFormulae());
       dispatch(addMemento());
     },
-    [dispatch, state.maxRows, state.selectedCell.id]
+    [dispatch, state.formulaTrackedCells, state.maxRows, state.selectedCell.id]
   );
 
   const handleBlur = (e) => {
-    if (!state.formulaMode) dispatch(recalculateFormulae());
+    const triggerRecalculation =
+      e.target.value.startsWith("=") ||
+      state.formulaTrackedCells.includes(state.selectedCell.id);
+    if (!state.formulaMode) {
+      triggerRecalculation && dispatch(recalculateFormulae());
+    }
   };
 
   const resetField = () => {
     dispatch(resetFormulaField());
     dispatch(deleteCellContent(state.selectedCell.id));
+    dispatch(addMemento());
   };
 
   const acceptInput = () => {

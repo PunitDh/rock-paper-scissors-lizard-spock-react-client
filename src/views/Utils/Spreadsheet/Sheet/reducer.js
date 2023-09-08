@@ -1,7 +1,7 @@
 import { SheetConfig } from "./constants";
 import { getCellOffset, typeInTextField } from "./utils/cellUtils";
 import { SheetAction } from "./actions";
-import { updateStateContent } from "./utils/evalUtils";
+import { getUpdatedStateContent } from "./utils/evalUtils";
 import Cell from "./models/Cell";
 import CellContent from "./models/CellContent";
 import Range from "./models/Range";
@@ -25,6 +25,7 @@ export const initialState = {
     rows: [],
     columns: [],
   },
+  formulaTrackedCells: [],
   formulaHighlighted: [],
   content: {
     rowHeights: {},
@@ -78,17 +79,37 @@ export const reducer = (state, action) => {
         ...state,
         formulaMode: action.payload,
       };
-    case SheetAction.SET_HOVERED:
+    case SheetAction.SET_HOVERED_CELL:
       return {
         ...state,
         hovered: action.payload,
       };
-    case SheetAction.SET_HIGHLIGHT_ANCHOR:
+    case SheetAction.SET_HIGHLIGHT_CELL_ANCHOR:
       return {
         ...state,
         highlighted: {
           ...state.highlighted,
           cellAnchor: action.payload,
+        },
+      };
+
+    case SheetAction.SET_HIGHLIGHT_ROW_ANCHOR:
+      return {
+        ...state,
+        highlighted: {
+          ...state.highlighted,
+          rowAnchor: action.payload,
+          cellAnchor: null,
+        },
+      };
+
+    case SheetAction.SET_HIGHLIGHT_COLUMN_ANCHOR:
+      return {
+        ...state,
+        highlighted: {
+          ...state.highlighted,
+          columnAnchor: action.payload,
+          cellAnchor: null,
         },
       };
 
@@ -308,18 +329,31 @@ export const reducer = (state, action) => {
       };
     }
     case SheetAction.RECALCULATE_FORMULAE: {
+      console.log("Recalculation triggered");
       const formulaCells = Object.keys(state.content).filter(
         (it) => state.content[it].formula?.length > 0
       );
 
-      const recalculatedValues = formulaCells.reduce((acc, cur) => {
-        const result = updateStateContent(acc, cur, acc[cur].formula);
-        return result ? { ...acc, [cur]: result[cur] } : acc;
+      const formulaTrackedCells = [];
+
+      const content = formulaCells.reduce((stateContent, cell) => {
+        const result = getUpdatedStateContent(
+          stateContent,
+          cell,
+          stateContent[cell].formula
+        );
+
+        formulaTrackedCells.push(result[cell].referenceCells);
+
+        return result
+          ? { ...stateContent, [cell]: result[cell] }
+          : stateContent;
       }, state.content);
 
       return {
         ...state,
-        content: recalculatedValues,
+        formulaTrackedCells: [...new Set(formulaTrackedCells.flat())],
+        content,
       };
     }
     case SheetAction.SET_CONTENT:

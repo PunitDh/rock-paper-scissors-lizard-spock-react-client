@@ -8,7 +8,7 @@ import {
   selectCell,
   setContent,
   setFormulaMode,
-  setHighlightAnchor,
+  setHighlightCellAnchor,
   setInputBoxFocused,
 } from "../actions";
 import { KeyEvent } from "../constants";
@@ -54,7 +54,7 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
       state.defaultRowHeight,
     [cell.row, state.content.rowHeights, state.defaultRowHeight]
   );
-  
+
   const getValue = useCallback(
     () =>
       state.content[cell.id]?.formula || state.content[cell.id]?.value || "",
@@ -99,11 +99,16 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
     }
   }, [dispatch, state.highlighted.cells]);
 
-  const handleBlur = () => {
+  const handleBlur = (e) => {
+    const triggerRecalculation =
+      state.formulaTrackedCells.includes(cell.id) ||
+      e.target.value.startsWith("=");
     dispatch(setInputBoxFocused(false));
     if (!state.formulaMode) {
-      dispatch(addMemento());
-      dispatch(recalculateFormulae());
+      if (triggerRecalculation) {
+        dispatch(recalculateFormulae());
+        dispatch(addMemento());
+      }
     }
   };
 
@@ -118,7 +123,7 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
       switch (e.key) {
         case KeyEvent.SHIFT:
           console.log("Here");
-          dispatch(setHighlightAnchor(cell.id));
+          dispatch(setHighlightCellAnchor(cell.id));
           break;
         case KeyEvent.ESCAPE:
           dispatch(setInputBoxFocused(false));
@@ -128,10 +133,13 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
           state.inputBoxFocused && e.stopPropagation();
           break;
         case KeyEvent.ENTER:
+          const triggerRecalculation =
+            state.formulaTrackedCells.includes(cell.id) ||
+            e.target.value.startsWith("=");
           dispatch(setInputBoxFocused(false));
           dispatch(setContent(cell.id, e.target.value));
           dispatch(setFormulaMode(false));
-          dispatch(recalculateFormulae());
+          triggerRecalculation && dispatch(recalculateFormulae());
           dispatch(addMemento());
           dispatch(highlightCells(cell.id));
           dispatch(
@@ -177,7 +185,15 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
           break;
       }
     },
-    [dispatch, cell.id, state.inputBoxFocused, state.maxRows, state.maxColumns]
+    [
+      dispatch,
+      cell.id,
+      state.inputBoxFocused,
+      state.formulaTrackedCells,
+      state.formulaMode,
+      state.maxRows,
+      state.maxColumns,
+    ]
   );
 
   const handleFocus = () => dispatch(setInputBoxFocused(true));
