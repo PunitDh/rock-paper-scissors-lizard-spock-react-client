@@ -63,11 +63,11 @@ export default class Range {
     return [
       ...new Set(
         formulae
-          .map((it) => it.match(/(\w+\d+):(\w+\d+)/gi))
+          .map((it) => it.match(/([a-z]+[0-9]+):([a-z]+[0-9]+)/gi))
           .filter(Boolean)
           .flat()
           .map((it) => Range.createFlat(it.split(":")[0], it.split(":")[1]).cellIds)
-          .concat(formulae.map((it) => it.match(/(\w+\d+)/gi)))
+          .concat(formulae.map((it) => it.match(/([a-z]+[0-9]+)/gi)))
           .flat()
           .map((it) => stateContent[it]?.value || "")
       ),

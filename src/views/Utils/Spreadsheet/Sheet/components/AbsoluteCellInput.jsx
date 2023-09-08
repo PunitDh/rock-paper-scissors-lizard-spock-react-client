@@ -110,10 +110,17 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
     dispatch(setInputBoxFocused(false));
 
     const triggerRecalculation =
-      state.formulaTrackedCells.includes(cell.id) ||
-      e.target.value.startsWith("=");
+      (state.formulaTrackedCells.includes(cell.id) ||
+        e.target.value.startsWith("=")) &&
+      !state.isFormulaModeActive;
 
-    if (!state.isFormulaModeActive && triggerRecalculation) {
+    console.log(
+      state.formulaTrackedCells.includes(cell.id),
+      e.target.value.startsWith("="),
+      !state.isFormulaModeActive
+    );
+
+    if (triggerRecalculation) {
       dispatch(recalculateFormulae());
       dispatch(addMemento());
     }

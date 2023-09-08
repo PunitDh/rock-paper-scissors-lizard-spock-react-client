@@ -42,7 +42,7 @@ const Cell = ({ id, state, dispatch }) => {
     (e) => {
       const isLeftClick = e.button === MouseButton.LEFT_CLICK;
       if (!isLeftClick) return;
-      console.log(state.content[state.selectedCell.id]?.formula);
+
       const isLastValueClosedBracket = /(\))$/gi.test(
         state.content[state.selectedCell.id]?.formula
       );
@@ -64,7 +64,20 @@ const Cell = ({ id, state, dispatch }) => {
         );
       };
 
-      if (!state.isFormulaModeActive) {
+      if (state.isFormulaModeActive) {
+        if (
+          !isSameCellSelected &&
+          (!isLastValueClosedBracket || isLastValueOperation)
+        ) {
+          addCellsToFormula();
+        } else {
+          dispatch(setFormulaMode(false));
+          dispatch(recalculateFormulae());
+          dispatch(resetHighlight());
+          dispatch(selectCell(id));
+          dispatch(highlightCells(id));
+        }
+      } else {
         if (isShiftOrCtrlPressed) {
           if (e.shiftKey) {
             dispatch(highlightCells(state.selectedCell.id, id));
@@ -78,23 +91,8 @@ const Cell = ({ id, state, dispatch }) => {
         dispatch(selectCell(id));
         dispatch(highlightCells(id));
       }
-
-      if (state.isFormulaModeActive && !isSameCellSelected) {
-        console.log({ isLastValueClosedBracket, isLastValueOperation });
-        if (!isLastValueClosedBracket || isLastValueOperation) {
-          console.log("It goes here");
-          addCellsToFormula();
-        } else {
-          dispatch(setFormulaMode(false));
-          dispatch(recalculateFormulae());
-          dispatch(resetHighlight());
-          dispatch(selectCell(id));
-          dispatch(highlightCells(id));
-        }
-        return;
-      }
     },
-    [id, state, dispatch]
+    [dispatch, id, state]
   );
 
   const handleMouseOver = (e) => {

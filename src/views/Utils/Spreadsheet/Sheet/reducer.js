@@ -348,26 +348,25 @@ export const reducer = (state, action) => {
     }
     case SheetAction.SET_CONTENT: {
       const { value, cell } = action.payload;
+      const formula = action.payload.value.toUpperCase();
 
       // Check if the first character is an equal sign
-      const isFirstValueEqualSign = value.startsWith("=");
+      const isFirstValueEqualSign = formula.startsWith("=");
 
-      const cells = value.match(/(\w+\d+)/gi) || [];
-      const cellRanges = value.match(/(\w+\d+):(\w+\d+)/gi) || [];
+      const cells = formula.toUpperCase().match(/([a-z]+[0-9]+)/gi) || [];
+      const cellRanges =
+        formula.toUpperCase().match(/([a-z]+[0-9]+):([a-z]+[0-9]+)/gi) || [];
 
       // Expand cell ranges into individual cells
       const expandedRanges = cellRanges
         .map((range) => {
           const [start, end] = range.split(":");
-          return Range.createFlat(start.toUpperCase(), end.toUpperCase())
-            .cellIds;
+          return Range.createFlat(start, end).cellIds;
         })
         .flat();
 
       // Combine all cell references without duplicates
-      const referenceCells = [...new Set(expandedRanges.concat(cells))].map(
-        (it) => it.toUpperCase()
-      );
+      const referenceCells = [...new Set(expandedRanges.concat(cells))];
       const formulaTrackedCells = [
         ...new Set(referenceCells.concat(state.formulaTrackedCells)),
       ];
@@ -379,7 +378,7 @@ export const reducer = (state, action) => {
           [cell]: isFirstValueEqualSign
             ? new CellContent({
                 ...state.content[cell],
-                formula: value,
+                formula,
                 referenceCells,
               })
             : new CellContent({

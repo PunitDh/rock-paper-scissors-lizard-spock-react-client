@@ -52,39 +52,12 @@ const SmallInputField = styled(InputTextField)({
 });
 
 const StatusField = ({ state, dispatch }) => {
-  const inputRef = useRef();
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
-
-  useEffect(() => {
-    if (state.isFormulaFieldFocused) {
-      inputRef.current?.focus();
-    }
-  }, [state.isFormulaFieldFocused]);
-
-  const handleSelectCell = (e) => {
-    e.preventDefault();
-    const cell = new Cell(e.target.value.toUpperCase());
-    if (cell.id) {
-      dispatch(selectCell(cell.id));
-    }
-  };
+  const handleSubmit = (e) => e.preventDefault();
 
   return (
     <div tabIndex="1000">
       <FlexForm onSubmit={handleSubmit}>
-        <SmallInputField
-          ref={inputRef}
-          name="currentCell"
-          type="text"
-          value={state.selectedCell.id}
-          onChange={handleSelectCell}
-          autoComplete="off"
-          id="current-cell"
-          tabIndex={2}
-        />
+        <SmallInputField type="text" autoComplete="off" />
         {/* <SheetTab>Sheet 1</SheetTab> */}
       </FlexForm>
     </div>

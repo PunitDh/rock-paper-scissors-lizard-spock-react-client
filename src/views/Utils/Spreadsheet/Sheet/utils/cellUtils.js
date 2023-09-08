@@ -74,8 +74,8 @@ export function typeInInputBox(text, replace = false) {
 }
 
 export function addCellToFocusedBox(state, text, replace) {
-  const isLastValueRange = /(\w+\d+:\w+\d+)$/gi;
-  const isLastValueCell = /(\w+\d+)$/gi;
+  const isLastValueRange = /([a-z]+[0-9]+):([a-z]+[0-9]+)$/gi;
+  const isLastValueCell = /([a-z]+[0-9]+)$/gi;
 
   // const currentValue = state.content[state.selectedCell.id].formula;
   const id = state.isFormulaFieldFocused ? "formula-field" : "input-box";
