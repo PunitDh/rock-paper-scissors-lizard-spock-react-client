@@ -12,7 +12,13 @@ import {
   setInputBoxFocused,
 } from "../actions";
 import { KeyEvent } from "../constants";
-import { getCtrlKey, getNextRow, getPreviousRow } from "../utils/cellUtils";
+import {
+  isCtrlKeyPressed,
+  getNextColumn,
+  getNextRow,
+  getPreviousColumn,
+  getPreviousRow,
+} from "../utils/cellUtils";
 
 const Container = styled.div(({ top, left }) => ({
   position: "absolute",
@@ -105,6 +111,7 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
     (e) => {
       switch (e.key) {
         case KeyEvent.SHIFT:
+          console.log("Here");
           dispatch(setHighlightAnchor(cell.id));
           break;
         case KeyEvent.ESCAPE:
@@ -130,21 +137,41 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
           );
           break;
         case KeyEvent.LOWERCASE_A:
-          if (getCtrlKey(e)) {
+          if (isCtrlKeyPressed(e)) {
             e.stopPropagation();
           }
           break;
-        case KeyEvent.ARROW_LEFT:
-        case KeyEvent.ARROW_RIGHT:
-          if (state.inputBoxFocused && textRef.current?.value.length > 0)
-            e.stopPropagation();
+        case KeyEvent.TAB: {
+          e.preventDefault();
+          e.shiftKey
+            ? dispatch(selectCell(getPreviousColumn(cell.id, state.maxColumns)))
+            : dispatch(selectCell(getNextColumn(cell.id, state.maxRows)));
           break;
+        }
+        case KeyEvent.ARROW_LEFT: {
+          if (textRef.current?.value.length === 0)
+            dispatch(selectCell(getPreviousColumn(cell.id, state.maxColumns)));
+          break;
+        }
+        case KeyEvent.ARROW_RIGHT: {
+          if (textRef.current?.value.length === 0)
+            dispatch(selectCell(getNextColumn(cell.id, state.maxRows)));
+          break;
+        }
+        case KeyEvent.ARROW_UP: {
+          dispatch(selectCell(getPreviousRow(cell.id)));
+          break;
+        }
+        case KeyEvent.ARROW_DOWN: {
+          dispatch(selectCell(getNextRow(cell.id, state.maxRows)));
+          break;
+        }
         default:
           dispatch(setInputBoxFocused(true));
           break;
       }
     },
-    [dispatch, cell.id, state.inputBoxFocused, state.maxRows]
+    [dispatch, cell.id, state.inputBoxFocused, state.maxRows, state.maxColumns]
   );
 
   const handleFocus = () => dispatch(setInputBoxFocused(true));

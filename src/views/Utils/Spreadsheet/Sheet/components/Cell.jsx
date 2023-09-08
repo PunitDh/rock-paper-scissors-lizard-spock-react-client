@@ -13,7 +13,7 @@ import {
   addCellsToHighlight,
 } from "../actions";
 import { MouseButton } from "../constants";
-import { getCtrlKey, getId, typeInTextField } from "../utils/cellUtils";
+import { isCtrlKeyPressed, getId, typeInTextField } from "../utils/cellUtils";
 
 const Cell = ({ id, state, dispatch }) => {
   const containerRef = useRef();
@@ -35,9 +35,9 @@ const Cell = ({ id, state, dispatch }) => {
   const handleClick = useCallback(
     (e) => {
       if (e.button === MouseButton.LEFT_CLICK) {
-        if (e.shiftKey || getCtrlKey(e)) {
+        if (e.shiftKey || isCtrlKeyPressed(e)) {
           e.shiftKey && dispatch(highlightCells(state.selectedCell.id, id));
-          getCtrlKey(e) && dispatch(addCellsToHighlight([id]));
+          isCtrlKeyPressed(e) && dispatch(addCellsToHighlight([id]));
         } else {
           const formulaMode = state.formulaMode && id !== state.selectedCell.id;
           if (formulaMode) {
@@ -79,15 +79,15 @@ const Cell = ({ id, state, dispatch }) => {
 
   const handleMouseDown = (e) => {
     if (e.button === MouseButton.LEFT_CLICK) {
-      if (!state.mouseDown && !e.shiftKey && !getCtrlKey(e))
+      if (!state.mouseDown && !e.shiftKey && !isCtrlKeyPressed(e))
         dispatch(resetHighlight());
       dispatch(setHighlightAnchor(id));
-      if (!getCtrlKey(e)) dispatch(highlightCells(id));
+      if (!isCtrlKeyPressed(e)) dispatch(highlightCells(id));
     }
   };
 
   const handleMouseMove = () => {
-    dispatch(setHighlightCurrent(id));
+    state.mouseDown && dispatch(setHighlightCurrent(id));
   };
 
   const handleDoubleClick = () => {
@@ -107,7 +107,7 @@ const Cell = ({ id, state, dispatch }) => {
       ref={containerRef}
       onClick={handleClick}
       selected={isSelected}
-      formulacell={isFormulaHighLighted}
+      formulacell={isFormulaHighLighted || undefined}
       onMouseOver={handleMouseOver}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}

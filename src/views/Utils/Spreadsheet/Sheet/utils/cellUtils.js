@@ -118,7 +118,7 @@ export const getNextRow = (id, maxRows = SheetConfig.MAX_ROWS) => {
   return `${column}${+row === maxRows ? +row : +row + 1}`;
 };
 
-export const getCtrlKey = (e) => {
+export const isCtrlKeyPressed = (e) => {
   return /mac/i.test(navigator.platform) ? e.metaKey : e.ctrlKey;
 };
 

@@ -127,6 +127,7 @@ export const reducer = (state, action) => {
     }
 
     case SheetAction.ADD_CELLS_TO_HIGHLIGHT: {
+      console.log(action.payload);
       const cells = action.payload.map((id) => new Cell(id));
       const rows = [...new Set(cells.map((it) => it.row))];
       const columns = [...new Set(cells.map((it) => it.column))];
@@ -252,6 +253,7 @@ export const reducer = (state, action) => {
       };
     }
     case SheetAction.SET_SELECTED_COLUMN: {
+      console.log(action.payload);
       const range = Range.createFlat(
         `${action.payload}1`,
         `${action.payload}${state.maxRows}`
@@ -384,9 +386,6 @@ export const reducer = (state, action) => {
           },
         };
       }, state.content);
-
-      console.log(formattedContent);
-
       return {
         ...state,
         content: formattedContent,

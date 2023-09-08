@@ -12,7 +12,7 @@ import {
   undoState,
 } from "../actions";
 import {
-  getCtrlKey,
+  isCtrlKeyPressed,
   getNextColumn,
   getNextRow,
   getPreviousColumn,
@@ -24,13 +24,13 @@ export const handleKeyDown = (e, state, dispatch, maxRows, maxColumns) => {
 
   switch (e.key) {
     case KeyEvent.LOWERCASE_A:
-      if (getCtrlKey(e)) {
+      if (isCtrlKeyPressed(e)) {
         e.preventDefault();
         dispatch(selectAll());
       }
       break;
     case KeyEvent.LOWERCASE_Z:
-      if (getCtrlKey(e)) {
+      if (isCtrlKeyPressed(e)) {
         e.preventDefault();
         e.shiftKey ? dispatch(redoState()) : dispatch(undoState());
       }
@@ -60,6 +60,7 @@ export const handleKeyDown = (e, state, dispatch, maxRows, maxColumns) => {
   }
 
   if (e.shiftKey) {
+    console.log(state.highlighted);
     dispatch(setHighlightCurrent(nextCell));
     dispatch(highlightCells(state.highlighted.anchor, nextCell));
   }
@@ -81,6 +82,7 @@ const determineNextCell = (e, state, dispatch, maxRows, maxColumns) => {
             maxRows
           );
     case KeyEvent.TAB:
+      e.preventDefault();
       return e.shiftKey
         ? handleNavigation(
             e,
@@ -100,7 +102,7 @@ const determineNextCell = (e, state, dispatch, maxRows, maxColumns) => {
             maxColumns
           );
     case KeyEvent.ARROW_DOWN:
-      return getCtrlKey(e)
+      return isCtrlKeyPressed(e)
         ? `${selectedCell.column}${maxRows}`
         : handleNavigation(
             e,
@@ -111,7 +113,7 @@ const determineNextCell = (e, state, dispatch, maxRows, maxColumns) => {
             maxRows
           );
     case KeyEvent.ARROW_RIGHT:
-      return getCtrlKey(e)
+      return isCtrlKeyPressed(e)
         ? `${SheetConfig.COLUMNS[maxColumns - 1]}${selectedCell.row}`
         : handleNavigation(
             e,
@@ -123,7 +125,7 @@ const determineNextCell = (e, state, dispatch, maxRows, maxColumns) => {
             maxColumns
           );
     case KeyEvent.ARROW_LEFT:
-      return getCtrlKey(e)
+      return isCtrlKeyPressed(e)
         ? `${SheetConfig.COLUMNS[0]}${selectedCell.row}`
         : handleNavigation(
             e,
@@ -134,7 +136,7 @@ const determineNextCell = (e, state, dispatch, maxRows, maxColumns) => {
             maxColumns
           );
     case KeyEvent.ARROW_UP:
-      return getCtrlKey(e)
+      return isCtrlKeyPressed(e)
         ? `${selectedCell.column}${1}`
         : handleNavigation(e, state, dispatch, getPreviousRow, selectedCell.id);
     default:

@@ -19,6 +19,7 @@ const Resizer = styled.div({
   bottom: 0,
   right: 0,
   width: "100%",
+  height: "0.5rem",
   borderBottom: "1px solid #aaa",
   cursor: "row-resize",
 });
@@ -39,10 +40,13 @@ const RowHeader = ({ state, dispatch, row, onContextMenu }) => {
 
   const handleDragStart = (e) => {
     e.dataTransfer.setData("text/plain", ""); // This initializes the drag operation
+    rowTop.current = headerRef.current?.getBoundingClientRect().top;
   };
 
   const handleDragEnd = (e) => {
+    console.log(e.clientY, rowTop.current);
     setNewHeight(e.clientY - rowTop.current);
+    console.log({ newHeight });
   };
 
   useEffect(() => {

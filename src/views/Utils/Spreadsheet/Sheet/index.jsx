@@ -18,7 +18,7 @@ import {
 } from "./actions";
 import {
   generateClipboardContent,
-  getCtrlKey,
+  isCtrlKeyPressed,
   parseInitialStateContent,
   typeInTextField,
 } from "./utils/cellUtils";
@@ -130,7 +130,7 @@ const Sheet = ({
 
   const handleMouseMove = useCallback(
     (e) => {
-      if (state.mouseDown && !getCtrlKey(e)) {
+      if (state.mouseDown && !isCtrlKeyPressed(e)) {
         if (state.formulaMode) {
           dispatch(
             formulaHighlightCellRange(
@@ -226,10 +226,10 @@ const Sheet = ({
                   .fill(0)
                   .map((_, column) => (
                     <ColumnHeader
-                      key={column}
+                      key={SheetConfig.COLUMNS[column]}
                       state={state}
                       dispatch={dispatch}
-                      column={column}
+                      column={SheetConfig.COLUMNS[column]}
                       onContextMenu={handleContextMenu}
                     />
                   ))}

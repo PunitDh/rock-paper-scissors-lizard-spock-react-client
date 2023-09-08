@@ -24,11 +24,13 @@ import { KeyEvent } from "../constants";
 const FormulaField = ({ state, dispatch, onContextMenu }) => {
   const formRef = useRef();
   const inputRef = useRef();
-  const defaultValue = useMemo(
+  const value = useMemo(
     () =>
+      state.formulaFieldText ||
       state.content[state.selectedCell.id]?.formula ||
-      state.content[state.selectedCell.id]?.value,
-    [state.content, state.selectedCell.id]
+      state.content[state.selectedCell.id]?.value ||
+      "",
+    [state.content, state.formulaFieldText, state.selectedCell.id]
   );
 
   const handleKeyDown = useCallback(
@@ -58,7 +60,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
   );
 
   const handleBlur = (e) => {
-    // if (!state.formulaMode) dispatch(setformulaFieldFocused(false));
+    if (!state.formulaMode) dispatch(recalculateFormulae());
   };
 
   const resetField = () => {
@@ -144,8 +146,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
           ref={inputRef}
           name="formulaFieldText"
           type="text"
-          value={state.formulaFieldText}
-          defaultValue={defaultValue}
+          value={value}
           onChange={handleChange}
           onContextMenu={onContextMenu}
           onKeyDown={handleKeyDown}
