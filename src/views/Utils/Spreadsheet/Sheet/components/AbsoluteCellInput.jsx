@@ -48,7 +48,13 @@ const InputField = styled.input(({ width, height, isfocused, formatting }) => ({
 const AbsoluteCellInput = ({ state, dispatch }) => {
   const textRef = useRef();
   const cell = useMemo(() => state.selectedCell, [state.selectedCell]);
-  const rowHeight = state.content.rowHeights[cell.row];
+  const rowHeight = useMemo(
+    () =>
+      (state.content.rowHeights && state.content.rowHeights[cell.row]) ||
+      state.defaultRowHeight,
+    [cell.row, state.content.rowHeights, state.defaultRowHeight]
+  );
+  
   const getValue = useCallback(
     () =>
       state.content[cell.id]?.formula || state.content[cell.id]?.value || "",

@@ -4,7 +4,7 @@ import { Save } from "@mui/icons-material";
 import { SheetConfig } from "../../constants";
 
 const SaveFile = ({ state }) => {
-  const handleExportAsCsv = (e) => {
+  const handleExportAsCsv = () => {
     const range = Range.create(
       `A1`,
       `${SheetConfig.COLUMNS[state.maxColumns - 1]}${state.maxRows}`
@@ -28,7 +28,6 @@ const SaveFile = ({ state }) => {
     <Tooltip title="Export as CSV">
       <FieldButton type="button" onClick={handleExportAsCsv}>
         <Save sx={{ width: "1rem" }} />
-        {/* <Download sx={{ width: "1rem" }} /> */}
       </FieldButton>
     </Tooltip>
   );

@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useRef } from "react";
 import { CellDiv, DivItem } from "../styles";
 import {
   resetHighlight,
@@ -6,10 +6,8 @@ import {
   highlightCells,
   selectCell,
   setHighlightAnchor,
-  setHighlightCurrent,
   setHovered,
   openContextMenu,
-  recalculateFormulae,
 } from "../actions";
 import { KeyEvent, MouseButton } from "../constants";
 
@@ -91,10 +89,6 @@ const Cell2 = ({ id, state, dispatch }) => {
     }
   };
 
-  const handleMouseMove = () => {
-    dispatch(setHighlightCurrent(id));
-  };
-
   const handleDoubleClick = () => {
     if (!state.mouseDown) dispatch(resetHighlight());
     dispatch(selectCell(id));
@@ -114,7 +108,6 @@ const Cell2 = ({ id, state, dispatch }) => {
       }
       onMouseOver={handleMouseOver}
       onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
       onDoubleClick={handleDoubleClick}
       onContextMenu={handleContextMenu}
       onKeyDown={handleKeyDown}

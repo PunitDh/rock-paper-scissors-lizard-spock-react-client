@@ -26,7 +26,13 @@ const Resizer = styled.div({
 
 const RowHeader = ({ state, dispatch, row, onContextMenu }) => {
   const headerRef = useRef();
-  const [newHeight, setNewHeight] = useState(state.content.rowHeights[row]);
+  const rowHeight = useMemo(
+    () =>
+      (state.content.rowHeights && state.content.rowHeights[row]) ||
+      state.defaultRowHeight,
+    [row, state.content.rowHeights, state.defaultRowHeight]
+  );
+  const [newHeight, setNewHeight] = useState(rowHeight);
   const selected = useMemo(
     () =>
       state.selectedCell.row === row || state.highlighted.rows.includes(row),
@@ -34,20 +40,14 @@ const RowHeader = ({ state, dispatch, row, onContextMenu }) => {
   );
   const rowTop = useRef();
 
-  const handleRowHeaderClick = (e, row) => {
-    dispatch(setSelectedRow(row));
-  };
+  const handleRowHeaderClick = () => dispatch(setSelectedRow(row));
 
   const handleDragStart = (e) => {
-    e.dataTransfer.setData("text/plain", ""); // This initializes the drag operation
+    e.dataTransfer.setData("text/plain", "");
     rowTop.current = headerRef.current?.getBoundingClientRect().top;
   };
 
-  const handleDragEnd = (e) => {
-    console.log(e.clientY, rowTop.current);
-    setNewHeight(e.clientY - rowTop.current);
-    console.log({ newHeight });
-  };
+  const handleDragEnd = (e) => setNewHeight(e.clientY - rowTop.current);
 
   useEffect(() => {
     dispatch(setRowHeight(row, newHeight));
@@ -56,12 +56,24 @@ const RowHeader = ({ state, dispatch, row, onContextMenu }) => {
 
   const resetHeight = () => dispatch(setRowHeight(row, 24));
 
+  const handleMouseDown = (e) => {
+    console.log("mouse down", row);
+  };
+  const handleMouseMove = (e) => {
+    console.log("mouse move", row);
+  };
+  const handleMouseUp = (e) => {
+    console.log("mouse up", row);
+  };
+
   return (
     <RowHeaderItem
-      onClick={(e) => handleRowHeaderClick(e, row)}
       selected={selected}
       onContextMenu={onContextMenu}
-      height={`${Math.floor(state.content.rowHeights[row])}px`}
+      height={`${Math.floor(rowHeight)}px`}
+      onMouseDown={handleRowHeaderClick}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
       id={`row-${row}`}
       ref={headerRef}
     >

@@ -8,7 +8,6 @@ import {
   selectCell,
   setEditMode,
   setHighlightAnchor,
-  setHighlightCurrent,
   undoState,
 } from "../actions";
 import {
@@ -47,9 +46,9 @@ export const handleKeyDown = (e, state, dispatch, maxRows, maxColumns) => {
     case KeyEvent.ARROW_LEFT:
     case KeyEvent.ARROW_UP:
       e.shiftKey &&
-        !state.highlighted.anchor &&
+        !state.highlighted.cellAnchor &&
         dispatch(setHighlightAnchor(state.selectedCell.id));
-      console.log(state.highlighted.anchor, state.highlighted.current);
+      console.log(state.highlighted.cellAnchor, state.highlighted.hovered);
       nextCell = determineNextCell(e, state, dispatch, maxRows, maxColumns);
       e.preventDefault();
       dispatch(selectCell(nextCell));
@@ -61,8 +60,7 @@ export const handleKeyDown = (e, state, dispatch, maxRows, maxColumns) => {
 
   if (e.shiftKey) {
     console.log(state.highlighted);
-    dispatch(setHighlightCurrent(nextCell));
-    dispatch(highlightCells(state.highlighted.anchor, nextCell));
+    dispatch(highlightCells(state.highlighted.cellAnchor, nextCell));
   }
 };
 

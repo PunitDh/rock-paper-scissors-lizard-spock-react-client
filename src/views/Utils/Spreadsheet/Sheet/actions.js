@@ -17,7 +17,6 @@ export const SheetAction = Object.freeze({
   FORMULA_HIGHLIGHT_CELLS: "FORMULA_HIGHLIGHT_CELLS",
   ADD_CELLS_TO_HIGHLIGHT: "ADD_CELLS_TO_HIGHLIGHT",
   SET_HIGHLIGHT_ANCHOR: "SET_HIGHLIGHT_ANCHOR",
-  SET_HIGHLIGHT_CURRENT: "SET_HIGHLIGHT_CURRENT",
   DELETE_CELL_CONTENT: "DELETE_CELL_CONTENT",
   PASTE_CELL_CONTENT: "PASTE_CELL_CONTENT",
   RESET_HIGHLIGHT: "RESET_HIGHLIGHT",
@@ -75,11 +74,6 @@ export const setHovered = (payload) => ({
 
 export const setHighlightAnchor = (payload) => ({
   type: SheetAction.SET_HIGHLIGHT_ANCHOR,
-  payload,
-});
-
-export const setHighlightCurrent = (payload) => ({
-  type: SheetAction.SET_HIGHLIGHT_CURRENT,
   payload,
 });
 

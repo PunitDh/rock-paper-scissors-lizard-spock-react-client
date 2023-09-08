@@ -1,10 +1,10 @@
 import { Tooltip } from "@mui/material";
 import { FieldButton } from "../styles";
 import { FolderOpenSharp } from "@mui/icons-material";
-import { SheetConfig } from "../../constants";
 import CellContent from "../../models/CellContent";
 import { setContentBulk } from "../../actions";
 import { useRef } from "react";
+import { parseCSV } from "../../utils/cellUtils";
 
 const OpenFile = ({ dispatch }) => {
   const fileRef = useRef();
@@ -13,7 +13,7 @@ const OpenFile = ({ dispatch }) => {
     const reader = new FileReader();
     reader.onload = async (e) => {
       const text = e.target.result;
-      const content = csvToStateContent(text);
+      const content = parseCSV(text);
       const filtered = Object.keys(content).reduce((acc, cur) => {
         if (content[cur]?.value.length > 0) {
           acc[cur] = new CellContent({
@@ -25,21 +25,6 @@ const OpenFile = ({ dispatch }) => {
       dispatch(setContentBulk(filtered));
     };
     reader.readAsText(e.target.files[0]);
-
-    function csvToStateContent(csvString) {
-      const rows = csvString.trim().split("\n");
-      let content = {};
-
-      rows.forEach((row, rowIndex) => {
-        row.split(",").forEach((cellValue, colIndex) => {
-          const colLabel = SheetConfig.COLUMNS[colIndex];
-          const cellId = `${colLabel}${rowIndex + 1}`;
-          content[cellId] = new CellContent({ value: cellValue, formula: "" });
-        });
-      });
-
-      return content;
-    }
   };
 
   return (

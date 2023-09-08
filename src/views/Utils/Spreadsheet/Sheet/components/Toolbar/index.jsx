@@ -20,10 +20,10 @@ import {
 } from "../../actions";
 import OpenFile from "./OpenFile";
 import SaveFile from "./SaveFile";
-import FormattingButton from "./FormattingButton";
+import FormattingButton from "./components/FormattingButton";
 import HistoryButton from "./HistoryButton";
 import NumberFormattingSelect from "./NumberFormattingSelect";
-import ColorPicker from "./ColorPicker";
+import ColorPicker from "./components/ColorPicker";
 import FontFamilySelect from "./FontFamilySelect";
 import FontSizeSelect from "./FontSizeSelect";
 import BorderStyleSelect from "./BorderStyleSelect";

@@ -10,13 +10,17 @@ import { isEqual, uniqueId } from "lodash";
 export const initialState = {
   maxRows: SheetConfig.MAX_ROWS,
   maxColumns: SheetConfig.MAX_COLUMNS,
+  defaultRowHeight: 24,
+  defaultColumnWidth: 50,
+  maxUndos: 32,
   selectedCell: new Cell("A1"), //{ cell: "A1", row: 1, column: "A", columnCharCode: 65 },
   editMode: false,
   formulaMode: false,
   hovered: "",
   highlighted: {
-    anchor: null,
-    current: null,
+    rowAnchor: null,
+    columnAnchor: null,
+    cellAnchor: null,
     cells: [],
     rows: [],
     columns: [],
@@ -31,7 +35,6 @@ export const initialState = {
   formulaFieldText: "",
   formulaFieldFocused: false,
   menuAnchorElement: null,
-  maxUndos: 32,
   memento: [],
   currentMementoId: null,
 };
@@ -85,15 +88,7 @@ export const reducer = (state, action) => {
         ...state,
         highlighted: {
           ...state.highlighted,
-          anchor: action.payload,
-        },
-      };
-    case SheetAction.SET_HIGHLIGHT_CURRENT:
-      return {
-        ...state,
-        highlighted: {
-          ...state.highlighted,
-          current: action.payload,
+          cellAnchor: action.payload,
         },
       };
 
@@ -357,7 +352,11 @@ export const reducer = (state, action) => {
     case SheetAction.SET_CONTENT_BULK:
       return {
         ...state,
-        content: action.payload,
+        content: {
+          rowHeights: state.rowHeights,
+          columnWidths: state.columnWidths,
+          ...action.payload,
+        },
       };
     case SheetAction.SET_CELL_FORMATTING:
       return {

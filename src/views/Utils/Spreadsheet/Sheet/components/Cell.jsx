@@ -6,7 +6,6 @@ import {
   highlightCells,
   selectCell,
   setHighlightAnchor,
-  setHighlightCurrent,
   setHovered,
   setEditMode,
   openContextMenu,
@@ -86,10 +85,6 @@ const Cell = ({ id, state, dispatch }) => {
     }
   };
 
-  const handleMouseMove = () => {
-    state.mouseDown && dispatch(setHighlightCurrent(id));
-  };
-
   const handleDoubleClick = () => {
     if (!state.mouseDown) dispatch(resetHighlight());
     dispatch(selectCell(id));
@@ -110,7 +105,6 @@ const Cell = ({ id, state, dispatch }) => {
       formulacell={isFormulaHighLighted || undefined}
       onMouseOver={handleMouseOver}
       onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
       onDoubleClick={handleDoubleClick}
       onContextMenu={handleContextMenu}
       id={id}

@@ -35,7 +35,6 @@ import StatusField from "./components/StatusField";
 import { handleKeyDown } from "./eventHandlers/keyboardHandlers";
 import Toolbar from "./components/Toolbar";
 import AbsoluteCellInput from "./components/AbsoluteCellInput";
-import { FlexBox } from "src/components/shared/styles";
 
 const Sheet = ({
   maxRows = SheetConfig.MAX_ROWS,
@@ -51,6 +50,8 @@ const Sheet = ({
   const createInitialState = useCallback(
     () => ({
       ...initialState,
+      defaultRowHeight,
+      defaultColumnWidth,
       maxRows,
       maxColumns,
       maxUndos,
@@ -117,7 +118,7 @@ const Sheet = ({
   const handleMouseUp = (e) => {
     dispatch(setMouseDown(false));
     if (state.formulaMode && state.formulaHighlighted.length > 0) {
-      const range = `${state.highlighted.anchor}:${state.highlighted.current}`;
+      const range = `${state.highlighted.cellAnchor}:${state.highlighted.hovered}`;
       if (state.formulaFieldFocused) {
         const value = typeInTextField("formula-field", range);
         dispatch(setContent(state.selectedCell.id, value));
@@ -134,18 +135,26 @@ const Sheet = ({
         if (state.formulaMode) {
           dispatch(
             formulaHighlightCellRange(
-              state.highlighted.anchor,
-              state.highlighted.current
+              state.highlighted.cellAnchor,
+              state.highlighted.hovered
             )
           );
         } else {
           dispatch(
-            highlightCells(state.highlighted.anchor, state.highlighted.current)
+            highlightCells(
+              state.highlighted.cellAnchor,
+              state.highlighted.hovered
+            )
           );
         }
       }
     },
-    [state.mouseDown, state.highlighted]
+    [
+      state.mouseDown,
+      state.formulaMode,
+      state.highlighted.cellAnchor,
+      state.highlighted.hovered,
+    ]
   );
 
   const handleFocusGuard = (e) => {

@@ -122,6 +122,21 @@ export const isCtrlKeyPressed = (e) => {
   return /mac/i.test(navigator.platform) ? e.metaKey : e.ctrlKey;
 };
 
+export function parseCSV(csvString) {
+  const rows = csvString.trim().split("\n");
+  let content = {};
+
+  rows.forEach((row, rowIndex) => {
+    row.split(",").forEach((cellValue, colIndex) => {
+      const colLabel = SheetConfig.COLUMNS[colIndex];
+      const cellId = `${colLabel}${rowIndex + 1}`;
+      content[cellId] = new CellContent({ value: cellValue, formula: "" });
+    });
+  });
+
+  return content;
+}
+
 export const parseInitialStateContent = (
   content,
   defaultRowHeight,
