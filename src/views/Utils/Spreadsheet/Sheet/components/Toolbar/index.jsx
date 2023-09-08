@@ -50,15 +50,11 @@ const Toolbar = ({ state, dispatch }) => {
     e.preventDefault();
   };
 
-  const handleBlur = (e) => {
-    // if (!state.formulaMode) dispatch(setformulaFieldFocused(false));
-  };
-
   useEffect(() => {
-    if (state.formulaFieldFocused) {
+    if (state.isFormulaFieldFocused) {
       inputRef.current?.focus();
     }
-  }, [state.formulaFieldFocused]);
+  }, [state.isFormulaFieldFocused]);
 
   const handleUndo = (e) => {
     canUndo && dispatch(undoState());
@@ -107,7 +103,7 @@ const Toolbar = ({ state, dispatch }) => {
   );
 
   return (
-    <div tabIndex="1000" onBlur={handleBlur}>
+    <div tabIndex="1000">
       <FlexForm onSubmit={handleSubmit}>
         <OpenFile dispatch={dispatch} />
         <SaveFile state={state} />

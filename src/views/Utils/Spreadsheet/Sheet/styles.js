@@ -23,7 +23,7 @@ export const Item = styled(TableCell)(
     color: theme.palette.text.secondary,
     border: selected
       ? "2px solid blue"
-      : formulacell
+      : formulacell > 0
       ? "2px dashed blue"
       : "1px solid rgba(0,0,0,0.2)",
     borderRadius: 0,

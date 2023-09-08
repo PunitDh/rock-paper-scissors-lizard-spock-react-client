@@ -55,13 +55,54 @@ export const generateClipboardContent = (state) => {
   return JSON.stringify({ type, content });
 };
 
-export function typeInTextField(id, newText) {
+function typeInTextField(id, newText, replace) {
   const el = document.getElementById(id);
   if (!el) return;
   const [start, end] = [el.selectionStart, el.selectionEnd];
   el.focus();
-  el.setRangeText(newText, start, end, "end");
-  return el.value;
+  if (replace) {
+    el.setRangeText(newText, 0, el.value.length, "preserve");
+    return el.value;
+  } else {
+    el.setRangeText(newText, start, end, "preserve");
+    return el.value;
+  }
+}
+
+export function typeInInputBox(text, replace = false) {
+  return typeInTextField("input-box", text, replace);
+}
+
+export function addCellToFocusedBox(state, text, replace) {
+  const isLastValueRange = /(\w+\d+:\w+\d+)$/gi;
+  const isLastValueCell = /(\w+\d+)$/gi;
+
+  // const currentValue = state.content[state.selectedCell.id].formula;
+  const id = state.isFormulaFieldFocused ? "formula-field" : "input-box";
+  const element = document.getElementById(id);
+
+  const [start, end] = [element.selectionStart, element.selectionEnd];
+  const currentValue = element.value.slice(0, end);
+  element.focus();
+
+  if (isLastValueRange.test(currentValue)) {
+    element.setRangeText(
+      replace ? currentValue.replace(isLastValueRange, text) : "," + text,
+      replace ? 0 : start,
+      replace ? element.value.length : end,
+      "preserve"
+    );
+  } else if (isLastValueCell.test(currentValue)) {
+    element.setRangeText(
+      replace ? currentValue.replace(isLastValueCell, text) : "," + text,
+      replace ? 0 : start,
+      replace ? element.value.length : end,
+      "preserve"
+    );
+  } else {
+    element.setRangeText(text, start, end, "preserve");
+  }
+  return element.value;
 }
 
 export function setCaretPosition(elemId, caretPos) {

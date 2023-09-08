@@ -1,5 +1,5 @@
 import { SheetConfig } from "./constants";
-import { getCellOffset, typeInTextField } from "./utils/cellUtils";
+import { getCellOffset, typeInInputBox } from "./utils/cellUtils";
 import { SheetAction } from "./actions";
 import { getUpdatedStateContent } from "./utils/evalUtils";
 import Cell from "./models/Cell";
@@ -15,7 +15,7 @@ export const initialState = {
   maxUndos: 32,
   selectedCell: new Cell("A1"), //{ cell: "A1", row: 1, column: "A", columnCharCode: 65 },
   editMode: false,
-  formulaMode: false,
+  isFormulaModeActive: false,
   hovered: "",
   highlighted: {
     rowAnchor: null,
@@ -34,7 +34,7 @@ export const initialState = {
   mouseDown: false,
   inputBoxFocused: false,
   formulaFieldText: "",
-  formulaFieldFocused: false,
+  isFormulaFieldFocused: false,
   menuAnchorElement: null,
   memento: [],
   currentMementoId: null,
@@ -55,7 +55,7 @@ export const reducer = (state, action) => {
     case SheetAction.SET_FORMULA_FIELD_FOCUSED:
       return {
         ...state,
-        formulaFieldFocused: action.payload,
+        isFormulaFieldFocused: action.payload,
       };
     case SheetAction.SET_INPUT_BOX_FOCUSED:
       return {
@@ -66,8 +66,8 @@ export const reducer = (state, action) => {
       return {
         ...state,
         formulaFieldText: "",
-        formulaFieldFocused: false,
-        formulaMode: false,
+        isFormulaFieldFocused: false,
+        isFormulaModeActive: false,
       };
     case SheetAction.SET_EDIT_MODE:
       return {
@@ -77,7 +77,7 @@ export const reducer = (state, action) => {
     case SheetAction.SET_FORMULA_MODE:
       return {
         ...state,
-        formulaMode: action.payload,
+        isFormulaModeActive: action.payload,
       };
     case SheetAction.SET_HOVERED_CELL:
       return {
@@ -143,7 +143,6 @@ export const reducer = (state, action) => {
     }
 
     case SheetAction.ADD_CELLS_TO_HIGHLIGHT: {
-      console.log(action.payload);
       const cells = action.payload.map((id) => new Cell(id));
       const rows = [...new Set(cells.map((it) => it.row))];
       const columns = [...new Set(cells.map((it) => it.column))];
@@ -213,10 +212,7 @@ export const reducer = (state, action) => {
           };
         }
       } catch (e) {
-        const value = typeInTextField(
-          `${action.payload.anchor.id}-input`,
-          action.payload.data
-        );
+        const value = typeInInputBox(action.payload.data);
         return {
           ...state,
           content: {
@@ -269,7 +265,6 @@ export const reducer = (state, action) => {
       };
     }
     case SheetAction.SET_SELECTED_COLUMN: {
-      console.log(action.payload);
       const range = Range.createFlat(
         `${action.payload}1`,
         `${action.payload}${state.maxRows}`
@@ -334,16 +329,12 @@ export const reducer = (state, action) => {
         (it) => state.content[it].formula?.length > 0
       );
 
-      const formulaTrackedCells = [];
-
       const content = formulaCells.reduce((stateContent, cell) => {
         const result = getUpdatedStateContent(
           stateContent,
           cell,
           stateContent[cell].formula
         );
-
-        formulaTrackedCells.push(result[cell].referenceCells);
 
         return result
           ? { ...stateContent, [cell]: result[cell] }
@@ -352,34 +343,90 @@ export const reducer = (state, action) => {
 
       return {
         ...state,
-        formulaTrackedCells: [...new Set(formulaTrackedCells.flat())],
         content,
       };
     }
-    case SheetAction.SET_CONTENT:
-      if (action.payload.value?.startsWith("=")) {
-        return {
-          ...state,
-          formulaMode: true,
-          content: {
-            ...state.content,
-            [action.payload.cell]: new CellContent({
-              ...state.content[action.payload.cell],
-              formula: action.payload.value,
-            }),
-          },
-        };
-      }
+    case SheetAction.SET_CONTENT: {
+      const { value, cell } = action.payload;
 
+      // Check if the first character is an equal sign
+      const isFirstValueEqualSign = value.startsWith("=");
+
+      const cells = value.match(/(\w+\d+)/gi) || [];
+      const cellRanges = value.match(/(\w+\d+):(\w+\d+)/gi) || [];
+
+      // Expand cell ranges into individual cells
+      const expandedRanges = cellRanges
+        .map((range) => {
+          const [start, end] = range.split(":");
+          return Range.createFlat(start.toUpperCase(), end.toUpperCase())
+            .cellIds;
+        })
+        .flat();
+
+      // Combine all cell references without duplicates
+      const referenceCells = [...new Set(expandedRanges.concat(cells))].map(
+        (it) => it.toUpperCase()
+      );
+      const formulaTrackedCells = [
+        ...new Set(referenceCells.concat(state.formulaTrackedCells)),
+      ];
+
+      const commonState = {
+        ...state,
+        content: {
+          ...state.content,
+          [cell]: isFirstValueEqualSign
+            ? new CellContent({
+                ...state.content[cell],
+                formula: value,
+                referenceCells,
+              })
+            : new CellContent({
+                ...state.content[cell],
+                value: value,
+                display: value,
+                formula: "",
+              }),
+        },
+      };
+
+      return isFirstValueEqualSign
+        ? {
+            ...commonState,
+            formulaTrackedCells,
+            isFormulaModeActive: true,
+          }
+        : {
+            ...commonState,
+            isFormulaModeActive: false,
+          };
+    }
+    case SheetAction.UPDATE_REFERENCE_CELLS:
+      const { values } = action.payload;
+      const cellIds =
+        values.length > 1
+          ? Range.createFlat(values[0], values[1]).cellIds
+          : values;
+
+      const referenceCells = action.payload.replace
+        ? [...new Set(cellIds)]
+        : [
+            ...new Set(
+              [
+                ...state.content[action.payload.cell].referenceCells,
+                ...cellIds,
+              ].flat()
+            ),
+          ];
       return {
         ...state,
         content: {
           ...state.content,
-          [action.payload.cell]: new CellContent({
+          [action.payload.cell]: {
             ...state.content[action.payload.cell],
-            value: action.payload.value,
-            display: action.payload.value,
-          }),
+            referenceCells,
+          },
         },
       };
 

@@ -17,7 +17,6 @@ const processMatches = (str, reg, formulaCreator, zeroValue) => {
   return referenceCells.map((it, idx) => ({
     [matches[idx][0]]: formulaCreator(it),
     zeroValue,
-    referenceCells,
   }));
 };
 
@@ -82,7 +81,6 @@ const evaluate = (str, stateContent) => {
           stateContent,
           it.zeroValue
         ),
-        referenceCells: it.referenceCells,
       },
     };
   });
@@ -92,7 +90,6 @@ const evaluate = (str, stateContent) => {
     return {
       [key]: {
         ...evaluateExpression(Object.values(it)[0].value),
-        referenceCells: Object.values(it)[0].referenceCells,
       },
     };
   });
@@ -103,10 +100,9 @@ const evaluate = (str, stateContent) => {
       const curValue = Object.values(cur)[0];
       return {
         stringValue: acc.stringValue.replaceAll(curKey, `(${curValue.value})`),
-        referenceCells: [...acc.referenceCells, ...curValue.referenceCells],
       };
     },
-    { stringValue: str.toUpperCase(), referenceCells: [] }
+    { stringValue: str.toUpperCase() }
   );
 
   const substitutedString = replaceFormulaWithValues(
@@ -115,12 +111,7 @@ const evaluate = (str, stateContent) => {
     0
   );
 
-  const finalEvaluation = evaluateExpression(substitutedString);
-
-  return {
-    ...finalEvaluation,
-    referenceCells: replacedString.referenceCells,
-  };
+  return evaluateExpression(substitutedString);
 };
 
 export const getUpdatedStateContent = (stateContent, cell, formula) => {
@@ -132,7 +123,6 @@ export const getUpdatedStateContent = (stateContent, cell, formula) => {
       [cell]: {
         ...stateContent[cell],
         formula: formula.toUpperCase(),
-        referenceCells: [...new Set(evaluated.referenceCells)].flat(),
         value: evaluated.value,
         display: evaluated.value,
       },

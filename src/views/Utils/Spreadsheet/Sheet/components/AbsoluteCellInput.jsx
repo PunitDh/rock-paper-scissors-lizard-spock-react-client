@@ -46,7 +46,7 @@ const InputField = styled.input(({ width, height, isfocused, formatting }) => ({
 }));
 
 const AbsoluteCellInput = ({ state, dispatch }) => {
-  const textRef = useRef();
+  const inputRef = useRef();
   const cell = useMemo(() => state.selectedCell, [state.selectedCell]);
   const rowHeight = useMemo(
     () =>
@@ -55,13 +55,14 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
     [cell.row, state.content.rowHeights, state.defaultRowHeight]
   );
 
-  const getValue = useCallback(
+  const currentValue = useMemo(
     () =>
       state.content[cell.id]?.formula || state.content[cell.id]?.value || "",
     [state.content, cell.id]
   );
 
-  const [value, setValue] = useState(getValue());
+  const [originalValue, setOriginalValue] = useState(currentValue);
+  const [value, setValue] = useState(currentValue);
   const [position, setPosition] = useState({
     top: 0,
     left: 0,
@@ -81,7 +82,7 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
   }, [cell.id, rowHeight]);
 
   useEffect(() => {
-    setValue(getValue());
+    setValue(currentValue);
     dispatch(setInputBoxFocused(true));
     setTextBoxPosition();
 
@@ -91,7 +92,12 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [getValue, dispatch, setTextBoxPosition]);
+  }, [currentValue, dispatch, setTextBoxPosition]);
+
+  useEffect(() => {
+    setOriginalValue(currentValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cell.id]);
 
   useEffect(() => {
     if (state.highlighted.cells.length > 0) {
@@ -100,21 +106,23 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
   }, [dispatch, state.highlighted.cells]);
 
   const handleBlur = (e) => {
+    console.log("input box blurred");
+    dispatch(setInputBoxFocused(false));
+
     const triggerRecalculation =
       state.formulaTrackedCells.includes(cell.id) ||
       e.target.value.startsWith("=");
-    dispatch(setInputBoxFocused(false));
-    if (!state.formulaMode) {
-      if (triggerRecalculation) {
-        dispatch(recalculateFormulae());
-        dispatch(addMemento());
-      }
+
+    if (!state.isFormulaModeActive && triggerRecalculation) {
+      dispatch(recalculateFormulae());
+      dispatch(addMemento());
     }
   };
 
   const handleChange = (e) => {
     const newValue = e.target.value;
-    dispatch(setFormulaMode(newValue.startsWith("=")));
+    if (newValue.startsWith("=")) dispatch(setFormulaMode(true));
+
     dispatch(setContent(cell.id, newValue));
   };
 
@@ -122,7 +130,6 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
     (e) => {
       switch (e.key) {
         case KeyEvent.SHIFT:
-          console.log("Here");
           dispatch(setHighlightCellAnchor(cell.id));
           break;
         case KeyEvent.ESCAPE:
@@ -130,7 +137,7 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
           dispatch(setFormulaMode(false));
           break;
         case KeyEvent.BACKSPACE:
-          state.inputBoxFocused && e.stopPropagation();
+          // state.inputBoxFocused && e.stopPropagation();
           break;
         case KeyEvent.ENTER:
           const triggerRecalculation =
@@ -140,7 +147,7 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
           dispatch(setContent(cell.id, e.target.value));
           dispatch(setFormulaMode(false));
           triggerRecalculation && dispatch(recalculateFormulae());
-          dispatch(addMemento());
+          originalValue !== currentValue && dispatch(addMemento());
           dispatch(highlightCells(cell.id));
           dispatch(
             selectCell(
@@ -163,12 +170,12 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
           break;
         }
         case KeyEvent.ARROW_LEFT: {
-          if (textRef.current?.value.length === 0)
+          if (inputRef.current?.value.length === 0)
             dispatch(selectCell(getPreviousColumn(cell.id, state.maxColumns)));
           break;
         }
         case KeyEvent.ARROW_RIGHT: {
-          if (textRef.current?.value.length === 0)
+          if (inputRef.current?.value.length === 0)
             dispatch(selectCell(getNextColumn(cell.id, state.maxRows)));
           break;
         }
@@ -188,11 +195,11 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
     [
       dispatch,
       cell.id,
-      state.inputBoxFocused,
       state.formulaTrackedCells,
-      state.formulaMode,
       state.maxRows,
       state.maxColumns,
+      originalValue,
+      currentValue,
     ]
   );
 
@@ -207,9 +214,9 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
     <Container top={position.top} left={position.left}>
       <InputField
         type="text"
-        ref={textRef}
+        ref={inputRef}
         value={value}
-        id={`${cell.id}-input`}
+        id={"input-box"}
         autoComplete="off"
         width={position.width}
         height={position.height}

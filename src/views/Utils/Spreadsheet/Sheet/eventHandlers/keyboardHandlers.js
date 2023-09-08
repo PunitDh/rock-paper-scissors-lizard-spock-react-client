@@ -63,7 +63,6 @@ export const handleKeyDown = (e, state, dispatch, maxRows, maxColumns) => {
       e.shiftKey &&
         !state.highlighted.cellAnchor &&
         dispatch(setHighlightCellAnchor(state.selectedCell.id));
-      console.log(state.highlighted.cellAnchor, state.hovered);
       nextCell = determineNextCell(e, state, dispatch, maxRows, maxColumns);
       e.preventDefault();
       dispatch(selectCell(nextCell));
@@ -74,7 +73,6 @@ export const handleKeyDown = (e, state, dispatch, maxRows, maxColumns) => {
   }
 
   if (e.shiftKey) {
-    console.log(state.highlighted);
     dispatch(highlightCells(state.highlighted.cellAnchor, nextCell));
   }
 };
@@ -159,7 +157,7 @@ const determineNextCell = (e, state, dispatch, maxRows, maxColumns) => {
 
 const handleNavigation = (e, state, dispatch, getNextFunction, ...args) => {
   e.preventDefault();
-  if (!e.shiftKey && !state.formulaMode) {
+  if (!e.shiftKey && !state.isFormulaModeActive) {
     dispatch(resetHighlight());
   }
   return getNextFunction(...args);

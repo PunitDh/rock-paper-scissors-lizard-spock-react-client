@@ -15,12 +15,13 @@ import {
   addMemento,
   formulaHighlightCells,
   formulaHighlightCellRange,
+  updateReferenceCells,
 } from "./actions";
 import {
   generateClipboardContent,
   isCtrlKeyPressed,
   generateInitialContent,
-  typeInTextField,
+  addCellToFocusedBox,
 } from "./utils/cellUtils";
 import { SheetConfig } from "./constants";
 import ContextMenu from "./ContextMenu";
@@ -28,7 +29,6 @@ import RowHeader from "./components/RowHeader";
 import ColumnHeader from "./components/ColumnHeader";
 import SelectAll from "./components/SelectAll";
 import { useClipboard, useToken } from "src/hooks";
-import Cell2 from "./components/Cell2";
 import FormulaField from "./components/FormulaField";
 import { Table, TableBody, TableHead, TableRow } from "@mui/material";
 import StatusField from "./components/StatusField";
@@ -87,11 +87,11 @@ const Sheet = ({
   // }, [state.content]);
 
   // useEffect(() => {
-  //   if (!state.formulaMode) {
+  //   if (!state.isFormulaModeActive) {
   //     console.log("Recalculation triggered");
   //     dispatch(recalculateFormulae());
   //   }
-  // }, [cellsToTrack, state.formulaMode]);
+  // }, [cellsToTrack, state.isFormulaModeActive]);
 
   useEffect(() => {
     dispatch(
@@ -117,22 +117,32 @@ const Sheet = ({
 
   const handleMouseUp = (e) => {
     dispatch(setMouseDown(false));
-    if (state.formulaMode && state.formulaHighlighted.length > 0) {
-      const range = `${state.highlighted.cellAnchor}:${state.hovered}`;
-      if (state.formulaFieldFocused) {
-        const value = typeInTextField("formula-field", range);
-        dispatch(setContent(state.selectedCell.id, value));
-      } else {
-        const value = typeInTextField(`${state.selectedCell.id}-input`, range);
-        dispatch(setContent(state.selectedCell.id, value));
-      }
+    const selectingFormulaCells =
+      state.isFormulaModeActive &&
+      state.formulaHighlighted.length > 1 &&
+      state.highlighted.cellAnchor !== state.hovered;
+
+    if (selectingFormulaCells) {
+      const value = addCellToFocusedBox(
+        state,
+        `${state.highlighted.cellAnchor}:${state.hovered}`,
+        !isCtrlKeyPressed(e)
+      );
+      dispatch(setContent(state.selectedCell.id, value));
+      dispatch(
+        updateReferenceCells(
+          state.selectedCell.id,
+          [state.highlighted.cellAnchor, state.hovered],
+          !isCtrlKeyPressed(e)
+        )
+      );
     }
   };
 
   const handleMouseMove = useCallback(
     (e) => {
       if (state.mouseDown && !isCtrlKeyPressed(e)) {
-        if (state.formulaMode) {
+        if (state.isFormulaModeActive) {
           dispatch(
             formulaHighlightCellRange(
               state.highlighted.cellAnchor,
@@ -140,14 +150,13 @@ const Sheet = ({
             )
           );
         } else {
-          console.log(state.highlighted.cellAnchor, state.hovered);
           dispatch(highlightCells(state.highlighted.cellAnchor, state.hovered));
         }
       }
     },
     [
       state.mouseDown,
-      state.formulaMode,
+      state.isFormulaModeActive,
       state.highlighted.cellAnchor,
       state.hovered,
     ]

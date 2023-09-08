@@ -10,9 +10,16 @@ import {
   setEditMode,
   openContextMenu,
   addCellsToHighlight,
+  updateReferenceCells,
+  setFormulaMode,
+  recalculateFormulae,
 } from "../actions";
 import { MouseButton } from "../constants";
-import { isCtrlKeyPressed, getId, typeInTextField } from "../utils/cellUtils";
+import {
+  isCtrlKeyPressed,
+  getId,
+  addCellToFocusedBox,
+} from "../utils/cellUtils";
 
 const Cell = ({ id, state, dispatch }) => {
   const containerRef = useRef();
@@ -33,39 +40,61 @@ const Cell = ({ id, state, dispatch }) => {
 
   const handleClick = useCallback(
     (e) => {
-      if (e.button === MouseButton.LEFT_CLICK) {
-        if (e.shiftKey || isCtrlKeyPressed(e)) {
-          e.shiftKey && dispatch(highlightCells(state.selectedCell.id, id));
-          isCtrlKeyPressed(e) && dispatch(addCellsToHighlight([id]));
-        } else {
-          const formulaMode = state.formulaMode && id !== state.selectedCell.id;
-          if (formulaMode) {
-            if (state.formulaFieldFocused) {
-              const value = typeInTextField("formula-field", id);
-              dispatch(setContent(state.selectedCell.id, value));
-            } else {
-              const value = typeInTextField(
-                `${state.selectedCell.id}-input`,
-                id
-              );
-              dispatch(setContent(state.selectedCell.id, value));
-            }
-          } else {
-            if (!state.mouseDown) dispatch(resetHighlight());
-            dispatch(selectCell(id));
-            dispatch(highlightCells(id));
+      const isLeftClick = e.button === MouseButton.LEFT_CLICK;
+      if (!isLeftClick) return;
+      console.log(state.content[state.selectedCell.id]?.formula);
+      const isLastValueClosedBracket = /(\))$/gi.test(
+        state.content[state.selectedCell.id]?.formula
+      );
+      const isLastValueOperation = /[+-/*^:,]$/gi.test(
+        state.content[state.selectedCell.id]?.formula
+      );
+      const isShiftOrCtrlPressed = e.shiftKey || isCtrlKeyPressed(e);
+      const isSameCellSelected = id === state.selectedCell.id;
+
+      const addCellsToFormula = () => {
+        const value = addCellToFocusedBox(state, id, !isCtrlKeyPressed(e));
+        dispatch(setContent(state.selectedCell.id, value));
+        dispatch(
+          updateReferenceCells(
+            state.selectedCell.id,
+            [id],
+            !isCtrlKeyPressed(e)
+          )
+        );
+      };
+
+      if (!state.isFormulaModeActive) {
+        if (isShiftOrCtrlPressed) {
+          if (e.shiftKey) {
+            dispatch(highlightCells(state.selectedCell.id, id));
           }
+          if (isCtrlKeyPressed(e)) {
+            dispatch(addCellsToHighlight([id]));
+          }
+          return;
         }
+        if (!state.mouseDown) dispatch(resetHighlight());
+        dispatch(selectCell(id));
+        dispatch(highlightCells(id));
+      }
+
+      if (state.isFormulaModeActive && !isSameCellSelected) {
+        console.log({ isLastValueClosedBracket, isLastValueOperation });
+        if (!isLastValueClosedBracket || isLastValueOperation) {
+          console.log("It goes here");
+          addCellsToFormula();
+        } else {
+          dispatch(setFormulaMode(false));
+          dispatch(recalculateFormulae());
+          dispatch(resetHighlight());
+          dispatch(selectCell(id));
+          dispatch(highlightCells(id));
+        }
+        return;
       }
     },
-    [
-      dispatch,
-      id,
-      state.formulaFieldFocused,
-      state.formulaMode,
-      state.mouseDown,
-      state.selectedCell.id,
-    ]
+    [id, state, dispatch]
   );
 
   const handleMouseOver = (e) => {
@@ -102,7 +131,7 @@ const Cell = ({ id, state, dispatch }) => {
       ref={containerRef}
       onClick={handleClick}
       selected={isSelected}
-      formulacell={isFormulaHighLighted || undefined}
+      formulacell={Number(isFormulaHighLighted)}
       onMouseOver={handleMouseOver}
       onMouseDown={handleMouseDown}
       onDoubleClick={handleDoubleClick}

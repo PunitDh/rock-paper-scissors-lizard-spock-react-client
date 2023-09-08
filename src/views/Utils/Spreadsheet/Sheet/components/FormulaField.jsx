@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   selectCell,
   setContent,
@@ -33,6 +33,10 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
     [state.content, state.formulaFieldText, state.selectedCell.id]
   );
 
+  const originalValue = useRef(value);
+
+  const valueChanged = originalValue.current !== value;
+
   const handleKeyDown = useCallback(
     (e) => {
       switch (e.key) {
@@ -66,7 +70,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
     const triggerRecalculation =
       e.target.value.startsWith("=") ||
       state.formulaTrackedCells.includes(state.selectedCell.id);
-    if (!state.formulaMode) {
+    if (!state.isFormulaModeActive) {
       triggerRecalculation && dispatch(recalculateFormulae());
     }
   };
@@ -114,13 +118,18 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
   };
 
   useEffect(() => {
-    if (state.formulaFieldFocused) {
+    if (state.isFormulaFieldFocused) {
       inputRef.current?.focus();
     }
-  }, [state.formulaFieldFocused]);
+  }, [state.isFormulaFieldFocused]);
+
+  useEffect(() => {
+    originalValue.current = value;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.selectedCell.id]);
 
   return (
-    <div tabIndex="1" onBlur={handleBlur}>
+    <div tabIndex="1">
       <FlexForm onSubmit={handleSubmit} ref={formRef}>
         <SmallInputField
           name="currentCell"
@@ -160,6 +169,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
           onContextMenu={onContextMenu}
           onKeyDown={handleKeyDown}
           onFocus={handleFocus}
+          onBlur={handleBlur}
           autoComplete="off"
           id="formula-field"
           tabIndex={3}

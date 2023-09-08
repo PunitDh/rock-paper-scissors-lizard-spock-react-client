@@ -22,11 +22,6 @@ const ColumnHeader = ({ state, dispatch, column, onContextMenu }) => {
       ).cellIds;
       dispatch(addCellsToHighlight(range));
     } else if (e.shiftKey) {
-      console.log(
-        state.highlighted.cells,
-        state.highlighted.cellAnchor,
-        state.hovered
-      );
       const range = Range.createFlat(
         `${column}1`,
         `${column}${state.maxRows}`
