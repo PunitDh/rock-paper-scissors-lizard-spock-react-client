@@ -1,6 +1,13 @@
 import { SheetConfig } from "../constants";
 import CellData from "../models/CellData";
 
+export function spreadContent(content, key, value) {
+  return {
+    ...content,
+    [key]: value,
+  };
+}
+
 export const getCellOffset = (cell, offsetX, offsetY) => {
   const offsetRow = +cell.row + offsetY;
   const offsetColumn =

@@ -22,6 +22,10 @@ export default class CellData {
     }
   }
 
+  static getOrNew(id) {
+    return this[id] || new CellData(id);
+  }
+
   get isFormulaCell() {
     return isFormula(this.formula) && this.formula?.length > 0;
   }
@@ -41,10 +45,15 @@ export default class CellData {
       const formula = value.toUpperCase();
       this.setFormula(formula);
     } else {
-      this.value = value || this.value || null;
+      this.value = value;
       this.setDisplay(value);
       this.formula = "";
     }
+    return this;
+  }
+
+  setReferenceCells(referenceCells) {
+    this.referenceCells = referenceCells;
     return this;
   }
 

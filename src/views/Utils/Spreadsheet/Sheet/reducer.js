@@ -2,10 +2,7 @@ import { SheetConfig } from "./constants";
 import { isFormula, typeInInputBox } from "./utils/cellUtils";
 import { SheetAction } from "./actions";
 import Cell from "./models/Cell";
-import CellData, {
-  getFormulaTrackedCells,
-  getReferenceCells,
-} from "./models/CellData";
+import CellData, { getFormulaTrackedCells } from "./models/CellData";
 import Range from "./models/Range";
 import { isEqual, uniqueId } from "lodash";
 
@@ -183,7 +180,7 @@ export const reducer = (state, action) => {
             ...state.content,
             data: {
               ...state.content.data,
-              [action.payload]: new CellData({ id: action.payload }),
+              [action.payload]: new CellData().setId(action.payload),
             },
           },
         };
@@ -378,7 +375,11 @@ export const reducer = (state, action) => {
       );
 
       const cellData =
-        state.content.data[cellId] || new CellData().setId(cellId);
+        new CellData(state.content.data[cellId]) ||
+        new CellData().setId(cellId);
+
+      console.log({ cellData });
+
       cellData.setValue(value);
 
       return {
@@ -394,7 +395,7 @@ export const reducer = (state, action) => {
         },
       };
     }
-    case SheetAction.UPDATE_REFERENCE_CELLS:
+    case SheetAction.UPDATE_REFERENCE_CELLS: {
       const { values } = action.payload;
       const cellIds =
         values.length > 1
@@ -411,20 +412,22 @@ export const reducer = (state, action) => {
               ].flat()
             ),
           ];
+
+      const cellData =
+        state.content.data[action.payload.cell] ||
+        new CellData().setId(action.payload.cell);
+
       return {
         ...state,
         content: {
           ...state.content,
           data: {
             ...state.content.data,
-            [action.payload.cell]: {
-              ...state.content.data[action.payload.cell],
-              referenceCells,
-            },
+            [action.payload.cell]: cellData.setReferenceCells(referenceCells),
           },
         },
       };
-
+    }
     case SheetAction.SET_CONTENT_BULK:
       return {
         ...state,
@@ -435,19 +438,19 @@ export const reducer = (state, action) => {
         },
       };
     case SheetAction.SET_CELL_FORMATTING:
+      const cellData =
+        state.content.data[state.selectedCell.id] ||
+        new CellData().setId(state.selectedCell.id);
       return {
         ...state,
         content: {
           ...state.content,
           data: {
             ...state.content.data,
-            [state.selectedCell.id]: {
-              ...state.content.data[state.selectedCell.id],
-              formatting: {
-                ...state.content.data[state.selectedCell.id]?.formatting,
-                ...action.payload,
-              },
-            },
+            [state.selectedCell.id]: cellData.setFormatting({
+              ...cellData.formatting,
+              ...action.payload,
+            }),
           },
         },
       };
