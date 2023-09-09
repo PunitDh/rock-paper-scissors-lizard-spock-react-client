@@ -11,7 +11,7 @@ import {
   selectCell,
   pasteCellContent,
   recalculateFormulae,
-  setContent,
+  setCellContent,
   addMemento,
   formulaHighlightCells,
   formulaHighlightCellRange,
@@ -96,14 +96,15 @@ const Sheet = ({
   useEffect(() => {
     dispatch(
       setFormulaFieldText(
-        state.content[state.selectedCell.id]?.formula ||
-          state.content[state.selectedCell.id]?.value ||
+        state.content.data[state.selectedCell.id]?.formula ||
+          state.content.data[state.selectedCell.id]?.value ||
           ""
       )
     );
-    const referenceCells = state.content[state.selectedCell.id]?.referenceCells;
+    const referenceCells =
+      state.content.data[state.selectedCell.id]?.referenceCells;
     dispatch(formulaHighlightCells(referenceCells || []));
-  }, [state.selectedCell.id, state.content]);
+  }, [state.selectedCell.id, state.content.data]);
 
   useEffect(() => {
     dispatch(recalculateFormulae());
@@ -128,7 +129,7 @@ const Sheet = ({
         `${state.highlighted.cellAnchor}:${state.hovered}`,
         !isCtrlKeyPressed(e)
       );
-      dispatch(setContent(state.selectedCell.id, value));
+      dispatch(setCellContent(state.selectedCell.id, value));
       dispatch(
         updateReferenceCells(
           state.selectedCell.id,
@@ -176,7 +177,6 @@ const Sheet = ({
   const handleCopyCapture = async (e) => {
     e.preventDefault();
     const content = generateClipboardContent(state);
-    console.log(content);
     await clipboard.copy(content);
   };
 
@@ -189,7 +189,6 @@ const Sheet = ({
   const handlePasteCapture = async (e) => {
     e.preventDefault();
     const data = await clipboard.get();
-    console.log(data);
     dispatch(pasteCellContent(state.selectedCell.id, data));
   };
 
@@ -303,7 +302,7 @@ const Sheet = ({
                   console.log(
                     "cell",
                     state.selectedCell.id,
-                    state.content[state.selectedCell.id]
+                    state.content.data[state.selectedCell.id]
                   )
                 }
               >
@@ -315,7 +314,7 @@ const Sheet = ({
                   console.log("formulahighlighted", state.formulaHighlighted);
                   console.log(
                     "referencecells",
-                    state.content[state.selectedCell.id]?.referenceCells
+                    state.content.data[state.selectedCell.id]?.referenceCells
                   );
                 }}
               >

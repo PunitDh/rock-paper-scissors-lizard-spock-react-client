@@ -1,3 +1,4 @@
+import { isFormula } from "../utils/cellUtils";
 import Range from "./Range";
 
 export default class CellContent {
@@ -21,12 +22,19 @@ export default class CellContent {
     }
   }
 
-  evaluate(stateContent) {
+  get isFormulaCell() {
+    return isFormula(this.formula) && this.formula?.length > 0;
+  }
+
+  evaluate(stateContentData) {
     if (this.formula) {
       const referenceCells = getReferenceCells(this.formula);
-      const evaluated = evaluate(this.formula, stateContent);
-      // console.log(evaluated, referenceCells);
-      // console.log("evaluating formula", this.id);
+      const evaluated = evaluate(this.formula, stateContentData);
+      console.log(evaluated, referenceCells);
+      console.log("evaluating formula", this.id);
+      this.value = evaluated.value;
+      this.display = evaluated.value;
+      this.referenceCells = referenceCells.flat();
     }
     return this;
   }

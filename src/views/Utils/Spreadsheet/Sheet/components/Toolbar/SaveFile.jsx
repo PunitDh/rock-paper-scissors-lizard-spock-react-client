@@ -11,7 +11,7 @@ const SaveFile = ({ state }) => {
     );
     const content = range.cells
       .map((row) =>
-        row.map((cell) => state.content[cell.id]?.value || "").join(",")
+        row.map((cell) => state.content.data[cell.id]?.value || "").join(",")
       )
       .join("\n");
     const blob = new Blob([content], { type: "text/csv" });

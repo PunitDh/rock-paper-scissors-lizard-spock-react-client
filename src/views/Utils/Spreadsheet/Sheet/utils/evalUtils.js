@@ -128,7 +128,6 @@ export const getUpdatedStateContent = (stateContent, cell, formula) => {
   try {
     const referenceCells = getReferenceCells(formula);
     const evaluated = evaluate(formula, stateContent);
-    // console.log("from recalculation", [...new Set(evaluated.referenceCells)].flat());
     return {
       ...stateContent,
       [cell]: new CellContent({

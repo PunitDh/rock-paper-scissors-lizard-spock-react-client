@@ -22,20 +22,17 @@ const ContextMenu = ({ state, dispatch }) => {
     await clipboard.copy(content);
     dispatch(deleteCellContent());
     dispatch(addMemento());
-    console.log(content);
     handleClose();
   };
 
   const handleCopy = async () => {
     const content = generateClipboardContent(state);
     await clipboard.copy(content);
-    console.log(content);
     handleClose();
   };
 
   const handlePaste = async () => {
     const data = await clipboard.get();
-    console.log(data);
     dispatch(pasteCellContent(state.selectedCell.id, data));
     handleClose();
   };

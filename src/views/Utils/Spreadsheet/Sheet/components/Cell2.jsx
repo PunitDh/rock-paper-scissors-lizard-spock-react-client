@@ -2,7 +2,7 @@ import React, { useCallback, useRef } from "react";
 import { CellDiv, DivItem } from "../styles";
 import {
   resetHighlight,
-  setContent,
+  setCellContent,
   highlightCells,
   selectCell,
   setHighlightCellAnchor,
@@ -13,22 +13,22 @@ import { KeyEvent, MouseButton } from "../constants";
 
 const Cell2 = ({ id, state, dispatch }) => {
   const containerRef = useRef();
-  const cellContentRef = useRef(state.content[id]?.value);
+  const cellContentRef = useRef(state.content.data[id]?.value);
 
   const textRef = useCallback(
     (node) => {
       if (node) {
         const focusInListener = node.addEventListener("focusin", () => {
-          if (state.content[id]?.formula) {
-            // setTimeout(() => setCellContent(state.content[id]?.formula), 0);
-            cellContentRef.current = state.content[id]?.formula;
+          if (state.content.data[id]?.formula) {
+            // setTimeout(() => setCellContent(state.content.data[id]?.formula), 0);
+            cellContentRef.current = state.content.data[id]?.formula;
           }
         });
 
         const focusOutListener = node.addEventListener("focusout", () => {
-          dispatch(setContent(id, cellContentRef.current));
+          dispatch(setCellContent(id, cellContentRef.current));
           // dispatch(recalculateFormulae());
-          cellContentRef.current = state.content[id]?.value;
+          cellContentRef.current = state.content.data[id]?.value;
         });
 
         if (state.selectedCell.id === id) {
@@ -63,9 +63,9 @@ const Cell2 = ({ id, state, dispatch }) => {
         state.editMode && e.stopPropagation();
         break;
       case KeyEvent.ENTER:
-        dispatch(setContent(id, cellContentRef.current));
+        dispatch(setCellContent(id, cellContentRef.current));
         // dispatch(recalculateFormulae());
-        // setCellContent(state.content[id]?.value);
+        // setCellContent(state.content.data[id]?.value);
         break;
       default:
         break;
@@ -121,8 +121,8 @@ const Cell2 = ({ id, state, dispatch }) => {
         suppressContentEditableWarning={true}
       >
         {id === state.selectedCell.id
-          ? state.content[id]?.formula || state.content[id]?.value
-          : state.content[id]?.value}
+          ? state.content.data[id]?.formula || state.content.data[id]?.value
+          : state.content.data[id]?.value}
       </CellDiv>
     </DivItem>
   );

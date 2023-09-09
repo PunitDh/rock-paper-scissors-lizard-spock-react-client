@@ -45,9 +45,9 @@ export const generateClipboardContent = (state) => {
       const id = `${column}${row}`;
       return new CellContent({
         id,
-        value: state.content[id]?.value || "",
-        display: state.content[id]?.display || "",
-        formula: state.content[id]?.formula || "",
+        value: state.content.data[id]?.value || "",
+        display: state.content.data[id]?.display || "",
+        formula: state.content.data[id]?.formula || "",
       });
     })
   );
@@ -77,7 +77,7 @@ export function addCellToFocusedBox(state, text, replace) {
   const isLastValueRange = /([a-z]+[0-9]+):([a-z]+[0-9]+)$/gi;
   const isLastValueCell = /([a-z]+[0-9]+)$/gi;
 
-  // const currentValue = state.content[state.selectedCell.id].formula;
+  // const currentValue = state.content.data[state.selectedCell.id].formula;
   const element = state.isFormulaFieldFocused
     ? state.formulaFieldRef
     : state.inputRef;
@@ -160,55 +160,56 @@ export function parseCSV(csvString) {
 }
 
 export const generateInitialContent = (
-  content,
+  initialData,
   defaultRowHeight,
   defaultColumnWidth,
   maxRows,
   maxColumns
 ) => {
-  const defaultColumnWidthsSet = Array(maxColumns)
+  const columnWidths = Array(maxColumns)
     .fill()
-    .reduce(
-      (acc, _, idx) => {
-        acc.columnWidths[SheetConfig.COLUMNS[idx]] = defaultColumnWidth;
-        return acc;
-      },
-      { columnWidths: {} }
-    );
+    .reduce((acc, _, idx) => {
+      acc[SheetConfig.COLUMNS[idx]] = defaultColumnWidth;
+      return acc;
+    }, {});
 
-  const defaultRowHeightsSet = Array(maxRows + 1)
+  const rowHeights = Array(maxRows + 1)
     .fill()
-    .reduce(
-      (acc, _, idx) => {
-        acc.rowHeights[idx] = defaultRowHeight;
-        return acc;
-      },
-      { ...defaultColumnWidthsSet, rowHeights: {} }
-    );
+    .reduce((acc, _, idx) => {
+      acc[idx] = defaultRowHeight;
+      return acc;
+    }, {});
 
-  return Object.keys(content).reduce(
-    (stateContent, it) => {
-      const cell = it.toUpperCase();
-      stateContent[cell] = new CellContent({ id: cell });
-      if (content[it] !== null && typeof content[it] !== "object") {
-        const isString =
-          typeof content[it] === "string" || content[it] instanceof String;
-        if (isString && isFormula(content[it])) {
-          stateContent[cell].formula = content[it];
-        } else {
-          stateContent[cell].value = content[it];
-        }
-        stateContent[cell].display = content[it];
+  const data = Object.keys(initialData).reduce((stateContentData, it) => {
+    const cell = it.toUpperCase();
+    stateContentData[cell] = new CellContent({ id: cell });
+    if (initialData[it] !== null && typeof initialData[it] !== "object") {
+      const isString =
+        typeof initialData[it] === "string" ||
+        initialData[it] instanceof String;
+      if (isString && isFormula(initialData[it])) {
+        stateContentData[cell].formula = initialData[it];
       } else {
-        stateContent[cell] = new CellContent({ id: cell, ...content[it] });
+        stateContentData[cell].value = initialData[it];
       }
+      stateContentData[cell].display = initialData[it];
+    } else {
+      stateContentData[cell] = new CellContent({
+        id: cell,
+        ...initialData[it],
+      });
+    }
 
-      return stateContent;
-    },
-    { ...defaultRowHeightsSet }
-  );
+    return stateContentData;
+  }, {});
+
+  return {
+    rowHeights,
+    columnWidths,
+    data,
+  };
 };
 
 export const isFormula = (value) => {
-  return value.startsWith("=");
+  return value?.startsWith("=");
 };

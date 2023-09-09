@@ -33,6 +33,7 @@ export const initialState = {
   formulaTrackedCells: [],
   formulaHighlighted: [],
   content: {
+    data: {},
     rowHeights: {},
     columnWidths: {},
   },
@@ -181,7 +182,10 @@ export const reducer = (state, action) => {
           ...state,
           content: {
             ...state.content,
-            [action.payload]: new CellContent({ id: action.payload }),
+            data: {
+              ...state.content.data,
+              [action.payload]: new CellContent({ id: action.payload }),
+            },
           },
         };
       }
@@ -189,11 +193,11 @@ export const reducer = (state, action) => {
       const content = Object.keys(state.content)
         .filter((cell) => state.highlighted.cells.includes(cell))
         .reduce(
-          (stateContent, cell) => ({
-            ...stateContent,
+          (stateContentData, cell) => ({
+            ...stateContentData,
             [cell]: new CellContent({ id: cell }),
           }),
-          state.content
+          state.content.data
         );
 
       return {
@@ -203,10 +207,8 @@ export const reducer = (state, action) => {
     }
     case SheetAction.PASTE_CELL_CONTENT: {
       const { data, anchor } = action.payload;
-      console.log({ anchor });
       try {
         const parsed = JSON.parse(data);
-        console.log(parsed);
         if (parsed.type === "_sheet") {
           const cellOffset = new Cell(anchor).getOffset(
             parsed.content[0].length - 1,
@@ -222,20 +224,18 @@ export const reducer = (state, action) => {
               });
             })
           );
-          const newContent = Object.keys(updateObj).reduce(
-            (stateContent, cell) => {
-              return {
-                ...stateContent,
-                [cell]: updateObj[cell],
-              };
-            },
-            state.content
-          );
-
-          console.log(newContent);
+          const data = Object.keys(updateObj).reduce((stateContent, cell) => {
+            return {
+              ...stateContent,
+              [cell]: updateObj[cell],
+            };
+          }, state.content.data);
           return {
             ...state,
-            content: newContent,
+            content: {
+              ...state.content,
+              data,
+            },
           };
         }
       } catch (e) {
@@ -245,8 +245,11 @@ export const reducer = (state, action) => {
           ...state,
           content: {
             ...state.content,
-            [action.payload.anchor.id]: {
-              value,
+            data: {
+              ...state.content.data,
+              [action.payload.anchor.id]: {
+                value,
+              },
             },
           },
         };
@@ -353,38 +356,20 @@ export const reducer = (state, action) => {
     }
     case SheetAction.RECALCULATE_FORMULAE: {
       console.log("Recalculation triggered");
-      const formulaCells = Object.keys(state.content).filter(
-        (it) => state.content[it].formula?.length > 0
-      );
+      const formulaCells = Object.values(state.content.data)
+        .filter((cellContent) => cellContent.isFormulaCell)
+        .map((cellContent) => cellContent.evaluate(state.content.data));
 
-      const formulaTrackedCells = [];
-
-      const content = formulaCells.reduce((stateContent, cell) => {
-        const result = getUpdatedStateContent(
-          stateContent,
-          cell,
-          stateContent[cell].formula
-        );
-
-        // const re1 = stateContent[cell].evaluate(stateContent);
-        // console.log({ re1 });
-
-        formulaTrackedCells.push(
-          getFormulaTrackedCells(stateContent[cell].formula)
-        );
-
-        return result
-          ? { ...stateContent, [cell]: result[cell] }
-          : stateContent;
-      }, state.content);
+      const formulaTrackedCells = formulaCells
+        .map((it) => it.referenceCells)
+        .flat();
 
       return {
         ...state,
-        formulaTrackedCells: [...new Set(formulaTrackedCells.flat())],
-        content,
+        formulaTrackedCells: [...new Set(formulaTrackedCells)],
       };
     }
-    case SheetAction.SET_CONTENT: {
+    case SheetAction.SET_CONTENT_DATA: {
       const { value, cell } = action.payload;
       // Combine all cell references without duplicates
       const formula = value.toUpperCase();
@@ -399,20 +384,23 @@ export const reducer = (state, action) => {
         ...state,
         content: {
           ...state.content,
-          [cell]: isFirstValueEqualSign
-            ? new CellContent({
-                id: cell,
-                ...state.content[cell],
-                formula,
-                referenceCells,
-              })
-            : new CellContent({
-                id: cell,
-                ...state.content[cell],
-                value: value,
-                display: value,
-                formula: "",
-              }),
+          data: {
+            ...state.content.data,
+            [cell]: isFirstValueEqualSign
+              ? new CellContent({
+                  id: cell,
+                  ...state.content.data[cell],
+                  formula,
+                  referenceCells,
+                })
+              : new CellContent({
+                  id: cell,
+                  ...state.content.data[cell],
+                  value: value,
+                  display: value,
+                  formula: "",
+                }),
+          },
         },
       };
 
@@ -439,7 +427,7 @@ export const reducer = (state, action) => {
         : [
             ...new Set(
               [
-                ...state.content[action.payload.cell].referenceCells,
+                ...state.content.data[action.payload.cell].referenceCells,
                 ...cellIds,
               ].flat()
             ),
@@ -448,9 +436,12 @@ export const reducer = (state, action) => {
         ...state,
         content: {
           ...state.content,
-          [action.payload.cell]: {
-            ...state.content[action.payload.cell],
-            referenceCells,
+          data: {
+            ...state.content.data,
+            [action.payload.cell]: {
+              ...state.content.data[action.payload.cell],
+              referenceCells,
+            },
           },
         },
       };
@@ -461,7 +452,7 @@ export const reducer = (state, action) => {
         content: {
           rowHeights: state.rowHeights,
           columnWidths: state.columnWidths,
-          ...action.payload,
+          data: action.payload,
         },
       };
     case SheetAction.SET_CELL_FORMATTING:
@@ -469,17 +460,20 @@ export const reducer = (state, action) => {
         ...state,
         content: {
           ...state.content,
-          [state.selectedCell.id]: {
-            ...state.content[state.selectedCell.id],
-            formatting: {
-              ...state.content[state.selectedCell.id]?.formatting,
-              ...action.payload,
+          data: {
+            ...state.content.data,
+            [state.selectedCell.id]: {
+              ...state.content.data[state.selectedCell.id],
+              formatting: {
+                ...state.content.data[state.selectedCell.id]?.formatting,
+                ...action.payload,
+              },
             },
           },
         },
       };
     case SheetAction.SET_CELL_FORMATTING_BULK:
-      const formattedContent = state.highlighted.cells.reduce((acc, cur) => {
+      const formattedData = state.highlighted.cells.reduce((acc, cur) => {
         return {
           ...acc,
           [cur]: {
@@ -490,10 +484,13 @@ export const reducer = (state, action) => {
             },
           },
         };
-      }, state.content);
+      }, state.content.data);
       return {
         ...state,
-        content: formattedContent,
+        content: {
+          ...state.content,
+          data: formattedData,
+        },
       };
     case SheetAction.ADD_MEMENTO: {
       const currentMemento = state.memento.find(

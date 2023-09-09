@@ -56,9 +56,10 @@ const Toolbar = ({ state, dispatch }) => {
 
   const stateCellFormatting = useMemo(() => {
     return (
-      state.content[state.selectedCell.id]?.formatting || currentCellFormatting
+      state.content.data[state.selectedCell.id]?.formatting ||
+      currentCellFormatting
     );
-  }, [currentCellFormatting, state.content, state.selectedCell.id]);
+  }, [currentCellFormatting, state.content.data, state.selectedCell.id]);
 
   const [selectedFormatting, setSelectedFormatting] =
     useState(stateCellFormatting);

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   selectCell,
-  setContent,
+  setCellContent,
   setFormulaMode,
   setFormulaFieldText,
   setFormulaFieldFocused,
@@ -33,10 +33,10 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
   const value = useMemo(
     () =>
       state.formulaFieldText ||
-      state.content[state.selectedCell.id]?.formula ||
-      state.content[state.selectedCell.id]?.value ||
+      state.content.data[state.selectedCell.id]?.formula ||
+      state.content.data[state.selectedCell.id]?.value ||
       "",
-    [state.content, state.formulaFieldText, state.selectedCell.id]
+    [state.content.data, state.formulaFieldText, state.selectedCell.id]
   );
 
   const [originalValue, setOriginalValue] = useState(value);
@@ -113,7 +113,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
       // e.preventDefault();
       dispatch(setFormulaFieldText(e.target.value));
       dispatch(setFormulaMode(isFormula(e.target.value)));
-      dispatch(setContent(state.selectedCell.id, e.target.value));
+      dispatch(setCellContent(state.selectedCell.id, e.target.value));
     },
     [dispatch, state.selectedCell.id]
   );

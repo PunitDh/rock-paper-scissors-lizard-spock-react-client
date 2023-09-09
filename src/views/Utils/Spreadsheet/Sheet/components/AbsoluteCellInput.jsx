@@ -6,7 +6,7 @@ import {
   openContextMenu,
   recalculateFormulae,
   selectCell,
-  setContent,
+  setCellContent,
   setFormulaMode,
   setHighlightCellAnchor,
   setInputBoxFocused,
@@ -57,8 +57,10 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
 
   const currentValue = useMemo(
     () =>
-      state.content[cell.id]?.formula || state.content[cell.id]?.value || "",
-    [state.content, cell.id]
+      state.content.data[cell.id]?.formula ||
+      state.content.data[cell.id]?.value ||
+      "",
+    [state.content.data, cell.id]
   );
 
   const [originalValue, setOriginalValue] = useState(currentValue);
@@ -122,7 +124,7 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
   const handleChange = (e) => {
     const newValue = e.target.value;
     if (isFormula(newValue)) dispatch(setFormulaMode(true));
-    dispatch(setContent(cell.id, newValue));
+    dispatch(setCellContent(cell.id, newValue));
   };
 
   const handleKeyDown = useCallback(
@@ -143,7 +145,7 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
             state.formulaTrackedCells.includes(cell.id) ||
             isFormula(e.target.value);
           dispatch(setInputBoxFocused(false));
-          dispatch(setContent(cell.id, e.target.value));
+          dispatch(setCellContent(cell.id, e.target.value));
           dispatch(setFormulaMode(false));
           triggerRecalculation && dispatch(recalculateFormulae());
           originalValue !== currentValue && dispatch(addMemento());
@@ -226,9 +228,9 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
         onFocus={handleFocus}
         onContextMenu={handleContextMenu}
         formatting={
-          state.content[cell.id]?.formula?.length > 0
+          state.content.data[cell.id]?.formula?.length > 0
             ? undefined
-            : state.content[cell.id]?.formatting
+            : state.content.data[cell.id]?.formatting
         }
       />
     </Container>

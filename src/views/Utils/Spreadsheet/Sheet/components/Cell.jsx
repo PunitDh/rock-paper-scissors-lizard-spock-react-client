@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef } from "react";
 import { Item } from "../styles";
 import {
   resetHighlight,
-  setContent,
+  setCellContent,
   highlightCells,
   selectCell,
   setHighlightCellAnchor,
@@ -43,17 +43,17 @@ const Cell = ({ id, state, dispatch }) => {
       if (!isLeftClick) return;
 
       const isLastValueClosedBracket = /(\))$/gi.test(
-        state.content[state.selectedCell.id]?.formula
+        state.content.data[state.selectedCell.id]?.formula
       );
       const isLastValueOperation = /[+-/*^:,]$/gi.test(
-        state.content[state.selectedCell.id]?.formula
+        state.content.data[state.selectedCell.id]?.formula
       );
       const isShiftOrCtrlPressed = e.shiftKey || isCtrlKeyPressed(e);
       const isSameCellSelected = id === state.selectedCell.id;
 
       const addCellsToFormula = () => {
         const value = addCellToFocusedBox(state, id, !isCtrlKeyPressed(e));
-        dispatch(setContent(state.selectedCell.id, value));
+        dispatch(setCellContent(state.selectedCell.id, value));
         dispatch(
           updateReferenceCells(
             state.selectedCell.id,
@@ -135,11 +135,11 @@ const Cell = ({ id, state, dispatch }) => {
       onContextMenu={handleContextMenu}
       id={id}
       tabIndex={row * state.maxRows + (columnCharCode - 65)}
-      textalign={isNaN(state.content[id]?.value) ? "left" : "right"}
+      textalign={isNaN(state.content.data[id]?.value) ? "left" : "right"}
       width={`${Math.floor((100 - 3) / state.maxColumns)}%`}
-      formatting={state.content[id]?.formatting}
+      formatting={state.content.data[id]?.formatting}
     >
-      {state.content[id]?.value}
+      {state.content.data[id]?.value}
       {/* {id === state.selectedCell.id && inputBoxFocused ? (
       ) : (
         
