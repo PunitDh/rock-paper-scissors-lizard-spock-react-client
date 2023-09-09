@@ -93,7 +93,6 @@ export default class CellData {
       const referenceCells = getReferenceCells(this.formula);
       const evaluated = evaluate(this.formula, stateContentData);
       console.log("evaluating formula", this.id);
-      console.log(evaluated);
       if (evaluated.error) {
         this.error = evaluated.error;
         this.referenceCells = [];

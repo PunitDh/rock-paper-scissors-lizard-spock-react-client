@@ -60,6 +60,7 @@ const SelectAll = ({ state, dispatch, onContextMenu }) => {
       onMouseUp={handleMouseUp}
       onContextMenu={onContextMenu}
       onKeyDown={handleKeyDown}
+      id={"select-all"}
     >
       <Corner />
     </SelectAllItem>

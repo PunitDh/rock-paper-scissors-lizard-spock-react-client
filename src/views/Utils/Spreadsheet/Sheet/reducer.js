@@ -43,16 +43,18 @@ export const initialState = {
 };
 
 export const reducer = (state, action) => {
-  console.log(action);
   switch (action.type) {
-    case SheetAction.SET_SELECTED:
-      return {
-        ...state,
-        selectedCell:
-          typeof action.payload === "object" && action.payload instanceof Cell
-            ? action.payload
-            : new Cell(action.payload),
-      };
+    case SheetAction.SET_SELECTED: {
+      if (Cell.isValidId(action.payload) || Cell.isValidId(action.payload.id))
+        return {
+          ...state,
+          selectedCell:
+            typeof action.payload === "object" && action.payload instanceof Cell
+              ? action.payload
+              : new Cell(action.payload),
+        };
+      return state;
+    }
     case SheetAction.SET_INPUT_REF:
       return {
         ...state,
@@ -95,13 +97,14 @@ export const reducer = (state, action) => {
         ...state,
         formulaMode: action.payload,
       };
-    case SheetAction.SET_HOVERED_CELL:
+    case SheetAction.SET_HOVERED: {
       if (Cell.isValidId(action.payload))
         return {
           ...state,
           hovered: action.payload,
         };
       return state;
+    }
     case SheetAction.SET_HIGHLIGHT_CELL_ANCHOR:
       return {
         ...state,
@@ -324,7 +327,7 @@ export const reducer = (state, action) => {
     case SheetAction.SET_SELECTED_ROW: {
       const range = CellRange.createFlat(
         `${SheetConfig.COLUMNS[0]}${action.payload}`,
-        `${SheetConfig.COLUMNS[state.maxColumns]}${action.payload}`
+        `${SheetConfig.COLUMNS[state.maxColumns - 1]}${action.payload}`
       );
 
       return {

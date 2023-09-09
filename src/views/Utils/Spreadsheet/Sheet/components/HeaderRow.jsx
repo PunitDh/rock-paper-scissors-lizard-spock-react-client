@@ -8,7 +8,6 @@ const HeaderRow = ({ state, dispatch }) => {
     <TableHead width="100%">
       <TableRow>
         <SelectAll state={state} dispatch={dispatch} />
-
         {Array(state.maxColumns)
           .fill(0)
           .map((_, column) => (

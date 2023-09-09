@@ -8,7 +8,7 @@ export const SheetAction = Object.freeze({
   RESET_FORMULA_FIELD: "RESET_FORMULA_FIELD",
   SET_EDIT_MODE: "SET_EDIT_MODE",
   SET_FORMULA_MODE: "SET_FORMULA_MODE",
-  SET_HOVERED_CELL: "SET_HOVERED_CELL",
+  SET_HOVERED: "SET_HOVERED",
   SET_SELECTED_ROW: "SET_SELECTED_ROW",
   SET_SELECTED_COLUMN: "SET_SELECTED_COLUMN",
   SET_ROW_HEIGHT: "SET_ROW_HEIGHT",
@@ -85,7 +85,7 @@ export const setFormulaMode = (payload) => ({
 });
 
 export const setHovered = (payload) => ({
-  type: SheetAction.SET_HOVERED_CELL,
+  type: SheetAction.SET_HOVERED,
   payload,
 });
 

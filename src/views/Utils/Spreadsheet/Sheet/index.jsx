@@ -58,7 +58,7 @@ const Sheet = ({
   statusField = true,
   initialData = {},
   defaultRowHeight = 24,
-  defaultColumnWidth = 50,
+  defaultColumnWidth = 80,
 }) => {
   const createInitialState = useCallback(
     () => ({
@@ -148,7 +148,9 @@ const Sheet = ({
       if (state.formulaMode) {
         // TODO
       } else {
-        dispatch(highlightCells(state.highlighted.cellAnchor, state.hovered));
+        dispatch(
+          highlightCells(state.highlighted.cellAnchor, state.hovered)
+        );
       }
     } else {
       if (state.formulaMode) {
@@ -190,11 +192,8 @@ const Sheet = ({
       !isSameCellHighlighted;
 
     if (selectingFormulaCells) {
-      const value = addCellToFocusedBox(
-        state,
-        `${state.highlighted.cellAnchor}:${state.hovered}`,
-        !isCtrlKeyPressed(e)
-      );
+      const range = `${state.highlighted.cellAnchor}:${state.hovered}`;
+      const value = addCellToFocusedBox(state, range, !isCtrlKeyPressed(e));
       dispatch(setCellContent(state.selectedCell.id, value));
       dispatch(
         updateReferenceCells(
@@ -222,7 +221,6 @@ const Sheet = ({
     }
   };
 
-  // const handleMouseUp = (e) => handleMouseUpSheet(e, state, dispatch);
   const handleContextMenu = (e) => {
     e.preventDefault();
     dispatch(openContextMenu(state.hovered));

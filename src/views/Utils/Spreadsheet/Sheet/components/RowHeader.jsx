@@ -1,13 +1,16 @@
 import styled from "@emotion/styled";
 import {
+  addCellsToHighlight,
   addMemento,
-  setHighlightRowAnchor,
-  setHovered,
+  highlightCells,
   setRowHeight,
   setSelectedRow,
 } from "../actions";
 import { HeaderItem } from "../styles";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useRef } from "react";
+import { isCtrlKeyPressed } from "../utils/cellUtils";
+import { SheetConfig } from "../constants";
+import CellRange from "../models/CellRange";
 
 const RowHeaderItem = styled(HeaderItem)(({ height }) => ({
   width: "3%",
@@ -32,56 +35,52 @@ const Resizer = styled.div({
 
 const RowHeader = ({ state, dispatch, row, onContextMenu }) => {
   const headerRef = useRef();
-  const rowHeight = useMemo(
-    () =>
-      (state.content.rowHeights && state.content.rowHeights[row]) ||
-      state.defaultRowHeight,
-    [row, state.content.rowHeights, state.defaultRowHeight]
-  );
-  const [newHeight, setNewHeight] = useState(rowHeight);
-  const selected = useMemo(
-    () =>
-      state.selectedCell.row === row || state.highlighted.rows.includes(row),
-    [row, state.highlighted.rows, state.selectedCell.row]
-  );
   const rowTop = useRef();
+  const selected =
+    state.selectedCell.row === row || state.highlighted.rows.includes(row);
 
-  const handleRowHeaderClick = () => dispatch(setSelectedRow(row));
+  const handleClick = (e) => {
+    e.stopPropagation();
+    if (isCtrlKeyPressed(e)) {
+      console.log("Here");
+      const range = CellRange.createFlat(
+        `${SheetConfig.COLUMNS[0]}${row}`,
+        `${SheetConfig.COLUMNS[state.maxColumns - 1]}${row}`
+      ).cellIds;
+      dispatch(addCellsToHighlight(range));
+    } else if (e.shiftKey) {
+      dispatch(
+        highlightCells(
+          `${SheetConfig.COLUMNS[0]}${state.selectedCell.row}`,
+          `${SheetConfig.COLUMNS[state.maxColumns - 1]}${row}`
+        )
+      );
+    } else {
+      dispatch(setSelectedRow(row));
+    }
+  };
 
   const handleDragStart = (e) => {
     e.dataTransfer.setData("text/plain", "");
     rowTop.current = headerRef.current?.getBoundingClientRect().top;
   };
 
-  const handleDragEnd = (e) => setNewHeight(e.clientY - rowTop.current);
-
-  useEffect(() => {
-    dispatch(setRowHeight(row, newHeight));
+  const handleDragEnd = (e) => {
+    dispatch(setRowHeight(row, e.clientY - rowTop.current));
     dispatch(addMemento());
-  }, [dispatch, newHeight, row]);
+  };
 
-  const resetHeight = () => dispatch(setRowHeight(row, 24));
-
-  const handleMouseDown = () => {
-    dispatch(setHighlightRowAnchor(row));
-  };
-  const handleMouseMove = (e) => {
-  };
-  const handleMouseUp = (e) => {
-  };
-  const handleMouseOver = (e) => {
-    dispatch(setHovered(row));
+  const resetHeight = () => {
+    dispatch(setRowHeight(row, state.defaultRowHeight));
+    dispatch(addMemento());
   };
 
   return (
     <RowHeaderItem
       selected={selected}
       onContextMenu={onContextMenu}
-      height={`${Math.round(rowHeight)}px`}
-      onMouseDown={handleRowHeaderClick}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseOver={handleMouseOver}
+      height={`${Math.round(state.content.rowHeights[row])}px`}
+      onMouseDown={handleClick}
       id={`row-${row}`}
       ref={headerRef}
     >

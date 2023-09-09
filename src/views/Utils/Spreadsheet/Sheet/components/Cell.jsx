@@ -19,7 +19,6 @@ const Cell = memo(({ id, state }) => {
       id={id}
       tabIndex={row * state.maxRows + (columnCharCode - 65)}
       textalign={isNaN(cellData?.value) ? "left" : "right"}
-      width={`${Math.floor((100 - 3) / state.maxColumns)}%`}
       formatting={cellData?.formatting}
     >
       {cellData?.display}
