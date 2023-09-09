@@ -105,8 +105,8 @@ export const setHighlightColumnAnchor = (payload) => ({
 export const pasteCellContent = (anchor, data) => ({
   type: SheetAction.PASTE_CELL_CONTENT,
   payload: {
-    data,
     anchor,
+    data,
   },
 });
 

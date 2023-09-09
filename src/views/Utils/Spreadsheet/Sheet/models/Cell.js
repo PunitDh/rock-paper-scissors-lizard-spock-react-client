@@ -30,12 +30,18 @@ export default class Cell {
     });
   }
 
+  getOffset = (offsetX, offsetY) => {
+    const offsetRow = +this.row + offsetY;
+    const offsetColumn =
+      SheetConfig.COLUMNS[+SheetConfig.COLUMNS.indexOf(this.column) + offsetX];
+    return new Cell(`${offsetColumn}${offsetRow}`);
+  };
+
   getNextColumn(
     maxRows = SheetConfig.MAX_ROWS,
     maxColumns = SheetConfig.MAX_COLUMNS
   ) {
     const lastColumnCharCode = getLastColumnCharCode(maxColumns);
-    this.log(maxRows, maxColumns, lastColumnCharCode);
     const newRow =
       this.columnCharCode + 1 > lastColumnCharCode && this.row === maxRows
         ? 1
@@ -48,25 +54,17 @@ export default class Cell {
 
     const newColumn = String.fromCharCode(newColumnCharCode);
     const newCellId = `${newColumn}${newRow}`;
-    console.log({ newRow, newColumnCharCode, newColumn, newCellId });
-
     return new Cell(newCellId);
   }
 
   getNextRow(maxRows = SheetConfig.MAX_ROWS) {
-    this.log(maxRows);
-
-    console.log("Here");
     const nextRow = +this.row === maxRows ? +this.row : +this.row + 1;
     const newCellId = `${this.column}${nextRow}`;
-    console.log({ newCellId });
     return new Cell(newCellId);
   }
 
   getPreviousColumn(maxColumns = SheetConfig.MAX_COLUMNS) {
     const firstColumnCharCode = getFirstColumnCharCode();
-    this.log("", maxColumns);
-
     const nextRow =
       this.columnCharCode - 1 < firstColumnCharCode && this.row > 1
         ? this.row - 1
@@ -82,10 +80,8 @@ export default class Cell {
   }
 
   getPreviousRow() {
-    this.log();
     const nextRow = +this.row === 1 ? +this.row : +this.row - 1;
     const newCellId = `${this.column}${nextRow}`;
-    console.log({ newCellId });
     return new Cell(newCellId);
   }
 }

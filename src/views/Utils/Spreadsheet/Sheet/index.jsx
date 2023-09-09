@@ -176,6 +176,7 @@ const Sheet = ({
   const handleCopyCapture = async (e) => {
     e.preventDefault();
     const content = generateClipboardContent(state);
+    console.log(content);
     await clipboard.copy(content);
   };
 
@@ -188,7 +189,8 @@ const Sheet = ({
   const handlePasteCapture = async (e) => {
     e.preventDefault();
     const data = await clipboard.get();
-    dispatch(pasteCellContent({ id: state.selectedCell.id }, data));
+    console.log(data);
+    dispatch(pasteCellContent(state.selectedCell.id, data));
   };
 
   return (

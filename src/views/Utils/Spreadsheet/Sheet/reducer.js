@@ -203,33 +203,43 @@ export const reducer = (state, action) => {
     }
     case SheetAction.PASTE_CELL_CONTENT: {
       const { data, anchor } = action.payload;
+      console.log({ anchor });
       try {
         const parsed = JSON.parse(data);
+        console.log(parsed);
         if (parsed.type === "_sheet") {
-          const cellOffset = getCellOffset(
-            new Cell(anchor.id),
+          const cellOffset = new Cell(anchor).getOffset(
             parsed.content[0].length - 1,
             parsed.content.length - 1
           );
-          const range = Range.create(anchor.id, cellOffset);
+          const range = Range.create(anchor, cellOffset.id);
           const updateObj = {};
           range.cells.forEach((row, rowIndex) =>
             row.forEach((cell, cellIndex) => {
-              updateObj[cell.id] = parsed.content[rowIndex][cellIndex];
+              updateObj[cell.id] = new CellContent({
+                id: cell.id,
+                ...parsed.content[rowIndex][cellIndex],
+              });
             })
           );
-          const newContent = Object.keys(updateObj).reduce((acc, cur) => {
-            return {
-              ...acc,
-              [cur]: new CellContent({ id: cur, ...updateObj[cur] }),
-            };
-          }, state.content);
+          const newContent = Object.keys(updateObj).reduce(
+            (stateContent, cell) => {
+              return {
+                ...stateContent,
+                [cell]: updateObj[cell],
+              };
+            },
+            state.content
+          );
+
+          console.log(newContent);
           return {
             ...state,
             content: newContent,
           };
         }
       } catch (e) {
+        console.log(e);
         const value = typeInInputBox(action.payload.data);
         return {
           ...state,
