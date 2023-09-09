@@ -42,7 +42,6 @@ const RowHeader = ({ state, dispatch, row, onContextMenu }) => {
   const handleClick = (e) => {
     e.stopPropagation();
     if (isCtrlKeyPressed(e)) {
-      console.log("Here");
       const range = CellRange.createFlat(
         `${SheetConfig.COLUMNS[0]}${row}`,
         `${SheetConfig.COLUMNS[state.maxColumns - 1]}${row}`

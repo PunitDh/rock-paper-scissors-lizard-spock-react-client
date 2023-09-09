@@ -3,7 +3,6 @@ import {
   addMemento,
   deleteCellContent,
   highlightCells,
-  recalculateFormulae,
   redoState,
   resetHighlight,
   selectAll,

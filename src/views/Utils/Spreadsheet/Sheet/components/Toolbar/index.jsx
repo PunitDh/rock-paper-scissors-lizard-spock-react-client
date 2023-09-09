@@ -19,7 +19,7 @@ import {
   setCellFormattingBulk,
 } from "../../actions";
 import OpenFile from "./OpenFile";
-import SaveFile from "./SaveFile";
+import SaveFileCSV from "./SaveFileCSV";
 import FormattingButton from "./components/FormattingButton";
 import HistoryButton from "./HistoryButton";
 import NumberFormattingSelect from "./NumberFormattingSelect";
@@ -27,6 +27,7 @@ import ColorPicker from "./components/ColorPicker";
 import FontFamilySelect from "./FontFamilySelect";
 import FontSizeSelect from "./FontSizeSelect";
 import BorderStyleSelect from "./BorderStyleSelect";
+import SaveFileJSON from "./SaveFileJSON";
 
 const Toolbar = ({ state, dispatch }) => {
   const inputRef = useRef();
@@ -128,7 +129,8 @@ const Toolbar = ({ state, dispatch }) => {
     <div tabIndex="1000">
       <FlexForm flexWrap="wrap" onSubmit={handleSubmit}>
         <OpenFile dispatch={dispatch} />
-        <SaveFile state={state} />
+        <SaveFileCSV state={state} />
+        <SaveFileJSON state={state} />
         <HistoryButton
           title="Undo"
           Icon={Undo}

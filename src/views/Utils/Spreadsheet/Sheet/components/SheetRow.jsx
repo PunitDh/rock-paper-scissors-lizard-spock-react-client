@@ -1,8 +1,9 @@
 import React from "react";
-import { SheetConfig } from "../constants";
+import { Dimension, SheetConfig } from "../constants";
 import { TableRow } from "@mui/material";
-import RowHeader from "./RowHeader";
 import Cell from "./Cell";
+import HeaderCell from "./HeaderCell";
+import RowHeader from "./RowHeader";
 
 const SheetRow = ({ state, dispatch, row }) => {
   return (
@@ -12,13 +13,21 @@ const SheetRow = ({ state, dispatch, row }) => {
         .map((_, column) => {
           const id = SheetConfig.COLUMNS[column - 1] + (row + 1);
           return column === 0 ? (
-            <RowHeader
+            <HeaderCell
               state={state}
               dispatch={dispatch}
+              dimension={Dimension.ROW}
+              id={row + 1}
               key={row + 1}
-              row={row + 1}
             />
+            // <RowHeader
+            //   state={state}
+            //   dispatch={dispatch}
+            //   key={row + 1}
+            //   row={row + 1}
+            // />
           ) : (
+            
             <Cell state={state} key={id} id={id} />
           );
         })}

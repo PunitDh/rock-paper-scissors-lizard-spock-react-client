@@ -9,7 +9,7 @@ import { HeaderItem } from "../styles";
 import styled from "@emotion/styled";
 import { isCtrlKeyPressed } from "../utils/cellUtils";
 import CellRange from "../models/CellRange";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useRef } from "react";
 
 const ColumnHeaderItem = styled(HeaderItem)(({ width }) => ({
   cursor: "s-resize",

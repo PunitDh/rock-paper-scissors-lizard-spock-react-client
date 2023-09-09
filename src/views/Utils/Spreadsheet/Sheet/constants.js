@@ -1,15 +1,15 @@
-export const MouseButton = {
+export const MouseButton = Object.freeze({
   LEFT_CLICK: 0,
   RIGHT_CLICK: 1,
-};
+});
 
-export const SheetConfig = {
+export const SheetConfig = Object.freeze({
   COLUMNS: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
   MAX_ROWS: 12,
   MAX_COLUMNS: 12,
-};
+});
 
-export const KeyEvent = {
+export const KeyEvent = Object.freeze({
   ENTER: "Enter",
   ESCAPE: "Escape",
   TAB: "Tab",
@@ -24,16 +24,22 @@ export const KeyEvent = {
   ALT: "Alt",
   LOWERCASE_A: "a",
   LOWERCASE_Z: "z",
-};
+});
 
-export const Calc = {
+export const Calc = Object.freeze({
   ANS: "Ans",
   DEG: "Deg",
   OPERATIONS: ["+", "-", "*", "/", "^"],
-};
+});
+
+export const Dimension = Object.freeze({
+  ROW: "row",
+  COLUMN: "column",
+});
 
 export const Formula = ["SUM(", "AVG("];
 
-export const getFirstColumnCharCode = () => SheetConfig.COLUMNS[0].charCodeAt(0);
+export const getFirstColumnCharCode = () =>
+  SheetConfig.COLUMNS[0].charCodeAt(0);
 export const getLastColumnCharCode = (maxColumns) =>
   SheetConfig.COLUMNS[maxColumns].charCodeAt(0);

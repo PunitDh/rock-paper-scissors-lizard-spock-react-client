@@ -4,7 +4,7 @@ import { Save } from "@mui/icons-material";
 import { SheetConfig } from "../../constants";
 import CellRange from "../../models/CellRange";
 
-const SaveFile = ({ state }) => {
+const SaveFileCSV = ({ state }) => {
   const handleExportAsCsv = () => {
     const range = CellRange.create(
       `A1`,
@@ -34,4 +34,4 @@ const SaveFile = ({ state }) => {
   );
 };
 
-export default SaveFile;
+export default SaveFileCSV;

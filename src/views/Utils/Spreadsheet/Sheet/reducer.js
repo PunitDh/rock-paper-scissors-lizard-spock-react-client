@@ -43,6 +43,7 @@ export const initialState = {
 };
 
 export const reducer = (state, action) => {
+  console.log(action);
   switch (action.type) {
     case SheetAction.SET_SELECTED: {
       if (Cell.isValidId(action.payload) || Cell.isValidId(action.payload.id))
