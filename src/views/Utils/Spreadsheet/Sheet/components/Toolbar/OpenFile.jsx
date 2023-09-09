@@ -1,7 +1,7 @@
 import { Tooltip } from "@mui/material";
 import { FieldButton } from "../styles";
 import { FolderOpenSharp } from "@mui/icons-material";
-import CellContent from "../../models/CellContent";
+import CellData from "../../models/CellData";
 import { setContentBulk } from "../../actions";
 import { useRef } from "react";
 import { parseCSV } from "../../utils/cellUtils";
@@ -16,7 +16,7 @@ const OpenFile = ({ dispatch }) => {
       const content = parseCSV(text);
       const filtered = Object.keys(content).reduce((acc, cur) => {
         if (content[cur]?.value.length > 0) {
-          acc[cur] = new CellContent({
+          acc[cur] = new CellData({
             id: cur,
             value: content[cur].value,
           });

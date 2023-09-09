@@ -75,7 +75,7 @@ export const handleKeyDown = (e, state, dispatch) => {
 const determineNextCell = (e, state, dispatch) => {
   const { selectedCell } = state;
 
-  if (!e.shiftKey && !state.isFormulaModeActive) {
+  if (!e.shiftKey && !state.formulaMode) {
     dispatch(resetHighlight()); // reset highlighting if conditions are met
   }
 

@@ -1,7 +1,7 @@
 import { isFormula } from "../utils/cellUtils";
 import Range from "./Range";
 
-export default class CellContent {
+export default class CellData {
   constructor(obj) {
     if (obj) {
       this.id = obj.id || null;
@@ -26,11 +26,57 @@ export default class CellContent {
     return isFormula(this.formula) && this.formula?.length > 0;
   }
 
+  setId(id) {
+    this.id = id || this.id || null;
+    return this;
+  }
+
+  setRef(ref) {
+    this.ref = ref || this.ref || null;
+    return this;
+  }
+
+  setValue(value) {
+    if (isFormula(value)) {
+      const formula = value.toUpperCase();
+      this.setFormula(formula);
+    } else {
+      this.value = value || this.value || null;
+      this.setDisplay(value);
+      this.formula = "";
+    }
+    return this;
+  }
+
+  setFormula(formula) {
+    this.formula = formula;
+    this.referenceCells = getReferenceCells(formula);
+    return this;
+  }
+
+  setDisplay(display) {
+    this.display = display || this.display || null;
+    return this;
+  }
+
+  setFormatting(formatting) {
+    this.formatting = formatting || this.formatting || {};
+    return this;
+  }
+
+  setData(obj) {
+    if (!obj) return this;
+    this.setValue(obj.value);
+    this.setId(obj.id);
+    this.setRef(obj.ref);
+    this.setFormatting(obj.formatting);
+    return this;
+  }
+
   evaluate(stateContentData) {
     if (this.formula) {
       const referenceCells = getReferenceCells(this.formula);
       const evaluated = evaluate(this.formula, stateContentData);
-      console.log(evaluated, referenceCells);
       console.log("evaluating formula", this.id);
       this.value = evaluated.value;
       this.display = evaluated.value;
@@ -160,34 +206,6 @@ export const evaluate = (str, stateContent) => {
     ...finalEvaluation,
     referenceCells: replacedString.referenceCells,
   };
-};
-
-export const getUpdatedStateContent = (stateContent, cell, formula) => {
-  try {
-    const referenceCells = getReferenceCells(formula);
-    const evaluated = evaluate(formula, stateContent);
-    return {
-      ...stateContent,
-      [cell]: new CellContent({
-        ...stateContent[cell],
-        id: cell,
-        formula: formula.toUpperCase(),
-        referenceCells,
-        value: evaluated.value,
-        display: evaluated.value,
-      }),
-    };
-  } catch (e) {
-    console.error(e);
-    return {
-      ...stateContent,
-      [cell]: {
-        formula: formula.toUpperCase(),
-        value: "Syntax Error",
-        display: "Syntax Error",
-      },
-    };
-  }
 };
 
 const evaluateExpression = (input) => {

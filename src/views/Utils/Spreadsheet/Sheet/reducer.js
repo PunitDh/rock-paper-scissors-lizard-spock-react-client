@@ -1,12 +1,11 @@
 import { SheetConfig } from "./constants";
-import { getCellOffset, isFormula, typeInInputBox } from "./utils/cellUtils";
+import { isFormula, typeInInputBox } from "./utils/cellUtils";
 import { SheetAction } from "./actions";
 import Cell from "./models/Cell";
-import CellContent, {
+import CellData, {
   getFormulaTrackedCells,
   getReferenceCells,
-  getUpdatedStateContent,
-} from "./models/CellContent";
+} from "./models/CellData";
 import Range from "./models/Range";
 import { isEqual, uniqueId } from "lodash";
 
@@ -20,7 +19,7 @@ export const initialState = {
   maxUndos: 32,
   selectedCell: new Cell("A1"), //{ cell: "A1", row: 1, column: "A", columnCharCode: 65 },
   editMode: false,
-  isFormulaModeActive: false,
+  formulaMode: false,
   hovered: "",
   highlighted: {
     rowAnchor: null,
@@ -86,7 +85,7 @@ export const reducer = (state, action) => {
         ...state,
         formulaFieldText: "",
         isFormulaFieldFocused: false,
-        isFormulaModeActive: false,
+        formulaMode: false,
       };
     case SheetAction.SET_EDIT_MODE:
       return {
@@ -96,7 +95,7 @@ export const reducer = (state, action) => {
     case SheetAction.SET_FORMULA_MODE:
       return {
         ...state,
-        isFormulaModeActive: action.payload,
+        formulaMode: action.payload,
       };
     case SheetAction.SET_HOVERED_CELL:
       return {
@@ -184,7 +183,7 @@ export const reducer = (state, action) => {
             ...state.content,
             data: {
               ...state.content.data,
-              [action.payload]: new CellContent({ id: action.payload }),
+              [action.payload]: new CellData({ id: action.payload }),
             },
           },
         };
@@ -195,7 +194,7 @@ export const reducer = (state, action) => {
         .reduce(
           (stateContentData, cell) => ({
             ...stateContentData,
-            [cell]: new CellContent({ id: cell }),
+            [cell]: new CellData({ id: cell }),
           }),
           state.content.data
         );
@@ -218,7 +217,7 @@ export const reducer = (state, action) => {
           const updateObj = {};
           range.cells.forEach((row, rowIndex) =>
             row.forEach((cell, cellIndex) => {
-              updateObj[cell.id] = new CellContent({
+              updateObj[cell.id] = new CellData({
                 id: cell.id,
                 ...parsed.content[rowIndex][cellIndex],
               });
@@ -370,50 +369,30 @@ export const reducer = (state, action) => {
       };
     }
     case SheetAction.SET_CONTENT_DATA: {
-      const { value, cell } = action.payload;
-      // Combine all cell references without duplicates
+      const { value, cell: cellId } = action.payload;
       const formula = value.toUpperCase();
-      const isFirstValueEqualSign = isFormula(value);
-      const referenceCells = getReferenceCells(formula);
+      const formulaMode = isFormula(formula);
       const formulaTrackedCells = getFormulaTrackedCells(
         formula,
         state.formulaTrackedCells
       );
 
-      const commonState = {
+      const cellData =
+        state.content.data[cellId] || new CellData().setId(cellId);
+      cellData.setValue(value);
+
+      return {
         ...state,
+        formulaTrackedCells,
+        formulaMode,
         content: {
           ...state.content,
           data: {
             ...state.content.data,
-            [cell]: isFirstValueEqualSign
-              ? new CellContent({
-                  id: cell,
-                  ...state.content.data[cell],
-                  formula,
-                  referenceCells,
-                })
-              : new CellContent({
-                  id: cell,
-                  ...state.content.data[cell],
-                  value: value,
-                  display: value,
-                  formula: "",
-                }),
+            [cellId]: cellData,
           },
         },
       };
-
-      return isFirstValueEqualSign
-        ? {
-            ...commonState,
-            formulaTrackedCells,
-            isFormulaModeActive: true,
-          }
-        : {
-            ...commonState,
-            isFormulaModeActive: false,
-          };
     }
     case SheetAction.UPDATE_REFERENCE_CELLS:
       const { values } = action.payload;

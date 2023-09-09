@@ -78,7 +78,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
       isFormula(e.target.value) ||
       state.formulaTrackedCells.includes(state.selectedCell.id) ||
       originalValue !== e.target.value;
-    if (!state.isFormulaModeActive) {
+    if (!state.formulaMode) {
       triggerRecalculation && dispatch(recalculateFormulae());
     }
   };

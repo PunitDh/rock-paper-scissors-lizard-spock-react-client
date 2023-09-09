@@ -1,4 +1,4 @@
-import CellContent from "../models/CellContent";
+import CellData from "../models/CellData";
 import Range from "../models/Range";
 
 // Utility functions
@@ -130,7 +130,7 @@ export const getUpdatedStateContent = (stateContent, cell, formula) => {
     const evaluated = evaluate(formula, stateContent);
     return {
       ...stateContent,
-      [cell]: new CellContent({
+      [cell]: new CellData({
         ...stateContent[cell],
         id: cell,
         formula: formula.toUpperCase(),

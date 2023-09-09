@@ -1,4 +1,3 @@
-import { SheetConfig } from "../constants";
 import { addCellsToHighlight, setSelectedColumn } from "../actions";
 import { HeaderItem } from "../styles";
 import styled from "@emotion/styled";

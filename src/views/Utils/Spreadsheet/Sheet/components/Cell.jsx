@@ -63,7 +63,7 @@ const Cell = ({ id, state, dispatch }) => {
         );
       };
 
-      if (state.isFormulaModeActive) {
+      if (state.formulaMode) {
         if (
           !isSameCellSelected &&
           (!isLastValueClosedBracket || isLastValueOperation)

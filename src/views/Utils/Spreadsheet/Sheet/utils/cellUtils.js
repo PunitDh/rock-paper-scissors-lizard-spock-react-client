@@ -1,36 +1,5 @@
 import { SheetConfig } from "../constants";
-import CellContent from "../models/CellContent";
-
-// export const getId = (id) => {
-//   const row = id?.match(/\d+/g);
-//   const column = id?.match(/[A-Z]/g);
-//   const columnCharCode = id?.match(/[A-Z]/g);
-
-//   if (row && column && columnCharCode)
-//     return {
-//       row: row[0],
-//       column: column[0],
-//       columnCharCode: columnCharCode[0].charCodeAt(0),
-//     };
-//   return {};
-// };
-
-// export const getCellMinMax = (highlighted) => {
-//   const ids = highlighted.map(getId);
-//   const columnCharCodes = ids.map((it) => it.columnCharCode);
-//   const rows = ids.map((it) => Number(it.row));
-//   const minC = Math.min(...columnCharCodes);
-//   const maxC = Math.max(...columnCharCodes);
-//   const minR = Math.min(...rows);
-//   const maxR = Math.max(...rows);
-
-//   return {
-//     minC,
-//     maxC,
-//     minR,
-//     maxR,
-//   };
-// };
+import CellData from "../models/CellData";
 
 export const getCellOffset = (cell, offsetX, offsetY) => {
   const offsetRow = +cell.row + offsetY;
@@ -43,7 +12,7 @@ export const generateClipboardContent = (state) => {
   const content = state.highlighted.rows.map((row) =>
     state.highlighted.columns.map((column) => {
       const id = `${column}${row}`;
-      return new CellContent({
+      return new CellData({
         id,
         value: state.content.data[id]?.value || "",
         display: state.content.data[id]?.display || "",
@@ -148,7 +117,7 @@ export function parseCSV(csvString) {
     row.split(",").forEach((cellValue, colIndex) => {
       const colLabel = SheetConfig.COLUMNS[colIndex];
       const cellId = `${colLabel}${rowIndex + 1}`;
-      content[cellId] = new CellContent({
+      content[cellId] = new CellData({
         id: cellId,
         value: cellValue,
         formula: "",
@@ -182,7 +151,7 @@ export const generateInitialContent = (
 
   const data = Object.keys(initialData).reduce((stateContentData, it) => {
     const cell = it.toUpperCase();
-    stateContentData[cell] = new CellContent({ id: cell });
+    stateContentData[cell] = new CellData({ id: cell });
     if (initialData[it] !== null && typeof initialData[it] !== "object") {
       const isString =
         typeof initialData[it] === "string" ||
@@ -194,7 +163,7 @@ export const generateInitialContent = (
       }
       stateContentData[cell].display = initialData[it];
     } else {
-      stateContentData[cell] = new CellContent({
+      stateContentData[cell] = new CellData({
         id: cell,
         ...initialData[it],
       });

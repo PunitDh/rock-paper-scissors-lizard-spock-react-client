@@ -12,7 +12,7 @@ export default function Spreadsheet() {
         toolbar={true}
         formulaField={true}
         statusField={true}
-        initalContent={{
+        initialData={{
           A1: 34,
           B1: 45,
           A2: "=A1+B1",

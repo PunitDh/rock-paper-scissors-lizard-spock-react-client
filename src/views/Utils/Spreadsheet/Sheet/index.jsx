@@ -43,7 +43,7 @@ const Sheet = ({
   toolbar = true,
   formulaField = true,
   statusField = true,
-  initalContent = {},
+  initialData = {},
   defaultRowHeight = 24,
   defaultColumnWidth = 50,
 }) => {
@@ -56,7 +56,7 @@ const Sheet = ({
       maxColumns,
       maxUndos,
       content: generateInitialContent(
-        initalContent,
+        initialData,
         defaultRowHeight,
         defaultColumnWidth,
         maxRows,
@@ -66,7 +66,7 @@ const Sheet = ({
     [
       defaultColumnWidth,
       defaultRowHeight,
-      initalContent,
+      initialData,
       maxColumns,
       maxRows,
       maxUndos,
@@ -87,11 +87,11 @@ const Sheet = ({
   // }, [state.content]);
 
   // useEffect(() => {
-  //   if (!state.isFormulaModeActive) {
+  //   if (!state.formulaMode) {
   //     console.log("Recalculation triggered");
   //     dispatch(recalculateFormulae());
   //   }
-  // }, [cellsToTrack, state.isFormulaModeActive]);
+  // }, [cellsToTrack, state.formulaMode]);
 
   useEffect(() => {
     dispatch(
@@ -119,7 +119,7 @@ const Sheet = ({
   const handleMouseUp = (e) => {
     dispatch(setMouseDown(false));
     const selectingFormulaCells =
-      state.isFormulaModeActive &&
+      state.formulaMode &&
       state.formulaHighlighted.length > 1 &&
       state.highlighted.cellAnchor !== state.hovered;
 
@@ -143,7 +143,7 @@ const Sheet = ({
   const handleMouseMove = useCallback(
     (e) => {
       if (state.mouseDown && !isCtrlKeyPressed(e)) {
-        if (state.isFormulaModeActive) {
+        if (state.formulaMode) {
           dispatch(
             formulaHighlightCellRange(
               state.highlighted.cellAnchor,
@@ -157,7 +157,7 @@ const Sheet = ({
     },
     [
       state.mouseDown,
-      state.isFormulaModeActive,
+      state.formulaMode,
       state.highlighted.cellAnchor,
       state.hovered,
     ]
