@@ -3,18 +3,20 @@ import {
   addMemento,
   deleteCellContent,
   highlightCells,
+  recalculateFormulae,
   redoState,
   resetHighlight,
   selectAll,
   selectCell,
   setEditMode,
+  setFormulaMode,
   setHighlightCellAnchor,
   undoState,
 } from "../actions";
 import { isCtrlKeyPressed } from "../utils/cellUtils";
 import Cell from "../models/Cell";
 
-export const handleKeyUp = (e, dispatch) => {
+export const handleKeyUpSheet = (e, dispatch) => {
   switch (e.key) {
     case KeyEvent.SHIFT:
       dispatch(setHighlightCellAnchor(null));
@@ -24,7 +26,7 @@ export const handleKeyUp = (e, dispatch) => {
   }
 };
 
-export const handleKeyDown = (e, state, dispatch) => {
+export const handleKeyDownSheet = (e, state, dispatch) => {
   let nextCell;
 
   switch (e.key) {
@@ -44,12 +46,13 @@ export const handleKeyDown = (e, state, dispatch) => {
       dispatch(setHighlightCellAnchor(state.selectedCell.id));
       break;
     case KeyEvent.BACKSPACE:
-      if (!state.editMode) {
-        dispatch(deleteCellContent());
-        dispatch(addMemento());
-      }
+      dispatch(deleteCellContent());
+      dispatch(addMemento());
       break;
     case KeyEvent.ENTER:
+      dispatch(setFormulaMode(false));
+      // dispatch(recalculateFormulae());
+    // eslint-disable-next-line no-fallthrough
     case KeyEvent.TAB:
     case KeyEvent.ARROW_DOWN:
     case KeyEvent.ARROW_RIGHT:

@@ -17,6 +17,10 @@ export default class Cell {
     this.columnCharCode = Number(this.column.charCodeAt(0));
   }
 
+  static isValidId(id) {
+    return /[A-Z]+\d+/gi.test(id);
+  }
+
   log(maxRows, maxColumns, ...rest) {
     console.log({
       id: this.id,

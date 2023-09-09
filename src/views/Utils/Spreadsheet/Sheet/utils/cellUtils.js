@@ -62,7 +62,9 @@ export function addCellToFocusedBox(state, text, replace) {
   const currentValue = element.value.slice(0, end);
   element.focus();
 
-  if (isLastValueRange.test(currentValue)) {
+  if (end > start) {
+    element.setRangeText(text, start, end, "preserve");
+  } else if (isLastValueRange.test(currentValue)) {
     element.setRangeText(
       replace ? currentValue.replace(isLastValueRange, text) : "," + text,
       replace ? 0 : start,

@@ -18,6 +18,7 @@ export const SheetAction = Object.freeze({
   FORMULA_HIGHLIGHT_CELL_RANGE: "FORMULA_HIGHLIGHT_CELL_RANGE",
   FORMULA_HIGHLIGHT_CELLS: "FORMULA_HIGHLIGHT_CELLS",
   ADD_CELLS_TO_HIGHLIGHT: "ADD_CELLS_TO_HIGHLIGHT",
+  REMOVE_CELLS_FROM_HIGHLIGHT: "REMOVE_CELLS_FROM_HIGHLIGHT",
   SET_HIGHLIGHT_CELL_ANCHOR: "SET_HIGHLIGHT_CELL_ANCHOR",
   SET_HIGHLIGHT_ROW_ANCHOR: "SET_HIGHLIGHT_ROW_ANCHOR",
   SET_HIGHLIGHT_COLUMN_ANCHOR: "SET_HIGHLIGHT_COLUMN_ANCHOR",
@@ -152,7 +153,7 @@ export const highlightCells = (start, end) => ({
   end,
 });
 
-export const formulaHighlightCellRange = (start, end) => ({
+export const highlightFormulaCellRange = (start, end) => ({
   type: SheetAction.FORMULA_HIGHLIGHT_CELL_RANGE,
   payload: {
     start,
@@ -160,13 +161,18 @@ export const formulaHighlightCellRange = (start, end) => ({
   },
 });
 
-export const formulaHighlightCells = (payload) => ({
+export const highlightFormulaCells = (payload) => ({
   type: SheetAction.FORMULA_HIGHLIGHT_CELLS,
   payload,
 });
 
 export const addCellsToHighlight = (payload) => ({
   type: SheetAction.ADD_CELLS_TO_HIGHLIGHT,
+  payload,
+});
+
+export const removeCellsFromHighlight = (payload) => ({
+  type: SheetAction.REMOVE_CELLS_FROM_HIGHLIGHT,
   payload,
 });
 

@@ -11,6 +11,7 @@ export default class CellData {
       this.referenceCells = obj.referenceCells || [];
       this.display = obj.display || null;
       this.formatting = obj.formatting || {};
+      this.error = obj.error || null;
     } else {
       this.id = null;
       this.ref = null;
@@ -19,6 +20,7 @@ export default class CellData {
       this.formula = null;
       this.referenceCells = [];
       this.formatting = {};
+      this.error = null;
     }
   }
 
@@ -91,9 +93,16 @@ export default class CellData {
       const referenceCells = getReferenceCells(this.formula);
       const evaluated = evaluate(this.formula, stateContentData);
       console.log("evaluating formula", this.id);
+      console.log(evaluated);
+      if (evaluated.error) {
+        this.error = evaluated.error;
+        this.referenceCells = [];
+      } else {
+        this.error = null;
+        this.referenceCells = referenceCells.flat();
+      }
       this.value = evaluated.value;
       this.display = evaluated.value;
-      this.referenceCells = referenceCells.flat();
     }
     return this;
   }

@@ -17,6 +17,10 @@ export const HeaderItem = styled(TableCell)(({ selected, theme }) => ({
   },
 }));
 
+export const Container = styled.div({
+  boxShadow: "8px 8px 18px -10px rgba(0,0,0,0.5)",
+});
+
 export const Item = styled(TableCell)(
   ({ theme, selected, textalign, width, formulacell, formatting }) => ({
     backgroundColor: selected ? theme.palette.primary.light : "#fff",

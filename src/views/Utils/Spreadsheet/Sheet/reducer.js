@@ -43,6 +43,7 @@ export const initialState = {
 };
 
 export const reducer = (state, action) => {
+  console.log(action);
   switch (action.type) {
     case SheetAction.SET_SELECTED:
       return {
@@ -95,10 +96,12 @@ export const reducer = (state, action) => {
         formulaMode: action.payload,
       };
     case SheetAction.SET_HOVERED_CELL:
-      return {
-        ...state,
-        hovered: action.payload,
-      };
+      if (Cell.isValidId(action.payload))
+        return {
+          ...state,
+          hovered: action.payload,
+        };
+      return state;
     case SheetAction.SET_HIGHLIGHT_CELL_ANCHOR:
       return {
         ...state,
@@ -150,7 +153,10 @@ export const reducer = (state, action) => {
     }
 
     case SheetAction.FORMULA_HIGHLIGHT_CELL_RANGE: {
-      const range = CellRange.createFlat(action.payload.start, action.payload.end);
+      const range = CellRange.createFlat(
+        action.payload.start,
+        action.payload.end
+      );
       return {
         ...state,
         formulaHighlighted: range.cellIds,
@@ -158,9 +164,16 @@ export const reducer = (state, action) => {
     }
 
     case SheetAction.ADD_CELLS_TO_HIGHLIGHT: {
-      const cells = action.payload.map((id) => new Cell(id));
-      const rows = [...new Set(cells.map((it) => it.row))];
-      const columns = [...new Set(cells.map((it) => it.column))];
+      const rowsSet = new Set();
+      const columnsSet = new Set();
+      action.payload.forEach((id) => {
+        const cell = new Cell(id);
+        rowsSet.add(cell.row);
+        columnsSet.add(cell.column);
+      });
+      const rows = [...rowsSet];
+      const columns = [...columnsSet];
+
       return {
         ...state,
         highlighted: {
@@ -169,9 +182,55 @@ export const reducer = (state, action) => {
           rows: state.highlighted.rows.concat(rows),
           columns: state.highlighted.columns.concat(columns),
         },
-        editMode: false,
       };
     }
+
+    case SheetAction.REMOVE_CELLS_FROM_HIGHLIGHT: {
+      const rowsToRemove = new Set();
+      const columnsToRemove = new Set();
+      action.payload.forEach((id) => {
+        const cell = new Cell(id);
+        if (state.highlighted.cells.includes(id)) {
+          rowsToRemove.add(cell.row);
+          columnsToRemove.add(cell.column);
+        }
+      });
+
+      const newHighlightedCells = state.highlighted.cells.filter(
+        (id) => !action.payload.includes(id)
+      );
+      const newHighlightedRows = state.highlighted.rows.filter((row) => {
+        if (rowsToRemove.has(row)) {
+          // Check if there are other highlighted cells in this row
+          return !newHighlightedCells.some(
+            (cellId) => new Cell(cellId).row === row
+          );
+        }
+        return true;
+      });
+      const newHighlightedColumns = state.highlighted.columns.filter(
+        (column) => {
+          if (columnsToRemove.has(column)) {
+            // Check if there are other highlighted cells in this column
+            return !newHighlightedCells.some(
+              (cellId) => new Cell(cellId).column === column
+            );
+          }
+          return true;
+        }
+      );
+
+      return {
+        ...state,
+        highlighted: {
+          ...state.highlighted,
+          cells: newHighlightedCells,
+          rows: newHighlightedRows,
+          columns: newHighlightedColumns,
+        },
+      };
+    }
+
     case SheetAction.DELETE_CELL_CONTENT: {
       if (action.payload) {
         return {
@@ -360,6 +419,7 @@ export const reducer = (state, action) => {
         .map((cellContent) => cellContent.evaluate(state.content.data));
 
       const formulaTrackedCells = formulaCells
+        .filter((it) => !it.error)
         .map((it) => it.referenceCells)
         .flat();
 

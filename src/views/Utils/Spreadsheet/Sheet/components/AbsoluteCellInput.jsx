@@ -189,7 +189,7 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
           break;
         }
         default:
-          dispatch(setInputBoxFocused(true));
+          // dispatch(setInputBoxFocused(true));
           break;
       }
     },
