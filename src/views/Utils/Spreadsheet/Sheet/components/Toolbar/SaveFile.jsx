@@ -2,10 +2,11 @@ import { Tooltip } from "@mui/material";
 import { FieldButton } from "../styles";
 import { Save } from "@mui/icons-material";
 import { SheetConfig } from "../../constants";
+import CellRange from "../../models/CellRange";
 
 const SaveFile = ({ state }) => {
   const handleExportAsCsv = () => {
-    const range = Range.create(
+    const range = CellRange.create(
       `A1`,
       `${SheetConfig.COLUMNS[state.maxColumns - 1]}${state.maxRows}`
     );

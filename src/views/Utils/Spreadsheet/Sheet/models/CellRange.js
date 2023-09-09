@@ -1,6 +1,6 @@
 import Cell from "./Cell";
 
-export default class Range {
+export default class CellRange {
   constructor(cells, ids, rows, columns) {
     this.cells = cells;
     this.cellIds = [...new Set(ids)];
@@ -9,7 +9,7 @@ export default class Range {
   }
 
   static createFlat(start, end) {
-    const { minC, maxC, minR, maxR } = Range.getCellMinMax([start, end]);
+    const { minC, maxC, minR, maxR } = getCellMinMax([start, end]);
 
     const cells = [];
     const rows = [];
@@ -26,11 +26,11 @@ export default class Range {
       }
     }
     // return cells;
-    return new Range(cells, ids, rows, columns);
+    return new CellRange(cells, ids, rows, columns);
   }
 
   static create(start, end) {
-    const { minC, maxC, minR, maxR } = Range.getCellMinMax([start, end]);
+    const { minC, maxC, minR, maxR } = getCellMinMax([start, end]);
 
     const cells = [];
     const rows = [];
@@ -51,7 +51,7 @@ export default class Range {
       ids.push(createdIds);
     }
     // return cells;
-    return new Range(cells, ids, rows, columns);
+    return new CellRange(cells, ids, rows, columns);
   }
 
   static getFormulaCellsToTrack = (stateContent) => {
@@ -66,7 +66,8 @@ export default class Range {
           .filter(Boolean)
           .flat()
           .map(
-            (it) => Range.createFlat(it.split(":")[0], it.split(":")[1]).cellIds
+            (it) =>
+              CellRange.createFlat(it.split(":")[0], it.split(":")[1]).cellIds
           )
           .concat(formulae.map((it) => it.match(/([a-z]+[0-9]+)/gi)))
           .flat()
@@ -76,7 +77,7 @@ export default class Range {
   };
 
   static createFromCell(startCell, endCell) {
-    const { minC, maxC, minR, maxR } = Range.getCellMinMax([
+    const { minC, maxC, minR, maxR } = getCellMinMax([
       startCell.id,
       endCell.id,
     ]);
@@ -100,26 +101,8 @@ export default class Range {
       ids.push(createdIds);
     }
     // return cells;
-    return new Range(cells, ids, rows, columns);
+    return new CellRange(cells, ids, rows, columns);
   }
-
-  static getCellMinMax = (highlighted) => {
-    const ids = highlighted.map(getId);
-
-    const columnCharCodes = ids.map((it) => it.columnCharCode);
-    const rows = ids.map((it) => Number(it.row));
-    const minC = Math.min(...columnCharCodes);
-    const maxC = Math.max(...columnCharCodes);
-    const minR = Math.min(...rows);
-    const maxR = Math.max(...rows);
-
-    return {
-      minC,
-      maxC,
-      minR,
-      maxR,
-    };
-  };
 }
 
 const getId = (id) => {
@@ -134,4 +117,22 @@ const getId = (id) => {
       columnCharCode: columnCharCode[0].charCodeAt(0),
     };
   return {};
+};
+
+const getCellMinMax = (highlighted) => {
+  const ids = highlighted.map(getId);
+
+  const columnCharCodes = ids.map((it) => it.columnCharCode);
+  const rows = ids.map((it) => Number(it.row));
+  const minC = Math.min(...columnCharCodes);
+  const maxC = Math.max(...columnCharCodes);
+  const minR = Math.min(...rows);
+  const maxR = Math.max(...rows);
+
+  return {
+    minC,
+    maxC,
+    minR,
+    maxR,
+  };
 };

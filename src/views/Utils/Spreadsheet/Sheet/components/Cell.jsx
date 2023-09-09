@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { Item } from "../styles";
 import {
   resetHighlight,
@@ -13,6 +13,7 @@ import {
   updateReferenceCells,
   setFormulaMode,
   recalculateFormulae,
+  setCellRef,
 } from "../actions";
 import { MouseButton } from "../constants";
 import { isCtrlKeyPressed, addCellToFocusedBox } from "../utils/cellUtils";
@@ -121,6 +122,12 @@ const Cell = ({ id, state, dispatch }) => {
     e.preventDefault();
     dispatch(openContextMenu(e.currentTarget));
   };
+
+  useEffect(() => {
+    if (containerRef.current) {
+      dispatch(setCellRef(id, containerRef.current));
+    }
+  }, [dispatch, id]);
 
   return (
     <Item

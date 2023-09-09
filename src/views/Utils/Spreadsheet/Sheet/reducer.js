@@ -3,7 +3,7 @@ import { isFormula, typeInInputBox } from "./utils/cellUtils";
 import { SheetAction } from "./actions";
 import Cell from "./models/Cell";
 import CellData, { getFormulaTrackedCells } from "./models/CellData";
-import Range from "./models/Range";
+import CellRange from "./models/CellRange";
 import { isEqual, uniqueId } from "lodash";
 
 export const initialState = {
@@ -129,7 +129,7 @@ export const reducer = (state, action) => {
       };
 
     case SheetAction.HIGHLIGHT_CELLS: {
-      const range = Range.createFlat(action.start, action.end);
+      const range = CellRange.createFlat(action.start, action.end);
       return {
         ...state,
         highlighted: {
@@ -150,7 +150,7 @@ export const reducer = (state, action) => {
     }
 
     case SheetAction.FORMULA_HIGHLIGHT_CELL_RANGE: {
-      const range = Range.createFlat(action.payload.start, action.payload.end);
+      const range = CellRange.createFlat(action.payload.start, action.payload.end);
       return {
         ...state,
         formulaHighlighted: range.cellIds,
@@ -186,7 +186,7 @@ export const reducer = (state, action) => {
         };
       }
 
-      const content = Object.keys(state.content)
+      const data = Object.keys(state.content.data)
         .filter((cell) => state.highlighted.cells.includes(cell))
         .reduce(
           (stateContentData, cell) => ({
@@ -198,7 +198,10 @@ export const reducer = (state, action) => {
 
       return {
         ...state,
-        content,
+        content: {
+          ...state.content,
+          data,
+        },
       };
     }
     case SheetAction.PASTE_CELL_CONTENT: {
@@ -210,7 +213,7 @@ export const reducer = (state, action) => {
             parsed.content[0].length - 1,
             parsed.content.length - 1
           );
-          const range = Range.create(anchor, cellOffset.id);
+          const range = CellRange.create(anchor, cellOffset.id);
           const updateObj = {};
           range.cells.forEach((row, rowIndex) =>
             row.forEach((cell, cellIndex) => {
@@ -260,7 +263,7 @@ export const reducer = (state, action) => {
       };
     }
     case SheetAction.SET_SELECTED_ROW: {
-      const range = Range.createFlat(
+      const range = CellRange.createFlat(
         `${SheetConfig.COLUMNS[0]}${action.payload}`,
         `${SheetConfig.COLUMNS[state.maxColumns]}${action.payload}`
       );
@@ -292,7 +295,7 @@ export const reducer = (state, action) => {
       };
     }
     case SheetAction.SET_SELECTED_COLUMN: {
-      const range = Range.createFlat(
+      const range = CellRange.createFlat(
         `${action.payload}1`,
         `${action.payload}${state.maxRows}`
       );
@@ -323,7 +326,7 @@ export const reducer = (state, action) => {
       };
     }
     case SheetAction.SELECT_ALL: {
-      const range = Range.createFlat(
+      const range = CellRange.createFlat(
         `A1`,
         `${SheetConfig.COLUMNS[state.maxColumns - 1]}${state.maxRows}`
       );
@@ -374,13 +377,9 @@ export const reducer = (state, action) => {
         state.formulaTrackedCells
       );
 
-      const cellData =
-        new CellData(state.content.data[cellId]) ||
-        new CellData().setId(cellId);
-
-      console.log({ cellData });
-
-      cellData.setValue(value);
+      const cellData = CellData.getOrNew(state.content.data[cellId]).setValue(
+        value
+      );
 
       return {
         ...state,
@@ -395,11 +394,27 @@ export const reducer = (state, action) => {
         },
       };
     }
+    case SheetAction.SET_CELL_REF: {
+      const cellData = CellData.getOrNew(
+        state.content.data[action.payload.cellId]
+      );
+
+      return {
+        ...state,
+        content: {
+          ...state.content,
+          data: {
+            ...state.content.data,
+            [action.payload.cellId]: cellData.setRef(action.payload.ref),
+          },
+        },
+      };
+    }
     case SheetAction.UPDATE_REFERENCE_CELLS: {
       const { values } = action.payload;
       const cellIds =
         values.length > 1
-          ? Range.createFlat(values[0], values[1]).cellIds
+          ? CellRange.createFlat(values[0], values[1]).cellIds
           : values;
 
       const referenceCells = action.payload.replace

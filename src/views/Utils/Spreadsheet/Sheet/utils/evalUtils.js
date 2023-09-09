@@ -1,5 +1,5 @@
 import CellData from "../models/CellData";
-import Range from "../models/Range";
+import CellRange from "../models/CellRange";
 
 // Utility functions
 const processMatches = (str, reg, formulaCreator, zeroValue) => {
@@ -9,7 +9,7 @@ const processMatches = (str, reg, formulaCreator, zeroValue) => {
       .split(",")
       .map((it) =>
         it.includes(":")
-          ? Range.createFlat(it.split(":")[0], it.split(":")[1]).cellIds
+          ? CellRange.createFlat(it.split(":")[0], it.split(":")[1]).cellIds
           : it
       )
       .flat()
@@ -213,7 +213,7 @@ export function getReferenceCells(formula) {
   const expandedRanges = cellRanges
     .map((range) => {
       const [start, end] = range.split(":");
-      return Range.createFlat(start, end).cellIds;
+      return CellRange.createFlat(start, end).cellIds;
     })
     .flat();
 

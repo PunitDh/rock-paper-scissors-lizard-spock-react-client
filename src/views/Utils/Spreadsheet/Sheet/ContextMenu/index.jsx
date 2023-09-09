@@ -33,7 +33,7 @@ const ContextMenu = ({ state, dispatch }) => {
 
   const handlePaste = async () => {
     const data = await clipboard.get();
-    dispatch(pasteCellContent(state.selectedCell.id, data));
+    dispatch(pasteCellContent(state.menuAnchorElement.id, data));
     handleClose();
   };
 

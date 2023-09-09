@@ -208,7 +208,7 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
 
   const handleContextMenu = (e) => {
     e.preventDefault();
-    dispatch(openContextMenu(e.currentTarget));
+    dispatch(openContextMenu(document.getElementById(state.selectedCell.id)));
   };
 
   return (

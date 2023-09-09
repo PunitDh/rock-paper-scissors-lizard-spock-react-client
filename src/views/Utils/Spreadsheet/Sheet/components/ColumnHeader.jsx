@@ -2,7 +2,7 @@ import { addCellsToHighlight, setSelectedColumn } from "../actions";
 import { HeaderItem } from "../styles";
 import styled from "@emotion/styled";
 import { isCtrlKeyPressed } from "../utils/cellUtils";
-import Range from "../models/Range";
+import CellRange from "../models/CellRange";
 
 const ColumnHeaderItem = styled(HeaderItem)({
   cursor: "s-resize",
@@ -15,13 +15,13 @@ const ColumnHeaderItem = styled(HeaderItem)({
 const ColumnHeader = ({ state, dispatch, column, onContextMenu }) => {
   const handleClick = (e) => {
     if (isCtrlKeyPressed(e)) {
-      const range = Range.createFlat(
+      const range = CellRange.createFlat(
         `${column}1`,
         `${column}${state.maxRows}`
       ).cellIds;
       dispatch(addCellsToHighlight(range));
     } else if (e.shiftKey) {
-      const range = Range.createFlat(
+      const range = CellRange.createFlat(
         `${column}1`,
         `${column}${state.maxRows}`
       ).cellIds;

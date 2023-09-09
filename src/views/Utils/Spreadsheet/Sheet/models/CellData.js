@@ -1,5 +1,5 @@
 import { isFormula } from "../utils/cellUtils";
-import Range from "./Range";
+import CellRange from "./CellRange";
 
 export default class CellData {
   constructor(obj) {
@@ -22,8 +22,12 @@ export default class CellData {
     }
   }
 
-  static getOrNew(id) {
-    return this[id] || new CellData(id);
+  static getOrNew(cellData, id) {
+    if (cellData instanceof CellData) {
+      return cellData;
+    }
+
+    return new CellData(cellData || id);
   }
 
   get isFormulaCell() {
@@ -102,7 +106,7 @@ const processMatches = (str, reg, formulaCreator, zeroValue) => {
       .split(",")
       .map((it) =>
         it.includes(":")
-          ? Range.createFlat(it.split(":")[0], it.split(":")[1]).cellIds
+          ? CellRange.createFlat(it.split(":")[0], it.split(":")[1]).cellIds
           : it
       )
       .flat()
@@ -278,7 +282,7 @@ export function getReferenceCells(formula) {
   const expandedRanges = cellRanges
     .map((range) => {
       const [start, end] = range.split(":");
-      return Range.createFlat(start, end).cellIds;
+      return CellRange.createFlat(start, end).cellIds;
     })
     .flat();
 
