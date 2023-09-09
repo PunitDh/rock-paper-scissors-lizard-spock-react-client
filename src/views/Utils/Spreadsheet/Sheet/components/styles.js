@@ -13,12 +13,13 @@ export const SmallInputField = styled(InputTextField)({
   textAlign: "center",
 });
 
-export const FlexForm = styled.form({
+export const FlexForm = styled.form(({ flexWrap }) => ({
   display: "flex",
   gap: "0.2rem",
   padding: "0.5rem",
   backgroundColor: "rgba(0,0,0,0.1)",
-});
+  flexWrap,
+}));
 
 export const FieldButton = styled.button(({ variant, theme, isactive }) => ({
   width: "1.75rem",

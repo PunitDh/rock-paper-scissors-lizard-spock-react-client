@@ -1,5 +1,7 @@
 export const SheetAction = Object.freeze({
   SET_SELECTED: "SET_SELECTED",
+  SET_INPUT_REF: "SET_INPUT_REF",
+  SET_FORMULA_FIELD_REF: "SET_FORMULA_FIELD_REF",
   SET_FORMULA_FIELD_TEXT: "SET_FORMULA_FIELD_TEXT",
   SET_FORMULA_FIELD_FOCUSED: "SET_FORMULA_FIELD_FOCUSED",
   SET_INPUT_BOX_FOCUSED: "SET_INPUT_BOX_FOCUSED",
@@ -38,6 +40,16 @@ export const SheetAction = Object.freeze({
 
 export const selectCell = (payload) => ({
   type: SheetAction.SET_SELECTED,
+  payload,
+});
+
+export const setInputRef = (payload) => ({
+  type: SheetAction.SET_INPUT_REF,
+  payload,
+});
+
+export const setFormulaFieldRef = (payload) => ({
+  type: SheetAction.SET_FORMULA_FIELD_REF,
   payload,
 });
 

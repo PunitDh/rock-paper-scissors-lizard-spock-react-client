@@ -5,6 +5,7 @@ export const formattingSelectStyle = (styles) => ({
   border: "1px solid rgba(0,0,0,0.3)",
   cursor: "pointer",
   ...styles,
+  width: "fit-content(min-content, 5rem)",
   ".MuiOutlinedInput-notchedOutline": {
     borderColor: "rgba(228, 219, 233, 0.25)",
   },

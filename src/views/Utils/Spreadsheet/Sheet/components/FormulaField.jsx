@@ -9,8 +9,9 @@ import {
   resetFormulaField,
   recalculateFormulae,
   addMemento,
+  setFormulaFieldRef,
 } from "../actions";
-import { getNextRow } from "../utils/cellUtils";
+import { isFormula } from "../utils/cellUtils";
 import { Check, Clear } from "@mui/icons-material";
 import {
   FieldButton,
@@ -24,6 +25,11 @@ import { KeyEvent } from "../constants";
 const FormulaField = ({ state, dispatch, onContextMenu }) => {
   const formRef = useRef();
   const inputRef = useRef();
+
+  useEffect(() => {
+    dispatch(setFormulaFieldRef(inputRef.current));
+  }, [dispatch]);
+
   const value = useMemo(
     () =>
       state.formulaFieldText ||
@@ -33,43 +39,45 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
     [state.content, state.formulaFieldText, state.selectedCell.id]
   );
 
-  const originalValue = useRef(value);
-
-  const valueChanged = originalValue.current !== value;
+  const [originalValue, setOriginalValue] = useState(value);
 
   const handleKeyDown = useCallback(
     (e) => {
       switch (e.key) {
         case KeyEvent.ESCAPE:
           dispatch(setFormulaMode(false));
+          // setOriginalValue(originalValue);
+          dispatch(setFormulaFieldText(originalValue));
+          e.target.blur();
           break;
         default:
           break;
       }
     },
-    [dispatch]
+    [dispatch, originalValue]
   );
 
   const handleSubmit = useCallback(
     (e) => {
       const triggerRecalculation =
-        e.target.formulaFieldText.value.startsWith("=") ||
+        isFormula(e.target.formulaFieldText.value) ||
         state.formulaTrackedCells.includes(state.selectedCell.id);
       e.preventDefault();
       dispatch(setFormulaFieldText(e.target.formulaFieldText.value));
       dispatch(setFormulaFieldFocused(false));
-      dispatch(selectCell(getNextRow(state.selectedCell.id, state.maxRows)));
+      dispatch(selectCell(state.selectedCell.getNextRow(state.maxRows)));
       dispatch(setFormulaMode(false));
       triggerRecalculation && dispatch(recalculateFormulae());
       dispatch(addMemento());
     },
-    [dispatch, state.formulaTrackedCells, state.maxRows, state.selectedCell.id]
+    [dispatch, state.formulaTrackedCells, state.maxRows, state.selectedCell]
   );
 
   const handleBlur = (e) => {
     const triggerRecalculation =
-      e.target.value.startsWith("=") ||
-      state.formulaTrackedCells.includes(state.selectedCell.id);
+      isFormula(e.target.value) ||
+      state.formulaTrackedCells.includes(state.selectedCell.id) ||
+      originalValue !== e.target.value;
     if (!state.isFormulaModeActive) {
       triggerRecalculation && dispatch(recalculateFormulae());
     }
@@ -104,14 +112,14 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
     (e) => {
       // e.preventDefault();
       dispatch(setFormulaFieldText(e.target.value));
-      dispatch(setFormulaMode(e.target.value.startsWith("=")));
+      dispatch(setFormulaMode(isFormula(e.target.value)));
       dispatch(setContent(state.selectedCell.id, e.target.value));
     },
     [dispatch, state.selectedCell.id]
   );
 
   const handleFocus = (e) => {
-    if (e.target.value.startsWith("=")) {
+    if (isFormula(e.target.value)) {
       dispatch(setFormulaMode(true));
     }
     dispatch(setFormulaFieldFocused(true));
@@ -124,7 +132,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
   }, [state.isFormulaFieldFocused]);
 
   useEffect(() => {
-    originalValue.current = value;
+    setOriginalValue(value);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.selectedCell.id]);
 

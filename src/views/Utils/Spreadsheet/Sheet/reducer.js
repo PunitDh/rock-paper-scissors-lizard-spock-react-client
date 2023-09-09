@@ -1,19 +1,20 @@
 import { SheetConfig } from "./constants";
-import { getCellOffset, typeInInputBox } from "./utils/cellUtils";
+import { getCellOffset, isFormula, typeInInputBox } from "./utils/cellUtils";
 import { SheetAction } from "./actions";
-import {
+import Cell from "./models/Cell";
+import CellContent, {
   getFormulaTrackedCells,
   getReferenceCells,
   getUpdatedStateContent,
-} from "./utils/evalUtils";
-import Cell from "./models/Cell";
-import CellContent from "./models/CellContent";
+} from "./models/CellContent";
 import Range from "./models/Range";
 import { isEqual, uniqueId } from "lodash";
 
 export const initialState = {
   maxRows: SheetConfig.MAX_ROWS,
   maxColumns: SheetConfig.MAX_COLUMNS,
+  inputRef: {},
+  formulaFieldRef: {},
   defaultRowHeight: 24,
   defaultColumnWidth: 50,
   maxUndos: 32,
@@ -49,7 +50,20 @@ export const reducer = (state, action) => {
     case SheetAction.SET_SELECTED:
       return {
         ...state,
-        selectedCell: new Cell(action.payload),
+        selectedCell:
+          typeof action.payload === "object" && action.payload instanceof Cell
+            ? action.payload
+            : new Cell(action.payload),
+      };
+    case SheetAction.SET_INPUT_REF:
+      return {
+        ...state,
+        inputRef: action.payload,
+      };
+    case SheetAction.SET_FORMULA_FIELD_REF:
+      return {
+        ...state,
+        formulaFieldRef: action.payload,
       };
     case SheetAction.SET_FORMULA_FIELD_TEXT:
       return {
@@ -167,7 +181,7 @@ export const reducer = (state, action) => {
           ...state,
           content: {
             ...state.content,
-            [action.payload]: new CellContent(),
+            [action.payload]: new CellContent({ id: action.payload }),
           },
         };
       }
@@ -175,9 +189,9 @@ export const reducer = (state, action) => {
       const content = Object.keys(state.content)
         .filter((cell) => state.highlighted.cells.includes(cell))
         .reduce(
-          (acc, cur) => ({
-            ...acc,
-            [cur]: new CellContent(),
+          (stateContent, cell) => ({
+            ...stateContent,
+            [cell]: new CellContent({ id: cell }),
           }),
           state.content
         );
@@ -207,7 +221,7 @@ export const reducer = (state, action) => {
           const newContent = Object.keys(updateObj).reduce((acc, cur) => {
             return {
               ...acc,
-              [cur]: new CellContent(updateObj[cur]),
+              [cur]: new CellContent({ id: cur, ...updateObj[cur] }),
             };
           }, state.content);
           return {
@@ -342,6 +356,9 @@ export const reducer = (state, action) => {
           stateContent[cell].formula
         );
 
+        // const re1 = stateContent[cell].evaluate(stateContent);
+        // console.log({ re1 });
+
         formulaTrackedCells.push(
           getFormulaTrackedCells(stateContent[cell].formula)
         );
@@ -361,7 +378,7 @@ export const reducer = (state, action) => {
       const { value, cell } = action.payload;
       // Combine all cell references without duplicates
       const formula = value.toUpperCase();
-      const isFirstValueEqualSign = value.startsWith("=");
+      const isFirstValueEqualSign = isFormula(value);
       const referenceCells = getReferenceCells(formula);
       const formulaTrackedCells = getFormulaTrackedCells(
         formula,
@@ -374,11 +391,13 @@ export const reducer = (state, action) => {
           ...state.content,
           [cell]: isFirstValueEqualSign
             ? new CellContent({
+                id: cell,
                 ...state.content[cell],
                 formula,
                 referenceCells,
               })
             : new CellContent({
+                id: cell,
                 ...state.content[cell],
                 value: value,
                 display: value,

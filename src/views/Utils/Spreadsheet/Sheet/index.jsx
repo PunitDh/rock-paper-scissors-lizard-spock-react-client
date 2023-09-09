@@ -297,7 +297,25 @@ const Sheet = ({
                 Show Content
               </button>
               <button
-                onClick={() => console.log(state.formulaHighlighted.length)}
+                onClick={() =>
+                  console.log(
+                    "cell",
+                    state.selectedCell.id,
+                    state.content[state.selectedCell.id]
+                  )
+                }
+              >
+                Show Current Cell
+              </button>
+              <button
+                onClick={() => {
+                  console.log("cell", state.selectedCell.id);
+                  console.log("formulahighlighted", state.formulaHighlighted);
+                  console.log(
+                    "referencecells",
+                    state.content[state.selectedCell.id]?.referenceCells
+                  );
+                }}
               >
                 Show FormulaHighlighted
               </button>

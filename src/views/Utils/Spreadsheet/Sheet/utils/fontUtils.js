@@ -125,6 +125,27 @@ const fontCheck = new Set(
   ].sort()
 );
 
+export function listFonts() {
+  let fonts = [];
+
+  for (let node of document.querySelectorAll("*")) {
+    if (!node.style) continue;
+
+    for (let pseudo of ["", ":before", ":after"]) {
+      let fontFamily = getComputedStyle(node, pseudo).fontFamily;
+
+      fonts = fonts.concat(fontFamily.split(/\n*,\n*/g));
+    }
+  }
+
+  // Remove duplicate elements from fonts array
+  // and remove the surrounding quotes around elements
+  return [...new Set(fonts)].map((font) =>
+    // font.replace(/^\s*['"]([^'"]*)['"]\s*$/, "$1").trim()
+    font.trim()
+  );
+}
+
 export async function getFonts() {
   return new Promise(async (resolve) => {
     await document.fonts.ready;

@@ -34,10 +34,31 @@ const Toolbar = ({ state, dispatch }) => {
   const canRedo =
     state.currentMementoId !== state.memento[state.memento.length - 1]?.id;
 
-  const stateCellFormatting = useMemo(
-    () => state.content[state.selectedCell.id]?.formatting || {},
-    [state.content, state.selectedCell.id]
-  );
+  const currentCellFormatting = useMemo(() => {
+    const element = document.getElementById(state.selectedCell.id);
+    if (!element) return {};
+    const styles = getComputedStyle(element);
+    return {
+      fontWeight: styles?.fontWeight,
+      fontStyle: styles?.fontStyle,
+      // fontFamily: styles?.fontFamily,
+      fontSize: styles?.fontSize,
+      textAlign: styles?.textAlign,
+      textDecoration: styles?.textDecoration,
+      borderBottom: styles?.borderBottom,
+      borderTop: styles?.borderTop,
+      borderRight: styles?.borderRight,
+      borderLeft: styles?.borderLeft,
+      color: styles?.color,
+      backgroundColor: styles?.backgroundColor,
+    };
+  }, [state.selectedCell.id]);
+
+  const stateCellFormatting = useMemo(() => {
+    return (
+      state.content[state.selectedCell.id]?.formatting || currentCellFormatting
+    );
+  }, [currentCellFormatting, state.content, state.selectedCell.id]);
 
   const [selectedFormatting, setSelectedFormatting] =
     useState(stateCellFormatting);
@@ -104,7 +125,7 @@ const Toolbar = ({ state, dispatch }) => {
 
   return (
     <div tabIndex="1000">
-      <FlexForm onSubmit={handleSubmit}>
+      <FlexForm flexWrap="wrap" onSubmit={handleSubmit}>
         <OpenFile dispatch={dispatch} />
         <SaveFile state={state} />
         <HistoryButton

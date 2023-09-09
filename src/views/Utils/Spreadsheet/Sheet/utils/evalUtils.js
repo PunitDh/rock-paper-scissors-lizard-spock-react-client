@@ -1,3 +1,4 @@
+import CellContent from "../models/CellContent";
 import Range from "../models/Range";
 
 // Utility functions
@@ -70,7 +71,7 @@ const evaluateFormula = (cellValue) => {
   return [sumMatches, avgMatches, countMatches].flat();
 };
 
-const evaluate = (str, stateContent) => {
+export const evaluate = (str, stateContent) => {
   const parsedStrings = evaluateFormula(str);
 
   const substitutedValues = parsedStrings.map((it) => {
@@ -125,17 +126,19 @@ const evaluate = (str, stateContent) => {
 
 export const getUpdatedStateContent = (stateContent, cell, formula) => {
   try {
-    // const referenceCells = getReferenceCells(formula);
+    const referenceCells = getReferenceCells(formula);
     const evaluated = evaluate(formula, stateContent);
+    // console.log("from recalculation", [...new Set(evaluated.referenceCells)].flat());
     return {
       ...stateContent,
-      [cell]: {
+      [cell]: new CellContent({
         ...stateContent[cell],
+        id: cell,
         formula: formula.toUpperCase(),
-        referenceCells: [...new Set(evaluated.referenceCells)].flat(),
+        referenceCells,
         value: evaluated.value,
         display: evaluated.value,
-      },
+      }),
     };
   } catch (e) {
     console.error(e);

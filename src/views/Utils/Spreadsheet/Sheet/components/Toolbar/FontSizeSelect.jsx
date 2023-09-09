@@ -8,7 +8,7 @@ const FontSizeSelect = ({ state, onChange }) => (
     id={"font-size-selector"}
     name="fontSizeSelector"
     onChange={(e) => onChange(e.target.value)}
-    value={state.fontSize || 12}
+    value={state.fontSize || `12px`}
     size="small"
     sx={formattingSelectStyle({ fontSize: state.fontSize })}
   >

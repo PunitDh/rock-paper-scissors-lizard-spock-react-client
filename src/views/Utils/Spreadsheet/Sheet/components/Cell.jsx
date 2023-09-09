@@ -15,15 +15,14 @@ import {
   recalculateFormulae,
 } from "../actions";
 import { MouseButton } from "../constants";
-import {
-  isCtrlKeyPressed,
-  getId,
-  addCellToFocusedBox,
-} from "../utils/cellUtils";
+import { isCtrlKeyPressed, addCellToFocusedBox } from "../utils/cellUtils";
 
 const Cell = ({ id, state, dispatch }) => {
   const containerRef = useRef();
-  const { row, columnCharCode } = useMemo(() => getId(id), [id]);
+  const { row, columnCharCode } = useMemo(
+    () => state.selectedCell,
+    [state.selectedCell]
+  );
 
   const isSelected = useMemo(
     () => id === state.selectedCell.id || state.highlighted.cells.includes(id),

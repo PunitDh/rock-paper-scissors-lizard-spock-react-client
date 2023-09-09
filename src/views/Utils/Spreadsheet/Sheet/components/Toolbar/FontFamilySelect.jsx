@@ -7,11 +7,9 @@ const FontFamilySelect = ({ state, onChange }) => {
   const [fonts, setFonts] = useState(["Sans-serif"]);
 
   useEffect(() => {
-    getFonts()
-      .then((data) =>
-        setFonts((fonts) => [...new Set(fonts.concat(data))].sort())
-      )
-      .catch(console.error);
+    getFonts().then((data) =>
+      setFonts((fonts) => [...new Set(fonts.concat(data).sort())])
+    );
   }, []);
 
   return (

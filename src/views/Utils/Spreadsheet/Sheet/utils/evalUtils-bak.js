@@ -69,6 +69,7 @@ export const updateStateContent = (stateContent, cell, formula) => {
     return {
       ...stateContent,
       [cell]: new CellContent({
+        id: cell,
         formula: formula.toUpperCase(),
         value: evaluatedExpression.value,
         display: evaluatedExpression.value,

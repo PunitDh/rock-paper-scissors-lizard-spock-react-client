@@ -17,6 +17,7 @@ const OpenFile = ({ dispatch }) => {
       const filtered = Object.keys(content).reduce((acc, cur) => {
         if (content[cur]?.value.length > 0) {
           acc[cur] = new CellContent({
+            id: cur,
             value: content[cur].value,
           });
         }

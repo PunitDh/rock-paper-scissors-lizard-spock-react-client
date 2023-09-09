@@ -1,37 +1,36 @@
-import { SheetConfig, getMaxColumn, getMinColumn } from "../constants";
-import Cell from "../models/Cell";
+import { SheetConfig } from "../constants";
 import CellContent from "../models/CellContent";
 
-export const getId = (id) => {
-  const row = id?.match(/\d+/g);
-  const column = id?.match(/[A-Z]/g);
-  const columnCharCode = id?.match(/[A-Z]/g);
+// export const getId = (id) => {
+//   const row = id?.match(/\d+/g);
+//   const column = id?.match(/[A-Z]/g);
+//   const columnCharCode = id?.match(/[A-Z]/g);
 
-  if (row && column && columnCharCode)
-    return {
-      row: row[0],
-      column: column[0],
-      columnCharCode: columnCharCode[0].charCodeAt(0),
-    };
-  return {};
-};
+//   if (row && column && columnCharCode)
+//     return {
+//       row: row[0],
+//       column: column[0],
+//       columnCharCode: columnCharCode[0].charCodeAt(0),
+//     };
+//   return {};
+// };
 
-export const getCellMinMax = (highlighted) => {
-  const ids = highlighted.map(getId);
-  const columnCharCodes = ids.map((it) => it.columnCharCode);
-  const rows = ids.map((it) => Number(it.row));
-  const minC = Math.min(...columnCharCodes);
-  const maxC = Math.max(...columnCharCodes);
-  const minR = Math.min(...rows);
-  const maxR = Math.max(...rows);
+// export const getCellMinMax = (highlighted) => {
+//   const ids = highlighted.map(getId);
+//   const columnCharCodes = ids.map((it) => it.columnCharCode);
+//   const rows = ids.map((it) => Number(it.row));
+//   const minC = Math.min(...columnCharCodes);
+//   const maxC = Math.max(...columnCharCodes);
+//   const minR = Math.min(...rows);
+//   const maxR = Math.max(...rows);
 
-  return {
-    minC,
-    maxC,
-    minR,
-    maxR,
-  };
-};
+//   return {
+//     minC,
+//     maxC,
+//     minR,
+//     maxR,
+//   };
+// };
 
 export const getCellOffset = (cell, offsetX, offsetY) => {
   const offsetRow = +cell.row + offsetY;
@@ -42,14 +41,15 @@ export const getCellOffset = (cell, offsetX, offsetY) => {
 
 export const generateClipboardContent = (state) => {
   const content = state.highlighted.rows.map((row) =>
-    state.highlighted.columns.map(
-      (column) =>
-        new CellContent({
-          value: state.content[`${column}${row}`]?.value || "",
-          display: state.content[`${column}${row}`]?.display || "",
-          formula: state.content[`${column}${row}`]?.formula || "",
-        })
-    )
+    state.highlighted.columns.map((column) => {
+      const id = `${column}${row}`;
+      return new CellContent({
+        id,
+        value: state.content[id]?.value || "",
+        display: state.content[id]?.display || "",
+        formula: state.content[id]?.formula || "",
+      });
+    })
   );
   const type = "_sheet";
   return JSON.stringify({ type, content });
@@ -78,8 +78,9 @@ export function addCellToFocusedBox(state, text, replace) {
   const isLastValueCell = /([a-z]+[0-9]+)$/gi;
 
   // const currentValue = state.content[state.selectedCell.id].formula;
-  const id = state.isFormulaFieldFocused ? "formula-field" : "input-box";
-  const element = document.getElementById(id);
+  const element = state.isFormulaFieldFocused
+    ? state.formulaFieldRef
+    : state.inputRef;
 
   const [start, end] = [element.selectionStart, element.selectionEnd];
   const currentValue = element.value.slice(0, end);
@@ -105,6 +106,7 @@ export function addCellToFocusedBox(state, text, replace) {
   return element.value;
 }
 
+// Unused
 export function setCaretPosition(elemId, caretPos) {
   const elem = document.getElementById(elemId);
 
@@ -134,31 +136,6 @@ export function getCaretPosition(input) {
   }
 }
 
-export const getNextColumn = (
-  id,
-  maxRows = SheetConfig.MAX_ROWS,
-  maxColumns = SheetConfig.MAX_COLUMNS
-) => {
-  const { row, columnCharCode } = getId(id);
-  const maxColumn = getMaxColumn(maxColumns);
-  const nextRow =
-    columnCharCode + 1 === maxColumn
-      ? parseInt(row) === maxRows
-        ? 1
-        : +row + 1
-      : row;
-  return `${
-    columnCharCode + 1 === maxColumn
-      ? String.fromCharCode(getMinColumn())
-      : String.fromCharCode(columnCharCode + 1)
-  }${nextRow}`;
-};
-
-export const getNextRow = (id, maxRows = SheetConfig.MAX_ROWS) => {
-  const { row, column } = getId(id);
-  return `${column}${+row === maxRows ? +row : +row + 1}`;
-};
-
 export const isCtrlKeyPressed = (e) => {
   return /mac/i.test(navigator.platform) ? e.metaKey : e.ctrlKey;
 };
@@ -171,7 +148,11 @@ export function parseCSV(csvString) {
     row.split(",").forEach((cellValue, colIndex) => {
       const colLabel = SheetConfig.COLUMNS[colIndex];
       const cellId = `${colLabel}${rowIndex + 1}`;
-      content[cellId] = new CellContent({ value: cellValue, formula: "" });
+      content[cellId] = new CellContent({
+        id: cellId,
+        value: cellValue,
+        formula: "",
+      });
     });
   });
 
@@ -208,18 +189,18 @@ export const generateInitialContent = (
   return Object.keys(content).reduce(
     (stateContent, it) => {
       const cell = it.toUpperCase();
-      stateContent[cell] = {};
+      stateContent[cell] = new CellContent({ id: cell });
       if (content[it] !== null && typeof content[it] !== "object") {
         const isString =
           typeof content[it] === "string" || content[it] instanceof String;
-        if (isString && content[it].startsWith("=")) {
+        if (isString && isFormula(content[it])) {
           stateContent[cell].formula = content[it];
         } else {
           stateContent[cell].value = content[it];
         }
         stateContent[cell].display = content[it];
       } else {
-        stateContent[cell].value = new CellContent(content[it]);
+        stateContent[cell] = new CellContent({ id: cell, ...content[it] });
       }
 
       return stateContent;
@@ -228,19 +209,6 @@ export const generateInitialContent = (
   );
 };
 
-export const getPreviousColumn = (id, maxColumns = SheetConfig.MAX_COLUMNS) => {
-  const { row, columnCharCode } = getId(id);
-
-  const nextRow =
-    columnCharCode === getMinColumn() ? (+row === 1 ? row : row - 1) : row;
-  return `${
-    columnCharCode === getMinColumn()
-      ? String.fromCharCode(getMaxColumn(maxColumns) - 1)
-      : String.fromCharCode(columnCharCode - 1)
-  }${nextRow}`;
-};
-
-export const getPreviousRow = (id) => {
-  const { row, column } = getId(id);
-  return `${column}${+row === 1 ? +row : +row - 1}`;
+export const isFormula = (value) => {
+  return value.startsWith("=");
 };

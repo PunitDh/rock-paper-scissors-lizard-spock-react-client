@@ -100,6 +100,7 @@ export const updateStateContent = (stateContent, cell, formula) => {
     return {
       ...stateContent,
       [cell]: new CellContent({
+        id: cell,
         formula: formula.toUpperCase(),
         value: evaluated.value,
         display: evaluated.value,
@@ -110,6 +111,7 @@ export const updateStateContent = (stateContent, cell, formula) => {
     return {
       ...stateContent,
       [cell]: new CellContent({
+        id: cell,
         formula: formula.toUpperCase(),
         value: "Syntax Error",
         display: "Syntax Error",

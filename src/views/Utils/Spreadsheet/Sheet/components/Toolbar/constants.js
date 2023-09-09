@@ -1,6 +1,5 @@
 import {
   CalendarMonth,
-  CurrencyExchange,
   NumbersOutlined,
   Percent,
   TextFields,
@@ -8,7 +7,16 @@ import {
 } from "@mui/icons-material";
 import { IconClock, IconCurrencyDollar } from "@tabler/icons";
 
-export const fontSizes = Object.freeze([8, 10, 12, 14, 16, 18, 20, 24]);
+export const fontSizes = Object.freeze([
+  "8px",
+  "10px",
+  "12px",
+  "14px",
+  "16px",
+  "18px",
+  "20px",
+  "24px",
+]);
 
 export const borderStyles = Object.freeze([
   {

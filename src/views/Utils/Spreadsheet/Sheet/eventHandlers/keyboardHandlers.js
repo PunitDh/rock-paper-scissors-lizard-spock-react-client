@@ -11,13 +11,8 @@ import {
   setHighlightCellAnchor,
   undoState,
 } from "../actions";
-import {
-  isCtrlKeyPressed,
-  getNextColumn,
-  getNextRow,
-  getPreviousColumn,
-  getPreviousRow,
-} from "../utils/cellUtils";
+import { isCtrlKeyPressed } from "../utils/cellUtils";
+import Cell from "../models/Cell";
 
 export const handleKeyUp = (e, dispatch) => {
   switch (e.key) {
@@ -29,7 +24,7 @@ export const handleKeyUp = (e, dispatch) => {
   }
 };
 
-export const handleKeyDown = (e, state, dispatch, maxRows, maxColumns) => {
+export const handleKeyDown = (e, state, dispatch) => {
   let nextCell;
 
   switch (e.key) {
@@ -63,7 +58,7 @@ export const handleKeyDown = (e, state, dispatch, maxRows, maxColumns) => {
       e.shiftKey &&
         !state.highlighted.cellAnchor &&
         dispatch(setHighlightCellAnchor(state.selectedCell.id));
-      nextCell = determineNextCell(e, state, dispatch, maxRows, maxColumns);
+      nextCell = determineNextCell(e, state, dispatch);
       e.preventDefault();
       dispatch(selectCell(nextCell));
       break;
@@ -73,92 +68,45 @@ export const handleKeyDown = (e, state, dispatch, maxRows, maxColumns) => {
   }
 
   if (e.shiftKey) {
-    dispatch(highlightCells(state.highlighted.cellAnchor, nextCell));
+    dispatch(highlightCells(state.highlighted.cellAnchor, nextCell?.id));
   }
 };
 
-const determineNextCell = (e, state, dispatch, maxRows, maxColumns) => {
+const determineNextCell = (e, state, dispatch) => {
   const { selectedCell } = state;
+
+  if (!e.shiftKey && !state.isFormulaModeActive) {
+    dispatch(resetHighlight()); // reset highlighting if conditions are met
+  }
 
   switch (e.key) {
     case KeyEvent.ENTER:
       return e.shiftKey
-        ? handleNavigation(e, state, dispatch, getPreviousRow, selectedCell.id)
-        : handleNavigation(
-            e,
-            state,
-            dispatch,
-            getNextRow,
-            selectedCell.id,
-            maxRows
-          );
+        ? selectedCell.getPreviousRow(selectedCell)
+        : selectedCell.getNextRow(state.maxRows);
     case KeyEvent.TAB:
-      e.preventDefault();
       return e.shiftKey
-        ? handleNavigation(
-            e,
-            state,
-            dispatch,
-            getPreviousColumn,
-            selectedCell.id,
-            maxColumns
-          )
-        : handleNavigation(
-            e,
-            state,
-            dispatch,
-            getNextColumn,
-            selectedCell.id,
-            maxRows,
-            maxColumns
-          );
+        ? selectedCell.getPreviousColumn(state.maxColumns)
+        : selectedCell.getNextColumn(state.maxRows, state.maxColumns);
     case KeyEvent.ARROW_DOWN:
       return isCtrlKeyPressed(e)
-        ? `${selectedCell.column}${maxRows}`
-        : handleNavigation(
-            e,
-            state,
-            dispatch,
-            getNextRow,
-            selectedCell.id,
-            maxRows
-          );
+        ? new Cell(`${selectedCell.column}${state.maxRows}`)
+        : selectedCell.getNextRow(state.maxRows);
     case KeyEvent.ARROW_RIGHT:
       return isCtrlKeyPressed(e)
-        ? `${SheetConfig.COLUMNS[maxColumns - 1]}${selectedCell.row}`
-        : handleNavigation(
-            e,
-            state,
-            dispatch,
-            getNextColumn,
-            selectedCell.id,
-            maxRows,
-            maxColumns
-          );
+        ? new Cell(
+            `${SheetConfig.COLUMNS[state.maxColumns - 1]}${selectedCell.row}`
+          )
+        : selectedCell.getNextColumn(state.maxRows, state.maxColumns);
     case KeyEvent.ARROW_LEFT:
       return isCtrlKeyPressed(e)
-        ? `${SheetConfig.COLUMNS[0]}${selectedCell.row}`
-        : handleNavigation(
-            e,
-            state,
-            dispatch,
-            getPreviousColumn,
-            selectedCell.id,
-            maxColumns
-          );
+        ? new Cell(`${SheetConfig.COLUMNS[0]}${selectedCell.row}`)
+        : selectedCell.getPreviousColumn(state.maxColumns);
     case KeyEvent.ARROW_UP:
       return isCtrlKeyPressed(e)
-        ? `${selectedCell.column}${1}`
-        : handleNavigation(e, state, dispatch, getPreviousRow, selectedCell.id);
+        ? new Cell(`${selectedCell.column}${1}`)
+        : selectedCell.getPreviousRow();
     default:
       break;
   }
-};
-
-const handleNavigation = (e, state, dispatch, getNextFunction, ...args) => {
-  e.preventDefault();
-  if (!e.shiftKey && !state.isFormulaModeActive) {
-    dispatch(resetHighlight());
-  }
-  return getNextFunction(...args);
 };

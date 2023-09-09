@@ -10,15 +10,10 @@ import {
   setFormulaMode,
   setHighlightCellAnchor,
   setInputBoxFocused,
+  setInputRef,
 } from "../actions";
 import { KeyEvent } from "../constants";
-import {
-  isCtrlKeyPressed,
-  getNextColumn,
-  getNextRow,
-  getPreviousColumn,
-  getPreviousRow,
-} from "../utils/cellUtils";
+import { isCtrlKeyPressed, isFormula } from "../utils/cellUtils";
 
 const Container = styled.div(({ top, left }) => ({
   position: "absolute",
@@ -47,6 +42,11 @@ const InputField = styled.input(({ width, height, isfocused, formatting }) => ({
 
 const AbsoluteCellInput = ({ state, dispatch }) => {
   const inputRef = useRef();
+
+  useEffect(() => {
+    dispatch(setInputRef(inputRef.current));
+  }, [dispatch]);
+
   const cell = useMemo(() => state.selectedCell, [state.selectedCell]);
   const rowHeight = useMemo(
     () =>
@@ -106,19 +106,12 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
   }, [dispatch, state.highlighted.cells]);
 
   const handleBlur = (e) => {
-    console.log("input box blurred");
     dispatch(setInputBoxFocused(false));
 
     const triggerRecalculation =
-      (state.formulaTrackedCells.includes(cell.id) ||
-        e.target.value.startsWith("=")) &&
-      !state.isFormulaModeActive;
-
-    console.log(
-      state.formulaTrackedCells.includes(cell.id),
-      e.target.value.startsWith("="),
-      !state.isFormulaModeActive
-    );
+      !state.isFormulaModeActive &&
+      (isFormula(e.target.value) ||
+        state.formulaTrackedCells.includes(cell.id));
 
     if (triggerRecalculation) {
       dispatch(recalculateFormulae());
@@ -128,8 +121,7 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
 
   const handleChange = (e) => {
     const newValue = e.target.value;
-    if (newValue.startsWith("=")) dispatch(setFormulaMode(true));
-
+    if (isFormula(newValue)) dispatch(setFormulaMode(true));
     dispatch(setContent(cell.id, newValue));
   };
 
@@ -149,7 +141,7 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
         case KeyEvent.ENTER:
           const triggerRecalculation =
             state.formulaTrackedCells.includes(cell.id) ||
-            e.target.value.startsWith("=");
+            isFormula(e.target.value);
           dispatch(setInputBoxFocused(false));
           dispatch(setContent(cell.id, e.target.value));
           dispatch(setFormulaMode(false));
@@ -159,8 +151,8 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
           dispatch(
             selectCell(
               e.shiftKey
-                ? getPreviousRow(cell.id)
-                : getNextRow(cell.id, state.maxRows)
+                ? cell.getPreviousRow()
+                : cell.getNextRow(state.maxRows)
             )
           );
           break;
@@ -172,26 +164,26 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
         case KeyEvent.TAB: {
           e.preventDefault();
           e.shiftKey
-            ? dispatch(selectCell(getPreviousColumn(cell.id, state.maxColumns)))
-            : dispatch(selectCell(getNextColumn(cell.id, state.maxRows)));
+            ? dispatch(selectCell(cell.getPreviousColumn(state.maxColumns)))
+            : dispatch(selectCell(cell.getNextColumn(state.maxRows)));
           break;
         }
         case KeyEvent.ARROW_LEFT: {
           if (inputRef.current?.value.length === 0)
-            dispatch(selectCell(getPreviousColumn(cell.id, state.maxColumns)));
+            dispatch(selectCell(cell.getPreviousColumn(state.maxColumns)));
           break;
         }
         case KeyEvent.ARROW_RIGHT: {
           if (inputRef.current?.value.length === 0)
-            dispatch(selectCell(getNextColumn(cell.id, state.maxRows)));
+            dispatch(selectCell(cell.getNextColumn(state.maxRows)));
           break;
         }
         case KeyEvent.ARROW_UP: {
-          dispatch(selectCell(getPreviousRow(cell.id)));
+          dispatch(selectCell(cell.getPreviousRow()));
           break;
         }
         case KeyEvent.ARROW_DOWN: {
-          dispatch(selectCell(getNextRow(cell.id, state.maxRows)));
+          dispatch(selectCell(cell.getNextRow(state.maxRows)));
           break;
         }
         default:
@@ -201,7 +193,7 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
     },
     [
       dispatch,
-      cell.id,
+      cell,
       state.formulaTrackedCells,
       state.maxRows,
       state.maxColumns,

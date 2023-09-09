@@ -34,6 +34,6 @@ export const Calc = {
 
 export const Formula = ["SUM(", "AVG("];
 
-export const getMinColumn = () => SheetConfig.COLUMNS[0].charCodeAt(0);
-export const getMaxColumn = (maxColumns) =>
+export const getFirstColumnCharCode = () => SheetConfig.COLUMNS[0].charCodeAt(0);
+export const getLastColumnCharCode = (maxColumns) =>
   SheetConfig.COLUMNS[maxColumns].charCodeAt(0);
