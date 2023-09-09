@@ -65,10 +65,7 @@ const RowHeader = ({ state, dispatch, row, onContextMenu }) => {
   const handleMouseDown = () => {
     dispatch(setHighlightRowAnchor(row));
   };
-  const handleMouseMove = (e) => {
-  };
-  const handleMouseUp = (e) => {
-  };
+
   const handleMouseOver = (e) => {
     dispatch(setHovered(row));
   };
@@ -79,8 +76,6 @@ const RowHeader = ({ state, dispatch, row, onContextMenu }) => {
       onContextMenu={onContextMenu}
       height={`${Math.round(rowHeight)}px`}
       onMouseDown={handleRowHeaderClick}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
       onMouseOver={handleMouseOver}
       id={`row-${row}`}
       ref={headerRef}

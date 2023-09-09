@@ -59,19 +59,25 @@ export function addCellToFocusedBox(state, text, replace) {
     : state.inputRef;
 
   const [start, end] = [element.selectionStart, element.selectionEnd];
-  const currentValue = element.value.slice(0, end);
+  const valueBeforeSelection = element.value.slice(0, end);
   element.focus();
 
-  if (isLastValueRange.test(currentValue)) {
+  if (end > start) {
+    element.setRangeText(text, start, end, "preserve");
+  } else if (isLastValueRange.test(valueBeforeSelection)) {
     element.setRangeText(
-      replace ? currentValue.replace(isLastValueRange, text) : "," + text,
+      replace
+        ? valueBeforeSelection.replace(isLastValueRange, text)
+        : "," + text,
       replace ? 0 : start,
       replace ? element.value.length : end,
       "preserve"
     );
-  } else if (isLastValueCell.test(currentValue)) {
+  } else if (isLastValueCell.test(valueBeforeSelection)) {
     element.setRangeText(
-      replace ? currentValue.replace(isLastValueCell, text) : "," + text,
+      replace
+        ? valueBeforeSelection.replace(isLastValueCell, text)
+        : "," + text,
       replace ? 0 : start,
       replace ? element.value.length : end,
       "preserve"
@@ -135,13 +141,13 @@ export function parseCSV(csvString) {
   return content;
 }
 
-export const generateInitialContent = (
+export const generateInitialContent = ({
   initialData,
   defaultRowHeight,
   defaultColumnWidth,
   maxRows,
-  maxColumns
-) => {
+  maxColumns,
+}) => {
   const columnWidths = Array(maxColumns)
     .fill()
     .reduce((acc, _, idx) => {

@@ -53,56 +53,6 @@ export default class CellRange {
     // return cells;
     return new CellRange(cells, ids, rows, columns);
   }
-
-  static getFormulaCellsToTrack = (stateContent) => {
-    const formulae = Object.keys(stateContent)
-      .filter((it) => stateContent[it].formula?.length > 0)
-      .map((it) => stateContent[it].formula);
-
-    return [
-      ...new Set(
-        formulae
-          .map((it) => it.match(/([a-z]+[0-9]+):([a-z]+[0-9]+)/gi))
-          .filter(Boolean)
-          .flat()
-          .map(
-            (it) =>
-              CellRange.createFlat(it.split(":")[0], it.split(":")[1]).cellIds
-          )
-          .concat(formulae.map((it) => it.match(/([a-z]+[0-9]+)/gi)))
-          .flat()
-          .map((it) => stateContent[it]?.value || "")
-      ),
-    ];
-  };
-
-  static createFromCell(startCell, endCell) {
-    const { minC, maxC, minR, maxR } = getCellMinMax([
-      startCell.id,
-      endCell.id,
-    ]);
-
-    const cells = [];
-    const rows = [];
-    const columns = [];
-    const ids = [];
-    for (let row = minR; row <= maxR; row++) {
-      const createdRow = [];
-      const createdIds = [];
-      for (let col = minC; col <= maxC; col++) {
-        const column = String.fromCharCode(col);
-        const id = `${column}${row}`;
-        createdRow.push(new Cell(id));
-        columns.push(column);
-        rows.push(row);
-        createdIds.push(id);
-      }
-      cells.push(createdRow);
-      ids.push(createdIds);
-    }
-    // return cells;
-    return new CellRange(cells, ids, rows, columns);
-  }
 }
 
 const getId = (id) => {

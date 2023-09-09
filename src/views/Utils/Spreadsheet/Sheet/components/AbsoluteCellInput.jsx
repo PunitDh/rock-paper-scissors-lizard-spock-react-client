@@ -5,6 +5,7 @@ import {
   highlightCells,
   openContextMenu,
   recalculateFormulae,
+  resetHighlight,
   selectCell,
   setCellContent,
   setFormulaMode,
@@ -19,7 +20,7 @@ const Container = styled.div(({ top, left }) => ({
   position: "absolute",
   top: `${top}px`,
   left: `${left}px`,
-  transition: "top 200ms ease-in-out, left 200ms ease-in-out",
+  transition: "top 100ms ease-in, left 100ms ease-in",
   zIndex: "50000",
 }));
 
@@ -204,11 +205,22 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
     ]
   );
 
-  const handleFocus = () => dispatch(setInputBoxFocused(true));
+  const handleFocus = (e) => {
+    dispatch(setInputBoxFocused(true));
+  };
 
   const handleContextMenu = (e) => {
     e.preventDefault();
     dispatch(openContextMenu(document.getElementById(state.selectedCell.id)));
+  };
+
+  const handleMouseDown = (e) => {
+    dispatch(setHighlightCellAnchor(cell.id));
+  };
+
+  const handleClick = (e) => {
+    if (!isCtrlKeyPressed(e)) dispatch(resetHighlight());
+    dispatch(selectCell(cell.id));
   };
 
   return (
@@ -222,6 +234,7 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
         width={position.width}
         height={position.height}
         isfocused={state.inputBoxFocused}
+        onClick={handleClick}
         onBlur={handleBlur}
         onChange={handleChange}
         onKeyDown={handleKeyDown}

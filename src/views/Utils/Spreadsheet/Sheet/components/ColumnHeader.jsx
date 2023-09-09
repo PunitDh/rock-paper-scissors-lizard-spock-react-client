@@ -1,4 +1,4 @@
-import { addCellsToHighlight, setSelectedColumn } from "../actions";
+import { addCellsToHighlight, setHovered, setSelectedColumn } from "../actions";
 import { HeaderItem } from "../styles";
 import styled from "@emotion/styled";
 import { isCtrlKeyPressed } from "../utils/cellUtils";
@@ -30,13 +30,9 @@ const ColumnHeader = ({ state, dispatch, column, onContextMenu }) => {
     }
   };
 
-  const handleMouseDown = (e, column) => {
-    // TODO
-  };
-
-  const handleMouseUp = (e, column) => {
-    // TODO
-  };
+  const handleMouseOver = (e) => {
+    dispatch(setHovered(column))
+  }
 
   return (
     <ColumnHeaderItem
@@ -46,8 +42,7 @@ const ColumnHeader = ({ state, dispatch, column, onContextMenu }) => {
         state.highlighted.columns.includes(column)
       }
       onClick={handleClick}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
+      onMouseOver={handleMouseOver}
       onContextMenu={onContextMenu}
     >
       {column}

@@ -6,7 +6,6 @@ export const SheetAction = Object.freeze({
   SET_FORMULA_FIELD_FOCUSED: "SET_FORMULA_FIELD_FOCUSED",
   SET_INPUT_BOX_FOCUSED: "SET_INPUT_BOX_FOCUSED",
   RESET_FORMULA_FIELD: "RESET_FORMULA_FIELD",
-  SET_EDIT_MODE: "SET_EDIT_MODE",
   SET_FORMULA_MODE: "SET_FORMULA_MODE",
   SET_HOVERED_CELL: "SET_HOVERED_CELL",
   SET_SELECTED_ROW: "SET_SELECTED_ROW",
@@ -18,6 +17,7 @@ export const SheetAction = Object.freeze({
   FORMULA_HIGHLIGHT_CELL_RANGE: "FORMULA_HIGHLIGHT_CELL_RANGE",
   FORMULA_HIGHLIGHT_CELLS: "FORMULA_HIGHLIGHT_CELLS",
   ADD_CELLS_TO_HIGHLIGHT: "ADD_CELLS_TO_HIGHLIGHT",
+  REMOVE_CELLS_FROM_HIGHLIGHT: "REMOVE_CELLS_FROM_HIGHLIGHT",
   SET_HIGHLIGHT_CELL_ANCHOR: "SET_HIGHLIGHT_CELL_ANCHOR",
   SET_HIGHLIGHT_ROW_ANCHOR: "SET_HIGHLIGHT_ROW_ANCHOR",
   SET_HIGHLIGHT_COLUMN_ANCHOR: "SET_HIGHLIGHT_COLUMN_ANCHOR",
@@ -26,7 +26,6 @@ export const SheetAction = Object.freeze({
   RESET_HIGHLIGHT: "RESET_HIGHLIGHT",
   SET_MOUSEDOWN: "SET_MOUSEDOWN",
   SET_CONTENT_DATA: "SET_CONTENT_DATA",
-  SET_CELL_REF: "SET_CELL_REF",
   UPDATE_REFERENCE_CELLS: "UPDATE_REFERENCE_CELLS",
   SET_CONTENT_BULK: "SET_CONTENT_BULK",
   SET_CELL_FORMATTING: "SET_CELL_FORMATTING",
@@ -70,11 +69,6 @@ export const setFormulaFieldFocused = (payload) => ({
 
 export const setInputBoxFocused = (payload) => ({
   type: SheetAction.SET_INPUT_BOX_FOCUSED,
-  payload,
-});
-
-export const setEditMode = (payload) => ({
-  type: SheetAction.SET_EDIT_MODE,
   payload,
 });
 
@@ -170,6 +164,11 @@ export const addCellsToHighlight = (payload) => ({
   payload,
 });
 
+export const removeCellsFromHighlight = (payload) => ({
+  type: SheetAction.REMOVE_CELLS_FROM_HIGHLIGHT,
+  payload,
+});
+
 export const openContextMenu = (payload) => ({
   type: SheetAction.OPEN_CONTEXT_MENU,
   payload,
@@ -182,11 +181,6 @@ export const resetHighlight = () => ({
 export const setMouseDown = (payload) => ({
   type: SheetAction.SET_MOUSEDOWN,
   payload,
-});
-
-export const setCellRef = (cellId, ref) => ({
-  type: SheetAction.SET_CELL_REF,
-  payload: { cellId, ref },
 });
 
 export const setCellContent = (cell, value) => ({

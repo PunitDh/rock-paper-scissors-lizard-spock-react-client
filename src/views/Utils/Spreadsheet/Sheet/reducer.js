@@ -15,7 +15,6 @@ export const initialState = {
   defaultColumnWidth: 50,
   maxUndos: 32,
   selectedCell: new Cell("A1"), //{ cell: "A1", row: 1, column: "A", columnCharCode: 65 },
-  editMode: false,
   formulaMode: false,
   hovered: "",
   highlighted: {
@@ -43,6 +42,7 @@ export const initialState = {
 };
 
 export const reducer = (state, action) => {
+  // console.log(action);
   switch (action.type) {
     case SheetAction.SET_SELECTED:
       return {
@@ -83,11 +83,6 @@ export const reducer = (state, action) => {
         formulaFieldText: "",
         isFormulaFieldFocused: false,
         formulaMode: false,
-      };
-    case SheetAction.SET_EDIT_MODE:
-      return {
-        ...state,
-        editMode: action.payload,
       };
     case SheetAction.SET_FORMULA_MODE:
       return {
@@ -150,7 +145,10 @@ export const reducer = (state, action) => {
     }
 
     case SheetAction.FORMULA_HIGHLIGHT_CELL_RANGE: {
-      const range = CellRange.createFlat(action.payload.start, action.payload.end);
+      const range = CellRange.createFlat(
+        action.payload.start,
+        action.payload.end
+      );
       return {
         ...state,
         formulaHighlighted: range.cellIds,
@@ -168,6 +166,21 @@ export const reducer = (state, action) => {
           cells: state.highlighted.cells.concat(action.payload),
           rows: state.highlighted.rows.concat(rows),
           columns: state.highlighted.columns.concat(columns),
+        },
+        editMode: false,
+      };
+    }
+
+    case SheetAction.REMOVE_CELLS_FROM_HIGHLIGHT: {
+      const { row, column } = new Cell(action.payload);
+
+      return {
+        ...state,
+        highlighted: {
+          ...state.highlighted,
+          cells: state.highlighted.cells.filter((it) => it !== action.payload),
+          rows: state.highlighted.rows.filter((it) => it !== row),
+          columns: state.highlighted.columns.filter((it) => it !== column),
         },
         editMode: false,
       };
@@ -390,22 +403,6 @@ export const reducer = (state, action) => {
           data: {
             ...state.content.data,
             [cellId]: cellData,
-          },
-        },
-      };
-    }
-    case SheetAction.SET_CELL_REF: {
-      const cellData = CellData.getOrNew(
-        state.content.data[action.payload.cellId]
-      );
-
-      return {
-        ...state,
-        content: {
-          ...state.content,
-          data: {
-            ...state.content.data,
-            [action.payload.cellId]: cellData.setRef(action.payload.ref),
           },
         },
       };

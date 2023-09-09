@@ -7,7 +7,6 @@ import {
   resetHighlight,
   selectAll,
   selectCell,
-  setEditMode,
   setHighlightCellAnchor,
   undoState,
 } from "../actions";
@@ -63,7 +62,6 @@ export const handleKeyDown = (e, state, dispatch) => {
       dispatch(selectCell(nextCell));
       break;
     default:
-      dispatch(setEditMode(true));
       break;
   }
 
