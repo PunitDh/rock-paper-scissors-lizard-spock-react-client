@@ -102,10 +102,10 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
   }, [cell.id]);
 
   useEffect(() => {
-    if (state.highlighted.cells.length > 0) {
+    if (state.highlighted.cells.length > 0 && state.inputBoxFocused) {
       dispatch(setInputBoxFocused(false));
     }
-  }, [dispatch, state.highlighted.cells]);
+  }, [dispatch, state.highlighted.cells, state.inputBoxFocused]);
 
   const handleBlur = (e) => {
     dispatch(setInputBoxFocused(false));

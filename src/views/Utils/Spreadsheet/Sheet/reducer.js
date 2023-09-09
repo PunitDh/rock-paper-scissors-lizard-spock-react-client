@@ -14,8 +14,8 @@ export const initialState = {
   defaultRowHeight: 24,
   defaultColumnWidth: 50,
   maxUndos: 32,
-  selectedCell: new Cell("A1"), //{ cell: "A1", row: 1, column: "A", columnCharCode: 65 },
-  editMode: false,
+  selectedCell: new Cell("A1"), //{ cell: "A1", row: 1, column: "A", columnCharCode: 65 }
+  selectedRef: null,
   formulaMode: false,
   hovered: "",
   highlighted: {
@@ -43,17 +43,23 @@ export const initialState = {
 };
 
 export const reducer = (state, action) => {
-  console.log(action);
+  action.type !== SheetAction.SET_HOVERED && console.log(action);
+
   switch (action.type) {
     case SheetAction.SET_SELECTED: {
-      if (Cell.isValidId(action.payload) || Cell.isValidId(action.payload.id))
+      let selectedCell;
+      if (Cell.isValidId(action.payload) || Cell.isValidId(action.payload.id)) {
+        selectedCell =
+          typeof action.payload === "object" && action.payload instanceof Cell
+            ? action.payload
+            : new Cell(action.payload);
+
         return {
           ...state,
-          selectedCell:
-            typeof action.payload === "object" && action.payload instanceof Cell
-              ? action.payload
-              : new Cell(action.payload),
+          selectedRef: state.content.data[selectedCell],
+          selectedCell,
         };
+      }
       return state;
     }
     case SheetAction.SET_INPUT_REF:
@@ -87,11 +93,6 @@ export const reducer = (state, action) => {
         formulaFieldText: "",
         isFormulaFieldFocused: false,
         formulaMode: false,
-      };
-    case SheetAction.SET_EDIT_MODE:
-      return {
-        ...state,
-        editMode: action.payload,
       };
     case SheetAction.SET_FORMULA_MODE:
       return {
@@ -145,7 +146,6 @@ export const reducer = (state, action) => {
           rows: range.rows,
           columns: range.columns,
         },
-        editMode: false,
       };
     }
 
@@ -395,7 +395,6 @@ export const reducer = (state, action) => {
       );
       return {
         ...state,
-        editMode: false,
         highlighted: {
           ...state.highlighted,
           cells: range.cellIds,

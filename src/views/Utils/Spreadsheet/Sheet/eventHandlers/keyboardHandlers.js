@@ -3,11 +3,11 @@ import {
   addMemento,
   deleteCellContent,
   highlightCells,
+  recalculateFormulae,
   redoState,
   resetHighlight,
   selectAll,
   selectCell,
-  setEditMode,
   setFormulaMode,
   setHighlightCellAnchor,
   undoState,
@@ -39,6 +39,7 @@ export const handleKeyDownSheet = (e, state, dispatch) => {
       if (isCtrlKeyPressed(e)) {
         e.preventDefault();
         e.shiftKey ? dispatch(redoState()) : dispatch(undoState());
+        dispatch(recalculateFormulae());
       }
       break;
     case KeyEvent.SHIFT:
@@ -50,7 +51,7 @@ export const handleKeyDownSheet = (e, state, dispatch) => {
       break;
     case KeyEvent.ENTER:
       dispatch(setFormulaMode(false));
-      // dispatch(recalculateFormulae());
+    // dispatch(recalculateFormulae());
     // eslint-disable-next-line no-fallthrough
     case KeyEvent.TAB:
     case KeyEvent.ARROW_DOWN:
@@ -65,7 +66,6 @@ export const handleKeyDownSheet = (e, state, dispatch) => {
       dispatch(selectCell(nextCell));
       break;
     default:
-      dispatch(setEditMode(true));
       break;
   }
 

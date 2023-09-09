@@ -86,6 +86,9 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
   const resetField = () => {
     dispatch(resetFormulaField());
     dispatch(deleteCellContent(state.selectedCell.id));
+    if (state.formulaTrackedCells.includes(state.selectedCell.id)) {
+      dispatch(recalculateFormulae());
+    }
     dispatch(addMemento());
   };
 

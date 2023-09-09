@@ -17,8 +17,9 @@ import {
   setSelectedCellFormatting,
   undoState,
   setCellFormattingBulk,
+  recalculateFormulae,
 } from "../../actions";
-import OpenFile from "./OpenFile";
+import OpenFileCSV from "./OpenFileCSV";
 import SaveFileCSV from "./SaveFileCSV";
 import FormattingButton from "./components/FormattingButton";
 import HistoryButton from "./HistoryButton";
@@ -30,7 +31,6 @@ import BorderStyleSelect from "./BorderStyleSelect";
 import SaveFileJSON from "./SaveFileJSON";
 
 const Toolbar = ({ state, dispatch }) => {
-  const inputRef = useRef();
   const canUndo = state.currentMementoId !== state.memento[0]?.id;
   const canRedo =
     state.currentMementoId !== state.memento[state.memento.length - 1]?.id;
@@ -73,18 +73,14 @@ const Toolbar = ({ state, dispatch }) => {
     e.preventDefault();
   };
 
-  useEffect(() => {
-    if (state.isFormulaFieldFocused) {
-      inputRef.current?.focus();
-    }
-  }, [state.isFormulaFieldFocused]);
-
   const handleUndo = (e) => {
     canUndo && dispatch(undoState());
+    dispatch(recalculateFormulae());
   };
 
   const handleRedo = (e) => {
     canRedo && dispatch(redoState());
+    dispatch(recalculateFormulae());
   };
 
   const toggleStyle = useCallback(
@@ -99,10 +95,12 @@ const Toolbar = ({ state, dispatch }) => {
     (formattingKey) => (event) => {
       const value = event.target?.value || event;
       const formatting = { [formattingKey]: value };
-      dispatch(setSelectedCellFormatting(formatting));
-      dispatch(setCellFormattingBulk(formatting));
+
+      if (state.highlighted.cells.length > 1)
+        dispatch(setCellFormattingBulk(formatting));
+      else dispatch(setSelectedCellFormatting(formatting));
     },
-    [dispatch]
+    [dispatch, state.highlighted.cells.length]
   );
 
   const setTextAlign = (textAlign) => () => {
@@ -128,7 +126,7 @@ const Toolbar = ({ state, dispatch }) => {
   return (
     <div tabIndex="1000">
       <FlexForm flexWrap="wrap" onSubmit={handleSubmit}>
-        <OpenFile dispatch={dispatch} />
+        <OpenFileCSV dispatch={dispatch} />
         <SaveFileCSV state={state} />
         <SaveFileJSON state={state} />
         <HistoryButton

@@ -74,11 +74,6 @@ export const setInputBoxFocused = (payload) => ({
   payload,
 });
 
-export const setEditMode = (payload) => ({
-  type: SheetAction.SET_EDIT_MODE,
-  payload,
-});
-
 export const setFormulaMode = (payload) => ({
   type: SheetAction.SET_FORMULA_MODE,
   payload,

@@ -105,7 +105,7 @@ const Sheet = ({
       dispatch(setFormulaFieldText(""));
       dispatch(highlightFormulaCells([]));
     }
-  }, [state.selectedCell.id, state.content.data]);
+  }, [state.content.data, state.selectedCell.id]);
 
   useEffect(() => {
     dispatch(recalculateFormulae());
@@ -148,9 +148,7 @@ const Sheet = ({
       if (state.formulaMode) {
         // TODO
       } else {
-        dispatch(
-          highlightCells(state.highlighted.cellAnchor, state.hovered)
-        );
+        dispatch(highlightCells(state.highlighted.cellAnchor, state.hovered));
       }
     } else {
       if (state.formulaMode) {
@@ -166,13 +164,13 @@ const Sheet = ({
           } else {
             dispatch(setFormulaMode(false));
             dispatch(recalculateFormulae());
-            dispatch(resetHighlight());
+            state.highlighted.cells.length > 0 && dispatch(resetHighlight());
             dispatch(selectCell(id));
             dispatch(highlightCells(id));
           }
         }
       } else {
-        dispatch(resetHighlight());
+        state.highlighted.cells.length > 0 && dispatch(resetHighlight());
         dispatch(selectCell(id));
         dispatch(setHighlightCellAnchor(id));
       }

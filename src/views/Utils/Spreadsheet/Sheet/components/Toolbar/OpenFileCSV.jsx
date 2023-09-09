@@ -6,7 +6,7 @@ import { setContentBulk } from "../../actions";
 import { useRef } from "react";
 import { parseCSV } from "../../utils/cellUtils";
 
-const OpenFile = ({ dispatch }) => {
+const OpenFileCSV = ({ dispatch }) => {
   const fileRef = useRef();
 
   const handleOpenFile = (e) => {
@@ -46,4 +46,4 @@ const OpenFile = ({ dispatch }) => {
   );
 };
 
-export default OpenFile;
+export default OpenFileCSV;
