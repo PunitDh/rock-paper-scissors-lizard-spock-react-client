@@ -67,4 +67,14 @@ export const AuthPage = {
     params.set("referrer", window.location.href);
     return `${AuthPage.LOGIN_PAGE}?${params.toString()}`;
   },
+  registerWithReferrer: () => {
+    const url = new URL(window.location.href);
+    const referrer = url.searchParams.get("referrer");
+    if (referrer) {
+      const params = new URLSearchParams();
+      params.set("referrer", referrer);
+      return `${AuthPage.REGISTER_PAGE}?${params.toString()}`;
+    }
+    return AuthPage.REGISTER_PAGE;
+  },
 };

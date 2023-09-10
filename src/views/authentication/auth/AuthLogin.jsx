@@ -102,7 +102,7 @@ const AuthLogin = ({ title, subtitle, subtext }) => {
             fullWidth
             type="submit"
           >
-            {loading ? <CircularProgress /> : "Sign In"}
+            {loading ? <CircularProgress color="secondary" /> : "Sign In"}
           </Button>
         </Box>
       </form>

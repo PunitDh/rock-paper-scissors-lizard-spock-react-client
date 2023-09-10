@@ -49,7 +49,7 @@ const Login = () => (
                   </Typography>
                   <Typography
                     component={Link}
-                    to={AuthPage.REGISTER_PAGE}
+                    to={AuthPage.registerWithReferrer()}
                     fontWeight="500"
                     sx={{
                       textDecoration: "none",

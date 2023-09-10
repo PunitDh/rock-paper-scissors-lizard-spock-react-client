@@ -137,7 +137,7 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
             size="large"
             fullWidth
           >
-            {loading ? <CircularProgress /> : "Sign Up"}
+            {loading ? <CircularProgress color="secondary" /> : "Sign Up"}
           </Button>
         </form>
       </Box>
