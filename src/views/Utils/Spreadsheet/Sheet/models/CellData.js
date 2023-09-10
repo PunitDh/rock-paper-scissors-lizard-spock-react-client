@@ -30,14 +30,14 @@ export default class CellData {
       return cellData;
     }
 
-    return new CellData(cellData || id);
+    return new CellData(cellData || { id });
   }
 
   static getOrNew1(stateContentData, id) {
     if (stateContentData[id] instanceof CellData) {
       return stateContentData[id];
     }
-    return new CellData().setId(id);
+    return new CellData({ id });
   }
 
   get isFormulaCell() {
