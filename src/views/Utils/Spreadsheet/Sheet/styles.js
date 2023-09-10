@@ -23,45 +23,54 @@ export const Container = styled.div({
   boxShadow: "8px 8px 18px -10px rgba(0,0,0,0.5)",
 });
 
+const BorderStyles = Object.freeze({
+  NO_BORDER: "1px solid rgba(0,0,0,0.2)",
+  THIN_BORDER: "1px double rgba(0,0,0,1)",
+  THICK_BORDER: "2px solid rgba(0,0,0,1)",
+});
+
+const initialBorders = {
+  borderTop: BorderStyles.NO_BORDER,
+  borderRight: BorderStyles.NO_BORDER,
+  borderBottom: BorderStyles.NO_BORDER,
+  borderLeft: BorderStyles.NO_BORDER,
+};
+
 const getBorder = (formatting) => {
-  const noBorder = "1px solid rgba(0,0,0,0.2)";
-  const border = "1px double rgba(0,0,0,1)";
-
-  const initialBorder = {
-    borderTop: noBorder,
-    borderRight: noBorder,
-    borderBottom: noBorder,
-    borderLeft: noBorder,
-  };
-
   switch (formatting.borderId) {
     case Border.BORDER_BOTTOM:
     case Border.BORDER_LEFT:
     case Border.BORDER_TOP:
     case Border.BORDER_RIGHT:
       return {
-        ...initialBorder,
-        [formatting.borderId]: border,
+        ...initialBorders,
+        [formatting.borderId]: BorderStyles.THIN_BORDER,
       };
     case Border.ALL_BORDERS:
       return {
-        borderTop: border,
-        borderRight: border,
-        borderBottom: border,
-        borderLeft: border,
+        borderTop: BorderStyles.THIN_BORDER,
+        borderRight: BorderStyles.THIN_BORDER,
+        borderBottom: BorderStyles.THIN_BORDER,
+        borderLeft: BorderStyles.THIN_BORDER,
       };
     case Border.OUTSIDE_BORDERS:
-      const { borders } = formatting;
-      return borders.reduce((acc, cur) => {
+      return formatting.borderTypes.reduce((acc, cur) => {
         return {
           ...acc,
-          [cur]: border,
+          [cur]: BorderStyles.THIN_BORDER,
         };
-      }, initialBorder);
+      }, initialBorders);
+    case Border.THICK_OUTSIDE_BORDERS:
+      return formatting.borderTypes.reduce((acc, cur) => {
+        return {
+          ...acc,
+          [cur]: BorderStyles.THICK_BORDER,
+        };
+      }, initialBorders);
     case Border.NO_BORDER:
-      return initialBorder;
+      return initialBorders;
     default:
-      return initialBorder;
+      return initialBorders;
   }
 };
 
@@ -73,15 +82,12 @@ const getBorderProperties = (selected, formulacell, formatting) => {
       ? "2px dashed blue"
       : getBorder(formatting)[property];
 
-  return ["borderTop", "borderRight", "borderBottom", "borderLeft"].reduce(
-    (borderProperties, property) => {
-      return {
-        ...borderProperties,
-        [property]: getProperty(property),
-      };
-    },
-    {}
-  );
+  return Object.keys(initialBorders).reduce((borderProperties, property) => {
+    return {
+      ...borderProperties,
+      [property]: getProperty(property),
+    };
+  }, {});
 };
 
 export const Item = styled(TableCell)(

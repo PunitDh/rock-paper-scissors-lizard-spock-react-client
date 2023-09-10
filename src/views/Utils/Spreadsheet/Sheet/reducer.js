@@ -435,9 +435,10 @@ export const reducer = (state, action) => {
         state.formulaTrackedCells
       );
 
-      const cellData = CellData.getOrNew(state.content.data[cellId]).setValue(
-        value
-      );
+      const cellData = CellData.getOrNew(
+        state.content.data[cellId],
+        cellId
+      ).setValue(value);
 
       return {
         ...state,
@@ -534,11 +535,23 @@ export const reducer = (state, action) => {
       };
     }
     case SheetAction.SET_CELL_OUTSIDE_BORDER_FORMATTING: {
+      const highlightedCells = state.highlighted.cells;
+
       const [first, last] = [
-        state.highlighted.cells[0],
-        state.highlighted.cells[state.highlighted.cells.length - 1],
+        highlightedCells[0],
+        highlightedCells[highlightedCells.length - 1],
       ];
-      const range = CellRange.create(first, last).cellIds;
+      let range;
+      range = CellRange.create(first, last).cellIds;
+
+      if (range.length < 1) {
+        if (Cell.isValidId(state.selectedCell.id)) {
+          range = [[state.selectedCell.id]];
+        } else {
+          return state;
+        }
+      }
+
       const topBorders = range[0];
       const bottomBorders = range[range.length - 1];
       const leftBorders = [];
@@ -554,7 +567,10 @@ export const reducer = (state, action) => {
           const cellData = CellData.getOrNew(stateContentData[cell], cell);
           return {
             ...stateContentData,
-            [cell]: cellData.addBorderFormatting(Border.BORDER_TOP),
+            [cell]: cellData.addBorderFormatting(
+              action.payload,
+              Border.BORDER_TOP
+            ),
           };
         },
         state.content.data
@@ -565,7 +581,10 @@ export const reducer = (state, action) => {
           const cellData = CellData.getOrNew(stateContentData[cell], cell);
           return {
             ...stateContentData,
-            [cell]: cellData.addBorderFormatting(Border.BORDER_LEFT),
+            [cell]: cellData.addBorderFormatting(
+              action.payload,
+              Border.BORDER_LEFT
+            ),
           };
         },
         formattedTopBorderData
@@ -576,7 +595,10 @@ export const reducer = (state, action) => {
           const cellData = CellData.getOrNew(stateContentData[cell], cell);
           return {
             ...stateContentData,
-            [cell]: cellData.addBorderFormatting(Border.BORDER_RIGHT),
+            [cell]: cellData.addBorderFormatting(
+              action.payload,
+              Border.BORDER_RIGHT
+            ),
           };
         },
         formattedLeftBorderData
@@ -587,13 +609,15 @@ export const reducer = (state, action) => {
           const cellData = CellData.getOrNew(stateContentData[cell], cell);
           return {
             ...stateContentData,
-            [cell]: cellData.addBorderFormatting(Border.BORDER_BOTTOM),
+            [cell]: cellData.addBorderFormatting(
+              action.payload,
+              Border.BORDER_BOTTOM
+            ),
           };
         },
         formattedRightBorderData
       );
 
-      console.log({ formattedBottomBorderData });
       return {
         ...state,
         content: {

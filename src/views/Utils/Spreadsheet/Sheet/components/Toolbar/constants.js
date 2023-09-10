@@ -26,7 +26,13 @@ export const Border = Object.freeze({
   NO_BORDER: "NO_BORDER",
   ALL_BORDERS: "ALL_BORDERS",
   OUTSIDE_BORDERS: "OUTSIDE_BORDERS",
+  THICK_OUTSIDE_BORDERS: "THICK_OUTSIDE_BORDERS",
 });
+
+export const outsideBorders = Object.freeze([
+  Border.OUTSIDE_BORDERS,
+  Border.THICK_OUTSIDE_BORDERS,
+]);
 
 export const borderStyles = Object.freeze([
   {
@@ -79,6 +85,16 @@ export const borderStyles = Object.freeze([
       borderBottom: "1px solid black",
     },
     value: "Outside Borders",
+  },
+  {
+    id: Border.THICK_OUTSIDE_BORDERS,
+    props: {
+      borderRight: "2px solid black",
+      borderLeft: "2px solid black",
+      borderTop: "2px solid black",
+      borderBottom: "2px solid black",
+    },
+    value: "Thick Outside Borders",
   },
 ]);
 

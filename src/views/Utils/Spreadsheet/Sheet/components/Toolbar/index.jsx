@@ -34,7 +34,7 @@ import DecimalIcon from "./components/DecimalIcon";
 import { clamp } from "lodash";
 import CellFormatting from "../../models/CellFormatting";
 import { FlexBox } from "src/components/shared/styles";
-import { Border } from "./constants";
+import { outsideBorders } from "./constants";
 
 const Toolbar = ({ state, dispatch }) => {
   const canUndo = state.currentMementoId !== state.memento[0]?.id;
@@ -120,8 +120,8 @@ const Toolbar = ({ state, dispatch }) => {
   };
 
   const selectBorder = (borderEvent) => {
-    if (borderEvent.target.value === Border.OUTSIDE_BORDERS) {
-      dispatch(setCellOutsideBorderFormatting());
+    if (outsideBorders.includes(borderEvent.target.value)) {
+      dispatch(setCellOutsideBorderFormatting(borderEvent.target.value));
     } else setFormattingChange("borderId")(borderEvent);
   };
 

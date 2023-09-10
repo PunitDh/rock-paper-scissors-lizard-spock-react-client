@@ -8,7 +8,7 @@ export default class CellFormatting {
       });
     } else {
       this.borderId = null;
-      this.borders = [];
+      this.borderTypes = [];
       this.decimals = 0;
       this.numberFormatting = null;
     }
@@ -22,11 +22,11 @@ export default class CellFormatting {
     return this;
   }
 
-  addBorder(borderId) {
-    const borders = new Set(this.borders);
-    borders.add(borderId);
-    this.borders = [...borders];
-    this.borderId = Border.OUTSIDE_BORDERS;
+  addBorder(borderId, borderType) {
+    this.borderId = borderId;
+    const currentBorderTypes = new Set(this.borderTypes);
+    currentBorderTypes.add(borderType);
+    this.borderTypes = [...currentBorderTypes];
     return this;
   }
 

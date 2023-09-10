@@ -1,4 +1,3 @@
-import { isNumber } from "lodash";
 import { isFormula } from "../utils/cellUtils";
 import CellRange from "./CellRange";
 import CellFormatting from "./CellFormatting";
@@ -80,8 +79,8 @@ export default class CellData {
     return this;
   }
 
-  addBorderFormatting(borderFormatting) {
-    this.formatting = this.formatting.addBorder(borderFormatting);
+  addBorderFormatting(borderId, borderType) {
+    this.formatting = this.formatting.addBorder(borderId, borderType);
     return this;
   }
 
