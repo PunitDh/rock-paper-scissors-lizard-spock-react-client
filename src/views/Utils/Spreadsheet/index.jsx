@@ -12,6 +12,8 @@ export default function Spreadsheet() {
         toolbar={true}
         formulaField={true}
         statusField={true}
+        maxDisplayColumns={12}
+        maxDisplayRows={12}
         initialData={{
           A1: 34,
           B1: 45,

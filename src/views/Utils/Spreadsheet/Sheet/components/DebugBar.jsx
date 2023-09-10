@@ -6,7 +6,7 @@ const DebugButton = styled.button({
   cursor: "pointer",
 });
 
-const DebugBar = ({ state }) => {
+const DebugBar = ({ state, tableBodyRef }) => {
   const token = useToken();
   return (
     token.decoded.isAdmin && (
@@ -41,6 +41,12 @@ const DebugBar = ({ state }) => {
         </DebugButton>
         <DebugButton type="button" onClick={() => console.log(state)}>
           Show State
+        </DebugButton>
+        <DebugButton
+          type="button"
+          onClick={() => console.log(tableBodyRef.current.scrollTop)}
+        >
+          Show Scroll Top
         </DebugButton>
       </FlexForm>
     )

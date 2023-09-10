@@ -22,9 +22,11 @@ import {
 import Cell from "../models/Cell";
 import { KeyEvent } from "../constants";
 
-const FormulaField = ({ state, dispatch, onContextMenu }) => {
+const FormulaField = ({ state, dispatch, eventHandler }) => {
   const formRef = useRef();
   const inputRef = useRef();
+
+  const handleContextMenu = (e) => eventHandler.handleContextMenu(e);
 
   useEffect(() => {
     dispatch(setFormulaFieldRef(inputRef.current));
@@ -178,7 +180,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
           type="text"
           value={value}
           onChange={handleChange}
-          onContextMenu={onContextMenu}
+          onContextMenu={handleContextMenu}
           onKeyDown={handleKeyDown}
           onFocus={handleFocus}
           onBlur={handleBlur}

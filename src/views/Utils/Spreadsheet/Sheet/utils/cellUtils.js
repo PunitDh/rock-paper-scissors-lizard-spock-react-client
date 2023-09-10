@@ -1,6 +1,7 @@
 import { FILE_TYPE, SheetConfig } from "../constants";
 import CellData from "../models/CellData";
 import CellFormatting from "../models/CellFormatting";
+import { initialState } from "../reducer";
 
 export function spreadContent(content, key, value) {
   return {
@@ -187,7 +188,30 @@ export function parseJSON(stringifiedJSON) {
   }
 }
 
-export const generateInitialContent = (
+export const createInitialState = (
+  maxRows = SheetConfig.MAX_ROWS,
+  maxColumns = SheetConfig.MAX_COLUMNS,
+  maxUndos = 32,
+  initialData = {},
+  defaultRowHeight = 24,
+  defaultColumnWidth = 80
+) => ({
+  ...initialState,
+  defaultRowHeight,
+  defaultColumnWidth,
+  maxRows,
+  maxColumns,
+  maxUndos,
+  content: generateInitialContent(
+    initialData,
+    defaultRowHeight,
+    defaultColumnWidth,
+    maxRows,
+    maxColumns
+  ),
+});
+
+const generateInitialContent = (
   initialData,
   defaultRowHeight,
   defaultColumnWidth,

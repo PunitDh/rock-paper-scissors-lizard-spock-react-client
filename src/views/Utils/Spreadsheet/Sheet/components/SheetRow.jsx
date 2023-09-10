@@ -7,7 +7,9 @@ import RowHeader from "./RowHeader";
 
 const SheetRow = ({ state, dispatch, row }) => {
   return (
-    <TableRow>
+    <TableRow
+    sx={{ tableLayout: "fixed" }}
+    >
       {Array(state.maxColumns + 1)
         .fill(0)
         .map((_, column) => {

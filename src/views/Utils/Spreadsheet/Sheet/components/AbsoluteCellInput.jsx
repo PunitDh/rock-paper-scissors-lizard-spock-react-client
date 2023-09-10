@@ -39,7 +39,15 @@ const InputField = styled.input(({ width, height, isfocused, formatting }) => ({
   },
 }));
 
-const AbsoluteCellInput = ({ state, dispatch, inputFocusRef }) => {
+const AbsoluteCellInput = ({
+  state,
+  dispatch,
+  inputFocusRef,
+  top,
+  left,
+  width,
+  height,
+}) => {
   const inputRef = useRef();
   const navigateRef = useRef(true);
 
@@ -73,13 +81,16 @@ const AbsoluteCellInput = ({ state, dispatch, inputFocusRef }) => {
   });
 
   const setTextBoxPosition = useCallback(() => {
-    const rect = document.getElementById(cell.id)?.getBoundingClientRect();
-    if (rect) {
+    const selectedCellRect = document
+      .getElementById(cell.id)
+      ?.getBoundingClientRect();
+
+    if (selectedCellRect) {
       setPosition({
-        top: rect.top + window.scrollY,
-        left: rect.left + window.scrollX,
-        width: rect.width,
-        height: rect.height,
+        top: selectedCellRect.top + window.scrollY,
+        left: selectedCellRect.left + window.scrollX,
+        width: selectedCellRect.width,
+        height: selectedCellRect.height,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
