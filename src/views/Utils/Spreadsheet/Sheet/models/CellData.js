@@ -79,6 +79,11 @@ export default class CellData {
     return this;
   }
 
+  clearBorderFormatting() {
+    this.formatting.clearBorders();
+    return this;
+  }
+
   addBorderFormatting(borderId, borderType) {
     this.formatting = this.formatting.addBorder(borderId, borderType);
     return this;

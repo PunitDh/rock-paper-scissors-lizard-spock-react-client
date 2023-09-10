@@ -19,6 +19,8 @@ import {
   setCellFormattingBulk,
   recalculateFormulae,
   setCellOutsideBorderFormatting,
+  setCellBorderFormattingBulk,
+  setCellBorderFormatting,
 } from "../../actions";
 import OpenFileCSV from "./OpenFileCSV";
 import SaveFileCSV from "./SaveFileCSV";
@@ -120,9 +122,14 @@ const Toolbar = ({ state, dispatch }) => {
   };
 
   const selectBorder = (borderEvent) => {
-    if (outsideBorders.includes(borderEvent.target.value)) {
-      dispatch(setCellOutsideBorderFormatting(borderEvent.target.value));
-    } else setFormattingChange("borderId")(borderEvent);
+    const { value } = borderEvent.target;
+    if (outsideBorders.includes(value)) {
+      dispatch(setCellOutsideBorderFormatting(value));
+    } else {
+      if (state.highlighted.cells.length > 1)
+        dispatch(setCellBorderFormattingBulk({ borderId: value }));
+      else dispatch(setCellBorderFormatting({ borderId: value }));
+    }
   };
 
   const createToggleHandler = useCallback(

@@ -22,6 +22,12 @@ export default class CellFormatting {
     return this;
   }
 
+  clearBorders() {
+    this.borderId = null;
+    this.borderTypes = [];
+    return this;
+  }
+
   addBorder(borderId, borderType) {
     this.borderId = borderId;
     const currentBorderTypes = new Set(this.borderTypes);

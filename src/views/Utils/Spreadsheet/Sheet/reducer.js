@@ -496,7 +496,7 @@ export const reducer = (state, action) => {
           data: action.payload,
         },
       };
-    case SheetAction.SET_CELL_FORMATTING:
+    case SheetAction.SET_CELL_FORMATTING: {
       const cellData = CellData.getOrNew(
         state.content.data[state.selectedCell.id],
         state.selectedCell.id
@@ -512,6 +512,7 @@ export const reducer = (state, action) => {
           },
         },
       };
+    }
     case SheetAction.SET_CELL_FORMATTING_BULK: {
       const formattedData = state.highlighted.cells.reduce(
         (stateContentData, cell) => {
@@ -534,6 +535,52 @@ export const reducer = (state, action) => {
         },
       };
     }
+
+    case SheetAction.SET_CELL_BORDER_FORMATTING: {
+      const cellData = CellData.getOrNew(
+        state.content.data[state.selectedCell.id],
+        state.selectedCell.id
+      );
+
+      return {
+        ...state,
+        content: {
+          ...state.content,
+          data: {
+            ...state.content.data,
+            [state.selectedCell.id]: cellData
+              .clearBorderFormatting()
+              .setFormatting(action.payload),
+          },
+        },
+      };
+    }
+
+    case SheetAction.SET_CELL_BORDER_FORMATTING_BULK: {
+      const formattedData = state.highlighted.cells.reduce(
+        (stateContentData, cell) => {
+          const cellData = CellData.getOrNew(
+            state.content.data[cell],
+            state.selectedCell.id
+          );
+          return {
+            ...stateContentData,
+            [cell]: cellData
+              .clearBorderFormatting()
+              .setFormatting(action.payload),
+          };
+        },
+        state.content.data
+      );
+      return {
+        ...state,
+        content: {
+          ...state.content,
+          data: formattedData,
+        },
+      };
+    }
+
     case SheetAction.SET_CELL_OUTSIDE_BORDER_FORMATTING: {
       const highlightedCells = state.highlighted.cells;
 
@@ -626,6 +673,7 @@ export const reducer = (state, action) => {
         },
       };
     }
+
     case SheetAction.ADD_MEMENTO: {
       const currentMemento = state.memento.find(
         (m) => m.id === state.currentMementoId
