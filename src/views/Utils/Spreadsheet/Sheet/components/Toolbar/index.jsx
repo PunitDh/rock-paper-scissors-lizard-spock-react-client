@@ -186,7 +186,7 @@ const Toolbar = ({ state, dispatch }) => {
           />
           <NumberFormattingSelect
             state={selectedFormatting}
-            onChange={() => {}}
+            onChange={setFormattingChange("numberFormat")}
           />
         </FlexBox>
         <FlexBox gap="0.2rem" justifyContent="flex-start" alignItems="center">

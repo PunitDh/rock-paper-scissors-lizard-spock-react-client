@@ -1,6 +1,7 @@
 import { isFormula } from "../utils/cellUtils";
 import CellRange from "./CellRange";
 import CellFormatting from "./CellFormatting";
+import { NumberFormat } from "../components/Toolbar/constants";
 
 export default class CellData {
   constructor(obj) {
@@ -47,7 +48,7 @@ export default class CellData {
       this.setFormula(formula);
     } else {
       this.value = value;
-      this.setDisplay(value);
+      this.setDisplay();
       this.formula = "";
     }
     return this;
@@ -64,18 +65,16 @@ export default class CellData {
     return this;
   }
 
-  setDisplay(display) {
+  setDisplay() {
+    let display;
+    display = getNumberFormattedValue(this.value, this.formatting);
     this.display = display;
     return this;
   }
 
   setFormatting(formatting) {
     this.formatting = this.formatting.setFormatting(formatting);
-    let display;
-    display = !isNaN(parseFloat(this.value))
-      ? Number(this.value).toFixed(formatting.decimals || 0)
-      : this.value;
-    this.setDisplay(display);
+    this.setDisplay();
     return this;
   }
 
@@ -110,11 +109,71 @@ export default class CellData {
         this.referenceCells = referenceCells.flat();
       }
       this.value = evaluated.value;
-      this.display = evaluated.value;
+      this.setDisplay();
     }
     return this;
   }
 }
+
+const getNumberFormattedValue = (value, formatting) => {
+  switch (formatting.numberFormat) {
+    case NumberFormat.GENERAL: {
+      return String(value);
+    }
+
+    case NumberFormat.NUMBER: {
+      const parsed = parseFloat(value);
+      if (isNaN(parsed)) return value;
+      return new Intl.NumberFormat(undefined, {
+        minimumFractionDigits: formatting.decimals,
+        maximumFractionDigits: formatting.decimals,
+      }).format(value);
+    }
+
+    case NumberFormat.CURRENCY: {
+      const parsed = parseFloat(value);
+      if (isNaN(parsed)) return value;
+      return new Intl.NumberFormat(undefined, {
+        style: "currency",
+        currency: "AUD",
+        currencyDisplay: "narrowSymbol",
+        minimumFractionDigits: formatting.decimals,
+        maximumFractionDigits: formatting.decimals,
+      }).format(value);
+    }
+
+    case NumberFormat.SHORT_DATE: {
+      return new Intl.DateTimeFormat(undefined).format(value);
+    }
+
+    case NumberFormat.LONG_DATE: {
+      return new Intl.DateTimeFormat(undefined, {
+        dateStyle: "full",
+        timeStyle: "long",
+      }).format(value);
+    }
+
+    case NumberFormat.TIME: {
+      return new Intl.DateTimeFormat(undefined, {
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+      }).format(value);
+    }
+
+    case NumberFormat.PERCENTAGE: {
+      return parseFloat(value / 100).toLocaleString(undefined, {
+        style: "percent",
+        minimumFractionDigits: formatting.decimals,
+      });
+    }
+
+    case NumberFormat.TEXT:
+    default: {
+      return String(value);
+    }
+  }
+};
 
 const processMatches = (str, reg, formulaCreator, zeroValue) => {
   const matches = [...str.matchAll(reg)];

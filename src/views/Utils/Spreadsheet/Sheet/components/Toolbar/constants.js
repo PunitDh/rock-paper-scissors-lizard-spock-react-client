@@ -98,47 +98,24 @@ export const borderStyles = Object.freeze([
   },
 ]);
 
+export const NumberFormat = Object.freeze({
+  GENERAL: "General",
+  NUMBER: "Number",
+  CURRENCY: "Currency",
+  SHORT_DATE: "Short Date",
+  LONG_DATE: "Long Date",
+  TIME: "Time",
+  PERCENTAGE: "Percentage",
+  TEXT: "Text",
+});
+
 export const numberFormats = Object.freeze([
-  { id: "General", function: String, Icon: TextFormat },
-  { id: "Number", function: Number, Icon: NumbersOutlined },
-  {
-    id: "Currency",
-    function: (it) =>
-      new Intl.NumberFormat(undefined, { style: "currency" }).format(it),
-    Icon: IconCurrencyDollar,
-  },
-  {
-    id: "Short Date",
-    function: (it) => new Intl.DateTimeFormat(undefined).format(it),
-    Icon: CalendarMonth,
-  },
-  {
-    id: "Long Date",
-    function: (it) =>
-      new Intl.DateTimeFormat(undefined, {
-        dateStyle: "full",
-        timeStyle: "long",
-      }).format(it),
-    Icon: CalendarMonth,
-  },
-  {
-    id: "Time",
-    function: (it) =>
-      new Intl.DateTimeFormat(undefined, {
-        hour: "numeric",
-        minute: "numeric",
-        second: "numeric",
-      }).format(it),
-    Icon: IconClock,
-  },
-  {
-    id: "Percentage",
-    function: (it) =>
-      Number(it / 100).toLocaleString(undefined, {
-        style: "percent",
-        minimumFractionDigits: 2,
-      }),
-    Icon: Percent,
-  },
-  { id: "Text", function: String, Icon: TextFields },
+  { id: NumberFormat.GENERAL, function: String, Icon: TextFormat },
+  { id: NumberFormat.NUMBER, function: Number, Icon: NumbersOutlined },
+  { id: NumberFormat.CURRENCY, Icon: IconCurrencyDollar },
+  { id: NumberFormat.SHORT_DATE, Icon: CalendarMonth },
+  { id: NumberFormat.LONG_DATE, Icon: CalendarMonth },
+  { id: NumberFormat.TIME, Icon: IconClock },
+  { id: NumberFormat.PERCENTAGE, Icon: Percent },
+  { id: NumberFormat.TEXT, Icon: TextFields },
 ]);

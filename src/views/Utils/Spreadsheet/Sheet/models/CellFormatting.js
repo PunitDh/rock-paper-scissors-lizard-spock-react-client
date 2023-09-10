@@ -1,5 +1,3 @@
-import { Border } from "../components/Toolbar/constants";
-
 export default class CellFormatting {
   constructor(obj) {
     if (obj) {
@@ -10,7 +8,7 @@ export default class CellFormatting {
       this.borderId = null;
       this.borderTypes = [];
       this.decimals = 0;
-      this.numberFormatting = null;
+      this.numberFormat = null;
     }
   }
 
@@ -41,8 +39,8 @@ export default class CellFormatting {
     return this;
   }
 
-  setNumberFormatting(numberFormatting) {
-    this.numberFormatting = numberFormatting;
+  setNumberFormatting(numberFormat) {
+    this.numberFormat = numberFormat;
     return this;
   }
 }

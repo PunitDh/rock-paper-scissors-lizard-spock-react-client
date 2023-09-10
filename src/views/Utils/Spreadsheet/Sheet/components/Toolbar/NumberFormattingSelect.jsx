@@ -10,15 +10,14 @@ const NumberFormattingSelect = ({ state, onChange }) => {
       labelId={"number-format-selector"}
       id={"number-format-selector"}
       name="numberFormatSelector"
-      // onChange={handleBorderStyleChange}
-      // value={selectedFormatting.border}
-      value={numberFormats[0].id}
+      onChange={onChange}
+      value={state.numberFormat || numberFormats[0].id}
       size="small"
       sx={formattingSelectStyle()}
     >
       {numberFormats.map((format) => (
         <MenuItem
-          // selected={selectedFormatting.border === border}
+          selected={state.numberFormat === format.id}
           key={format.id}
           value={format.id}
         >

@@ -413,8 +413,8 @@ export const reducer = (state, action) => {
     case SheetAction.RECALCULATE_FORMULAE: {
       console.log("Recalculation triggered");
       const formulaCells = Object.values(state.content.data)
-        .filter((cellContent) => cellContent.isFormulaCell)
-        .map((cellContent) => cellContent.evaluate(state.content.data));
+        .filter((cellData) => cellData.isFormulaCell)
+        .map((cellData) => cellData.evaluate(state.content.data));
 
       const formulaTrackedCells = formulaCells
         .filter((it) => !it.error)
