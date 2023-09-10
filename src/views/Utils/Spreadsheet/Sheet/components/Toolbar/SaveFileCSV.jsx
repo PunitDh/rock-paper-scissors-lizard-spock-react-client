@@ -3,6 +3,7 @@ import { FieldButton } from "../styles";
 import { Save } from "@mui/icons-material";
 import { SheetConfig } from "../../constants";
 import CellRange from "../../models/CellRange";
+import CSVIcon from "./components/CSVIcon";
 
 const SaveFileCSV = ({ state }) => {
   const handleExportAsCsv = () => {
@@ -28,7 +29,8 @@ const SaveFileCSV = ({ state }) => {
   return (
     <Tooltip title="Export as CSV">
       <FieldButton type="button" onClick={handleExportAsCsv}>
-        <Save sx={{ width: "1rem" }} />
+        {/* <Save sx={{ width: "1rem" }} /> */}
+        <CSVIcon width="1rem" />
       </FieldButton>
     </Tooltip>
   );

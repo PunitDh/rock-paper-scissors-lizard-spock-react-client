@@ -1,6 +1,6 @@
 import { Tooltip } from "@mui/material";
 import { FieldButton } from "../styles";
-import { FolderOpenSharp } from "@mui/icons-material";
+import { DataObject, FolderOpenSharp } from "@mui/icons-material";
 import CellData from "../../models/CellData";
 import { setContentBulk } from "../../actions";
 import { useRef } from "react";
@@ -22,8 +22,6 @@ const OpenFileJSON = ({ dispatch }) => {
         return notification.error(parsedContent.message);
       }
 
-      console.log({parsedContent});
-
       dispatch(setContentBulk(parsedContent));
     };
     reader.readAsText(e.target.files[0]);
@@ -33,7 +31,7 @@ const OpenFileJSON = ({ dispatch }) => {
     <Tooltip title="Open a JSON File">
       <FieldButton type="button">
         <label style={{ cursor: "pointer" }} htmlFor="json-file-upload">
-          <FolderOpenSharp sx={{ width: "1rem" }} />
+          <DataObject sx={{ width: "1rem" }} />
         </label>
         <input
           type="file"

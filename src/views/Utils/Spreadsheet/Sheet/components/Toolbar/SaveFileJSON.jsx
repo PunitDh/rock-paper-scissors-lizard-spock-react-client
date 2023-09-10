@@ -2,6 +2,7 @@ import { Tooltip } from "@mui/material";
 import { FieldButton } from "../styles";
 import { DataObject } from "@mui/icons-material";
 import { generateJSONContent } from "../../utils/cellUtils";
+import JSONIcon from "./components/JSONIcon";
 
 const SaveFileJSON = ({ state }) => {
   const handleExportAsJSON = () => {
@@ -19,7 +20,7 @@ const SaveFileJSON = ({ state }) => {
   return (
     <Tooltip title="Export as JSON">
       <FieldButton type="button" onClick={handleExportAsJSON}>
-        <DataObject sx={{ width: "1rem" }} />
+        <JSONIcon width="1rem" />
       </FieldButton>
     </Tooltip>
   );
