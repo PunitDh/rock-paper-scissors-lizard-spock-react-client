@@ -44,6 +44,12 @@ import Product4 from "./images/products/s11.jpg";
 import ProfileImg from "./images/avatar/user-1.jpg";
 import LogoImage from "./images/logos/logo.png";
 import encoder from "../utils/encoder";
+import Rpsls from "./images/dashboard/Rpsls";
+import TicTacToe from "./images/dashboard/TicTacToe";
+import Calculator from "./images/dashboard/Calculator";
+import ColorPicker from "./images/dashboard/ColorPicker";
+import Spreadsheet from "./images/dashboard/Spreadsheet";
+import VideoSubtitles from "./images/dashboard/VideoSubtitles";
 
 const avatars = [
   { id: 1, image: astronaut, name: "Astronaut" },
@@ -129,6 +135,15 @@ const languages = [
   "Vietnamese",
 ];
 
+const DashboardImage = {
+  Rpsls,
+  TicTacToe,
+  Calculator,
+  ColorPicker,
+  Spreadsheet,
+  VideoSubtitles,
+};
+
 export {
   avatars,
   getAvatar,
@@ -144,4 +159,5 @@ export {
   ProfileImg,
   LogoImage,
   languages,
+  DashboardImage,
 };

@@ -16,12 +16,12 @@ const ReactCalculator = Loadable(
   lazy(() => import("../views/Utils/ReactCalculator"))
 );
 const Spreadsheet = Loadable(lazy(() => import("../views/Utils/Spreadsheet")));
-const RpslsHome = Loadable(lazy(() => import("../views/Games/Rpsls")));
-const TicTacToeHome = Loadable(lazy(() => import("../views/Games/TicTacToe")));
-const Games = Loadable(lazy(() => import("../views/Games")));
+const RpslsHome = Loadable(lazy(() => import("../views/Apps/Rpsls")));
+const TicTacToeHome = Loadable(lazy(() => import("../views/Apps/TicTacToe")));
+const Games = Loadable(lazy(() => import("../views/Apps")));
 const Utils = Loadable(lazy(() => import("../views/Utils")));
 const RpslsGameWindow = Loadable(
-  lazy(() => import("../views/Games/Rpsls/GameWindow"))
+  lazy(() => import("../views/Apps/Rpsls/GameWindow"))
 );
 const Profile = Loadable(lazy(() => import("../views/Profile")));
 
