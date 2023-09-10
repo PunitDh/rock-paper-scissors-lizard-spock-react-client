@@ -590,7 +590,7 @@ export const reducer = (state, action) => {
 
       const applyBorder = (data, cells, border) => {
         return cells.reduce((stateContentData, cell) => {
-          const cellData = CellData.getOrNew1(stateContentData[cell], cell);
+          const cellData = CellData.getOrNew1(stateContentData, cell);
           return {
             ...stateContentData,
             [cell]: cellData.addBorderFormatting(action.payload, border),
