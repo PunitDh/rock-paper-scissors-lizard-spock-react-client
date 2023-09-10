@@ -26,7 +26,7 @@ import Cell from "../models/Cell";
 import {
   addCellToFocusedBox,
   generateClipboardContent,
-  isCtrlKeyPressed,
+  isFormula,
 } from "../utils/cellUtils";
 
 export default class EventHandler {
@@ -37,9 +37,30 @@ export default class EventHandler {
     this.inputFocusRef = inputFocusRef;
   }
 
+  static isCtrlKeyPressed = (e) => {
+    return /mac/i.test(navigator.platform) ? e.metaKey : e.ctrlKey;
+  };
+
+  setInputFocusRef(value) {
+    this.inputFocusRef.current = value;
+  }
+
+  handleInputBoxBlur(e) {
+    this.inputFocusRef.current = false;
+    const triggerRecalculation =
+      !this.state.formulaMode &&
+      (isFormula(e.target.value) ||
+        this.state.formulaTrackedCells.includes(this.state.selectedCell.id));
+
+    if (triggerRecalculation) {
+      this.dispatch(recalculateFormulae());
+      this.dispatch(addMemento());
+    }
+  }
+
   handleMouseMove(e) {
     this.dispatch(setHovered(e.target.id));
-    if (this.state.mouseDown && !isCtrlKeyPressed(e)) {
+    if (this.state.mouseDown && !EventHandler.isCtrlKeyPressed(e)) {
       const { cellAnchor } = this.state.highlighted;
       if (this.state.formulaMode) {
         this.dispatch(
@@ -67,13 +88,13 @@ export default class EventHandler {
 
     switch (e.key) {
       case KeyEvent.LOWERCASE_A:
-        if (isCtrlKeyPressed(e)) {
+        if (EventHandler.isCtrlKeyPressed(e)) {
           e.preventDefault();
           this.dispatch(selectAll());
         }
         break;
       case KeyEvent.LOWERCASE_Z:
-        if (isCtrlKeyPressed(e)) {
+        if (EventHandler.isCtrlKeyPressed(e)) {
           e.preventDefault();
           e.shiftKey ? this.dispatch(redoState()) : this.dispatch(undoState());
           this.dispatch(recalculateFormulae());
@@ -151,17 +172,21 @@ export default class EventHandler {
     const isLastValueClosedBracket = /(\))$/gi.test(formula);
     const isLastValueOperation = /[+-/*^:,]$/gi.test(formula);
     const isShiftPressed = e.shiftKey;
-    const isCtrlPressed = isCtrlKeyPressed(e);
+    const isCtrlPressed = EventHandler.isCtrlKeyPressed(e);
     const isSameCellSelected = id === this.state.selectedCell.id;
 
     const addCellsToFormula = () => {
-      const value = addCellToFocusedBox(this.state, id, !isCtrlKeyPressed(e));
+      const value = addCellToFocusedBox(
+        this.state,
+        id,
+        !EventHandler.isCtrlKeyPressed(e)
+      );
       this.dispatch(setCellContent(this.state.selectedCell.id, value));
       this.dispatch(
         updateReferenceCells(
           this.state.selectedCell.id,
           [id],
-          !isCtrlKeyPressed(e)
+          !EventHandler.isCtrlKeyPressed(e)
         )
       );
     };
@@ -231,18 +256,18 @@ export default class EventHandler {
       const value = addCellToFocusedBox(
         this.state,
         range,
-        !isCtrlKeyPressed(e)
+        !EventHandler.isCtrlKeyPressed(e)
       );
       this.dispatch(setCellContent(this.state.selectedCell.id, value));
       this.dispatch(
         updateReferenceCells(
           this.state.selectedCell.id,
           [this.state.highlighted.cellAnchor, this.state.hovered],
-          !isCtrlKeyPressed(e)
+          !EventHandler.isCtrlKeyPressed(e)
         )
       );
     } else if (!isSameCellHighlighted) {
-      if (isCtrlKeyPressed(e)) {
+      if (EventHandler.isCtrlKeyPressed(e)) {
         this.dispatch(addCellsToHighlight([this.state.hovered]));
       }
     }
@@ -276,11 +301,11 @@ export default class EventHandler {
               this.state.maxColumns
             );
       case KeyEvent.ARROW_DOWN:
-        return isCtrlKeyPressed(e)
+        return EventHandler.EventHandler.isCtrlKeyPressed(e)
           ? new Cell(`${selectedCell.column}${this.state.maxRows}`)
           : selectedCell.getNextRow(this.state.maxRows);
       case KeyEvent.ARROW_RIGHT:
-        return isCtrlKeyPressed(e)
+        return EventHandler.EventHandler.isCtrlKeyPressed(e)
           ? new Cell(
               `${SheetConfig.COLUMNS[this.state.maxColumns - 1]}${
                 selectedCell.row
@@ -291,11 +316,11 @@ export default class EventHandler {
               this.state.maxColumns
             );
       case KeyEvent.ARROW_LEFT:
-        return isCtrlKeyPressed(e)
+        return EventHandler.EventHandler.isCtrlKeyPressed(e)
           ? new Cell(`${SheetConfig.COLUMNS[0]}${selectedCell.row}`)
           : selectedCell.getPreviousColumn(this.state.maxColumns);
       case KeyEvent.ARROW_UP:
-        return isCtrlKeyPressed(e)
+        return EventHandler.EventHandler.isCtrlKeyPressed(e)
           ? new Cell(`${selectedCell.column}${1}`)
           : selectedCell.getPreviousRow();
       default:

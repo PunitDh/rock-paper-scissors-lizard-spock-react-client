@@ -3,20 +3,6 @@ import CellData from "../models/CellData";
 import CellFormatting from "../models/CellFormatting";
 import { initialState } from "../reducer";
 
-export function spreadContent(content, key, value) {
-  return {
-    ...content,
-    [key]: value,
-  };
-}
-
-export const getCellOffset = (cell, offsetX, offsetY) => {
-  const offsetRow = +cell.row + offsetY;
-  const offsetColumn =
-    SheetConfig.COLUMNS[+SheetConfig.COLUMNS.indexOf(cell.column) + offsetX];
-  return `${offsetColumn}${offsetRow}`;
-};
-
 export const generateClipboardContent = (state) => {
   const content = state.highlighted.rows.map((row) =>
     state.highlighted.columns.map((column) => {
@@ -90,49 +76,6 @@ export function addCellToFocusedBox(state, text, replace) {
     element.setRangeText(text, start, end, "preserve");
   }
   return element.value;
-}
-
-// Unused
-export function setCaretPosition(elemId, caretPos) {
-  const elem = document.getElementById(elemId);
-
-  if (elem != null) {
-    if (elem.createTextRange) {
-      const range = elem.createTextRange();
-      range.move("character", caretPos);
-      range.select();
-    } else {
-      if (elem.selectionStart) {
-        elem.focus();
-        elem.setSelectionRange(caretPos, caretPos);
-      } else elem.focus();
-    }
-  }
-}
-
-export function getCaretPosition(input) {
-  // Internet Explorer Caret Position (TextArea)
-  if (document.selection && document.selection.createRange) {
-    const range = document.selection.createRange();
-    const bookmark = range.getBookmark();
-    return bookmark.charCodeAt(2) - 2;
-  } else {
-    // Firefox Caret Position (TextArea)
-    if (input.setSelectionRange) return input.selectionEnd;
-  }
-}
-
-export const isCtrlKeyPressed = (e) => {
-  return /mac/i.test(navigator.platform) ? e.metaKey : e.ctrlKey;
-};
-
-function cToHex(c) {
-  var hex = c.toString(16);
-  return hex.length === 1 ? "0" + hex : hex;
-}
-
-export function rgbToHex(r, g, b) {
-  return "#" + cToHex(r) + cToHex(g) + cToHex(b);
 }
 
 export function parseCSV(csvString) {

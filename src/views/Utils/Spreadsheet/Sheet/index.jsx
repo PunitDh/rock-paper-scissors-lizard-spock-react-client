@@ -9,7 +9,7 @@ import {
 } from "./actions";
 import { createInitialState } from "./utils/cellUtils";
 import { SheetConfig } from "./constants";
-import ContextMenu from "./ContextMenu";
+import ContextMenu from "./components/ContextMenu";
 import { useClipboard } from "src/hooks";
 import FormulaField from "./components/FormulaField";
 import { Table, TableBody } from "@mui/material";
@@ -94,8 +94,8 @@ const Sheet = ({
         <AbsoluteCellInput
           state={state}
           dispatch={dispatch}
-          inputFocusRef={inputFocusRef}
           tableBodyRef={tableBodyRef}
+          eventHandler={eventHandler}
         />
         <EventDelegator eventHandler={eventHandler}>
           <Table width="100%" sx={{ mb: 0 }}>

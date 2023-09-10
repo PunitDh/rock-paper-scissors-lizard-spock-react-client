@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Paper, TableCell } from "@mui/material";
-import { Border } from "./components/Toolbar/constants";
+import { BorderType } from "./components/Toolbar/constants";
 import CellFormatting from "./models/CellFormatting";
 
 export const HeaderItem = styled(TableCell)(({ selected, theme }) => ({
@@ -38,36 +38,36 @@ const initialBorders = {
 
 const getBorder = (formatting) => {
   switch (formatting.borderId) {
-    case Border.BORDER_BOTTOM:
-    case Border.BORDER_LEFT:
-    case Border.BORDER_TOP:
-    case Border.BORDER_RIGHT:
+    case BorderType.BORDER_BOTTOM:
+    case BorderType.BORDER_LEFT:
+    case BorderType.BORDER_TOP:
+    case BorderType.BORDER_RIGHT:
       return {
         ...initialBorders,
         [formatting.borderId]: BorderStyles.THIN_BORDER,
       };
-    case Border.ALL_BORDERS:
+    case BorderType.ALL_BORDERS:
       return {
         borderTop: BorderStyles.THIN_BORDER,
         borderRight: BorderStyles.THIN_BORDER,
         borderBottom: BorderStyles.THIN_BORDER,
         borderLeft: BorderStyles.THIN_BORDER,
       };
-    case Border.OUTSIDE_BORDERS:
+    case BorderType.OUTSIDE_BORDERS:
       return formatting.borderTypes.reduce((acc, cur) => {
         return {
           ...acc,
           [cur]: BorderStyles.THIN_BORDER,
         };
       }, initialBorders);
-    case Border.THICK_OUTSIDE_BORDERS:
+    case BorderType.THICK_OUTSIDE_BORDERS:
       return formatting.borderTypes.reduce((acc, cur) => {
         return {
           ...acc,
           [cur]: BorderStyles.THICK_BORDER,
         };
       }, initialBorders);
-    case Border.NO_BORDER:
+    case BorderType.NO_BORDER:
       return initialBorders;
     default:
       return initialBorders;

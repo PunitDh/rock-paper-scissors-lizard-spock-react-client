@@ -18,7 +18,7 @@ export const fontSizes = Object.freeze([
   "24px",
 ]);
 
-export const Border = Object.freeze({
+export const BorderType = Object.freeze({
   BORDER_TOP: "borderTop",
   BORDER_RIGHT: "borderRight",
   BORDER_BOTTOM: "borderBottom",
@@ -30,38 +30,38 @@ export const Border = Object.freeze({
 });
 
 export const outsideBorders = Object.freeze([
-  Border.OUTSIDE_BORDERS,
-  Border.THICK_OUTSIDE_BORDERS,
+  BorderType.OUTSIDE_BORDERS,
+  BorderType.THICK_OUTSIDE_BORDERS,
 ]);
 
 export const borderStyles = Object.freeze([
   {
-    id: Border.BORDER_BOTTOM,
+    id: BorderType.BORDER_BOTTOM,
     props: { borderBottom: "1px solid black" },
     value: "Border Bottom",
   },
   {
-    id: Border.BORDER_TOP,
+    id: BorderType.BORDER_TOP,
     props: { borderTop: "1px solid black" },
     value: "Border Top",
   },
   {
-    id: Border.BORDER_LEFT,
+    id: BorderType.BORDER_LEFT,
     props: { borderLeft: "1px solid black" },
     value: "Border Left",
   },
   {
-    id: Border.BORDER_RIGHT,
+    id: BorderType.BORDER_RIGHT,
     props: { borderRight: "1px solid black" },
     value: "Border Right",
   },
   {
-    id: Border.NO_BORDER,
+    id: BorderType.NO_BORDER,
     props: undefined,
     value: "No Border",
   },
   {
-    id: Border.ALL_BORDERS,
+    id: BorderType.ALL_BORDERS,
     props: {
       borderRight: "unset",
       borderLeft: "1px solid black",
@@ -77,7 +77,7 @@ export const borderStyles = Object.freeze([
     value: "All Borders",
   },
   {
-    id: Border.OUTSIDE_BORDERS,
+    id: BorderType.OUTSIDE_BORDERS,
     props: {
       borderRight: "1px solid black",
       borderLeft: "1px solid black",
@@ -87,7 +87,7 @@ export const borderStyles = Object.freeze([
     value: "Outside Borders",
   },
   {
-    id: Border.THICK_OUTSIDE_BORDERS,
+    id: BorderType.THICK_OUTSIDE_BORDERS,
     props: {
       borderRight: "2px solid black",
       borderLeft: "2px solid black",

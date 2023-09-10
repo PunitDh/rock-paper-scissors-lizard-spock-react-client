@@ -11,8 +11,8 @@ import {
   setSelectedRow,
 } from "../actions";
 import { Dimension, SheetConfig } from "../constants";
-import { isCtrlKeyPressed } from "../utils/cellUtils";
 import CellRange from "../models/CellRange";
+import EventHandler from "../eventHandlers/EventHandler";
 
 const HeaderItemComponent = styled(HeaderItem)(({ dimension, size }) => ({
   cursor: dimension === Dimension.ROW ? "e-resize" : "s-resize",
@@ -71,7 +71,7 @@ const HeaderCell = ({ state, dispatch, id, onContextMenu, dimension }) => {
 
   const handleClick = (e) => {
     e.stopPropagation();
-    if (isCtrlKeyPressed(e)) {
+    if (EventHandler.isCtrlKeyPressed(e)) {
       const start =
         dimension === Dimension.ROW
           ? `${SheetConfig.COLUMNS[0]}${id}`

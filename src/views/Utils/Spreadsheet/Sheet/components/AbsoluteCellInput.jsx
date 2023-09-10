@@ -12,7 +12,8 @@ import {
   setInputRef,
 } from "../actions";
 import { KeyEvent } from "../constants";
-import { isCtrlKeyPressed, isFormula } from "../utils/cellUtils";
+import { isFormula } from "../utils/cellUtils";
+import EventHandler from "../eventHandlers/EventHandler";
 
 const Container = styled.div(({ top, left }) => ({
   position: "absolute",
@@ -42,7 +43,7 @@ const InputField = styled.input(({ width, height, isfocused, formatting }) => ({
 const AbsoluteCellInput = ({
   state,
   dispatch,
-  inputFocusRef,
+  eventHandler,
   top,
   left,
   width,
@@ -114,18 +115,7 @@ const AbsoluteCellInput = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cell.id]);
 
-  const handleBlur = (e) => {
-    inputFocusRef.current = false;
-    const triggerRecalculation =
-      !state.formulaMode &&
-      (isFormula(e.target.value) ||
-        state.formulaTrackedCells.includes(cell.id));
-
-    if (triggerRecalculation) {
-      dispatch(recalculateFormulae());
-      dispatch(addMemento());
-    }
-  };
+  const handleBlur = (e) => eventHandler.handleInputBoxBlur(e);
 
   const handleChange = (e) => {
     const newValue = e.target.value;
@@ -162,7 +152,7 @@ const AbsoluteCellInput = ({
           );
           break;
         case KeyEvent.LOWERCASE_A:
-          if (isCtrlKeyPressed(e)) {
+          if (EventHandler.isCtrlKeyPressed(e)) {
             e.stopPropagation();
           }
           break;
@@ -209,7 +199,7 @@ const AbsoluteCellInput = ({
   );
 
   const handleFocus = (e) => {
-    inputFocusRef.current = true;
+    eventHandler.setInputFocusRef(true);
   };
 
   const handleContextMenu = (e) => {
@@ -231,7 +221,7 @@ const AbsoluteCellInput = ({
         autoComplete="off"
         width={position.width}
         height={position.height}
-        isfocused={inputFocusRef.current}
+        isfocused={eventHandler.inputFocusRef.current}
         onBlur={handleBlur}
         onChange={handleChange}
         onKeyDown={handleKeyDown}

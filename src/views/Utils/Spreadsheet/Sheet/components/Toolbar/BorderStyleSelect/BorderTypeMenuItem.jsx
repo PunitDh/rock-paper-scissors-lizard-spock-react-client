@@ -34,7 +34,7 @@ const Cell = styled.td(
   })
 );
 
-const BorderType = (props) => {
+const BorderTypeMenuItem = (props) => {
   return (
     <FlexBox justifyContent="space-between" gap="1rem">
       <Table {...props}>
@@ -54,4 +54,4 @@ const BorderType = (props) => {
   );
 };
 
-export default BorderType;
+export default BorderTypeMenuItem;

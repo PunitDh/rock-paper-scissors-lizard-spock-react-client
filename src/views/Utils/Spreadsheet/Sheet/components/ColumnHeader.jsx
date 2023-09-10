@@ -7,9 +7,9 @@ import {
 } from "../actions";
 import { HeaderItem } from "../styles";
 import styled from "@emotion/styled";
-import { isCtrlKeyPressed } from "../utils/cellUtils";
 import CellRange from "../models/CellRange";
 import { useRef } from "react";
+import EventHandler from "../eventHandlers/EventHandler";
 
 const ColumnHeaderItem = styled(HeaderItem)(({ width }) => ({
   cursor: "s-resize",
@@ -50,7 +50,7 @@ const ColumnHeader = ({ state, dispatch, column, onContextMenu }) => {
 
   const handleClick = (e) => {
     e.stopPropagation();
-    if (isCtrlKeyPressed(e)) {
+    if (EventHandler.isCtrlKeyPressed(e)) {
       const range = CellRange.createFlat(
         `${column}1`,
         `${column}${state.maxRows}`

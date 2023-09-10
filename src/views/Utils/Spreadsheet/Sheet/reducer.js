@@ -5,7 +5,7 @@ import Cell from "./models/Cell";
 import CellData, { getFormulaTrackedCells } from "./models/CellData";
 import CellRange from "./models/CellRange";
 import { isEqual, uniqueId } from "lodash";
-import { Border } from "./components/Toolbar/constants";
+import { BorderType } from "./components/Toolbar/constants";
 
 export const initialState = {
   maxRows: SheetConfig.MAX_ROWS,
@@ -599,12 +599,12 @@ export const reducer = (state, action) => {
       };
 
       const data = [
-        { cells: range[0], border: Border.BORDER_TOP },
-        { cells: range[range.length - 1], border: Border.BORDER_BOTTOM },
-        { cells: range.map((row) => row[0]), border: Border.BORDER_LEFT },
+        { cells: range[0], border: BorderType.BORDER_TOP },
+        { cells: range[range.length - 1], border: BorderType.BORDER_BOTTOM },
+        { cells: range.map((row) => row[0]), border: BorderType.BORDER_LEFT },
         {
           cells: range.map((row) => row[row.length - 1]),
-          border: Border.BORDER_RIGHT,
+          border: BorderType.BORDER_RIGHT,
         },
       ].reduce(
         (data, { cells, border }) => applyBorder(data, cells, border),

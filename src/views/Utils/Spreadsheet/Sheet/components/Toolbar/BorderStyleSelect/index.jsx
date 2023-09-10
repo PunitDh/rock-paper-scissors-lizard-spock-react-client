@@ -1,8 +1,8 @@
 import { MenuItem, Select } from "@mui/material";
 import React from "react";
 import { formattingSelectStyle } from "../styles";
-import { Border, borderStyles } from "../constants";
-import BorderType from "./BorderType";
+import { BorderType, borderStyles } from "../constants";
+import BorderTypeMenuItem from "./BorderTypeMenuItem";
 
 const BorderStyleSelect = ({ state, onChange }) => (
   <Select
@@ -10,7 +10,7 @@ const BorderStyleSelect = ({ state, onChange }) => (
     id={"border-style-selector"}
     name="borderStyleSelector"
     onChange={onChange}
-    value={state.borderId || Border.NO_BORDER}
+    value={state.borderId || BorderType.NO_BORDER}
     size="small"
     sx={formattingSelectStyle()}
   >
@@ -20,7 +20,7 @@ const BorderStyleSelect = ({ state, onChange }) => (
         key={border.value}
         value={border.id}
       >
-        <BorderType {...border.props} title={border.value} />
+        <BorderTypeMenuItem {...border.props} title={border.value} />
       </MenuItem>
     ))}
   </Select>

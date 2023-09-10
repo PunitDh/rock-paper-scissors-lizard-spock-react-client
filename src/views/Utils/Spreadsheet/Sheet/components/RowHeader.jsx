@@ -8,9 +8,9 @@ import {
 } from "../actions";
 import { HeaderItem } from "../styles";
 import { useRef } from "react";
-import { isCtrlKeyPressed } from "../utils/cellUtils";
 import { SheetConfig } from "../constants";
 import CellRange from "../models/CellRange";
+import EventHandler from "../eventHandlers/EventHandler";
 
 const RowHeaderItem = styled(HeaderItem)(({ height }) => ({
   width: "3%",
@@ -41,7 +41,7 @@ const RowHeader = ({ state, dispatch, row, onContextMenu }) => {
 
   const handleClick = (e) => {
     e.stopPropagation();
-    if (isCtrlKeyPressed(e)) {
+    if (EventHandler.isCtrlKeyPressed(e)) {
       const range = CellRange.createFlat(
         `${SheetConfig.COLUMNS[0]}${row}`,
         `${SheetConfig.COLUMNS[state.maxColumns - 1]}${row}`
