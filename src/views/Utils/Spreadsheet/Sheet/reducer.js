@@ -582,16 +582,11 @@ export const reducer = (state, action) => {
     }
 
     case SheetAction.SET_CELL_OUTSIDE_BORDER_FORMATTING: {
-      const highlightedCells = state.highlighted.cells;
+      const { cells } = state.highlighted;
 
-      const [first, last] = [
-        highlightedCells[0],
-        highlightedCells[highlightedCells.length - 1],
-      ];
-      let range;
-      range = CellRange.create(first, last).cellIds;
+      let range = CellRange.create(cells[0], cells[cells.length - 1]).cellIds;
 
-      if (range.length < 1) {
+      if (!range.length) {
         if (Cell.isValidId(state.selectedCell.id)) {
           range = [[state.selectedCell.id]];
         } else {
@@ -599,77 +594,34 @@ export const reducer = (state, action) => {
         }
       }
 
-      const topBorders = range[0];
-      const bottomBorders = range[range.length - 1];
-      const leftBorders = [];
-      const rightBorders = [];
-
-      for (let i = 0; i < range.length; i++) {
-        leftBorders.push(range[i][0]);
-        rightBorders.push(range[i][range[i].length - 1]);
-      }
-
-      const formattedTopBorderData = topBorders.reduce(
-        (stateContentData, cell) => {
+      const applyBorder = (data, cells, border) => {
+        return cells.reduce((stateContentData, cell) => {
           const cellData = CellData.getOrNew(stateContentData[cell], cell);
           return {
             ...stateContentData,
-            [cell]: cellData.addBorderFormatting(
-              action.payload,
-              Border.BORDER_TOP
-            ),
+            [cell]: cellData.addBorderFormatting(action.payload, border),
           };
+        }, data);
+      };
+
+      const data = [
+        { cells: range[0], border: Border.BORDER_TOP },
+        { cells: range[range.length - 1], border: Border.BORDER_BOTTOM },
+        { cells: range.map((row) => row[0]), border: Border.BORDER_LEFT },
+        {
+          cells: range.map((row) => row[row.length - 1]),
+          border: Border.BORDER_RIGHT,
         },
+      ].reduce(
+        (data, { cells, border }) => applyBorder(data, cells, border),
         state.content.data
-      );
-
-      const formattedLeftBorderData = leftBorders.reduce(
-        (stateContentData, cell) => {
-          const cellData = CellData.getOrNew(stateContentData[cell], cell);
-          return {
-            ...stateContentData,
-            [cell]: cellData.addBorderFormatting(
-              action.payload,
-              Border.BORDER_LEFT
-            ),
-          };
-        },
-        formattedTopBorderData
-      );
-
-      const formattedRightBorderData = rightBorders.reduce(
-        (stateContentData, cell) => {
-          const cellData = CellData.getOrNew(stateContentData[cell], cell);
-          return {
-            ...stateContentData,
-            [cell]: cellData.addBorderFormatting(
-              action.payload,
-              Border.BORDER_RIGHT
-            ),
-          };
-        },
-        formattedLeftBorderData
-      );
-
-      const formattedBottomBorderData = bottomBorders.reduce(
-        (stateContentData, cell) => {
-          const cellData = CellData.getOrNew(stateContentData[cell], cell);
-          return {
-            ...stateContentData,
-            [cell]: cellData.addBorderFormatting(
-              action.payload,
-              Border.BORDER_BOTTOM
-            ),
-          };
-        },
-        formattedRightBorderData
       );
 
       return {
         ...state,
         content: {
           ...state.content,
-          data: formattedBottomBorderData,
+          data,
         },
       };
     }
