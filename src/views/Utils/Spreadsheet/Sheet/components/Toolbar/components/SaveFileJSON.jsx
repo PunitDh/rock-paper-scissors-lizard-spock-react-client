@@ -1,8 +1,8 @@
 import { Tooltip } from "@mui/material";
-import { FieldButton } from "../styles";
+import { FieldButton } from "../../styles";
 import { DataObject } from "@mui/icons-material";
-import { generateJSONContent } from "../../utils/cellUtils";
-import JSONIcon from "./components/JSONIcon";
+import { generateJSONContent } from "../../../utils/cellUtils";
+import JSONIcon from "./icons/JSONIcon";
 
 const SaveFileJSON = ({ state }) => {
   const handleExportAsJSON = () => {

@@ -32,6 +32,7 @@ export const SheetAction = Object.freeze({
   SET_CELL_BORDER_FORMATTING: "SET_CELL_BORDER_FORMATTING",
   SET_CELL_BORDER_FORMATTING_BULK: "SET_CELL_BORDER_FORMATTING_BULK",
   SET_CELL_OUTSIDE_BORDER_FORMATTING: "SET_CELL_OUTSIDE_BORDER_FORMATTING",
+  CLEAR_CELL_FORMATTING: "CLEAR_CELL_FORMATTING",
   RECALCULATE_FORMULAE: "RECALCULATE_FORMULAE",
   OPEN_CONTEXT_MENU: "OPEN_CONTEXT_MENU",
   ADD_MEMENTO: "ADD_MEMENTO",
@@ -217,6 +218,11 @@ export const setCellBorderFormattingBulk = (payload) => ({
 
 export const setCellOutsideBorderFormatting = (payload) => ({
   type: SheetAction.SET_CELL_OUTSIDE_BORDER_FORMATTING,
+  payload,
+});
+
+export const clearCellFormatting = (payload) => ({
+  type: SheetAction.CLEAR_CELL_FORMATTING,
   payload,
 });
 

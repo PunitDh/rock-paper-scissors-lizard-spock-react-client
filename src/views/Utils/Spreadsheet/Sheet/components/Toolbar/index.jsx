@@ -21,23 +21,26 @@ import {
   setCellOutsideBorderFormatting,
   setCellBorderFormattingBulk,
   setCellBorderFormatting,
+  addMemento,
+  clearCellFormatting,
 } from "../../actions";
-import OpenFileCSV from "./OpenFileCSV";
-import SaveFileCSV from "./SaveFileCSV";
+import OpenFileCSV from "./components/OpenFileCSV";
+import SaveFileCSV from "./components/SaveFileCSV";
 import FormattingButton from "./components/FormattingButton";
-import HistoryButton from "./HistoryButton";
-import NumberFormattingSelect from "./NumberFormattingSelect";
+import HistoryButton from "./components/HistoryButton";
+import NumberFormattingSelect from "./components/NumberFormattingSelect";
 import ColorPicker from "./components/ColorPicker";
-import FontFamilySelect from "./FontFamilySelect";
-import FontSizeSelect from "./FontSizeSelect";
+import FontFamilySelect from "./components/FontFamilySelect";
+import FontSizeSelect from "./components/FontSizeSelect";
 import BorderStyleSelect from "./BorderStyleSelect";
-import SaveFileJSON from "./SaveFileJSON";
-import DecimalIcon from "./components/DecimalIcon";
+import SaveFileJSON from "./components/SaveFileJSON";
+import DecimalIcon from "./components/icons/DecimalIcon";
 import { clamp } from "lodash";
 import CellFormatting from "../../models/CellFormatting";
 import { FlexBox } from "src/components/shared/styles";
 import { outsideBorders } from "./constants";
-import OpenFileJSON from "./OpenFileJSON";
+import OpenFileJSON from "./components/OpenFileJSON";
+import ClearFormattingIcon from "./components/icons/ClearFormatting";
 
 const Toolbar = ({ state, dispatch }) => {
   const canUndo = state.currentMementoId !== state.memento[0]?.id;
@@ -108,6 +111,7 @@ const Toolbar = ({ state, dispatch }) => {
       if (state.highlighted.cells.length > 1)
         dispatch(setCellFormattingBulk(formatting));
       else dispatch(setSelectedCellFormatting(formatting));
+      dispatch(addMemento());
     },
     [dispatch, state.highlighted.cells.length]
   );
@@ -122,6 +126,10 @@ const Toolbar = ({ state, dispatch }) => {
     setFormattingChange("decimals")(newDecimals);
   };
 
+  const clearFormatting = () => {
+    dispatch(clearCellFormatting());
+  };
+
   const selectBorder = (borderEvent) => {
     const { value } = borderEvent.target;
     if (outsideBorders.includes(value)) {
@@ -131,6 +139,7 @@ const Toolbar = ({ state, dispatch }) => {
         dispatch(setCellBorderFormattingBulk({ borderId: value }));
       else dispatch(setCellBorderFormatting({ borderId: value }));
     }
+    dispatch(addMemento());
   };
 
   const createToggleHandler = useCallback(
@@ -256,6 +265,12 @@ const Toolbar = ({ state, dispatch }) => {
           >
             <DecimalIcon type="decrease" />
           </FormattingButton>
+          <FormattingButton
+            title={"Clear Formatting"}
+            isActive={false}
+            Icon={ClearFormattingIcon}
+            onClick={clearFormatting}
+          />
         </FlexBox>
       </FlexForm>
     </div>

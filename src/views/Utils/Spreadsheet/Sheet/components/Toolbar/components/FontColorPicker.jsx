@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { FieldButton } from "../styles";
+import { FieldButton } from "../../styles";
 import { useRef } from "react";
 import { FormatColorText } from "@mui/icons-material";
 import { Box } from "@mui/material";

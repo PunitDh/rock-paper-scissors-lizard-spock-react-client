@@ -33,6 +33,13 @@ export default class CellData {
     return new CellData(cellData || id);
   }
 
+  static getOrNew1(stateContentData, id) {
+    if (stateContentData[id] instanceof CellData) {
+      return stateContentData[id];
+    }
+    return new CellData().setId(id);
+  }
+
   get isFormulaCell() {
     return isFormula(this.formula) && this.formula?.length > 0;
   }
@@ -75,6 +82,11 @@ export default class CellData {
   setFormatting(formatting) {
     this.formatting = this.formatting.setFormatting(formatting);
     this.setDisplay();
+    return this;
+  }
+
+  clearFormatting() {
+    this.formatting = new CellFormatting();
     return this;
   }
 

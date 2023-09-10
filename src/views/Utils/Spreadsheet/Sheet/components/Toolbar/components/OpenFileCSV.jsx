@@ -1,10 +1,10 @@
 import { Tooltip } from "@mui/material";
-import { FieldButton } from "../styles";
+import { FieldButton } from "../../styles";
 import { FolderOpenSharp } from "@mui/icons-material";
-import CellData from "../../models/CellData";
-import { setContentBulk } from "../../actions";
+import CellData from "../../../models/CellData";
+import { setContentBulk } from "../../../actions";
 import { useRef } from "react";
-import { parseCSV } from "../../utils/cellUtils";
+import { parseCSV } from "../../../utils/cellUtils";
 
 const OpenFileCSV = ({ dispatch }) => {
   const fileRef = useRef();

@@ -111,11 +111,6 @@ export const Item = styled(TableCell)(
         ? theme.palette.primary.light
         : formatting.backgroundColor || "#fff",
       color: formatting.color || theme.palette.text.secondary,
-      // fontSize: formatting.fontSize || "inherit",
-      // textDecoration: formatting.textDecoration || "inherit",
-      // fontStyle: formatting.fontStyle || "inherit",
-      // fontWeight: formatting.fontWeight || "inherit",
-      // fontFamily: formatting.fontFamily || "inherit",
       textAlign: formatting.textAlign || textalign,
       ...borderProperties,
       borderRadius: 0,

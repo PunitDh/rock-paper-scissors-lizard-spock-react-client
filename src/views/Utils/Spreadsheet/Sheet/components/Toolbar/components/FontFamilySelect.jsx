@@ -1,7 +1,7 @@
 import { MenuItem, Select } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { formattingSelectStyle } from "./styles";
-import { getFonts } from "../../utils/fontUtils";
+import { formattingSelectStyle } from "../styles";
+import { getFonts } from "../../../utils/fontUtils";
 
 const FontFamilySelect = ({ state, onChange }) => {
   const [fonts, setFonts] = useState(["Sans-serif"]);

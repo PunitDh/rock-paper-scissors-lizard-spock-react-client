@@ -1,10 +1,10 @@
 import { Tooltip } from "@mui/material";
-import { FieldButton } from "../styles";
+import { FieldButton } from "../../styles";
 import { DataObject, FolderOpenSharp } from "@mui/icons-material";
-import CellData from "../../models/CellData";
-import { setContentBulk } from "../../actions";
+import CellData from "../../../models/CellData";
+import { setContentBulk } from "../../../actions";
 import { useRef } from "react";
-import { parseJSON } from "../../utils/cellUtils";
+import { parseJSON } from "../../../utils/cellUtils";
 import { useNotification } from "src/hooks";
 
 const OpenFileJSON = ({ dispatch }) => {

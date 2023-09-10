@@ -1,9 +1,9 @@
 import { Tooltip } from "@mui/material";
-import { FieldButton } from "../styles";
+import { FieldButton } from "../../styles";
 import { Save } from "@mui/icons-material";
-import { SheetConfig } from "../../constants";
-import CellRange from "../../models/CellRange";
-import CSVIcon from "./components/CSVIcon";
+import { SheetConfig } from "../../../constants";
+import CellRange from "../../../models/CellRange";
+import CSVIcon from "./icons/CSVIcon";
 
 const SaveFileCSV = ({ state }) => {
   const handleExportAsCsv = () => {

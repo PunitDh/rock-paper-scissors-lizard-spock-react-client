@@ -556,10 +556,7 @@ export const reducer = (state, action) => {
     case SheetAction.SET_CELL_BORDER_FORMATTING_BULK: {
       const formattedData = state.highlighted.cells.reduce(
         (stateContentData, cell) => {
-          const cellData = CellData.getOrNew(
-            state.content.data[cell],
-            state.selectedCell.id
-          );
+          const cellData = CellData.getOrNew1(state.content.data, cell);
           return {
             ...stateContentData,
             [cell]: cellData
@@ -593,7 +590,7 @@ export const reducer = (state, action) => {
 
       const applyBorder = (data, cells, border) => {
         return cells.reduce((stateContentData, cell) => {
-          const cellData = CellData.getOrNew(stateContentData[cell], cell);
+          const cellData = CellData.getOrNew1(stateContentData[cell], cell);
           return {
             ...stateContentData,
             [cell]: cellData.addBorderFormatting(action.payload, border),
@@ -621,6 +618,46 @@ export const reducer = (state, action) => {
           data,
         },
       };
+    }
+
+    case SheetAction.CLEAR_CELL_FORMATTING: {
+      if (state.highlighted.cells.length > 1) {
+        const data = state.highlighted.cells.reduce(
+          (stateContentData, cell) => {
+            const cellData = state.content.data[cell];
+            if (cellData) {
+              return {
+                ...stateContentData,
+                [cell]: cellData.clearFormatting(),
+              };
+            }
+            return stateContentData;
+          },
+          state.content.data
+        );
+        return {
+          ...state,
+          content: {
+            ...state.content,
+            data,
+          },
+        };
+      } else {
+        const selectedCellData = CellData.getOrNew1(
+          state.content.data,
+          state.selectedCell.id
+        );
+        return {
+          ...state,
+          content: {
+            ...state.content,
+            data: {
+              ...state.content.data,
+              [state.selectedCell.id]: selectedCellData.clearFormatting(),
+            },
+          },
+        };
+      }
     }
 
     case SheetAction.ADD_MEMENTO: {
