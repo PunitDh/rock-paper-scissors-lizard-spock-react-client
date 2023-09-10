@@ -1,4 +1,4 @@
-import { SheetConfig } from "./constants";
+import { FILE_TYPE, SheetConfig } from "./constants";
 import { isFormula, typeInInputBox } from "./utils/cellUtils";
 import { SheetAction } from "./actions";
 import Cell from "./models/Cell";
@@ -43,7 +43,7 @@ export const initialState = {
 };
 
 export const reducer = (state, action) => {
-  // action.type !== SheetAction.SET_HOVERED && console.log(action);
+  action.type !== SheetAction.SET_HOVERED && console.log(action);
 
   switch (action.type) {
     case SheetAction.SET_SELECTED: {
@@ -266,7 +266,7 @@ export const reducer = (state, action) => {
       const { data, anchor } = action.payload;
       try {
         const parsed = JSON.parse(data);
-        if (parsed.type === "_sheet") {
+        if (parsed.type === FILE_TYPE) {
           const cellOffset = new Cell(anchor).getOffset(
             parsed.content[0].length - 1,
             parsed.content.length - 1
@@ -488,13 +488,10 @@ export const reducer = (state, action) => {
       };
     }
     case SheetAction.SET_CONTENT_BULK:
+      console.log(action.payload);
       return {
         ...state,
-        content: {
-          rowHeights: state.rowHeights,
-          columnWidths: state.columnWidths,
-          data: action.payload,
-        },
+        content: action.payload,
       };
     case SheetAction.SET_CELL_FORMATTING: {
       const cellData = CellData.getOrNew(

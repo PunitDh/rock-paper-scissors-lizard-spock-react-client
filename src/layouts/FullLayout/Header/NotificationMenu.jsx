@@ -88,7 +88,7 @@ const NotificationMenu = () => {
       return {
         id: uniqueId(),
         player,
-        link: `/games/${game.id}`,
+        link: `/apps/${game.id}`,
         buttonText: "Go to Game",
         content: (
           <>

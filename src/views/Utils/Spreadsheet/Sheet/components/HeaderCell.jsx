@@ -20,7 +20,7 @@ const HeaderItemComponent = styled(HeaderItem)(({ dimension, size }) => ({
   width: dimension === Dimension.ROW ? "3%" : size + "px",
   "&:active": {
     backgroundColor: "#555",
-    color: "white",
+    color: "#FFFFFF",
   },
   height: dimension === Dimension.ROW ? size + "px" : "initial",
 }));
@@ -118,8 +118,12 @@ const HeaderCell = ({ state, dispatch, id, onContextMenu, dimension }) => {
 
   const dimensionSize =
     dimension === Dimension.ROW
-      ? state.content.rowHeights[id]
-      : state.content.columnWidths[id];
+      ? state.content.rowHeights
+        ? state.content.rowHeights[id]
+        : state.defaultRowHeight
+      : state.content.columnWidths
+      ? state.content.columnWidths[id]
+      : state.defaultColumnWidth;
 
   return (
     <HeaderItemComponent

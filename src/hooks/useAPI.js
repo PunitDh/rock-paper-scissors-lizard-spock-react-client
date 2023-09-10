@@ -143,7 +143,7 @@ export default function useAPI() {
         .then((data) => {
           dispatch(setCurrentGame(data.payload));
           dispatch(updateCurrentGameMenu(data.payload));
-          navigate(`/games/${data.payload.id}`);
+          navigate(`/apps/${data.payload.id}`);
         })
         .catch(handleError);
     },
@@ -176,7 +176,7 @@ export default function useAPI() {
         .get(`/games/${gameId}`, authHeaders)
         .then((data) => dispatch(setCurrentGame(data.payload)))
         .catch((data) => {
-          navigate("/games");
+          navigate("/apps");
           notification.error(data.payload);
         });
     },

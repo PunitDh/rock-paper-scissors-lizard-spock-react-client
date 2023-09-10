@@ -37,6 +37,7 @@ import { clamp } from "lodash";
 import CellFormatting from "../../models/CellFormatting";
 import { FlexBox } from "src/components/shared/styles";
 import { outsideBorders } from "./constants";
+import OpenFileJSON from "./OpenFileJSON";
 
 const Toolbar = ({ state, dispatch }) => {
   const canUndo = state.currentMementoId !== state.memento[0]?.id;
@@ -158,6 +159,7 @@ const Toolbar = ({ state, dispatch }) => {
       >
         <FlexBox gap="0.2rem" justifyContent="flex-start" alignItems="center">
           <OpenFileCSV dispatch={dispatch} />
+          <OpenFileJSON dispatch={dispatch} />
           <SaveFileCSV state={state} />
           <SaveFileJSON state={state} />
           <HistoryButton
@@ -211,12 +213,16 @@ const Toolbar = ({ state, dispatch }) => {
           <ColorPicker
             Icon={FormatColorFill}
             state={selectedFormatting}
-            onChange={() => {}}
+            property="backgroundColor"
+            defaultValue="#FFFFFF"
+            onChange={setFormattingChange}
           />
           <ColorPicker
             Icon={FormatColorText}
             state={selectedFormatting}
-            onChange={() => {}}
+            property="color"
+            defaultValue="#000000"
+            onChange={setFormattingChange}
           />
           <FormattingButton
             title={"Align left"}

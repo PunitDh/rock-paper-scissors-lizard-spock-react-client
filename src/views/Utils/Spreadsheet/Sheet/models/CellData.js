@@ -10,14 +10,14 @@ export default class CellData {
       this.value = obj.value || null;
       this.formula = obj.formula || null;
       this.referenceCells = obj.referenceCells || [];
-      this.display = obj.display || null;
+      this.display = obj.display || "";
       this.formatting =
         new CellFormatting(obj.formatting) || new CellFormatting();
       this.error = obj.error || null;
     } else {
       this.id = null;
       this.value = null;
-      this.display = null;
+      this.display = "";
       this.formula = null;
       this.referenceCells = [];
       this.formatting = new CellFormatting();
@@ -67,7 +67,7 @@ export default class CellData {
 
   setDisplay() {
     let display;
-    display = getNumberFormattedValue(this.value, this.formatting);
+    display = getNumberFormattedDisplay(this.value, this.formatting);
     this.display = display;
     return this;
   }
@@ -115,7 +115,8 @@ export default class CellData {
   }
 }
 
-const getNumberFormattedValue = (value, formatting) => {
+const getNumberFormattedDisplay = (value, formatting) => {
+  if (!value) return "";
   switch (formatting.numberFormat) {
     case NumberFormat.GENERAL: {
       return String(value);

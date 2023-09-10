@@ -121,11 +121,11 @@ export const APIProvider = ({ children }) => {
 
     createGame: (data) => {
       return request
-        .post("/games/new", data, authHeaders)
+        .post("/apps/new", data, authHeaders)
         .then((data) => {
           dispatch(setCurrentGame(data.payload));
           dispatch(updateCurrentGameMenu(data.payload));
-          navigate(`/games/${data.payload.id}`);
+          navigate(`/apps/${data.payload.id}`);
         })
         .catch((data) => notification.error(data.payload));
     },
@@ -133,7 +133,7 @@ export const APIProvider = ({ children }) => {
     getCurrentGames: () =>
       token.jwt &&
       request
-        .get("/player/games", authHeaders)
+        .get("/player/apps", authHeaders)
         .then((data) => {
           dispatch(setCurrentGames(data.payload));
           dispatch(setCurrentGamesNav(data.payload));
@@ -142,7 +142,7 @@ export const APIProvider = ({ children }) => {
 
     getRecentGames: (limit) =>
       request
-        .get("/games/recent", { ...authHeaders, params: { limit } })
+        .get("/apps/recent", { ...authHeaders, params: { limit } })
         .then((data) => dispatch(setRecentGames(data.payload)))
         .catch((data) => notification.error(data.payload)),
 
@@ -155,10 +155,10 @@ export const APIProvider = ({ children }) => {
     getGame: (gameId) => {
       socket.emit(SocketRequest.JOIN_CHAT, secure({ gameId }));
       return request
-        .get(`/games/${gameId}`, authHeaders)
+        .get(`/apps/${gameId}`, authHeaders)
         .then((data) => dispatch(setCurrentGame(data.payload)))
         .catch((data) => {
-          navigate("/games");
+          navigate("/apps");
           notification.error(data.payload);
         });
     },

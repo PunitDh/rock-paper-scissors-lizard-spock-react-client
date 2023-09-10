@@ -13,17 +13,26 @@ const OpenFileCSV = ({ dispatch }) => {
     const reader = new FileReader();
     reader.onload = async (e) => {
       const text = e.target.result;
-      const content = parseCSV(text);
-      const filtered = Object.keys(content).reduce((acc, cur) => {
-        if (content[cur]?.value.length > 0) {
+      const parsed = parseCSV(text);
+
+      console.log(parsed);
+      const data = Object.keys(parsed).reduce((acc, cur) => {
+        if (parsed[cur]?.value?.length > 0) {
           acc[cur] = new CellData({
             id: cur,
-            value: content[cur].value,
+            value: parsed[cur].value,
           });
         }
         return acc;
       }, {});
-      dispatch(setContentBulk(filtered));
+
+      const content = {
+        rowHeights: {},
+        columnWidths: {},
+        data,
+      };
+
+      dispatch(setContentBulk(content));
     };
     reader.readAsText(e.target.files[0]);
   };

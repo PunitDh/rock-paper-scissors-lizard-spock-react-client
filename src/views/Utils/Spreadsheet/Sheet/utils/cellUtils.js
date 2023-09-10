@@ -1,4 +1,4 @@
-import { SheetConfig } from "../constants";
+import { FILE_TYPE, SheetConfig } from "../constants";
 import CellData from "../models/CellData";
 
 export function spreadContent(content, key, value) {
@@ -27,8 +27,14 @@ export const generateClipboardContent = (state) => {
       });
     })
   );
-  const type = "_sheet";
+  const type = FILE_TYPE;
   return JSON.stringify({ type, content });
+};
+
+export const generateJSONContent = (state) => {
+  const content = state.content;
+  const type = FILE_TYPE;
+  return JSON.stringify({ type, content }, null, 2);
 };
 
 function typeInTextField(id, newText, replace) {
@@ -118,15 +124,24 @@ export const isCtrlKeyPressed = (e) => {
   return /mac/i.test(navigator.platform) ? e.metaKey : e.ctrlKey;
 };
 
+function cToHex(c) {
+  var hex = c.toString(16);
+  return hex.length === 1 ? "0" + hex : hex;
+}
+
+export function rgbToHex(r, g, b) {
+  return "#" + cToHex(r) + cToHex(g) + cToHex(b);
+}
+
 export function parseCSV(csvString) {
   const rows = csvString.trim().split("\n");
-  let content = {};
+  let data = {};
 
   rows.forEach((row, rowIndex) => {
     row.split(",").forEach((cellValue, colIndex) => {
       const colLabel = SheetConfig.COLUMNS[colIndex];
       const cellId = `${colLabel}${rowIndex + 1}`;
-      content[cellId] = new CellData({
+      data[cellId] = new CellData({
         id: cellId,
         value: cellValue,
         formula: "",
@@ -134,7 +149,19 @@ export function parseCSV(csvString) {
     });
   });
 
-  return content;
+  return data;
+}
+
+export function parseJSON(stringifiedJSON) {
+  try {
+    const jsonObject = JSON.parse(stringifiedJSON);
+    if (jsonObject.type !== FILE_TYPE) {
+      throw new Error(`Invalid or unknown JSON file`);
+    }
+    return jsonObject.content;
+  } catch (error) {
+    return { error: error.message };
+  }
 }
 
 export const generateInitialContent = (

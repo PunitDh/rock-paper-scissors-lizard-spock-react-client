@@ -37,6 +37,8 @@ export const Dimension = Object.freeze({
   COLUMN: "column",
 });
 
+export const FILE_TYPE = "_sheet";
+
 export const Formula = ["SUM(", "AVG("];
 
 export const getFirstColumnCharCode = () =>

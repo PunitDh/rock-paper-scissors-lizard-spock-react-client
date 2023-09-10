@@ -22,7 +22,7 @@ const menuMapper = (game) => ({
   id: game.id,
   title: game.name,
   icon: getIcon(game.icon).icon,
-  href: `/games/${game.id}`,
+  href: `/apps/${game.id}`,
   gameContext: true,
   players: game.players,
   movePlayed: false,
@@ -43,27 +43,29 @@ export const menuSlice = createSlice({
     Home: [
       {
         id: uniqueId(),
-        title: "Games",
+        title: "Apps",
         icon: IconDeviceGamepad,
-        href: "/games",
+        href: "/apps",
       },
+    ],
+
+    Games: [
       {
         id: uniqueId(),
         title: "Rock Paper Scissors",
         icon: ContentCut,
-        href: "/games/rpsls",
+        href: "/apps/rpsls",
       },
       {
         id: uniqueId(),
         title: "Tic Tac Toe",
         icon: IconTicTac,
-        href: "/games/tictactoe",
+        href: "/apps/tictactoe",
         restricted: true,
       },
     ],
 
-    [CURRENT_GAMES]: [],
-    Utilities: [
+    Apps: [
       {
         id: uniqueId(),
         title: "Calculator",
@@ -89,6 +91,9 @@ export const menuSlice = createSlice({
         href: "/utils/video",
       },
     ],
+    [CURRENT_GAMES]: [],
+
+
     Settings: [
       {
         id: uniqueId(),

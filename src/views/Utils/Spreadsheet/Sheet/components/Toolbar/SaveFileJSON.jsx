@@ -1,10 +1,11 @@
 import { Tooltip } from "@mui/material";
 import { FieldButton } from "../styles";
 import { DataObject } from "@mui/icons-material";
+import { generateJSONContent } from "../../utils/cellUtils";
 
 const SaveFileJSON = ({ state }) => {
   const handleExportAsJSON = () => {
-    const content = JSON.stringify(state.content.data, null, 2);
+    const content = generateJSONContent(state);
     const blob = new Blob([content], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");

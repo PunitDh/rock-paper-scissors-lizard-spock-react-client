@@ -18,14 +18,14 @@ const Apps = () => (
         reversed
       >
         <LinkCard
-          to="/games/rpsls"
+          to="/apps/rpsls"
           title="Rock Paper Scissors Lizard Spock"
           Icon={DashboardImage.Rpsls}
           description="Rock Paper Scissors Lizard Spock"
         />
         <LinkCard
-          to="/games/tictactoe"
-          title="Tic Tac Toe"
+          to="/apps/tictactoe"
+          title={<>Tic Tac Toe <br/>(Coming Soon)</>}
           Icon={DashboardImage.TicTacToe}
           description="Tic Tac Toe (coming soon)"
         />

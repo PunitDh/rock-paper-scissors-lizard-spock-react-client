@@ -18,7 +18,7 @@ const ReactCalculator = Loadable(
 const Spreadsheet = Loadable(lazy(() => import("../views/Utils/Spreadsheet")));
 const RpslsHome = Loadable(lazy(() => import("../views/Apps/Rpsls")));
 const TicTacToeHome = Loadable(lazy(() => import("../views/Apps/TicTacToe")));
-const Games = Loadable(lazy(() => import("../views/Apps")));
+const Apps = Loadable(lazy(() => import("../views/Apps")));
 const Utils = Loadable(lazy(() => import("../views/Utils")));
 const RpslsGameWindow = Loadable(
   lazy(() => import("../views/Apps/Rpsls/GameWindow"))
@@ -41,7 +41,7 @@ const Router = [
     path: "",
     element: <FullLayout />,
     children: [
-      { path: "", element: <Navigate to="/games" /> },
+      { path: "", element: <Navigate to="/apps" /> },
       { path: "dashboard", exact: true, element: <Dashboard /> },
       { path: "video", exact: true, element: <VideoConverter /> },
       { path: "profile", exact: true, element: <Profile /> },
@@ -50,10 +50,10 @@ const Router = [
     ],
   },
   {
-    path: "games",
+    path: "apps",
     element: <FullLayout />,
     children: [
-      { path: "", element: <Games /> },
+      { path: "", element: <Apps /> },
       { path: "rpsls", exact: true, element: <RpslsHome /> },
       { path: "tictactoe", exact: true, element: <TicTacToeHome /> },
       { path: ":gameId", exact: true, element: <RpslsGameWindow /> },

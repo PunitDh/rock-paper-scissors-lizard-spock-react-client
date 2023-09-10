@@ -15,13 +15,19 @@ const Input = styled.input({
   left: "-1.1rem",
 });
 
-const ColorPicker = ({ Icon }) => {
+const ColorPicker = ({ Icon, state, onChange, property, defaultValue }) => {
   const inputRef = useRef();
   return (
     <FieldButton onClick={() => inputRef.current?.click()}>
       <Icon sx={{ width: "1rem" }} />
       <Box sx={{ position: "relative" }}>
-        <Input ref={inputRef} type="color" id="bg-color-picker" />
+        <Input
+          ref={inputRef}
+          type="color"
+          id={`${property}-picker`}
+          value={state[property]}
+          onChange={onChange(property)}
+        />
       </Box>
     </FieldButton>
   );
