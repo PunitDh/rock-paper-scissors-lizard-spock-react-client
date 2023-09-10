@@ -27,6 +27,7 @@ export const handleKeyUpSheet = (e, dispatch) => {
 
 export const handleKeyDownSheet = (e, state, dispatch) => {
   let nextCell;
+  state.inputRef.focus();
 
   switch (e.key) {
     case KeyEvent.LOWERCASE_A:

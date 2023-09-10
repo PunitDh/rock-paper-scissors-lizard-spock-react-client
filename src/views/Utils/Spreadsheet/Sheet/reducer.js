@@ -43,7 +43,7 @@ export const initialState = {
 };
 
 export const reducer = (state, action) => {
-  action.type !== SheetAction.SET_HOVERED && console.log(action);
+  // action.type !== SheetAction.SET_HOVERED && console.log(action);
 
   switch (action.type) {
     case SheetAction.SET_SELECTED: {
@@ -488,7 +488,6 @@ export const reducer = (state, action) => {
       };
     }
     case SheetAction.SET_CONTENT_BULK:
-      console.log(action.payload);
       return {
         ...state,
         content: action.payload,
@@ -510,6 +509,7 @@ export const reducer = (state, action) => {
         },
       };
     }
+
     case SheetAction.SET_CELL_FORMATTING_BULK: {
       const formattedData = state.highlighted.cells.reduce(
         (stateContentData, cell) => {

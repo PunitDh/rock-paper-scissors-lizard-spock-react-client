@@ -17,26 +17,14 @@ const OpenFileJSON = ({ dispatch }) => {
     reader.onload = async (e) => {
       const text = e.target.result;
       const parsedContent = parseJSON(text);
+
       if (parsedContent.error) {
-        return notification.error(parsedContent.error);
+        return notification.error(parsedContent.message);
       }
 
-      const data = Object.keys(parsedContent.data).reduce(
-        (stateContentData, cell) => {
-          if (String(parsedContent[cell]?.value)?.length > 0) {
-            stateContentData[cell] = new CellData(parsedContent[cell]);
-          }
-          return stateContentData;
-        },
-        {}
-      );
-      const content = {
-        rowHeights: parsedContent.rowHeights,
-        columnWidths: parsedContent.columnWidths,
-        data,
-      };
+      console.log({parsedContent});
 
-      dispatch(setContentBulk(content));
+      dispatch(setContentBulk(parsedContent));
     };
     reader.readAsText(e.target.files[0]);
   };

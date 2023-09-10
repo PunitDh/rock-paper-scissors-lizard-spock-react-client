@@ -2,6 +2,7 @@ import { SheetConfig } from "../constants";
 import { HeaderItem } from "../styles";
 import { selectAll } from "../actions";
 import styled from "@emotion/styled";
+import { useMemo } from "react";
 
 const SelectAllItem = styled(HeaderItem)({
   height: "1.5rem",
@@ -30,36 +31,29 @@ const SelectAll = ({ state, dispatch, onContextMenu }) => {
     dispatch(selectAll());
   };
 
-  const handleMouseDown = (e, column) => {
-    // TODO
-  };
-
-  const handleMouseUp = (e, column) => {
-    // TODO
-  };
-
-  const handleKeyDown = (e) => {
-    // TODO
-  };
-
-  const selected =
-    Array(state.maxRows)
-      .fill(0)
-      .map((_, it) => it + 1)
-      .every((row) => state.highlighted.rows.includes(row)) &&
-    Array(state.maxColumns)
-      .fill(0)
-      .map((_, it) => SheetConfig.COLUMNS[it])
-      .every((column) => state.highlighted.columns.includes(column));
+  const selected = useMemo(
+    () =>
+      Array(state.maxRows)
+        .fill(0)
+        .map((_, it) => it + 1)
+        .every((row) => state.highlighted.rows.includes(row)) &&
+      Array(state.maxColumns)
+        .fill(0)
+        .map((_, it) => SheetConfig.COLUMNS[it])
+        .every((column) => state.highlighted.columns.includes(column)),
+    [
+      state.highlighted.columns,
+      state.highlighted.rows,
+      state.maxColumns,
+      state.maxRows,
+    ]
+  );
 
   return (
     <SelectAllItem
       selected={selected}
       onClick={handleClick}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
       onContextMenu={onContextMenu}
-      onKeyDown={handleKeyDown}
       id={"select-all"}
     >
       <Corner />

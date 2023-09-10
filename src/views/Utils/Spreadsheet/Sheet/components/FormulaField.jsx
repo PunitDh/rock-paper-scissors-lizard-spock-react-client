@@ -43,6 +43,7 @@ const FormulaField = ({ state, dispatch, onContextMenu }) => {
 
   const handleKeyDown = useCallback(
     (e) => {
+      console.log("from formula field", e.key);
       switch (e.key) {
         case KeyEvent.ESCAPE:
           dispatch(setFormulaMode(false));

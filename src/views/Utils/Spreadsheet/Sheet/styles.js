@@ -106,8 +106,17 @@ export const Item = styled(TableCell)(
       formatting
     );
     return {
-      backgroundColor: selected ? theme.palette.primary.light : "#fff",
-      color: theme.palette.text.secondary,
+      ...formatting,
+      backgroundColor: selected
+        ? theme.palette.primary.light
+        : formatting.backgroundColor || "#fff",
+      color: formatting.color || theme.palette.text.secondary,
+      // fontSize: formatting.fontSize || "inherit",
+      // textDecoration: formatting.textDecoration || "inherit",
+      // fontStyle: formatting.fontStyle || "inherit",
+      // fontWeight: formatting.fontWeight || "inherit",
+      // fontFamily: formatting.fontFamily || "inherit",
+      textAlign: formatting.textAlign || textalign,
       ...borderProperties,
       borderRadius: 0,
       cursor: "cell",
@@ -120,8 +129,6 @@ export const Item = styled(TableCell)(
       zIndex: tabIndex,
       borderCollapse: "collapse",
       width,
-      textAlign: textalign,
-      ...formatting,
       "&:hover": {
         // border: "2px solid blue",
         border: "2px solid blue",

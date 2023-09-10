@@ -1,5 +1,6 @@
 import { FILE_TYPE, SheetConfig } from "../constants";
 import CellData from "../models/CellData";
+import CellFormatting from "../models/CellFormatting";
 
 export function spreadContent(content, key, value) {
   return {
@@ -158,9 +159,31 @@ export function parseJSON(stringifiedJSON) {
     if (jsonObject.type !== FILE_TYPE) {
       throw new Error(`Invalid or unknown JSON file`);
     }
-    return jsonObject.content;
+
+    const data = Object.keys(jsonObject.content.data).reduce((acc, cell) => {
+      if (acc[cell].id) {
+        return {
+          ...acc,
+          [cell]: new CellData({
+            ...acc[cell],
+            formatting: new CellFormatting(acc[cell].formatting),
+          }).setDisplay(),
+        };
+      } else {
+        delete acc[cell];
+      }
+      return acc;
+    }, jsonObject.content.data);
+
+    const content = {
+      rowHeights: jsonObject.content.rowHeights,
+      columnWidths: jsonObject.content.columnWidths,
+      data,
+    };
+
+    return content;
   } catch (error) {
-    return { error: error.message };
+    return error;
   }
 }
 

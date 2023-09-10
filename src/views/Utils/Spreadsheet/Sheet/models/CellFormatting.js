@@ -4,6 +4,7 @@ export default class CellFormatting {
       Object.entries(obj).forEach(([key, value]) => {
         this[key] = value;
       });
+      return this;
     } else {
       this.borderId = null;
       this.borderTypes = [];

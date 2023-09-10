@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useRef } from "react";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import DashboardCard from "src/components/shared/DashboardCard";
 import { initialState, reducer } from "./reducer";
 import {
@@ -238,7 +238,7 @@ const Sheet = ({
   const handleKeyUp = (e) => handleKeyUpSheet(e, dispatch);
 
   const handleKeyDown = (e) =>
-    handleKeyDownSheet(e, state, dispatch, maxRows, maxColumns);
+    handleKeyDownSheet(e, state, dispatch, inputFocusRef);
 
   return (
     <DashboardCard sx={{ height: "100%" }} title="Spreadsheet">
