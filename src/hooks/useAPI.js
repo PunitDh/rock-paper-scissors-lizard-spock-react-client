@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { setConversations } from "src/redux/conversationSlice";
 import {
   setCurrentGame,
@@ -10,7 +10,7 @@ import {
 } from "src/redux/playerSlice";
 import { setCurrentGamesNav, updateCurrentGameMenu } from "src/redux/menuSlice";
 import { setSiteSettings } from "src/redux/siteSlice";
-import { LOGIN_PAGE, SocketRequest } from "src/utils/constants";
+import { AuthPage, SocketRequest } from "src/utils/constants";
 import { useNotification, useSocket, useToken } from "src/hooks";
 
 export default function useAPI() {
@@ -19,6 +19,7 @@ export default function useAPI() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const socket = useSocket();
+  const location = useLocation();
 
   const authHeaders = {
     headers: {
@@ -43,7 +44,7 @@ export default function useAPI() {
   const handleError = (data) => {
     notification.error(data.payload);
     if (data.code === 401) {
-      navigate(LOGIN_PAGE);
+      navigate(AuthPage.LOGIN_PAGE);
     }
   };
 
@@ -77,11 +78,24 @@ export default function useAPI() {
   const handleToken = (data, successMessage) => {
     if (data.code >= 300) {
       handleError(data);
-    } else {
-      token.set(data.payload);
-      notification.success(successMessage);
-      navigate("/");
+      return;
     }
+
+    token.set(data.payload);
+    notification.success(successMessage);
+
+    const params = new URLSearchParams(location.search);
+    const referrerUrl = params.get("referrer");
+
+    if (referrerUrl) {
+      try {
+        const url = new URL(referrerUrl);
+        return navigate(url.pathname);
+      } catch {
+        return navigate("/");
+      }
+    }
+    return navigate("/");
   };
 
   return {
@@ -205,7 +219,7 @@ export default function useAPI() {
 
     logoutPlayer: () => {
       token.clear();
-      navigate(LOGIN_PAGE);
+      navigate(AuthPage.LOGIN_PAGE);
     },
 
     sendMessage: (request) =>

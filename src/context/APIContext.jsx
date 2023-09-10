@@ -11,7 +11,7 @@ import {
 } from "src/redux/playerSlice";
 import { setCurrentGamesNav, updateCurrentGameMenu } from "src/redux/menuSlice";
 import { setSiteSettings } from "src/redux/siteSlice";
-import { LOGIN_PAGE, SocketRequest } from "src/utils/constants";
+import { AuthPage, SocketRequest } from "src/utils/constants";
 import { useNotification, useSocket, useToken } from "src/hooks";
 
 export const APIContext = createContext();
@@ -198,7 +198,7 @@ export const APIProvider = ({ children }) => {
 
     logoutPlayer: () => {
       token.clear();
-      navigate(LOGIN_PAGE);
+      navigate(AuthPage.LOGIN_PAGE);
     },
 
     sendMessage: (request) =>

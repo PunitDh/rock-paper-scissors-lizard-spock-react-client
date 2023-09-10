@@ -4,7 +4,7 @@ import PageContainer from "src/components/container/PageContainer";
 import Logo from "src/components/shared/Logo";
 import AuthLogin from "./auth/AuthLogin";
 import { AuthBox } from "./styles";
-import { REGISTER_PAGE } from "src/utils/constants";
+import { AuthPage } from "src/utils/constants";
 
 const Login = () => (
   <PageContainer title="Login" description="Login page">
@@ -49,7 +49,7 @@ const Login = () => (
                   </Typography>
                   <Typography
                     component={Link}
-                    to={REGISTER_PAGE}
+                    to={AuthPage.REGISTER_PAGE}
                     fontWeight="500"
                     sx={{
                       textDecoration: "none",

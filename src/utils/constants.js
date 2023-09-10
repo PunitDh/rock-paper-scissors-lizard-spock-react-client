@@ -57,6 +57,14 @@ export const SocketResponse = Object.freeze({
   PROGRESS_UPDATE: "update-progress",
 });
 
-export const TOKEN_KEY = "rpsls-token";
-export const LOGIN_PAGE = "/auth/login";
-export const REGISTER_PAGE = "/auth/login";
+export const TOKEN_KEY = "ostrta-token";
+
+export const AuthPage = {
+  LOGIN_PAGE: "/auth/login",
+  REGISTER_PAGE: "/auth/register",
+  loginWithReferrer: () => {
+    const params = new URLSearchParams();
+    params.set("referrer", window.location.href);
+    return `${AuthPage.LOGIN_PAGE}?${params.toString()}`;
+  },
+};

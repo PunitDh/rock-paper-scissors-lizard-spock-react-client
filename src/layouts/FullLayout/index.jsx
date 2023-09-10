@@ -6,7 +6,7 @@ import Sidebar from "./Sidebar";
 import Footer from "./Footer";
 import { useAPI, useNotification, useToken } from "src/hooks";
 import Notification from "src/components/shared/Notification";
-import { LOGIN_PAGE } from "src/utils/constants";
+import { AuthPage } from "src/utils/constants";
 
 const MainWrapper = styled("div")(() => ({
   display: "flex",
@@ -39,7 +39,7 @@ const FullLayout = () => {
   }, []);
 
   if (!token.decoded) {
-    return <Navigate to={LOGIN_PAGE} />;
+    return <Navigate to={AuthPage.loginWithReferrer()} />;
   }
 
   return (
