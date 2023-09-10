@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer, useRef } from "react";
 import DashboardCard from "src/components/shared/DashboardCard";
 import { initialState, reducer } from "./reducer";
 import {
@@ -18,7 +18,6 @@ import {
   selectCell,
   highlightFormulaCellRange,
   setHovered,
-  setInputBoxFocused,
   removeCellsFromHighlight,
 } from "./actions";
 import {
@@ -93,6 +92,7 @@ const Sheet = ({
   );
 
   const clipboard = useClipboard();
+  const inputFocusRef = useRef(false);
 
   useEffect(() => {
     const selectedCellData = state.content.data[state.selectedCell.id];
@@ -232,7 +232,7 @@ const Sheet = ({
   // const handleMouseMove = (e) => handleMouseMoveSheet(e, state, dispatch);
 
   const handleDoubleClick = (e) => {
-    dispatch(setInputBoxFocused(true));
+    inputFocusRef.current = true;
   };
 
   const handleKeyUp = (e) => handleKeyUpSheet(e, dispatch);
@@ -260,7 +260,11 @@ const Sheet = ({
             onContextMenu={handleContextMenu}
           />
         )}
-        <AbsoluteCellInput state={state} dispatch={dispatch} />
+        <AbsoluteCellInput
+          state={state}
+          dispatch={dispatch}
+          inputFocusRef={inputFocusRef}
+        />
         <div
           onKeyDown={handleKeyDown}
           onKeyUp={handleKeyUp}
@@ -289,9 +293,9 @@ const Sheet = ({
             </TableBody>
           </Table>
           <FocusGuard state={state} dispatch={dispatch} />
-          <DebugBar state={state} />
           {statusField && <StatusField state={state} dispatch={dispatch} />}
         </div>
+        <DebugBar state={state} />
       </Container>
     </DashboardCard>
   );

@@ -1,25 +1,26 @@
+import { isNumber } from "lodash";
 import { isFormula } from "../utils/cellUtils";
 import CellRange from "./CellRange";
+import CellFormatting from "./CellFormatting";
 
 export default class CellData {
   constructor(obj) {
     if (obj) {
       this.id = obj.id || null;
-      this.ref = obj.ref || null;
       this.value = obj.value || null;
       this.formula = obj.formula || null;
       this.referenceCells = obj.referenceCells || [];
       this.display = obj.display || null;
-      this.formatting = obj.formatting || {};
+      this.formatting =
+        new CellFormatting(obj.formatting) || new CellFormatting();
       this.error = obj.error || null;
     } else {
       this.id = null;
-      this.ref = null;
       this.value = null;
       this.display = null;
       this.formula = null;
       this.referenceCells = [];
-      this.formatting = {};
+      this.formatting = new CellFormatting();
       this.error = null;
     }
   }
@@ -38,11 +39,6 @@ export default class CellData {
 
   setId(id) {
     this.id = id || this.id || null;
-    return this;
-  }
-
-  setRef(ref) {
-    this.ref = ref || this.ref || null;
     return this;
   }
 
@@ -70,12 +66,22 @@ export default class CellData {
   }
 
   setDisplay(display) {
-    this.display = display || this.display || null;
+    this.display = display;
     return this;
   }
 
   setFormatting(formatting) {
-    this.formatting = formatting || this.formatting || {};
+    this.formatting = this.formatting.setFormatting(formatting);
+    let display;
+    display = !isNaN(parseFloat(this.value))
+      ? Number(this.value).toFixed(formatting.decimals || 0)
+      : this.value;
+    this.setDisplay(display);
+    return this;
+  }
+
+  addBorderFormatting(borderFormatting) {
+    this.formatting = this.formatting.addBorder(borderFormatting);
     return this;
   }
 
@@ -83,7 +89,6 @@ export default class CellData {
     if (!obj) return this;
     this.setValue(obj.value);
     this.setId(obj.id);
-    this.setRef(obj.ref);
     this.setFormatting(obj.formatting);
     return this;
   }

@@ -27,11 +27,11 @@ export const SheetAction = Object.freeze({
   RESET_HIGHLIGHT: "RESET_HIGHLIGHT",
   SET_MOUSEDOWN: "SET_MOUSEDOWN",
   SET_CONTENT_DATA: "SET_CONTENT_DATA",
-  SET_CELL_REF: "SET_CELL_REF",
   UPDATE_REFERENCE_CELLS: "UPDATE_REFERENCE_CELLS",
   SET_CONTENT_BULK: "SET_CONTENT_BULK",
   SET_CELL_FORMATTING: "SET_CELL_FORMATTING",
   SET_CELL_FORMATTING_BULK: "SET_CELL_FORMATTING_BULK",
+  SET_CELL_OUTSIDE_BORDER_FORMATTING: "SET_CELL_OUTSIDE_BORDER_FORMATTING",
   RECALCULATE_FORMULAE: "RECALCULATE_FORMULAE",
   OPEN_CONTEXT_MENU: "OPEN_CONTEXT_MENU",
   ADD_MEMENTO: "ADD_MEMENTO",
@@ -66,11 +66,6 @@ export const resetFormulaField = () => ({
 
 export const setFormulaFieldFocused = (payload) => ({
   type: SheetAction.SET_FORMULA_FIELD_FOCUSED,
-  payload,
-});
-
-export const setInputBoxFocused = (payload) => ({
-  type: SheetAction.SET_INPUT_BOX_FOCUSED,
   payload,
 });
 
@@ -185,11 +180,6 @@ export const setMouseDown = (payload) => ({
   payload,
 });
 
-export const setCellRef = (cellId, ref) => ({
-  type: SheetAction.SET_CELL_REF,
-  payload: { cellId, ref },
-});
-
 export const setCellContent = (cell, value) => ({
   type: SheetAction.SET_CONTENT_DATA,
   payload: { cell, value },
@@ -212,6 +202,11 @@ export const setSelectedCellFormatting = (payload) => ({
 
 export const setCellFormattingBulk = (payload) => ({
   type: SheetAction.SET_CELL_FORMATTING_BULK,
+  payload,
+});
+
+export const setCellOutsideBorderFormatting = (payload) => ({
+  type: SheetAction.SET_CELL_OUTSIDE_BORDER_FORMATTING,
   payload,
 });
 

@@ -1,12 +1,21 @@
 import { useToken } from "src/hooks";
+import { FlexForm } from "./styles";
+import styled from "@emotion/styled";
+
+const DebugButton = styled.button({
+  cursor: "pointer",
+});
 
 const DebugBar = ({ state }) => {
   const token = useToken();
   return (
     token.decoded.isAdmin && (
-      <>
-        <button onClick={() => console.log(state.content)}>Show Content</button>
-        <button
+      <FlexForm>
+        <DebugButton type="button" onClick={() => console.log(state.content)}>
+          Show Content
+        </DebugButton>
+        <DebugButton
+          type="button"
           onClick={() =>
             console.log(
               "cell",
@@ -16,8 +25,9 @@ const DebugBar = ({ state }) => {
           }
         >
           Show Current Cell
-        </button>
-        <button
+        </DebugButton>
+        <DebugButton
+          type="button"
           onClick={() => {
             console.log("cell", state.selectedCell.id);
             console.log("formulahighlighted", state.formulaHighlighted);
@@ -28,9 +38,11 @@ const DebugBar = ({ state }) => {
           }}
         >
           Show FormulaHighlighted
-        </button>
-        <button onClick={() => console.log(state)}>Show State</button>
-      </>
+        </DebugButton>
+        <DebugButton type="button" onClick={() => console.log(state)}>
+          Show State
+        </DebugButton>
+      </FlexForm>
     )
   );
 };

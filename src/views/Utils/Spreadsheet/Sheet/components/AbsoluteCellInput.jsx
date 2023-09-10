@@ -9,7 +9,6 @@ import {
   setCellContent,
   setFormulaMode,
   setHighlightCellAnchor,
-  setInputBoxFocused,
   setInputRef,
 } from "../actions";
 import { KeyEvent } from "../constants";
@@ -40,8 +39,9 @@ const InputField = styled.input(({ width, height, isfocused, formatting }) => ({
   },
 }));
 
-const AbsoluteCellInput = ({ state, dispatch }) => {
+const AbsoluteCellInput = ({ state, dispatch, inputFocusRef }) => {
   const inputRef = useRef();
+  const navigateRef = useRef(true);
 
   useEffect(() => {
     dispatch(setInputRef(inputRef.current));
@@ -74,18 +74,19 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
 
   const setTextBoxPosition = useCallback(() => {
     const rect = document.getElementById(cell.id)?.getBoundingClientRect();
-    setPosition({
-      top: rect.top + window.scrollY,
-      left: rect.left + window.scrollX,
-      width: rect.width,
-      height: rect.height,
-    });
+    if (rect) {
+      setPosition({
+        top: rect.top + window.scrollY,
+        left: rect.left + window.scrollX,
+        width: rect.width,
+        height: rect.height,
+      });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cell.id, rowHeight]);
 
   useEffect(() => {
     setValue(currentValue);
-    dispatch(setInputBoxFocused(true));
     setTextBoxPosition();
 
     const handleResize = () => setTextBoxPosition();
@@ -98,18 +99,12 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
 
   useEffect(() => {
     setOriginalValue(currentValue);
+    navigateRef.current = true;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cell.id]);
 
-  useEffect(() => {
-    if (state.highlighted.cells.length > 0 && state.inputBoxFocused) {
-      dispatch(setInputBoxFocused(false));
-    }
-  }, [dispatch, state.highlighted.cells, state.inputBoxFocused]);
-
   const handleBlur = (e) => {
-    dispatch(setInputBoxFocused(false));
-
+    inputFocusRef.current = false;
     const triggerRecalculation =
       !state.formulaMode &&
       (isFormula(e.target.value) ||
@@ -134,17 +129,14 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
           dispatch(setHighlightCellAnchor(cell.id));
           break;
         case KeyEvent.ESCAPE:
-          dispatch(setInputBoxFocused(false));
           dispatch(setFormulaMode(false));
           break;
         case KeyEvent.BACKSPACE:
-          // state.inputBoxFocused && e.stopPropagation();
           break;
         case KeyEvent.ENTER:
           const triggerRecalculation =
             state.formulaTrackedCells.includes(cell.id) ||
             isFormula(e.target.value);
-          dispatch(setInputBoxFocused(false));
           dispatch(setCellContent(cell.id, e.target.value));
           dispatch(setFormulaMode(false));
           triggerRecalculation && dispatch(recalculateFormulae());
@@ -171,12 +163,14 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
           break;
         }
         case KeyEvent.ARROW_LEFT: {
-          if (inputRef.current?.value.length === 0)
+          const { current } = inputRef;
+          if (current?.value.length === 0 || navigateRef.current)
             dispatch(selectCell(cell.getPreviousColumn(state.maxColumns)));
           break;
         }
         case KeyEvent.ARROW_RIGHT: {
-          if (inputRef.current?.value.length === 0)
+          const { current } = inputRef;
+          if (current?.value.length === 0 || navigateRef.current)
             dispatch(selectCell(cell.getNextColumn(state.maxRows)));
           break;
         }
@@ -189,7 +183,6 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
           break;
         }
         default:
-          // dispatch(setInputBoxFocused(true));
           break;
       }
     },
@@ -204,11 +197,17 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
     ]
   );
 
-  const handleFocus = () => dispatch(setInputBoxFocused(true));
+  const handleFocus = (e) => {
+    inputFocusRef.current = true;
+  };
 
   const handleContextMenu = (e) => {
     e.preventDefault();
     dispatch(openContextMenu(document.getElementById(state.selectedCell.id)));
+  };
+
+  const handleClick = (e) => {
+    navigateRef.current = false;
   };
 
   return (
@@ -221,12 +220,13 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
         autoComplete="off"
         width={position.width}
         height={position.height}
-        isfocused={state.inputBoxFocused}
+        isfocused={inputFocusRef.current}
         onBlur={handleBlur}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         onFocus={handleFocus}
         onContextMenu={handleContextMenu}
+        onClick={handleClick}
         formatting={
           state.content.data[cell.id]?.formula?.length > 0
             ? undefined

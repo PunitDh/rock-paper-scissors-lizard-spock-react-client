@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { FlexForm } from "../styles";
 import {
   FormatAlignCenter,
@@ -18,6 +18,7 @@ import {
   undoState,
   setCellFormattingBulk,
   recalculateFormulae,
+  setCellOutsideBorderFormatting,
 } from "../../actions";
 import OpenFileCSV from "./OpenFileCSV";
 import SaveFileCSV from "./SaveFileCSV";
@@ -29,6 +30,11 @@ import FontFamilySelect from "./FontFamilySelect";
 import FontSizeSelect from "./FontSizeSelect";
 import BorderStyleSelect from "./BorderStyleSelect";
 import SaveFileJSON from "./SaveFileJSON";
+import DecimalIcon from "./components/DecimalIcon";
+import { clamp } from "lodash";
+import CellFormatting from "../../models/CellFormatting";
+import { FlexBox } from "src/components/shared/styles";
+import { Border } from "./constants";
 
 const Toolbar = ({ state, dispatch }) => {
   const canUndo = state.currentMementoId !== state.memento[0]?.id;
@@ -37,7 +43,7 @@ const Toolbar = ({ state, dispatch }) => {
 
   const currentCellFormatting = useMemo(() => {
     const element = document.getElementById(state.selectedCell.id);
-    if (!element) return {};
+    if (!element) return new CellFormatting();
     const styles = getComputedStyle(element);
     return {
       fontWeight: styles?.fontWeight,
@@ -107,6 +113,18 @@ const Toolbar = ({ state, dispatch }) => {
     setFormattingChange("textAlign")(textAlign);
   };
 
+  const setDecimals = (decimals) => () => {
+    const currentDecimals = stateCellFormatting.decimals || 0;
+    const newDecimals = clamp(currentDecimals + decimals, 0, 10);
+    setFormattingChange("decimals")(newDecimals);
+  };
+
+  const selectBorder = (borderEvent) => {
+    if (borderEvent.target.value === Border.OUTSIDE_BORDERS) {
+      dispatch(setCellOutsideBorderFormatting());
+    } else setFormattingChange("borderId")(borderEvent);
+  };
+
   const createToggleHandler = useCallback(
     (formattingKey, activeValue, inactiveValue) => () => {
       const newValue = toggleStyle(formattingKey, activeValue, inactiveValue);
@@ -125,84 +143,107 @@ const Toolbar = ({ state, dispatch }) => {
 
   return (
     <div tabIndex="1000">
-      <FlexForm flexWrap="wrap" onSubmit={handleSubmit}>
-        <OpenFileCSV dispatch={dispatch} />
-        <SaveFileCSV state={state} />
-        <SaveFileJSON state={state} />
-        <HistoryButton
-          title="Undo"
-          Icon={Undo}
-          onClick={handleUndo}
-          disabled={!canUndo}
-        />
-        <HistoryButton
-          title="Redo"
-          Icon={Redo}
-          onClick={handleRedo}
-          disabled={!canRedo}
-        />
-        <FontFamilySelect
-          state={selectedFormatting}
-          onChange={setFormattingChange("fontFamily")}
-        />
-        <FontSizeSelect
-          state={selectedFormatting}
-          onChange={setFormattingChange("fontSize")}
-        />
-        <BorderStyleSelect
-          state={selectedFormatting}
-          onChange={setFormattingChange("border")}
-        />
-        <NumberFormattingSelect
-          state={selectedFormatting}
-          onChange={() => {}}
-        />
-        <FormattingButton
-          title={"Bold"}
-          isActive={selectedFormatting.fontWeight === "bold"}
-          onClick={toggleBold}
-          Icon={FormatBold}
-        />
-        <FormattingButton
-          title={"Italics"}
-          isActive={selectedFormatting.fontStyle === "italic"}
-          onClick={toggleItalic}
-          Icon={FormatItalic}
-        />
-        <FormattingButton
-          title={"Underline"}
-          isActive={selectedFormatting.textDecoration === "underline"}
-          onClick={toggleUnderline}
-          Icon={FormatUnderlined}
-        />
-        <ColorPicker
-          Icon={FormatColorFill}
-          state={selectedFormatting}
-          onChange={() => {}}
-        />
-        <ColorPicker
-          Icon={FormatColorText}
-          state={selectedFormatting}
-          onChange={() => {}}
-        />
-        <FormattingButton
-          title={"Align left"}
-          isActive={selectedFormatting.textAlign === "left"}
-          onClick={setTextAlign("left")}
-          Icon={FormatAlignLeft}
-        />
-        <FormattingButton
-          title={"Align center"}
-          isActive={selectedFormatting.textAlign === "center"}
-          onClick={setTextAlign("center")}
-          Icon={FormatAlignCenter}
-        />
-        <FormattingButton
-          title={"Align right"}
-          isActive={selectedFormatting.textAlign === "right"}
-          onClick={setTextAlign("right")}
-          Icon={FormatAlignRight}
-        />
+      <FlexForm
+        flexWrap="wrap"
+        gap="0.5rem"
+        flexDirection="column"
+        onSubmit={handleSubmit}
+      >
+        <FlexBox gap="0.2rem" justifyContent="flex-start" alignItems="center">
+          <OpenFileCSV dispatch={dispatch} />
+          <SaveFileCSV state={state} />
+          <SaveFileJSON state={state} />
+          <HistoryButton
+            title="Undo"
+            Icon={Undo}
+            onClick={handleUndo}
+            disabled={!canUndo}
+          />
+          <HistoryButton
+            title="Redo"
+            Icon={Redo}
+            onClick={handleRedo}
+            disabled={!canRedo}
+          />
+          <FontFamilySelect
+            state={selectedFormatting}
+            onChange={setFormattingChange("fontFamily")}
+          />
+          <FontSizeSelect
+            state={selectedFormatting}
+            onChange={setFormattingChange("fontSize")}
+          />
+          <BorderStyleSelect
+            state={selectedFormatting}
+            onChange={selectBorder}
+          />
+          <NumberFormattingSelect
+            state={selectedFormatting}
+            onChange={() => {}}
+          />
+        </FlexBox>
+        <FlexBox gap="0.2rem" justifyContent="flex-start" alignItems="center">
+          <FormattingButton
+            title={"Bold"}
+            isActive={selectedFormatting.fontWeight === "bold"}
+            onClick={toggleBold}
+            Icon={FormatBold}
+          />
+          <FormattingButton
+            title={"Italics"}
+            isActive={selectedFormatting.fontStyle === "italic"}
+            onClick={toggleItalic}
+            Icon={FormatItalic}
+          />
+          <FormattingButton
+            title={"Underline"}
+            isActive={selectedFormatting.textDecoration === "underline"}
+            onClick={toggleUnderline}
+            Icon={FormatUnderlined}
+          />
+          <ColorPicker
+            Icon={FormatColorFill}
+            state={selectedFormatting}
+            onChange={() => {}}
+          />
+          <ColorPicker
+            Icon={FormatColorText}
+            state={selectedFormatting}
+            onChange={() => {}}
+          />
+          <FormattingButton
+            title={"Align left"}
+            isActive={selectedFormatting.textAlign === "left"}
+            onClick={setTextAlign("left")}
+            Icon={FormatAlignLeft}
+          />
+          <FormattingButton
+            title={"Align center"}
+            isActive={selectedFormatting.textAlign === "center"}
+            onClick={setTextAlign("center")}
+            Icon={FormatAlignCenter}
+          />
+          <FormattingButton
+            title={"Align right"}
+            isActive={selectedFormatting.textAlign === "right"}
+            onClick={setTextAlign("right")}
+            Icon={FormatAlignRight}
+          />
+          <FormattingButton
+            title={"Increase Decimal"}
+            isActive={false}
+            onClick={setDecimals(1)}
+          >
+            <DecimalIcon type="increase" />
+          </FormattingButton>
+          <FormattingButton
+            title={"Decrease Decimal"}
+            isActive={false}
+            onClick={setDecimals(-1)}
+          >
+            <DecimalIcon type="decrease" />
+          </FormattingButton>
+        </FlexBox>
       </FlexForm>
     </div>
   );

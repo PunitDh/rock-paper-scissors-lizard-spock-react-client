@@ -1,8 +1,8 @@
 import { memo } from "react";
 import { Item } from "../styles";
 
-const Cell = memo(({ id, state }) => {
-  const { row, columnCharCode } = state.selectedCell;
+const Cell = memo(({ id, state, row, column }) => {
+  const columnCharCode = column.charCodeAt(0);
   const cellData = state.content.data[id];
   const isSelected =
     id === state.selectedCell.id || state.highlighted.cells.includes(id);

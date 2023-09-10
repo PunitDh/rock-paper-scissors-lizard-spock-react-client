@@ -18,50 +18,60 @@ export const fontSizes = Object.freeze([
   "24px",
 ]);
 
+export const Border = Object.freeze({
+  BORDER_TOP: "borderTop",
+  BORDER_RIGHT: "borderRight",
+  BORDER_BOTTOM: "borderBottom",
+  BORDER_LEFT: "borderLeft",
+  NO_BORDER: "NO_BORDER",
+  ALL_BORDERS: "ALL_BORDERS",
+  OUTSIDE_BORDERS: "OUTSIDE_BORDERS",
+});
+
 export const borderStyles = Object.freeze([
   {
-    id: "borderBottom",
+    id: Border.BORDER_BOTTOM,
     props: { borderBottom: "1px solid black" },
     value: "Border Bottom",
   },
   {
-    id: "borderTop",
+    id: Border.BORDER_TOP,
     props: { borderTop: "1px solid black" },
     value: "Border Top",
   },
   {
-    id: "borderLeft",
+    id: Border.BORDER_LEFT,
     props: { borderLeft: "1px solid black" },
     value: "Border Left",
   },
   {
-    id: "borderRight",
+    id: Border.BORDER_RIGHT,
     props: { borderRight: "1px solid black" },
     value: "Border Right",
   },
   {
-    id: "noBorder",
+    id: Border.NO_BORDER,
     props: undefined,
     value: "No Border",
   },
   {
-    id: "allBorders",
+    id: Border.ALL_BORDERS,
     props: {
-      borderRight: "1px solid black",
+      borderRight: "unset",
       borderLeft: "1px solid black",
       borderTop: "1px solid black",
-      borderBottom: "1px solid black",
+      borderBottom: "unset",
       cellBorders: {
         borderRight: "1px solid black",
-        borderLeft: "1px solid black",
-        borderTop: "1px solid black",
+        borderLeft: "unset",
+        borderTop: "unset",
         borderBottom: "1px solid black",
       },
     },
     value: "All Borders",
   },
   {
-    id: "outsideBorders",
+    id: Border.OUTSIDE_BORDERS,
     props: {
       borderRight: "1px solid black",
       borderLeft: "1px solid black",

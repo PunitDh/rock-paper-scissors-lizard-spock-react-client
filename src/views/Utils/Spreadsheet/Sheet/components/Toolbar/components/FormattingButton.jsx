@@ -2,11 +2,11 @@ import { Tooltip } from "@mui/material";
 import React from "react";
 import { FieldButton } from "../../styles";
 
-const FormattingButton = ({ onClick, title, isActive, Icon }) => (
+const FormattingButton = ({ onClick, title, isActive, Icon, children }) => (
   <Tooltip title={title}>
     <span>
       <FieldButton type="button" isactive={isActive} onClick={onClick}>
-        <Icon style={{ width: "1rem" }} />
+        {Icon ? <Icon style={{ width: "1rem" }} /> : children}
       </FieldButton>
     </span>
   </Tooltip>

@@ -5,6 +5,7 @@ import Cell from "./models/Cell";
 import CellData, { getFormulaTrackedCells } from "./models/CellData";
 import CellRange from "./models/CellRange";
 import { isEqual, uniqueId } from "lodash";
+import { Border } from "./components/Toolbar/constants";
 
 export const initialState = {
   maxRows: SheetConfig.MAX_ROWS,
@@ -34,7 +35,6 @@ export const initialState = {
     columnWidths: {},
   },
   mouseDown: false,
-  inputBoxFocused: false,
   formulaFieldText: "",
   isFormulaFieldFocused: false,
   menuAnchorElement: null,
@@ -43,7 +43,7 @@ export const initialState = {
 };
 
 export const reducer = (state, action) => {
-  action.type !== SheetAction.SET_HOVERED && console.log(action);
+  // action.type !== SheetAction.SET_HOVERED && console.log(action);
 
   switch (action.type) {
     case SheetAction.SET_SELECTED: {
@@ -81,11 +81,6 @@ export const reducer = (state, action) => {
       return {
         ...state,
         isFormulaFieldFocused: action.payload,
-      };
-    case SheetAction.SET_INPUT_BOX_FOCUSED:
-      return {
-        ...state,
-        inputBoxFocused: action.payload,
       };
     case SheetAction.RESET_FORMULA_FIELD:
       return {
@@ -457,22 +452,6 @@ export const reducer = (state, action) => {
         },
       };
     }
-    case SheetAction.SET_CELL_REF: {
-      const cellData = CellData.getOrNew(
-        state.content.data[action.payload.cellId]
-      );
-
-      return {
-        ...state,
-        content: {
-          ...state.content,
-          data: {
-            ...state.content.data,
-            [action.payload.cellId]: cellData.setRef(action.payload.ref),
-          },
-        },
-      };
-    }
     case SheetAction.UPDATE_REFERENCE_CELLS: {
       const { values } = action.payload;
       const cellIds =
@@ -491,9 +470,10 @@ export const reducer = (state, action) => {
             ),
           ];
 
-      const cellData =
-        state.content.data[action.payload.cell] ||
-        new CellData().setId(action.payload.cell);
+      const cellData = CellData.getOrNew(
+        state.content.data[action.payload.cell],
+        action.payload.cell
+      );
 
       return {
         ...state,
@@ -516,35 +496,35 @@ export const reducer = (state, action) => {
         },
       };
     case SheetAction.SET_CELL_FORMATTING:
-      const cellData =
-        state.content.data[state.selectedCell.id] ||
-        new CellData().setId(state.selectedCell.id);
+      const cellData = CellData.getOrNew(
+        state.content.data[state.selectedCell.id],
+        state.selectedCell.id
+      );
+
       return {
         ...state,
         content: {
           ...state.content,
           data: {
             ...state.content.data,
-            [state.selectedCell.id]: cellData.setFormatting({
-              ...cellData.formatting,
-              ...action.payload,
-            }),
+            [state.selectedCell.id]: cellData.setFormatting(action.payload),
           },
         },
       };
-    case SheetAction.SET_CELL_FORMATTING_BULK:
-      const formattedData = state.highlighted.cells.reduce((acc, cur) => {
-        return {
-          ...acc,
-          [cur]: {
-            ...acc[cur],
-            formatting: {
-              ...acc[cur]?.formatting,
-              ...action.payload,
-            },
-          },
-        };
-      }, state.content.data);
+    case SheetAction.SET_CELL_FORMATTING_BULK: {
+      const formattedData = state.highlighted.cells.reduce(
+        (stateContentData, cell) => {
+          const cellData = CellData.getOrNew(
+            state.content.data[cell],
+            state.selectedCell.id
+          );
+          return {
+            ...stateContentData,
+            [cell]: cellData.setFormatting(action.payload),
+          };
+        },
+        state.content.data
+      );
       return {
         ...state,
         content: {
@@ -552,6 +532,76 @@ export const reducer = (state, action) => {
           data: formattedData,
         },
       };
+    }
+    case SheetAction.SET_CELL_OUTSIDE_BORDER_FORMATTING: {
+      const [first, last] = [
+        state.highlighted.cells[0],
+        state.highlighted.cells[state.highlighted.cells.length - 1],
+      ];
+      const range = CellRange.create(first, last).cellIds;
+      const topBorders = range[0];
+      const bottomBorders = range[range.length - 1];
+      const leftBorders = [];
+      const rightBorders = [];
+
+      for (let i = 0; i < range.length; i++) {
+        leftBorders.push(range[i][0]);
+        rightBorders.push(range[i][range[i].length - 1]);
+      }
+
+      const formattedTopBorderData = topBorders.reduce(
+        (stateContentData, cell) => {
+          const cellData = CellData.getOrNew(stateContentData[cell], cell);
+          return {
+            ...stateContentData,
+            [cell]: cellData.addBorderFormatting(Border.BORDER_TOP),
+          };
+        },
+        state.content.data
+      );
+
+      const formattedLeftBorderData = leftBorders.reduce(
+        (stateContentData, cell) => {
+          const cellData = CellData.getOrNew(stateContentData[cell], cell);
+          return {
+            ...stateContentData,
+            [cell]: cellData.addBorderFormatting(Border.BORDER_LEFT),
+          };
+        },
+        formattedTopBorderData
+      );
+
+      const formattedRightBorderData = rightBorders.reduce(
+        (stateContentData, cell) => {
+          const cellData = CellData.getOrNew(stateContentData[cell], cell);
+          return {
+            ...stateContentData,
+            [cell]: cellData.addBorderFormatting(Border.BORDER_RIGHT),
+          };
+        },
+        formattedLeftBorderData
+      );
+
+      const formattedBottomBorderData = bottomBorders.reduce(
+        (stateContentData, cell) => {
+          const cellData = CellData.getOrNew(stateContentData[cell], cell);
+          return {
+            ...stateContentData,
+            [cell]: cellData.addBorderFormatting(Border.BORDER_BOTTOM),
+          };
+        },
+        formattedRightBorderData
+      );
+
+      console.log({ formattedBottomBorderData });
+      return {
+        ...state,
+        content: {
+          ...state.content,
+          data: formattedBottomBorderData,
+        },
+      };
+    }
     case SheetAction.ADD_MEMENTO: {
       const currentMemento = state.memento.find(
         (m) => m.id === state.currentMementoId
