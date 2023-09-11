@@ -55,7 +55,6 @@ export const initialState = {
 };
 
 export const reducer = (state, action) => {
-  console.log(action);
   switch (action.type) {
     case RestAction.SET_URL:
       try {
@@ -257,24 +256,37 @@ export const reducer = (state, action) => {
 
     case RestAction.SET_OUTPUT: {
       console.log(action.payload);
-      if (action.payload) {
+      const data = action.payload.data || action.payload.response.data;
+      const headers = action.payload.headers || action.payload.response.headers;
+      if (data) {
+        const isObject = typeof data === "object";
+        const dataLength = isObject
+          ? +JSON.stringify(data).length
+          : +String(data).length + JSON.stringify(headers).length;
         return {
           ...state,
           response: {
             ...state.response,
-            output: action.payload.data,
-            json: typeof action.payload.data === "object",
+            output: data,
+            json: isObject,
             status: action.payload.status,
             statusText: action.payload.statusText,
-            headers: action.payload.headers,
-            size: prettyBytes(
-              JSON.stringify(action.payload.data).length +
-                JSON.stringify(action.payload.headers).length
-            ),
+            headers,
+            size: prettyBytes(dataLength),
           },
         };
       }
       return state;
+    }
+
+    case RestAction.SET_RESPONSE_TIME: {
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          time: action.payload,
+        },
+      };
     }
 
     case RestAction.SET_OUTPUT_DISPLAY_TYPE: {

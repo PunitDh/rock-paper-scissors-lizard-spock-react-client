@@ -6,14 +6,20 @@ import {
   TextField,
 } from "@mui/material";
 import { FlexBox } from "src/components/shared/styles";
-import { setLoading, setMethod, setOutput, setUrl } from "../../actions";
+import {
+  setLoading,
+  setMethod,
+  setOutput,
+  setResponseTime,
+  setUrl,
+} from "../../actions";
 import SendIcon from "../../components/SendIcon";
 import sendRequest, { send } from "../../api/rest";
 import styled from "@emotion/styled";
 import { useNotification } from "src/hooks";
 import { AuthorizationType } from "./AuthorizationTab/constants";
 import { Buffer } from "buffer";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 const FlexForm = styled.form({
   display: "flex",
@@ -24,9 +30,10 @@ const FlexForm = styled.form({
 
 const URLBar = ({ state, dispatch }) => {
   const notification = useNotification();
-  const [startTime, setStartTime] = useState(0);
+  const startTime = useRef(0);
   const handleSubmit = (e) => {
     e.preventDefault();
+    startTime.current = Date.now();
 
     const handleResponse = (response) => {
       dispatch(setOutput(response));
@@ -80,7 +87,11 @@ const URLBar = ({ state, dispatch }) => {
       send(state.request.url.href, state.request.method, {}, authorization)
         .then(handleResponse)
         .catch(handleResponse)
-        .finally(() => dispatch(setLoading(false)));
+        .finally(() => {
+          dispatch(setLoading(false));
+          dispatch(setResponseTime(Date.now() - startTime.current));
+          startTime.current = 0;
+        });
 
       dispatch(setLoading(true));
     } else {

@@ -49,12 +49,16 @@ const StatusBar = ({ state, dispatch }) => {
         ))}
       </FlexBox>
       {state.response.output && (
-        <FlexBox width="50%" gap="1rem" justifyContent="flex-end">
+        <FlexBox width="100%" gap="1rem" justifyContent="flex-end">
           <Typography textAlign="right" sx={{ display: "flex", gap: "0.3rem" }}>
             <Bold>Status:</Bold>
             <Green>
               {state.response.status} {state.response.statusText}
             </Green>
+          </Typography>
+          <Typography textAlign="right" sx={{ display: "flex", gap: "0.3rem" }}>
+            <Bold>Time:</Bold>
+            <Green>{state.response.time} ms</Green>
           </Typography>
           <Typography textAlign="right" sx={{ display: "flex", gap: "0.3rem" }}>
             <Bold>Size:</Bold>
