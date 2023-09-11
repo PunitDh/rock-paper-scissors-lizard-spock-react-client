@@ -3,7 +3,7 @@ import { Button, Tooltip, Typography } from "@mui/material";
 import { Bold, FlexBox } from "src/components/shared/styles";
 import { setOutputDisplayType } from "../../actions";
 import { DisplayType } from "./constants";
-import { Green } from "./styles";
+import { Color, Green } from "./styles";
 import { Save } from "@mui/icons-material";
 
 const StatusButton = styled(Button)(({ selected }) => ({
@@ -52,17 +52,17 @@ const StatusBar = ({ state, dispatch }) => {
         <FlexBox width="100%" gap="1rem" justifyContent="flex-end">
           <Typography textAlign="right" sx={{ display: "flex", gap: "0.3rem" }}>
             <Bold>Status:</Bold>
-            <Green>
+            <Color type={state.response.error ? "red" : "green"}>
               {state.response.status} {state.response.statusText}
-            </Green>
+            </Color>
           </Typography>
           <Typography textAlign="right" sx={{ display: "flex", gap: "0.3rem" }}>
             <Bold>Time:</Bold>
-            <Green>{state.response.time} ms</Green>
+            <Color type={state.response.error ? "red" : "green"}>{state.response.time} ms</Color>
           </Typography>
           <Typography textAlign="right" sx={{ display: "flex", gap: "0.3rem" }}>
             <Bold>Size:</Bold>
-            <Green>{state.response.size}</Green>
+            <Color type={state.response.error ? "red" : "green"}>{state.response.size}</Color>
           </Typography>
           <Tooltip title="Save File">
             <StatusButton variant="primary" size="small" onClick={handleSave}>

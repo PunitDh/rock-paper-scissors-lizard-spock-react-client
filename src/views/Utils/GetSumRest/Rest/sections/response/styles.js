@@ -1,5 +1,9 @@
 import styled from "@emotion/styled";
 
+export const Color = styled.span(({ type }) => ({
+  color: type,
+}));
+
 export const Blue = styled.span({
   color: "blue",
 });

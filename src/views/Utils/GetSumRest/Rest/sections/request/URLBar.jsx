@@ -32,26 +32,12 @@ const URLBar = ({ state, dispatch }) => {
   const notification = useNotification();
   const startTime = useRef(0);
   const handleSubmit = (e) => {
-    e.preventDefault();
     startTime.current = Date.now();
+    e.preventDefault();
 
     const handleResponse = (response) => {
       dispatch(setOutput(response));
-      // const endTime = process.hrtime(startTime);
-      // console.log(endTime);
     };
-
-    // const config = sendRequest(
-    //   state.request.url.value,
-    //   params,
-    //   state.request.method,
-    //   state.request.headers,
-    //   ContentTypeMenuItems[state.request.contentType].value,
-    //   state.request.authorization.headers,
-    //   state.request.body
-    // );
-
-    // console.log(config);
 
     if (state.request.isValidUrl) {
       const createAuth = (authorization) => {
@@ -82,8 +68,6 @@ const URLBar = ({ state, dispatch }) => {
       };
 
       const authorization = createAuth(state.request.authorization);
-      console.log(authorization);
-      // setStartTime(process.hrtime());
       send(state.request.url.href, state.request.method, {}, authorization)
         .then(handleResponse)
         .catch(handleResponse)

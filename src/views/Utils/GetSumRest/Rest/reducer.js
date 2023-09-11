@@ -52,6 +52,7 @@ export const initialState = {
     displayType: DisplayType.PRETTY,
     time: 0,
     size: 0,
+    error: false,
   },
   history: [],
 };
@@ -277,6 +278,7 @@ export const reducer = (state, action) => {
             statusText,
             headers,
             size: prettyBytes(dataLength),
+            error: status >= 400,
           },
         };
       }
