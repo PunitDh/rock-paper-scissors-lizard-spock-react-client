@@ -70,7 +70,8 @@ const Prettify = ({ children }) => {
           <br />
           {keys.map((key, index) => (
             <Margin key={key} depth={depth}>
-              <Red>"{key}"</Red>:{" "}
+              <Red>"{key}"</Red>
+              <Black>:</Black>{" "}
               {typeof object[key] === "number" ? (
                 <Green>{object[key]}</Green> // Numbers are printed Green
               ) : typeof object[key] === "boolean" ? (
@@ -83,9 +84,9 @@ const Prettify = ({ children }) => {
                 JSON.stringify(object[key])
               )}
               {index !== keys.length - 1 && (
-                <>
+                <Black>
                   ,<br />
-                </>
+                </Black>
               )}
             </Margin>
           ))}
