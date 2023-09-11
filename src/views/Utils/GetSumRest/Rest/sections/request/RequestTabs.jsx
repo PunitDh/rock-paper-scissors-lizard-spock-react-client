@@ -1,10 +1,10 @@
 import { Box, Tab, Tabs } from "@mui/material";
 import { useState } from "react";
-import QueryParams from "./QueryParams";
-import Authorization from "./Authorization";
-import Headers from "./Headers";
-import Body from "./Body";
 import { useLocation } from "react-router";
+import QueryParamsTab from "./QueryParamsTab";
+import AuthorizationTab from "./AuthorizationTab";
+import Body from "./BodyTab";
+import HeadersTab from "./HeadersTab";
 
 function a11yProps(index) {
   return {
@@ -37,9 +37,9 @@ export default function RequestTabs({ state, dispatch }) {
           <Tab label="Body" {...a11yProps(3)} />
         </Tabs>
       </Box>
-      <QueryParams state={state} dispatch={dispatch} value={value} />
-      <Authorization state={state} dispatch={dispatch} value={value} />
-      <Headers state={state} dispatch={dispatch} value={value} />
+      <QueryParamsTab state={state} dispatch={dispatch} value={value} />
+      <AuthorizationTab state={state} dispatch={dispatch} value={value} />
+      <HeadersTab state={state} dispatch={dispatch} value={value} />
       <Body state={state} dispatch={dispatch} value={value} />
     </Box>
   );

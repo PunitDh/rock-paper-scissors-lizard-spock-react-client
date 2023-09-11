@@ -8,9 +8,11 @@ import {
 } from "@mui/material";
 import DeleteButton from "./DeleteButton";
 import styled from "@emotion/styled";
-import { setParams } from "../actions";
 
-const CheckboxCell = styled(TableCell)({ width: "1rem", paddingRight: 0 });
+const CheckboxCell = styled(TableCell)({
+  width: "1rem",
+  paddingRight: 0,
+});
 
 const StyledTableCell = styled(TableCell)({
   padding: "0rem 0.5rem 0rem 0rem",
@@ -26,10 +28,12 @@ const StyledTableRow = styled(TableRow)({
   borderBottom: "1px solid black",
 });
 
-export default function ParamRow({ state, dispatch, index }) {
+export default function KeyValueRow({ pair, onChange, isLast }) {
   const handleChange = (e) => {
-    dispatch(setParams());
+    pair[e.target.name] = e.target.value || e.target.checked;
+    return onChange(pair);
   };
+
   return (
     <StyledTableRow>
       <CheckboxCell colSpan={1}>
@@ -38,7 +42,8 @@ export default function ParamRow({ state, dispatch, index }) {
             control={
               <Checkbox
                 onChange={handleChange}
-                checked={state.params[index]?.include}
+                checked={pair.include}
+                name="include"
               />
             }
           />
@@ -47,28 +52,31 @@ export default function ParamRow({ state, dispatch, index }) {
       <StyledTableCell colSpan={1}>
         <StyledTextField
           name="key"
-          value={state.params[index]?.key}
+          value={pair.key}
           onChange={handleChange}
           size="small"
           autoComplete="off"
+          placeholder={isLast ? "Key" : ""}
         />
       </StyledTableCell>
       <StyledTableCell colSpan={3}>
         <StyledTextField
           name="value"
-          value={state.params[index]?.value}
+          value={pair.value}
           onChange={handleChange}
           size="small"
           autoComplete="off"
+          placeholder={isLast ? "Value" : ""}
         />
       </StyledTableCell>
       <StyledTableCell colSpan={4}>
         <StyledTextField
           name="description"
-          value={state.params[index]?.description}
+          value={pair.description}
           onChange={handleChange}
           size="small"
           autoComplete="off"
+          placeholder={isLast ? "Description" : ""}
         />
       </StyledTableCell>
       <StyledTableCell colSpan={1}>

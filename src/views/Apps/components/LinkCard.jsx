@@ -42,22 +42,27 @@ const TextContainer = styled.div({
   gap: "0.75rem",
 });
 
-const LinkCard = ({ to, Icon, title, description }) => (
-  <Tooltip title={title} disableInteractive>
-    <CardLink to={to}>
-      <ImageContainer>
-        <Icon fill="none" width="50%" />
-      </ImageContainer>
-      <TextContainer>
-        <FlexBox alignItems="flex-start" textAlign="center" height="2.5rem">
-          <Typography variant="h6">{title}</Typography>
-        </FlexBox>
-        <Typography variant="body2" color="text.secondary" textAlign="center">
-          {description}
-        </Typography>
-      </TextContainer>
-    </CardLink>
-  </Tooltip>
+const LinkCard = ({ to, Icon, title, description, comingSoon }) => (
+  <CardLink to={to}>
+    <ImageContainer>
+      <Icon fill="none" width="50%" />
+    </ImageContainer>
+    <TextContainer>
+      <FlexBox
+        alignItems="center"
+        justifyContent="flex-start"
+        textAlign="center"
+        height="2.5rem"
+        flexDirection="column"
+      >
+        <Typography variant="h6">{title}</Typography>
+        {comingSoon && <Typography variant="h6">(Coming Soon)</Typography>}
+      </FlexBox>
+      <Typography variant="body2" color="text.secondary" textAlign="center">
+        {description}
+      </Typography>
+    </TextContainer>
+  </CardLink>
 );
 
 export default LinkCard;

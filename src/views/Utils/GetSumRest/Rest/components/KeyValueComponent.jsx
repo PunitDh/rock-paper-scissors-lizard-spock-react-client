@@ -6,14 +6,18 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import ParamRow from "./ParamRow";
+import KeyValueRow from "./KeyValueRow";
 
 const TableHeaderCell = styled(TableCell)({
   paddingLeft: 0,
   paddingBottom: "0.25rem",
 });
 
-const KeyValueComponent = ({ state, dispatch }) => {
+const KeyValueComponent = ({ property, onChange }) => {
+  const handleChange = (e) => {
+    onChange(e);
+  };
+
   return (
     <Table>
       <TableHead style={{ borderBottom: "1px solid rgba(0,0,0,1)" }}>
@@ -25,16 +29,14 @@ const KeyValueComponent = ({ state, dispatch }) => {
         </TableRow>
       </TableHead>
       <TableBody>
-        {Array(3)
-          .fill()
-          .map((_, index) => (
-            <ParamRow
-              state={state}
-              dispatch={dispatch}
-              key={index}
-              index={index}
-            />
-          ))}
+        {property.map((pair, index) => (
+          <KeyValueRow
+            pair={pair}
+            onChange={handleChange}
+            key={index}
+            isLast={index === property.length - 1}
+          />
+        ))}
       </TableBody>
     </Table>
   );

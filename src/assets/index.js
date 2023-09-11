@@ -47,6 +47,7 @@ import encoder from "../utils/encoder";
 import Rpsls from "./images/dashboard/Rpsls";
 import TicTacToe from "./images/dashboard/TicTacToe";
 import Calculator from "./images/dashboard/Calculator";
+import Rest from "./images/dashboard/Rest";
 import ColorPicker from "./images/dashboard/ColorPicker";
 import Spreadsheet from "./images/dashboard/Spreadsheet";
 import VideoSubtitles from "./images/dashboard/VideoSubtitles";
@@ -142,6 +143,7 @@ const DashboardImage = {
   ColorPicker,
   Spreadsheet,
   VideoSubtitles,
+  Rest,
 };
 
 export {

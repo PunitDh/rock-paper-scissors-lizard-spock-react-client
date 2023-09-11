@@ -25,9 +25,10 @@ const Apps = () => (
         />
         <LinkCard
           to="/apps/tictactoe"
-          title={<>Tic Tac Toe <br/>(Coming Soon)</>}
+          title="Tic Tac Toe"
           Icon={DashboardImage.TicTacToe}
           description="Tic Tac Toe (coming soon)"
+          comingSoon={true}
         />
         <LinkCard
           to="/utils/calculator"
@@ -46,6 +47,12 @@ const Apps = () => (
           title="Spreadsheet"
           Icon={DashboardImage.Spreadsheet}
           description="Spreadsheet made with React"
+        />
+        <LinkCard
+          to="/utils/rest"
+          title="GetSumRest"
+          Icon={DashboardImage.Rest}
+          description="A Postman / Insomnia clone"
         />
         <LinkCard
           to="/utils/video"

@@ -1,9 +1,9 @@
 import { MenuItem, Select, Typography } from "@mui/material";
-import CustomTabPanel from "../components/CustomTabPanel";
+import CustomTabPanel from "../../../components/CustomTabPanel";
 import { Bold, FlexBox } from "src/components/shared/styles";
 import styled from "@emotion/styled";
-import { setAuthorizationType } from "../actions";
-import { AuthorizationType } from "./Body/constants";
+import { setAuthorizationType } from "../../../actions";
+import { AuthorizationType } from "../BodyTab/constants";
 
 const StyledBox = styled.div(({ border }) => ({
   borderRight: border ? "1px solid rgba(0,0,0,0.1)" : 0,
@@ -16,7 +16,7 @@ const StyledBox = styled.div(({ border }) => ({
   gap: "0.5rem",
 }));
 
-const Authorization = ({ state, dispatch, value }) => {
+const AuthorizationTab = ({ state, dispatch, value }) => {
   const handleChange = (e) => {
     dispatch(setAuthorizationType(e.target.value));
   };
@@ -62,4 +62,4 @@ const Authorization = ({ state, dispatch, value }) => {
   );
 };
 
-export default Authorization;
+export default AuthorizationTab;

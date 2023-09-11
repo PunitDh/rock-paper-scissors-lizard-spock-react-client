@@ -1,5 +1,5 @@
 import React from "react";
-import CustomTabPanel from "../../components/CustomTabPanel";
+import CustomTabPanel from "../../../components/CustomTabPanel";
 import {
   FormControl,
   FormControlLabel,
@@ -8,8 +8,8 @@ import {
 } from "@mui/material";
 import { Bold, FlexBox } from "src/components/shared/styles";
 import styled from "@emotion/styled";
-import { setContentType } from "../../actions";
-import { ContentType } from "./constants";
+import { setContentType } from "../../../actions";
+import { ContentTypeMenuItems } from "./constants";
 
 const StyledFormControl = styled(FormControl)({
   flexDirection: "row",
@@ -22,19 +22,15 @@ const InputContainer = styled(RadioGroup)({
 
 export default function Body({ state, dispatch, value }) {
   const handleChange = (e) => {
+    console.log(e.target.value);
     dispatch(setContentType(e.target.value));
   };
 
-  const Component = ContentType.find(
-    (type) => type.id === state.contentType
-  )?.Component;
+  const { Component } = ContentTypeMenuItems[state.contentType];
 
   return (
     <CustomTabPanel value={value} index={3}>
       <Bold>Body</Bold>
-      <button type="button" onClick={() => console.log(state)}>
-        Show State
-      </button>
       <FlexBox
         flexDirection="column"
         justifyContent="flex-start"
@@ -52,12 +48,12 @@ export default function Body({ state, dispatch, value }) {
             row
             onChange={handleChange}
           >
-            {ContentType.map((type) => (
+            {Object.keys(ContentTypeMenuItems).map((type) => (
               <FormControlLabel
-                key={type.id}
-                value={type.id}
+                key={type}
+                value={type}
                 control={<Radio />}
-                label={type.label}
+                label={ContentTypeMenuItems[type].label}
               />
             ))}
           </RadioGroup>
