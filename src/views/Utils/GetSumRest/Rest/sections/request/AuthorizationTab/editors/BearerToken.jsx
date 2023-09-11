@@ -6,8 +6,21 @@ import {
   TextField,
 } from "@mui/material";
 import { Bold, FlexBox } from "src/components/shared/styles";
+import { AuthorizationType } from "../constants";
+import { setAuthorization } from "../../../../actions";
 
 export default function BearerToken({ state, dispatch }) {
+  const credentials =
+    state.request.authorization[AuthorizationType.BEARER_TOKEN];
+  const handleChange = (e) => {
+    dispatch(
+      setAuthorization(
+        AuthorizationType.BEARER_TOKEN,
+        e.target.name,
+        e.target.value
+      )
+    );
+  };
   return (
     <FlexBox
       height="20rem"
@@ -27,6 +40,9 @@ export default function BearerToken({ state, dispatch }) {
                 size="small"
                 sx={{ width: "80%" }}
                 autoComplete="off"
+                name="prefix"
+                value={credentials.prefix}
+                onChange={handleChange}
                 defaultValue="Bearer"
                 placeholder="None"
               />
@@ -41,6 +57,9 @@ export default function BearerToken({ state, dispatch }) {
                 size="small"
                 sx={{ width: "80%" }}
                 autoComplete="off"
+                name="token"
+                value={credentials.token}
+                onChange={handleChange}
               />
             </TableCell>
           </TableRow>

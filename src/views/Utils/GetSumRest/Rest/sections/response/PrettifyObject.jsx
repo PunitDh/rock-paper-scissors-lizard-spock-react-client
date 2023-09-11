@@ -1,7 +1,7 @@
 import { Black, Blue, Green, Margin, Purple, Red } from "./styles";
 
 const PrettifyObject = ({ children }) => {
-  if (!children || typeof children !== "object") return <></>;
+  if (!children && typeof children !== "object") return <></>;
 
   const prettify = (object, depth = 1) => {
     if (Array.isArray(object)) {
@@ -21,7 +21,7 @@ const PrettifyObject = ({ children }) => {
                   {item}
                   <Red>"</Red>
                 </Blue>
-              ) : typeof item === "object" ? (
+              ) : item && typeof item === "object" ? (
                 prettify(item, depth + 1)
               ) : (
                 JSON.stringify(item)
@@ -34,10 +34,13 @@ const PrettifyObject = ({ children }) => {
             </Margin>
           ))}
           <br />
-          <Black>]</Black>
+          <Margin depth={depth - 1}>
+            <Black>]</Black>
+          </Margin>
         </>
       );
     } else {
+      if (!object) return null;
       const keys = Object.keys(object);
       return (
         <>
@@ -53,7 +56,7 @@ const PrettifyObject = ({ children }) => {
                 <Purple>{object[key].toString()}</Purple> // Booleans are purple
               ) : typeof object[key] === "string" ? (
                 <Blue>"{object[key]}"</Blue> // Strings are blue
-              ) : typeof object[key] === "object" ? (
+              ) : object[key] && typeof object[key] === "object" ? (
                 prettify(object[key], depth + 1)
               ) : (
                 JSON.stringify(object[key])

@@ -51,6 +51,16 @@ const URLBar = ({ state, dispatch }) => {
             };
             return createBasicAuth(authorization[AuthorizationType.BASIC_AUTH]);
           }
+          case AuthorizationType.BEARER_TOKEN: {
+            const createBearerToken = (authorization) => {
+              return authorization.prefix.length
+                ? `${authorization.prefix} ${authorization.token}`
+                : authorization.token;
+            };
+            return createBearerToken(
+              authorization[AuthorizationType.BEARER_TOKEN]
+            );
+          }
           default:
             break;
         }
