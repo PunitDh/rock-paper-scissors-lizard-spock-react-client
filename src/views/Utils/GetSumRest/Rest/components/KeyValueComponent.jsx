@@ -14,9 +14,13 @@ const TableHeaderCell = styled(TableCell)(({ width }) => ({
   width: width || "calc((100%)/3)",
 }));
 
-const KeyValueComponent = ({ property, onChange, fileUpload }) => {
+const KeyValueComponent = ({ property, onChange, onDelete, fileUpload }) => {
   const handleChange = (e) => {
     onChange(e);
+  };
+
+  const handleDelete = (e) => {
+    onDelete(e);
   };
 
   return (
@@ -35,6 +39,7 @@ const KeyValueComponent = ({ property, onChange, fileUpload }) => {
           <KeyValueRow
             pair={pair}
             onChange={handleChange}
+            onDelete={handleDelete}
             key={index}
             isLast={index === property.length - 1}
             fileUpload={fileUpload}

@@ -28,6 +28,7 @@ export default function BearerToken() {
                 sx={{ width: "80%" }}
                 autoComplete="off"
                 defaultValue="Bearer"
+                placeholder="None"
               />
             </TableCell>
           </TableRow>

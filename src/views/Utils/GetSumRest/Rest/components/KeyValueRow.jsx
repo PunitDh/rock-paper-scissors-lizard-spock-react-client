@@ -51,15 +51,6 @@ const FileInputContainer = styled(Box)({
   left: 0,
 });
 
-const FileSelectContainer = styled(FlexBox)({
-  position: "relative",
-  border: "1px solid #aaa",
-  borderRadius: "0.2rem",
-  height: "2.25rem",
-  justifyContent: "flex-start",
-  cursor: "text",
-});
-
 const FileInput = styled(TextField)({
   display: "none",
 });
@@ -78,13 +69,12 @@ export default function KeyValueRow({
     } else {
       pair[e.target.name] = e.target.value;
     }
-    console.log(pair);
     return onChange(pair);
   };
 
   const handleDelete = (e) => {
     console.log("deleting", pair.id);
-    // onDelete(pair)
+    onDelete(pair);
   };
 
   const handleUpload = (e) => {

@@ -1,9 +1,8 @@
-import { uniqueId } from "lodash";
 import { initialState } from "./reducer";
 import KeyValuePair from "./models/KeyValuePair";
 
 export const createKeyValue = (prefix, include = true) => {
-  return new KeyValuePair().setId(uniqueId(`${prefix}-`)).setInclude(include);
+  return new KeyValuePair().setUniqueId(prefix).setInclude(include);
 };
 
 export const updateList = (currentList, payload) => {

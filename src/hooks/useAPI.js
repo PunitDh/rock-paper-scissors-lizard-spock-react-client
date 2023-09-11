@@ -12,6 +12,7 @@ import { setCurrentGamesNav, updateCurrentGameMenu } from "src/redux/menuSlice";
 import { setSiteSettings } from "src/redux/siteSlice";
 import { AuthPage, SocketRequest } from "src/utils/constants";
 import { useNotification, useSocket, useToken } from "src/hooks";
+import { Buffer } from "buffer";
 
 export default function useAPI() {
   const token = useToken();
@@ -25,6 +26,18 @@ export default function useAPI() {
     headers: {
       Authorization: token.jwt,
     },
+  };
+
+  const createBasicAuth = (formData) => {
+    const credentials = Buffer.from(
+      `${formData.email}:${formData.password}`
+    ).toString("base64");
+
+    return {
+      headers: {
+        Authorization: `Basic ${credentials}`,
+      },
+    };
   };
 
   const secure = (request) => ({
@@ -105,11 +118,13 @@ export default function useAPI() {
         .then((response) => handleToken(response, "Registration successful!"))
         .catch(handleError),
 
-    loginPlayer: (formData) =>
-      request
-        .post("/player/login", formData)
+    loginPlayer: (formData) => {
+      console.log({ ...createBasicAuth(formData) });
+      return request
+        .post("/player/login", {}, createBasicAuth(formData))
         .then((response) => handleToken(response, "Login successful!"))
-        .catch(handleError),
+        .catch(handleError);
+    },
 
     getSiteSettings: () =>
       request

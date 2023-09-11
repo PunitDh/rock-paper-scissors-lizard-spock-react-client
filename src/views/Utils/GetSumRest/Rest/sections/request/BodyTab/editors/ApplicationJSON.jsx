@@ -1,7 +1,7 @@
 import JSONInput from "react-json-editor-ajrm";
 import locale from "react-json-editor-ajrm/locale/en";
 import { ContentType, jsonEditorColors } from "../constants";
-import { setBodyContent } from "../../../../actions";
+import { deleteBodyContent, setBodyContent } from "../../../../actions";
 
 const ApplicationJSON = ({ state, dispatch }) => {
   const handleBodyChange = (e) =>

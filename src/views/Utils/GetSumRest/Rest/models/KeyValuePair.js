@@ -1,31 +1,33 @@
 import { uniqueId } from "lodash";
 
 export default class KeyValuePair {
-  constructor(key, value, description, include, id) {
-    this.key = key;
-    this.value = value;
-    this.description = description;
-    this.include = Boolean(include);
+  constructor(key, value, description) {
+    this.key = key || "";
+    this.value = value || "";
+    this.description = description || "";
+    this.include = true;
     this.type = "Text";
-    this.id = id || uniqueId();
+    this.id = null;
     this.files = [];
   }
 
   get filled() {
-    return Boolean(this.key?.length > 0 || this.value?.length > 0);
+    return Boolean(
+      this.key?.length > 0 || this.value?.length > 0 || this.isFile
+    );
   }
 
   get isFile() {
     return Boolean(this.type === "File");
   }
 
-  setId(id) {
-    this.id = id;
+  setUniqueId(prefix) {
+    this.id = uniqueId(`${prefix}-`);
     return this;
   }
 
   setInclude(include) {
-    this.include = include;
+    this.include = Boolean(include);
     return this;
   }
 

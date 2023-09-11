@@ -38,7 +38,7 @@ const URLBar = ({ state, dispatch }) => {
 
     // console.log(config);
 
-    send(state.request.url.value, state.request.method)
+    send(state.request.url.href, state.request.method)
       .then((response) => {
         dispatch(setLoading(false));
         console.log(response);
@@ -102,7 +102,7 @@ const URLBar = ({ state, dispatch }) => {
       <TextField
         type="url"
         placeholder="https://www.example.com/"
-        value={state.request.url.value}
+        value={state.request.urlDisplay}
         onChange={handleSetUrl}
         sx={{ width: "100%" }}
         autoComplete="off"
