@@ -50,6 +50,8 @@ export const initialState = {
     output: null,
     json: false,
     displayType: DisplayType.PRETTY,
+    time: 0,
+    size: 0,
   },
   history: [],
 };
@@ -255,9 +257,11 @@ export const reducer = (state, action) => {
       };
 
     case RestAction.SET_OUTPUT: {
-      console.log(action.payload);
-      const data = action.payload.data || action.payload.response.data;
-      const headers = action.payload.headers || action.payload.response.headers;
+      const payload = action.payload;
+      const data = payload.data || payload.response.data;
+      const headers = payload.headers || payload.response.headers;
+      const status = payload.status || payload.response.status;
+      const statusText = payload.statusText || payload.response.statusText;
       if (data) {
         const isObject = typeof data === "object";
         const dataLength = isObject
@@ -269,8 +273,8 @@ export const reducer = (state, action) => {
             ...state.response,
             output: data,
             json: isObject,
-            status: action.payload.status,
-            statusText: action.payload.statusText,
+            status,
+            statusText,
             headers,
             size: prettyBytes(dataLength),
           },
