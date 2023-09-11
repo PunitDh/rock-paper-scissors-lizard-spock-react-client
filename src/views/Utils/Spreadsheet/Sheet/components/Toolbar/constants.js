@@ -5,7 +5,7 @@ import {
   TextFields,
   TextFormat,
 } from "@mui/icons-material";
-import { IconClock, IconCurrencyDollar } from "@tabler/icons";
+import { IconClock, IconCurrencyDollar } from "@tabler/icons-react";
 
 export const fontSizes = Object.freeze([
   "8px",

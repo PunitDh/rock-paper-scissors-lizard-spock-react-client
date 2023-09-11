@@ -13,7 +13,7 @@ import {
   IconLogout,
   IconTicTac,
   IconUser,
-} from "@tabler/icons";
+} from "@tabler/icons-react";
 import { uniqueId } from "lodash";
 import { getIcon } from "src/assets";
 
@@ -89,7 +89,7 @@ export const menuSlice = createSlice({
         id: uniqueId(),
         title: "Rest API",
         icon: Api,
-        href: "/utils/rest?activeTab=3",
+        href: "/utils/rest?activeTab=0",
       },
       {
         id: uniqueId(),

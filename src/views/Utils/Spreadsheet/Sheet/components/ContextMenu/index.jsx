@@ -1,5 +1,5 @@
 import { Box, ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
-import { IconCopy, IconCut } from "@tabler/icons";
+import { IconCopy, IconCut } from "@tabler/icons-react";
 import {
   deleteCellContent,
   pasteCellContent,

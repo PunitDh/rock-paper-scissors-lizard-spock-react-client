@@ -7,7 +7,7 @@ import {
   IconButton,
 } from "@mui/material";
 import CornerProfile from "./CornerProfile";
-import { IconMenu } from "@tabler/icons";
+import { IconMenu } from "@tabler/icons-react";
 import { useToken } from "src/hooks";
 import NotificationMenu from "./NotificationMenu";
 

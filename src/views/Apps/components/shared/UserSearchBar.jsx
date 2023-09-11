@@ -1,4 +1,4 @@
-import { IconSearch } from "@tabler/icons";
+import { IconSearch } from "@tabler/icons-react";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import CustomTextField from "src/components/forms/theme-elements/CustomTextField";
 import styled from "@emotion/styled";

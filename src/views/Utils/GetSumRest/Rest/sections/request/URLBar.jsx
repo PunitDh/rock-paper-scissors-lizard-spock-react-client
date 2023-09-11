@@ -13,6 +13,7 @@ import styled from "@emotion/styled";
 import { useNotification } from "src/hooks";
 import { AuthorizationType } from "./AuthorizationTab/constants";
 import { Buffer } from "buffer";
+import { useState } from "react";
 
 const FlexForm = styled.form({
   display: "flex",
@@ -23,8 +24,15 @@ const FlexForm = styled.form({
 
 const URLBar = ({ state, dispatch }) => {
   const notification = useNotification();
+  const [startTime, setStartTime] = useState(0);
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const handleResponse = (response) => {
+      dispatch(setOutput(response));
+      // const endTime = process.hrtime(startTime);
+      // console.log(endTime);
+    };
 
     // const config = sendRequest(
     //   state.request.url.value,
@@ -68,20 +76,11 @@ const URLBar = ({ state, dispatch }) => {
 
       const authorization = createAuth(state.request.authorization);
       console.log(authorization);
+      // setStartTime(process.hrtime());
       send(state.request.url.href, state.request.method, {}, authorization)
-        .then((response) => {
-          dispatch(setLoading(false));
-          console.log(response);
-          return dispatch(setOutput(response));
-        })
-        .catch((error) => {
-          dispatch(setLoading(false));
-          console.log(error);
-          return dispatch(setOutput(error.response));
-        })
-        .finally(() => {
-          dispatch(setLoading(false));
-        });
+        .then(handleResponse)
+        .catch(handleResponse)
+        .finally(() => dispatch(setLoading(false)));
 
       dispatch(setLoading(true));
     } else {

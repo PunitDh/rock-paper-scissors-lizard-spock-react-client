@@ -10,7 +10,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { IconUser, IconUserCheck } from "@tabler/icons";
+import { IconUser, IconUserCheck } from "@tabler/icons-react";
 import { ProfileImg, getAvatar } from "src/assets";
 import styled from "@emotion/styled";
 import { useAPI } from "src/hooks";

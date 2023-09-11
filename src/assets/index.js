@@ -16,7 +16,7 @@ import {
   IconChessRook,
   IconGoGame,
   IconTrophy,
-} from "@tabler/icons";
+} from "@tabler/icons-react";
 import astronaut from "./images/avatar/astronaut.png";
 import bear from "./images/avatar/bear.png";
 import cat from "./images/avatar/cat.png";

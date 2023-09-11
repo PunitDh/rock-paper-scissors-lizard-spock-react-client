@@ -1,3 +1,4 @@
+import prettyBytes from "pretty-bytes";
 import { RestAction } from "./actions";
 import KeyValuePair from "./models/KeyValuePair";
 import { AuthorizationType } from "./sections/request/AuthorizationTab/constants";
@@ -255,14 +256,25 @@ export const reducer = (state, action) => {
       };
 
     case RestAction.SET_OUTPUT: {
-      return {
-        ...state,
-        response: {
-          ...state.response,
-          output: action.payload.data,
-          json: typeof action.payload.data === "object",
-        },
-      };
+      console.log(action.payload);
+      if (action.payload) {
+        return {
+          ...state,
+          response: {
+            ...state.response,
+            output: action.payload.data,
+            json: typeof action.payload.data === "object",
+            status: action.payload.status,
+            statusText: action.payload.statusText,
+            headers: action.payload.headers,
+            size: prettyBytes(
+              JSON.stringify(action.payload.data).length +
+                JSON.stringify(action.payload.headers).length
+            ),
+          },
+        };
+      }
+      return state;
     }
 
     case RestAction.SET_OUTPUT_DISPLAY_TYPE: {

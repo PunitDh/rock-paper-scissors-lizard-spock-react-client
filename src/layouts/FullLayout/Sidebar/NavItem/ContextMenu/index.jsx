@@ -1,5 +1,5 @@
 import { Box, Menu, MenuItem, ListItemIcon, ListItemText } from "@mui/material";
-import { IconMail, IconUser } from "@tabler/icons";
+import { IconMail, IconUser } from "@tabler/icons-react";
 import { setAnchorEl, showConfirmDelete, showConfirmRename } from "../actions";
 
 const ContextMenu = ({ state, dispatch, ariaLabelledBy }) => (

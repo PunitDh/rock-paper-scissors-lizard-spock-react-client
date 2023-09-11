@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Badge, IconButton, Menu, alpha } from "@mui/material";
 import styled from "@emotion/styled";
-import { IconBellRinging } from "@tabler/icons";
+import { IconBellRinging } from "@tabler/icons-react";
 import { useToken } from "src/hooks";
 import { useSelector } from "react-redux";
 import { Bold } from "src/components/shared/styles";
