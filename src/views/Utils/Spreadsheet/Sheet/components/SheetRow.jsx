@@ -3,13 +3,10 @@ import { Dimension, SheetConfig } from "../constants";
 import { TableRow } from "@mui/material";
 import Cell from "./Cell";
 import HeaderCell from "./HeaderCell";
-import RowHeader from "./RowHeader";
 
 const SheetRow = ({ state, dispatch, row }) => {
   return (
-    <TableRow
-    sx={{ tableLayout: "fixed" }}
-    >
+    <TableRow sx={{ tableLayout: "fixed" }}>
       {Array(state.maxColumns + 1)
         .fill(0)
         .map((_, column) => {

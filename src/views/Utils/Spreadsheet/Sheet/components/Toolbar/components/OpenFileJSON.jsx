@@ -1,7 +1,6 @@
 import { Tooltip } from "@mui/material";
 import { FieldButton } from "../../styles";
-import { DataObject, FolderOpenSharp } from "@mui/icons-material";
-import CellData from "../../../models/CellData";
+import { DataObject } from "@mui/icons-material";
 import { setContentBulk } from "../../../actions";
 import { useRef } from "react";
 import { parseJSON } from "../../../utils/cellUtils";

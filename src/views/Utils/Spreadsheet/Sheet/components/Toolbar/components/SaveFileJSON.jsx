@@ -1,6 +1,5 @@
 import { Tooltip } from "@mui/material";
 import { FieldButton } from "../../styles";
-import { DataObject } from "@mui/icons-material";
 import { generateJSONContent } from "../../../utils/cellUtils";
 import JSONIcon from "./icons/JSONIcon";
 

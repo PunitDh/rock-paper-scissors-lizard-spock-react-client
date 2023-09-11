@@ -1,4 +1,5 @@
 import {
+  Api,
   Calculate,
   ColorLens,
   ContentCut,
@@ -83,6 +84,12 @@ export const menuSlice = createSlice({
         title: "Spreadsheet",
         icon: IconFileSpreadsheet,
         href: "/utils/sheets",
+      },
+      {
+        id: uniqueId(),
+        title: "Rest API",
+        icon: Api,
+        href: "/utils/rest?activeTab=3",
       },
       {
         id: uniqueId(),

@@ -28,6 +28,7 @@ const Output = styled.div(({ rgb }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  flexDirection: "column",
   color: `rgb(${255 - rgb.r}, ${255 - rgb.g}, ${255 - rgb.b})`,
 }));
 
@@ -36,6 +37,15 @@ const Picker = () => {
   const maxWidth = 32;
   const canvasWidth = 512;
   const canvasHeight = 80;
+
+  function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length === 1 ? "0" + hex : hex;
+  }
+
+  function rgbToHex(r, g, b) {
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+  }
 
   const setOutput = (carat) => {
     const x =
@@ -108,9 +118,10 @@ const Picker = () => {
           sx={{ width: canvasWidth }}
           onChange={handleChange}
         />
-        <Output
-          rgb={state.rgb}
-        >{`rgb(${state.rgb.r}, ${state.rgb.g}, ${state.rgb.b})`}</Output>
+        <Output rgb={state.rgb}>
+          <span>{`rgb(${state.rgb.r}, ${state.rgb.g}, ${state.rgb.b})`}</span>
+          <span>{rgbToHex(state.rgb.r, state.rgb.g, state.rgb.b)}</span>
+        </Output>
       </ResponsiveFlexBox>
     </DashboardCard>
   );

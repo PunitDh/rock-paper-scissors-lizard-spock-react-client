@@ -1,6 +1,5 @@
 import { FlexBox } from "src/components/shared/styles";
 import AngleButton from "./AngleButton";
-import InvButton from "./InverseButton";
 import TrigButton from "./TrigButton";
 import { Sup } from "../../styles";
 import CalcButton from "../../components/CalcButton";

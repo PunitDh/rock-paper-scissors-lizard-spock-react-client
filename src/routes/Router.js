@@ -16,6 +16,7 @@ const ReactCalculator = Loadable(
   lazy(() => import("../views/Utils/ReactCalculator"))
 );
 const Spreadsheet = Loadable(lazy(() => import("../views/Utils/Spreadsheet")));
+const GetSumRest = Loadable(lazy(() => import("../views/Utils/GetSumRest")));
 const RpslsHome = Loadable(lazy(() => import("../views/Apps/Rpsls")));
 const TicTacToeHome = Loadable(lazy(() => import("../views/Apps/TicTacToe")));
 const Apps = Loadable(lazy(() => import("../views/Apps")));
@@ -68,6 +69,7 @@ const Router = [
       { path: "color", exact: true, element: <ColorPicker /> },
       { path: "calculator", exact: true, element: <ReactCalculator /> },
       { path: "sheets", exact: true, element: <Spreadsheet /> },
+      { path: "rest", exact: true, element: <GetSumRest /> },
     ],
   },
   {

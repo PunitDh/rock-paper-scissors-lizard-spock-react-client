@@ -1,7 +1,4 @@
-import { useEffect, useRef } from "react";
-import { selectCell } from "../actions";
 import styled from "@emotion/styled";
-import Cell from "../models/Cell";
 import { FlexForm, InputTextField } from "./styles";
 
 const SheetTab = styled.div({

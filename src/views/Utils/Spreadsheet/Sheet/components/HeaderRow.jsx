@@ -1,6 +1,5 @@
 import { TableHead, TableRow } from "@mui/material";
 import SelectAll from "./SelectAll";
-import ColumnHeader from "./ColumnHeader";
 import { Dimension, SheetConfig } from "../constants";
 import HeaderCell from "./HeaderCell";
 
