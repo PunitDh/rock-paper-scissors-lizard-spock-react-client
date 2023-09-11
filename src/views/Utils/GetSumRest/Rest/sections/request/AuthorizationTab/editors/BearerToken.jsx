@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { Bold, FlexBox } from "src/components/shared/styles";
 
-export default function BearerToken() {
+export default function BearerToken({ state, dispatch }) {
   return (
     <FlexBox
       height="20rem"

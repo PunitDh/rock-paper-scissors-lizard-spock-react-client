@@ -15,6 +15,18 @@ export const initialState = {
     params: [],
     authorization: {
       type: AuthorizationType.NO_AUTH,
+      [AuthorizationType.BASIC_AUTH]: {
+        username: "",
+        password: "",
+      },
+      [AuthorizationType.BEARER_TOKEN]: {
+        prefix: "",
+        token: "",
+      },
+      [AuthorizationType.API_KEY]: {
+        key: "",
+        value: "",
+      },
     },
     headers: [],
     body: {
@@ -36,7 +48,7 @@ export const initialState = {
   response: {
     output: null,
     json: false,
-    displayType: DisplayType.RAW,
+    displayType: DisplayType.PRETTY,
   },
   history: [],
 };
@@ -127,7 +139,13 @@ export const reducer = (state, action) => {
         ...state,
         request: {
           ...state.request,
-          authorization: action.payload,
+          authorization: {
+            ...state.request.authorization,
+            [action.payload.type]: {
+              ...state.request.authorization[action.payload.type],
+              [action.payload.key]: action.payload.value,
+            },
+          },
         },
       };
     case RestAction.SET_AUTHORIZATION_TYPE:
@@ -136,7 +154,7 @@ export const reducer = (state, action) => {
         request: {
           ...state.request,
           authorization: {
-            ...action.payload.authorization,
+            ...state.request.authorization,
             type: action.payload,
           },
         },

@@ -11,6 +11,8 @@ import SendIcon from "../../components/SendIcon";
 import sendRequest, { send } from "../../api/rest";
 import styled from "@emotion/styled";
 import { useNotification } from "src/hooks";
+import { AuthorizationType } from "./AuthorizationTab/constants";
+import { Buffer } from "buffer";
 
 const FlexForm = styled.form({
   display: "flex",
@@ -37,7 +39,26 @@ const URLBar = ({ state, dispatch }) => {
     // console.log(config);
 
     if (state.request.isValidUrl) {
-      send(state.request.url.href, state.request.method)
+      const createAuth = (authorization) => {
+        switch (authorization.type) {
+          case AuthorizationType.BASIC_AUTH: {
+            const createBasicAuth = (data) => {
+              const credentials = Buffer.from(
+                `${data.username}:${data.password}`
+              ).toString("base64");
+
+              return `Basic ${credentials}`;
+            };
+            return createBasicAuth(authorization[AuthorizationType.BASIC_AUTH]);
+          }
+          default:
+            break;
+        }
+      };
+
+      const authorization = createAuth(state.request.authorization);
+      console.log(authorization);
+      send(state.request.url.href, state.request.method, {}, authorization)
         .then((response) => {
           dispatch(setLoading(false));
           console.log(response);

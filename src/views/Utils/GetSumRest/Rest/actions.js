@@ -42,9 +42,13 @@ export const setAuthorizationType = (payload) => ({
   payload,
 });
 
-export const setAuthorization = (payload) => ({
+export const setAuthorization = (type, key, value) => ({
   type: RestAction.SET_AUTHORIZATION,
-  payload,
+  payload: {
+    type,
+    key,
+    value,
+  },
 });
 
 export const setHeaders = (payload) => ({

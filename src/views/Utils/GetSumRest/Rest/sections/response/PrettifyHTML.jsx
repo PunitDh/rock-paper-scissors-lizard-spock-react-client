@@ -1,0 +1,60 @@
+import { Blue, Green, Indent, Purple, Red } from "./styles";
+
+export default function PrettifyHTML({ children }) {
+  if (typeof children !== "string") return <></>;
+  const metaRegex = /(<meta[^>]*>)/g;
+  const commentRegex = /(<![^>]*>)/g;
+  const tagRegex = /(<[^>]*>)/g;
+  const attributeRegex = /([a-z\-]+)="([^"]*)"/gi; // Identify attributes
+
+  const parts = children.replaceAll("\n", "").split(tagRegex);
+  const stack = [];
+
+  return parts.map((part, index) => {
+    const isTag = part.match(tagRegex);
+    const isComment = part.match(commentRegex);
+    const isMeta = part.match(metaRegex);
+    let level = stack.length;
+
+    if (isTag) {
+      if (!part.startsWith("</")) {
+        if (!isComment && !isMeta) stack.push(part);
+      } else if (stack.length > 0) {
+        stack.pop();
+        level = stack.length;
+      }
+
+      const tagParts = [];
+      let lastIndex = 0;
+      let match;
+
+      while ((match = attributeRegex.exec(part)) !== null) {
+        // Push non-attribute parts
+        tagParts.push(part.slice(lastIndex, match.index));
+
+        // Push colored attribute name
+        tagParts.push(<Purple key={match.index + "name"}>{match[1]}</Purple>);
+        tagParts.push("=");
+        // Push colored attribute value
+        tagParts.push(<Green key={match.index + "value"}>"{match[2]}"</Green>);
+
+        lastIndex = match.index + match[0].length;
+      }
+
+      // Add any remaining parts of the string after the last attribute
+      tagParts.push(part.slice(lastIndex));
+
+      return (
+        <Indent level={level} key={index}>
+          <Red>{tagParts}</Red>
+        </Indent>
+      );
+    } else {
+      return (
+        <Indent level={level + 1} key={index}>
+          <Blue key={index}>{part}</Blue>
+        </Indent>
+      );
+    }
+  });
+}

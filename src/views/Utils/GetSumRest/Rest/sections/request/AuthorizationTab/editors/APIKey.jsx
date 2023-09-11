@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { Bold, FlexBox } from "src/components/shared/styles";
 
-export default function APIKey() {
+export default function APIKey({ state, dispatch }) {
   return (
     <FlexBox
       height="20rem"

@@ -1,32 +1,7 @@
-import styled from "@emotion/styled";
-import React from "react";
+import { Black, Blue, Green, Margin, Purple, Red } from "./styles";
 
-const Blue = styled.span({
-  color: "blue",
-});
-
-const Red = styled.span({
-  color: "red",
-});
-
-const Green = styled.span({
-  color: "green",
-});
-
-const Purple = styled.span({
-  color: "purple",
-});
-
-const Black = styled.span({
-  color: "black",
-});
-
-const Margin = styled.span(({ depth }) => ({
-  marginLeft: `${depth}rem`,
-}));
-
-const Prettify = ({ children }) => {
-  if (!children) return <span>null</span>;
+const PrettifyObject = ({ children }) => {
+  if (!children || typeof children !== "object") return <></>;
 
   const prettify = (object, depth = 1) => {
     if (Array.isArray(object)) {
@@ -102,4 +77,4 @@ const Prettify = ({ children }) => {
   return <div>{prettify(children)}</div>;
 };
 
-export default Prettify;
+export default PrettifyObject;

@@ -119,7 +119,6 @@ export default function useAPI() {
         .catch(handleError),
 
     loginPlayer: (formData) => {
-      console.log({ ...createBasicAuth(formData) });
       return request
         .post("/player/login", {}, createBasicAuth(formData))
         .then((response) => handleToken(response, "Login successful!"))

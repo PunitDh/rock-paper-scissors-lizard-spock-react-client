@@ -197,14 +197,18 @@ export default function sendRequest(
   return config;
 }
 
-export function send(url, method) {
+export function send(url, method, headers, authorization) {
   const config = {
     url,
     method,
     headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
-    }
+      ...headers,
+      Authorization: authorization,
+    },
+    // headers: {
+    //   "Access-Control-Allow-Origin": "*",
+    //   "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+    // },
   };
 
   return axios(config);
