@@ -10,6 +10,7 @@ import { setLoading, setMethod, setOutput, setUrl } from "../../actions";
 import SendIcon from "../../components/SendIcon";
 import sendRequest, { send } from "../../api/rest";
 import styled from "@emotion/styled";
+import { useNotification } from "src/hooks";
 
 const FlexForm = styled.form({
   display: "flex",
@@ -19,12 +20,9 @@ const FlexForm = styled.form({
 });
 
 const URLBar = ({ state, dispatch }) => {
+  const notification = useNotification();
   const handleSubmit = (e) => {
     e.preventDefault();
-    const params = new URLSearchParams();
-    state.request.params.forEach((param) => {
-      params.set(param.key, param.value);
-    });
 
     // const config = sendRequest(
     //   state.request.url.value,
@@ -38,22 +36,26 @@ const URLBar = ({ state, dispatch }) => {
 
     // console.log(config);
 
-    send(state.request.url.href, state.request.method)
-      .then((response) => {
-        dispatch(setLoading(false));
-        console.log(response);
-        return dispatch(setOutput(response));
-      })
-      .catch((error) => {
-        dispatch(setLoading(false));
-        console.log(error);
-        return dispatch(setOutput(error.response));
-      })
-      .finally(() => {
-        dispatch(setLoading(false));
-      });
+    if (state.request.isValidUrl) {
+      send(state.request.url.href, state.request.method)
+        .then((response) => {
+          dispatch(setLoading(false));
+          console.log(response);
+          return dispatch(setOutput(response));
+        })
+        .catch((error) => {
+          dispatch(setLoading(false));
+          console.log(error);
+          return dispatch(setOutput(error.response));
+        })
+        .finally(() => {
+          dispatch(setLoading(false));
+        });
 
-    dispatch(setLoading(true));
+      dispatch(setLoading(true));
+    } else {
+      notification.error(`'${state.request.urlDisplay}' is not a valid URL`);
+    }
 
     // sendRequest(
     //   state.request.url.value,

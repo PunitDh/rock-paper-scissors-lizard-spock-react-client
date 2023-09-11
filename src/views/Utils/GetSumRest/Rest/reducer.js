@@ -2,6 +2,7 @@ import { RestAction } from "./actions";
 import KeyValuePair from "./models/KeyValuePair";
 import { AuthorizationType } from "./sections/request/AuthorizationTab/constants";
 import { ContentType } from "./sections/request/BodyTab/constants";
+import { DisplayType } from "./sections/response/constants";
 import { createKeyValue, updateList } from "./utils";
 
 export const initialState = {
@@ -33,14 +34,15 @@ export const initialState = {
     contentType: ContentType.NONE,
   },
   response: {
-    output: {},
-    json: true,
+    output: null,
+    json: false,
+    displayType: DisplayType.RAW,
   },
   history: [],
 };
 
 export const reducer = (state, action) => {
-  console.log(action, state.url);
+  console.log(action);
   switch (action.type) {
     case RestAction.SET_URL:
       try {
@@ -48,7 +50,7 @@ export const reducer = (state, action) => {
         const params = [...url.searchParams.entries()].map(([key, value]) =>
           new KeyValuePair(key, value).setInclude(true).setUniqueId("param")
         );
-        if (params[params.length - 1].filled) {
+        if (params[params.length - 1]?.filled) {
           params.push(createKeyValue("param"));
         }
         return {
@@ -61,7 +63,8 @@ export const reducer = (state, action) => {
             params,
           },
         };
-      } catch {
+      } catch (e) {
+        console.log(e);
         return {
           ...state,
           request: {
@@ -237,8 +240,19 @@ export const reducer = (state, action) => {
       return {
         ...state,
         response: {
+          ...state.response,
           output: action.payload.data,
           json: typeof action.payload.data === "object",
+        },
+      };
+    }
+
+    case RestAction.SET_OUTPUT_DISPLAY_TYPE: {
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          displayType: action.payload,
         },
       };
     }
