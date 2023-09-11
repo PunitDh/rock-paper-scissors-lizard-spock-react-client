@@ -4,19 +4,12 @@ import FormDataComponent from "./editors/FormDataComponent";
 import FormEncoded from "./editors/FormEncoded";
 import ApplicationJSON from "./editors/ApplicationJSON";
 
-export const AuthorizationType = Object.freeze({
-  NO_AUTH: "No Auth",
-  API_KEY: "API Key",
-  BEARER_TOKEN: "Bearer Token",
-  BASIC_AUTH: "Basic Auth",
-});
-
 export const ContentType = Object.freeze({
   NONE: "NONE",
   FORM_DATA: "formData",
   FORM_ENCODED: "formEncoded",
   JSON: "json",
-  XML: "xml"
+  XML: "xml",
 });
 
 export const ContentTypeMenuItems = Object.freeze({
@@ -40,15 +33,15 @@ export const ContentTypeMenuItems = Object.freeze({
   },
   [ContentType.JSON]: {
     id: uniqueId(),
-    label: "raw",
+    label: "json",
     value: "application/json",
     Component: ApplicationJSON,
   },
-  // [BodyType.JSON]: {
+  // [ContentType.XML]: {
   //   id: uniqueId(),
   //   label: "xml",
   //   value: "application/xml",
-  //   Component: ApplicationJSON,
+  //   Component: ApplicationXML,
   // },
 });
 

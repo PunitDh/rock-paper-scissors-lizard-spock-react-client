@@ -1,0 +1,50 @@
+import {
+  MenuItem,
+  Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from "@mui/material";
+import { Bold } from "src/components/shared/styles";
+import { setAuthorizationType } from "../../../actions";
+import { AuthorizationTypeMenuItems } from "./constants";
+
+const Selector = ({ state, dispatch }) => {
+  const handleChange = (e) => {
+    dispatch(setAuthorizationType(e.target.value));
+  };
+  return (
+    <Table>
+      <TableBody>
+        <TableRow>
+          <TableCell>
+            <Bold>Type</Bold>
+          </TableCell>
+          <TableCell sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Select
+              labelId="method-select"
+              id="method-select"
+              value={state.request.authorization.type}
+              onChange={handleChange}
+              sx={{ width: "10rem" }}
+              size="small"
+            >
+              {Object.keys(AuthorizationTypeMenuItems).map((type) => (
+                <MenuItem
+                  key={type}
+                  value={type}
+                  selected={type === state.request.authorization.type}
+                >
+                  {AuthorizationTypeMenuItems[type].label}
+                </MenuItem>
+              ))}
+            </Select>
+          </TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
+  );
+};
+
+export default Selector;

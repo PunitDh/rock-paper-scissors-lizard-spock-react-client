@@ -33,6 +33,7 @@
     "react-scripts": "5.0.1",
     "react-spring": "^9.2.4",
     "react-toastify": "^9.1.3",
+    "react-xml-editor": "^0.10.2",
     "socket.io-client": "^4.7.1",
     "yn": "^5.0.0"
   },

@@ -8,6 +8,7 @@ export const RestAction = Object.freeze({
   SET_CONTENT_TYPE: "SET_CONTENT_TYPE",
   SET_BODY_CONTENT: "SET_BODY_CONTENT",
   SET_LOADING: "SET_LOADING",
+  SET_OUTPUT: "SET_OUTPUT",
   RESET_OUTPUT: "RESET_OUTPUT",
   RESET_STATE: "RESET_STATE",
 });
@@ -55,6 +56,11 @@ export const setBodyContent = (type, value) => ({
 export const setLoading = (payload) => ({
   type: RestAction.SET_LOADING,
   payload,
+});
+
+export const setOutput = (payload) => ({
+  type: RestAction.SET_OUTPUT,
+  payload
 });
 
 export const resetOutput = () => ({

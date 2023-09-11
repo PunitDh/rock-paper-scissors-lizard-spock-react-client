@@ -7,7 +7,7 @@ export default function FormEncoded({ state, dispatch }) {
     dispatch(setBodyContent(ContentType.FORM_ENCODED, e));
   return (
     <KeyValueComponent
-      property={state.body.formEncoded}
+      property={state.request.body.formEncoded}
       onChange={handleChange}
     />
   );

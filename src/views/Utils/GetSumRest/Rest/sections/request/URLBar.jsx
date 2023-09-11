@@ -6,11 +6,10 @@ import {
   TextField,
 } from "@mui/material";
 import { FlexBox } from "src/components/shared/styles";
-import { setLoading, setMethod, setUrl } from "../../actions";
+import { setLoading, setMethod, setOutput, setUrl } from "../../actions";
 import SendIcon from "../../components/SendIcon";
-import sendRequest from "../../api/rest";
+import sendRequest, { send } from "../../api/rest";
 import styled from "@emotion/styled";
-import { ContentTypeMenuItems } from "./BodyTab/constants";
 
 const FlexForm = styled.form({
   display: "flex",
@@ -23,40 +22,57 @@ const URLBar = ({ state, dispatch }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const params = new URLSearchParams();
-    state.params.forEach((param) => {
+    state.request.params.forEach((param) => {
       params.set(param.key, param.value);
     });
 
-    const config = sendRequest(
-      state.url.value,
-      params,
-      state.method,
-      state.headers,
-      ContentTypeMenuItems[state.contentType].value,
-      state.authorization,
-      state.body
-    );
+    // const config = sendRequest(
+    //   state.request.url.value,
+    //   params,
+    //   state.request.method,
+    //   state.request.headers,
+    //   ContentTypeMenuItems[state.request.contentType].value,
+    //   state.request.authorization.headers,
+    //   state.request.body
+    // );
 
-    console.log(config);
+    // console.log(config);
+
+    send(state.request.url.value, state.request.method)
+      .then((response) => {
+        dispatch(setLoading(false));
+        console.log(response);
+        return dispatch(setOutput(response));
+      })
+      .catch((error) => {
+        dispatch(setLoading(false));
+        console.log(error);
+        return dispatch(setOutput(error.response));
+      })
+      .finally(() => {
+        dispatch(setLoading(false));
+      });
+
+    dispatch(setLoading(true));
 
     // sendRequest(
-    //   state.url.value,
+    //   state.request.url.value,
     //   params,
-    //   state.method,
-    //   state.headers,
-    //   ContentType[state.contentType].value,
-    //   state.authorization,
-    //   state.body
+    //   state.request.method,
+    //   state.request.headers,
+    //   ContentType[state.request.contentType].value,
+    //   state.request.authorization,
+    //   state.request.body
     // )
     //   .then((response) => console.log(response))
     //   .catch((error) => console.error(error));
-
-    dispatch(setLoading(true));
-    setTimeout(() => dispatch(setLoading(false)), 4000);
   };
 
   const methods = ["GET", "POST", "PUT", "PATCH", "DELETE"];
-  const handleSetUrl = (e) => dispatch(setUrl(e.target.value));
+  const handleSetUrl = (e) => {
+    e.preventDefault();
+    dispatch(setUrl(e.target.value));
+  };
   const handleSetMethod = (e) => dispatch(setMethod(e.target.value));
 
   return (
@@ -69,14 +85,14 @@ const URLBar = ({ state, dispatch }) => {
       <Select
         labelId="method-select"
         id="method-select"
-        value={state.method}
+        value={state.request.method}
         onChange={handleSetMethod}
       >
         {methods.map((method) => (
           <MenuItem
             key={method}
             value={method}
-            selected={state.method === method}
+            selected={state.request.method === method}
           >
             {method}
           </MenuItem>
@@ -86,7 +102,7 @@ const URLBar = ({ state, dispatch }) => {
       <TextField
         type="url"
         placeholder="https://www.example.com/"
-        value={state.url.display}
+        value={state.request.url.value}
         onChange={handleSetUrl}
         sx={{ width: "100%" }}
         autoComplete="off"

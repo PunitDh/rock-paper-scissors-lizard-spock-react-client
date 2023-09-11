@@ -1,13 +1,20 @@
 import {
+  Box,
+  Button,
   Checkbox,
   FormControlLabel,
   FormGroup,
+  MenuItem,
+  Select,
   TableCell,
   TableRow,
   TextField,
 } from "@mui/material";
 import DeleteButton from "./DeleteButton";
 import styled from "@emotion/styled";
+import { FlexBox } from "src/components/shared/styles";
+import { useRef } from "react";
+import Tag from "./Tag";
 
 const CheckboxCell = styled(TableCell)({
   width: "1rem",
@@ -18,9 +25,11 @@ const StyledTableCell = styled(TableCell)({
   padding: "0rem 0.5rem 0rem 0rem",
 });
 
-const StyledTextField = styled(TextField)({
+const StyledTextField = styled(TextField)(({ include }) => ({
   width: "100%",
-});
+  color: "green",
+  // color: include > 1 ? "initial" : "green",
+}));
 
 const StyledTableRow = styled(TableRow)({
   backgroundColor: "rgba(220,220,220,0.1)",
@@ -28,15 +37,70 @@ const StyledTableRow = styled(TableRow)({
   borderBottom: "1px solid black",
 });
 
-export default function KeyValueRow({ pair, onChange, isLast }) {
+const FieldTypeSelect = styled(Select)({
+  position: "absolute",
+  right: 0,
+  opacity: 0,
+  "&:hover": {
+    opacity: 0.3,
+  },
+});
+
+const FileInputContainer = styled(Box)({
+  position: "absolute",
+  left: 0,
+});
+
+const FileSelectContainer = styled(FlexBox)({
+  position: "relative",
+  border: "1px solid #aaa",
+  borderRadius: "0.2rem",
+  height: "2.25rem",
+  justifyContent: "flex-start",
+  cursor: "text",
+});
+
+const FileInput = styled(TextField)({
+  display: "none",
+});
+
+export default function KeyValueRow({
+  pair,
+  onChange,
+  onDelete,
+  isLast,
+  fileUpload,
+}) {
+  const fileRef = useRef();
   const handleChange = (e) => {
-    pair[e.target.name] = e.target.value || e.target.checked;
+    if (e.target.name === "include") {
+      pair.include = !pair.include;
+    } else {
+      pair[e.target.name] = e.target.value;
+    }
+    console.log(pair);
+    return onChange(pair);
+  };
+
+  const handleDelete = (e) => {
+    console.log("deleting", pair.id);
+    // onDelete(pair)
+  };
+
+  const handleUpload = (e) => {
+    pair.files = e.target.files;
+    console.log(pair.files);
+    return onChange(pair);
+  };
+
+  const handleDeleteFiles = (e) => {
+    pair.files = [];
     return onChange(pair);
   };
 
   return (
     <StyledTableRow>
-      <CheckboxCell colSpan={1}>
+      <CheckboxCell>
         <FormGroup>
           <FormControlLabel
             control={
@@ -49,27 +113,96 @@ export default function KeyValueRow({ pair, onChange, isLast }) {
           />
         </FormGroup>
       </CheckboxCell>
-      <StyledTableCell colSpan={1}>
-        <StyledTextField
-          name="key"
-          value={pair.key}
-          onChange={handleChange}
-          size="small"
-          autoComplete="off"
-          placeholder={isLast ? "Key" : ""}
-        />
+      <StyledTableCell>
+        <FlexBox position="relative">
+          <StyledTextField
+            name="key"
+            value={pair.key}
+            onChange={handleChange}
+            size="small"
+            autoComplete="off"
+            placeholder={isLast ? "Key" : ""}
+            sx={{
+              input: { color: pair.include || isLast ? "initial" : "#aaa" },
+            }}
+          />
+          {fileUpload && (
+            <FieldTypeSelect
+              labelId="field-type-select"
+              id="field-type-select"
+              value={pair.type}
+              onChange={handleChange}
+              sx={{ width: "5rem", height: "2rem" }}
+              size="small"
+              name="type"
+            >
+              {["Text", "File"].map((type) => (
+                <MenuItem key={type} value={type} selected={pair.type === type}>
+                  {type}
+                </MenuItem>
+              ))}
+            </FieldTypeSelect>
+          )}
+        </FlexBox>
       </StyledTableCell>
-      <StyledTableCell colSpan={3}>
-        <StyledTextField
-          name="value"
-          value={pair.value}
-          onChange={handleChange}
-          size="small"
-          autoComplete="off"
-          placeholder={isLast ? "Value" : ""}
-        />
+      <StyledTableCell>
+        {fileUpload && pair.isFile ? (
+          <FlexBox
+            position="relative"
+            border="1px solid #aaa"
+            borderRadius="0.2rem"
+            height="2.25rem"
+            justifyContent="flex-start"
+            cursor="text"
+          >
+            {pair.files.length ? (
+              <Tag
+                text={
+                  pair.files.length > 1
+                    ? `${pair.files.length} files selected`
+                    : pair.files[0].name
+                }
+                onClick={handleDeleteFiles}
+              />
+            ) : (
+              <FileInputContainer>
+                <Button
+                  variant="primary"
+                  type="button"
+                  onClick={() => fileRef.current?.click()}
+                  sx={{ height: "2rem", width: "6.8rem" }}
+                >
+                  Select Files
+                </Button>
+                <FileInput
+                  name="files"
+                  type="file"
+                  id="form-data-upload-file"
+                  inputRef={fileRef}
+                  onChange={handleUpload}
+                  inputProps={{
+                    multiple: true,
+                  }}
+                />
+              </FileInputContainer>
+            )}
+          </FlexBox>
+        ) : (
+          <StyledTextField
+            name="value"
+            value={pair.value}
+            onChange={handleChange}
+            size="small"
+            autoComplete="off"
+            disabled={fileUpload && pair.isFile}
+            placeholder={isLast ? "Value" : ""}
+            sx={{
+              input: { color: pair.include || isLast ? "initial" : "#aaa" },
+            }}
+          />
+        )}
       </StyledTableCell>
-      <StyledTableCell colSpan={4}>
+      <StyledTableCell>
         <StyledTextField
           name="description"
           value={pair.description}
@@ -77,10 +210,11 @@ export default function KeyValueRow({ pair, onChange, isLast }) {
           size="small"
           autoComplete="off"
           placeholder={isLast ? "Description" : ""}
+          sx={{ input: { color: pair.include || isLast ? "initial" : "#aaa" } }}
         />
       </StyledTableCell>
-      <StyledTableCell colSpan={1}>
-        <DeleteButton />
+      <StyledTableCell>
+        <DeleteButton onClick={handleDelete} />
       </StyledTableCell>
     </StyledTableRow>
   );

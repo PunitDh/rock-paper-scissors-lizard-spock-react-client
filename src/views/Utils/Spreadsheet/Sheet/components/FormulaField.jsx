@@ -45,7 +45,6 @@ const FormulaField = ({ state, dispatch, eventHandler }) => {
 
   const handleKeyDown = useCallback(
     (e) => {
-      console.log("from formula field", e.key);
       switch (e.key) {
         case KeyEvent.ESCAPE:
           dispatch(setFormulaMode(false));

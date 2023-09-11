@@ -22,11 +22,10 @@ const InputContainer = styled(RadioGroup)({
 
 export default function Body({ state, dispatch, value }) {
   const handleChange = (e) => {
-    console.log(e.target.value);
     dispatch(setContentType(e.target.value));
   };
 
-  const { Component } = ContentTypeMenuItems[state.contentType];
+  const { Component } = ContentTypeMenuItems[state.request.contentType];
 
   return (
     <CustomTabPanel value={value} index={3}>
@@ -43,7 +42,7 @@ export default function Body({ state, dispatch, value }) {
         <StyledFormControl>
           <RadioGroup
             aria-labelledby="body-type"
-            value={state.contentType}
+            value={state.request.contentType}
             name="body-type-group"
             row
             onChange={handleChange}

@@ -79,7 +79,7 @@ export default function sendRequest(
     // syntax alternative to send data into the body
     // method post
     // only the value is sent, not the key
-    data: "Country=Brasil&City=Belo Horizonte",
+    // data: "Country=Brasil&City=Belo Horizonte",
 
     // `timeout` specifies the number of milliseconds before the request times out.
     // If the request takes longer than `timeout`, the request will be aborted.
@@ -195,4 +195,17 @@ export default function sendRequest(
   };
   // return axios(config);
   return config;
+}
+
+export function send(url, method) {
+  const config = {
+    url,
+    method,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+    }
+  };
+
+  return axios(config);
 }

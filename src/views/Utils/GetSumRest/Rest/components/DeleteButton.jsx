@@ -10,12 +10,10 @@ const DeleteIcon = styled(Delete)(({ theme }) => ({
   },
 }));
 
-const DeleteButton = () => {
-  return (
-    <Tooltip title="Delete">
-      <DeleteIcon />
-    </Tooltip>
-  );
-};
+const DeleteButton = ({ onClick }) => (
+  <Tooltip title="Delete">
+    <DeleteIcon onClick={onClick} />
+  </Tooltip>
+);
 
 export default DeleteButton;

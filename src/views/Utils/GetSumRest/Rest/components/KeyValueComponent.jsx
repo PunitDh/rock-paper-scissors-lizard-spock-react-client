@@ -8,24 +8,26 @@ import {
 } from "@mui/material";
 import KeyValueRow from "./KeyValueRow";
 
-const TableHeaderCell = styled(TableCell)({
+const TableHeaderCell = styled(TableCell)(({ width }) => ({
   paddingLeft: 0,
   paddingBottom: "0.25rem",
-});
+  width: width || "calc((100%)/3)",
+}));
 
-const KeyValueComponent = ({ property, onChange }) => {
+const KeyValueComponent = ({ property, onChange, fileUpload }) => {
   const handleChange = (e) => {
     onChange(e);
   };
 
   return (
-    <Table>
+    <Table style={{ tableLayout: "fixed" }}>
       <TableHead style={{ borderBottom: "1px solid rgba(0,0,0,1)" }}>
         <TableRow>
-          <TableCell colSpan={1}></TableCell>
-          <TableHeaderCell colSpan={1}>Key</TableHeaderCell>
-          <TableHeaderCell colSpan={3}>Value</TableHeaderCell>
-          <TableHeaderCell colSpan={5}>Description</TableHeaderCell>
+          <TableCell style={{ width: "4rem" }}> </TableCell>
+          <TableHeaderCell>Key</TableHeaderCell>
+          <TableHeaderCell>Value</TableHeaderCell>
+          <TableHeaderCell>Description</TableHeaderCell>
+          <TableHeaderCell width="2rem"></TableHeaderCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -35,6 +37,7 @@ const KeyValueComponent = ({ property, onChange }) => {
             onChange={handleChange}
             key={index}
             isLast={index === property.length - 1}
+            fileUpload={fileUpload}
           />
         ))}
       </TableBody>

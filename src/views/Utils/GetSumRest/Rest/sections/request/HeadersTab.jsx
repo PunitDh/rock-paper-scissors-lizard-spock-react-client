@@ -10,7 +10,7 @@ export default function HeadersTab({ state, dispatch, value }) {
   return (
     <CustomTabPanel value={value} index={2}>
       <Bold>Headers</Bold>
-      <KeyValueComponent property={state.headers} onChange={handleChange} />
+      <KeyValueComponent property={state.request.headers} onChange={handleChange} />
     </CustomTabPanel>
   );
 }

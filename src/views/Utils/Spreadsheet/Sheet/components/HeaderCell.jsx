@@ -58,8 +58,6 @@ const HeaderCell = ({ state, dispatch, id, onContextMenu, dimension }) => {
         ? e.clientY - posRef.current
         : e.clientX - posRef.current;
 
-    console.log(newSize);
-
     const action =
       dimension === Dimension.ROW
         ? setRowHeight(id, newSize)

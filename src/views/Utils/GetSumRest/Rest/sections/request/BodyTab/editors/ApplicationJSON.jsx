@@ -1,4 +1,3 @@
-import React from "react";
 import JSONInput from "react-json-editor-ajrm";
 import locale from "react-json-editor-ajrm/locale/en";
 import { ContentType, jsonEditorColors } from "../constants";
@@ -12,14 +11,14 @@ const ApplicationJSON = ({ state, dispatch }) => {
     <JSONInput
       id="body-json-input"
       locale={locale}
-      placeholder={state.body.json}
+      placeholder={state.request.body.json}
       width="100%"
       height="20rem"
       theme="light_mitsuketa_tribute"
       colors={jsonEditorColors}
       style={{ body: { fontSize: "14px" } }}
       onChange={handleBodyChange}
-      waitAfterKeyPress={2500}
+      waitAfterKeyPress={1500}
       data-gramm="false"
     />
   );
