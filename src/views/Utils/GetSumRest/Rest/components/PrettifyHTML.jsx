@@ -1,8 +1,9 @@
-import { Blue, Green, Indent, Purple, Red } from "../sections/response/styles";
+import { Blue, Green, Indent, Purple, Red } from "./styles";
 
 export default function PrettifyHTML({ children }) {
   if (typeof children !== "string") return <></>;
-  const metaRegex = /(<meta[^>]*>)/g;
+  // const metaRegex = /(<meta[^>]*>)/g;
+  const selfClosingRegex = /(<[^>]*\/>)/g;
   const commentRegex = /(<![^>]*>)/g;
   const tagRegex = /(<[^>]*>)/g;
   const attributeRegex = /([a-z-]+)=(["'])([^"]*)(["'])/gi; // Identify attributes
@@ -13,12 +14,12 @@ export default function PrettifyHTML({ children }) {
   const jsx = parts.map((part, index) => {
     const isTag = part.match(tagRegex);
     const isComment = part.match(commentRegex);
-    const isMeta = part.match(metaRegex);
+    const isSelfClosing = part.match(selfClosingRegex);
     let level = stack.length;
 
     if (isTag) {
       if (!part.startsWith("</")) {
-        if (!isComment && !isMeta) stack.push(part);
+        if (!isComment && !isSelfClosing) stack.push(part);
       } else if (stack.length > 0) {
         stack.pop();
         level = stack.length;

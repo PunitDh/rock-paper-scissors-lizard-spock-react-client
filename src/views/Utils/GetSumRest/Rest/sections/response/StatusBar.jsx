@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Button, Tooltip, Typography } from "@mui/material";
 import { Bold, FlexBox } from "src/components/shared/styles";
 import { setOutputDisplayType } from "../../actions";
-import { Color } from "./styles";
+import { Color } from "../../components/styles";
 import { Save } from "@mui/icons-material";
 import prettyBytes from "pretty-bytes";
 import { DisplayType } from "../../constants";

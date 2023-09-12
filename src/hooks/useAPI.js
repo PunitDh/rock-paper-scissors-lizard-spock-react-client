@@ -215,6 +215,9 @@ export default function useAPI() {
 
     sendRestRequest: (config) => axios(config),
 
+    sendProxyRestRequest: (data) =>
+      axios.post(`${process.env.REACT_APP_SERVER_URL}/rest`, data, authHeaders),
+
     setSiteSettings: (request) =>
       socket.emit(SocketRequest.UPDATE_SITE_SETTINGS, restricted(request)),
 

@@ -38,7 +38,7 @@ const URLBar = ({ state, dispatch }) => {
       const headers = createHeaders(state.request.headers);
       const authorization = createAuthorization(state.request.authorization);
 
-      sendRequest({
+      const requestConfig = {
         url: state.request.url.href,
         method: state.request.method,
         withCredentials: false,
@@ -47,9 +47,16 @@ const URLBar = ({ state, dispatch }) => {
           "Content-Type": ContentTypeMenuItems[state.request.contentType].value,
           Authorization: authorization,
         },
-      })
+      };
+
+      sendRequest(requestConfig)
         .then(handleResponse)
-        .catch(handleResponse)
+        .catch(() =>
+          api
+            .sendProxyRestRequest(requestConfig)
+            .then((response) => handleResponse(response))
+            .catch(() => notification.error("Unable to send request"))
+        )
         .finally(() => {
           dispatch(setResponseTime(Date.now() - startTime.current));
           startTime.current = 0;
@@ -57,18 +64,6 @@ const URLBar = ({ state, dispatch }) => {
     } else {
       notification.error(`'${state.request.urlDisplay}' is not a valid URL`);
     }
-
-    // sendRequest(
-    //   state.request.url.value,
-    //   params,
-    //   state.request.method,
-    //   state.request.headers,
-    //   ContentType[state.request.contentType].value,
-    //   state.request.authorization,
-    //   state.request.body
-    // )
-    //   .then((response) => console.log(response))
-    //   .catch((error) => console.error(error));
   };
 
   const handleSetUrl = (e) => {

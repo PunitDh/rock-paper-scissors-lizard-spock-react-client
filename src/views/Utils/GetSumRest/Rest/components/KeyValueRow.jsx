@@ -73,10 +73,7 @@ export default function KeyValueRow({
     return onChange(pair);
   };
 
-  const handleDelete = (e) => {
-    console.log("deleting", pair.id);
-    onDelete(pair);
-  };
+  const handleDelete = () => onDelete(pair);
 
   const handleSelectFiles = (e) => {
     pair.files = e.target.files;

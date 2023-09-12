@@ -70,7 +70,6 @@ export const reducer = (state, action) => {
             .setParams(params),
         };
       } catch (e) {
-        console.log(e);
         return {
           ...state,
           request: state.request

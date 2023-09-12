@@ -1,5 +1,4 @@
-import { DisplayType } from "../constants";
-
+import { DisplayType, HttpStatusCode } from "../constants";
 
 export default class Response {
   constructor(obj = {}) {
@@ -8,7 +7,8 @@ export default class Response {
     this.output = data;
     this.json = isObject(data);
     this.status = status;
-    this.statusText = statusText;
+    this.statusText =
+      statusText?.length > 0 ? statusText : HttpStatusCode[status] || "";
     this.headers = headers;
     this.size = getDataLength(data, headers);
     this.error = this.status >= 400;

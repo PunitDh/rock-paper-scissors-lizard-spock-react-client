@@ -1,4 +1,4 @@
-import { Black, Blue, Green, Margin, Purple, Red } from "../sections/response/styles";
+import { Blue, Red, Purple, Margin, Black, Green } from "./styles";
 
 const PrettifyObject = ({ children }) => {
   if (!children && typeof children !== "object") return <></>;
@@ -28,7 +28,8 @@ const PrettifyObject = ({ children }) => {
               )}
               {index !== object.length - 1 && (
                 <>
-                  ,<br />
+                  ,
+                  <br />
                 </>
               )}
             </Margin>
@@ -61,10 +62,13 @@ const PrettifyObject = ({ children }) => {
               ) : (
                 JSON.stringify(object[key])
               )}
-              {index !== keys.length - 1 && (
+              {index !== keys.length - 1 ? (
                 <Black>
-                  ,<br />
+                  ,
+                  <br />
                 </Black>
+              ) : (
+                <></>
               )}
             </Margin>
           ))}
