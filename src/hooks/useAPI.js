@@ -213,6 +213,8 @@ export default function useAPI() {
         responseType: "blob",
       }),
 
+    sendRestRequest: (config) => axios(config),
+
     setSiteSettings: (request) =>
       socket.emit(SocketRequest.UPDATE_SITE_SETTINGS, restricted(request)),
 

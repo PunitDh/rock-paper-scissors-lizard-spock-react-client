@@ -37,8 +37,8 @@ const replaceFormulaWithValues = (str, stateContent, blankValue) => {
   );
 
   return cellMatches.reduce(
-    (acc, cur) =>
-      acc.replaceAll(cur, `(${stateContent[cur]?.value || blankValue})`),
+    (acc, cell) =>
+      acc.replaceAll(cell, `(${stateContent[cell]?.value || blankValue})`),
     str.replace("=", "")
   );
 };

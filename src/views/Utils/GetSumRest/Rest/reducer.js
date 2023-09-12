@@ -1,6 +1,6 @@
-import prettyBytes from "pretty-bytes";
 import { RestAction } from "./actions";
 import KeyValuePair from "./models/KeyValuePair";
+import Response from "./models/Response";
 import { AuthorizationType } from "./sections/request/AuthorizationTab/constants";
 import { ContentType } from "./sections/request/BodyTab/constants";
 import { DisplayType } from "./sections/response/constants";
@@ -9,8 +9,20 @@ import { createKeyValue, updateList } from "./utils";
 export const initialState = {
   loading: false,
   request: {
-    url: new URL("http://localhost:5000/admin/settings?test=1223"),
-    urlDisplay: new URL("http://localhost:5000/admin/settings?test=1223").href,
+    // url: new URL(
+    //   "https://rpscls-punitdh-api-b70261e87515.herokuapp.com/admin/settings"
+    // ),
+    // urlDisplay: new URL(
+    //   "https://rpscls-punitdh-api-b70261e87515.herokuapp.com/admin/settings"
+    // ).href,
+    url: new URL("http://localhost:5000/admin/settings"),
+    urlDisplay: new URL("http://localhost:5000/admin/settings").href,
+    // url: new URL(
+    //   "https://jsonplaceholder.typicode.com/todos/"
+    // ),
+    // urlDisplay: new URL(
+    //   "https://jsonplaceholder.typicode.com/todos/"
+    // ).href,
     isValidUrl: true,
     method: "GET",
     params: [],
@@ -46,14 +58,14 @@ export const initialState = {
     },
     contentType: ContentType.NONE,
   },
-  response: {
+  response: new Response({
     output: null,
     json: false,
     displayType: DisplayType.PRETTY,
     time: 0,
     size: 0,
     error: false,
-  },
+  }),
   history: [],
 };
 
@@ -257,58 +269,29 @@ export const reducer = (state, action) => {
         },
       };
 
-    case RestAction.SET_OUTPUT: {
-      const payload = action.payload;
-      const data = payload.data || payload.response.data;
-      const headers = payload.headers || payload.response.headers;
-      const status = payload.status || payload.response.status;
-      const statusText = payload.statusText || payload.response.statusText;
-      if (data) {
-        const isObject = typeof data === "object";
-        const dataLength = isObject
-          ? +JSON.stringify(data).length
-          : +String(data).length + JSON.stringify(headers).length;
-        return {
-          ...state,
-          response: {
-            ...state.response,
-            output: data,
-            json: isObject,
-            status,
-            statusText,
-            headers,
-            size: prettyBytes(dataLength),
-            error: status >= 400,
-          },
-        };
-      }
-      return state;
+    case RestAction.SET_RESPONSE: {
+      return {
+        ...state,
+        response: new Response({
+          ...state.response,
+          ...action.payload,
+        }),
+      };
     }
 
     case RestAction.SET_RESPONSE_TIME: {
       return {
         ...state,
-        response: {
-          ...state.response,
-          time: action.payload,
-        },
+        response: state.response.setTime(action.payload),
       };
     }
 
     case RestAction.SET_OUTPUT_DISPLAY_TYPE: {
       return {
         ...state,
-        response: {
-          ...state.response,
-          displayType: action.payload,
-        },
+        response: state.response.setDisplayType(action.payload),
       };
     }
-    case RestAction.SET_LOADING:
-      return {
-        ...state,
-        loading: action.payload,
-      };
     case RestAction.RESET_STATE:
     default:
       return initialState;

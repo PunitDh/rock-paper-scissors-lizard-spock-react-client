@@ -15,11 +15,11 @@ const OpenFileCSV = ({ dispatch }) => {
       const text = e.target.result;
       const parsed = parseCSV(text);
 
-      const data = Object.keys(parsed).reduce((acc, cur) => {
-        if (parsed[cur]?.value?.length > 0) {
-          acc[cur] = new CellData({
-            id: cur,
-            value: parsed[cur].value,
+      const data = Object.keys(parsed).reduce((acc, cell) => {
+        if (parsed[cell]?.value?.length > 0) {
+          acc[cell] = new CellData({
+            id: cell,
+            value: parsed[cell].value,
           }).setDisplay();
         }
         return acc;

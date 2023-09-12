@@ -54,17 +54,17 @@ const getBorder = (formatting) => {
         borderLeft: BorderStyles.THIN_BORDER,
       };
     case BorderType.OUTSIDE_BORDERS:
-      return formatting.borderTypes.reduce((acc, cur) => {
+      return formatting.borderTypes.reduce((borders, cell) => {
         return {
-          ...acc,
-          [cur]: BorderStyles.THIN_BORDER,
+          ...borders,
+          [cell]: BorderStyles.THIN_BORDER,
         };
       }, initialBorders);
     case BorderType.THICK_OUTSIDE_BORDERS:
-      return formatting.borderTypes.reduce((acc, cur) => {
+      return formatting.borderTypes.reduce((borders, cell) => {
         return {
-          ...acc,
-          [cur]: BorderStyles.THICK_BORDER,
+          ...borders,
+          [cell]: BorderStyles.THICK_BORDER,
         };
       }, initialBorders);
     case BorderType.NO_BORDER:

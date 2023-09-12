@@ -3,11 +3,15 @@ import { Button, Tooltip, Typography } from "@mui/material";
 import { Bold, FlexBox } from "src/components/shared/styles";
 import { setOutputDisplayType } from "../../actions";
 import { DisplayType } from "./constants";
-import { Color, Green } from "./styles";
+import { Color } from "./styles";
 import { Save } from "@mui/icons-material";
+import prettyBytes from "pretty-bytes";
 
 const StatusButton = styled(Button)(({ selected }) => ({
-  backgroundColor: selected ? "#eee" : "#ddd",
+  backgroundColor: selected ? "#eee" : "#eee",
+  "&:hover": {
+    backgroundColor: selected ? "#aaa" : "#bbb",
+  },
 }));
 
 const StatusBar = ({ state, dispatch }) => {
@@ -58,11 +62,11 @@ const StatusBar = ({ state, dispatch }) => {
           </Typography>
           <Typography textAlign="right" sx={{ display: "flex", gap: "0.3rem" }}>
             <Bold>Time:</Bold>
-            <Color type={state.response.error ? "red" : "green"}>{state.response.time} ms</Color>
+            <Color type="green">{state.response.time} ms</Color>
           </Typography>
           <Typography textAlign="right" sx={{ display: "flex", gap: "0.3rem" }}>
             <Bold>Size:</Bold>
-            <Color type={state.response.error ? "red" : "green"}>{state.response.size}</Color>
+            <Color type="green">{prettyBytes(state.response.size)}</Color>
           </Typography>
           <Tooltip title="Save File">
             <StatusButton variant="primary" size="small" onClick={handleSave}>

@@ -208,7 +208,7 @@ const processMatches = (str, reg, formulaCreator, zeroValue) => {
   }));
 };
 
-const replaceFormulaWithValues = (str, stateContent, blankValue) => {
+const replaceFormulaWithValues = (str, stateContentData, blankValue) => {
   const cellReg = /([A-Z]\d+)/g;
   const cellMatches = [...new Set([...str.matchAll(cellReg)].flat())].sort(
     (a, b) => {
@@ -223,8 +223,8 @@ const replaceFormulaWithValues = (str, stateContent, blankValue) => {
   );
 
   return cellMatches.reduce(
-    (acc, cur) =>
-      acc.replaceAll(cur, `(${stateContent[cur]?.value || blankValue})`),
+    (acc, cell) =>
+      acc.replaceAll(cell, `(${stateContentData[cell]?.value || blankValue})`),
     str.replace("=", "")
   );
 };
