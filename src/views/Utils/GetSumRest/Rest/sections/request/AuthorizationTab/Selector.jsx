@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { Bold } from "src/components/shared/styles";
 import { setAuthorizationType } from "../../../actions";
-import { AuthorizationTypeMenuItems } from "./constants";
+import { AuthorizationTypeItems } from "../../../constants";
 
 const Selector = ({ state, dispatch }) => {
   const handleChange = (e) => {
@@ -30,13 +30,13 @@ const Selector = ({ state, dispatch }) => {
               sx={{ width: "10rem" }}
               size="small"
             >
-              {Object.keys(AuthorizationTypeMenuItems).map((type) => (
+              {Object.keys(AuthorizationTypeItems).map((type) => (
                 <MenuItem
                   key={type}
                   value={type}
                   selected={type === state.request.authorization.type}
                 >
-                  {AuthorizationTypeMenuItems[type].label}
+                  {AuthorizationTypeItems[type].label}
                 </MenuItem>
               ))}
             </Select>

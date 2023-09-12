@@ -9,7 +9,7 @@ import {
 import { Bold, FlexBox } from "src/components/shared/styles";
 import styled from "@emotion/styled";
 import { setContentType } from "../../../actions";
-import { ContentTypeMenuItems } from "./constants";
+import { ContentTypeMenuItems } from "../../../constants";
 
 const StyledFormControl = styled(FormControl)({
   flexDirection: "row",

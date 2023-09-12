@@ -1,8 +1,8 @@
 import CustomTabPanel from "../../../components/CustomTabPanel";
 import { Bold, FlexBox } from "src/components/shared/styles";
 import styled from "@emotion/styled";
-import { AuthorizationTypeMenuItems } from "./constants";
 import Selector from "./Selector";
+import { AuthorizationTypeItems } from "../../../constants";
 
 const StyledBox = styled.div(({ border, width }) => ({
   borderRight: border ? "1px solid rgba(0,0,0,0.1)" : 0,
@@ -17,7 +17,7 @@ const StyledBox = styled.div(({ border, width }) => ({
 
 const AuthorizationTab = ({ state, dispatch, value }) => {
   const { Component } =
-    AuthorizationTypeMenuItems[state.request.authorization.type];
+    AuthorizationTypeItems[state.request.authorization.type];
 
   return (
     <CustomTabPanel value={value} index={1}>

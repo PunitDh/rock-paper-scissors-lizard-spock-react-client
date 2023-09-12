@@ -1,4 +1,5 @@
 import { uniqueId } from "lodash";
+import { FormDataFieldType } from "../constants";
 
 export default class KeyValuePair {
   constructor(key, value, description) {
@@ -6,7 +7,7 @@ export default class KeyValuePair {
     this.value = value || "";
     this.description = description || "";
     this.include = true;
-    this.type = "Text";
+    this.type = FormDataFieldType.TEXT;
     this.id = null;
     this.files = [];
   }

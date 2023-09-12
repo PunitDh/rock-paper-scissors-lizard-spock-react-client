@@ -1,27 +1,17 @@
-import { FlexBox } from "src/components/shared/styles";
-const { Button } = require("@mui/material");
-const { styled } = require("@mui/styles");
+import styled from "@emotion/styled";
 
-export const CalculatorBox = styled(FlexBox)({
-  border: "1px solid lightgray",
-  borderRadius: "0.25rem",
-  margin: "0.25rem 1rem",
-  textAlign: "center",
+export const OutputRaw = styled.pre({
+  width: "100%",
+  height: "30rem",
+  border: "1px solid rgba(0,0,0,0.1)",
+  padding: "1rem",
+  overflowY: "scroll",
+  fontFamily: "'Roboto Mono', Monaco, monospace;",
+  wordWrap: "break-word",
+  wordBreak: "break-all",
+  whiteSpace: "normal",
 });
 
-export const CalculatorButton = styled(Button)({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  cursor: "pointer",
-  minWidth: "2.5rem",
-  margin: "1px",
-  aspectRatio: "1/1",
-  border: "1px solid gray",
-  textTransform: "none",
-  padding: 0,
-});
-
-export const Sup = styled("sup")({
-  fontSize: "0.4rem",
+export const OutputPretty = styled(OutputRaw)({
+  color: "#ff4455",
 });

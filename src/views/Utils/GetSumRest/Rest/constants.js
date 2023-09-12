@@ -1,8 +1,25 @@
 import { uniqueId } from "lodash";
-import None from "./editors/None";
-import FormDataComponent from "./editors/FormDataComponent";
-import FormEncoded from "./editors/FormEncoded";
-import ApplicationJSON from "./editors/ApplicationJSON";
+import None from "./sections/request/BodyTab/editors/None";
+import FormDataComponent from "./sections/request/BodyTab/editors/FormDataComponent";
+import FormEncoded from "./sections/request/BodyTab/editors/FormEncoded";
+import ApplicationJSON from "./sections/request/BodyTab/editors/ApplicationJSON";
+import NoAuth from "./sections/request/AuthorizationTab/editors/NoAuth";
+import APIKey from "./sections/request/AuthorizationTab/editors/APIKey";
+import BasicAuth from "./sections/request/AuthorizationTab/editors/BasicAuth";
+import BearerToken from "./sections/request/AuthorizationTab/editors/BearerToken";
+
+export const FormDataFieldType = Object.freeze({
+  TEXT: "Text",
+  FILE: "File",
+});
+
+export const HttpMethod = Object.freeze({
+  GET: "GET",
+  POST: "POST",
+  PUT: "PUT",
+  PATCH: "PATCH",
+  DELETE: "DELETE",
+});
 
 export const ContentType = Object.freeze({
   NONE: "NONE",
@@ -22,7 +39,7 @@ export const ContentTypeMenuItems = Object.freeze({
   [ContentType.FORM_DATA]: {
     id: uniqueId(),
     label: "form-data",
-    value: "form-data",
+    value: "multipart/form-data",
     Component: FormDataComponent,
   },
   [ContentType.FORM_ENCODED]: {
@@ -45,7 +62,60 @@ export const ContentTypeMenuItems = Object.freeze({
   // },
 });
 
-export const jsonEditorColors = Object.freeze({
+export const DisplayType = Object.freeze({
+  PRETTY: "Pretty",
+  RAW: "Raw",
+  PREVIEW: "Preview",
+});
+
+export const AuthorizationType = Object.freeze({
+  NO_AUTH: "No Auth",
+  API_KEY: "API Key",
+  BEARER_TOKEN: "Bearer Token",
+  BASIC_AUTH: "Basic Auth",
+});
+
+export const AuthorizationTypeItems = Object.freeze({
+  [AuthorizationType.NO_AUTH]: {
+    id: uniqueId(),
+    label: "No Auth",
+    value: null,
+    Component: NoAuth,
+    initialState: {},
+  },
+  [AuthorizationType.API_KEY]: {
+    id: uniqueId(),
+    label: "API Key",
+    value: "API",
+    Component: APIKey,
+    initialState: {
+      key: "",
+      value: "",
+    },
+  },
+  [AuthorizationType.BASIC_AUTH]: {
+    id: uniqueId(),
+    label: "Basic Auth",
+    value: "Basic",
+    Component: BasicAuth,
+    initialState: {
+      username: "",
+      password: "",
+    },
+  },
+  [AuthorizationType.BEARER_TOKEN]: {
+    id: uniqueId(),
+    label: "Bearer Token",
+    value: "Bearer",
+    Component: BearerToken,
+    initialState: {
+      prefix: "",
+      token: "",
+    },
+  },
+});
+
+export const JSONEditorColors = Object.freeze({
   default: "#333",
   string: "#bd2c00",
   number: "#009e60",

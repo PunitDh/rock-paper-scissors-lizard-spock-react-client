@@ -1,4 +1,4 @@
-import { Black, Blue, Green, Margin, Purple, Red } from "./styles";
+import { Black, Blue, Green, Margin, Purple, Red } from "../sections/response/styles";
 
 const PrettifyObject = ({ children }) => {
   if (!children && typeof children !== "object") return <></>;

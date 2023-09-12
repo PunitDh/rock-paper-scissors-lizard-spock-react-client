@@ -8,7 +8,7 @@ import {
 import PasswordField from "src/components/shared/PasswordField";
 import { Bold, FlexBox } from "src/components/shared/styles";
 import { setAuthorization } from "../../../../actions";
-import { AuthorizationType } from "../constants";
+import { AuthorizationType } from "../../../../constants";
 
 export default function BasicAuth({ state, dispatch }) {
   const credentials = state.request.authorization[AuthorizationType.BASIC_AUTH];

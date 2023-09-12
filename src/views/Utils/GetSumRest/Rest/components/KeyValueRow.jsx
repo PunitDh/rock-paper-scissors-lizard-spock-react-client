@@ -15,6 +15,7 @@ import styled from "@emotion/styled";
 import { FlexBox } from "src/components/shared/styles";
 import { useRef } from "react";
 import Tag from "./Tag";
+import { FormDataFieldType } from "../constants";
 
 const CheckboxCell = styled(TableCell)({
   width: "1rem",
@@ -77,13 +78,12 @@ export default function KeyValueRow({
     onDelete(pair);
   };
 
-  const handleUpload = (e) => {
+  const handleSelectFiles = (e) => {
     pair.files = e.target.files;
-    console.log(pair.files);
     return onChange(pair);
   };
 
-  const handleDeleteFiles = (e) => {
+  const handleDeleteFiles = () => {
     pair.files = [];
     return onChange(pair);
   };
@@ -126,7 +126,7 @@ export default function KeyValueRow({
               size="small"
               name="type"
             >
-              {["Text", "File"].map((type) => (
+              {Object.values(FormDataFieldType).map((type) => (
                 <MenuItem key={type} value={type} selected={pair.type === type}>
                   {type}
                 </MenuItem>
@@ -169,7 +169,7 @@ export default function KeyValueRow({
                   type="file"
                   id="form-data-upload-file"
                   inputRef={fileRef}
-                  onChange={handleUpload}
+                  onChange={handleSelectFiles}
                   inputProps={{
                     multiple: true,
                   }}

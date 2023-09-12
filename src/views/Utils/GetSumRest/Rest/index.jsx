@@ -8,6 +8,7 @@ import RequestTabs from "./sections/request/RequestTabs";
 import Response from "./sections/response/Response";
 import { initializeState } from "./utils";
 import { useToken } from "src/hooks";
+import RequestName from "./sections/request/RequestName";
 
 const Rest = () => {
   const [state, dispatch] = useReducer(reducer, initialState, initializeState);
@@ -28,6 +29,7 @@ const Rest = () => {
             Show State
           </button>
         )}
+        <RequestName state={state} dispatch={dispatch} />
         <URLBar state={state} dispatch={dispatch} />
         <RequestTabs state={state} dispatch={dispatch} />
         <Response state={state} dispatch={dispatch} />

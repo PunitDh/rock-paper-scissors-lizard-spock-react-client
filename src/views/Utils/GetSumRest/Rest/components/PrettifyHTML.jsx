@@ -1,16 +1,16 @@
-import { Blue, Green, Indent, Purple, Red } from "./styles";
+import { Blue, Green, Indent, Purple, Red } from "../sections/response/styles";
 
 export default function PrettifyHTML({ children }) {
   if (typeof children !== "string") return <></>;
   const metaRegex = /(<meta[^>]*>)/g;
   const commentRegex = /(<![^>]*>)/g;
   const tagRegex = /(<[^>]*>)/g;
-  const attributeRegex = /([a-z\-]+)="([^"]*)"/gi; // Identify attributes
+  const attributeRegex = /([a-z-]+)=(["'])([^"]*)(["'])/gi; // Identify attributes
 
   const parts = children.replaceAll("\n", "").split(tagRegex);
   const stack = [];
 
-  return parts.map((part, index) => {
+  const jsx = parts.map((part, index) => {
     const isTag = part.match(tagRegex);
     const isComment = part.match(commentRegex);
     const isMeta = part.match(metaRegex);
@@ -36,7 +36,13 @@ export default function PrettifyHTML({ children }) {
         tagParts.push(<Purple key={match.index + "name"}>{match[1]}</Purple>);
         tagParts.push("=");
         // Push colored attribute value
-        tagParts.push(<Green key={match.index + "value"}>"{match[2]}"</Green>);
+        tagParts.push(
+          <Green key={match.index + "value"}>
+            {match[2]}
+            {match[3]}
+            {match[4]}
+          </Green>
+        );
 
         lastIndex = match.index + match[0].length;
       }
@@ -57,4 +63,6 @@ export default function PrettifyHTML({ children }) {
       );
     }
   });
+
+  return jsx;
 }

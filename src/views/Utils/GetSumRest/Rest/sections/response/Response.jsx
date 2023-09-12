@@ -1,13 +1,13 @@
 import locale from "react-json-editor-ajrm/locale/en";
 import JSONInput from "react-json-editor-ajrm";
-import { jsonEditorColors } from "../request/BodyTab/constants";
 import { Bold, FlexBox } from "src/components/shared/styles";
 import StatusBar from "./StatusBar";
 import { useMediaQuery } from "@mui/material";
-import { DisplayType } from "./constants";
 import styled from "@emotion/styled";
-import PrettifyObject from "./PrettifyObject";
-import PrettifyHTML from "./PrettifyHTML";
+import PrettifyHTML from "../../components/PrettifyHTML";
+import PrettifyObject from "../../components/PrettifyObject";
+import { OutputPretty, OutputRaw } from "../../styles";
+import { DisplayType, JSONEditorColors } from "../../constants";
 
 const OutputDisplay = styled.div({
   width: "100%",
@@ -16,22 +16,6 @@ const OutputDisplay = styled.div({
   fontFamily: "monospace",
   padding: "1rem",
   overflowY: "scroll",
-});
-
-const OutputRaw = styled.pre({
-  width: "100%",
-  height: "30rem",
-  border: "1px solid rgba(0,0,0,0.1)",
-  padding: "1rem",
-  overflowY: "scroll",
-  fontFamily: "'Roboto Mono', Monaco, monospace;",
-  wordWrap: "break-word",
-  wordBreak: "break-all",
-  whiteSpace: "normal"
-});
-
-const OutputPretty = styled(OutputRaw)({
-  color: "#ff4455",
 });
 
 const Response = ({ state, dispatch }) => {
@@ -57,7 +41,7 @@ const Response = ({ state, dispatch }) => {
               width="100%"
               height="20rem"
               theme="light_mitsuketa_tribute"
-              colors={jsonEditorColors}
+              colors={JSONEditorColors}
               style={{ body: { fontSize: "14px" } }}
               viewOnly={true}
               waitAfterKeyPress={1500}

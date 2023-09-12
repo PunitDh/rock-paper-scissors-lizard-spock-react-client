@@ -1,6 +1,6 @@
 import { deleteBodyContent, setBodyContent } from "../../../../actions";
 import KeyValueComponent from "../../../../components/KeyValueComponent";
-import { ContentType } from "../constants";
+import { ContentType } from "../../../../constants";
 
 export default function FormDataComponent({ state, dispatch }) {
   const handleChange = (e) =>

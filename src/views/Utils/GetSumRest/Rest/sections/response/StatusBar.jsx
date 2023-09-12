@@ -2,10 +2,10 @@ import styled from "@emotion/styled";
 import { Button, Tooltip, Typography } from "@mui/material";
 import { Bold, FlexBox } from "src/components/shared/styles";
 import { setOutputDisplayType } from "../../actions";
-import { DisplayType } from "./constants";
 import { Color } from "./styles";
 import { Save } from "@mui/icons-material";
 import prettyBytes from "pretty-bytes";
+import { DisplayType } from "../../constants";
 
 const StatusButton = styled(Button)(({ selected }) => ({
   backgroundColor: selected ? "#eee" : "#eee",

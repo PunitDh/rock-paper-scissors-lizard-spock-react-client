@@ -1,25 +1,26 @@
 import { initialState } from "./reducer";
 import KeyValuePair from "./models/KeyValuePair";
-import { AuthorizationType } from "./sections/request/AuthorizationTab/constants";
 import { Buffer } from "buffer";
+import Request from "./models/Request";
+import { AuthorizationType } from "./constants";
 
 export const initializeState = () => {
   return {
     ...initialState,
-    request: {
+    request: new Request({
       ...initialState.request,
-      params: [createKeyValue("params")],
-      headers: [createKeyValue("headers")],
+      params: [createKeyValuePair("params")],
+      headers: [createKeyValuePair("headers")],
       body: {
         ...initialState.request.body,
-        formData: [createKeyValue("formData")],
-        formEncoded: [createKeyValue("formEncoded")],
+        formData: [createKeyValuePair("formData")],
+        formEncoded: [createKeyValuePair("formEncoded")],
       },
-    },
+    }),
   };
 };
 
-export const createKeyValue = (prefix, include = true) => {
+export const createKeyValuePair = (prefix, include = true) => {
   return new KeyValuePair().setUniqueId(prefix).setInclude(include);
 };
 
@@ -29,7 +30,7 @@ export const updateList = (currentList, payload) => {
   updatedList[index] = payload;
   const prefix = currentList[index].id.split("-")[0];
   if (index === currentList.length - 1 && updatedList[index].filled) {
-    updatedList.push(createKeyValue(prefix, true));
+    updatedList.push(createKeyValuePair(prefix, true));
   }
   return updatedList;
 };

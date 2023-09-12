@@ -1,4 +1,5 @@
-import { DisplayType } from "../sections/response/constants";
+import { DisplayType } from "../constants";
+
 
 export default class Response {
   constructor(obj = {}) {

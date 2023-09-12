@@ -1,7 +1,7 @@
 import JSONInput from "react-json-editor-ajrm";
 import locale from "react-json-editor-ajrm/locale/en";
-import { ContentType, jsonEditorColors } from "../constants";
-import { deleteBodyContent, setBodyContent } from "../../../../actions";
+import { setBodyContent } from "../../../../actions";
+import { ContentType, JSONEditorColors } from "../../../../constants";
 
 const ApplicationJSON = ({ state, dispatch }) => {
   const handleBodyChange = (e) =>
@@ -15,7 +15,7 @@ const ApplicationJSON = ({ state, dispatch }) => {
       width="100%"
       height="20rem"
       theme="light_mitsuketa_tribute"
-      colors={jsonEditorColors}
+      colors={JSONEditorColors}
       style={{ body: { fontSize: "14px" } }}
       onChange={handleBodyChange}
       waitAfterKeyPress={1500}

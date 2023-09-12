@@ -12,6 +12,7 @@ import styled from "@emotion/styled";
 import { useAPI, useLoading, useNotification } from "src/hooks";
 import { useRef } from "react";
 import { createAuthorization, createHeaders } from "../../utils";
+import { ContentTypeMenuItems, HttpMethod } from "../../constants";
 
 const FlexForm = styled.form({
   display: "flex",
@@ -40,8 +41,10 @@ const URLBar = ({ state, dispatch }) => {
       sendRequest({
         url: state.request.url.href,
         method: state.request.method,
+        withCredentials: false,
         headers: {
           ...headers,
+          "Content-Type": ContentTypeMenuItems[state.request.contentType].value,
           Authorization: authorization,
         },
       })
@@ -68,7 +71,6 @@ const URLBar = ({ state, dispatch }) => {
     //   .catch((error) => console.error(error));
   };
 
-  const methods = ["GET", "POST", "PUT", "PATCH", "DELETE"];
   const handleSetUrl = (e) => {
     e.preventDefault();
     dispatch(setUrl(e.target.value));
@@ -88,7 +90,7 @@ const URLBar = ({ state, dispatch }) => {
         value={state.request.method}
         onChange={handleSetMethod}
       >
-        {methods.map((method) => (
+        {Object.keys(HttpMethod).map((method) => (
           <MenuItem
             key={method}
             value={method}

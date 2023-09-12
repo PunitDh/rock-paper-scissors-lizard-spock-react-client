@@ -1,14 +1,15 @@
 import { RestAction } from "./actions";
+import { ContentType, DisplayType } from "./constants";
 import KeyValuePair from "./models/KeyValuePair";
+import Request from "./models/Request";
+import RequestBody from "./models/RequestBody";
 import Response from "./models/Response";
-import { AuthorizationType } from "./sections/request/AuthorizationTab/constants";
-import { ContentType } from "./sections/request/BodyTab/constants";
-import { DisplayType } from "./sections/response/constants";
-import { createKeyValue, updateList } from "./utils";
+import { createKeyValuePair, updateList } from "./utils";
 
 export const initialState = {
   loading: false,
-  request: {
+  requests: [new Request()],
+  request: new Request({
     // url: new URL(
     //   "https://rpscls-punitdh-api-b70261e87515.herokuapp.com/admin/settings"
     // ),
@@ -24,25 +25,8 @@ export const initialState = {
     //   "https://jsonplaceholder.typicode.com/todos/"
     // ).href,
     isValidUrl: true,
-    method: "GET",
-    params: [],
-    authorization: {
-      type: AuthorizationType.NO_AUTH,
-      [AuthorizationType.BASIC_AUTH]: {
-        username: "",
-        password: "",
-      },
-      [AuthorizationType.BEARER_TOKEN]: {
-        prefix: "",
-        token: "",
-      },
-      [AuthorizationType.API_KEY]: {
-        key: "",
-        value: "",
-      },
-    },
-    headers: [],
-    body: {
+
+    body: new RequestBody({
       json: {
         id: "6209c3403ebaa300084cec22",
         batchId: "6209c3403ebaa300084cec21",
@@ -52,12 +36,9 @@ export const initialState = {
         reportKey: "PDF_PORTFOLIO_SUMMARY_AGGREGATED",
         test: null,
       },
-      formData: [],
-      formEncoded: [],
-      xml: "",
-    },
+    }),
     contentType: ContentType.NONE,
-  },
+  }),
   response: new Response({
     output: null,
     json: false,
@@ -78,37 +59,30 @@ export const reducer = (state, action) => {
           new KeyValuePair(key, value).setInclude(true).setUniqueId("param")
         );
         if (params[params.length - 1]?.filled) {
-          params.push(createKeyValue("param"));
+          params.push(createKeyValuePair("param"));
         }
         return {
           ...state,
-          request: {
-            ...state.request,
-            url,
-            isValidUrl: true,
-            urlDisplay: url.href,
-            params,
-          },
+          request: state.request
+            .setUrl(url)
+            .setIsValidUrl(true)
+            .setUrlDisplay(url.href)
+            .setParams(params),
         };
       } catch (e) {
         console.log(e);
         return {
           ...state,
-          request: {
-            ...state.request,
-            url: state.request.url,
-            isValidUrl: false,
-            urlDisplay: action.payload,
-          },
+          request: state.request
+            .setUrl(action.payload)
+            .setIsValidUrl(false)
+            .setUrlDisplay(action.payload),
         };
       }
     case RestAction.SET_METHOD:
       return {
         ...state,
-        request: {
-          ...state.request,
-          method: action.payload,
-        },
+        request: state.request.setMethod(action.payload),
       };
     case RestAction.SET_PARAMS: {
       const params = updateList(state.request.params, action.payload);
@@ -121,13 +95,11 @@ export const reducer = (state, action) => {
 
       return {
         ...state,
-        request: {
-          ...state.request,
-          url,
-          urlDisplay: url.href,
-          isValidUrl: true,
-          params,
-        },
+        request: state.request
+          .setUrl(url)
+          .setUrlDisplay(url.href)
+          .setIsValidUrl(true)
+          .setParams(params),
       };
     }
     case RestAction.DELETE_PARAMS: {
@@ -139,61 +111,57 @@ export const reducer = (state, action) => {
         return it.id !== action.payload.id;
       });
 
+      if (params.length === 0) {
+        params.push(createKeyValuePair("params"));
+      }
+
       return {
         ...state,
-        request: {
-          ...state.request,
-          params,
-          urlDisplay: state.request.url.href,
-          isValidUrl: true,
-        },
+        request: state.request
+          .setParams(params)
+          .setUrlDisplay(state.request.url.href)
+          .setIsValidUrl(true),
       };
     }
-    case RestAction.SET_AUTHORIZATION:
+    case RestAction.SET_AUTHORIZATION: // TODO
       return {
         ...state,
-        request: {
-          ...state.request,
-          authorization: {
-            ...state.request.authorization,
-            [action.payload.type]: {
-              ...state.request.authorization[action.payload.type],
-              [action.payload.key]: action.payload.value,
-            },
+        request: state.request.setAuthorization({
+          ...state.request.authorization,
+          [action.payload.type]: {
+            ...state.request.authorization[action.payload.type],
+            [action.payload.key]: action.payload.value,
           },
-        },
+        }),
       };
-    case RestAction.SET_AUTHORIZATION_TYPE:
+    case RestAction.SET_AUTHORIZATION_TYPE: {
       return {
         ...state,
-        request: {
-          ...state.request,
-          authorization: {
-            ...state.request.authorization,
-            type: action.payload,
-          },
-        },
+        request: state.request.setAuthorization({
+          ...state.request.authorization,
+          type: action.payload,
+        }),
       };
+    }
     case RestAction.SET_HEADERS: {
       const headers = updateList(state.request.headers, action.payload);
       return {
         ...state,
-        request: {
-          ...state.request,
-          headers,
-        },
+        request: state.request.setHeaders(headers),
       };
     }
     case RestAction.DELETE_HEADERS: {
       const headers = state.request.headers.filter(
         (it) => it.id !== action.payload.id
       );
+
+      if (headers.length === 0) {
+        headers.push(createKeyValuePair("headers"));
+      }
+
       return {
         ...state,
-        request: {
-          ...state.request,
-          headers,
-        },
+        request: state.request.setHeaders(headers),
       };
     }
     case RestAction.SET_BODY_CONTENT: {
@@ -202,13 +170,10 @@ export const reducer = (state, action) => {
         case ContentType.XML:
           return {
             ...state,
-            request: {
-              ...state.request,
-              body: {
-                ...state.request.body,
-                [action.payload.type]: action.payload.value,
-              },
-            },
+            request: state.request.setBody({
+              ...state.request.body,
+              [action.payload.type]: action.payload.value,
+            }),
           };
         case ContentType.FORM_DATA:
         case ContentType.FORM_ENCODED:
@@ -218,13 +183,10 @@ export const reducer = (state, action) => {
           );
           return {
             ...state,
-            request: {
-              ...state.request,
-              body: {
-                ...state.request.body,
-                [action.payload.type]: updated,
-              },
-            },
+            request: state.request.setBody({
+              ...state.request.body,
+              [action.payload.type]: updated,
+            }),
           };
         case ContentType.NONE:
         default:
@@ -237,7 +199,7 @@ export const reducer = (state, action) => {
       );
 
       if (updatedList.length === 0) {
-        updatedList.push(createKeyValue(action.payload.type, true));
+        updatedList.push(createKeyValuePair(action.payload.type, true));
       }
 
       switch (action.payload.type) {
@@ -245,13 +207,10 @@ export const reducer = (state, action) => {
         case ContentType.FORM_ENCODED:
           return {
             ...state,
-            request: {
-              ...state.request,
-              body: {
-                ...state.request.body,
-                [action.payload.type]: updatedList,
-              },
-            },
+            request: state.request.setBody({
+              ...state.request.body,
+              [action.payload.type]: updatedList,
+            }),
           };
         case ContentType.JSON:
         case ContentType.XML:
@@ -263,10 +222,7 @@ export const reducer = (state, action) => {
     case RestAction.SET_CONTENT_TYPE:
       return {
         ...state,
-        request: {
-          ...state.request,
-          contentType: action.payload,
-        },
+        request: state.request.setContentType(action.payload),
       };
 
     case RestAction.SET_RESPONSE: {

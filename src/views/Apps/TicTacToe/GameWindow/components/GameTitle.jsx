@@ -1,32 +1,10 @@
-import { TextField, Tooltip } from "@mui/material";
-import { withStyles } from "@mui/styles";
+import { Tooltip } from "@mui/material";
 import { useEffect, useState } from "react";
 import IconSelectField from "src/components/shared/IconSelectField";
 import { FlexBox } from "src/components/shared/styles";
 import { getIcon } from "src/assets";
 import { useAPI, useCurrentGame } from "src/hooks";
-
-const InvisibleTextField = withStyles({
-  root: {
-    "& label.Mui-focused": {
-      color: "white",
-    },
-    "& .MuiInput-underline:after": {
-      borderBottomColor: "rgba(0, 0, 0, 0.23)",
-    },
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": {
-        borderColor: "white",
-      },
-      "&:hover fieldset": {
-        borderColor: "rgba(0, 0, 0, 0.23)",
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "rgba(0, 0, 0, 0.58)",
-      },
-    },
-  },
-})(TextField);
+import { InvisibleTextField } from "src/components/shared/InvisibleTextField";
 
 const GameTitle = () => {
   const currentGame = useCurrentGame();

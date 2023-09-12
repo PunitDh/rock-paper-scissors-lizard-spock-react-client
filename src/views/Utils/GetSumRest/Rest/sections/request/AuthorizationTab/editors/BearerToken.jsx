@@ -6,8 +6,8 @@ import {
   TextField,
 } from "@mui/material";
 import { Bold, FlexBox } from "src/components/shared/styles";
-import { AuthorizationType } from "../constants";
 import { setAuthorization } from "../../../../actions";
+import { AuthorizationType } from "../../../../constants";
 
 export default function BearerToken({ state, dispatch }) {
   const credentials =
