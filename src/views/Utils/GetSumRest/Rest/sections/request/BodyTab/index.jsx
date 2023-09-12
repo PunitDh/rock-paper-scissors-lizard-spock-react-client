@@ -20,7 +20,7 @@ const InputContainer = styled(RadioGroup)({
   width: "100%",
 });
 
-export default function Body({ state, dispatch, value }) {
+export default function Body({ state, dispatch, value, id: tabId }) {
   const handleChange = (e) => {
     dispatch(setContentType(e.target.value));
   };
@@ -28,7 +28,7 @@ export default function Body({ state, dispatch, value }) {
   const { Component } = ContentTypeMenuItems[state.request.contentType];
 
   return (
-    <CustomTabPanel value={value} index={3}>
+    <CustomTabPanel value={value} index={3} tabId={tabId}>
       <Bold>Body</Bold>
       <FlexBox
         flexDirection="column"

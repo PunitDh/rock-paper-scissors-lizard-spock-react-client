@@ -203,6 +203,8 @@ export function send(url, method, headers, authorization) {
     method,
     headers: {
       ...headers,
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
       Authorization: authorization,
     },
     // headers: {

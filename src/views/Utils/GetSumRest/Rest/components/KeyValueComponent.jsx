@@ -14,40 +14,31 @@ const TableHeaderCell = styled(TableCell)(({ width }) => ({
   width: width || "calc((100%)/3)",
 }));
 
-const KeyValueComponent = ({ property, onChange, onDelete, fileUpload }) => {
-  const handleChange = (e) => {
-    onChange(e);
-  };
-
-  const handleDelete = (e) => {
-    onDelete(e);
-  };
-
-  return (
-    <Table style={{ tableLayout: "fixed" }}>
-      <TableHead style={{ borderBottom: "1px solid rgba(0,0,0,1)" }}>
-        <TableRow>
-          <TableCell style={{ width: "4rem" }}> </TableCell>
-          <TableHeaderCell>Key</TableHeaderCell>
-          <TableHeaderCell>Value</TableHeaderCell>
-          <TableHeaderCell>Description</TableHeaderCell>
-          <TableHeaderCell width="2rem"></TableHeaderCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {property.map((pair, index) => (
-          <KeyValueRow
-            pair={pair}
-            onChange={handleChange}
-            onDelete={handleDelete}
-            key={index}
-            isLast={index === property.length - 1}
-            fileUpload={fileUpload}
-          />
-        ))}
-      </TableBody>
-    </Table>
-  );
-};
+const KeyValueComponent = ({ property, onChange, onDelete, fileUpload, type }) => (
+  <Table style={{ tableLayout: "fixed" }}>
+    <TableHead style={{ borderBottom: "1px solid rgba(0,0,0,1)" }}>
+      <TableRow>
+        <TableCell style={{ width: "4rem" }}> </TableCell>
+        <TableHeaderCell>Key</TableHeaderCell>
+        <TableHeaderCell>Value</TableHeaderCell>
+        <TableHeaderCell>Description</TableHeaderCell>
+        <TableHeaderCell width="2rem"></TableHeaderCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {property.map((pair, index) => (
+        <KeyValueRow
+          pair={pair}
+          type={type}
+          onChange={onChange}
+          onDelete={onDelete}
+          key={index}
+          isLast={index === property.length - 1}
+          fileUpload={fileUpload}
+        />
+      ))}
+    </TableBody>
+  </Table>
+);
 
 export default KeyValueComponent;

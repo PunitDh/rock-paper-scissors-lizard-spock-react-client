@@ -14,13 +14,28 @@ export const SmallInputField = styled(InputTextField)({
 });
 
 export const FlexForm = styled.form(
-  ({ gap = "0.2rem", flexWrap, flexDirection = "row" }) => ({
+  ({
+    gap = "0.2rem",
+    flexWrap,
+    flexDirection = "row",
+    height,
+    alignItems,
+    justifyContent,
+    width,
+    marginLeft,
+    backgroundColor,
+  }) => ({
     display: "flex",
     padding: "0.5rem",
-    backgroundColor: "rgba(0,0,0,0.1)",
+    backgroundColor: backgroundColor || "rgba(0,0,0,0.1)",
     gap,
     flexWrap,
     flexDirection,
+    height,
+    alignItems,
+    justifyContent,
+    width,
+    marginLeft,
   })
 );
 

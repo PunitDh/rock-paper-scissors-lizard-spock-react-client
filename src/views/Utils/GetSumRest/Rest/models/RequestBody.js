@@ -1,10 +1,11 @@
-import { createKeyValuePair } from "../utils";
+import { KeyValuePairType } from "../constants";
+import { createBlankKeyValuePair } from "../utils";
 
 export default class RequestBody {
   constructor(obj = {}) {
     this.json = obj.json || {};
-    this.formData = obj.formData || [createKeyValuePair("formData")];
-    this.formEncoded = obj.formEncoded || [createKeyValuePair("formEncoded")];
+    this.formData = obj.formData || [createBlankKeyValuePair(KeyValuePairType.FORM_DATA)];
+    this.formEncoded = obj.formEncoded || [createBlankKeyValuePair(KeyValuePairType.FORM_ENCODED)];
     this.xml = obj.xml || "";
   }
 
@@ -21,7 +22,7 @@ export default class RequestBody {
   removeField(field, keyValuePair) {
     this[field].filter((it) => it.id !== keyValuePair.id);
     if (this[field].length === 0) {
-      this[field].push(createKeyValuePair(field));
+      this[field].push(createBlankKeyValuePair(field));
     }
     return this;
   }

@@ -1,46 +1,61 @@
-import { Box, Tab, Tabs } from "@mui/material";
+import { Box, Tabs } from "@mui/material";
 import { useState } from "react";
-import { useLocation } from "react-router";
 import QueryParamsTab from "./QueryParamsTab";
 import AuthorizationTab from "./AuthorizationTab";
 import Body from "./BodyTab";
 import HeadersTab from "./HeadersTab";
+import styled from "@emotion/styled";
+import { RequestTabList, tabProps } from "../../constants";
+import { DividerBox } from "../../styles";
+import { useQueryParam } from "src/hooks";
+import CustomTab from "../../components/CustomTab";
 
-function a11yProps(index) {
-  return {
-    id: `header-tab-${index}`,
-    "aria-controls": `rest-tabpanel-${index}`,
-  };
-}
+const WideBox = styled(Box)({
+  width: "100%",
+});
 
 export default function RequestTabs({ state, dispatch }) {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const activeTab = Number(searchParams.get("activeTab"));
-  const [value, setValue] = useState(activeTab || 0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  const requestTab = useQueryParam("requestTab");
+  const [tab, setTab] = useState(Number(requestTab) || 0);
+  const handleChange = (_, newValue) => setTab(newValue);
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+    <WideBox>
+      <DividerBox>
         <Tabs
-          value={value}
+          value={tab}
           onChange={handleChange}
-          aria-label="basic tabs example"
+          aria-label="rest-request-props"
         >
-          <Tab label="Params" {...a11yProps(0)} />
-          <Tab label="Authorization" {...a11yProps(1)} />
-          <Tab label="Headers" {...a11yProps(2)} />
-          <Tab label="Body" {...a11yProps(3)} />
+          {RequestTabList.map((tab, index) => (
+            <CustomTab
+              key={tab.type}
+              label={tab.type}
+              subLabel={() => tab.subLabel(state.request)}
+              {...tabProps(index)}
+            />
+          ))}
         </Tabs>
-      </Box>
-      <QueryParamsTab state={state} dispatch={dispatch} value={value} />
-      <AuthorizationTab state={state} dispatch={dispatch} value={value} />
-      <HeadersTab state={state} dispatch={dispatch} value={value} />
-      <Body state={state} dispatch={dispatch} value={value} />
-    </Box>
+      </DividerBox>
+      <QueryParamsTab
+        state={state}
+        dispatch={dispatch}
+        value={tab}
+        tabId="request"
+      />
+      <AuthorizationTab
+        state={state}
+        dispatch={dispatch}
+        value={tab}
+        tabId="request"
+      />
+      <HeadersTab
+        state={state}
+        dispatch={dispatch}
+        value={tab}
+        tabId="request"
+      />
+      <Body state={state} dispatch={dispatch} value={tab} tabId="request" />
+    </WideBox>
   );
 }

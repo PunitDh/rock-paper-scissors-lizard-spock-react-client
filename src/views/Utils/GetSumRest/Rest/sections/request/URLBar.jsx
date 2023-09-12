@@ -1,17 +1,16 @@
+import styled from "@emotion/styled";
+import { useRef } from "react";
 import {
+  Autocomplete,
   Button,
   CircularProgress,
-  MenuItem,
-  Select,
   TextField,
 } from "@mui/material";
 import { FlexBox } from "src/components/shared/styles";
 import { setMethod, setResponse, setResponseTime, setUrl } from "../../actions";
 import SendIcon from "../../components/SendIcon";
-import styled from "@emotion/styled";
 import { useAPI, useLoading, useNotification } from "src/hooks";
-import { useRef } from "react";
-import { createAuthorization, createHeaders } from "../../utils";
+import { createAuthorizationHeader, createHeaders } from "../../utils";
 import { ContentTypeMenuItems, HttpMethod } from "../../constants";
 
 const FlexForm = styled.form({
@@ -26,7 +25,7 @@ const URLBar = ({ state, dispatch }) => {
   const [sendRequest, loading] = useLoading(api.sendRestRequest);
   const notification = useNotification();
   const startTime = useRef(0);
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     startTime.current = Date.now();
     e.preventDefault();
 
@@ -36,12 +35,14 @@ const URLBar = ({ state, dispatch }) => {
 
     if (state.request.isValidUrl) {
       const headers = createHeaders(state.request.headers);
-      const authorization = createAuthorization(state.request.authorization);
+      const authorization = createAuthorizationHeader(
+        state.request.authorization
+      );
 
       const requestConfig = {
         url: state.request.url.href,
         method: state.request.method,
-        withCredentials: false,
+        withCredentials: true,
         headers: {
           ...headers,
           "Content-Type": ContentTypeMenuItems[state.request.contentType].value,
@@ -55,7 +56,11 @@ const URLBar = ({ state, dispatch }) => {
           api
             .sendProxyRestRequest(requestConfig)
             .then((response) => handleResponse(response))
-            .catch(() => notification.error("Unable to send request"))
+            .catch(() =>
+              notification.error(
+                `Unable to get a response from '${requestConfig.url}'`
+              )
+            )
         )
         .finally(() => {
           dispatch(setResponseTime(Date.now() - startTime.current));
@@ -70,7 +75,8 @@ const URLBar = ({ state, dispatch }) => {
     e.preventDefault();
     dispatch(setUrl(e.target.value));
   };
-  const handleSetMethod = (e) => dispatch(setMethod(e.target.value));
+
+  const handleSetMethod = (e, value) => dispatch(setMethod(value));
 
   return (
     <FlexForm
@@ -79,23 +85,16 @@ const URLBar = ({ state, dispatch }) => {
       alignItems="stretch"
       onSubmit={handleSubmit}
     >
-      <Select
-        labelId="method-select"
-        id="method-select"
-        value={state.request.method}
-        onChange={handleSetMethod}
-      >
-        {Object.keys(HttpMethod).map((method) => (
-          <MenuItem
-            key={method}
-            value={method}
-            selected={state.request.method === method}
-          >
-            {method}
-          </MenuItem>
-        ))}
-      </Select>
-
+      <div>
+        <Autocomplete
+          inputValue={state.request.method}
+          onInputChange={handleSetMethod}
+          id="method-select"
+          options={Object.keys(HttpMethod)}
+          sx={{ width: "8rem" }}
+          renderInput={(params) => <TextField {...params} />}
+        />
+      </div>
       <TextField
         type="url"
         placeholder="https://www.example.com/"
@@ -104,7 +103,6 @@ const URLBar = ({ state, dispatch }) => {
         sx={{ width: "100%" }}
         autoComplete="off"
       />
-
       <Button
         type="submit"
         variant="contained"

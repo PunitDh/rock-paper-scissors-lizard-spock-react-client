@@ -1,3 +1,4 @@
+import { Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { FlexBox } from "src/components/shared/styles";
 
 export default function NoAuth() {
@@ -9,7 +10,13 @@ export default function NoAuth() {
       width="100%"
       marginLeft="2rem"
     >
-      This request does not use any authorization
+      <Table>
+        <TableBody>
+          <TableRow>
+            <TableCell>This request does not use any authorization</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
     </FlexBox>
   );
 }

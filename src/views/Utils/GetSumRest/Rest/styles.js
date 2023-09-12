@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { Box, Button } from "@mui/material";
 
 export const OutputRaw = styled.pre({
   width: "100%",
@@ -15,3 +16,15 @@ export const OutputRaw = styled.pre({
 export const OutputPretty = styled(OutputRaw)({
   color: "#ff4455",
 });
+
+export const DividerBox = styled(Box)({
+  borderBottom: 1,
+  borderColor: "divider",
+});
+
+export const StatusButton = styled(Button)(({ selected }) => ({
+  backgroundColor: selected ? "#eee" : "#eee",
+  "&:hover": {
+    backgroundColor: selected ? "#aaa" : "#bbb",
+  },
+}));

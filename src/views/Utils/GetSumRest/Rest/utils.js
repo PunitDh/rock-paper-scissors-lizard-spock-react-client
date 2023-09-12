@@ -2,36 +2,53 @@ import { initialState } from "./reducer";
 import KeyValuePair from "./models/KeyValuePair";
 import { Buffer } from "buffer";
 import Request from "./models/Request";
-import { AuthorizationType } from "./constants";
+import { AuthorizationType, KeyValuePairType } from "./constants";
 import RequestBody from "./models/RequestBody";
+import Authorization from "./models/Authorization";
 
 export const initializeState = () => {
   return {
     ...initialState,
     request: new Request({
       ...initialState.request,
-      params: [createKeyValuePair("params")],
-      headers: [createKeyValuePair("headers")],
+      params: [createBlankKeyValuePair(KeyValuePairType.PARAM)],
+      headers: [createBlankKeyValuePair(KeyValuePairType.HEADER)],
       body: new RequestBody({
         ...initialState.request.body,
-        formData: [createKeyValuePair("formData")],
-        formEncoded: [createKeyValuePair("formEncoded")],
+        formData: [createBlankKeyValuePair(KeyValuePairType.FORM_DATA)],
+        formEncoded: [createBlankKeyValuePair(KeyValuePairType.FORM_ENCODED)],
       }),
     }),
   };
 };
 
-export const createKeyValuePair = (prefix, include = true) => {
+/**
+ *
+ * @param {String} prefix
+ * @param {Boolean} include
+ * @returns {KeyValuePair}
+ */
+export const createBlankKeyValuePair = (prefix, include = true) => {
   return new KeyValuePair().setUniqueId(prefix).setInclude(include);
 };
 
-export const updateList = (currentList, payload) => {
-  const index = currentList.findIndex((it) => it.id === payload.id);
-  const updatedList = [...currentList];
-  updatedList[index] = payload;
-  const prefix = currentList[index].id.split("-")[0];
+/**
+ *
+ * @param {Array} currentList
+ * @param {KeyValuePair} keyValuePair
+ * @returns {Array}
+ */
+export const updateList = (currentList, keyValuePair) => {
+  const index = currentList.findIndex((it) => it.id === keyValuePair.id);
+  let updatedList = [...currentList];
+  if (index < 0) {
+    updatedList = [...currentList, keyValuePair]; // If not found, add new
+  } else {
+    updatedList[index] = keyValuePair;
+  }
+  const prefix = keyValuePair.id.split("-")[0];
   if (index === currentList.length - 1 && updatedList[index].filled) {
-    updatedList.push(createKeyValuePair(prefix, true));
+    updatedList.push(createBlankKeyValuePair(prefix, true));
   }
   return updatedList;
 };
@@ -43,8 +60,13 @@ export const createHeaders = (headers) => {
   );
 };
 
-export const createAuthorization = (authorization) => {
-  switch (authorization.type) {
+/**
+ *
+ * @param {Authorization} stateAuthorization
+ * @returns {String}
+ */
+export const createAuthorizationHeader = (stateAuthorization) => {
+  switch (stateAuthorization.type) {
     case AuthorizationType.BASIC_AUTH: {
       const createBasicAuth = (data) => {
         const credentials = Buffer.from(
@@ -53,7 +75,7 @@ export const createAuthorization = (authorization) => {
 
         return `Basic ${credentials}`;
       };
-      return createBasicAuth(authorization[AuthorizationType.BASIC_AUTH]);
+      return createBasicAuth(stateAuthorization[AuthorizationType.BASIC_AUTH]);
     }
     case AuthorizationType.BEARER_TOKEN: {
       const createBearerToken = (authorization) => {
@@ -61,14 +83,22 @@ export const createAuthorization = (authorization) => {
           ? `${authorization.prefix} ${authorization.token}`
           : authorization.token;
       };
-      return createBearerToken(authorization[AuthorizationType.BEARER_TOKEN]);
+      return createBearerToken(
+        stateAuthorization[AuthorizationType.BEARER_TOKEN]
+      );
     }
     default:
       break;
   }
 };
 
-export const createSerializedFilename = (name, date) => {
+/**
+ *
+ * @param {String} name
+ * @returns {String}
+ */
+export const createSerializedFilename = (name) => {
+  const date = new Date();
   return name
     .concat(`-${date.toLocaleDateString()}-${date.toLocaleTimeString()}`)
     .replaceAll(/[:/?=."'+*^\\<>|]/g, " ")

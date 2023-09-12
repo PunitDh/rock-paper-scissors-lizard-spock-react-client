@@ -12,7 +12,7 @@ import { AuthorizationType } from "../../../../constants";
 
 export default function BasicAuth({ state, dispatch }) {
   const credentials = state.request.authorization[AuthorizationType.BASIC_AUTH];
-  const handleChange = (e) => {
+  const handleChange = (e) =>
     dispatch(
       setAuthorization(
         AuthorizationType.BASIC_AUTH,
@@ -20,7 +20,6 @@ export default function BasicAuth({ state, dispatch }) {
         e.target.value
       )
     );
-  };
 
   return (
     <FlexBox

@@ -10,20 +10,21 @@ const StyledBox = styled.div(({ border, width }) => ({
   justifyContent: "flex-start",
   alignItems: "flex-start",
   display: "flex",
-  width: width || "40%",
+  width: width || "60%",
   flexDirection: "column",
   gap: "0.5rem",
 }));
 
-const AuthorizationTab = ({ state, dispatch, value }) => {
+const AuthorizationTab = ({ state, dispatch, value, tabId }) => {
   const { Component } =
     AuthorizationTypeItems[state.request.authorization.type];
 
   return (
-    <CustomTabPanel value={value} index={1}>
+    <CustomTabPanel value={value} index={1} tabId={tabId}>
       <Bold>Authorization</Bold>
       <FlexBox
         width="100%"
+        height="100%"
         gap="1rem"
         justifyContent="flex-start"
         marginTop="1rem"
@@ -31,7 +32,7 @@ const AuthorizationTab = ({ state, dispatch, value }) => {
         <StyledBox border>
           <Selector state={state} dispatch={dispatch} />
         </StyledBox>
-        <StyledBox width="60%" height="">
+        <StyledBox width="100%" height="">
           {Component && <Component state={state} dispatch={dispatch} />}
         </StyledBox>
       </FlexBox>

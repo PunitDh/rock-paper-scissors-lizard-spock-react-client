@@ -1,10 +1,16 @@
 import { RestAction } from "./actions";
-import { ContentType, DisplayType } from "./constants";
+import {
+  APIKeyAddTo,
+  ContentType,
+  DisplayType,
+  KeyValuePairType,
+} from "./constants";
+import Authorization from "./models/Authorization";
 import KeyValuePair from "./models/KeyValuePair";
 import Request from "./models/Request";
 import RequestBody from "./models/RequestBody";
 import Response from "./models/Response";
-import { createKeyValuePair, updateList } from "./utils";
+import { createBlankKeyValuePair, updateList } from "./utils";
 
 export const initialState = {
   loading: false,
@@ -25,7 +31,7 @@ export const initialState = {
     //   "https://jsonplaceholder.typicode.com/todos/"
     // ).href,
     isValidUrl: true,
-
+    authorization: new Authorization(),
     body: new RequestBody({
       json: {
         id: "6209c3403ebaa300084cec22",
@@ -56,10 +62,12 @@ export const reducer = (state, action) => {
       try {
         const url = new URL(action.payload);
         const params = [...url.searchParams.entries()].map(([key, value]) =>
-          new KeyValuePair(key, value).setInclude(true).setUniqueId("param")
+          new KeyValuePair(key, value)
+            .setInclude(true)
+            .setUniqueId(KeyValuePairType.PARAM)
         );
         if (params[params.length - 1]?.filled) {
-          params.push(createKeyValuePair("param"));
+          params.push(createBlankKeyValuePair(KeyValuePairType.PARAM));
         }
         return {
           ...state,
@@ -91,6 +99,7 @@ export const reducer = (state, action) => {
         request: state.request.setMethod(action.payload),
       };
     case RestAction.SET_PARAMS: {
+      console.log(action.payload);
       const params = updateList(state.request.params, action.payload);
       const url = new URL(state.request.url.pathname, state.request.url.origin);
       params.forEach((it) => {
@@ -118,7 +127,7 @@ export const reducer = (state, action) => {
       });
 
       if (params.length === 0) {
-        params.push(createKeyValuePair("params"));
+        params.push(createBlankKeyValuePair(KeyValuePairType.PARAM));
       }
 
       return {
@@ -129,7 +138,7 @@ export const reducer = (state, action) => {
           .setIsValidUrl(true),
       };
     }
-    case RestAction.SET_AUTHORIZATION: // TODO
+    case RestAction.SET_AUTHORIZATION:
       return {
         ...state,
         request: state.request.setAuthorization({
@@ -162,7 +171,7 @@ export const reducer = (state, action) => {
       );
 
       if (headers.length === 0) {
-        headers.push(createKeyValuePair("headers"));
+        headers.push(createBlankKeyValuePair(KeyValuePairType.HEADER));
       }
 
       return {
@@ -205,7 +214,7 @@ export const reducer = (state, action) => {
       );
 
       if (updatedList.length === 0) {
-        updatedList.push(createKeyValuePair(action.payload.type, true));
+        updatedList.push(createBlankKeyValuePair(action.payload.type, true));
       }
 
       switch (action.payload.type) {
@@ -232,6 +241,7 @@ export const reducer = (state, action) => {
       };
 
     case RestAction.SET_RESPONSE: {
+      console.log(action.payload);
       return {
         ...state,
         response: new Response({

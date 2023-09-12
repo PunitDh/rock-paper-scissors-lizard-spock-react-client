@@ -21,6 +21,7 @@ export default function BearerToken({ state, dispatch }) {
       )
     );
   };
+
   return (
     <FlexBox
       height="20rem"
@@ -43,7 +44,6 @@ export default function BearerToken({ state, dispatch }) {
                 name="prefix"
                 value={credentials.prefix}
                 onChange={handleChange}
-                defaultValue="Bearer"
                 placeholder="None"
               />
             </TableCell>

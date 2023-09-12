@@ -7,7 +7,7 @@ export default function FormDataComponent({ state, dispatch }) {
     dispatch(setBodyContent(ContentType.FORM_DATA, e));
   const handleDelete = (e) =>
     dispatch(deleteBodyContent(ContentType.FORM_DATA, e));
-    
+
   return (
     <KeyValueComponent
       fileUpload={true}

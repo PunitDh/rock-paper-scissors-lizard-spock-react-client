@@ -4,6 +4,18 @@ import CellFormatting from "./CellFormatting";
 import { NumberFormat } from "../components/Toolbar/constants";
 
 export default class CellData {
+  /**
+   * Creates an instance of CellData.
+   *
+   * @param {Object} [obj] - The initial values for the cell data.
+   * @param {string} [obj.id] - The ID of the cell.
+   * @param {string|number} [obj.value] - The value of the cell.
+   * @param {string} [obj.formula] - The formula of the cell (if it contains one).
+   * @param {Array<string>} [obj.referenceCells] - The cells referenced in the formula.
+   * @param {string} [obj.display] - The formatted display value of the cell.
+   * @param {Object} [obj.formatting] - The cell formatting attributes.
+   * @param {string} [obj.error] - Any error related to the cell.
+   */
   constructor(obj) {
     if (obj) {
       this.id = obj.id || null;
@@ -25,6 +37,13 @@ export default class CellData {
     }
   }
 
+  /**
+   * Retrieves an existing `CellData` instance or creates a new one.
+   *
+   * @param {CellData|Object} cellData - An existing `CellData` instance or an object with cell data properties.
+   * @param {string} id - The ID for the new `CellData` instance if one is created.
+   * @returns {CellData} An existing or newly created `CellData` instance.
+   */
   static getOrNew(cellData, id) {
     if (cellData instanceof CellData) {
       return cellData;
@@ -33,6 +52,13 @@ export default class CellData {
     return new CellData(cellData || { id });
   }
 
+  /**
+   * Retrieves an existing `CellData` instance from state or creates a new one.
+   *
+   * @param {Object} stateContentData - The state containing cell data instances.
+   * @param {string} id - The ID for retrieving or creating a `CellData` instance.
+   * @returns {CellData} An existing or newly created `CellData` instance.
+   */
   static getOrNew1(stateContentData, id) {
     if (stateContentData[id] instanceof CellData) {
       return stateContentData[id];
@@ -40,10 +66,21 @@ export default class CellData {
     return new CellData({ id });
   }
 
+  /**
+   * Determines if the cell contains a formula.
+   *
+   * @returns {boolean} True if the cell contains a formula, otherwise false.
+   */
   get isFormulaCell() {
     return isFormula(this.formula) && this.formula?.length > 0;
   }
 
+  /**
+   * Sets the ID of the cell.
+   *
+   * @param {string} id - The ID to set.
+   * @returns {CellData} The current `CellData` instance for chaining.
+   */
   setId(id) {
     this.id = id || this.id || null;
     return this;
@@ -127,6 +164,15 @@ export default class CellData {
   }
 }
 
+/**
+ * Formats a given value based on the specified number formatting options.
+ *
+ * @param {Number} value - The value to format.
+ * @param {Object} formatting - The formatting options object.
+ * @param {string} formatting.numberFormat - The desired number format. Can be one of `NumberFormat.GENERAL`, `NumberFormat.NUMBER`, `NumberFormat.CURRENCY`, `NumberFormat.SHORT_DATE`, `NumberFormat.LONG_DATE`, `NumberFormat.TIME`, `NumberFormat.PERCENTAGE`, or `NumberFormat.TEXT`.
+ * @param {number} [formatting.decimals] - The number of decimal places to display (relevant for some number formats).
+ * @returns {string} The formatted value as a string.
+ */
 const getNumberFormattedDisplay = (value, formatting) => {
   if (!value) return "";
   switch (formatting.numberFormat) {
@@ -188,6 +234,16 @@ const getNumberFormattedDisplay = (value, formatting) => {
   }
 };
 
+/**
+ * Processes a given string for matches with a provided regular expression.
+ * Extracts and formats matched substrings according to a provided formula.
+ *
+ * @param {string} str - The input string to process.
+ * @param {RegExp} reg - The regular expression to use for matching.
+ * @param {Function} formulaCreator - Function to format the matched substrings.
+ * @param {undefined | null} zeroValue - What to treat a blank value as.
+ * @returns {Array} An array of objects containing the matched formulas and reference cells.
+ */
 const processMatches = (str, reg, formulaCreator, zeroValue) => {
   const matches = [...str.matchAll(reg)];
   const referenceCells = matches.map(([_, match]) =>
@@ -208,6 +264,14 @@ const processMatches = (str, reg, formulaCreator, zeroValue) => {
   }));
 };
 
+/**
+ * Replaces cell formulas in a string with their actual values.
+ *
+ * @param {string} str - The formula string to process.
+ * @param {Object} stateContentData - An object containing cell values.
+ * @param {*} blankValue - Default value to use when cell value is not found.
+ * @returns {string} The processed string with replaced cell values.
+ */
 const replaceFormulaWithValues = (str, stateContentData, blankValue) => {
   const cellReg = /([A-Z]\d+)/g;
   const cellMatches = [...new Set([...str.matchAll(cellReg)].flat())].sort(
@@ -230,6 +294,12 @@ const replaceFormulaWithValues = (str, stateContentData, blankValue) => {
 };
 
 // Core evaluation functions
+/**
+ * Evaluates common spreadsheet formulas like SUM, AVERAGE, COUNT.
+ *
+ * @param {string} cellValue - The formula string to evaluate.
+ * @returns {Array} An array of objects containing parsed formulas and reference cells.
+ */
 const evaluateFormula = (cellValue) => {
   let str = cellValue.toUpperCase();
 
@@ -257,6 +327,13 @@ const evaluateFormula = (cellValue) => {
   return [sumMatches, avgMatches, countMatches].flat();
 };
 
+/**
+ * Parses and evaluates a formula string. Replaces formulas with actual values and evaluates the resulting expression.
+ *
+ * @param {string} str - The formula string to evaluate.
+ * @param {Object} stateContent - An object containing cell values.
+ * @returns {Object} An object containing the evaluated result and reference cells.
+ */
 export const evaluate = (str, stateContent) => {
   const parsedStrings = evaluateFormula(str);
 
@@ -310,6 +387,12 @@ export const evaluate = (str, stateContent) => {
   };
 };
 
+/**
+ * Parses and evaluates an input expression. Supports various mathematical operations and functions.
+ *
+ * @param {string} input - The mathematical expression to evaluate.
+ * @returns {Object} An object containing the evaluated value, parsed input, and any error if occurred.
+ */
 const evaluateExpression = (input) => {
   let parsedInput, value;
   try {
@@ -362,6 +445,12 @@ const evaluateExpression = (input) => {
   }
 };
 
+/**
+ * Extracts cell references from a formula.
+ *
+ * @param {string} formula - The formula string to extract cell references from.
+ * @returns {Array} An array of cell references.
+ */
 export function getReferenceCells(formula) {
   const cells = formula.toUpperCase().match(/([a-z]+[0-9]+)/gi) || [];
   const cellRanges =
@@ -379,6 +468,14 @@ export function getReferenceCells(formula) {
   return [...new Set(expandedRanges.concat(cells))].flat();
 }
 
+/**
+ * Combines cell references from a formula and state-tracked cells.
+ * Helps track which cells a formula is dependent on.
+ *
+ * @param {string} formula - The formula string to extract cell references from.
+ * @param {Array} stateFormulaTrackedCells - Previously tracked cell references.
+ * @returns {Array} An array of combined cell references.
+ */
 export function getFormulaTrackedCells(formula, stateFormulaTrackedCells) {
   const referenceCells = getReferenceCells(formula);
 

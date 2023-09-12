@@ -89,7 +89,7 @@ export const menuSlice = createSlice({
         id: uniqueId(),
         title: "Rest API",
         icon: Api,
-        href: "/utils/rest?activeTab=0",
+        href: "/utils/rest?requestTab=0",
       },
       {
         id: uniqueId(),

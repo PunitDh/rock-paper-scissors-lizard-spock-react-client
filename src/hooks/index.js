@@ -5,6 +5,7 @@ import useNotification from "./useNotification";
 import useAPI from "./useAPI";
 import useLoading from "./useLoading";
 import useClipboard from "./useClipboard";
+import useQueryParam from "./useQueryParam";
 
 export {
   useCurrentGame,
@@ -14,4 +15,5 @@ export {
   useAPI,
   useLoading,
   useClipboard,
+  useQueryParam,
 };

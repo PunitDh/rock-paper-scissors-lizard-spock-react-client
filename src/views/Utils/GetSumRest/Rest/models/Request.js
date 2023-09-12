@@ -1,8 +1,8 @@
 import { uniqueId } from "lodash";
-import { createKeyValuePair } from "../utils";
+import { createBlankKeyValuePair } from "../utils";
 import Authorization from "./Authorization";
 import RequestBody from "./RequestBody";
-import { ContentType, HttpMethod } from "../constants";
+import { ContentType, HttpMethod, KeyValuePairType } from "../constants";
 
 export default class Request {
   constructor(obj = {}) {
@@ -12,9 +12,9 @@ export default class Request {
     this.urlDisplay = obj.urlDisplay || "";
     this.isValidUrl = obj.isValidUrl || false;
     this.method = obj.method || HttpMethod.GET;
-    this.params = obj.params || [createKeyValuePair("params")];
+    this.params = obj.params || [createBlankKeyValuePair(KeyValuePairType.PARAM)];
     this.authorization = new Authorization();
-    this.headers = obj.headers || [createKeyValuePair("headers")];
+    this.headers = obj.headers || [createBlankKeyValuePair(KeyValuePairType.HEADER)];
     this.body = obj.body || new RequestBody();
     this.contentType = obj.contentType || ContentType.NONE;
   }
@@ -54,6 +54,22 @@ export default class Request {
     return this;
   }
 
+  addParam(param) {
+    const existing = this.params.findIndex((it) => it.id === param.id);
+    console.log(existing);
+    if (existing < 0) {
+      this.params = [...this.params, param];
+    } else {
+      this.params[existing] = param;
+    }
+    return this;
+  }
+
+  removeParam(paramId) {
+    this.params = this.params.filter((it) => it.id !== paramId);
+    return this;
+  }
+
   setAuthorization(authorization) {
     this.authorization = new Authorization(authorization);
     return this;
@@ -61,6 +77,22 @@ export default class Request {
 
   setHeaders(headers) {
     this.headers = headers;
+    return this;
+  }
+
+  addHeader(header) {
+    const existing = this.headers.findIndex((it) => it.id === header.id);
+    console.log("Here", existing);
+    if (existing < 0) {
+      this.headers = [...this.headers, header];
+    } else {
+      this.headers[existing] = header;
+    }
+    return this;
+  }
+
+  removeHeader(headerId) {
+    this.headers = this.headers.filter((it) => it.id !== headerId);
     return this;
   }
 

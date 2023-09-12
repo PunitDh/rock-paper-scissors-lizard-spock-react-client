@@ -69,10 +69,42 @@ export const DisplayType = Object.freeze({
 });
 
 export const AuthorizationType = Object.freeze({
-  NO_AUTH: "No Auth",
-  API_KEY: "API Key",
-  BEARER_TOKEN: "Bearer Token",
-  BASIC_AUTH: "Basic Auth",
+  NO_AUTH: "NO_AUTH",
+  API_KEY: "API_KEY",
+  BEARER_TOKEN: "BEARER_TOKEN",
+  BASIC_AUTH: "BASIC_AUTH",
+});
+
+export const APIKeyAddTo = Object.freeze({
+  HEADER: "Header",
+  QUERY_PARAMS: "Query Params",
+});
+
+export const RequestTabList = Object.freeze([
+  {
+    type: "Params",
+    subLabel: (it) => it.params?.filter((it) => it.key.length)?.length,
+  },
+  { type: "Authorization", subLabel: () => {} },
+  {
+    type: "Headers",
+    subLabel: (it) => it.headers?.filter((it) => it.key.length)?.length,
+  },
+  { type: "Body", subLabel: () => {} },
+]);
+
+export const ResponseTabList = Object.freeze([
+  { type: "Body", subLabel: () => {} },
+  { type: "Cookies", subLabel: () => {} },
+  {
+    type: "Headers",
+    subLabel: (it) => it.headers && Object.keys(it.headers).length,
+  },
+]);
+
+export const tabProps = (index) => ({
+  id: `header-tab-${index}`,
+  "aria-controls": `rest-tabpanel-${index}`,
 });
 
 export const AuthorizationTypeItems = Object.freeze({
@@ -91,6 +123,7 @@ export const AuthorizationTypeItems = Object.freeze({
     initialState: {
       key: "",
       value: "",
+      addTo: "Header",
     },
   },
   [AuthorizationType.BASIC_AUTH]: {
@@ -109,13 +142,21 @@ export const AuthorizationTypeItems = Object.freeze({
     value: "Bearer",
     Component: BearerToken,
     initialState: {
-      prefix: "",
+      prefix: "Bearer",
       token: "",
     },
   },
 });
 
-export const HttpStatusCode = {
+export const KeyValuePairType = Object.freeze({
+  PARAM: "params",
+  HEADER: "header",
+  FORM_DATA: "formData",
+  FORM_ENCODED: "formEncoded",
+  API_KEY: "apiKey",
+});
+
+export const HttpStatusCode = Object.freeze({
   // 1xx: Informational responses
   100: "Continue",
   101: "Switching Protocols",
@@ -185,7 +226,7 @@ export const HttpStatusCode = {
   508: "Loop Detected",
   510: "Not Extended",
   511: "Network Authentication Required",
-};
+});
 
 export const JSONEditorColors = Object.freeze({
   default: "#333",

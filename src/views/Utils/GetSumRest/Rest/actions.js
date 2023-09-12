@@ -62,6 +62,11 @@ export const setHeaders = (payload) => ({
   payload,
 });
 
+export const removeHeader = (payload) => ({
+  type: RestAction.SET_HEADERS,
+  payload,
+});
+
 export const deleteHeaders = (payload) => ({
   type: RestAction.DELETE_HEADERS,
   payload,

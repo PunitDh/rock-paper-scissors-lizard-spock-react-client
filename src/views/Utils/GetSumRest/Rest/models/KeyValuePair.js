@@ -10,6 +10,7 @@ export default class KeyValuePair {
     this.type = FormDataFieldType.TEXT;
     this.id = null;
     this.files = [];
+    // this.type =
   }
 
   get filled() {
@@ -20,6 +21,16 @@ export default class KeyValuePair {
 
   get isFile() {
     return Boolean(this.type === "File");
+  }
+
+  setId(id) {
+    this.id = id;
+    return this;
+  }
+
+  setType(type) {
+    this.type = type;
+    return this;
   }
 
   setUniqueId(prefix) {
