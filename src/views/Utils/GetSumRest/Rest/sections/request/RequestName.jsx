@@ -1,11 +1,26 @@
-import { Tooltip } from "@mui/material";
-import { setUrl } from "../../actions";
-import { InvisibleTextField } from "src/components/shared/InvisibleTextField";
+import { InputBase, Tooltip } from "@mui/material";
+import { setRequestName } from "../../actions";
+import styled from "@emotion/styled";
+
+const RequestNameField = styled(InputBase)({
+  padding: "0.5rem",
+  fontWeight: "bold",
+  borderRadius: "4px",
+  "&:hover": {
+    outline: "1px solid rgba(0,0,0,0.1)",
+  },
+  "&:focused": {
+    outline: "1px solid rgba(0,0,0,0.1)",
+  },
+  "&:active": {
+    outline: "1px solid rgba(0,0,0,0.1)",
+  },
+});
 
 const RequestName = ({ state, dispatch }) => {
-  const handleSetUrl = (e) => {
+  const handleChange = (e) => {
     e.preventDefault();
-    dispatch(setUrl(e.target.value));
+    dispatch(setRequestName(e.target.value));
   };
 
   return (
@@ -14,13 +29,14 @@ const RequestName = ({ state, dispatch }) => {
       enterDelay={1000}
       enterNextDelay={1000}
     >
-      <InvisibleTextField
-        value={"Request Name"}
+      <RequestNameField
+        value={state.request.name}
         name="requestName"
         size="small"
-        // onChange={handleChange}
+        onChange={handleChange}
         // onBlur={handleRename}
         autoComplete="off"
+        variant="standard"
       />
     </Tooltip>
     // <TextField

@@ -6,6 +6,7 @@ import { Color } from "./styles";
 import { Save } from "@mui/icons-material";
 import prettyBytes from "pretty-bytes";
 import { DisplayType } from "../../constants";
+import { createSerializedFilename } from "../../utils";
 
 const StatusButton = styled(Button)(({ selected }) => ({
   backgroundColor: selected ? "#eee" : "#eee",
@@ -25,13 +26,7 @@ const StatusBar = ({ state, dispatch }) => {
     const link = document.createElement("a");
     link.href = url;
     const date = new Date();
-    const serializedName = `${state.request.method}-${
-      state.request.url.href
-    }-${date.toLocaleDateString()}-${date.toLocaleTimeString()}`
-      .replaceAll(/([:/?=."'+*^\\])/g, " ")
-      .split(" ")
-      .filter((it) => it.length)
-      .join("-");
+    const serializedName = createSerializedFilename(state.request.name, date);
     link.setAttribute("download", `${serializedName}.json`);
     document.body.appendChild(link);
     link.click();

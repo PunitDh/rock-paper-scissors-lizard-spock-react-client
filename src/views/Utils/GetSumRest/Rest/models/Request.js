@@ -7,7 +7,7 @@ import { ContentType, HttpMethod } from "../constants";
 export default class Request {
   constructor(obj = {}) {
     this.id = uniqueId("request-");
-    this.name = obj.name || "";
+    this.name = obj.name || "New Request";
     this.url = obj.url || {};
     this.urlDisplay = obj.urlDisplay || "";
     this.isValidUrl = obj.isValidUrl || false;

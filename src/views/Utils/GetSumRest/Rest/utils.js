@@ -3,6 +3,7 @@ import KeyValuePair from "./models/KeyValuePair";
 import { Buffer } from "buffer";
 import Request from "./models/Request";
 import { AuthorizationType } from "./constants";
+import RequestBody from "./models/RequestBody";
 
 export const initializeState = () => {
   return {
@@ -11,11 +12,11 @@ export const initializeState = () => {
       ...initialState.request,
       params: [createKeyValuePair("params")],
       headers: [createKeyValuePair("headers")],
-      body: {
+      body: new RequestBody({
         ...initialState.request.body,
         formData: [createKeyValuePair("formData")],
         formEncoded: [createKeyValuePair("formEncoded")],
-      },
+      }),
     }),
   };
 };
@@ -65,4 +66,14 @@ export const createAuthorization = (authorization) => {
     default:
       break;
   }
+};
+
+export const createSerializedFilename = (name, date) => {
+  return name
+    .concat(`-${date.toLocaleDateString()}-${date.toLocaleTimeString()}`)
+    .replaceAll(/[:/?=."'+*^\\<>|]/g, " ")
+    .split(" ")
+    .filter(Boolean)
+    .join("-")
+    .toLowerCase();
 };

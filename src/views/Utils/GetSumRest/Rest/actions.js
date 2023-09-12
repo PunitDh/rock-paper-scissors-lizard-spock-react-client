@@ -1,5 +1,6 @@
 export const RestAction = Object.freeze({
   SET_URL: "SET_URL",
+  SET_REQUEST_NAME: "SET_REQUEST_NAME",
   SET_METHOD: "SET_METHOD",
   SET_PARAMS: "SET_PARAMS",
   DELETE_PARAMS: "DELETE_PARAMS",
@@ -19,6 +20,11 @@ export const RestAction = Object.freeze({
 
 export const setUrl = (payload) => ({
   type: RestAction.SET_URL,
+  payload,
+});
+
+export const setRequestName = (payload) => ({
+  type: RestAction.SET_REQUEST_NAME,
   payload,
 });
 

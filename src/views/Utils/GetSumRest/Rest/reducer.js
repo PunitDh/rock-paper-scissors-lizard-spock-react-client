@@ -79,6 +79,13 @@ export const reducer = (state, action) => {
             .setUrlDisplay(action.payload),
         };
       }
+
+    case RestAction.SET_REQUEST_NAME:
+      return {
+        ...state,
+        request: state.request.setName(action.payload),
+      };
+
     case RestAction.SET_METHOD:
       return {
         ...state,
