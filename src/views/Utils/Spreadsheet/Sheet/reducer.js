@@ -6,6 +6,7 @@ import CellData, { getFormulaTrackedCells } from "./models/CellData";
 import CellRange from "./models/CellRange";
 import { isEqual, uniqueId } from "lodash";
 import { BorderType } from "./components/Toolbar/constants";
+import Highlight from "./models/Highlight";
 
 export const initialState = {
   maxRows: SheetConfig.MAX_ROWS,
@@ -19,14 +20,15 @@ export const initialState = {
   selectedRef: null,
   formulaMode: false,
   hovered: "",
-  highlighted: {
-    rowAnchor: null,
-    columnAnchor: null,
-    cellAnchor: null,
-    cells: [],
-    rows: [],
-    columns: [],
-  },
+  highlighted: new Highlight(),
+  //  {
+  //   rowAnchor: null,
+  //   columnAnchor: null,
+  //   cellAnchor: null,
+  //   cells: [],
+  //   rows: [],
+  //   columns: [],
+  // },
   formulaTrackedCells: [],
   formulaHighlighted: [],
   content: {
@@ -103,44 +105,56 @@ export const reducer = (state, action) => {
       return state;
     }
     case SheetAction.SET_HIGHLIGHT_CELL_ANCHOR:
+      console.log(state.highlighted);
       return {
         ...state,
-        highlighted: {
-          ...state.highlighted,
-          cellAnchor: action.payload,
-        },
+        highlighted: state.highlighted.setCellAnchor(action.payload),
+        // {
+        //   ...state.highlighted,
+        //   cellAnchor: action.payload,
+        // },
       };
 
     case SheetAction.SET_HIGHLIGHT_ROW_ANCHOR:
       return {
         ...state,
-        highlighted: {
-          ...state.highlighted,
-          rowAnchor: action.payload,
-          cellAnchor: null,
-        },
+        highlighted: state.highlighted
+          .setRowAnchor(action.payload)
+          .setCellAnchor(null),
+        // {
+        //   ...state.highlighted,
+        //   rowAnchor: action.payload,
+        //   cellAnchor: null,
+        // },
       };
 
     case SheetAction.SET_HIGHLIGHT_COLUMN_ANCHOR:
       return {
         ...state,
-        highlighted: {
-          ...state.highlighted,
-          columnAnchor: action.payload,
-          cellAnchor: null,
-        },
+        highlighted: state.highlighted
+          .setColumnAnchor(action.payload)
+          .setCellAnchor(null),
+        // {
+        //   ...state.highlighted,
+        //   columnAnchor: action.payload,
+        //   cellAnchor: null,
+        // },
       };
 
     case SheetAction.HIGHLIGHT_CELLS: {
       const range = CellRange.createFlat(action.start, action.end);
       return {
         ...state,
-        highlighted: {
-          ...state.highlighted,
-          cells: range.cellIds,
-          rows: range.rows,
-          columns: range.columns,
-        },
+        highlighted: state.highlighted
+          .setCells(range.cellIds, state.content.data)
+          .setRows(range.rows)
+          .setColumns(range.columns),
+        //  {
+        //   ...state.highlighted,
+        //   cells: range.cellIds,
+        //   rows: range.rows,
+        //   columns: range.columns,
+        // },
       };
     }
 
@@ -175,12 +189,13 @@ export const reducer = (state, action) => {
 
       return {
         ...state,
-        highlighted: {
-          ...state.highlighted,
-          cells: state.highlighted.cells.concat(action.payload),
-          rows: state.highlighted.rows.concat(rows),
-          columns: state.highlighted.columns.concat(columns),
-        },
+        highlighted: state.highlighted
+          .setCells(
+            state.highlighted.cells.concat(action.payload),
+            state.content.data
+          )
+          .setRows(state.highlighted.rows.concat(rows))
+          .setColumns(state.highlighted.columns.concat(columns)),
       };
     }
 
@@ -221,12 +236,16 @@ export const reducer = (state, action) => {
 
       return {
         ...state,
-        highlighted: {
-          ...state.highlighted,
-          cells: newHighlightedCells,
-          rows: newHighlightedRows,
-          columns: newHighlightedColumns,
-        },
+        highlighted: state.highlighted
+          .setCells(newHighlightedCells, state.content.data)
+          .setRows(newHighlightedRows)
+          .setColumns(newHighlightedColumns),
+        // {
+        //   ...state.highlighted,
+        //   cells: newHighlightedCells,
+        //   rows: newHighlightedRows,
+        //   columns: newHighlightedColumns,
+        // },
       };
     }
 
@@ -331,12 +350,16 @@ export const reducer = (state, action) => {
           ...state.selectedCell,
           row: Number(action.payload),
         },
-        highlighted: {
-          ...state.highlighted,
-          cells: range.cellIds,
-          rows: range.rows,
-          columns: range.columns,
-        },
+        highlighted: state.highlighted
+          .setCells(range.cellIds, state.content.data)
+          .setRows(range.rows)
+          .setColumns(range.columns),
+        //  {
+        //   ...state.highlighted,
+        //   cells: range.cellIds,
+        //   rows: range.rows,
+        //   columns: range.columns,
+        // },
       };
     }
     case SheetAction.SET_ROW_HEIGHT: {
@@ -362,12 +385,16 @@ export const reducer = (state, action) => {
           ...state.selectedCell,
           column: action.payload,
         },
-        highlighted: {
-          ...state.highlighted,
-          cells: range.cellIds,
-          rows: range.rows,
-          columns: range.columns,
-        },
+        highlighted: state.highlighted
+          .setCells(range.cellIds, state.content.data)
+          .setRows(range.rows)
+          .setColumns(range.columns),
+        //  {
+        //   ...state.highlighted,
+        //   cells: range.cellIds,
+        //   rows: range.rows,
+        //   columns: range.columns,
+        // },
       };
     }
     case SheetAction.SET_COLUMN_WIDTH: {
@@ -389,12 +416,16 @@ export const reducer = (state, action) => {
       );
       return {
         ...state,
-        highlighted: {
-          ...state.highlighted,
-          cells: range.cellIds,
-          rows: range.rows,
-          columns: range.columns,
-        },
+        highlighted: state.highlighted
+          .setCells(range.cellIds, state.content.data)
+          .setRows(range.rows)
+          .setColumns(range.columns),
+        //  {
+        //   ...state.highlighted,
+        //   cells: range.cellIds,
+        //   rows: range.rows,
+        //   columns: range.columns,
+        // },
       };
     }
     case SheetAction.RESET_HIGHLIGHT: {

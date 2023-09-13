@@ -13,7 +13,7 @@ import ContextMenu from "./components/ContextMenu";
 import { useClipboard } from "src/hooks";
 import FormulaField from "./components/FormulaField";
 import { Table, TableBody } from "@mui/material";
-import StatusField from "./components/StatusField";
+import StatusBar from "./components/StatusBar.jsx";
 import Toolbar from "./components/Toolbar";
 import AbsoluteCellInput from "./components/AbsoluteCellInput";
 import FocusGuard from "./components/FocusGuard";
@@ -80,67 +80,67 @@ const Sheet = ({
 
   return (
     <>
-    <DashboardCard sx={{ height: "100%" }} title="Spreadsheet">
-      {state.menuAnchorElement && (
-        <ContextMenu state={state} dispatch={dispatch} />
-      )}
-      <Container>
-        {toolbar && <Toolbar state={state} dispatch={dispatch} />}
-        {formulaField && (
-          <FormulaField
-            state={state}
-            dispatch={dispatch}
-            eventHandler={eventHandler}
-          />
+      <DashboardCard sx={{ height: "100%" }} title="Spreadsheet">
+        {state.menuAnchorElement && (
+          <ContextMenu state={state} dispatch={dispatch} />
         )}
-        <AbsoluteCellInput
-          state={state}
-          dispatch={dispatch}
-          tableBodyRef={tableBodyRef}
-          eventHandler={eventHandler}
-        />
-        <EventDelegator eventHandler={eventHandler}>
-          <Table width="100%" sx={{ mb: 0 }}>
-            <HeaderRow
+        <Container>
+          {toolbar && <Toolbar state={state} dispatch={dispatch} />}
+          {formulaField && (
+            <FormulaField
               state={state}
               dispatch={dispatch}
               eventHandler={eventHandler}
             />
-          </Table>
-          <Table
-            width="100%"
-            // sx={{
-            //   display: "block",
-            //   tableLayout: "fixed",
-            //   height: `${maxDisplayRows * defaultRowHeight}px`,
-            //   overflowY: "scroll",
-            // }}
-            // onScroll={handleScroll}
-            // ref={tableBodyRef}
-          >
-            <TableBody
-              sx={{ display: "table", width: "100%", tableLayout: "fixed" }}
+          )}
+          <AbsoluteCellInput
+            state={state}
+            dispatch={dispatch}
+            tableBodyRef={tableBodyRef}
+            eventHandler={eventHandler}
+          />
+          <EventDelegator eventHandler={eventHandler}>
+            <Table width="100%" sx={{ mb: 0 }}>
+              <HeaderRow
+                state={state}
+                dispatch={dispatch}
+                eventHandler={eventHandler}
+              />
+            </Table>
+            <Table
+              width="100%"
+              // sx={{
+              //   display: "block",
+              //   tableLayout: "fixed",
+              //   height: `${maxDisplayRows * defaultRowHeight}px`,
+              //   overflowY: "scroll",
+              // }}
+              // onScroll={handleScroll}
+              // ref={tableBodyRef}
             >
-              {Array(maxRows)
-                .fill(0)
-                .map((_, row) => (
-                  <SheetRow
-                    key={row}
-                    state={state}
-                    dispatch={dispatch}
-                    row={row}
-                    eventHandler={eventHandler}
-                  />
-                ))}
-            </TableBody>
-          </Table>
-          <FocusGuard state={state} dispatch={dispatch} />
-          {statusField && <StatusField state={state} dispatch={dispatch} />}
-        </EventDelegator>
-        <DebugBar state={state} tableBodyRef={tableBodyRef} />
-      </Container>
-    </DashboardCard>
-    <TestSheet state={state} />
+              <TableBody
+                sx={{ display: "table", width: "100%", tableLayout: "fixed" }}
+              >
+                {Array(maxRows)
+                  .fill(0)
+                  .map((_, row) => (
+                    <SheetRow
+                      key={row}
+                      state={state}
+                      dispatch={dispatch}
+                      row={row}
+                      eventHandler={eventHandler}
+                    />
+                  ))}
+              </TableBody>
+            </Table>
+            <FocusGuard state={state} dispatch={dispatch} />
+            {statusField && <StatusBar state={state} dispatch={dispatch} />}
+          </EventDelegator>
+          <DebugBar state={state} tableBodyRef={tableBodyRef} />
+        </Container>
+      </DashboardCard>
+      <TestSheet state={state} />
     </>
   );
 };

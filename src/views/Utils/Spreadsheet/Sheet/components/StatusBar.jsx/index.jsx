@@ -1,5 +1,9 @@
 import styled from "@emotion/styled";
-import { FlexForm, InputTextField } from "./styles";
+import { FlexForm } from "../styles";
+import { FlexBox } from "src/components/shared/styles";
+import { Typography } from "@mui/material";
+import DelayedTooltip from "../DelayedTooltip";
+import HighlightedStats from "./HighlightedStats";
 
 const SheetTab = styled.div({
   width: "4rem",
@@ -42,23 +46,30 @@ const SheetTab = styled.div({
   },
 });
 
-const SmallInputField = styled(InputTextField)({
-  width: "2rem",
-  textAlign: "center",
-  opacity: 0,
-});
-
-const StatusField = ({ state, dispatch }) => {
+const StatusBar = ({ state, dispatch }) => {
   const handleSubmit = (e) => e.preventDefault();
+  const { average, sum, count } = state.highlighted;
 
   return (
     <div tabIndex="1000">
-      <FlexForm onSubmit={handleSubmit}>
-        <SmallInputField type="text" autoComplete="off" />
-        {/* <SheetTab>Sheet 1</SheetTab> */}
+      <FlexForm
+        onSubmit={handleSubmit}
+        justifyContent="space-between"
+        height="2rem"
+      >
+        <FlexBox gap="1.5rem"> </FlexBox>
+        <FlexBox gap="0.75rem">
+          {state.highlighted.cells.length > 1 && (
+            <>
+              <HighlightedStats title="Average" data={average.toFixed(5)} />
+              <HighlightedStats title="Count" data={count} />
+              <HighlightedStats title="Sum" data={sum} />
+            </>
+          )}
+        </FlexBox>
       </FlexForm>
     </div>
   );
 };
 
-export default StatusField;
+export default StatusBar;

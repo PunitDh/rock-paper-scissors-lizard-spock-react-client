@@ -150,6 +150,7 @@ export default class EventHandler {
   async handlePasteCapture(e) {
     e.preventDefault();
     const data = await this.clipboard.get();
+    console.log(data);
     this.dispatch(pasteCellContent(this.state.selectedCell.id, data));
   }
 
