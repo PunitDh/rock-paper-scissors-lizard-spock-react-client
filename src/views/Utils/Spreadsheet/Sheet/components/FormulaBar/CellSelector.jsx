@@ -45,11 +45,12 @@ const CellSelector = ({ state }) => {
         list="cells"
       />
       <datalist id="cells">
-        {Object.keys(state.content.namedRanges).map((range) => (
-          <option key={range} value={range}>
-            {range}
-          </option>
-        ))}
+        {state.content.namedRanges &&
+          Object.keys(state.content.namedRanges).map((range) => (
+            <option key={range} value={range}>
+              {range}
+            </option>
+          ))}
       </datalist>
     </FlexForm>
   );
