@@ -1,3 +1,4 @@
+import { cloneDeep } from "lodash";
 import { FILE_TYPE, SheetConfig } from "../constants";
 import CellData from "../models/CellData";
 import CellFormatting from "../models/CellFormatting";
@@ -140,7 +141,8 @@ export const createInitialState = (
   defaultRowHeight = 24,
   defaultColumnWidth = 80
 ) => ({
-  ...initialState,
+  // ...initialState,
+  ...cloneDeep(initialState),
   defaultRowHeight,
   defaultColumnWidth,
   maxRows,

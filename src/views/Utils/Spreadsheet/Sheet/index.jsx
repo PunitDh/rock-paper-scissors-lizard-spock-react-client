@@ -67,16 +67,19 @@ const Sheet = ({
 
   useEffect(() => {
     const selectedCellData = state.content.data[state.selectedCell.id];
-
     if (selectedCellData) {
       const { formula, value, referenceCells } = selectedCellData;
       dispatch(setFormulaFieldText(formula || value));
       dispatch(highlightFormulaCells(referenceCells || []));
     } else {
-      dispatch(setFormulaFieldText(""));
+      state.formulaFieldText.length && dispatch(setFormulaFieldText(""));
       dispatch(highlightFormulaCells([]));
     }
-  }, [state.content.data, state.selectedCell.id]);
+  }, [
+    state.content.data,
+    state.formulaFieldText.length,
+    state.selectedCell.id,
+  ]);
 
   return (
     <>

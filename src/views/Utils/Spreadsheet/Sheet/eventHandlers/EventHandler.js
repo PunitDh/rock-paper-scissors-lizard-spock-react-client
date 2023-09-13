@@ -24,6 +24,7 @@ import {
 } from "../actions";
 import { KeyEvent, MouseButton, SheetConfig } from "../constants";
 import Cell from "../models/Cell";
+import { initialState } from "../reducer";
 import {
   addCellToFocusedBox,
   generateClipboardContent,
@@ -138,24 +139,22 @@ export default class EventHandler {
   }
 
   handleMouseMove(e) {
-    this.dispatch(setHovered(e.target.id));
+    this.state.hovered !== e.target.id &&
+      this.dispatch(setHovered(e.target.id));
     if (this.state.mouseDown) {
-      this.dispatch(setDragging(true));
+      !this.state.dragging && this.dispatch(setDragging(true));
     }
 
-    if (this.state.dragging) {
+    if (this.state.formulaMode) {
+      if (this.state.dragging && !this.isCtrlKeyPressed(e)) {
+        const { cellAnchor } = this.state.highlighted;
+        this.dispatch(
+          highlightFormulaCellRange(cellAnchor, this.state.hovered)
+        );
+      }
     } else {
-    }
-
-    if (this.state.mouseDown && !this.isCtrlKeyPressed(e)) {
-      const { cellAnchor } = this.state.highlighted;
-      if (this.state.formulaMode) {
-        if (!this.isCtrlKeyPressed(e)) {
-          this.dispatch(
-            highlightFormulaCellRange(cellAnchor, this.state.hovered)
-          );
-        }
-      } else {
+      if (this.state.dragging && !this.isCtrlKeyPressed(e)) {
+        const { cellAnchor } = this.state.highlighted;
         this.dispatch(highlightCells(cellAnchor, this.state.hovered));
       }
     }
@@ -204,7 +203,6 @@ export default class EventHandler {
       case KeyEvent.ARROW_RIGHT:
       case KeyEvent.ARROW_LEFT:
       case KeyEvent.ARROW_UP:
-        console.log("Here", e.key);
         e.shiftKey &&
           !this.state.highlighted.cellAnchor &&
           this.dispatch(setHighlightCellAnchor(this.state.selectedCell.id));
@@ -294,25 +292,15 @@ export default class EventHandler {
 
     const isSameCellHighlighted =
       this.state.highlighted.cellAnchor === this.state.hovered;
-    const selectingFormulaCells =
-      this.state.formulaMode && this.state.dragging && !isSameCellHighlighted;
     const isCtrlKeyPressed = this.isCtrlKeyPressed(e);
 
-    if (selectingFormulaCells && !isCtrlKeyPressed) {
-      const range = `${this.state.highlighted.cellAnchor}:${this.state.hovered}`;
-      const value = addCellToFocusedBox(this.state, range, true);
-      this.dispatch(setCellContent(this.state.selectedCell.id, value));
-      this.dispatch(
-        updateReferenceCells(
-          this.state.selectedCell.id,
-          [this.state.highlighted.cellAnchor, this.state.hovered],
-          true
-        )
-      );
-    } else if (!isSameCellHighlighted && isCtrlKeyPressed) {
-      this.dispatch(addCellsToHighlight([this.state.hovered]));
+    if (this.state.formulaMode) {
+      this.#handleFormulaModeMouseUp(isSameCellHighlighted, isCtrlKeyPressed);
+    } else {
+      this.#handleRegularModeMouseUp(isCtrlKeyPressed, isCtrlKeyPressed);
     }
-    this.dispatch(setDragging(false));
+
+    this.state.dragging && this.dispatch(setDragging(false));
   }
 
   handleScroll(e) {
@@ -326,10 +314,12 @@ export default class EventHandler {
   // Private functions
   #determineNextCell(e) {
     const { selectedCell } = this.state;
+    const shouldResetHighlight =
+      !e.shiftKey &&
+      !this.state.formulaMode &&
+      this.state.highlighted.cells.length;
 
-    if (!e.shiftKey && !this.state.formulaMode) {
-      this.dispatch(resetHighlight()); // reset highlighting if conditions are met
-    }
+    shouldResetHighlight && this.dispatch(resetHighlight()); // reset highlighting if conditions are met
 
     switch (e.key) {
       case KeyEvent.ENTER:
@@ -395,11 +385,35 @@ export default class EventHandler {
     } else if (isShiftPressed) {
       this.dispatch(highlightCells(highlighted.cellAnchor, id));
     } else {
-      !this.state.dragging && this.dispatch(resetHighlight());
+      !this.state.dragging &&
+        this.state.highlighted.cells.length &&
+        this.dispatch(resetHighlight());
       this.dispatch(selectCell(id));
       this.dispatch(setHighlightCellAnchor(id));
     }
   };
+
+  #handleFormulaModeMouseUp(isSameCellHighlighted, isCtrlKeyPressed) {
+    if (this.state.dragging && !isSameCellHighlighted && !isCtrlKeyPressed) {
+      const range = `${this.state.highlighted.cellAnchor}:${this.state.hovered}`;
+      const value = addCellToFocusedBox(this.state, range, true);
+      this.dispatch(setCellContent(this.state.selectedCell.id, value));
+      this.dispatch(
+        updateReferenceCells(
+          this.state.selectedCell.id,
+          [this.state.highlighted.cellAnchor, this.state.hovered],
+          true
+        )
+      );
+    }
+  }
+
+  #handleRegularModeMouseUp(isSameCellHighlighted, isCtrlKeyPressed) {
+    if (!isSameCellHighlighted && isCtrlKeyPressed) {
+      console.log("It's coming from here");
+      this.dispatch(addCellsToHighlight([this.state.hovered]));
+    }
+  }
 
   #handleFormulaModeMouseDown = (
     id,
@@ -421,7 +435,6 @@ export default class EventHandler {
     } else if (isShiftPressed) {
       // TODO
     } else {
-      console.log("Here");
       this.dispatch(setHighlightCellAnchor(id));
       if (
         !isSameCellSelected &&
@@ -434,7 +447,9 @@ export default class EventHandler {
         } else {
           this.dispatch(setFormulaMode(false));
           this.dispatch(recalculateFormulae());
-          highlighted.cells.length > 0 && this.dispatch(resetHighlight());
+          highlighted.cells.length > 0 &&
+            !this.state.dragging &&
+            this.dispatch(resetHighlight());
           this.dispatch(selectCell(id));
           this.dispatch(highlightCells(id));
         }

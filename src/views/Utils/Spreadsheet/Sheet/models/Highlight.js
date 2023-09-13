@@ -6,44 +6,102 @@ export default class Highlight {
     this.cells = obj.cells || [];
     this.rows = obj.rows || [];
     this.columns = obj.columns || [];
+    this.rangeStart = obj.rangeStart || null;
+    this.rangeEnd = obj.rangeEnd || null;
     this.sum = null;
     this.average = null;
     this.count = null;
   }
 
-  setRowAnchor(rowAnchor) {
-    this.rowAnchor = rowAnchor;
+  /**
+   *
+   * @param {Number} row
+   * @returns {Highlight}
+   */
+  setRowAnchor(row) {
+    this.rowAnchor = row;
     return this;
   }
 
-  setColumnAnchor(columnAnchor) {
-    this.columnAnchor = columnAnchor;
+  /**
+   *
+   * @param {String} column
+   * @returns {Highlight}
+   */
+  setColumnAnchor(column) {
+    this.columnAnchor = column;
     return this;
   }
 
-  setCellAnchor(cellAnchor) {
-    this.cellAnchor = cellAnchor;
+  /**
+   *
+   * @param {String} cellId
+   * @returns {Highlight}
+   */
+  setCellAnchor(cellId) {
+    this.cellAnchor = cellId;
     return this;
   }
 
-  setCells(cells, stateContentData) {
-    this.cells = cells;
+  /**
+   *
+   * @param {String} cellId
+   * @returns {Highlight}
+   */
+  setRangeStart(cellId) {
+    this.rangeStart = cellId;
+    return this;
+  }
+
+  /**
+   *
+   * @param {String} cellId
+   * @returns {Highlight}
+   */
+  setRangeEnd(cellId) {
+    this.rangeEnd = cellId;
+    return this;
+  }
+
+  /**
+   *
+   * @param {Array<String>} cellIds
+   * @param {Object} stateContentData
+   * @returns {Highlight}
+   */
+  setCells(cellIds, stateContentData) {
+    this.cells = cellIds;
     this.calculateSum(stateContentData);
     this.calculateAverage(stateContentData);
     this.calculateCount(stateContentData);
     return this;
   }
 
-  setRows(rows) {
-    this.rows = rows;
+  /**
+   *
+   * @param {Array<String>} rowIds
+   * @returns {Highlight}
+   */
+  setRows(rowIds) {
+    this.rows = rowIds;
     return this;
   }
 
-  setColumns(columns) {
-    this.columns = columns;
+  /**
+   *
+   * @param {Array<String>} columnIds
+   * @returns {Highlight}
+   */
+  setColumns(columnIds) {
+    this.columns = columnIds;
     return this;
   }
 
+  /**
+   *
+   * @param {Object} stateContentData
+   * @returns {Highlight}
+   */
   calculateSum(stateContentData) {
     if (this.cells.length > 1) {
       const sum = this.cells
@@ -59,6 +117,11 @@ export default class Highlight {
     return this;
   }
 
+  /**
+   *
+   * @param {Object} stateContentData
+   * @returns {Highlight}
+   */
   calculateAverage(stateContentData) {
     if (this.cells.length > 1) {
       const average =
@@ -73,6 +136,11 @@ export default class Highlight {
     return this;
   }
 
+  /**
+   *
+   * @param {Object} stateContentData
+   * @returns {Highlight}
+   */
   calculateCount(stateContentData) {
     if (this.cells.length > 1) {
       const count = this.cells.filter((cell) =>

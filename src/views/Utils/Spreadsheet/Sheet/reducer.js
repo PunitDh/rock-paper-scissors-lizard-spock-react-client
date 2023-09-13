@@ -8,7 +8,7 @@ import { isEqual, uniqueId } from "lodash";
 import { BorderType } from "./components/Toolbar/constants";
 import Highlight from "./models/Highlight";
 
-export const initialState = {
+export const initialState = Object.freeze({
   maxRows: SheetConfig.MAX_ROWS,
   maxColumns: SheetConfig.MAX_COLUMNS,
   inputRef: {},
@@ -35,10 +35,10 @@ export const initialState = {
   menuAnchorElement: null,
   memento: [],
   currentMementoId: null,
-};
+});
 
 export const reducer = (state, action) => {
-  // action.type !== SheetAction.SET_HOVERED && console.log(action);
+  action.type !== SheetAction.SET_HOVERED && console.log(action);
 
   switch (action.type) {
     case SheetAction.SET_SELECTED: {
@@ -126,7 +126,9 @@ export const reducer = (state, action) => {
         highlighted: state.highlighted
           .setCells(range.cellIds, state.content.data)
           .setRows(range.rows)
-          .setColumns(range.columns),
+          .setColumns(range.columns)
+          .setRangeStart(action.start)
+          .setRangeEnd(action.end),
       };
     }
 
@@ -151,8 +153,10 @@ export const reducer = (state, action) => {
     case SheetAction.ADD_CELLS_TO_HIGHLIGHT: {
       const rowsSet = new Set();
       const columnsSet = new Set();
+      const cellsSet = new Set(state.highlighted.cells);
       action.payload.forEach((id) => {
         const cell = new Cell(id);
+        cellsSet.add(cell.id);
         rowsSet.add(cell.row);
         columnsSet.add(cell.column);
       });
@@ -162,10 +166,7 @@ export const reducer = (state, action) => {
       return {
         ...state,
         highlighted: state.highlighted
-          .setCells(
-            state.highlighted.cells.concat(action.payload),
-            state.content.data
-          )
+          .setCells([...cellsSet], state.content.data)
           .setRows(state.highlighted.rows.concat(rows))
           .setColumns(state.highlighted.columns.concat(columns)),
       };
@@ -174,17 +175,18 @@ export const reducer = (state, action) => {
     case SheetAction.REMOVE_CELLS_FROM_HIGHLIGHT: {
       const rowsToRemove = new Set();
       const columnsToRemove = new Set();
+      const updatedCells = new Set(state.highlighted.cells);
       action.payload.forEach((id) => {
         const cell = new Cell(id);
         if (state.highlighted.cells.includes(id)) {
+          updatedCells.delete(id);
           rowsToRemove.add(cell.row);
           columnsToRemove.add(cell.column);
         }
       });
 
-      const newHighlightedCells = state.highlighted.cells.filter(
-        (id) => !action.payload.includes(id)
-      );
+      const newHighlightedCells = [...updatedCells];
+
       const newHighlightedRows = state.highlighted.rows.filter((row) => {
         if (rowsToRemove.has(row)) {
           return !newHighlightedCells.some(
@@ -253,7 +255,8 @@ export const reducer = (state, action) => {
         if (parsed.type === FILE_TYPE) {
           const cellOffset = new Cell(anchor).getOffset(
             parsed.content[0].length - 1,
-            parsed.content.length - 1
+            parsed.content.length - 1,
+            false
           );
           const range = CellRange.create(anchor, cellOffset.id);
           const updateObj = {};
@@ -378,7 +381,7 @@ export const reducer = (state, action) => {
     case SheetAction.RESET_HIGHLIGHT: {
       return {
         ...state,
-        highlighted: initialState.highlighted,
+        highlighted: new Highlight(),
       };
     }
     case SheetAction.SET_MOUSEDOWN: {

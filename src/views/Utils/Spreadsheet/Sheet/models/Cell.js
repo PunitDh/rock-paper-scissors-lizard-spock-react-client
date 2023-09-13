@@ -10,7 +10,7 @@ export default class Cell {
     const rowMatch = id?.match(/\d+/g);
     const columnMatch = id?.match(/[A-Z]+/g);
     if (!rowMatch || !columnMatch || !rowMatch[0] || !columnMatch[0]) {
-      throw new Error(`Invalid cell id: ${id}`);
+      return console.error(`Invalid cell id: ${id}`);
     }
     this.row = Number(rowMatch[0]);
     this.column = columnMatch[0];
@@ -34,12 +34,25 @@ export default class Cell {
     });
   }
 
-  getOffset = (offsetX, offsetY) => {
-    const offsetRow = +this.row + offsetY;
-    const offsetColumn =
-      SheetConfig.COLUMNS[+SheetConfig.COLUMNS.indexOf(this.column) + offsetX];
+  getOffset(offsetX, offsetY, wrap = true, maxRows, maxColumns) {
+    let offsetRow = +this.row + offsetY;
+    let columnIndex = SheetConfig.COLUMNS.indexOf(this.column) + offsetX;
+
+    if (wrap && maxRows && maxColumns) {
+      offsetRow = ((offsetRow - 1 + maxRows) % maxRows) + 1; // The -1 and +1 are to make it 1-indexed
+      columnIndex =
+        (columnIndex + SheetConfig.COLUMNS.length) % SheetConfig.COLUMNS.length;
+    }
+
+    const offsetColumn = SheetConfig.COLUMNS[columnIndex];
+
+    // Ensure the resulting cell is valid, otherwise, you might want to throw an error or handle differently
+    if (!offsetColumn || offsetRow <= 0) {
+      return console.error(`Invalid cell id: ${offsetColumn}${offsetRow}`); // or throw new Error("Invalid cell position");
+    }
+
     return new Cell(`${offsetColumn}${offsetRow}`);
-  };
+  }
 
   getNextColumn(
     maxRows = SheetConfig.MAX_ROWS,

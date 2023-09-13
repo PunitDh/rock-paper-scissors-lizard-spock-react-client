@@ -16,7 +16,7 @@ import CellRange from "../models/CellRange";
 const HeaderItemComponent = styled(HeaderItem)(({ dimension, size }) => ({
   cursor: dimension === Dimension.ROW ? "e-resize" : "s-resize",
   position: "relative",
-  width: dimension === Dimension.ROW ? "3%" : size + "px",
+  width: dimension === Dimension.ROW ? "1.75rem" : size + "px",
   "&:active": {
     backgroundColor: "#555",
     color: "#FFFFFF",
