@@ -3,8 +3,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   openContextMenu,
   setCellContent,
+  setFillerRef,
   setFormulaMode,
-  setInputRef,
 } from "../actions";
 import { isFormula } from "../utils/cellUtils";
 // eslint-disable-next-line no-unused-vars
@@ -42,15 +42,13 @@ const InputField = styled.input(({ width, height, isfocused, formatting }) => ({
  * @returns
  */
 const AbsoluteCellInput = ({ state, dispatch, eventHandler }) => {
+  const fillerRef = useRef();
   const navigateRef = useRef(true);
 
-  const inputRef = useCallback(
-    (node) => {
-      console.log("Setting inputRef");
-      dispatch(setInputRef(node));
-    },
-    [dispatch]
-  );
+  const fillerNode = useCallback((node) => {
+    console.log("Setting filler ref");
+    dispatch(setFillerRef(node));
+  }, [dispatch]);
 
   const cell = useMemo(() => state.selectedCell, [state.selectedCell]);
   const currentCellContentData = state.content.data[cell.id];
@@ -137,7 +135,7 @@ const AbsoluteCellInput = ({ state, dispatch, eventHandler }) => {
         originalValue,
         currentValue,
         navigateRef.current,
-        inputRef.current
+        fillerRef.current
       ),
     [currentValue, eventHandler, originalValue]
   );
@@ -157,7 +155,7 @@ const AbsoluteCellInput = ({ state, dispatch, eventHandler }) => {
     <Container top={position.top} left={position.left}>
       <InputField
         type="text"
-        ref={inputRef}
+        ref={fillerNode}
         value={value}
         id={"input-box"}
         autoComplete="off"

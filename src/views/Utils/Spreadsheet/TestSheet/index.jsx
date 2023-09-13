@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import DashboardCard from "src/components/shared/DashboardCard";
 import { FlexBox } from "src/components/shared/styles";
 import { useToken } from "src/hooks";
@@ -47,7 +47,8 @@ const TestSheet = ({ state }) => {
   const [keyboard, setKeyBoard] = useState(null);
   const [mouse, setMouse] = useState(null);
 
-  useEffect(() => {
+  useCallback(() => {
+    console.log("running once");
     const keyboardEvent = (e) => setKeyBoard(e);
     const mouseEvent = (e) => setMouse(e);
 

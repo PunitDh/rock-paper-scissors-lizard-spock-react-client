@@ -6,6 +6,7 @@ import useAPI from "./useAPI";
 import useLoading from "./useLoading";
 import useClipboard from "./useClipboard";
 import useQueryParam from "./useQueryParam";
+import useEffectLog from "./useEffectLog";
 
 export {
   useCurrentGame,
@@ -16,4 +17,5 @@ export {
   useLoading,
   useClipboard,
   useQueryParam,
+  useEffectLog,
 };

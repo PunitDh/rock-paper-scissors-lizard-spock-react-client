@@ -12,6 +12,7 @@ export const initialState = Object.freeze({
   maxRows: SheetConfig.MAX_ROWS,
   maxColumns: SheetConfig.MAX_COLUMNS,
   inputRef: {},
+  fillerRef: {},
   formulaFieldRef: {},
   defaultRowHeight: 24,
   defaultColumnWidth: 50,
@@ -61,6 +62,11 @@ export const reducer = (state, action) => {
       return {
         ...state,
         inputRef: action.payload,
+      };
+    case SheetAction.SET_FILLER_REF:
+      return {
+        ...state,
+        fillerRef: action.payload,
       };
     case SheetAction.SET_FORMULA_FIELD_REF:
       return {

@@ -14,20 +14,23 @@ const Cell = memo(
     display,
     width,
     formatting,
-  }) => (
-    <Item
-      colSpan={1}
-      selected={isSelected}
-      formulacell={Number(isFormulaHighLighted)}
-      id={id}
-      tabIndex={row * maxRows + (columnCharCode - 65)}
-      textalign={isNaN(value) ? "left" : "right"}
-      formatting={formatting}
-      width={width}
-    >
-      {display}
-    </Item>
-  )
+  }) => {
+    // console.log("re-rendering", id);
+    return (
+      <Item
+        colSpan={1}
+        selected={isSelected}
+        formulacell={Number(isFormulaHighLighted)}
+        id={id}
+        tabIndex={row * maxRows + (columnCharCode - 65)}
+        textalign={isNaN(value) ? "left" : "right"}
+        formatting={formatting}
+        width={width}
+      >
+        {display}
+      </Item>
+    );
+  }
 );
 
 export default Cell;

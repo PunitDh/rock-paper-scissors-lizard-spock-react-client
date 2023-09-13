@@ -24,7 +24,6 @@ import {
 } from "../actions";
 import { KeyEvent, MouseButton, SheetConfig } from "../constants";
 import Cell from "../models/Cell";
-import { initialState } from "../reducer";
 import {
   addCellToFocusedBox,
   generateClipboardContent,
@@ -413,6 +412,7 @@ export default class EventHandler {
       console.log("It's coming from here");
       this.dispatch(addCellsToHighlight([this.state.hovered]));
     }
+    this.dispatch(selectCell(this.state.hovered));
   }
 
   #handleFormulaModeMouseDown = (

@@ -23,9 +23,7 @@ import Cell from "../models/Cell";
 import { KeyEvent } from "../constants";
 
 const FormulaField = ({ state, dispatch, eventHandler }) => {
-  const formRef = useRef();
   const inputRef = useRef();
-
   const handleContextMenu = (e) => eventHandler.handleContextMenu(e);
 
   useEffect(() => {
@@ -157,7 +155,7 @@ const FormulaField = ({ state, dispatch, eventHandler }) => {
 
   return (
     <div tabIndex="1">
-      <FlexForm onSubmit={handleSubmit} ref={formRef}>
+      <FlexForm onSubmit={handleSubmit}>
         <SmallInputField
           name="currentCell"
           type="text"

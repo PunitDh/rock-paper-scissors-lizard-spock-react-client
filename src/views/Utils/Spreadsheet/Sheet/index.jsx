@@ -10,7 +10,7 @@ import {
 import { createInitialState } from "./utils/cellUtils";
 import { SheetConfig } from "./constants";
 import ContextMenu from "./components/ContextMenu";
-import { useClipboard } from "src/hooks";
+import { useClipboard, useEffectLog } from "src/hooks";
 import FormulaField from "./components/FormulaField";
 import { Table, TableBody } from "@mui/material";
 import StatusBar from "./components/StatusBar.jsx";
@@ -60,7 +60,7 @@ const Sheet = ({
     inputFocusRef
   );
 
-  useEffect(() => {
+  useEffectLog(() => {
     dispatch(recalculateFormulae());
     dispatch(addMemento());
   }, []);
@@ -72,14 +72,10 @@ const Sheet = ({
       dispatch(setFormulaFieldText(formula || value));
       dispatch(highlightFormulaCells(referenceCells || []));
     } else {
-      state.formulaFieldText.length && dispatch(setFormulaFieldText(""));
+      dispatch(setFormulaFieldText(""));
       dispatch(highlightFormulaCells([]));
     }
-  }, [
-    state.content.data,
-    state.formulaFieldText.length,
-    state.selectedCell.id,
-  ]);
+  }, [state.content.data, state.selectedCell.id]);
 
   return (
     <>
