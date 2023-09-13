@@ -1,4 +1,8 @@
-const EventDelegator = ({ eventHandler, children }) => {
+import useEventHandler from "../hooks/useEventHandler";
+
+const EventDelegator = ({ children }) => {
+  const eventHandler = useEventHandler();
+  
   const handleMouseUp = (e) => eventHandler.handleMouseUp(e);
   const handleMouseDown = (e) => eventHandler.handleMouseDown(e);
   const handleContextMenu = (e) => eventHandler.handleContextMenu(e);

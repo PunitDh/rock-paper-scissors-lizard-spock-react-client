@@ -12,7 +12,6 @@ import FormulaBar from "./components/FormulaBar";
 const SheetContent = ({
   state,
   dispatch,
-  eventHandler,
   toolbar,
   formulaField,
   statusField,
@@ -20,31 +19,13 @@ const SheetContent = ({
   return (
     <Container>
       {toolbar && <Toolbar state={state} dispatch={dispatch} />}
-      {formulaField && (
-        <FormulaBar
-          state={state}
-          dispatch={dispatch}
-          eventHandler={eventHandler}
-        />
-      )}
-      <AbsoluteCellInput
-        state={state}
-        dispatch={dispatch}
-        eventHandler={eventHandler}
-      />
-      <EventDelegator eventHandler={eventHandler}>
+      {formulaField && <FormulaBar state={state} dispatch={dispatch} />}
+      <AbsoluteCellInput state={state} dispatch={dispatch} />
+      <EventDelegator>
         <Table width="100%" sx={{ mb: 0 }}>
-          <HeaderRow
-            state={state}
-            dispatch={dispatch}
-            eventHandler={eventHandler}
-          />
+          <HeaderRow state={state} dispatch={dispatch} />
         </Table>
-        <SheetTable
-          state={state}
-          dispatch={dispatch}
-          eventHandler={eventHandler}
-        />
+        <SheetTable state={state} dispatch={dispatch} />
         <FocusGuard state={state} dispatch={dispatch} />
         {statusField && <StatusBar state={state} dispatch={dispatch} />}
       </EventDelegator>

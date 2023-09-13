@@ -1,15 +1,15 @@
-import { useReducer, useRef } from "react";
+import { useReducer } from "react";
 import DashboardCard from "src/components/shared/DashboardCard";
 import { initialState, reducer } from "./reducer";
 import { recalculateFormulae, addMemento } from "./actions";
 import { createInitialState } from "./utils/cellUtils";
 import { SheetConfig } from "./constants";
 import ContextMenu from "./components/ContextMenu";
-import { useClipboard, useEffectLog } from "src/hooks";
+import { useEffectLog } from "src/hooks";
 import DebugBar from "./components/DebugBar";
-import EventHandler from "./eventHandlers/EventHandler";
 import TestSheet from "../TestSheet";
 import SheetContent from "./SheetContent";
+import { EventProvider } from "./context/EventHandlerContext";
 
 const Sheet = ({
   maxRows = SheetConfig.MAX_ROWS,
@@ -33,23 +33,13 @@ const Sheet = ({
     )
   );
 
-  const clipboard = useClipboard();
-  const inputFocusRef = useRef(false);
-
-  const eventHandler = new EventHandler(
-    state,
-    dispatch,
-    clipboard,
-    inputFocusRef
-  );
-
   useEffectLog(() => {
     dispatch(recalculateFormulae());
     dispatch(addMemento());
   }, []);
 
   return (
-    <>
+    <EventProvider state={state} dispatch={dispatch}>
       <DashboardCard sx={{ height: "100%" }} title="Spreadsheet">
         {state.menuAnchorElement && (
           <ContextMenu state={state} dispatch={dispatch} />
@@ -57,7 +47,6 @@ const Sheet = ({
         <SheetContent
           state={state}
           dispatch={dispatch}
-          eventHandler={eventHandler}
           toolbar={toolbar}
           formulaField={formulaField}
           statusField={statusField}
@@ -65,7 +54,7 @@ const Sheet = ({
         <DebugBar state={state} />
       </DashboardCard>
       <TestSheet state={state} />
-    </>
+    </EventProvider>
   );
 };
 

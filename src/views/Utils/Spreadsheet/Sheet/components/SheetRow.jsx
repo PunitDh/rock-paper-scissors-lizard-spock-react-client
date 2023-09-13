@@ -4,7 +4,7 @@ import { TableRow } from "@mui/material";
 import Cell from "./Cell";
 import HeaderCell from "./HeaderCell";
 
-const SheetRow = ({ state, dispatch, row, eventHandler }) => {
+const SheetRow = ({ state, dispatch, row }) => {
   return (
     <TableRow sx={{ tableLayout: "fixed" }}>
       {Array(state.maxColumns + 1)
@@ -29,7 +29,6 @@ const SheetRow = ({ state, dispatch, row, eventHandler }) => {
               dimension={Dimension.ROW}
               id={row + 1}
               key={row + 1}
-              eventHandler={eventHandler}
             />
           ) : (
             <Cell

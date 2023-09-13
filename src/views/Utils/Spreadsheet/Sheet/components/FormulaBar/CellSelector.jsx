@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { FlexForm, SmallInputField } from "../styles";
+import useEventHandler from "../../hooks/useEventHandler";
 
-const CellSelector = ({ state, eventHandler }) => {
+const CellSelector = ({ state }) => {
+  const eventHandler = useEventHandler();
   const cellInputValue = useMemo(
     () =>
       state.highlighted.cells.length > 1 && state.mouseDown

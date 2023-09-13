@@ -11,7 +11,7 @@ import FormulaField from "./FormulaField";
  * @param {Function} props.dispatch
  * @returns
  */
-const FormulaBar = ({ state, dispatch, eventHandler }) => {
+const FormulaBar = ({ state, dispatch }) => {
   useEffect(() => {
     const selectedCellData = state.content.data[state.selectedCell.id];
     if (selectedCellData) {
@@ -27,12 +27,8 @@ const FormulaBar = ({ state, dispatch, eventHandler }) => {
   return (
     <div tabIndex="1">
       <FlexBox width="100%" justifyContent="flex-start">
-        <CellSelector state={state} eventHandler={eventHandler} />
-        <FormulaField
-          state={state}
-          dispatch={dispatch}
-          eventHandler={eventHandler}
-        />
+        <CellSelector state={state} />
+        <FormulaField state={state} dispatch={dispatch} />
       </FlexBox>
     </div>
   );

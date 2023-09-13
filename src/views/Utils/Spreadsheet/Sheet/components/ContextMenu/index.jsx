@@ -7,11 +7,11 @@ import {
   addMemento,
 } from "../../actions";
 import { ContentPaste, Delete } from "@mui/icons-material";
-import { useClipboard } from "src/hooks";
 import { generateClipboardContent } from "../../utils/cellUtils";
+import useEventHandler from "../../hooks/useEventHandler";
 
 const ContextMenu = ({ state, dispatch }) => {
-  const clipboard = useClipboard();
+  const eventHandler = useEventHandler();
 
   const handleClose = () => {
     dispatch(openContextMenu(false));
@@ -19,7 +19,7 @@ const ContextMenu = ({ state, dispatch }) => {
 
   const handleCut = async () => {
     const content = generateClipboardContent(state);
-    await clipboard.copy(content);
+    await eventHandler.clipboard.copy(content);
     dispatch(deleteCellContent());
     dispatch(addMemento());
     handleClose();
@@ -27,12 +27,12 @@ const ContextMenu = ({ state, dispatch }) => {
 
   const handleCopy = async () => {
     const content = generateClipboardContent(state);
-    await clipboard.copy(content);
+    await eventHandler.clipboard.copy(content);
     handleClose();
   };
 
   const handlePaste = async () => {
-    const data = await clipboard.get();
+    const data = await eventHandler.clipboard.get();
     console.log(data);
     dispatch(pasteCellContent(state.menuAnchorElement.id, data));
     handleClose();

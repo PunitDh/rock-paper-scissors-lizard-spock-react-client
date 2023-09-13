@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import DelayedTooltip from "../DelayedTooltip";
 import { Box, Typography } from "@mui/material";
 import { useState } from "react";
-import { useClipboard } from "src/hooks";
+import useEventHandler from "../../hooks/useEventHandler";
 
 const StatusBox = styled(Box)(({ active }) => ({
   cursor: "pointer",
@@ -17,11 +17,11 @@ const HighlightedStats = ({ data, title }) => {
   const [active, setActive] = useState(false);
   const initialTooltip = `Copy '${data}'`;
   const [tooltip, setTooltip] = useState(initialTooltip);
-  const clipboard = useClipboard();
+  const eventHandler = useEventHandler();
 
   const handleClick = (e, data) => {
     e.stopPropagation();
-    clipboard.copy(data);
+    eventHandler.clipboard.copy(data);
     setTooltip("Copied!");
   };
 

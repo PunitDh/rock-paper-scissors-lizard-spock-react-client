@@ -13,8 +13,10 @@ import {
 import { isFormula } from "../../utils/cellUtils";
 import { FieldButton, FlexForm, InputTextField } from "../styles";
 import { Check, Clear } from "@mui/icons-material";
+import useEventHandler from "../../hooks/useEventHandler";
 
-const FormulaField = ({ state, dispatch, eventHandler }) => {
+const FormulaField = ({ state, dispatch }) => {
+  const eventHandler = useEventHandler();
   const value = useMemo(
     () =>
       state.formulaFieldText ||

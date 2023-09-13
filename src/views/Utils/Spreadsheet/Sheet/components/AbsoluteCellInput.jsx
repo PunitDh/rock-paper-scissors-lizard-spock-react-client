@@ -8,8 +8,7 @@ import {
 } from "../actions";
 import { isFormula } from "../utils/cellUtils";
 // eslint-disable-next-line no-unused-vars
-import EventHandler from "../eventHandlers/EventHandler";
-import { useEffectLog } from "src/hooks";
+import useEventHandler from "../hooks/useEventHandler";
 
 const Container = styled.div(({ top, left }) => ({
   position: "absolute",
@@ -38,11 +37,11 @@ const InputField = styled.input(({ width, height, isfocused, formatting }) => ({
 /**
  *
  * @param {Object} props
- * @param {EventHandler} props.eventHandler
  * @returns
  */
-const AbsoluteCellInput = ({ state, dispatch, eventHandler }) => {
+const AbsoluteCellInput = ({ state, dispatch }) => {
   const navigateRef = useRef(true);
+  const eventHandler = useEventHandler();
 
   const inputRef = useCallback(
     (node) => dispatch(setInputRef(node)),
@@ -136,7 +135,7 @@ const AbsoluteCellInput = ({ state, dispatch, eventHandler }) => {
         navigateRef.current,
         inputRef.current
       ),
-    [currentValue, eventHandler, originalValue]
+    [currentValue, eventHandler, inputRef, originalValue]
   );
 
   const handleFocus = () => eventHandler.setFocusInput(true);
