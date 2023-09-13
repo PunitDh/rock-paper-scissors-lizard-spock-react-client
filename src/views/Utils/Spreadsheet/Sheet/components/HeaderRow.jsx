@@ -3,7 +3,7 @@ import SelectAll from "./SelectAll";
 import { Dimension, SheetConfig } from "../constants";
 import HeaderCell from "./HeaderCell";
 
-const HeaderRow = ({ state, dispatch }) => {
+const HeaderRow = ({ state, dispatch, eventHandler }) => {
   return (
     <TableHead width="100%">
       <TableRow>
@@ -17,6 +17,7 @@ const HeaderRow = ({ state, dispatch }) => {
               dispatch={dispatch}
               id={SheetConfig.COLUMNS[column]}
               dimension={Dimension.COLUMN}
+              eventHandler={eventHandler}
             />
             // <ColumnHeader
             //   key={SheetConfig.COLUMNS[column]}

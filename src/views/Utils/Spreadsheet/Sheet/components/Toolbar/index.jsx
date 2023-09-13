@@ -221,17 +221,17 @@ const Toolbar = ({ state, dispatch }) => {
           />
           <ColorPicker
             Icon={FormatColorFill}
-            state={selectedFormatting}
+            stateCellFormatting={selectedFormatting}
             property="backgroundColor"
-            defaultValue="#FFFFFF"
             onChange={setFormattingChange}
+            defaultValue="#FFFFFF"
           />
           <ColorPicker
             Icon={FormatColorText}
-            state={selectedFormatting}
+            stateCellFormatting={selectedFormatting}
             property="color"
-            defaultValue="#000000"
             onChange={setFormattingChange}
+            defaultValue="#000000"
           />
           <FormattingButton
             title={"Align left"}

@@ -37,7 +37,7 @@ export default class EventHandler {
     this.inputFocusRef = inputFocusRef;
   }
 
-  static isCtrlKeyPressed = (e) => {
+  isCtrlKeyPressed = (e) => {
     return /mac/i.test(navigator.platform) ? e.metaKey : e.ctrlKey;
   };
 
@@ -60,7 +60,7 @@ export default class EventHandler {
 
   handleMouseMove(e) {
     this.dispatch(setHovered(e.target.id));
-    if (this.state.mouseDown && !EventHandler.isCtrlKeyPressed(e)) {
+    if (this.state.mouseDown && !this.isCtrlKeyPressed(e)) {
       const { cellAnchor } = this.state.highlighted;
       if (this.state.formulaMode) {
         this.dispatch(
@@ -84,17 +84,16 @@ export default class EventHandler {
 
   handleKeyDown(e) {
     let nextCell;
-    this.state.inputRef.focus();
 
     switch (e.key) {
       case KeyEvent.LOWERCASE_A:
-        if (EventHandler.isCtrlKeyPressed(e)) {
+        if (this.isCtrlKeyPressed(e)) {
           e.preventDefault();
           this.dispatch(selectAll());
         }
         break;
       case KeyEvent.LOWERCASE_Z:
-        if (EventHandler.isCtrlKeyPressed(e)) {
+        if (this.isCtrlKeyPressed(e)) {
           e.preventDefault();
           e.shiftKey ? this.dispatch(redoState()) : this.dispatch(undoState());
           this.dispatch(recalculateFormulae());
@@ -116,6 +115,7 @@ export default class EventHandler {
       case KeyEvent.ARROW_RIGHT:
       case KeyEvent.ARROW_LEFT:
       case KeyEvent.ARROW_UP:
+        console.log("Here", e.key);
         e.shiftKey &&
           !this.state.highlighted.cellAnchor &&
           this.dispatch(setHighlightCellAnchor(this.state.selectedCell.id));
@@ -124,6 +124,7 @@ export default class EventHandler {
         this.dispatch(selectCell(nextCell));
         break;
       default:
+        this.state.inputRef.focus();
         break;
     }
 
@@ -158,84 +159,42 @@ export default class EventHandler {
     this.dispatch(openContextMenu(element));
   }
 
-  handleDoubleClick(e) {
+  handleDoubleClick() {
     this.inputFocusRef.current = true;
   }
 
   handleMouseDown(e) {
     if (e.button !== MouseButton.LEFT_CLICK) return;
     this.dispatch(setMouseDown(true));
-    const id = this.state.hovered;
-    const selectedCellId = this.state.selectedCell.id;
-    const selectedCellData = this.state.content.data[selectedCellId];
-    const formula = selectedCellData?.formula;
-    const isLastValueClosedBracket = /(\))$/gi.test(formula);
-    const isLastValueOperation = /[+-/*^:,]$/gi.test(formula);
-    const isShiftPressed = e.shiftKey;
-    const isCtrlPressed = EventHandler.isCtrlKeyPressed(e);
-    const isSameCellSelected = id === this.state.selectedCell.id;
 
-    const addCellsToFormula = () => {
-      const value = addCellToFocusedBox(
-        this.state,
+    const {
+      hovered: id,
+      selectedCell,
+      content: { data: contentData },
+      formulaMode,
+      highlighted,
+      isFormulaFieldFocused,
+    } = this.state;
+
+    const isCtrlPressed = this.isCtrlKeyPressed(e);
+
+    if (formulaMode) {
+      this.#handleFormulaModeMouseDown(
         id,
-        !EventHandler.isCtrlKeyPressed(e)
+        isFormulaFieldFocused,
+        selectedCell.id,
+        contentData[selectedCell.id],
+        highlighted,
+        isCtrlPressed,
+        e.shiftKey
       );
-      this.dispatch(setCellContent(this.state.selectedCell.id, value));
-      this.dispatch(
-        updateReferenceCells(
-          this.state.selectedCell.id,
-          [id],
-          !EventHandler.isCtrlKeyPressed(e)
-        )
-      );
-    };
-
-    if (isCtrlPressed) {
-      if (this.state.formulaMode) {
-        this.dispatch(highlightFormulaCells(this.state.hovered));
-        addCellsToFormula();
-      } else {
-        if (this.state.highlighted.cells.includes(id)) {
-          this.dispatch(removeCellsFromHighlight([id]));
-        } else {
-          this.dispatch(addCellsToHighlight([id]));
-        }
-      }
-    } else if (isShiftPressed) {
-      if (this.state.formulaMode) {
-        // TODO
-      } else {
-        this.dispatch(
-          highlightCells(this.state.highlighted.cellAnchor, this.state.hovered)
-        );
-      }
     } else {
-      if (this.state.formulaMode) {
-        this.dispatch(setHighlightCellAnchor(id));
-        if (
-          !isSameCellSelected &&
-          (!isLastValueClosedBracket || isLastValueOperation)
-        ) {
-          addCellsToFormula();
-        } else {
-          if (this.state.isFormulaFieldFocused) {
-            addCellsToFormula();
-          } else {
-            this.dispatch(setFormulaMode(false));
-            this.dispatch(recalculateFormulae());
-            this.state.highlighted.cells.length > 0 &&
-              this.dispatch(resetHighlight());
-            this.dispatch(selectCell(id));
-            this.dispatch(highlightCells(id));
-          }
-        }
-      } else {
-        this.state.highlighted.cells.length > 0 &&
-          this.dispatch(resetHighlight());
-        this.dispatch(selectCell(id));
-        this.dispatch(setHighlightCellAnchor(id));
-      }
+      this.#handleRegularModeMouseDown(
+        id,
+        highlighted,
+        isCtrlPressed,
+        e.shiftKey
+      );
     }
   }
 
@@ -256,18 +215,18 @@ export default class EventHandler {
       const value = addCellToFocusedBox(
         this.state,
         range,
-        !EventHandler.isCtrlKeyPressed(e)
+        !this.isCtrlKeyPressed(e)
       );
       this.dispatch(setCellContent(this.state.selectedCell.id, value));
       this.dispatch(
         updateReferenceCells(
           this.state.selectedCell.id,
           [this.state.highlighted.cellAnchor, this.state.hovered],
-          !EventHandler.isCtrlKeyPressed(e)
+          !this.isCtrlKeyPressed(e)
         )
       );
     } else if (!isSameCellHighlighted) {
-      if (EventHandler.isCtrlKeyPressed(e)) {
+      if (this.isCtrlKeyPressed(e)) {
         this.dispatch(addCellsToHighlight([this.state.hovered]));
       }
     }
@@ -281,6 +240,7 @@ export default class EventHandler {
     this.state.inputRef.style.top = e.target.scrollTop;
   }
 
+  // Private functions
   #determineNextCell(e) {
     const { selectedCell } = this.state;
 
@@ -301,11 +261,11 @@ export default class EventHandler {
               this.state.maxColumns
             );
       case KeyEvent.ARROW_DOWN:
-        return EventHandler.EventHandler.isCtrlKeyPressed(e)
+        return this.isCtrlKeyPressed(e)
           ? new Cell(`${selectedCell.column}${this.state.maxRows}`)
           : selectedCell.getNextRow(this.state.maxRows);
       case KeyEvent.ARROW_RIGHT:
-        return EventHandler.EventHandler.isCtrlKeyPressed(e)
+        return this.isCtrlKeyPressed(e)
           ? new Cell(
               `${SheetConfig.COLUMNS[this.state.maxColumns - 1]}${
                 selectedCell.row
@@ -316,15 +276,84 @@ export default class EventHandler {
               this.state.maxColumns
             );
       case KeyEvent.ARROW_LEFT:
-        return EventHandler.EventHandler.isCtrlKeyPressed(e)
+        return this.isCtrlKeyPressed(e)
           ? new Cell(`${SheetConfig.COLUMNS[0]}${selectedCell.row}`)
           : selectedCell.getPreviousColumn(this.state.maxColumns);
       case KeyEvent.ARROW_UP:
-        return EventHandler.EventHandler.isCtrlKeyPressed(e)
+        return this.isCtrlKeyPressed(e)
           ? new Cell(`${selectedCell.column}${1}`)
           : selectedCell.getPreviousRow();
       default:
         break;
     }
   }
+
+  #addCellsToFormula = (id, isCtrlPressed) => {
+    const value = addCellToFocusedBox(this.state, id, !isCtrlPressed);
+    this.dispatch(setCellContent(this.state.selectedCell.id, value));
+    this.dispatch(
+      updateReferenceCells(this.state.selectedCell.id, [id], !isCtrlPressed)
+    );
+  };
+
+  #handleRegularModeMouseDown = (
+    id,
+    highlighted,
+    isCtrlPressed,
+    isShiftPressed
+  ) => {
+    if (isCtrlPressed) {
+      if (highlighted.cells.includes(id)) {
+        this.dispatch(removeCellsFromHighlight([id]));
+      } else {
+        this.dispatch(addCellsToHighlight([id]));
+      }
+    } else if (isShiftPressed) {
+      this.dispatch(highlightCells(highlighted.cellAnchor, id));
+    } else {
+      highlighted.cells.length > 0 && this.dispatch(resetHighlight());
+      this.dispatch(selectCell(id));
+      this.dispatch(setHighlightCellAnchor(id));
+    }
+  };
+
+  #handleFormulaModeMouseDown = (
+    id,
+    isFormulaFieldFocused,
+    selectedCellId,
+    selectedCellData,
+    highlighted,
+    isCtrlPressed,
+    isShiftPressed
+  ) => {
+    const formula = selectedCellData?.formula;
+    const isLastValueClosedBracket = /(\))$/gi.test(formula);
+    const isLastValueOperation = /[+-/*^:,]$/gi.test(formula);
+    const isSameCellSelected = id === selectedCellId;
+
+    if (isCtrlPressed) {
+      this.dispatch(highlightFormulaCells(id));
+      this.#addCellsToFormula(id, isCtrlPressed);
+    } else if (isShiftPressed) {
+      // TODO
+    } else {
+      this.dispatch(setHighlightCellAnchor(id));
+      if (
+        !isSameCellSelected &&
+        (!isLastValueClosedBracket || isLastValueOperation)
+      ) {
+        this.#addCellsToFormula(id, isCtrlPressed);
+      } else {
+        if (isFormulaFieldFocused) {
+          this.#addCellsToFormula(id, isCtrlPressed);
+        } else {
+          this.dispatch(setFormulaMode(false));
+          this.dispatch(recalculateFormulae());
+          highlighted.cells.length > 0 && this.dispatch(resetHighlight());
+          this.dispatch(selectCell(id));
+          this.dispatch(highlightCells(id));
+        }
+      }
+    }
+  };
 }

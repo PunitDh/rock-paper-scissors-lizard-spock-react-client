@@ -23,7 +23,6 @@ export default function Spreadsheet() {
           f4: "=SUM(A1,B1,E1,A2)",
         }}
       />
-      <TestSheet />
     </PageContainer>
   );
 }

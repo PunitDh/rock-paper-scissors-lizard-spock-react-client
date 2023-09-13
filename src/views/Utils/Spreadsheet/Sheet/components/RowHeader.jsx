@@ -33,7 +33,7 @@ const Resizer = styled.div({
   cursor: "row-resize",
 });
 
-const RowHeader = ({ state, dispatch, row, onContextMenu }) => {
+const RowHeader = ({ state, dispatch, row, onContextMenu, eventHandler }) => {
   const headerRef = useRef();
   const rowTop = useRef();
   const selected =
@@ -41,7 +41,7 @@ const RowHeader = ({ state, dispatch, row, onContextMenu }) => {
 
   const handleClick = (e) => {
     e.stopPropagation();
-    if (EventHandler.isCtrlKeyPressed(e)) {
+    if (eventHandler.isCtrlKeyPressed(e)) {
       const range = CellRange.createFlat(
         `${SheetConfig.COLUMNS[0]}${row}`,
         `${SheetConfig.COLUMNS[state.maxColumns - 1]}${row}`

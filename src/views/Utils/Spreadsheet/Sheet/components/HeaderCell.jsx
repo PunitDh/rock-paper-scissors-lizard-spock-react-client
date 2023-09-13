@@ -12,7 +12,6 @@ import {
 } from "../actions";
 import { Dimension, SheetConfig } from "../constants";
 import CellRange from "../models/CellRange";
-import EventHandler from "../eventHandlers/EventHandler";
 
 const HeaderItemComponent = styled(HeaderItem)(({ dimension, size }) => ({
   cursor: dimension === Dimension.ROW ? "e-resize" : "s-resize",
@@ -37,7 +36,14 @@ const ResizerComponent = styled.div(({ dimension }) => ({
     : "borderRight"]: `2px solid #aaa`,
 }));
 
-const HeaderCell = ({ state, dispatch, id, onContextMenu, dimension }) => {
+const HeaderCell = ({
+  state,
+  dispatch,
+  id,
+  onContextMenu,
+  dimension,
+  eventHandler,
+}) => {
   const headerRef = useRef();
   const posRef = useRef();
   const selected =
@@ -69,7 +75,7 @@ const HeaderCell = ({ state, dispatch, id, onContextMenu, dimension }) => {
 
   const handleClick = (e) => {
     e.stopPropagation();
-    if (EventHandler.isCtrlKeyPressed(e)) {
+    if (eventHandler.isCtrlKeyPressed(e)) {
       const start =
         dimension === Dimension.ROW
           ? `${SheetConfig.COLUMNS[0]}${id}`

@@ -23,6 +23,7 @@ import HeaderRow from "./components/HeaderRow";
 import { Container } from "./styles";
 import EventHandler from "./eventHandlers/EventHandler";
 import EventDelegator from "./eventHandlers/EventDelegator";
+import TestSheet from "../TestSheet";
 
 const Sheet = ({
   maxRows = SheetConfig.MAX_ROWS,
@@ -78,6 +79,7 @@ const Sheet = ({
   }, [state.content.data, state.selectedCell.id]);
 
   return (
+    <>
     <DashboardCard sx={{ height: "100%" }} title="Spreadsheet">
       {state.menuAnchorElement && (
         <ContextMenu state={state} dispatch={dispatch} />
@@ -99,7 +101,11 @@ const Sheet = ({
         />
         <EventDelegator eventHandler={eventHandler}>
           <Table width="100%" sx={{ mb: 0 }}>
-            <HeaderRow state={state} dispatch={dispatch} />
+            <HeaderRow
+              state={state}
+              dispatch={dispatch}
+              eventHandler={eventHandler}
+            />
           </Table>
           <Table
             width="100%"
@@ -123,6 +129,7 @@ const Sheet = ({
                     state={state}
                     dispatch={dispatch}
                     row={row}
+                    eventHandler={eventHandler}
                   />
                 ))}
             </TableBody>
@@ -133,6 +140,8 @@ const Sheet = ({
         <DebugBar state={state} tableBodyRef={tableBodyRef} />
       </Container>
     </DashboardCard>
+    <TestSheet state={state} />
+    </>
   );
 };
 

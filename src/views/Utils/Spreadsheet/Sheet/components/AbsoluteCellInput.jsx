@@ -152,7 +152,7 @@ const AbsoluteCellInput = ({
           );
           break;
         case KeyEvent.LOWERCASE_A:
-          if (EventHandler.isCtrlKeyPressed(e)) {
+          if (eventHandler.isCtrlKeyPressed(e)) {
             e.stopPropagation();
           }
           break;

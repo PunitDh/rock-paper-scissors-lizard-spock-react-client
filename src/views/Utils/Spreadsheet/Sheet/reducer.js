@@ -296,7 +296,6 @@ export const reducer = (state, action) => {
           };
         }
       } catch (e) {
-        console.log(e);
         const value = typeInInputBox(action.payload.data);
         return {
           ...state,

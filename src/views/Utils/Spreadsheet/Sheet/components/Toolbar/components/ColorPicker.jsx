@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { FieldButton } from "../../styles";
 import { useRef } from "react";
-import { Box } from "@mui/material";
+import { Box, rgbToHex } from "@mui/material";
 
 const Input = styled.input({
   width: "1.25rem",
@@ -15,8 +15,19 @@ const Input = styled.input({
   left: "-1.1rem",
 });
 
-const ColorPicker = ({ Icon, state, onChange, property, defaultValue }) => {
+const ColorPicker = ({
+  Icon,
+  stateCellFormatting,
+  onChange,
+  property,
+  defaultValue,
+}) => {
   const inputRef = useRef();
+  const isRgb = /^rgb/g.test(stateCellFormatting[property]);
+  const value = isRgb
+    ? rgbToHex(stateCellFormatting[property])
+    : stateCellFormatting[property];
+
   return (
     <FieldButton onClick={() => inputRef.current?.click()}>
       <Icon sx={{ width: "1rem" }} />
@@ -25,7 +36,7 @@ const ColorPicker = ({ Icon, state, onChange, property, defaultValue }) => {
           ref={inputRef}
           type="color"
           id={`${property}-picker`}
-          value={state[property]}
+          value={value || defaultValue}
           onChange={onChange(property)}
         />
       </Box>
