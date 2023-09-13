@@ -25,6 +25,7 @@ export const initialState = Object.freeze({
   formulaTrackedCells: [],
   formulaHighlighted: [],
   content: {
+    namedRanges: {},
     data: {},
     rowHeights: {},
     columnWidths: {},
@@ -39,7 +40,7 @@ export const initialState = Object.freeze({
 });
 
 export const reducer = (state, action) => {
-  action.type !== SheetAction.SET_HOVERED && console.log(action);
+  // action.type !== SheetAction.SET_HOVERED && console.log(action);
 
   switch (action.type) {
     case SheetAction.SET_SELECTED: {
@@ -72,6 +73,21 @@ export const reducer = (state, action) => {
       return {
         ...state,
         formulaFieldRef: action.payload,
+      };
+
+    case SheetAction.ADD_NAMED_RANGE:
+      return {
+        ...state,
+        content: {
+          ...state.content,
+          namedRanges: {
+            ...state.content.namedRanges,
+            [action.payload]:
+              state.highlighted.cells.length > 1
+                ? state.highlighted.cells
+                : [state.selectedCell.id],
+          },
+        },
       };
     case SheetAction.SET_FORMULA_FIELD_TEXT:
       return {

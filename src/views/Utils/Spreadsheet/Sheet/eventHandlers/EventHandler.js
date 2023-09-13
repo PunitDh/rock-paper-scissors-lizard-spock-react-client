@@ -1,6 +1,7 @@
 import {
   addCellsToHighlight,
   addMemento,
+  addNamedRange,
   deleteCellContent,
   highlightCells,
   highlightFormulaCellRange,
@@ -15,6 +16,8 @@ import {
   selectCell,
   setCellContent,
   setDragging,
+  setFormulaFieldFocused,
+  setFormulaFieldText,
   setFormulaMode,
   setHighlightCellAnchor,
   setHovered,
@@ -136,6 +139,83 @@ export default class EventHandler {
         break;
     }
   }
+
+  /**
+   *
+   * @param {Event} e
+   * @param {String} originalValue
+   */
+  handleFormulaFieldKeyDown(e, originalValue) {
+    switch (e.key) {
+      case KeyEvent.ESCAPE:
+        this.dispatch(setFormulaMode(false));
+        // setOriginalValue(originalValue);
+        this.dispatch(setFormulaFieldText(originalValue));
+        e.target.blur();
+        break;
+      case KeyEvent.ENTER:
+        e.stopPropagation();
+        break;
+      default:
+        break;
+    }
+  }
+
+  handleSelectCellSubmit(e) {
+    e.preventDefault();
+    const value = e.target.currentCell.value;
+    if (Cell.isValidId(value)) {
+      this.dispatch(selectCell(value));
+    } else {
+      e.stopPropagation();
+      this.dispatch(addNamedRange(value));
+    }
+  }
+
+  handleFormulaFieldSubmit(e) {
+    const triggerRecalculation =
+      isFormula(e.target.formulaFieldText.value) ||
+      this.state.formulaTrackedCells.includes(this.state.selectedCell.id);
+    e.preventDefault();
+    this.dispatch(setFormulaFieldText(e.target.formulaFieldText.value));
+    this.dispatch(setFormulaFieldFocused(false));
+    this.dispatch(
+      selectCell(this.state.selectedCell.getNextRow(this.state.maxRows))
+    );
+    this.dispatch(setFormulaMode(false));
+    triggerRecalculation && this.dispatch(recalculateFormulae());
+    this.dispatch(addMemento());
+  }
+
+  handleFormulaFieldBlur(e, originalValue) {
+    const triggerRecalculation =
+      isFormula(e.target.value) ||
+      this.state.formulaTrackedCells.includes(this.state.selectedCell.id) ||
+      originalValue !== e.target.value;
+    if (!this.state.formulaMode) {
+      triggerRecalculation && this.dispatch(recalculateFormulae());
+    }
+  }
+
+  handleFunction = () => {
+    this.dispatch(setFormulaFieldText("="));
+    this.dispatch(setFormulaMode(true));
+    console.log(this.state.formulaFieldRef);
+    this.state.formulaFieldRef.focus();
+  };
+
+  handleSelectCell = (value) => {
+    if (Cell.isValidId(value.toUpperCase())) {
+      this.dispatch(selectCell(value.toUpperCase()));
+    } else {
+      if (value in this.state.content.namedRanges) {
+        this.dispatch(resetHighlight());
+        this.dispatch(
+          addCellsToHighlight(this.state.content.namedRanges[value])
+        );
+      }
+    }
+  };
 
   handleMouseMove(e) {
     this.state.hovered !== e.target.id &&

@@ -45,10 +45,7 @@ const AbsoluteCellInput = ({ state, dispatch, eventHandler }) => {
   const navigateRef = useRef(true);
 
   const inputRef = useCallback(
-    (node) => {
-      console.log("Setting inputRef");
-      dispatch(setInputRef(node));
-    },
+    (node) => dispatch(setInputRef(node)),
     [dispatch]
   );
 

@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { Autocomplete } from "@mui/material";
 
 export const InputTextField = styled.input({
   width: "100%",
@@ -13,6 +14,16 @@ export const SmallInputField = styled(InputTextField)({
   textAlign: "center",
 });
 
+export const SmallAutoComplete = styled(Autocomplete)({
+  outline: "none",
+  borderRadius: 0,
+  border: "1px solid rgba(0,0,0,0.2)",
+  lineHeight: "1.5rem",
+  width: "4rem",
+  padding: 0,
+  textAlign: "center",
+});
+
 export const FlexForm = styled.form(
   ({
     gap = "0.2rem",
@@ -24,9 +35,12 @@ export const FlexForm = styled.form(
     width,
     marginLeft,
     backgroundColor,
+    paddingRight = "0.5rem",
+    paddingLeft = "0.5rem",
   }) => ({
     display: "flex",
-    padding: "0.5rem",
+    paddingTop: "0.5rem",
+    paddingBottom: "0.5rem",
     backgroundColor: backgroundColor || "rgba(0,0,0,0.1)",
     gap,
     flexWrap,
@@ -36,6 +50,8 @@ export const FlexForm = styled.form(
     justifyContent,
     width,
     marginLeft,
+    paddingRight,
+    paddingLeft,
   })
 );
 

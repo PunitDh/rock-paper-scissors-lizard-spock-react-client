@@ -3,6 +3,7 @@ export const SheetAction = Object.freeze({
   SET_INPUT_REF: "SET_INPUT_REF",
   SET_FILLER_REF: "SET_FILLER_REF",
   SET_FORMULA_FIELD_REF: "SET_FORMULA_FIELD_REF",
+  ADD_NAMED_RANGE: "ADD_NAMED_RANGE",
   SET_FORMULA_FIELD_TEXT: "SET_FORMULA_FIELD_TEXT",
   SET_FORMULA_FIELD_FOCUSED: "SET_FORMULA_FIELD_FOCUSED",
   RESET_FORMULA_FIELD: "RESET_FORMULA_FIELD",
@@ -60,6 +61,11 @@ export const setFillerRef = (payload) => ({
 
 export const setFormulaFieldRef = (payload) => ({
   type: SheetAction.SET_FORMULA_FIELD_REF,
+  payload,
+});
+
+export const addNamedRange = (payload) => ({
+  type: SheetAction.ADD_NAMED_RANGE,
   payload,
 });
 

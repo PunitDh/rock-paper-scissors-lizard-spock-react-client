@@ -9,7 +9,7 @@ const StatusBox = styled(Box)(({ active }) => ({
   padding: "0 0.5rem 0 0.5rem",
   borderRadius: "3px",
   "&:hover": {
-    backgroundColor: active ? "#777" : "#aaa",
+    backgroundColor: active > 0 ? "#777" : "#aaa",
   },
 }));
 
@@ -45,7 +45,7 @@ const HighlightedStats = ({ data, title }) => {
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
-        active={active}
+        active={Number(active)}
       >
         <Typography sx={{ fontSize: "0.75rem" }} variant="subtitle-1">
           {title}: {data}

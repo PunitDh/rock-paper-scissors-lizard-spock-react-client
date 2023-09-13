@@ -41,7 +41,7 @@ const InputField = styled.input(({ width, height, isfocused, formatting }) => ({
  * @param {EventHandler} props.eventHandler
  * @returns
  */
-const AbsoluteCellInput = ({ state, dispatch, eventHandler }) => {
+const Filler = ({ state, dispatch, eventHandler }) => {
   const fillerRef = useRef();
   const navigateRef = useRef(true);
 
@@ -177,4 +177,4 @@ const AbsoluteCellInput = ({ state, dispatch, eventHandler }) => {
   );
 };
 
-export default AbsoluteCellInput;
+export default Filler;

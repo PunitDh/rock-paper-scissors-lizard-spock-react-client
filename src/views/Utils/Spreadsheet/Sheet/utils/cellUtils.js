@@ -205,6 +205,7 @@ const generateInitialContent = (
     rowHeights,
     columnWidths,
     data,
+    namedRanges: {},
   };
 };
 
