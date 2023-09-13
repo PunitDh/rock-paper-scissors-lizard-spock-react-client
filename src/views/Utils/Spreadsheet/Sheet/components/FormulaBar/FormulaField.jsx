@@ -37,11 +37,11 @@ const FormulaField = ({ state, dispatch }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.selectedCell.id]);
 
-  useEffect(() => {
-    if (state.isFormulaFieldFocused) {
-      eventHandler.formulaFieldRef.focus();
-    }
-  }, [eventHandler.formulaFieldRef, state.isFormulaFieldFocused]);
+  // useEffect(() => {
+  //   if (state.isFormulaFieldFocused) {
+  //     eventHandler.formulaFieldRef.focus();
+  //   }
+  // }, [eventHandler.formulaFieldRef, state.isFormulaFieldFocused]);
 
   const handleContextMenu = (e) => eventHandler.handleContextMenu(e);
   const handleKeyDown = (e) =>

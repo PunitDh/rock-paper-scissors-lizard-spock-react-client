@@ -1,11 +1,6 @@
 import styled from "@emotion/styled";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-  openContextMenu,
-  setCellContent,
-  setFormulaMode,
-  setInputRef,
-} from "../actions";
+import { openContextMenu, setCellContent, setFormulaMode } from "../actions";
 import { isFormula } from "../utils/cellUtils";
 // eslint-disable-next-line no-unused-vars
 import useEventHandler from "../hooks/useEventHandler";

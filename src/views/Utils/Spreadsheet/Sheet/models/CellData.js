@@ -148,7 +148,10 @@ export default class CellData {
   evaluate(stateContentData) {
     if (this.formula) {
       const referenceCells = getReferenceCells(this.formula);
-      const evaluated = evaluate(this.formula, stateContentData);
+      const evaluated = evaluate(
+        this.formula.replace("=", ""),
+        stateContentData
+      );
       console.log("evaluating formula", this.id);
       if (evaluated.error) {
         this.error = evaluated.error;
@@ -234,6 +237,25 @@ const getNumberFormattedDisplay = (value, formatting) => {
   }
 };
 
+const processLookup = (str, reg, formulaCreator, zeroValue) => {
+  const matches = [...str.matchAll(reg)];
+  const referenceCells = matches.map(([_, match]) =>
+    match
+      .split(",")
+      .map((it) =>
+        it.includes(":")
+          ? CellRange.createFlat(it.split(":")[0], it.split(":")[1]).cellIds
+          : it
+      )
+  );
+
+  return referenceCells.map((it, idx) => ({
+    [matches[idx][0]]: formulaCreator(it),
+    zeroValue,
+    referenceCells,
+  }));
+};
+
 /**
  * Processes a given string for matches with a provided regular expression.
  * Extracts and formats matched substrings according to a provided formula.
@@ -286,11 +308,15 @@ const replaceFormulaWithValues = (str, stateContentData, blankValue) => {
     }
   );
 
-  return cellMatches.reduce(
-    (acc, cell) =>
-      acc.replaceAll(cell, `(${stateContentData[cell]?.value || blankValue})`),
-    str.replace("=", "")
-  );
+  return cellMatches.reduce((acc, cell) => {
+    if (isNaN(parseFloat(stateContentData[cell]?.value))) {
+      return acc.replaceAll(cell, `'${stateContentData[cell]?.value || ""}'`);
+    }
+    return acc.replaceAll(
+      cell,
+      `(${stateContentData[cell]?.value || blankValue})`
+    );
+  }, str);
 };
 
 // Core evaluation functions
@@ -324,7 +350,21 @@ const evaluateFormula = (cellValue) => {
     undefined
   );
 
-  return [sumMatches, avgMatches, countMatches].flat();
+  const lookupMatches = processLookup(
+    str,
+    /(?:LOOKUP)\(([^)]+)\)/gi,
+    (it) =>
+      `[${it[2].map((i) => `${i}`).join(",")}][[${it[1]
+        .map((i) => `${i}`)
+        .join(",")}].findIndex(it => it === ${it[0]})]`,
+    null
+  );
+
+  //  ['a','b','c','d'][[1,2,3,4].findIndex(it => it === 2)]
+
+  // console.log(lookupMatches);
+
+  return [sumMatches, avgMatches, countMatches, lookupMatches].flat();
 };
 
 /**
@@ -361,12 +401,19 @@ export const evaluate = (str, stateContent) => {
     };
   });
 
+  console.log({ evaluatedExpressions });
+
   const replacedString = evaluatedExpressions.reduce(
     (acc, cur) => {
       const curKey = Object.keys(cur)[0];
       const curValue = Object.values(cur)[0];
       return {
-        stringValue: acc.stringValue.replaceAll(curKey, `(${curValue.value})`),
+        stringValue: acc.stringValue.replaceAll(
+          curKey,
+          isNaN(parseFloat(curValue.value))
+            ? `"${curValue.value}"`
+            : `(${curValue.value})`
+        ),
         referenceCells: [...acc.referenceCells, ...curValue.referenceCells],
       };
     },
@@ -396,6 +443,7 @@ export const evaluate = (str, stateContent) => {
 const evaluateExpression = (input) => {
   let parsedInput, value;
   try {
+    console.log({ input });
     parsedInput = input
       .replaceAll("%", "/100")
       .replaceAll("^", "**")
@@ -405,10 +453,6 @@ const evaluateExpression = (input) => {
       .replaceAll(
         /(\d+|\))(?=\s*(atan|acos|asin|sin|cos|tan|log|ln|Rnd|E|π))/gi,
         "$&* "
-      )
-      .replaceAll(
-        /(\d+)(!+)/g,
-        "(Array($1).fill(0).map((_,i)=>i+1).reduce((a,c)=>a*c,1))"
       )
       .replaceAll(/(\d+)(√\()(\d+)/g, "(Math.pow($3, 1/$1))")
       .replaceAll(/SQRT\(/gi, "(Math.sqrt(")
@@ -436,7 +480,9 @@ const evaluateExpression = (input) => {
     const diffBrackets = openBrackets - closeBrackets;
     if (diffBrackets > 0) parsedInput += ")".repeat(diffBrackets);
 
-    value = String(Math.round(eval(parsedInput) * 10 ** 13) / 10 ** 13);
+    console.log({ parsedInput });
+    value = eval(parsedInput);
+    // value = String(Math.round(eval(parsedInput) * 10 ** 13) / 10 ** 13);
 
     return { value, parsedInput };
   } catch (error) {

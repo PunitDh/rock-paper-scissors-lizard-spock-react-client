@@ -21,19 +21,6 @@ export default class Cell {
     return /[A-Z]+\d+/gi.test(id);
   }
 
-  log(maxRows, maxColumns, ...rest) {
-    console.log({
-      id: this.id,
-      row: this.row,
-      column: this.column,
-      columnCharCode: this.columnCharCode,
-      fromCharCode: String.fromCharCode(this.columnCharCode),
-      maxRows,
-      maxColumns,
-      rest,
-    });
-  }
-
   getOffset(offsetX, offsetY, wrap = true, maxRows, maxColumns) {
     let offsetRow = +this.row + offsetY;
     let columnIndex = SheetConfig.COLUMNS.indexOf(this.column) + offsetX;

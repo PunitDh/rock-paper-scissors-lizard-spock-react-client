@@ -8,6 +8,7 @@ import FocusGuard from "./components/FocusGuard";
 import StatusBar from "./components/StatusBar.jsx";
 import SheetTable from "./components/SheetTable";
 import FormulaBar from "./components/FormulaBar";
+import Filler from "./components/Filler";
 
 const SheetContent = ({
   state,
@@ -21,6 +22,7 @@ const SheetContent = ({
       {toolbar && <Toolbar state={state} dispatch={dispatch} />}
       {formulaField && <FormulaBar state={state} dispatch={dispatch} />}
       <CellInput state={state} dispatch={dispatch} />
+      <Filler state={state} dispatch={dispatch} />
       <EventDelegator>
         <Table width="100%" sx={{ mb: 0 }}>
           <HeaderRow state={state} dispatch={dispatch} />

@@ -16,6 +16,7 @@ import {
   selectCell,
   setCellContent,
   setDragging,
+  setFillerMode,
   setFormulaFieldFocused,
   setFormulaFieldText,
   setFormulaMode,
@@ -37,6 +38,7 @@ export default class EventHandler {
     this.inputFocusRef = inputFocusRef;
     this.inputRef = {};
     this.formulaFieldRef = {};
+    this.fillerRef = {};
   }
 
   isCtrlKeyPressed = (e) => {
@@ -49,6 +51,10 @@ export default class EventHandler {
 
   setFormulaFieldRef(ref) {
     this.formulaFieldRef = ref;
+  }
+
+  setFillerRef(ref) {
+    this.fillerRef = ref;
   }
 
   setFocusInput(value) {
@@ -250,6 +256,7 @@ export default class EventHandler {
 
   handleKeyDown(e) {
     let nextCell;
+    console.log(e.key);
 
     switch (e.key) {
       case KeyEvent.LOWERCASE_A:
@@ -263,6 +270,22 @@ export default class EventHandler {
           e.preventDefault();
           e.shiftKey ? this.dispatch(redoState()) : this.dispatch(undoState());
           this.dispatch(recalculateFormulae());
+        }
+        break;
+      case KeyEvent.LOWERCASE_C:
+        if (this.isCtrlKeyPressed(e)) {
+          e.preventDefault();
+          const content = generateClipboardContent(this.state);
+          console.log(content);
+        }
+        break;
+      case KeyEvent.LOWERCASE_X:
+        if (this.isCtrlKeyPressed(e)) {
+          e.preventDefault();
+          const content = generateClipboardContent(this.state);
+          console.log(content);
+
+          this.dispatch(deleteCellContent());
         }
         break;
       case KeyEvent.SHIFT:
@@ -302,6 +325,7 @@ export default class EventHandler {
 
   async handleCopyCapture(e) {
     e.preventDefault();
+    console.log("Here");
     const content = generateClipboardContent(this.state);
     await this.clipboard.copy(content);
   }
@@ -367,6 +391,7 @@ export default class EventHandler {
   handleMouseUp(e) {
     if (e.button !== MouseButton.LEFT_CLICK) return;
     this.dispatch(setMouseDown(false));
+    this.state.fillerMode && this.dispatch(setFillerMode(false));
 
     const isSameCellHighlighted =
       this.state.highlighted.cellAnchor === this.state.hovered;
@@ -487,7 +512,6 @@ export default class EventHandler {
 
   #handleRegularModeMouseUp(isSameCellHighlighted, isCtrlKeyPressed) {
     if (!isSameCellHighlighted && isCtrlKeyPressed) {
-      console.log("It's coming from here");
       this.dispatch(addCellsToHighlight([this.state.hovered]));
     }
     this.dispatch(selectCell(this.state.hovered));
@@ -558,7 +582,6 @@ export default class EventHandler {
         "preserve"
       );
     } else if (isLastValueCell.test(currentValue)) {
-      console.log("Here");
       element.setRangeText(
         replace ? currentValue.replace(isLastValueCell, text) : "," + text,
         replace ? 0 : start,

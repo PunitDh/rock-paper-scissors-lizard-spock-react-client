@@ -48,7 +48,6 @@ const TestingArea = ({ state }) => {
   const [mouse, setMouse] = useState(null);
 
   useCallback(() => {
-    console.log("running once");
     const keyboardEvent = (e) => setKeyBoard(e);
     const mouseEvent = (e) => setMouse(e);
 
@@ -67,6 +66,8 @@ const TestingArea = ({ state }) => {
         {/* <StatusCell label="Keyboard">{keyboard && keyboard.key}</StatusCell>
         <StatusCell label="Mouse button">{mouse && mouse.buttons}</StatusCell>
         <StatusCell label="MouseDown">{String(state.mouseDown)}</StatusCell> */}
+        <StatusCell label="Hovered">{state.hovered}</StatusCell>
+
         <StatusCell label="Current Cell">{state.selectedCell.id}</StatusCell>
         <StatusCell label="Highlighted Anchor">
           {state.highlighted.cellAnchor}
@@ -74,6 +75,7 @@ const TestingArea = ({ state }) => {
         <StatusCell label="Highlighted Cells">
           {state.highlighted.cells.join(",")}
         </StatusCell>
+        <StatusCell label="Filler Mode">{String(state.fillerMode)}</StatusCell>
       </FlexBox>
     </DashboardCard>
   ) : null;

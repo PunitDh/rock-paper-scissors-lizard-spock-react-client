@@ -3,6 +3,12 @@ export const MouseButton = Object.freeze({
   RIGHT_CLICK: 1,
 });
 
+export const Mode = Object.freeze({
+  REGULAR: "REGULAR",
+  FORMULA: "FORMULA",
+  FILLER: "FILLER",
+});
+
 export const SheetConfig = Object.freeze({
   COLUMNS: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
   MAX_ROWS: 12,
@@ -23,6 +29,8 @@ export const KeyEvent = Object.freeze({
   CONTROL: "Control",
   ALT: "Alt",
   LOWERCASE_A: "a",
+  LOWERCASE_C: "c",
+  LOWERCASE_X: "x",
   LOWERCASE_Z: "z",
 });
 

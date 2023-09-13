@@ -32,6 +32,7 @@ export const initialState = Object.freeze({
   },
   mouseDown: false,
   dragging: false,
+  fillerMode: false,
   formulaFieldText: "",
   isFormulaFieldFocused: false,
   menuAnchorElement: null,
@@ -416,6 +417,12 @@ export const reducer = (state, action) => {
       return {
         ...state,
         dragging: action.payload,
+      };
+    }
+    case SheetAction.SET_FILLER_MODE: {
+      return {
+        ...state,
+        fillerMode: action.payload,
       };
     }
     case SheetAction.RECALCULATE_FORMULAE: {

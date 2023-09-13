@@ -148,17 +148,13 @@ export function listFonts() {
 
 export async function getFonts() {
   return new Promise(async (resolve) => {
-    console.log("getting fonts");
     await document.fonts.ready;
-
     const availableFonts = new Set();
-
     for (const font of fontCheck.values()) {
       if (document.fonts.check(`12px "${font}"`)) {
         availableFonts.add(font);
       }
     }
-
     return resolve([...new Set(availableFonts.values())]);
   });
 }

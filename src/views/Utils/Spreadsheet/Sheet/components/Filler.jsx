@@ -1,177 +1,91 @@
 import styled from "@emotion/styled";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-  openContextMenu,
-  setCellContent,
-  setFillerRef,
-  setFormulaMode,
-} from "../actions";
-import { isFormula } from "../utils/cellUtils";
+import { useCallback, useEffect, useState } from "react";
 // eslint-disable-next-line no-unused-vars
-import EventHandler from "../eventHandlers/EventHandler";
-import { useEffectLog } from "src/hooks";
+import useEventHandler from "../hooks/useEventHandler";
+import { setDragging, setFillerMode } from "../actions";
 
 const Container = styled.div(({ top, left }) => ({
   position: "absolute",
   top: `${top}px`,
   left: `${left}px`,
-  transition: "top 200ms ease-in-out, left 200ms ease-in-out",
-  zIndex: "50000",
+  zIndex: "60000",
+  userSelect: "none"
 }));
 
-const InputField = styled.input(({ width, height, isfocused, formatting }) => ({
-  width: `${width}px`,
-  height: `${height}px`,
+const FillerObject = styled.div({
+  width: `6px`,
+  height: `6px`,
   borderRadius: 0,
   outline: "none",
   border: "2px solid blue",
-  cursor: "cell",
-  padding: "1px",
-  backgroundColor: isfocused ? "white" : "transparent",
-  color: isfocused ? "black" : "transparent",
-  ...formatting,
-  "&:focus": {
-    cursor: "text",
-  },
-}));
+  backgroundColor: "blue",
+  cursor: "crosshair",
+});
 
-/**
- *
- * @param {Object} props
- * @param {EventHandler} props.eventHandler
- * @returns
- */
-const Filler = ({ state, dispatch, eventHandler }) => {
-  const fillerRef = useRef();
-  const navigateRef = useRef(true);
+const Filler = ({ state, dispatch }) => {
+  const eventHandler = useEventHandler();
 
-  const fillerNode = useCallback((node) => {
-    console.log("Setting filler ref");
-    dispatch(setFillerRef(node));
-  }, [dispatch]);
-
-  const cell = useMemo(() => state.selectedCell, [state.selectedCell]);
-  const currentCellContentData = state.content.data[cell.id];
-  const rowHeight = useMemo(
-    () => ({
-      value:
-        (state.content.rowHeights && state.content.rowHeights[cell.row]) ||
-        state.defaultRowHeight,
-    }),
-    [cell.row, state.content.rowHeights, state.defaultRowHeight]
+  const fillerRef = useCallback(
+    (node) => eventHandler.setFillerRef(node),
+    [eventHandler]
   );
 
-  const columnWidth = useMemo(
-    () => ({
-      value:
-        (state.content.columnWidths &&
-          state.content.columnWidths[cell.column]) ||
-        state.defaultColumnWidth,
-    }),
-    [cell.column, state.content.columnWidths, state.defaultColumnWidth]
-  );
+  const cell = state.selectedCell;
+  const selectedCells = state.highlighted.cells;
+  const lastSelected = selectedCells[state.highlighted.cells.length - 1];
 
-  const currentValue = useMemo(
-    () =>
-      currentCellContentData?.formula || currentCellContentData?.value || "",
-    [currentCellContentData?.formula, currentCellContentData?.value]
-  );
-
-  const [originalValue, setOriginalValue] = useState(currentValue);
-  const [value, setValue] = useState(currentValue);
-  const [position, setPosition] = useState({
-    top: 0,
-    left: 0,
-    width: 0,
-    height: 0,
-  });
+  const [position, setPosition] = useState({ top: 0, left: 0 });
 
   const setTextBoxStats = useCallback(() => {
     const selectedCellRect = document
-      .getElementById(cell.id)
+      .getElementById(lastSelected || cell.id)
       ?.getBoundingClientRect();
 
     if (selectedCellRect) {
-      setPosition({
-        top: selectedCellRect.top + window.scrollY,
-        left: selectedCellRect.left + window.scrollX,
-        width: selectedCellRect.width,
-        height: selectedCellRect.height,
-      });
+      const top =
+        selectedCellRect.top + window.scrollY + selectedCellRect.height - 6;
+      const left =
+        selectedCellRect.left + window.scrollX + selectedCellRect.width - 6;
+      setPosition({ top, left });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cell.id, rowHeight, columnWidth]);
+  }, [cell.id, lastSelected]);
 
   useEffect(() => {
-    setValue(currentValue);
     setTextBoxStats();
-
     const handleResize = () => setTextBoxStats();
     window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [currentValue, dispatch, setTextBoxStats]);
+  }, [setTextBoxStats]);
 
-  useEffect(() => {
-    setOriginalValue(currentValue);
-    navigateRef.current = true;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cell.id]);
+  const handleDragStart = (e) => {
+    // e.dataTransfer.setData("text/plain", cell.value);
+    // dispatch(setDragging(true));
+    dispatch(setFillerMode(true));
 
-  const handleBlur = (e) => eventHandler.handleInputBoxBlur(e);
-
-  const handleChange = (e) => {
-    const newValue = e.target.value;
-    if (isFormula(newValue)) dispatch(setFormulaMode(true));
-    dispatch(setCellContent(cell.id, newValue));
   };
 
-  const handleKeyDown = useCallback(
-    (e) =>
-      eventHandler.handleCellInputKeyDown(
-        e,
-        originalValue,
-        currentValue,
-        navigateRef.current,
-        fillerRef.current
-      ),
-    [currentValue, eventHandler, originalValue]
-  );
-
-  const handleFocus = () => eventHandler.setFocusInput(true);
-
-  const handleContextMenu = (e) => {
-    e.preventDefault();
-    dispatch(openContextMenu(document.getElementById(state.selectedCell.id)));
+  const handleDrag = (e) => {
+    // console.log(e);
   };
-
-  const handleClick = (e) => {
-    navigateRef.current = false;
+  const handleDragEnd = (e) => {
+    // console.log(e);
+    console.log(e.target);
+    // dispatch(setDragging(false));
+    dispatch(setFillerMode(false));
   };
 
   return (
     <Container top={position.top} left={position.left}>
-      <InputField
-        type="text"
-        ref={fillerNode}
-        value={value}
-        id={"input-box"}
-        autoComplete="off"
-        width={position.width}
-        height={position.height}
-        isfocused={eventHandler.inputFocusRef.current}
-        onBlur={handleBlur}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        onFocus={handleFocus}
-        onContextMenu={handleContextMenu}
-        onClick={handleClick}
-        formatting={
-          !(state.content.data[cell.id]?.formula?.length > 0) &&
-          state.content.data[cell.id]?.formatting
-        }
+      <FillerObject
+        onMouseDown={handleDragStart}
+        onDrag={handleDrag}
+        // onMouseUp={handleDragEnd}
+        draggable={false}
+        ref={fillerRef}
       />
     </Container>
   );

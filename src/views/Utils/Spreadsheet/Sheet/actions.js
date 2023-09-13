@@ -27,6 +27,7 @@ export const SheetAction = Object.freeze({
   RESET_HIGHLIGHT: "RESET_HIGHLIGHT",
   SET_MOUSEDOWN: "SET_MOUSEDOWN",
   SET_DRAGGING: "SET_DRAGGING",
+  SET_FILLER_MODE: "SET_FILLER_MODE",
   SET_CONTENT_DATA: "SET_CONTENT_DATA",
   UPDATE_REFERENCE_CELLS: "UPDATE_REFERENCE_CELLS",
   SET_CONTENT_BULK: "SET_CONTENT_BULK",
@@ -196,6 +197,11 @@ export const setMouseDown = (payload) => ({
 
 export const setDragging = (payload) => ({
   type: SheetAction.SET_DRAGGING,
+  payload,
+});
+
+export const setFillerMode = (payload) => ({
+  type: SheetAction.SET_FILLER_MODE,
   payload,
 });
 
