@@ -24,6 +24,7 @@ export const SheetAction = Object.freeze({
   PASTE_CELL_CONTENT: "PASTE_CELL_CONTENT",
   RESET_HIGHLIGHT: "RESET_HIGHLIGHT",
   SET_MOUSEDOWN: "SET_MOUSEDOWN",
+  SET_DRAGGING: "SET_DRAGGING",
   SET_CONTENT_DATA: "SET_CONTENT_DATA",
   UPDATE_REFERENCE_CELLS: "UPDATE_REFERENCE_CELLS",
   SET_CONTENT_BULK: "SET_CONTENT_BULK",
@@ -178,6 +179,11 @@ export const resetHighlight = () => ({
 
 export const setMouseDown = (payload) => ({
   type: SheetAction.SET_MOUSEDOWN,
+  payload,
+});
+
+export const setDragging = (payload) => ({
+  type: SheetAction.SET_DRAGGING,
   payload,
 });
 

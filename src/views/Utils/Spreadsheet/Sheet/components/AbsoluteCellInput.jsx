@@ -1,18 +1,13 @@
 import styled from "@emotion/styled";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  addMemento,
-  highlightCells,
   openContextMenu,
-  recalculateFormulae,
-  selectCell,
   setCellContent,
   setFormulaMode,
-  setHighlightCellAnchor,
   setInputRef,
 } from "../actions";
-import { KeyEvent } from "../constants";
 import { isFormula } from "../utils/cellUtils";
+// eslint-disable-next-line no-unused-vars
 import EventHandler from "../eventHandlers/EventHandler";
 
 const Container = styled.div(({ top, left }) => ({
@@ -40,6 +35,12 @@ const InputField = styled.input(({ width, height, isfocused, formatting }) => ({
   },
 }));
 
+/**
+ *
+ * @param {Object} props
+ * @param {EventHandler} props.eventHandler
+ * @returns
+ */
 const AbsoluteCellInput = ({
   state,
   dispatch,
@@ -57,19 +58,30 @@ const AbsoluteCellInput = ({
   }, [dispatch]);
 
   const cell = useMemo(() => state.selectedCell, [state.selectedCell]);
+  const currentCellContentData = state.content.data[cell.id];
   const rowHeight = useMemo(
-    () =>
-      (state.content.rowHeights && state.content.rowHeights[cell.row]) ||
-      state.defaultRowHeight,
+    () => ({
+      value:
+        (state.content.rowHeights && state.content.rowHeights[cell.row]) ||
+        state.defaultRowHeight,
+    }),
     [cell.row, state.content.rowHeights, state.defaultRowHeight]
+  );
+
+  const columnWidth = useMemo(
+    () => ({
+      value:
+        (state.content.columnWidths &&
+          state.content.columnWidths[cell.column]) ||
+        state.defaultColumnWidth,
+    }),
+    [cell.column, state.content.columnWidths, state.defaultColumnWidth]
   );
 
   const currentValue = useMemo(
     () =>
-      state.content.data[cell.id]?.formula ||
-      state.content.data[cell.id]?.value ||
-      "",
-    [state.content.data, cell.id]
+      currentCellContentData?.formula || currentCellContentData?.value || "",
+    [currentCellContentData?.formula, currentCellContentData?.value]
   );
 
   const [originalValue, setOriginalValue] = useState(currentValue);
@@ -81,7 +93,7 @@ const AbsoluteCellInput = ({
     height: 0,
   });
 
-  const setTextBoxPosition = useCallback(() => {
+  const setTextBoxStats = useCallback(() => {
     const selectedCellRect = document
       .getElementById(cell.id)
       ?.getBoundingClientRect();
@@ -95,19 +107,19 @@ const AbsoluteCellInput = ({
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cell.id, rowHeight]);
+  }, [cell.id, rowHeight, columnWidth]);
 
   useEffect(() => {
     setValue(currentValue);
-    setTextBoxPosition();
+    setTextBoxStats();
 
-    const handleResize = () => setTextBoxPosition();
+    const handleResize = () => setTextBoxStats();
     window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [currentValue, dispatch, setTextBoxPosition]);
+  }, [currentValue, dispatch, setTextBoxStats]);
 
   useEffect(() => {
     setOriginalValue(currentValue);
@@ -124,83 +136,18 @@ const AbsoluteCellInput = ({
   };
 
   const handleKeyDown = useCallback(
-    (e) => {
-      switch (e.key) {
-        case KeyEvent.SHIFT:
-          dispatch(setHighlightCellAnchor(cell.id));
-          break;
-        case KeyEvent.ESCAPE:
-          dispatch(setFormulaMode(false));
-          break;
-        case KeyEvent.BACKSPACE:
-          break;
-        case KeyEvent.ENTER:
-          const triggerRecalculation =
-            state.formulaTrackedCells.includes(cell.id) ||
-            isFormula(e.target.value);
-          dispatch(setCellContent(cell.id, e.target.value));
-          dispatch(setFormulaMode(false));
-          triggerRecalculation && dispatch(recalculateFormulae());
-          originalValue !== currentValue && dispatch(addMemento());
-          dispatch(highlightCells(cell.id));
-          dispatch(
-            selectCell(
-              e.shiftKey
-                ? cell.getPreviousRow()
-                : cell.getNextRow(state.maxRows)
-            )
-          );
-          break;
-        case KeyEvent.LOWERCASE_A:
-          if (eventHandler.isCtrlKeyPressed(e)) {
-            e.stopPropagation();
-          }
-          break;
-        case KeyEvent.TAB: {
-          e.preventDefault();
-          e.shiftKey
-            ? dispatch(selectCell(cell.getPreviousColumn(state.maxColumns)))
-            : dispatch(selectCell(cell.getNextColumn(state.maxRows)));
-          break;
-        }
-        case KeyEvent.ARROW_LEFT: {
-          const { current } = inputRef;
-          if (current?.value.length === 0 || navigateRef.current)
-            dispatch(selectCell(cell.getPreviousColumn(state.maxColumns)));
-          break;
-        }
-        case KeyEvent.ARROW_RIGHT: {
-          const { current } = inputRef;
-          if (current?.value.length === 0 || navigateRef.current)
-            dispatch(selectCell(cell.getNextColumn(state.maxRows)));
-          break;
-        }
-        case KeyEvent.ARROW_UP: {
-          dispatch(selectCell(cell.getPreviousRow()));
-          break;
-        }
-        case KeyEvent.ARROW_DOWN: {
-          dispatch(selectCell(cell.getNextRow(state.maxRows)));
-          break;
-        }
-        default:
-          break;
-      }
-    },
-    [
-      dispatch,
-      cell,
-      state.formulaTrackedCells,
-      state.maxRows,
-      state.maxColumns,
-      originalValue,
-      currentValue,
-    ]
+    (e) =>
+      eventHandler.handleCellInputKeyDown(
+        e,
+        originalValue,
+        currentValue,
+        navigateRef.current,
+        inputRef.current
+      ),
+    [currentValue, eventHandler, originalValue]
   );
 
-  const handleFocus = (e) => {
-    eventHandler.setInputFocusRef(true);
-  };
+  const handleFocus = () => eventHandler.setFocusInput(true);
 
   const handleContextMenu = (e) => {
     e.preventDefault();
@@ -229,9 +176,8 @@ const AbsoluteCellInput = ({
         onContextMenu={handleContextMenu}
         onClick={handleClick}
         formatting={
-          state.content.data[cell.id]?.formula?.length > 0
-            ? undefined
-            : state.content.data[cell.id]?.formatting
+          !(state.content.data[cell.id]?.formula?.length > 0) &&
+          state.content.data[cell.id]?.formatting
         }
       />
     </Container>

@@ -11,6 +11,17 @@ const SheetRow = ({ state, dispatch, row, eventHandler }) => {
         .fill(0)
         .map((_, column) => {
           const id = SheetConfig.COLUMNS[column - 1] + (row + 1);
+          const cellData = state.content.data[id];
+          const isSelected =
+            id === state.selectedCell.id ||
+            state.highlighted.cells.includes(id);
+          const isFormulaHighLighted = state.formulaHighlighted.includes(id);
+          const isLastHighlighted =
+            id === state.highlighted.cells[state.highlighted.cells.length - 1];
+          const width =
+            state.content.columnWidths[SheetConfig.COLUMNS[column - 1]] ||
+            state.defaultColumnWidth;
+
           return column === 0 ? (
             <HeaderCell
               state={state}
@@ -21,18 +32,19 @@ const SheetRow = ({ state, dispatch, row, eventHandler }) => {
               eventHandler={eventHandler}
             />
           ) : (
-            // <RowHeader
-            //   state={state}
-            //   dispatch={dispatch}
-            //   key={row + 1}
-            //   row={row + 1}
-            // />
             <Cell
-              state={state}
               key={id}
               id={id}
               row={row + 1}
-              column={SheetConfig.COLUMNS[column - 1]}
+              columnCharCode={SheetConfig.COLUMNS[column - 1].charCodeAt(0)}
+              isSelected={isSelected}
+              isFormulaHighLighted={isFormulaHighLighted}
+              isLastHighlighted={isLastHighlighted}
+              maxRows={state.maxRows}
+              value={cellData?.value}
+              display={cellData?.display}
+              width={width}
+              formatting={cellData?.formatting}
             />
           );
         })}

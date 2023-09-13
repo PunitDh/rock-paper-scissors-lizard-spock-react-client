@@ -74,7 +74,7 @@ const getBorder = (formatting) => {
   }
 };
 
-const getBorderProperties = (selected, formulacell, formatting) => {
+export const getBorderProperties = (selected, formulacell, formatting) => {
   const getProperty = (property) =>
     selected
       ? "2px solid blue"
@@ -90,47 +90,45 @@ const getBorderProperties = (selected, formulacell, formatting) => {
   }, {});
 };
 
-export const Item = styled(TableCell)(
-  ({
-    theme,
+export const Item = styled(TableCell)(({
+  theme,
+  selected,
+  textalign,
+  tabIndex,
+  width,
+  formulacell,
+  formatting = new CellFormatting(),
+}) => {
+  const borderProperties = getBorderProperties(
     selected,
-    textalign,
-    tabIndex,
-    width,
     formulacell,
-    formatting = new CellFormatting(),
-  }) => {
-    const borderProperties = getBorderProperties(
-      selected,
-      formulacell,
-      formatting
-    );
-    return {
-      ...formatting,
-      backgroundColor: selected
-        ? theme.palette.primary.light
-        : formatting.backgroundColor || "#fff",
-      color: formatting.color || theme.palette.text.secondary,
-      textAlign: formatting.textAlign || textalign,
-      ...borderProperties,
-      borderRadius: 0,
-      cursor: "cell",
-      height: "1.5rem",
-      padding: "2px",
-      overflowX: "hidden",
-      position: "relative",
-      whiteSpace: "nowrap",
-      userSelect: "none",
-      zIndex: tabIndex,
-      borderCollapse: "collapse",
-      width,
-      "&:hover": {
-        // border: "2px solid blue",
-        border: "2px solid blue",
-      },
-    };
-  }
-);
+    formatting
+  );
+  return {
+    ...formatting,
+    backgroundColor: selected
+      ? theme.palette.primary.light
+      : formatting.backgroundColor || "#fff",
+    color: formatting.color || theme.palette.text.secondary,
+    textAlign: formatting.textAlign || textalign,
+    ...borderProperties,
+    borderRadius: 0,
+    cursor: "cell",
+    height: "1.5rem",
+    padding: "2px",
+    overflowX: "hidden",
+    position: "relative",
+    whiteSpace: "nowrap",
+    userSelect: "none",
+    zIndex: tabIndex,
+    borderCollapse: "collapse",
+    width,
+    "&:hover": {
+      // border: "2px solid blue",
+      border: "2px solid blue",
+    },
+  };
+});
 
 export const Resize = styled.div({
   "&:after": {

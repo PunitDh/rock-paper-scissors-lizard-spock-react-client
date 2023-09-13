@@ -49,8 +49,8 @@ export default class Highlight {
       const sum = this.cells
         .filter((cell) => !isNaN(parseFloat(stateContentData[cell]?.value)))
         .reduce(
-          (acc, cell) => acc + parseFloat(stateContentData[cell]?.value || 0),
-          0
+          (acc, cell) => acc + parseFloat(stateContentData[cell]?.value),
+          null
         );
       this.sum = sum;
     } else {
@@ -75,10 +75,9 @@ export default class Highlight {
 
   calculateCount(stateContentData) {
     if (this.cells.length > 1) {
-      const count =
-        this.cells.filter((cell) =>
-          Boolean(stateContentData[cell]?.value.toString())
-        ).length || 0;
+      const count = this.cells.filter((cell) =>
+        Boolean(stateContentData[cell]?.value?.toString())
+      ).length;
       this.count = count;
     } else {
       this.count = null;

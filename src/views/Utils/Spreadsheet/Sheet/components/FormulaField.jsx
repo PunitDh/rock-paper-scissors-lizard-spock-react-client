@@ -141,13 +141,27 @@ const FormulaField = ({ state, dispatch, eventHandler }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.selectedCell.id]);
 
+  const currentCellInputValue = useMemo(
+    () =>
+      state.highlighted.cells.length > 1 && state.mouseDown
+        ? `${state.highlighted.rows.length}R × ${state.highlighted.columns.length}C`
+        : state.selectedCell.id,
+    [
+      state.highlighted.cells.length,
+      state.highlighted.columns.length,
+      state.highlighted.rows.length,
+      state.mouseDown,
+      state.selectedCell.id,
+    ]
+  );
+
   return (
     <div tabIndex="1">
       <FlexForm onSubmit={handleSubmit} ref={formRef}>
         <SmallInputField
           name="currentCell"
           type="text"
-          value={state.selectedCell.id}
+          value={currentCellInputValue}
           onChange={handleSelectCell}
           autoComplete="off"
           id="current-cell"

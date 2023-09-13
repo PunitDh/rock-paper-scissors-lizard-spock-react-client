@@ -86,7 +86,7 @@ const NotificationMenu = () => {
         (player) => player.id !== token.decoded.id
       );
       return {
-        id: uniqueId(),
+        id: uniqueId("notification-"),
         player,
         link: `/apps/${game.id}`,
         buttonText: "Go to Game",

@@ -31,31 +31,31 @@ export const ContentType = Object.freeze({
 
 export const ContentTypeMenuItems = Object.freeze({
   [ContentType.NONE]: {
-    id: uniqueId(),
+    id: uniqueId("content-type-"),
     label: "none",
     value: null,
     Component: None,
   },
   [ContentType.FORM_DATA]: {
-    id: uniqueId(),
+    id: uniqueId("content-type-"),
     label: "form-data",
     value: "multipart/form-data",
     Component: FormDataComponent,
   },
   [ContentType.FORM_ENCODED]: {
-    id: uniqueId(),
+    id: uniqueId("content-type-"),
     label: "x-www-form-urlencoded",
     value: "x-www-form-urlencoded",
     Component: FormEncoded,
   },
   [ContentType.JSON]: {
-    id: uniqueId(),
+    id: uniqueId("content-type-"),
     label: "json",
     value: "application/json",
     Component: ApplicationJSON,
   },
   // [ContentType.XML]: {
-  //   id: uniqueId(),
+  //   id: uniqueId("content-type-"),
   //   label: "xml",
   //   value: "application/xml",
   //   Component: ApplicationXML,
@@ -109,14 +109,14 @@ export const tabProps = (index) => ({
 
 export const AuthorizationTypeItems = Object.freeze({
   [AuthorizationType.NO_AUTH]: {
-    id: uniqueId(),
+    id: uniqueId("auth-type-"),
     label: "No Auth",
     value: null,
     Component: NoAuth,
     initialState: {},
   },
   [AuthorizationType.API_KEY]: {
-    id: uniqueId(),
+    id: uniqueId("auth-type-"),
     label: "API Key",
     value: "API",
     Component: APIKey,
@@ -127,7 +127,7 @@ export const AuthorizationTypeItems = Object.freeze({
     },
   },
   [AuthorizationType.BASIC_AUTH]: {
-    id: uniqueId(),
+    id: uniqueId("auth-type-"),
     label: "Basic Auth",
     value: "Basic",
     Component: BasicAuth,
@@ -137,7 +137,7 @@ export const AuthorizationTypeItems = Object.freeze({
     },
   },
   [AuthorizationType.BEARER_TOKEN]: {
-    id: uniqueId(),
+    id: uniqueId("auth-type-"),
     label: "Bearer Token",
     value: "Bearer",
     Component: BearerToken,

@@ -63,9 +63,16 @@ const TestSheet = ({ state }) => {
   return token.decoded.isAdmin ? (
     <DashboardCard sx={{ height: "100%" }} title="Test Sheet">
       <FlexBox width="100%" height="100%" gap="0.5rem">
-        <StatusCell label="Keyboard">{keyboard && keyboard.key}</StatusCell>
+        {/* <StatusCell label="Keyboard">{keyboard && keyboard.key}</StatusCell>
         <StatusCell label="Mouse button">{mouse && mouse.buttons}</StatusCell>
-        <StatusCell label="MouseDown">{String(state.mouseDown)}</StatusCell>
+        <StatusCell label="MouseDown">{String(state.mouseDown)}</StatusCell> */}
+        <StatusCell label="Current Cell">{state.selectedCell.id}</StatusCell>
+        <StatusCell label="Highlighted Anchor">
+          {state.highlighted.cellAnchor}
+        </StatusCell>
+        <StatusCell label="Highlighted Cells">
+          {state.highlighted.cells.join(",")}
+        </StatusCell>
       </FlexBox>
     </DashboardCard>
   ) : null;

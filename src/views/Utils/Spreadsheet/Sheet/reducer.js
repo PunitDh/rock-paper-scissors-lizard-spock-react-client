@@ -16,19 +16,11 @@ export const initialState = {
   defaultRowHeight: 24,
   defaultColumnWidth: 50,
   maxUndos: 32,
-  selectedCell: new Cell("A1"), //{ cell: "A1", row: 1, column: "A", columnCharCode: 65 }
+  selectedCell: new Cell("A1"),
   selectedRef: null,
   formulaMode: false,
   hovered: "",
   highlighted: new Highlight(),
-  //  {
-  //   rowAnchor: null,
-  //   columnAnchor: null,
-  //   cellAnchor: null,
-  //   cells: [],
-  //   rows: [],
-  //   columns: [],
-  // },
   formulaTrackedCells: [],
   formulaHighlighted: [],
   content: {
@@ -37,6 +29,7 @@ export const initialState = {
     columnWidths: {},
   },
   mouseDown: false,
+  dragging: false,
   formulaFieldText: "",
   isFormulaFieldFocused: false,
   menuAnchorElement: null,
@@ -105,14 +98,9 @@ export const reducer = (state, action) => {
       return state;
     }
     case SheetAction.SET_HIGHLIGHT_CELL_ANCHOR:
-      console.log(state.highlighted);
       return {
         ...state,
         highlighted: state.highlighted.setCellAnchor(action.payload),
-        // {
-        //   ...state.highlighted,
-        //   cellAnchor: action.payload,
-        // },
       };
 
     case SheetAction.SET_HIGHLIGHT_ROW_ANCHOR:
@@ -121,11 +109,6 @@ export const reducer = (state, action) => {
         highlighted: state.highlighted
           .setRowAnchor(action.payload)
           .setCellAnchor(null),
-        // {
-        //   ...state.highlighted,
-        //   rowAnchor: action.payload,
-        //   cellAnchor: null,
-        // },
       };
 
     case SheetAction.SET_HIGHLIGHT_COLUMN_ANCHOR:
@@ -134,11 +117,6 @@ export const reducer = (state, action) => {
         highlighted: state.highlighted
           .setColumnAnchor(action.payload)
           .setCellAnchor(null),
-        // {
-        //   ...state.highlighted,
-        //   columnAnchor: action.payload,
-        //   cellAnchor: null,
-        // },
       };
 
     case SheetAction.HIGHLIGHT_CELLS: {
@@ -149,12 +127,6 @@ export const reducer = (state, action) => {
           .setCells(range.cellIds, state.content.data)
           .setRows(range.rows)
           .setColumns(range.columns),
-        //  {
-        //   ...state.highlighted,
-        //   cells: range.cellIds,
-        //   rows: range.rows,
-        //   columns: range.columns,
-        // },
       };
     }
 
@@ -215,7 +187,6 @@ export const reducer = (state, action) => {
       );
       const newHighlightedRows = state.highlighted.rows.filter((row) => {
         if (rowsToRemove.has(row)) {
-          // Check if there are other highlighted cells in this row
           return !newHighlightedCells.some(
             (cellId) => new Cell(cellId).row === row
           );
@@ -240,12 +211,6 @@ export const reducer = (state, action) => {
           .setCells(newHighlightedCells, state.content.data)
           .setRows(newHighlightedRows)
           .setColumns(newHighlightedColumns),
-        // {
-        //   ...state.highlighted,
-        //   cells: newHighlightedCells,
-        //   rows: newHighlightedRows,
-        //   columns: newHighlightedColumns,
-        // },
       };
     }
 
@@ -354,12 +319,6 @@ export const reducer = (state, action) => {
           .setCells(range.cellIds, state.content.data)
           .setRows(range.rows)
           .setColumns(range.columns),
-        //  {
-        //   ...state.highlighted,
-        //   cells: range.cellIds,
-        //   rows: range.rows,
-        //   columns: range.columns,
-        // },
       };
     }
     case SheetAction.SET_ROW_HEIGHT: {
@@ -389,12 +348,6 @@ export const reducer = (state, action) => {
           .setCells(range.cellIds, state.content.data)
           .setRows(range.rows)
           .setColumns(range.columns),
-        //  {
-        //   ...state.highlighted,
-        //   cells: range.cellIds,
-        //   rows: range.rows,
-        //   columns: range.columns,
-        // },
       };
     }
     case SheetAction.SET_COLUMN_WIDTH: {
@@ -420,12 +373,6 @@ export const reducer = (state, action) => {
           .setCells(range.cellIds, state.content.data)
           .setRows(range.rows)
           .setColumns(range.columns),
-        //  {
-        //   ...state.highlighted,
-        //   cells: range.cellIds,
-        //   rows: range.rows,
-        //   columns: range.columns,
-        // },
       };
     }
     case SheetAction.RESET_HIGHLIGHT: {
@@ -438,6 +385,12 @@ export const reducer = (state, action) => {
       return {
         ...state,
         mouseDown: action.payload,
+      };
+    }
+    case SheetAction.SET_DRAGGING: {
+      return {
+        ...state,
+        dragging: action.payload,
       };
     }
     case SheetAction.RECALCULATE_FORMULAE: {
@@ -505,6 +458,8 @@ export const reducer = (state, action) => {
         state.content.data[action.payload.cell],
         action.payload.cell
       );
+
+      console.log(action.payload.replace, referenceCells);
 
       return {
         ...state,
@@ -698,7 +653,7 @@ export const reducer = (state, action) => {
         return state;
       }
 
-      const id = uniqueId();
+      const id = uniqueId("memento-");
       let memento = [
         ...state.memento.slice(
           0,
@@ -707,7 +662,6 @@ export const reducer = (state, action) => {
         { id, content: state.content },
       ];
 
-      // Limit the number of mementos to 32. If there are more, remove the oldest.
       if (memento.length > state.maxUndos) {
         memento = memento.slice(1);
       }
@@ -720,15 +674,11 @@ export const reducer = (state, action) => {
     }
 
     case SheetAction.UNDO_STATE: {
-      // Find the index of the current memento by ID.
       const currentIndex = state.memento.findIndex(
         (m) => m.id === state.currentMementoId
       );
 
-      // If we're at the start of the memento list or couldn't find the current memento, just return the state.
       if (currentIndex <= 0) return state;
-
-      // Get the previous memento.
       const previousMemento = state.memento[currentIndex - 1];
 
       return {
@@ -745,11 +695,8 @@ export const reducer = (state, action) => {
         (m) => m.id === state.currentMementoId
       );
 
-      // If we're at the end of the memento list or couldn't find the current memento, just return the state.
       if (currentIndex === -1 || currentIndex >= state.memento.length - 1)
         return state;
-
-      // Get the next memento.
       const nextMemento = state.memento[currentIndex + 1];
 
       return {

@@ -73,6 +73,8 @@ const HeaderCell = ({
     dispatch(addMemento());
   };
 
+  const handleResizerClick = (e) => e.stopPropagation();
+
   const handleClick = (e) => {
     e.stopPropagation();
     if (eventHandler.isCtrlKeyPressed(e)) {
@@ -143,6 +145,8 @@ const HeaderCell = ({
       <ResizerComponent
         draggable={true}
         dimension={dimension}
+        onClick={handleResizerClick}
+        onMouseDown={handleResizerClick}
         onDragStart={handleDragStart}
         onDragEndCapture={handleDragEnd}
         onDoubleClick={resetDimension}

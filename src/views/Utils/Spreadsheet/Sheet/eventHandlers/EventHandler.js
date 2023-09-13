@@ -14,6 +14,7 @@ import {
   selectAll,
   selectCell,
   setCellContent,
+  setDragging,
   setFormulaMode,
   setHighlightCellAnchor,
   setHovered,
@@ -41,12 +42,15 @@ export default class EventHandler {
     return /mac/i.test(navigator.platform) ? e.metaKey : e.ctrlKey;
   };
 
-  setInputFocusRef(value) {
+  setFocusInput(value) {
     this.inputFocusRef.current = value;
   }
 
   handleInputBoxBlur(e) {
-    this.inputFocusRef.current = false;
+    if (!this.state.formulaMode) {
+      this.setFocusInput(false);
+    }
+
     const triggerRecalculation =
       !this.state.formulaMode &&
       (isFormula(e.target.value) ||
@@ -58,14 +62,99 @@ export default class EventHandler {
     }
   }
 
+  handleCellInputKeyDown(
+    e,
+    originalValue,
+    currentValue,
+    navigateRefCurrent,
+    inputRefCurrent
+  ) {
+    const cell = this.state.selectedCell;
+    switch (e.key) {
+      case KeyEvent.SHIFT:
+        this.dispatch(setHighlightCellAnchor(cell.id));
+        break;
+      case KeyEvent.ESCAPE:
+        this.dispatch(setFormulaMode(false));
+        break;
+      case KeyEvent.BACKSPACE:
+        break;
+      case KeyEvent.ENTER:
+        const triggerRecalculation =
+          this.state.formulaTrackedCells.includes(cell.id) ||
+          isFormula(e.target.value);
+        this.dispatch(setCellContent(cell.id, e.target.value));
+        this.dispatch(setFormulaMode(false));
+        triggerRecalculation && this.dispatch(recalculateFormulae());
+        originalValue !== currentValue && this.dispatch(addMemento());
+        this.dispatch(highlightCells(cell.id));
+        this.dispatch(
+          selectCell(
+            e.shiftKey
+              ? cell.getPreviousRow()
+              : cell.getNextRow(this.state.maxRows)
+          )
+        );
+        break;
+      case KeyEvent.LOWERCASE_A:
+        if (this.isCtrlKeyPressed(e)) {
+          e.stopPropagation();
+        }
+        break;
+      case KeyEvent.TAB: {
+        e.preventDefault();
+        e.shiftKey
+          ? this.dispatch(
+              selectCell(cell.getPreviousColumn(this.state.maxColumns))
+            )
+          : this.dispatch(selectCell(cell.getNextColumn(this.state.maxRows)));
+        break;
+      }
+      case KeyEvent.ARROW_LEFT: {
+        const { current } = inputRefCurrent;
+        if (current?.value.length === 0 || navigateRefCurrent)
+          this.dispatch(
+            selectCell(cell.getPreviousColumn(this.state.maxColumns))
+          );
+        break;
+      }
+      case KeyEvent.ARROW_RIGHT: {
+        const { current } = inputRefCurrent;
+        if (current?.value.length === 0 || navigateRefCurrent)
+          this.dispatch(selectCell(cell.getNextColumn(this.state.maxRows)));
+        break;
+      }
+      case KeyEvent.ARROW_UP: {
+        this.dispatch(selectCell(cell.getPreviousRow()));
+        break;
+      }
+      case KeyEvent.ARROW_DOWN: {
+        this.dispatch(selectCell(cell.getNextRow(this.state.maxRows)));
+        break;
+      }
+      default:
+        break;
+    }
+  }
+
   handleMouseMove(e) {
     this.dispatch(setHovered(e.target.id));
+    if (this.state.mouseDown) {
+      this.dispatch(setDragging(true));
+    }
+
+    if (this.state.dragging) {
+    } else {
+    }
+
     if (this.state.mouseDown && !this.isCtrlKeyPressed(e)) {
       const { cellAnchor } = this.state.highlighted;
       if (this.state.formulaMode) {
-        this.dispatch(
-          highlightFormulaCellRange(cellAnchor, this.state.hovered)
-        );
+        if (!this.isCtrlKeyPressed(e)) {
+          this.dispatch(
+            highlightFormulaCellRange(cellAnchor, this.state.hovered)
+          );
+        }
       } else {
         this.dispatch(highlightCells(cellAnchor, this.state.hovered));
       }
@@ -161,7 +250,7 @@ export default class EventHandler {
   }
 
   handleDoubleClick() {
-    this.inputFocusRef.current = true;
+    this.setFocusInput(true);
   }
 
   handleMouseDown(e) {
@@ -200,37 +289,30 @@ export default class EventHandler {
   }
 
   handleMouseUp(e) {
-    // Assuming you only want to process the mouse up for the left button.
     if (e.button !== MouseButton.LEFT_CLICK) return;
     this.dispatch(setMouseDown(false));
 
     const isSameCellHighlighted =
       this.state.highlighted.cellAnchor === this.state.hovered;
     const selectingFormulaCells =
-      this.state.formulaMode &&
-      this.state.formulaHighlighted.length > 1 &&
-      !isSameCellHighlighted;
+      this.state.formulaMode && this.state.dragging && !isSameCellHighlighted;
+    const isCtrlKeyPressed = this.isCtrlKeyPressed(e);
 
-    if (selectingFormulaCells) {
+    if (selectingFormulaCells && !isCtrlKeyPressed) {
       const range = `${this.state.highlighted.cellAnchor}:${this.state.hovered}`;
-      const value = addCellToFocusedBox(
-        this.state,
-        range,
-        !this.isCtrlKeyPressed(e)
-      );
+      const value = addCellToFocusedBox(this.state, range, true);
       this.dispatch(setCellContent(this.state.selectedCell.id, value));
       this.dispatch(
         updateReferenceCells(
           this.state.selectedCell.id,
           [this.state.highlighted.cellAnchor, this.state.hovered],
-          !this.isCtrlKeyPressed(e)
+          true
         )
       );
-    } else if (!isSameCellHighlighted) {
-      if (this.isCtrlKeyPressed(e)) {
-        this.dispatch(addCellsToHighlight([this.state.hovered]));
-      }
+    } else if (!isSameCellHighlighted && isCtrlKeyPressed) {
+      this.dispatch(addCellsToHighlight([this.state.hovered]));
     }
+    this.dispatch(setDragging(false));
   }
 
   handleScroll(e) {
@@ -289,8 +371,9 @@ export default class EventHandler {
     }
   }
 
-  #addCellsToFormula = (id, isCtrlPressed) => {
+  #addCellsToFormula = (id, isCtrlPressed = false) => {
     const value = addCellToFocusedBox(this.state, id, !isCtrlPressed);
+    console.log({ value });
     this.dispatch(setCellContent(this.state.selectedCell.id, value));
     this.dispatch(
       updateReferenceCells(this.state.selectedCell.id, [id], !isCtrlPressed)
@@ -312,7 +395,7 @@ export default class EventHandler {
     } else if (isShiftPressed) {
       this.dispatch(highlightCells(highlighted.cellAnchor, id));
     } else {
-      highlighted.cells.length > 0 && this.dispatch(resetHighlight());
+      !this.state.dragging && this.dispatch(resetHighlight());
       this.dispatch(selectCell(id));
       this.dispatch(setHighlightCellAnchor(id));
     }
@@ -333,20 +416,21 @@ export default class EventHandler {
     const isSameCellSelected = id === selectedCellId;
 
     if (isCtrlPressed) {
-      this.dispatch(highlightFormulaCells(id));
+      this.dispatch(highlightFormulaCells([id]));
       this.#addCellsToFormula(id, isCtrlPressed);
     } else if (isShiftPressed) {
       // TODO
     } else {
+      console.log("Here");
       this.dispatch(setHighlightCellAnchor(id));
       if (
         !isSameCellSelected &&
         (!isLastValueClosedBracket || isLastValueOperation)
       ) {
-        this.#addCellsToFormula(id, isCtrlPressed);
+        this.#addCellsToFormula(id, false);
       } else {
         if (isFormulaFieldFocused) {
-          this.#addCellsToFormula(id, isCtrlPressed);
+          this.#addCellsToFormula(id, false);
         } else {
           this.dispatch(setFormulaMode(false));
           this.dispatch(recalculateFormulae());

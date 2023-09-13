@@ -34,7 +34,7 @@ export const menuSlice = createSlice({
   initialState: {
     Admin: [
       {
-        id: uniqueId(),
+        id: uniqueId("admin-"),
         title: "Dashboard",
         icon: IconDashboard,
         href: "/dashboard",
@@ -43,7 +43,7 @@ export const menuSlice = createSlice({
     ],
     Home: [
       {
-        id: uniqueId(),
+        id: uniqueId("apps-"),
         title: "Apps",
         icon: IconDeviceGamepad,
         href: "/apps",
@@ -52,13 +52,13 @@ export const menuSlice = createSlice({
 
     Games: [
       {
-        id: uniqueId(),
+        id: uniqueId("games-"),
         title: "Rock Paper Scissors",
         icon: ContentCut,
         href: "/apps/rpsls",
       },
       {
-        id: uniqueId(),
+        id: uniqueId("games-"),
         title: "Tic Tac Toe",
         icon: IconTicTac,
         href: "/apps/tictactoe",
@@ -68,31 +68,31 @@ export const menuSlice = createSlice({
 
     Apps: [
       {
-        id: uniqueId(),
+        id: uniqueId("apps-"),
         title: "Calculator",
         icon: Calculate,
         href: "/utils/calculator",
       },
       {
-        id: uniqueId(),
+        id: uniqueId("apps-"),
         title: "Color Picker",
         icon: ColorLens,
         href: "/utils/color",
       },
       {
-        id: uniqueId(),
+        id: uniqueId("apps-"),
         title: "Spreadsheet",
         icon: IconFileSpreadsheet,
         href: "/utils/sheets",
       },
       {
-        id: uniqueId(),
+        id: uniqueId("apps-"),
         title: "Rest API",
         icon: Api,
         href: "/utils/rest?requestTab=0",
       },
       {
-        id: uniqueId(),
+        id: uniqueId("apps-"),
         title: "Video Subtitles",
         icon: VideoCall,
         href: "/utils/video",
@@ -100,16 +100,15 @@ export const menuSlice = createSlice({
     ],
     [CURRENT_GAMES]: [],
 
-
     Settings: [
       {
-        id: uniqueId(),
+        id: uniqueId("settings-"),
         title: "Profile",
         icon: IconUser,
         href: "/profile",
       },
       {
-        id: uniqueId(),
+        id: uniqueId("settings-"),
         title: "Logout",
         icon: IconLogout,
         href: "/auth/logout",
