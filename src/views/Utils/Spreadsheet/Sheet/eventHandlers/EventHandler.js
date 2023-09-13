@@ -27,11 +27,7 @@ import {
 } from "../actions";
 import { KeyEvent, MouseButton, SheetConfig } from "../constants";
 import Cell from "../models/Cell";
-import {
-  addCellToFocusedBox,
-  generateClipboardContent,
-  isFormula,
-} from "../utils/cellUtils";
+import { generateClipboardContent, isFormula } from "../utils/cellUtils";
 
 export default class EventHandler {
   constructor(state, dispatch, clipboard, inputFocusRef) {
@@ -39,11 +35,21 @@ export default class EventHandler {
     this.dispatch = dispatch;
     this.clipboard = clipboard;
     this.inputFocusRef = inputFocusRef;
+    this.inputRef = {};
+    this.formulaFieldRef = {};
   }
 
   isCtrlKeyPressed = (e) => {
     return /mac/i.test(navigator.platform) ? e.metaKey : e.ctrlKey;
   };
+
+  setInputRef(ref) {
+    this.inputRef = ref;
+  }
+
+  setFormulaFieldRef(ref) {
+    this.formulaFieldRef = ref;
+  }
 
   setFocusInput(value) {
     this.inputFocusRef.current = value;
@@ -65,13 +71,7 @@ export default class EventHandler {
     }
   }
 
-  handleCellInputKeyDown(
-    e,
-    originalValue,
-    currentValue,
-    navigateRefCurrent,
-    inputRefCurrent
-  ) {
+  handleCellInputKeyDown(e, originalValue, currentValue, navigateRefCurrent) {
     const cell = this.state.selectedCell;
     switch (e.key) {
       case KeyEvent.SHIFT:
@@ -114,7 +114,7 @@ export default class EventHandler {
         break;
       }
       case KeyEvent.ARROW_LEFT: {
-        const { current } = inputRefCurrent;
+        const { current } = this.inputRef.current;
         if (current?.value.length === 0 || navigateRefCurrent)
           this.dispatch(
             selectCell(cell.getPreviousColumn(this.state.maxColumns))
@@ -122,7 +122,7 @@ export default class EventHandler {
         break;
       }
       case KeyEvent.ARROW_RIGHT: {
-        const { current } = inputRefCurrent;
+        const { current } = this.inputRef.current;
         if (current?.value.length === 0 || navigateRefCurrent)
           this.dispatch(selectCell(cell.getNextColumn(this.state.maxRows)));
         break;
@@ -200,8 +200,7 @@ export default class EventHandler {
   handleFunction = () => {
     this.dispatch(setFormulaFieldText("="));
     this.dispatch(setFormulaMode(true));
-    console.log(this.state.formulaFieldRef);
-    this.state.formulaFieldRef.focus();
+    this.formulaFieldRef.focus();
   };
 
   handleSelectCell = (value) => {
@@ -290,7 +289,7 @@ export default class EventHandler {
         this.dispatch(selectCell(nextCell));
         break;
       default:
-        this.state.inputRef.focus();
+        this.inputRef.focus();
         break;
     }
 
@@ -387,7 +386,7 @@ export default class EventHandler {
     // const selectedRow = document.getElementById(`row-${state.selectedCell.row}`);
     // console.log(selectedRow);
     // selectedRow.scrollIntoView();
-    this.state.inputRef.style.top = e.target.scrollTop;
+    this.inputRef.style.top = e.target.scrollTop;
   }
 
   // Private functions
@@ -441,8 +440,7 @@ export default class EventHandler {
   }
 
   #addCellsToFormula = (id, isCtrlPressed = false) => {
-    const value = addCellToFocusedBox(this.state, id, !isCtrlPressed);
-    console.log({ value });
+    const value = this.#addCellToFocusedBox(id, !isCtrlPressed);
     this.dispatch(setCellContent(this.state.selectedCell.id, value));
     this.dispatch(
       updateReferenceCells(this.state.selectedCell.id, [id], !isCtrlPressed)
@@ -475,7 +473,7 @@ export default class EventHandler {
   #handleFormulaModeMouseUp(isSameCellHighlighted, isCtrlKeyPressed) {
     if (this.state.dragging && !isSameCellHighlighted && !isCtrlKeyPressed) {
       const range = `${this.state.highlighted.cellAnchor}:${this.state.hovered}`;
-      const value = addCellToFocusedBox(this.state, range, true);
+      const value = this.#addCellToFocusedBox(range, true);
       this.dispatch(setCellContent(this.state.selectedCell.id, value));
       this.dispatch(
         updateReferenceCells(
@@ -536,4 +534,40 @@ export default class EventHandler {
       }
     }
   };
+
+  #addCellToFocusedBox(text, replace) {
+    const isLastValueRange = /([a-z]+[0-9]+):([a-z]+[0-9]+)$/gi;
+    const isLastValueCell = /([a-z]+[0-9]+)$/gi;
+
+    // const currentValue = state.content.data[state.selectedCell.id].formula;
+    const element = this.state.isFormulaFieldFocused
+      ? this.formulaFieldRef
+      : this.inputRef;
+
+    const [start, end] = [element.selectionStart, element.selectionEnd];
+    const currentValue = element.value.slice(0, end);
+    element.focus();
+
+    if (end > start) {
+      element.setRangeText(text, start, end, "preserve");
+    } else if (isLastValueRange.test(currentValue)) {
+      element.setRangeText(
+        replace ? currentValue.replace(isLastValueRange, text) : "," + text,
+        replace ? 0 : start,
+        replace ? element.value.length : end,
+        "preserve"
+      );
+    } else if (isLastValueCell.test(currentValue)) {
+      console.log("Here");
+      element.setRangeText(
+        replace ? currentValue.replace(isLastValueCell, text) : "," + text,
+        replace ? 0 : start,
+        replace ? element.value.length : end,
+        "preserve"
+      );
+    } else {
+      element.setRangeText(text, start, end, "preserve");
+    }
+    return element.value;
+  }
 }

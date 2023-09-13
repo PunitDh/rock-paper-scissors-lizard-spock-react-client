@@ -6,7 +6,6 @@ import {
   resetFormulaField,
   setCellContent,
   setFormulaFieldFocused,
-  setFormulaFieldRef,
   setFormulaFieldText,
   setFormulaMode,
 } from "../../actions";
@@ -29,11 +28,8 @@ const FormulaField = ({ state, dispatch }) => {
   const [originalValue, setOriginalValue] = useState(value);
 
   const inputRef = useCallback(
-    (node) => {
-      dispatch(setFormulaFieldRef(node));
-      return node;
-    },
-    [dispatch]
+    (node) => eventHandler.setFormulaFieldRef(node),
+    [eventHandler]
   );
 
   useEffect(() => {
@@ -43,9 +39,9 @@ const FormulaField = ({ state, dispatch }) => {
 
   useEffect(() => {
     if (state.isFormulaFieldFocused) {
-      state.formulaFieldRef.focus();
+      eventHandler.formulaFieldRef.focus();
     }
-  }, [state.formulaFieldRef, state.isFormulaFieldFocused]);
+  }, [eventHandler.formulaFieldRef, state.isFormulaFieldFocused]);
 
   const handleContextMenu = (e) => eventHandler.handleContextMenu(e);
   const handleKeyDown = (e) =>

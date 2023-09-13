@@ -44,42 +44,6 @@ export function typeInInputBox(text, replace = false) {
   return typeInTextField("input-box", text, replace);
 }
 
-export function addCellToFocusedBox(state, text, replace) {
-  const isLastValueRange = /([a-z]+[0-9]+):([a-z]+[0-9]+)$/gi;
-  const isLastValueCell = /([a-z]+[0-9]+)$/gi;
-
-  // const currentValue = state.content.data[state.selectedCell.id].formula;
-  const element = state.isFormulaFieldFocused
-    ? state.formulaFieldRef
-    : state.inputRef;
-
-  const [start, end] = [element.selectionStart, element.selectionEnd];
-  const currentValue = element.value.slice(0, end);
-  element.focus();
-
-  if (end > start) {
-    element.setRangeText(text, start, end, "preserve");
-  } else if (isLastValueRange.test(currentValue)) {
-    element.setRangeText(
-      replace ? currentValue.replace(isLastValueRange, text) : "," + text,
-      replace ? 0 : start,
-      replace ? element.value.length : end,
-      "preserve"
-    );
-  } else if (isLastValueCell.test(currentValue)) {
-    console.log("Here");
-    element.setRangeText(
-      replace ? currentValue.replace(isLastValueCell, text) : "," + text,
-      replace ? 0 : start,
-      replace ? element.value.length : end,
-      "preserve"
-    );
-  } else {
-    element.setRangeText(text, start, end, "preserve");
-  }
-  return element.value;
-}
-
 export function parseCSV(csvString) {
   const rows = csvString.trim().split("\n");
   let data = {};

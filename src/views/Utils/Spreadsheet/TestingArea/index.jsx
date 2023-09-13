@@ -42,7 +42,7 @@ const StatusCell = function ({ label, children }) {
   );
 };
 
-const TestSheet = ({ state }) => {
+const TestingArea = ({ state }) => {
   const token = useToken();
   const [keyboard, setKeyBoard] = useState(null);
   const [mouse, setMouse] = useState(null);
@@ -62,7 +62,7 @@ const TestSheet = ({ state }) => {
   }, []);
 
   return token.decoded.isAdmin ? (
-    <DashboardCard sx={{ height: "100%" }} title="Test Sheet">
+    <DashboardCard sx={{ height: "100%" }} title="Testing Area">
       <FlexBox width="100%" height="100%" gap="0.5rem">
         {/* <StatusCell label="Keyboard">{keyboard && keyboard.key}</StatusCell>
         <StatusCell label="Mouse button">{mouse && mouse.buttons}</StatusCell>
@@ -79,4 +79,4 @@ const TestSheet = ({ state }) => {
   ) : null;
 };
 
-export default TestSheet;
+export default TestingArea;

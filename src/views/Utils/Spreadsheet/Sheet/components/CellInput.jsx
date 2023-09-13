@@ -39,13 +39,15 @@ const InputField = styled.input(({ width, height, isfocused, formatting }) => ({
  * @param {Object} props
  * @returns
  */
-const AbsoluteCellInput = ({ state, dispatch }) => {
+const CellInput = ({ state, dispatch }) => {
   const navigateRef = useRef(true);
   const eventHandler = useEventHandler();
 
   const inputRef = useCallback(
-    (node) => dispatch(setInputRef(node)),
-    [dispatch]
+    (node) => {
+      eventHandler.setInputRef(node);
+    },
+    [eventHandler]
   );
 
   const cell = useMemo(() => state.selectedCell, [state.selectedCell]);
@@ -132,10 +134,9 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
         e,
         originalValue,
         currentValue,
-        navigateRef.current,
-        inputRef.current
+        navigateRef.current
       ),
-    [currentValue, eventHandler, inputRef, originalValue]
+    [currentValue, eventHandler, originalValue]
   );
 
   const handleFocus = () => eventHandler.setFocusInput(true);
@@ -175,4 +176,4 @@ const AbsoluteCellInput = ({ state, dispatch }) => {
   );
 };
 
-export default AbsoluteCellInput;
+export default CellInput;

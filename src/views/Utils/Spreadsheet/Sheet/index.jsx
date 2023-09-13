@@ -7,7 +7,7 @@ import { SheetConfig } from "./constants";
 import ContextMenu from "./components/ContextMenu";
 import { useEffectLog } from "src/hooks";
 import DebugBar from "./components/DebugBar";
-import TestSheet from "../TestSheet";
+import TestingArea from "../TestingArea";
 import SheetContent from "./SheetContent";
 import { EventProvider } from "./context/EventHandlerContext";
 
@@ -53,7 +53,7 @@ const Sheet = ({
         />
         <DebugBar state={state} />
       </DashboardCard>
-      <TestSheet state={state} />
+      <TestingArea state={state} />
     </EventProvider>
   );
 };

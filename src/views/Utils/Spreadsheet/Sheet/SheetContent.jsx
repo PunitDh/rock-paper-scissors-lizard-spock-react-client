@@ -1,5 +1,5 @@
 import { Table } from "@mui/material";
-import AbsoluteCellInput from "./components/AbsoluteCellInput";
+import CellInput from "./components/CellInput";
 import Toolbar from "./components/Toolbar";
 import EventDelegator from "./eventHandlers/EventDelegator";
 import { Container } from "./styles";
@@ -20,7 +20,7 @@ const SheetContent = ({
     <Container>
       {toolbar && <Toolbar state={state} dispatch={dispatch} />}
       {formulaField && <FormulaBar state={state} dispatch={dispatch} />}
-      <AbsoluteCellInput state={state} dispatch={dispatch} />
+      <CellInput state={state} dispatch={dispatch} />
       <EventDelegator>
         <Table width="100%" sx={{ mb: 0 }}>
           <HeaderRow state={state} dispatch={dispatch} />
