@@ -3,6 +3,8 @@ import { Alert, Snackbar } from "@mui/material";
 
 const WideAlert = styled(Alert)({
   width: "100%",
+  display: "flex",
+  justifyContent: "center",
 });
 
 const Notification = ({

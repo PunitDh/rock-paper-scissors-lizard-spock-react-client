@@ -12,18 +12,27 @@ const OpenFileJSON = ({ dispatch }) => {
   const fileRef = useRef();
 
   const handleOpenFile = (e) => {
+    const file = e.target.files[0];
+    const errorMessage = `Selected file '${file.name}' is not a valid JSON file or is unable to be parsed correctly`;
+    const errorDuration = 10000;
+
     const reader = new FileReader();
     reader.onload = async (e) => {
       const text = e.target.result;
       const parsedContent = parseJSON(text);
 
       if (parsedContent.error) {
-        return notification.error(parsedContent.message);
+        return notification.error(errorMessage, errorDuration);
       }
 
       dispatch(setContentBulk(parsedContent));
     };
-    reader.readAsText(e.target.files[0]);
+
+    if (file.type === "application/json") {
+      reader.readAsText(file);
+    } else {
+      notification.error(errorMessage, errorDuration);
+    }
   };
 
   return (

@@ -5,15 +5,26 @@ import CellData from "../../../models/CellData";
 import { setContentBulk } from "../../../actions";
 import { useRef } from "react";
 import { parseCSV } from "../../../utils/cellUtils";
+import { useNotification } from "src/hooks";
+import StateContent from "../../../models/StateContent";
 
 const OpenFileCSV = ({ dispatch }) => {
   const fileRef = useRef();
+  const notification = useNotification();
 
   const handleOpenFile = (e) => {
+    const file = e.target.files[0];
+    const errorMessage = `Selected file '${file.name}' is not a valid CSV file or is unable to be parsed correctly`;
+    const errorDuration = 10000;
+
     const reader = new FileReader();
     reader.onload = async (e) => {
       const text = e.target.result;
       const parsed = parseCSV(text);
+
+      if (parsed.error) {
+        return notification.error(errorMessage, errorDuration);
+      }
 
       const data = Object.keys(parsed).reduce((acc, cell) => {
         if (parsed[cell]?.value?.length > 0) {
@@ -25,15 +36,15 @@ const OpenFileCSV = ({ dispatch }) => {
         return acc;
       }, {});
 
-      const content = {
-        rowHeights: {},
-        columnWidths: {},
-        data,
-      };
+      const content = new StateContent({}, {}, data);
 
       dispatch(setContentBulk(content));
     };
-    reader.readAsText(e.target.files[0]);
+    if (file.type === "text/csv") {
+      reader.readAsText(e.target.files[0]);
+    } else {
+      notification.error(errorMessage, errorDuration);
+    }
   };
 
   return (

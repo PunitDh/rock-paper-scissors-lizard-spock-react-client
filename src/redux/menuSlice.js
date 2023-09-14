@@ -87,7 +87,7 @@ export const menuSlice = createSlice({
       },
       {
         id: uniqueId("apps-"),
-        title: "Rest API",
+        title: "Get Sum Rest",
         icon: Api,
         href: "/utils/rest?requestTab=0",
       },

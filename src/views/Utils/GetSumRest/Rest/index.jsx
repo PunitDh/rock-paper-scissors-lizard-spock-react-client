@@ -16,7 +16,7 @@ const Rest = () => {
   const token = useToken();
 
   return (
-    <DashboardCard sx={{ height: "100%" }} title="Rest API">
+    <DashboardCard sx={{ height: "100%" }} title="Get Sum Rest">
       <FlexBox
         justifyContent="flex-start"
         flexDirection={"column"}

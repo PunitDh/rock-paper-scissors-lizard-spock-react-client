@@ -7,6 +7,7 @@ import CellRange from "./models/CellRange";
 import { isEqual, uniqueId } from "lodash";
 import { BorderType } from "./components/Toolbar/constants";
 import Highlight from "./models/Highlight";
+import StateContent from "./models/StateContent";
 
 export const initialState = Object.freeze({
   maxRows: SheetConfig.MAX_ROWS,
@@ -595,7 +596,10 @@ export const reducer = (state, action) => {
     case SheetAction.SET_CELL_OUTSIDE_BORDER_FORMATTING: {
       const { cells } = state.highlighted;
 
-      let range = CellRange.createHorizontalSliced(cells[0], cells[cells.length - 1]).cellIds;
+      let range = CellRange.createHorizontalSliced(
+        cells[0],
+        cells[cells.length - 1]
+      ).cellIds;
 
       if (!range.length) {
         if (Cell.isValidId(state.selectedCell.id)) {
