@@ -1,6 +1,6 @@
+import styled from "@emotion/styled";
+import { Button } from "@mui/material";
 import { FlexBox } from "src/components/shared/styles";
-const { Button } = require("@mui/material");
-const { styled } = require("@mui/styles");
 
 export const CalculatorBox = styled(FlexBox)({
   border: "1px solid lightgray",
