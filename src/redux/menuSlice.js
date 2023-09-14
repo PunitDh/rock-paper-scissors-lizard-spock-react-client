@@ -59,7 +59,7 @@ export const menuSlice = createSlice({
       },
       {
         id: uniqueId("games-"),
-        title: "Tic Tac Toe",
+        title: "Tic Tac Toe (Coming Soon)",
         icon: IconTicTac,
         href: "/apps/tictactoe",
         restricted: true,
