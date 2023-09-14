@@ -205,9 +205,9 @@ export const setFillerMode = (payload) => ({
   payload,
 });
 
-export const setCellContent = (cell, value) => ({
+export const setCellContent = (cellId, value) => ({
   type: SheetAction.SET_CONTENT_DATA,
-  payload: { cell, value },
+  payload: { cell: cellId, value },
 });
 
 export const updateReferenceCells = (cell, values, replace) => ({

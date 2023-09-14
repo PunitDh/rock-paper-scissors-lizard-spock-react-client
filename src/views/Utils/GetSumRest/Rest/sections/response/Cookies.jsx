@@ -13,7 +13,6 @@ const Cookies = ({ state }) => {
     .split(";")
     .map((it) => it.split("="))
     .reduce((acc, cur) => ({ ...acc, [cur[0].trim()]: cur[1] }), {});
-  console.log(cookies);
 
   return (
     <FlexBox width="100%" flexGrow={1} flex="1 0 auto">

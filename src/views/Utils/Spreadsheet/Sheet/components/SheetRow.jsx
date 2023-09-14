@@ -1,4 +1,3 @@
-import React from "react";
 import { Dimension, SheetConfig } from "../constants";
 import { TableRow } from "@mui/material";
 import Cell from "./Cell";

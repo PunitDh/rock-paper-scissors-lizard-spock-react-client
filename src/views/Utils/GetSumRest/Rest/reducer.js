@@ -99,7 +99,6 @@ export const reducer = (state, action) => {
         request: state.request.setMethod(action.payload),
       };
     case RestAction.SET_PARAMS: {
-      console.log(action.payload);
       const params = updateList(state.request.params, action.payload);
       const url = new URL(state.request.url.pathname, state.request.url.origin);
       params.forEach((it) => {
@@ -241,7 +240,6 @@ export const reducer = (state, action) => {
       };
 
     case RestAction.SET_RESPONSE: {
-      console.log(action.payload);
       return {
         ...state,
         response: new Response({

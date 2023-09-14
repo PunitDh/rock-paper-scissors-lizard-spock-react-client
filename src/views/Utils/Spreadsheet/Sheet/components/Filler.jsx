@@ -9,7 +9,7 @@ const Container = styled.div(({ top, left }) => ({
   top: `${top}px`,
   left: `${left}px`,
   zIndex: "60000",
-  userSelect: "none"
+  userSelect: "none",
 }));
 
 const FillerObject = styled.div({
@@ -65,7 +65,6 @@ const Filler = ({ state, dispatch }) => {
     // e.dataTransfer.setData("text/plain", cell.value);
     // dispatch(setDragging(true));
     dispatch(setFillerMode(true));
-
   };
 
   const handleDrag = (e) => {
@@ -73,7 +72,6 @@ const Filler = ({ state, dispatch }) => {
   };
   const handleDragEnd = (e) => {
     // console.log(e);
-    console.log(e.target);
     // dispatch(setDragging(false));
     dispatch(setFillerMode(false));
   };

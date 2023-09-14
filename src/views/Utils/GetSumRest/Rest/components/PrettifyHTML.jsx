@@ -1,7 +1,8 @@
+import { isString } from "src/utils";
 import { Blue, Green, Indent, Purple, Red } from "./styles";
 
 export default function PrettifyHTML({ children }) {
-  if (typeof children !== "string") return <></>;
+  if (!isString(children)) return <></>;
   // const metaRegex = /(<meta[^>]*>)/g;
   const selfClosingRegex = /(<[^>]*\/>)/g;
   const commentRegex = /(<![^>]*>)/g;

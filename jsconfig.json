@@ -3,6 +3,6 @@
     "jsx": "react",
     "baseUrl": "."
   },
-  "include": ["src/**/*", "src/assets/index.js"],
+  "include": ["src/**/*", "src/assets/index.js", "test.js"],
   "exclude": ["node_modules"]
 }

@@ -39,9 +39,7 @@ const CellInput = ({ state, dispatch }) => {
   const eventHandler = useEventHandler();
 
   const inputRef = useCallback(
-    (node) => {
-      eventHandler.setInputRef(node);
-    },
+    (node) => eventHandler.setInputRef(node),
     [eventHandler]
   );
 

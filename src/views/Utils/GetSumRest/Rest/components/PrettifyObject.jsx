@@ -1,7 +1,8 @@
+import { isBoolean, isNumber, isObject, isString } from "src/utils";
 import { Blue, Red, Purple, Margin, Black, Green } from "./styles";
 
 const PrettifyObject = ({ children }) => {
-  if (!children && typeof children !== "object") return <></>;
+  if (!isObject(children)) return <></>;
 
   const prettify = (object, depth = 1) => {
     if (Array.isArray(object)) {
@@ -11,17 +12,17 @@ const PrettifyObject = ({ children }) => {
           <br />
           {object.map((item, index) => (
             <Margin key={index} depth={depth}>
-              {typeof item === "number" ? (
+              {isNumber(item) ? (
                 <Green>{item}</Green>
-              ) : typeof item === "boolean" ? (
+              ) : isBoolean(item) ? (
                 <Purple>{item.toString()}</Purple>
-              ) : typeof item === "string" ? (
+              ) : isString(item) ? (
                 <Blue>
                   <Red>"</Red>
                   {item}
                   <Red>"</Red>
                 </Blue>
-              ) : item && typeof item === "object" ? (
+              ) : isObject(item) ? (
                 prettify(item, depth + 1)
               ) : (
                 JSON.stringify(item)
@@ -51,13 +52,13 @@ const PrettifyObject = ({ children }) => {
             <Margin key={key} depth={depth}>
               <Red>"{key}"</Red>
               <Black>:</Black>{" "}
-              {typeof object[key] === "number" ? (
+              {isNumber(object[key]) ? (
                 <Green>{object[key]}</Green> // Numbers are printed Green
-              ) : typeof object[key] === "boolean" ? (
+              ) : isBoolean(object[key]) ? (
                 <Purple>{object[key].toString()}</Purple> // Booleans are purple
-              ) : typeof object[key] === "string" ? (
+              ) : isString(object[key]) ? (
                 <Blue>"{object[key]}"</Blue> // Strings are blue
-              ) : object[key] && typeof object[key] === "object" ? (
+              ) : isObject(object[key]) ? (
                 prettify(object[key], depth + 1)
               ) : (
                 JSON.stringify(object[key])

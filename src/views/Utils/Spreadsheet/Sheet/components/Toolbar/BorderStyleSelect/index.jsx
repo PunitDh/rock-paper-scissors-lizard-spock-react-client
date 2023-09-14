@@ -1,5 +1,4 @@
 import { MenuItem, Select } from "@mui/material";
-import React from "react";
 import { formattingSelectStyle } from "../styles";
 import { BorderType, borderStyles } from "../constants";
 import BorderTypeMenuItem from "./BorderTypeMenuItem";

@@ -1,6 +1,5 @@
 import { CloseSharp } from "@mui/icons-material";
 import { Button, Tooltip, useTheme } from "@mui/material";
-import React from "react";
 import { FlexBox } from "src/components/shared/styles";
 
 const Tag = ({ text, onClick }) => {

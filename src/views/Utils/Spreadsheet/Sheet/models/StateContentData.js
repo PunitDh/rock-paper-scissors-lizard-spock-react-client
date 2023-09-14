@@ -1,3 +1,4 @@
+import { isObject, isString } from "src/utils";
 import { isFormula } from "../utils/cellUtils";
 import CellData from "./CellData";
 
@@ -6,11 +7,8 @@ export default class StateContentData {
     Object.keys(initialData).reduce((stateContentData, it) => {
       const cell = it.toUpperCase();
       stateContentData[cell] = new CellData({ id: cell });
-      if (initialData[it] !== null && typeof initialData[it] !== "object") {
-        const isString =
-          typeof initialData[it] === "string" ||
-          initialData[it] instanceof String;
-        if (isString && isFormula(initialData[it])) {
+      if (!isObject(initialData[it])) {
+        if (isString(initialData[it]) && isFormula(initialData[it])) {
           stateContentData[cell].formula = initialData[it];
         } else {
           stateContentData[cell].value = initialData[it];

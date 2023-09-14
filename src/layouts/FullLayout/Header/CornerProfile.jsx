@@ -14,6 +14,7 @@ import { IconUser, IconUserCheck } from "@tabler/icons-react";
 import { ProfileImg, getAvatar } from "src/assets";
 import styled from "@emotion/styled";
 import { useAPI } from "src/hooks";
+import { isObject } from "src/utils";
 
 const ProfileAvatar = styled(Avatar)({
   width: 35,
@@ -39,7 +40,7 @@ const CornerProfile = ({ decoded }) => {
         aria-controls="msgs-menu"
         aria-haspopup="true"
         sx={{
-          ...(typeof anchorEl === "object" && {
+          ...(isObject(anchorEl) && {
             color: "primary.main",
           }),
         }}

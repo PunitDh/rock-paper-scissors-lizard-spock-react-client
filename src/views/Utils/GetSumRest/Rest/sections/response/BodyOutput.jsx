@@ -7,6 +7,7 @@ import { OutputPretty, OutputRaw } from "../../styles";
 import PrettifyObject from "../../components/PrettifyObject";
 import PrettifyHTML from "../../components/PrettifyHTML";
 import ResponseType from "./ResponseType";
+import { isObject } from "src/utils";
 
 const OutputDisplay = styled.div({
   width: "100%",
@@ -43,7 +44,7 @@ const BodyOutput = ({ state, dispatch }) => (
           />
         )
       ) : state.response.displayType === DisplayType.RAW ? (
-        typeof state.response.output === "object" ? (
+        isObject(state.response.output) ? (
           <OutputRaw
             contentEditable={true}
             suppressContentEditableWarning={true}
@@ -58,7 +59,7 @@ const BodyOutput = ({ state, dispatch }) => (
             {String(state.response.output)}
           </OutputRaw>
         )
-      ) : typeof state.response.output === "object" ? (
+      ) : isObject(state.response.output) ? (
         <OutputPretty
           contentEditable={true}
           suppressContentEditableWarning={true}

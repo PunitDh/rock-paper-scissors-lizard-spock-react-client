@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { isBoolean } from "src/utils";
 import { Status } from "src/views/ChatBar/constants";
 
 const findIndex = (state, action) =>
@@ -38,8 +39,7 @@ export const conversationSlice = createSlice({
       const index = findIndex(state, action);
 
       const opener =
-        typeof action.payload.opener === "boolean" &&
-        Boolean(action.payload.opener);
+        isBoolean(action.payload.opener) && Boolean(action.payload.opener);
 
       const conversation = {
         ...action.payload,

@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { Alert, Snackbar } from "@mui/material";
+import { isObject } from "src/utils";
 
 const WideAlert = styled(Alert)({
   width: "100%",
@@ -24,7 +25,7 @@ const Notification = ({
         variant="filled"
         severity={notification.type}
       >
-        {typeof notification.message === "object"
+        {isObject(notification.message)
           ? JSON.stringify(notification.message)
           : notification.message}
       </WideAlert>

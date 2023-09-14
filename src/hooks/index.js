@@ -6,7 +6,7 @@ import useAPI from "./useAPI";
 import useLoading from "./useLoading";
 import useClipboard from "./useClipboard";
 import useQueryParam from "./useQueryParam";
-import useEffectLog from "./useEffectLog";
+import useCleanupEffect from "./useCleanupEffect";
 
 export {
   useCurrentGame,
@@ -17,5 +17,5 @@ export {
   useLoading,
   useClipboard,
   useQueryParam,
-  useEffectLog,
+  useCleanupEffect,
 };

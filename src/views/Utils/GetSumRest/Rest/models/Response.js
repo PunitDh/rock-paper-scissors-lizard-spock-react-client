@@ -1,3 +1,4 @@
+import { isObject } from "src/utils";
 import { DisplayType, HttpStatusCode } from "../constants";
 
 export default class Response {
@@ -48,8 +49,6 @@ export default class Response {
     return this;
   }
 }
-
-const isObject = (value) => value && typeof value === "object";
 
 const getDataLength = (data, headers) => {
   const dataLength = isObject(data)

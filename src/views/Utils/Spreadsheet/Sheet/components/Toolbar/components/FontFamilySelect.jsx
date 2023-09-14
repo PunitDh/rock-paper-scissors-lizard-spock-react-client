@@ -1,12 +1,12 @@
 import { MenuItem, Select } from "@mui/material";
-import { useCallback, useState } from "react";
+import { useEffect, useState } from "react";
 import { formattingSelectStyle } from "../styles";
 import { getFonts } from "../../../utils/fontUtils";
 
 const FontFamilySelect = ({ state, onChange }) => {
   const [fonts, setFonts] = useState(["Sans-serif"]);
 
-  const fontsFn = useCallback(() => {
+  useEffect(() => {
     getFonts().then((data) =>
       setFonts((fonts) => [...new Set(fonts.concat(data).sort())])
     );
@@ -14,7 +14,6 @@ const FontFamilySelect = ({ state, onChange }) => {
 
   return (
     <Select
-      ref={fontsFn}
       labelId={"font-selector"}
       id={"font-selector"}
       name="fontSelector"

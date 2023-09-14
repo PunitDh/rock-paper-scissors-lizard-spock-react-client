@@ -1,5 +1,4 @@
 import { Tooltip } from "@mui/material";
-import React from "react";
 import { FieldButton } from "../../styles";
 
 const HistoryButton = ({ title, disabled, onClick, Icon }) => (

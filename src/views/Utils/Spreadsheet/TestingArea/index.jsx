@@ -3,6 +3,7 @@ import { useCallback, useState } from "react";
 import DashboardCard from "src/components/shared/DashboardCard";
 import { FlexBox } from "src/components/shared/styles";
 import { useToken } from "src/hooks";
+import useEventHandler from "../Sheet/hooks/useEventHandler";
 
 const CellContainer = styled.div({
   width: "6.5rem",
@@ -46,6 +47,7 @@ const TestingArea = ({ state }) => {
   const token = useToken();
   const [keyboard, setKeyBoard] = useState(null);
   const [mouse, setMouse] = useState(null);
+  const eventHandler = useEventHandler();
 
   useCallback(() => {
     const keyboardEvent = (e) => setKeyBoard(e);
@@ -76,6 +78,13 @@ const TestingArea = ({ state }) => {
           {state.highlighted.cells.join(",")}
         </StatusCell>
         <StatusCell label="Filler Mode">{String(state.fillerMode)}</StatusCell>
+        <StatusCell label="Formula Mode">
+          {String(state.formulaMode)}
+        </StatusCell>
+        <StatusCell label="Selection Range">
+          {eventHandler.formulaFieldRef.selectionStart},
+          {eventHandler.formulaFieldRef.selectionEnd}
+        </StatusCell>
       </FlexBox>
     </DashboardCard>
   ) : null;

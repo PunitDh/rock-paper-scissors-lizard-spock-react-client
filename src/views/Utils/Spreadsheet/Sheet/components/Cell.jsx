@@ -15,7 +15,7 @@ const Cell = memo(
     width,
     formatting,
   }) => {
-    console.log("re-rendering", id);
+    // console.log("re-rendering", id);
     return (
       <Item
         colSpan={1}

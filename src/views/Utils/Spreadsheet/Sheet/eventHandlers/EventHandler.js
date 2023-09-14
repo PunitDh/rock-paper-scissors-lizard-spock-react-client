@@ -1,3 +1,4 @@
+import { isNumber } from "src/utils";
 import {
   addCellsToHighlight,
   addMemento,
@@ -89,6 +90,7 @@ export default class EventHandler {
       case KeyEvent.BACKSPACE:
         break;
       case KeyEvent.ENTER:
+        console.log(e.key);
         const triggerRecalculation =
           this.state.formulaTrackedCells.includes(cell.id) ||
           isFormula(e.target.value);
@@ -225,20 +227,49 @@ export default class EventHandler {
   handleMouseMove(e) {
     this.state.hovered !== e.target.id &&
       this.dispatch(setHovered(e.target.id));
+
     if (this.state.mouseDown) {
       !this.state.dragging && this.dispatch(setDragging(true));
     }
 
+    const { cellAnchor } = this.state.highlighted;
     if (this.state.formulaMode) {
       if (this.state.dragging && !this.isCtrlKeyPressed(e)) {
-        const { cellAnchor } = this.state.highlighted;
         this.dispatch(
           highlightFormulaCellRange(cellAnchor, this.state.hovered)
         );
       }
+      if (this.state.fillerMode) {
+        this.#handleFillerModeFormulaFill();
+      }
+    } else if (this.state.fillerMode) {
+      const getBoundingRect = (id) => {
+        const element = document.getElementById(id);
+        if (!Cell.isValidId(id)) return {};
+        return element.getBoundingClientRect();
+      };
+
+      const cellAnchorRect = getBoundingRect(cellAnchor);
+      const hoveredRect = getBoundingRect(this.state.hovered);
+
+      const euclideanDistance = {
+        x: Math.abs(hoveredRect.right - cellAnchorRect.right),
+        y: Math.abs(hoveredRect.bottom - cellAnchorRect.bottom),
+      };
+
+      // Extract the cell information to avoid repetitive instantiation
+      const cellAnchorInstance = new Cell(cellAnchor);
+      const hoveredInstance = new Cell(this.state.hovered);
+
+      let rangeEnd =
+        euclideanDistance.y > euclideanDistance.x
+          ? `${cellAnchorInstance.column}${hoveredInstance.row}`
+          : `${hoveredInstance.column}${cellAnchorInstance.row}`;
+
+      this.dispatch(highlightCells(cellAnchor, rangeEnd));
+      this.#handleFillerModeValueFill(false);
     } else {
       if (this.state.dragging && !this.isCtrlKeyPressed(e)) {
-        const { cellAnchor } = this.state.highlighted;
         this.dispatch(highlightCells(cellAnchor, this.state.hovered));
       }
     }
@@ -275,14 +306,12 @@ export default class EventHandler {
         if (this.isCtrlKeyPressed(e)) {
           e.preventDefault();
           const content = generateClipboardContent(this.state);
-          console.log(content);
         }
         break;
       case KeyEvent.LOWERCASE_X:
         if (this.isCtrlKeyPressed(e)) {
           e.preventDefault();
           const content = generateClipboardContent(this.state);
-          console.log(content);
 
           this.dispatch(deleteCellContent());
         }
@@ -295,8 +324,11 @@ export default class EventHandler {
         this.dispatch(addMemento());
         break;
       case KeyEvent.ENTER:
+        console.log(e.key);
         this.dispatch(setFormulaMode(false));
-      // dispatch(recalculateFormulae());
+        if (this.state.content.data[this.state.selectedCell.id]?.isFormulaCell) {
+          this.dispatch(recalculateFormulae());
+        }
       // eslint-disable-next-line no-fallthrough
       case KeyEvent.TAB:
       case KeyEvent.ARROW_DOWN:
@@ -324,7 +356,6 @@ export default class EventHandler {
 
   async handleCopyCapture(e) {
     e.preventDefault();
-    console.log("Here");
     const content = generateClipboardContent(this.state);
     await this.clipboard.copy(content);
   }
@@ -338,7 +369,6 @@ export default class EventHandler {
   async handlePasteCapture(e) {
     e.preventDefault();
     const data = await this.clipboard.get();
-    console.log(data);
     this.dispatch(pasteCellContent(this.state.selectedCell.id, data));
   }
 
@@ -398,6 +428,8 @@ export default class EventHandler {
 
     if (this.state.formulaMode) {
       this.#handleFormulaModeMouseUp(isSameCellHighlighted, isCtrlKeyPressed);
+    } else if (this.state.fillerMode) {
+      // this.#handleFillerModeMouseMove(isSameCellHighlighted);
     } else {
       this.#handleRegularModeMouseUp(isCtrlKeyPressed, isCtrlKeyPressed);
     }
@@ -493,6 +525,80 @@ export default class EventHandler {
       this.dispatch(setHighlightCellAnchor(id));
     }
   };
+
+  #handleFillerModeFormulaFill() {
+    const highlightedCells = this.state.highlighted.cells;
+    if (highlightedCells.length < 1) return;
+    const anchorCell =
+      this.state.content.data[this.state.highlighted.cellAnchor];
+    const anchorFormula = anchorCell?.formula;
+
+    if (isFormula(anchorFormula)) {
+      const firstCell = new Cell(this.state.highlighted.cellAnchor);
+      const lastCell = new Cell(highlightedCells[highlightedCells.length - 1]);
+      const columnFill = lastCell.columnCharCode > firstCell.columnCharCode;
+      const rowFill = lastCell.row > firstCell.row;
+      const { referenceCells, formula } = this.state.content.data[firstCell.id];
+
+      let increment = 0;
+      Array(highlightedCells.length - 1)
+        .fill()
+        .forEach((_, i) => {
+          if (columnFill) {
+            increment++;
+
+            const newFormula = referenceCells.reduce((acc, cur) => {
+              const { columnCharCode, row, id } = new Cell(cur);
+              return acc.replace(
+                id,
+                `${String.fromCharCode(+columnCharCode + increment)}${row}`
+              );
+            }, formula);
+
+            this.dispatch(
+              setCellContent(highlightedCells[i + 1], String(newFormula))
+            );
+          } else if (rowFill) {
+            increment++;
+
+            const newFormula = referenceCells.reduce((acc, cur) => {
+              const { columnCharCode, row, id } = new Cell(cur);
+              return acc.replace(
+                id,
+                `${String.fromCharCode(+columnCharCode + increment)}${row}`
+              );
+            }, formula);
+
+            this.dispatch(
+              setCellContent(highlightedCells[i + 1], String(newFormula))
+            );
+          }
+        });
+    }
+  }
+
+  #handleFillerModeValueFill() {
+    const highlightedCells = this.state.highlighted.cells;
+    if (highlightedCells.length < 1) return;
+    const anchorCell =
+      this.state.content.data[this.state.highlighted.cellAnchor];
+    const anchorValue = anchorCell?.value;
+
+    if (isNumber(anchorValue)) {
+      let increment = 0;
+      Array(highlightedCells.length - 1)
+        .fill()
+        .forEach((_, i) => {
+          increment++;
+          this.dispatch(
+            setCellContent(
+              highlightedCells[i + 1],
+              String(+anchorValue + increment)
+            )
+          );
+        });
+    }
+  }
 
   #handleFormulaModeMouseUp(isSameCellHighlighted, isCtrlKeyPressed) {
     if (this.state.dragging && !isSameCellHighlighted && !isCtrlKeyPressed) {

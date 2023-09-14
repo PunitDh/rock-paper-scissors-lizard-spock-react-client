@@ -2,6 +2,8 @@ import { isFormula } from "../utils/cellUtils";
 import CellRange from "./CellRange";
 import CellFormatting from "./CellFormatting";
 import { NumberFormat } from "../components/Toolbar/constants";
+import { isFalsy, isNumber } from "src/utils";
+import { isString } from "lodash";
 
 export default class CellData {
   /**
@@ -73,6 +75,10 @@ export default class CellData {
    */
   get isFormulaCell() {
     return isFormula(this.formula) && this.formula?.length > 0;
+  }
+
+  isNumber() {
+    return isNumber(this.value);
   }
 
   /**
@@ -152,7 +158,7 @@ export default class CellData {
         this.formula.replace("=", ""),
         stateContentData
       );
-      console.log("evaluating formula", this.id);
+
       if (evaluated.error) {
         this.error = evaluated.error;
         this.referenceCells = [];
@@ -177,7 +183,7 @@ export default class CellData {
  * @returns {string} The formatted value as a string.
  */
 const getNumberFormattedDisplay = (value, formatting) => {
-  if (!value) return "";
+  if (isFalsy(value)) return "";
   switch (formatting.numberFormat) {
     case NumberFormat.GENERAL: {
       return String(value);
@@ -246,8 +252,6 @@ const processVLookup = (str, reg, formulaCreator, zeroValue) => {
       return it.includes(":") ? range.cellIds : it;
     })
   );
-
-  console.log({ referenceCells });
 
   return referenceCells.map((it, idx) => ({
     [matches[idx][0]]: formulaCreator(it),
@@ -328,12 +332,15 @@ const replaceFormulaWithValues = (str, stateContentData, blankValue) => {
   );
 
   return cellMatches.reduce((acc, cell) => {
-    if (isNaN(parseFloat(stateContentData[cell]?.value))) {
-      return acc.replaceAll(cell, `'${stateContentData[cell]?.value || ""}'`);
-    }
+    const cellDataValue = stateContentData[cell]?.value;
+
     return acc.replaceAll(
       cell,
-      `(${stateContentData[cell]?.value || blankValue})`
+      isNumber(cellDataValue)
+        ? `(${cellDataValue || blankValue})`
+        : isString(cellDataValue)
+        ? `'${cellDataValue}'`
+        : `null`
     );
   }, str);
 };
@@ -383,7 +390,7 @@ const evaluateFormula = (cellValue) => {
     str,
     /(?:\bVLOOKUP)\(([^)]+)\)/gi,
     (it) => {
-      console.log(it);
+      console.log(it[0], it[1], it[2]);
       const _0 = it[0];
       const _1 = `[${it[1].map((it) => `[${it.join(",")}]`).join(",")}]`;
       const _2 = it[2];
@@ -478,12 +485,16 @@ const evaluateExpression = (input) => {
     parsedInput = input
       .replaceAll("%", "/100")
       .replaceAll("^", "**")
-      .replaceAll(/(\b)e(\b|\B)/g, "1e0")
+      // .replaceAll(/(\b)e(\b|\B)/g, "1e0")
       .replaceAll(/(\d+)(?=\()/g, "$&*")
       .replaceAll(/(?<=\))(\d+)/g, "*$&")
       .replaceAll(
         /(\d+|\))(?=\s*(atan|acos|asin|sin|cos|tan|log|ln|Rnd|E|π))/gi,
         "$&* "
+      )
+      .replaceAll(
+        /(\d+)(!+)/g,
+        "(Array($1).fill(0).map((_,i)=>i+1).reduce((a,c)=>a*c,1))"
       )
       .replaceAll(/(\d+)(√\()(\d+)/g, "(Math.pow($3, 1/$1))")
       .replaceAll(/SQRT\(/gi, "(Math.sqrt(")
@@ -511,12 +522,13 @@ const evaluateExpression = (input) => {
     const diffBrackets = openBrackets - closeBrackets;
     if (diffBrackets > 0) parsedInput += ")".repeat(diffBrackets);
 
+    console.log({ parsedInput, value });
     value = eval(parsedInput);
     // value = String(Math.round(eval(parsedInput) * 10 ** 13) / 10 ** 13);
 
     return { value, parsedInput };
   } catch (error) {
-    console.log(error, parsedInput);
+    console.log({error, parsedInput});
     return { value: "Syntax Error", parsedInput, error };
   }
 };

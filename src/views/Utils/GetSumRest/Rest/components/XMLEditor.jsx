@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import PrettifyHTML from "./PrettifyHTML";
 import { OutputPretty } from "../styles";
 import { Button } from "@mui/material";

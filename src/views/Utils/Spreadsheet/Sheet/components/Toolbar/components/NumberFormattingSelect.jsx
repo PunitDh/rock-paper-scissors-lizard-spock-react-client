@@ -1,5 +1,4 @@
 import { MenuItem, Select } from "@mui/material";
-import React from "react";
 import { numberFormats } from "../constants";
 import { formattingSelectStyle } from "../styles";
 import { FlexBox } from "src/components/shared/styles";

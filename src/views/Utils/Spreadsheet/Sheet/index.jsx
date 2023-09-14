@@ -1,11 +1,10 @@
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import DashboardCard from "src/components/shared/DashboardCard";
 import { initialState, reducer } from "./reducer";
 import { recalculateFormulae, addMemento } from "./actions";
 import { createInitialState } from "./utils/cellUtils";
 import { SheetConfig } from "./constants";
 import ContextMenu from "./components/ContextMenu";
-import { useEffectLog } from "src/hooks";
 import DebugBar from "./components/DebugBar";
 import TestingArea from "../TestingArea";
 import SheetContent from "./SheetContent";
@@ -33,7 +32,7 @@ const Sheet = ({
     )
   );
 
-  useEffectLog(() => {
+  useEffect(() => {
     dispatch(recalculateFormulae());
     dispatch(addMemento());
   }, []);

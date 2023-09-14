@@ -1,3 +1,5 @@
+import { isNumber } from "src/utils";
+
 export default class Highlight {
   constructor(obj = {}) {
     this.rowAnchor = obj.rowAnchor || null;
@@ -105,7 +107,7 @@ export default class Highlight {
   calculateSum(stateContentData) {
     if (this.cells.length > 1) {
       const sum = this.cells
-        .filter((cell) => !isNaN(parseFloat(stateContentData[cell]?.value)))
+        .filter((cell) => isNumber(stateContentData[cell]?.value))
         .reduce(
           (acc, cell) => acc + parseFloat(stateContentData[cell]?.value),
           null
@@ -126,9 +128,8 @@ export default class Highlight {
     if (this.cells.length > 1) {
       const average =
         this.sum /
-        (this.cells.filter(
-          (cell) => !isNaN(parseFloat(stateContentData[cell]?.value))
-        ).length || 1);
+        (this.cells.filter((cell) => isNumber(stateContentData[cell]?.value))
+          .length || 1);
       this.average = average;
     } else {
       this.average = null;

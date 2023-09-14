@@ -4,6 +4,7 @@ import CellData from "../models/CellData";
 import CellFormatting from "../models/CellFormatting";
 import { initialState } from "../reducer";
 import StateContent from "../models/StateContent";
+import { isObject, isString } from "src/utils";
 
 export const generateClipboardContent = (state) => {
   const content = state.highlighted.rows.map((row) =>
@@ -151,21 +152,18 @@ const generateInitialContent = (
   const data = Object.keys(initialData).reduce((stateContentData, it) => {
     const cell = it.toUpperCase();
     stateContentData[cell] = new CellData({ id: cell });
-    if (initialData[it] !== null && typeof initialData[it] !== "object") {
-      const isString =
-        typeof initialData[it] === "string" ||
-        initialData[it] instanceof String;
-      if (isString && isFormula(initialData[it])) {
+    if (isObject(initialData[it])) {
+      stateContentData[cell] = new CellData({
+        id: cell,
+        ...initialData[it],
+      });
+    } else {
+      if (isString(initialData[it]) && isFormula(initialData[it])) {
         stateContentData[cell].formula = initialData[it];
       } else {
         stateContentData[cell].value = initialData[it];
       }
       stateContentData[cell].display = initialData[it];
-    } else {
-      stateContentData[cell] = new CellData({
-        id: cell,
-        ...initialData[it],
-      });
     }
 
     return stateContentData;

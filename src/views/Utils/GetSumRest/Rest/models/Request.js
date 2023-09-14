@@ -56,7 +56,6 @@ export default class Request {
 
   addParam(param) {
     const existing = this.params.findIndex((it) => it.id === param.id);
-    console.log(existing);
     if (existing < 0) {
       this.params = [...this.params, param];
     } else {
@@ -82,7 +81,6 @@ export default class Request {
 
   addHeader(header) {
     const existing = this.headers.findIndex((it) => it.id === header.id);
-    console.log("Here", existing);
     if (existing < 0) {
       this.headers = [...this.headers, header];
     } else {

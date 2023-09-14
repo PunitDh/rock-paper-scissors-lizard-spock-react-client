@@ -1,5 +1,4 @@
 import { Tooltip } from "@mui/material";
-import React from "react";
 import { FieldButton } from "../../styles";
 
 const FormattingButton = ({ onClick, title, isActive, Icon, children }) => (

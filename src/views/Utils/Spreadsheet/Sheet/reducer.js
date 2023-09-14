@@ -7,7 +7,7 @@ import CellRange from "./models/CellRange";
 import { isEqual, uniqueId } from "lodash";
 import { BorderType } from "./components/Toolbar/constants";
 import Highlight from "./models/Highlight";
-import StateContent from "./models/StateContent";
+import { isInstance } from "src/utils";
 
 export const initialState = Object.freeze({
   maxRows: SheetConfig.MAX_ROWS,
@@ -48,10 +48,9 @@ export const reducer = (state, action) => {
     case SheetAction.SET_SELECTED: {
       let selectedCell;
       if (Cell.isValidId(action.payload) || Cell.isValidId(action.payload.id)) {
-        selectedCell =
-          typeof action.payload === "object" && action.payload instanceof Cell
-            ? action.payload
-            : new Cell(action.payload);
+        selectedCell = isInstance(action.payload, Cell)
+          ? action.payload
+          : new Cell(action.payload);
 
         return {
           ...state,
@@ -491,8 +490,6 @@ export const reducer = (state, action) => {
         state.content.data[action.payload.cell],
         action.payload.cell
       );
-
-      console.log(action.payload.replace, referenceCells);
 
       return {
         ...state,

@@ -1,4 +1,3 @@
-import React from "react";
 import CustomTabPanel from "../../../components/CustomTabPanel";
 import {
   FormControl,
