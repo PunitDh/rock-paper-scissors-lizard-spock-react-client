@@ -237,6 +237,25 @@ const getNumberFormattedDisplay = (value, formatting) => {
   }
 };
 
+const processVLookup = (str, reg, formulaCreator, zeroValue) => {
+  const matches = [...str.matchAll(reg)];
+  const referenceCells = matches.map(([_, match]) =>
+    match.split(",").map((it) => {
+      const [rangeStart, rangeEnd] = it.split(":");
+      const range = CellRange.createVerticalSliced(rangeStart, rangeEnd);
+      return it.includes(":") ? range.cellIds : it;
+    })
+  );
+
+  console.log({ referenceCells });
+
+  return referenceCells.map((it, idx) => ({
+    [matches[idx][0]]: formulaCreator(it),
+    zeroValue,
+    referenceCells,
+  }));
+};
+
 const processLookup = (str, reg, formulaCreator, zeroValue) => {
   const matches = [...str.matchAll(reg)];
   const referenceCells = matches.map(([_, match]) =>
@@ -352,7 +371,7 @@ const evaluateFormula = (cellValue) => {
 
   const lookupMatches = processLookup(
     str,
-    /(?:LOOKUP)\(([^)]+)\)/gi,
+    /(?:\bLOOKUP)\(([^)]+)\)/gi,
     (it) =>
       `[${it[2].map((i) => `${i}`).join(",")}][[${it[1]
         .map((i) => `${i}`)
@@ -360,11 +379,26 @@ const evaluateFormula = (cellValue) => {
     null
   );
 
-  //  ['a','b','c','d'][[1,2,3,4].findIndex(it => it === 2)]
+  const vLookupMatches = processVLookup(
+    str,
+    /(?:\bVLOOKUP)\(([^)]+)\)/gi,
+    (it) => {
+      console.log(it);
+      const _0 = it[0];
+      const _1 = `[${it[1].map((it) => `[${it.join(",")}]`).join(",")}]`;
+      const _2 = it[2];
+      return `${_1}[${_2}-1][${_1}[0].findIndex(it => it === ${_0})]`;
+    },
+    null
+  );
 
-  // console.log(lookupMatches);
-
-  return [sumMatches, avgMatches, countMatches, lookupMatches].flat();
+  return [
+    sumMatches,
+    avgMatches,
+    countMatches,
+    lookupMatches,
+    vLookupMatches,
+  ].flat();
 };
 
 /**
@@ -400,8 +434,6 @@ export const evaluate = (str, stateContent) => {
       },
     };
   });
-
-  console.log({ evaluatedExpressions });
 
   const replacedString = evaluatedExpressions.reduce(
     (acc, cur) => {
@@ -443,7 +475,6 @@ export const evaluate = (str, stateContent) => {
 const evaluateExpression = (input) => {
   let parsedInput, value;
   try {
-    console.log({ input });
     parsedInput = input
       .replaceAll("%", "/100")
       .replaceAll("^", "**")
@@ -480,7 +511,6 @@ const evaluateExpression = (input) => {
     const diffBrackets = openBrackets - closeBrackets;
     if (diffBrackets > 0) parsedInput += ")".repeat(diffBrackets);
 
-    console.log({ parsedInput });
     value = eval(parsedInput);
     // value = String(Math.round(eval(parsedInput) * 10 ** 13) / 10 ** 13);
 

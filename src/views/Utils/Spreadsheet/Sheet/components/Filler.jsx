@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { useCallback, useEffect, useState } from "react";
 // eslint-disable-next-line no-unused-vars
 import useEventHandler from "../hooks/useEventHandler";
-import { setDragging, setFillerMode } from "../actions";
+import { setFillerMode } from "../actions";
 
 const Container = styled.div(({ top, left }) => ({
   position: "absolute",

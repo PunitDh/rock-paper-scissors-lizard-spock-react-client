@@ -281,7 +281,7 @@ export const reducer = (state, action) => {
             parsed.content.length - 1,
             false
           );
-          const range = CellRange.create(anchor, cellOffset.id);
+          const range = CellRange.createHorizontalSliced(anchor, cellOffset.id);
           const updateObj = {};
           range.cells.forEach((row, rowIndex) =>
             row.forEach((cell, cellIndex) => {
@@ -595,7 +595,7 @@ export const reducer = (state, action) => {
     case SheetAction.SET_CELL_OUTSIDE_BORDER_FORMATTING: {
       const { cells } = state.highlighted;
 
-      let range = CellRange.create(cells[0], cells[cells.length - 1]).cellIds;
+      let range = CellRange.createHorizontalSliced(cells[0], cells[cells.length - 1]).cellIds;
 
       if (!range.length) {
         if (Cell.isValidId(state.selectedCell.id)) {

@@ -6,7 +6,7 @@ import CSVIcon from "./icons/CSVIcon";
 
 const SaveFileCSV = ({ state }) => {
   const handleExportAsCsv = () => {
-    const range = CellRange.create(
+    const range = CellRange.createHorizontalSliced(
       `A1`,
       `${SheetConfig.COLUMNS[state.maxColumns - 1]}${state.maxRows}`
     );

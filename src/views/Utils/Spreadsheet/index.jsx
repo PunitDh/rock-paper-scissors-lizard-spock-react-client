@@ -1,6 +1,5 @@
 import PageContainer from "src/components/container/PageContainer";
 import Sheet from "./Sheet";
-import TestingArea from "./TestingArea";
 
 export default function Spreadsheet() {
   return (

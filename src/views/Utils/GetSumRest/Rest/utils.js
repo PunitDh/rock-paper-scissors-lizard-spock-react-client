@@ -4,7 +4,6 @@ import { Buffer } from "buffer";
 import Request from "./models/Request";
 import { AuthorizationType, KeyValuePairType } from "./constants";
 import RequestBody from "./models/RequestBody";
-import Authorization from "./models/Authorization";
 
 export const initializeState = () => {
   return {

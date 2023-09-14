@@ -57,7 +57,7 @@ export default function useAPI() {
   const handleError = (data) => {
     notification.error(data.payload);
     if (data.code === 401) {
-      navigate(AuthPage.LOGIN_PAGE);
+      navigate(AuthPage.loginWithReferrer());
     }
   };
 

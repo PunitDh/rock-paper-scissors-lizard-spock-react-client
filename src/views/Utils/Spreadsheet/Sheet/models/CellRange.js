@@ -29,7 +29,7 @@ export default class CellRange {
     return new CellRange(cells, ids, rows, columns);
   }
 
-  static create(start, end) {
+  static createHorizontalSliced(start, end) {
     const { minC, maxC, minR, maxR } = getCellMinMax([start, end]);
 
     const cells = [];
@@ -48,6 +48,32 @@ export default class CellRange {
         createdIds.push(id);
       }
       cells.push(createdRow);
+      ids.push(createdIds);
+    }
+    // return cells;
+    return new CellRange(cells, ids, rows, columns);
+  }
+
+  static createVerticalSliced(start, end) {
+    const { minC, maxC, minR, maxR } = getCellMinMax([start, end]);
+
+    const cells = [];
+    const rows = [];
+    const columns = [];
+    const ids = [];
+
+    for (let col = minC; col <= maxC; col++) {
+      const createdColumns = [];
+      const createdIds = [];
+      for (let row = minR; row <= maxR; row++) {
+        const column = String.fromCharCode(col);
+        const id = `${column}${row}`;
+        createdColumns.push(new Cell(id));
+        columns.push(column);
+        rows.push(row);
+        createdIds.push(id);
+      }
+      cells.push(createdColumns);
       ids.push(createdIds);
     }
     // return cells;

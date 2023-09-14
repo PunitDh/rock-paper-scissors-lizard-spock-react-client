@@ -68,7 +68,9 @@ const SocketListeners = () => {
     socket.on(SocketResponse.DELETE_PROFILE, (response) =>
       isSuccess(response).then(api.logoutPlayer).catch(notification.error)
     );
-    socket.on(Status.UNAUTHORIZED, () => navigate(AuthPage.LOGIN_PAGE));
+    socket.on(Status.UNAUTHORIZED, () =>
+      navigate(AuthPage.loginWithReferrer())
+    );
     socket.on(SocketResponse.PLAY_MOVE, (response) =>
       handleResponse(response, setCurrentGame)
     );

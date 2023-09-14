@@ -256,7 +256,6 @@ export default class EventHandler {
 
   handleKeyDown(e) {
     let nextCell;
-    console.log(e.key);
 
     switch (e.key) {
       case KeyEvent.LOWERCASE_A:
