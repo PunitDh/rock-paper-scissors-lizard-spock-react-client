@@ -19,7 +19,9 @@ type CellDataShape = {
 export default class CellData {
   id: string | null;
   value: string | number | null;
+  previousValue: string | number | null;
   formula: string | null;
+  previousFormula: string | number | null;
   referenceCells: Array<string>;
   display: string;
   formatting: CellFormatting;
@@ -47,7 +49,9 @@ export default class CellData {
   }: CellDataShape) {
     this.id = id;
     this.value = value;
+    this.previousValue = value;
     this.formula = formula;
+    this.previousFormula = formula;
     this.referenceCells = referenceCells;
     this.display = display;
     this.formatting = formatting;
@@ -92,6 +96,15 @@ export default class CellData {
     return Boolean(isFormula(this.formula) && this.formula?.length! > 0);
   }
 
+  get hasChanged(): Boolean {
+    return (
+      (Boolean(this?.value && this?.previousValue) &&
+        this?.value !== this?.previousValue) ||
+      (Boolean(this?.formula && this?.previousFormula) &&
+        this?.previousFormula !== this?.formula)
+    );
+  }
+
   isNumber() {
     return isNumber(this.value);
   }
@@ -112,6 +125,7 @@ export default class CellData {
       const formula = String(value).toUpperCase();
       this.setFormula(formula);
     } else {
+      this.previousValue = this.value;
       this.value = value;
       this.setDisplay();
       this.formula = "";
@@ -125,6 +139,7 @@ export default class CellData {
   }
 
   setFormula(formula: string): CellData {
+    this.previousFormula = this.formula;
     this.formula = formula;
     this.referenceCells = getReferenceCells(formula);
     return this;
@@ -158,7 +173,11 @@ export default class CellData {
     return this;
   }
 
-  setData(obj: { value: string | null; id: string; formatting: CellFormatting; }) {
+  setData(obj: {
+    value: string | null;
+    id: string;
+    formatting: CellFormatting;
+  }) {
     if (!obj) return this;
     this.setValue(obj.value);
     this.setId(obj.id);
@@ -181,6 +200,7 @@ export default class CellData {
         this.error = null;
         this.referenceCells = referenceCells.flat();
       }
+      this.previousValue = this.value;
       this.value = evaluated.value;
       this.setDisplay();
     }

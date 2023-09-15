@@ -139,7 +139,7 @@ const CellInput = ({ state, dispatch }: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cell.id]);
 
-  const handleBlur = (e: React.FocusEvent) => eventHandler.handleInputBoxBlur(e);
+  const handleBlur = (e: React.FocusEvent) => eventHandler.handleInputBoxBlur(e, cell.id);
 
   const handleChange = (e: React.ChangeEvent) => {
     const newValue = (e.target as HTMLInputElement).value;

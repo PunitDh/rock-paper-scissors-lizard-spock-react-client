@@ -80,14 +80,21 @@ export default class EventHandler {
     if (this.inputFocusRef) this.inputFocusRef.current = value;
   }
 
-  handleInputBoxBlur(e: React.FocusEvent) {
+  handleInputBoxBlur(e: React.FocusEvent, cellId) {
     if (!this.state.formulaMode) {
       this.setFocusInput(false);
     }
 
+    console.log(
+      e.target.id,
+      "blurred",
+      cellId,
+      this.state.formulaTrackedCells.includes(cellId)
+    );
+
     const triggerRecalculation =
-      (isFormula((e.target as HTMLInputElement).value) ||
-        this.state.formulaTrackedCells.includes(this.state.selectedCell.id));
+      isFormula((e.target as HTMLInputElement).value) ||
+      this.state.formulaTrackedCells.includes(cellId);
 
     if (triggerRecalculation) {
       this.dispatch(recalculateFormulae());
@@ -548,10 +555,31 @@ export default class EventHandler {
       !this.state.dragging &&
         this.state.highlighted.hasLength &&
         this.dispatch(resetHighlight());
+
+      const selectedCellData = this.getSelectedCellData();
+      const shouldRecalculate =
+        this.isFormulaTrackedCell(this.state.selectedCell.id) &&
+        selectedCellData?.hasChanged;
+
+      if (shouldRecalculate) {
+        this.dispatch(recalculateFormulae());
+      }
       this.dispatch(selectCell(id));
       this.dispatch(setHighlightCellAnchor(id));
     }
   };
+
+  private getSelectedCellData(): CellData | undefined {
+    return this.state.content.data[this.state.selectedCell.id];
+  }
+
+  private isFormulaTrackedCell(cellId: string): Boolean {
+    return this.state.formulaTrackedCells.includes(cellId);
+  }
+
+  private getData(cellId: string): CellData {
+    return this.state.content.data[cellId];
+  }
 
   #handleFillerModeFormulaFill() {
     const {

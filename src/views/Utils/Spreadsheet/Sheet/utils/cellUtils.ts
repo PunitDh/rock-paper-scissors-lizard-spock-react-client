@@ -179,8 +179,10 @@ const generateInitialContent = (
     } else {
       if (isString(initialData[it]) && isFormula(initialData[it])) {
         stateContentData[cell].formula = initialData[it];
+        stateContentData[cell].previousFormula = initialData[it];
       } else {
         stateContentData[cell].value = initialData[it];
+        stateContentData[cell].previousValue = initialData[it];
       }
       stateContentData[cell].display = initialData[it];
     }

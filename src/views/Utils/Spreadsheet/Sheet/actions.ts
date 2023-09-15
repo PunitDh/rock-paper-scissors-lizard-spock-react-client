@@ -34,7 +34,7 @@ export enum SheetAction {
   SET_MOUSEDOWN,
   SET_DRAGGING,
   SET_FILLER_MODE,
-  SET_CONTENT_DATA,
+  SET_CELL_CONTENT,
   UPDATE_REFERENCE_CELLS,
   SET_CONTENT_BULK,
   SET_CELL_FORMATTING,
@@ -218,7 +218,7 @@ export const setFillerMode = (payload: boolean): Action => ({
 });
 
 export const setCellContent = (cellId: string, value: string): Action => ({
-  type: SheetAction.SET_CONTENT_DATA,
+  type: SheetAction.SET_CELL_CONTENT,
   payload: { cell: cellId, value },
 });
 

@@ -16,9 +16,11 @@ export default class StateContentData {
         const cellData = new CellData({ id: cell });
         if (!isObject(initialData[it])) {
           if (isString(initialData[it]) && isFormula(initialData[it])) {
+            cellData.previousFormula = initialData[it];
             cellData.formula = initialData[it];
             // stateContentData[cell].formula = initialData[it];
           } else {
+            cellData.previousValue = initialData[it];
             cellData.value = initialData[it];
           }
           cellData.display = initialData[it];

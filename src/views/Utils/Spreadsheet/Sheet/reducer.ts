@@ -481,7 +481,7 @@ export const reducer = (state: State, action: Action) => {
 
       return state;
     }
-    case SheetAction.SET_CONTENT_DATA: {
+    case SheetAction.SET_CELL_CONTENT: {
       const { value, cell: cellId } = action.payload;
       const formula = value.toUpperCase();
       const formulaMode = isFormula(formula);
