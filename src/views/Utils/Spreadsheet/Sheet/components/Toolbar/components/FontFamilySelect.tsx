@@ -7,7 +7,7 @@ import CellFormatting from "../../../models/CellFormatting";
 
 type Props = {
   state: CellFormatting;
-  onChange: (e: React.ChangeEvent) => void
+  onChange: (text: string) => void
 }
 
 const FontFamilySelect = ({ state, onChange }: Props) => {
@@ -28,7 +28,7 @@ const FontFamilySelect = ({ state, onChange }: Props) => {
       value={state.fontFamily || "Sans-serif"}
       size="small"
       sx={formattingSelectStyle({
-        fontFamily: state.fontFamily,
+        fontFamily: state.fontFamily!,
       })}
     >
       {fonts.map((fontFamily) => (

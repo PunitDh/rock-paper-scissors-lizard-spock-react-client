@@ -1,9 +1,16 @@
+import React, { Dispatch } from "react";
 import FlexBox from "../../../../../components/shared/FlexBox";
 import MemoryButton from "../components/MemoryButton";
 import { MemoryOperation } from "../constants";
 import InvButton from "./ScientificBox/InverseButton";
+import { Action, State } from "../types";
 
-function MemoryBox({ state, dispatch }) {
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>
+}
+
+function MemoryBox({ state, dispatch }: Props) {
   return (
     <FlexBox flexDirection="column" justifyContent="flex-start">
       <InvButton state={state} dispatch={dispatch} />

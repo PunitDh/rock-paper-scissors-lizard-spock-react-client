@@ -1,7 +1,14 @@
+import React, { Dispatch } from "react";
 import { toggleInverseMode } from "../../actions";
 import { CalculatorButton } from "../../styles";
+import { Action, State } from "../../types";
 
-function InvButton({ state, dispatch }) {
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+}
+
+function InvButton({ state, dispatch }: Props) {
   const handleClick = () => dispatch(toggleInverseMode());
 
   return (

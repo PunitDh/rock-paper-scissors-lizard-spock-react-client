@@ -1,8 +1,15 @@
+import React, { Dispatch } from "react";
 import { setOutput } from "../actions";
 import { CalculatorButton } from "../styles";
 import { evaluateExpression } from "../utils";
+import { Action, State } from "../types";
 
-const EvalButton = ({ state, dispatch }) => {
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+}
+
+const EvalButton = ({ state, dispatch }: Props) => {
   const handleClick = () => {
     const output = evaluateExpression(state);
     dispatch(setOutput(output));

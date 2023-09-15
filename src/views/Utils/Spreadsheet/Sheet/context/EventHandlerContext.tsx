@@ -2,6 +2,7 @@ import React, { Dispatch, createContext, useRef } from "react";
 import EventHandler from "../eventHandlers/EventHandler";
 import { useClipboard } from "../../../../../hooks";
 import { Action, State } from "../types";
+import { Clipboard } from "../../../../../hooks/useClipboard";
 
 type Props = {
   state: State;
@@ -13,7 +14,7 @@ export const EventDelegatorContext = createContext<EventHandler>({} as EventHand
 
 export const EventProvider = ({ state, dispatch, children }: Props) => {
   const inputFocusRef = useRef(false);
-  const clipboard = useClipboard();
+  const clipboard: Clipboard = useClipboard();
 
   const eventHandler = new EventHandler(
     state,

@@ -1,13 +1,19 @@
+import React from "react";
 import FlexBox from "../../../../../../components/shared/FlexBox";
+import { State } from "../../types";
 import { FlexForm } from "../styles";
 import HighlightedStats from "./HighlightedStats";
 
-const StatusBar = ({ state, dispatch }) => {
-  const handleSubmit = (e) => e.preventDefault();
+type Props = {
+  state: State;
+}
+
+const StatusBar = ({ state }: Props) => {
+  const handleSubmit = (e: React.FormEvent) => e.preventDefault();
   const { average, sum, count } = state.highlighted;
 
   return (
-    <div tabIndex="1000">
+    <div tabIndex={1000}>
       <FlexForm
         onSubmit={handleSubmit}
         justifyContent="space-between"

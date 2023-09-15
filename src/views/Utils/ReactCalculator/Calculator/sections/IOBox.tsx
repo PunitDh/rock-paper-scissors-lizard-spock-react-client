@@ -1,9 +1,15 @@
+import React from "react";
 import { TextField } from "@mui/material";
 import { CalculatorBox } from "../styles";
 import { useToken } from "../../../../../hooks";
 import FlexBox from "../../../../../components/shared/FlexBox";
+import { State } from "../types";
 
-const IOBox = ({ state }) => {
+type Props = {
+  state: State;
+}
+
+const IOBox = ({ state }: Props) => {
   const token = useToken();
   return (
     <CalculatorBox width="100%">
@@ -27,7 +33,9 @@ const IOBox = ({ state }) => {
           sx={{ width: "100%" }}
           value={state.output}
           inputProps={{ style: { textAlign: "right" } }}
-          readOnly={true}
+          InputProps={{
+            readOnly: true,
+          }}
         />
       </FlexBox>
     </CalculatorBox>

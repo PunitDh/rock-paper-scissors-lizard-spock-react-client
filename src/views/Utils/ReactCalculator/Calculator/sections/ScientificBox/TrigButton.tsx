@@ -1,7 +1,15 @@
+import React, { Dispatch } from "react";
 import { Sup } from "../../styles";
 import InvertedButton from "./InvertedButton";
+import { Action, State } from "../../types";
 
-const TrigButton = ({ value, state, dispatch }) => (
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+  value: string;
+}
+
+const TrigButton = ({ value, state, dispatch }: Props) => (
   <InvertedButton
     display={<span>{value}</span>}
     state={state}
@@ -14,8 +22,8 @@ const TrigButton = ({ value, state, dispatch }) => (
         {<Sup>-1</Sup>}
       </span>
     }
-    // operation={true}
-    // invertedOperation={true}
+  // operation={true}
+  // invertedOperation={true}
   />
 );
 

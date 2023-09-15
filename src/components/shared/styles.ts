@@ -1,10 +1,23 @@
 import styled from "@emotion/styled";
 import { Card, TextField } from "@mui/material";
 
-export type FlexDirection = "row" | "column"
-export type AlignItems = "center" | "flex-start" | "flex-end" | "space-between"
-export type JustifyContent =  "center" | "flex-start" | "flex-end" | "space-between" | "space-around"
-export type FlexWrap = "wrap" | "nowrap"
+export type FlexDirection = "row" | "column";
+export type AlignItems = "center" | "flex-start" | "flex-end" | "space-between";
+export type JustifyContent =
+  | "center"
+  | "flex-start"
+  | "flex-end"
+  | "space-between"
+  | "space-around";
+export type FlexWrap = "wrap" | "nowrap";
+export type TextAlign =
+  | "left"
+  | "right"
+  | "center"
+  | "justify"
+  | "inherit"
+  | "start"
+  | "end";
 
 export const ResponsiveCard = styled(Card)({
   display: "flex",

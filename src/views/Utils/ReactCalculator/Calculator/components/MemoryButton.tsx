@@ -1,3 +1,4 @@
+import React, { Dispatch } from "react";
 import { Menu, MenuItem, Typography } from "@mui/material";
 import {
   addInput,
@@ -12,23 +13,30 @@ import { CalculatorButton } from "../styles";
 import { evaluateExpression } from "../utils";
 import { useState } from "react";
 import FlexBox from "../../../../../components/shared/FlexBox";
+import { Action, State } from "../types";
 
-function MemoryButton({ value, state, dispatch }) {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const openMenu = (event) => setAnchorEl(event.currentTarget);
+type Props = {
+  state: State
+  dispatch: Dispatch<Action>;
+  value: string;
+}
+
+function MemoryButton({ value, state, dispatch }: Props) {
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const openMenu = (event: React.MouseEvent) => setAnchorEl(event.currentTarget as HTMLElement);
   const closeMenu = () => setAnchorEl(null);
 
   const handleMemory = (address) => () => {
     switch (value) {
       case MemoryOperation.ADD:
         if (state.evaled) {
-          dispatch(addMemory({ address, value: state.output }));
+          dispatch(addMemory(address, state.output));
         } else {
           const output = evaluateExpression(
             state.input.length === 0 ? { ...state, input: ["0"] } : state
           );
           dispatch(setOutput(output));
-          dispatch(addMemory({ address, value: output.value }));
+          dispatch(addMemory(address, output.value));
         }
         break;
       case MemoryOperation.REMOVE:
@@ -44,7 +52,7 @@ function MemoryButton({ value, state, dispatch }) {
     closeMenu();
   };
 
-  const handleClick = (event) => {
+  const handleClick = (event: React.MouseEvent) => {
     switch (value) {
       case MemoryOperation.ADD:
       case MemoryOperation.REMOVE:

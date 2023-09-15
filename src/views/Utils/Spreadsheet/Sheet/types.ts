@@ -1,3 +1,4 @@
+import { SheetAction } from "./actions";
 import Cell from "./models/Cell";
 import Highlight from "./models/Highlight";
 import StateContent from "./models/StateContent";
@@ -40,6 +41,6 @@ export type State = {
 };
 
 export type Action = {
-  type: string;
+  type: SheetAction;
   payload?: any;
 };

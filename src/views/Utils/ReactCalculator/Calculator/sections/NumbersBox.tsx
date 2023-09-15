@@ -1,11 +1,18 @@
-
+import React from "react";
 import CalcButton from "../components/CalcButton";
 import EvalButton from "../components/EvalButton";
 import ClearButton from "../components/ClearButton";
 import { backspace } from "../actions";
 import FlexBox from "../../../../../components/shared/FlexBox";
+import { Action, State } from "../types";
+import { Dispatch } from "react";
 
-const NumbersBox = ({ state, dispatch }) => {
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>
+}
+
+const NumbersBox = ({ state, dispatch }: Props) => {
   const numberGroups = [
     // ["(", ")", "%"],
     [7, 8, 9],
@@ -19,7 +26,6 @@ const NumbersBox = ({ state, dispatch }) => {
         <CalcButton state={state} dispatch={dispatch} value="(" />
         <CalcButton state={state} dispatch={dispatch} value=")" />
         <ClearButton
-          state={state}
           dispatch={dispatch}
           fn={backspace}
           display="DEL"
@@ -32,7 +38,7 @@ const NumbersBox = ({ state, dispatch }) => {
               key={number}
               state={state}
               dispatch={dispatch}
-              value={number}
+              value={String(number)}
             />
           ))}
         </FlexBox>

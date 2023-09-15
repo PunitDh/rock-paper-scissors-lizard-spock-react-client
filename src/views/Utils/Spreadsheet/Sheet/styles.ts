@@ -3,6 +3,7 @@ import { Paper, TableCell, TableCellProps } from "@mui/material";
 import { BorderType } from "./components/Toolbar/constants";
 import CellFormatting from "./models/CellFormatting";
 import { Theme as MuiTheme } from "@mui/material/styles";
+import { TextAlign } from "../../../../components/shared/styles";
 
 type HeaderItemProps = {
   selected: boolean;
@@ -44,7 +45,14 @@ const initialBorders = {
   borderLeft: BorderStyles.NO_BORDER,
 };
 
-const getBorder = (formatting: CellFormatting) => {
+type Borders = {
+  borderTop: string;
+  borderRight: string;
+  borderBottom: string;
+  borderLeft: string;
+};
+
+const getBorder = (formatting: CellFormatting): Borders => {
   switch (formatting.borderId) {
     case BorderType.BORDER_BOTTOM:
     case BorderType.BORDER_LEFT:
@@ -63,24 +71,24 @@ const getBorder = (formatting: CellFormatting) => {
       };
     case BorderType.OUTSIDE_BORDERS:
       return formatting.borderTypes?.reduce(
-        (borders: string[], cell: string) => {
+        (borders: Borders, borderPosition: string) => {
           return {
             ...borders,
-            [cell]: BorderStyles.THIN_BORDER,
+            [borderPosition]: BorderStyles.THIN_BORDER,
           };
         },
         initialBorders
-      );
+      ) as Borders;
     case BorderType.THICK_OUTSIDE_BORDERS:
       return formatting.borderTypes?.reduce(
-        (borders: string[], cell: string) => {
+        (borders: Borders, borderPosition: string) => {
           return {
             ...borders,
-            [cell]: BorderStyles.THICK_BORDER,
+            [borderPosition]: BorderStyles.THICK_BORDER,
           };
         },
         initialBorders
-      );
+      ) as Borders;
     case BorderType.NO_BORDER:
       return initialBorders;
     default:
@@ -111,10 +119,8 @@ export const getBorderProperties = (
 type ItemProps = {
   theme: MuiTheme;
   selected: boolean;
-  textalign: string;
+  textalign: TextAlign;
   formulacell: number;
-  tabIndex: number;
-  width: number;
   formatting: CellFormatting;
 } & TableCellProps;
 

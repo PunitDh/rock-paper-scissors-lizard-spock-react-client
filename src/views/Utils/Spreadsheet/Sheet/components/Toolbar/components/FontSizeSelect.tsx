@@ -6,7 +6,7 @@ import CellFormatting from "../../../models/CellFormatting";
 
 type Props = {
   state: CellFormatting;
-  onChange: (e: React.ChangeEvent) => void;
+  onChange: (text: string) => void;
 }
 
 const FontSizeSelect = ({ state, onChange }: Props) => (
@@ -17,7 +17,7 @@ const FontSizeSelect = ({ state, onChange }: Props) => (
     onChange={(e) => onChange(e.target.value)}
     value={state.fontSize || `12px`}
     size="small"
-    sx={formattingSelectStyle({ fontSize: state.fontSize })}
+    sx={formattingSelectStyle({ fontSize: state.fontSize! })}
   >
     {fontSizes.map((fontSize) => (
       <MenuItem

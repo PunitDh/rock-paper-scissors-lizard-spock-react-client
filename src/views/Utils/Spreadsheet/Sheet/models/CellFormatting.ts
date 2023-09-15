@@ -1,17 +1,21 @@
+import { NumberFormat } from "../components/Toolbar/constants";
+
 export default class CellFormatting {
-  // borderId?: string | null;
-  // borderTypes?: string[];
-  // decimals?: number;
-  // numberFormat?: string | null;
-  // backgroundColor?: string | undefined;
-  // color?: string | undefined;
-  // textAlign?: "left" | "right" | "center" | undefined;
+  borderId?: string | null;
+  borderTypes?: string[];
+  decimals?: number;
+  numberFormat?: NumberFormat;
+  backgroundColor?: string;
+  color?: string;
+  textAlign?: "left" | "right" | "center";
+  fontFamily?: string;
+  fontSize?: string;
 
   constructor({
     borderId = null,
     borderTypes = [],
     decimals = 0,
-    numberFormat = null,
+    numberFormat = undefined,
     backgroundColor = undefined,
     color = undefined,
     textAlign = undefined,
@@ -29,26 +33,16 @@ export default class CellFormatting {
     this.fontSize = fontSize;
   }
 
-  setFormatting({
-    borderId = null,
-    borderTypes = [],
-    decimals = 0,
-    numberFormat = null,
-    backgroundColor = undefined,
-    color = undefined,
-    textAlign = undefined,
-    fontFamily = undefined,
-    fontSize = undefined,
-  }) {
-    this.borderId = borderId || this.borderId;
-    this.borderTypes = borderTypes || this.borderTypes;
-    this.decimals = decimals || this.decimals;
-    this.numberFormat = numberFormat || this.numberFormat;
-    this.backgroundColor = backgroundColor || this.backgroundColor;
-    this.color = color || this.color;
-    this.textAlign = textAlign || this.textAlign;
-    this.fontFamily = fontFamily || this.fontFamily;
-    this.fontSize = fontSize || this.fontSize;
+  setFormatting(formatting: CellFormatting) {
+    this.borderId = formatting.borderId || this.borderId;
+    this.borderTypes = formatting.borderTypes || this.borderTypes;
+    this.decimals = formatting.decimals || this.decimals;
+    this.numberFormat = formatting.numberFormat || this.numberFormat;
+    this.backgroundColor = formatting.backgroundColor || this.backgroundColor;
+    this.color = formatting.color || this.color;
+    this.textAlign = formatting.textAlign || this.textAlign;
+    this.fontFamily = formatting.fontFamily || this.fontFamily;
+    this.fontSize = formatting.fontSize || this.fontSize;
 
     return this;
   }
@@ -72,7 +66,7 @@ export default class CellFormatting {
     return this;
   }
 
-  setNumberFormatting(numberFormat) {
+  setNumberFormatting(numberFormat: NumberFormat) {
     this.numberFormat = numberFormat;
     return this;
   }

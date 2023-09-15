@@ -1,8 +1,12 @@
 import styled from "@emotion/styled";
-import { Box, TextField, Typography } from "@mui/material";
+import { Box, TextField, Theme as MuiTheme, Typography } from "@mui/material";
 import FlexBox from "../../../components/shared/FlexBox";
 
-export const IndentedBox = styled(Box)(({ theme }) => ({
+type Props = {
+  theme: MuiTheme;
+};
+
+export const IndentedBox = styled(Box)(({ theme }: Props) => ({
   marginLeft: "auto",
   marginRight: "auto",
   width: "100%",
@@ -16,14 +20,20 @@ export const IndentedBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-export const ResponsiveFlexBox = styled(FlexBox)(({ theme, reversed }) => ({
-  alignItems: reversed ? "flex-start" : "center",
-  [theme.breakpoints.up("lg")]: {
-    alignItems: reversed ? "center" : "flex-start",
-  },
-}));
+type ResponsiveFlexBoxProps = {
+  reversed: boolean;
+} & Props;
 
-export const ResponsiveForm = styled.form(({ theme }) => ({
+export const ResponsiveFlexBox = styled(FlexBox)(
+  ({ theme, reversed }: ResponsiveFlexBoxProps) => ({
+    alignItems: reversed ? "flex-start" : "center",
+    [theme.breakpoints.up("lg")]: {
+      alignItems: reversed ? "center" : "flex-start",
+    },
+  })
+);
+
+export const ResponsiveForm = styled.form(({ theme }: Props) => ({
   display: "flex",
   flexDirection: "column",
   justifyContent: "flex-start",
@@ -38,7 +48,7 @@ export const ResponsiveForm = styled.form(({ theme }) => ({
   },
 }));
 
-export const ResponsiveTypography = styled(Typography)(({ theme }) => ({
+export const ResponsiveTypography = styled(Typography)(({ theme }: Props) => ({
   alignSelf: "center",
   textAlign: "center",
   fontWeight: "500",
@@ -48,7 +58,7 @@ export const ResponsiveTypography = styled(Typography)(({ theme }) => ({
   },
 }));
 
-export const ResponsiveTextField = styled(TextField)(({ theme }) => ({
+export const ResponsiveTextField = styled(TextField)(({ theme }: Props) => ({
   width: "100%",
   [theme.breakpoints.up("lg")]: {
     width: "60%",

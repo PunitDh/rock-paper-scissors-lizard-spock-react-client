@@ -1,12 +1,17 @@
-
+import React, { Dispatch } from "react";
 import AngleButton from "./AngleButton";
 import TrigButton from "./TrigButton";
 import { Sup } from "../../styles";
 import CalcButton from "../../components/CalcButton";
 import InvertedButton from "./InvertedButton";
 import FlexBox from "../../../../../../components/shared/FlexBox";
+import { Action, State } from "../../types";
 
-const ScientificBox = ({ state, dispatch }) => (
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+}
+const ScientificBox = ({ state, dispatch }: Props) => (
   <FlexBox width="100%" flexDirection="column" alignItems="flex-end">
     <FlexBox justifyContent="flex-end">
       <AngleButton value="Rad" state={state} dispatch={dispatch} />
@@ -43,7 +48,7 @@ const ScientificBox = ({ state, dispatch }) => (
     </FlexBox>
     <FlexBox justifyContent="flex-end">
       <CalcButton display={"π"} state={state} dispatch={dispatch} value={"π"} />
-      <TrigButton value="cos" invertedValue state={state} dispatch={dispatch} />
+      <TrigButton value="cos" state={state} dispatch={dispatch} />
       <InvertedButton
         display={"log"}
         state={state}
@@ -55,8 +60,8 @@ const ScientificBox = ({ state, dispatch }) => (
           </span>
         }
         invertedValue={"(10^"}
-        // operation={true}
-        // invertedOperation={true}
+      // operation={true}
+      // invertedOperation={true}
       />
     </FlexBox>
     <FlexBox justifyContent="flex-end">

@@ -1,6 +1,17 @@
+import React, { Dispatch } from "react";
 import { addInput, resetOutput, setInverseMode } from "../actions";
 import { Calc } from "../constants";
 import { CalculatorButton } from "../styles";
+import { Action, State } from "../types";
+
+type Props = {
+  value: string,
+  display?: string | JSX.Element,
+  state: State,
+  dispatch: Dispatch<Action>,
+  operation?: boolean,
+  invertedOperation?: boolean,
+}
 
 function CalcButton({
   value,
@@ -9,7 +20,7 @@ function CalcButton({
   dispatch,
   operation,
   invertedOperation,
-}) {
+}: Props) {
   const handleClick = () => {
     if (state.evaled) {
       dispatch(resetOutput());

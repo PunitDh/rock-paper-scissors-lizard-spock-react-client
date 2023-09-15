@@ -1,6 +1,7 @@
 import { CalculatorAction } from "./actions";
+import { State } from "./types";
 
-export const initialState = {
+export const initialState: State = {
   // input: "4sin(90)+8cos(10)+9tan(80)+4log(4)+2.5ln(5)+24atan(4)+14Ans+14E-4π-2√3",
   input: [],
   output: 0,
