@@ -85,13 +85,6 @@ export default class EventHandler {
       this.setFocusInput(false);
     }
 
-    console.log(
-      e.target.id,
-      "blurred",
-      cellId,
-      this.state.formulaTrackedCells.includes(cellId)
-    );
-
     const triggerRecalculation =
       isFormula((e.target as HTMLInputElement).value) ||
       this.state.formulaTrackedCells.includes(cellId);
@@ -111,6 +104,7 @@ export default class EventHandler {
         break;
       case KeyEvent.ESCAPE:
         this.dispatch(setFormulaMode(false));
+        (e.target as HTMLInputElement).blur();
         break;
       case KeyEvent.BACKSPACE:
         break;
@@ -120,7 +114,7 @@ export default class EventHandler {
         this.dispatch(setCellContent(cell.id, value));
         this.dispatch(setFormulaMode(false));
         triggerRecalculation && this.dispatch(recalculateFormulae());
-        // originalValue !== currentValue &&
+        
         this.dispatch(addMemento());
         this.dispatch(highlightCells(cell.id));
         this.dispatch(
@@ -175,13 +169,14 @@ export default class EventHandler {
    * @param {Event} e
    * @param {String} originalValue
    */
-  handleFormulaFieldKeyDown(e, originalValue) {
+  handleFormulaFieldKeyDown(e: React.KeyboardEvent, originalValue) {
     switch (e.key) {
       case KeyEvent.ESCAPE:
         this.dispatch(setFormulaMode(false));
         // setOriginalValue(originalValue);
         this.dispatch(setFormulaFieldText(originalValue));
-        e.target.blur();
+
+        (e.target as HTMLInputElement).blur();
         break;
       case KeyEvent.ENTER:
         e.stopPropagation();
@@ -359,7 +354,6 @@ export default class EventHandler {
         this.dispatch(addMemento());
         break;
       case KeyEvent.ENTER:
-        console.log(e.key);
         this.dispatch(setFormulaMode(false));
         if (
           this.state.content.data[this.state.selectedCell.id]?.isFormulaCell
@@ -385,7 +379,7 @@ export default class EventHandler {
         }
         break;
       default:
-        this.inputRef?.focus();
+        this.setFocusInput(true);
         break;
     }
   }
@@ -408,7 +402,7 @@ export default class EventHandler {
     this.dispatch(pasteCellContent(this.state.selectedCell.id, data));
   }
 
-  handleContextMenu(e) {
+  handleContextMenu(e: React.MouseEvent) {
     e.preventDefault();
     const element = document.getElementById(this.state.hovered);
     this.dispatch(openContextMenu(element));
@@ -418,7 +412,7 @@ export default class EventHandler {
     this.setFocusInput(true);
   }
 
-  handleMouseDown(e) {
+  handleMouseDown(e: React.MouseEvent) {
     if (e.button !== MouseButton.LEFT_CLICK) return;
     this.dispatch(setMouseDown(true));
 
@@ -764,7 +758,7 @@ export default class EventHandler {
     ];
     const currentValue = element.value.slice(0, end);
 
-    element.focus();
+    element.focus({ preventScroll: true });
 
     const isLastValueRange = this.#isLastValueRangeRegEx.test(currentValue);
     const isLastValueCell = this.#isLastValueCellRegEx.test(currentValue);

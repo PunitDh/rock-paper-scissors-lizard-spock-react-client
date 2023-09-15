@@ -41,7 +41,7 @@ function typeInTextField(id: string, newText: string, replace: boolean) {
     (el as HTMLInputElement).selectionStart,
     (el as HTMLInputElement).selectionEnd,
   ];
-  el.focus();
+  el.focus({ preventScroll: true });
   if (replace) {
     el.setRangeText(newText, 0, el.value.length, "preserve");
     return el.value;

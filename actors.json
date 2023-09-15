@@ -1,0 +1,480 @@
+{
+  "type": "_sheet",
+  "content": {
+    "rowHeights": {
+      "0": 24,
+      "1": 24,
+      "2": 24,
+      "3": 24,
+      "4": 24,
+      "5": 24,
+      "6": 24,
+      "7": 24,
+      "8": 24,
+      "9": 36.90625,
+      "10": 24,
+      "11": 24,
+      "12": 24
+    },
+    "columnWidths": {
+      "A": 80,
+      "B": 80,
+      "C": 143.7578125,
+      "D": 102.1484375,
+      "E": 94.9609375,
+      "F": 80,
+      "G": 158.90625,
+      "H": 80,
+      "I": 80,
+      "J": 80,
+      "K": 80,
+      "L": 80
+    },
+    "data": {
+      "A1": {
+        "id": "A1",
+        "value": null,
+        "previousValue": null,
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 0,
+          "numberFormat": null
+        },
+        "error": null
+      },
+      "B1": {
+        "id": "B1",
+        "value": null,
+        "previousValue": null,
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 0,
+          "numberFormat": null
+        },
+        "error": null
+      },
+      "A2": {
+        "id": "A2",
+        "value": null,
+        "previousValue": null,
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 0,
+          "numberFormat": null
+        },
+        "error": null
+      },
+      "C4": {
+        "id": "C4",
+        "value": null,
+        "previousValue": null,
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 0,
+          "numberFormat": null
+        },
+        "error": null
+      },
+      "E1": {
+        "id": "E1",
+        "value": "Characters",
+        "previousValue": "Characters",
+        "formula": "",
+        "previousFormula": "",
+        "referenceCells": [],
+        "display": "Characters",
+        "formatting": {
+          "borderId": "THICK_OUTSIDE_BORDERS",
+          "borderTypes": [
+            "borderTop",
+            "borderBottom",
+            "borderLeft"
+          ],
+          "decimals": 0,
+          "numberFormat": null,
+          "fontSize": "16px",
+          "fontWeight": "bold"
+        },
+        "error": null
+      },
+      "F4": {
+        "id": "F4",
+        "value": "Sean Astin",
+        "previousValue": "Sean Astin",
+        "formula": "",
+        "previousFormula": "",
+        "referenceCells": [],
+        "display": "Sean Astin",
+        "formatting": {
+          "borderId": "THICK_OUTSIDE_BORDERS",
+          "borderTypes": [
+            "borderRight"
+          ],
+          "decimals": 0,
+          "numberFormat": null
+        },
+        "error": null
+      },
+      "E2": {
+        "id": "E2",
+        "value": "Frodo",
+        "previousValue": "Frodo",
+        "formula": "",
+        "previousFormula": "",
+        "referenceCells": [],
+        "display": "Frodo",
+        "formatting": {
+          "borderId": "THICK_OUTSIDE_BORDERS",
+          "borderTypes": [
+            "borderLeft"
+          ],
+          "decimals": 0,
+          "numberFormat": null,
+          "fontWeight": "normal"
+        },
+        "error": null
+      },
+      "E3": {
+        "id": "E3",
+        "value": "Aragorn",
+        "previousValue": "Aragorn",
+        "formula": "",
+        "previousFormula": "",
+        "referenceCells": [],
+        "display": "Aragorn",
+        "formatting": {
+          "borderId": "THICK_OUTSIDE_BORDERS",
+          "borderTypes": [
+            "borderLeft"
+          ],
+          "decimals": 0,
+          "numberFormat": null
+        },
+        "error": null
+      },
+      "C9": {
+        "id": "C9",
+        "value": "Enter Character",
+        "previousValue": "Enter Character",
+        "formula": "",
+        "previousFormula": "",
+        "referenceCells": [],
+        "display": "Enter Character",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 0,
+          "numberFormat": null,
+          "textAlign": "right",
+          "fontSize": "18px",
+          "fontWeight": "bold"
+        },
+        "error": null
+      },
+      "D9": {
+        "id": "D9",
+        "value": "Gandalf",
+        "previousValue": "Gandalf",
+        "formula": "",
+        "previousFormula": "",
+        "referenceCells": [],
+        "display": "Gandalf",
+        "formatting": {
+          "borderId": "THICK_OUTSIDE_BORDERS",
+          "borderTypes": [
+            "borderTop",
+            "borderBottom",
+            "borderLeft",
+            "borderRight"
+          ],
+          "decimals": 0,
+          "numberFormat": null,
+          "color": "#1b0ce9",
+          "textAlign": "center",
+          "fontSize": "18px"
+        },
+        "error": null
+      },
+      "F9": {
+        "id": "F9",
+        "value": "Actor",
+        "previousValue": "Actor",
+        "formula": "",
+        "previousFormula": "",
+        "referenceCells": [],
+        "display": "Actor",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 0,
+          "numberFormat": null,
+          "textAlign": "right",
+          "fontSize": "16px",
+          "fontWeight": "bold"
+        },
+        "error": null
+      },
+      "G9": {
+        "id": "G9",
+        "value": "",
+        "previousValue": "",
+        "formula": "",
+        "previousFormula": "",
+        "referenceCells": [
+          "E2",
+          "E3",
+          "E4",
+          "E5",
+          "E6",
+          "E7",
+          "F2",
+          "F3",
+          "F4",
+          "F5",
+          "F6",
+          "F7",
+          "D9"
+        ],
+        "display": "",
+        "formatting": {
+          "borderId": "THICK_OUTSIDE_BORDERS",
+          "borderTypes": [
+            "borderTop",
+            "borderBottom",
+            "borderLeft",
+            "borderRight"
+          ],
+          "decimals": 0,
+          "numberFormat": null,
+          "color": "#ea0606",
+          "textAlign": "center",
+          "fontSize": "18px"
+        },
+        "error": null
+      },
+      "D1": {
+        "id": "D1",
+        "value": "",
+        "previousValue": "",
+        "formula": "",
+        "previousFormula": "",
+        "referenceCells": [],
+        "display": "",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 0,
+          "numberFormat": null
+        },
+        "error": null
+      },
+      "F1": {
+        "id": "F1",
+        "value": "Actors",
+        "previousValue": "Actors",
+        "formula": "",
+        "previousFormula": "",
+        "referenceCells": [],
+        "display": "Actors",
+        "formatting": {
+          "borderId": "THICK_OUTSIDE_BORDERS",
+          "borderTypes": [
+            "borderTop",
+            "borderBottom",
+            "borderRight"
+          ],
+          "decimals": 0,
+          "numberFormat": null,
+          "fontSize": "16px",
+          "fontWeight": "bold"
+        },
+        "error": null
+      },
+      "E4": {
+        "id": "E4",
+        "value": "Samwise",
+        "previousValue": "Samwise",
+        "formula": "",
+        "previousFormula": "",
+        "referenceCells": [],
+        "display": "Samwise",
+        "formatting": {
+          "borderId": "THICK_OUTSIDE_BORDERS",
+          "borderTypes": [
+            "borderLeft"
+          ],
+          "decimals": 0,
+          "numberFormat": null
+        },
+        "error": null
+      },
+      "E5": {
+        "id": "E5",
+        "value": "Legolas",
+        "previousValue": "Legolas",
+        "formula": "",
+        "previousFormula": "",
+        "referenceCells": [],
+        "display": "Legolas",
+        "formatting": {
+          "borderId": "THICK_OUTSIDE_BORDERS",
+          "borderTypes": [
+            "borderLeft"
+          ],
+          "decimals": 0,
+          "numberFormat": null
+        },
+        "error": null
+      },
+      "E6": {
+        "id": "E6",
+        "value": "Pippin",
+        "previousValue": "Pippin",
+        "formula": "",
+        "previousFormula": "",
+        "referenceCells": [],
+        "display": "Pippin",
+        "formatting": {
+          "borderId": "THICK_OUTSIDE_BORDERS",
+          "borderTypes": [
+            "borderLeft"
+          ],
+          "decimals": 0,
+          "numberFormat": null
+        },
+        "error": null
+      },
+      "E7": {
+        "id": "E7",
+        "value": "Gandalf",
+        "previousValue": "Gandalf",
+        "formula": "",
+        "previousFormula": "",
+        "referenceCells": [],
+        "display": "Gandalf",
+        "formatting": {
+          "borderId": "THICK_OUTSIDE_BORDERS",
+          "borderTypes": [
+            "borderBottom",
+            "borderLeft"
+          ],
+          "decimals": 0,
+          "numberFormat": null
+        },
+        "error": null
+      },
+      "F2": {
+        "id": "F2",
+        "value": "Elijah Wood",
+        "previousValue": "Elijah Wood",
+        "formula": "",
+        "previousFormula": "",
+        "referenceCells": [],
+        "display": "Elijah Wood",
+        "formatting": {
+          "borderId": "THICK_OUTSIDE_BORDERS",
+          "borderTypes": [
+            "borderRight"
+          ],
+          "decimals": 0,
+          "numberFormat": null
+        },
+        "error": null
+      },
+      "F3": {
+        "id": "F3",
+        "value": "Viggo Mortensen",
+        "previousValue": "Viggo Mortensen",
+        "formula": "",
+        "previousFormula": "",
+        "referenceCells": [],
+        "display": "Viggo Mortensen",
+        "formatting": {
+          "borderId": "THICK_OUTSIDE_BORDERS",
+          "borderTypes": [
+            "borderRight"
+          ],
+          "decimals": 0,
+          "numberFormat": null
+        },
+        "error": null
+      },
+      "F5": {
+        "id": "F5",
+        "value": "Orlando Bloom",
+        "previousValue": "Orlando Bloom",
+        "formula": "",
+        "previousFormula": "",
+        "referenceCells": [],
+        "display": "Orlando Bloom",
+        "formatting": {
+          "borderId": "THICK_OUTSIDE_BORDERS",
+          "borderTypes": [
+            "borderRight"
+          ],
+          "decimals": 0,
+          "numberFormat": null
+        },
+        "error": null
+      },
+      "F6": {
+        "id": "F6",
+        "value": "Billy Boyd",
+        "previousValue": "Billy Boyd",
+        "formula": "",
+        "previousFormula": "",
+        "referenceCells": [],
+        "display": "Billy Boyd",
+        "formatting": {
+          "borderId": "THICK_OUTSIDE_BORDERS",
+          "borderTypes": [
+            "borderRight"
+          ],
+          "decimals": 0,
+          "numberFormat": null
+        },
+        "error": null
+      },
+      "F7": {
+        "id": "F7",
+        "value": "Ian McKellen",
+        "previousValue": "Ian McKellen",
+        "formula": "",
+        "previousFormula": "",
+        "referenceCells": [],
+        "display": "Ian McKellen",
+        "formatting": {
+          "borderId": "THICK_OUTSIDE_BORDERS",
+          "borderTypes": [
+            "borderBottom",
+            "borderRight"
+          ],
+          "decimals": 0,
+          "numberFormat": null
+        },
+        "error": null
+      }
+    },
+    "namedRanges": {}
+  }
+}

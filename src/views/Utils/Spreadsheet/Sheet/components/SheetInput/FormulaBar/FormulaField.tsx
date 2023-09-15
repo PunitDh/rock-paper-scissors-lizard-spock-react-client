@@ -1,4 +1,4 @@
-import React, { Dispatch, useCallback, useEffect, useMemo, useState } from "react";
+import React, { Dispatch, useCallback, useEffect } from "react";
 import {
   addMemento,
   deleteCellContent,
@@ -8,58 +8,33 @@ import {
   setFormulaFieldFocused,
   setFormulaFieldText,
   setFormulaMode,
-} from "../../actions";
-import { isFormula } from "../../utils/cellUtils";
-import { FieldButton, FlexForm, InputTextField } from "../styles";
+} from "../../../actions";
+import { isFormula } from "../../../utils/cellUtils";
+import { FieldButton, FlexForm, InputTextField } from "../../styles";
 import { Check, Clear } from "@mui/icons-material";
-import useEventHandler from "../../hooks/useEventHandler";
-import { Action, State } from "../../types";
+import { Action, State } from "../../../types";
+import useEventHandler from "../../../hooks/useEventHandler";
 
 type Props = {
   state: State;
-  dispatch: Dispatch<Action>
+  dispatch: Dispatch<Action>;
+  originalValue: string;
+  value: string;
 }
 
-const FormulaField = ({ state, dispatch }: Props) => {
+const FormulaField = ({ state, dispatch, originalValue, value }: Props) => {
   const eventHandler = useEventHandler();
-  const value = useMemo<string>(
-    () => {
-      const selectedCell = state.content.data[state.selectedCell.id]
-      return state.formulaFieldText ||
-        selectedCell?.formula ||
-        selectedCell?.value ||
-        ""
-    },
-    [state.content.data, state.formulaFieldText, state.selectedCell.id]
-  );
 
-  const [originalValue, setOriginalValue] = useState(value);
-
-  const inputRef = useCallback(
+  const formulaFieldRef = useCallback(
     (node: HTMLInputElement) => eventHandler.setFormulaFieldRef(node),
     [eventHandler]
   );
 
-  useEffect(() => {
-    setOriginalValue(value);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.selectedCell.id]);
-
-  useEffect(() => {
-    if (state.isFormulaFieldFocused && !state.menuAnchorElement) {
-      eventHandler.formulaFieldRef?.focus();
-    }
-  }, [
-    eventHandler.formulaFieldRef,
-    state.isFormulaFieldFocused,
-    state.menuAnchorElement,
-  ]);
-
-  const handleContextMenu = (e) => eventHandler.handleContextMenu(e);
-  const handleKeyDown = (e) =>
+  const handleContextMenu = (e: React.MouseEvent) => eventHandler.handleContextMenu(e);
+  const handleKeyDown = (e: React.KeyboardEvent) =>
     eventHandler.handleFormulaFieldKeyDown(e, originalValue);
-  const handleSubmit = (e) => eventHandler.handleFormulaFieldSubmit(e);
-  const handleBlur = (e) =>
+  const handleSubmit = (e: React.FormEvent) => eventHandler.handleFormulaFieldSubmit(e);
+  const handleBlur = (e: React.FocusEvent) =>
     eventHandler.handleFormulaFieldBlur(e, originalValue);
 
   const resetField = () => {
@@ -120,7 +95,7 @@ const FormulaField = ({ state, dispatch }: Props) => {
       </FieldButton>
       <input type="submit" style={{ display: "none" }} />
       <InputTextField
-        ref={inputRef}
+        ref={formulaFieldRef}
         name="formulaFieldText"
         type="text"
         value={value}

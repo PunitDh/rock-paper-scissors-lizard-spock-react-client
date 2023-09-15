@@ -14,6 +14,7 @@ const FontFamilySelect = ({ state, onChange }: Props) => {
   const [fonts, setFonts] = useState<string[]>(["Sans-serif"]);
 
   useEffect(() => {
+    console.log("Get fonts hook triggered");
     getFonts().then((data) =>
       setFonts((fonts) => [...new Set(fonts.concat(data).sort())])
     );

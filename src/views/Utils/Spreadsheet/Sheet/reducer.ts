@@ -433,7 +433,7 @@ export const reducer = (state: State, action: Action) => {
       };
     }
     case SheetAction.RECALCULATE_FORMULAE: {
-      console.log("Recalculation triggered");
+      // console.log("Recalculation triggered");
       const formulaCells: CellData[] = Object.values(state.content.data)
         .filter((cellData) => (cellData as CellData).isFormulaCell)
         .map((cellData) => (cellData as CellData).evaluate(state.content.data));
@@ -461,7 +461,7 @@ export const reducer = (state: State, action: Action) => {
             : new Cell(last).getOffset(1, 0)
         )!;
 
-        const cellData = CellData.getOrNew1(state.content.data, offset.id);
+        const cellData = CellData.getOrNew(state.content.data, offset.id);
 
         return {
           ...state,
@@ -490,10 +490,9 @@ export const reducer = (state: State, action: Action) => {
         state.formulaTrackedCells
       );
 
-      const cellData = CellData.getOrNew(
-        state.content.data[cellId],
-        cellId
-      ).setValue(value);
+      const cellData = CellData.getOrNew(state.content.data, cellId).setValue(
+        value
+      );
 
       return {
         ...state,
@@ -527,7 +526,7 @@ export const reducer = (state: State, action: Action) => {
           );
 
       const cellData = CellData.getOrNew(
-        state.content.data[action.payload.cell],
+        state.content.data,
         action.payload.cell
       );
 
@@ -549,7 +548,7 @@ export const reducer = (state: State, action: Action) => {
       };
     case SheetAction.SET_CELL_FORMATTING: {
       const cellData = CellData.getOrNew(
-        state.content.data[state.selectedCell.id],
+        state.content.data,
         state.selectedCell.id
       );
 
@@ -571,10 +570,7 @@ export const reducer = (state: State, action: Action) => {
           stateContentData: StateContentData,
           cellId: string
         ): StateContentData => {
-          const cellData = CellData.getOrNew(
-            state.content.data[cellId],
-            state.selectedCell.id
-          );
+          const cellData = CellData.getOrNew(state.content.data, cellId);
           return {
             ...stateContentData,
             [cellId]: cellData.setFormatting(action.payload),
@@ -593,7 +589,7 @@ export const reducer = (state: State, action: Action) => {
 
     case SheetAction.SET_CELL_BORDER_FORMATTING: {
       const cellData = CellData.getOrNew(
-        state.content.data[state.selectedCell.id],
+        state.content.data,
         state.selectedCell.id
       );
 
@@ -614,7 +610,7 @@ export const reducer = (state: State, action: Action) => {
     case SheetAction.SET_CELL_BORDER_FORMATTING_BULK: {
       const formattedData = state.highlighted.cells.reduce(
         (stateContentData: StateContentData, cellId: string) => {
-          const cellData = CellData.getOrNew1(state.content.data, cellId);
+          const cellData = CellData.getOrNew(state.content.data, cellId);
           return {
             ...stateContentData,
             [cellId]: cellData
@@ -656,7 +652,7 @@ export const reducer = (state: State, action: Action) => {
             stateContentData: StateContentData,
             cellId: string
           ): StateContentData => {
-            const cellData = CellData.getOrNew1(stateContentData, cellId);
+            const cellData = CellData.getOrNew(stateContentData, cellId);
             return {
               ...stateContentData,
               [cellId]: cellData.addBorderFormatting(action.payload, border),
@@ -713,7 +709,7 @@ export const reducer = (state: State, action: Action) => {
           },
         };
       } else {
-        const selectedCellData = CellData.getOrNew1(
+        const selectedCellData = CellData.getOrNew(
           state.content.data,
           state.selectedCell.id
         );

@@ -83,9 +83,10 @@ const Toolbar = ({ state, dispatch }) => {
 
   useEffect(() => {
     setSelectedFormatting(stateCellFormatting);
+    console.log("stateCellFormatting hook triggered");
   }, [stateCellFormatting]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
   };
 

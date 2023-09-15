@@ -1,43 +1,45 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { FlexForm, SmallInputField } from "../styles";
-import useEventHandler from "../../hooks/useEventHandler";
-import { State } from "../../types";
+import { FlexForm, SmallInputField } from "../../styles";
+import useEventHandler from "../../../hooks/useEventHandler";
+import { State } from "../../../types";
 
 type Props = {
   state: State
 }
 
 const CellSelector = ({ state }: Props) => {
-  const eventHandler = useEventHandler();
-  const cellInputValue = useMemo(
+  const { id: selectedId } = state.selectedCell;
+  const cellSelectorValue = useMemo(
     () =>
       state.highlighted.hasLength && state.mouseDown
         ? `${state.highlighted.rows.length}R × ${state.highlighted.columns.length}C`
-        : state.selectedCell.id,
-    [state.highlighted.columns.length, state.highlighted.hasLength, state.highlighted.rows.length, state.mouseDown, state.selectedCell.id]
+        : selectedId,
+    [state.highlighted.columns.length, state.highlighted.hasLength, state.highlighted.rows.length, state.mouseDown, selectedId]
   );
 
-  const [currentCellInputValue, setCurrentCellInputValue] =
-    useState(cellInputValue);
+  const eventHandler = useEventHandler();
+  const [currentCellSelectorValue, setCurrentCellSelectorValue] =
+    useState(cellSelectorValue);
   const handleSelectCellSubmit = (e: React.FormEvent) => eventHandler.handleSelectCellSubmit(e);
 
   const handleSelectCell = (e: React.ChangeEvent) => {
     const value = (e.target as HTMLInputElement).value;
     e.preventDefault();
-    setCurrentCellInputValue(value);
+    setCurrentCellSelectorValue(value);
     eventHandler.handleSelectCell(value);
   };
 
   useEffect(() => {
-    setCurrentCellInputValue(state.selectedCell.id);
-  }, [state.selectedCell.id]);
+    setCurrentCellSelectorValue(selectedId);
+    console.log("Cell selector current input value hook triggered");
+  }, [selectedId]);
 
   return (
     <FlexForm paddingRight="0rem" onSubmit={handleSelectCellSubmit}>
       <SmallInputField
         name="currentCell"
         type="text"
-        value={currentCellInputValue}
+        value={currentCellSelectorValue}
         onChange={handleSelectCell}
         autoComplete="off"
         id="current-cell"
