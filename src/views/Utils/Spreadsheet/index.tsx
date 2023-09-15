@@ -1,9 +1,10 @@
+import React from "react";
 import PageContainer from "../../../components/container/PageContainer";
 import Sheet from "./Sheet";
 
 export default function Spreadsheet() {
   return (
-    <PageContainer title="Spreadsheet">
+    <PageContainer title="Spreadsheet" description="React-based spreadsheet">
       <Sheet
         maxColumns={12}
         maxRows={12}
@@ -11,8 +12,8 @@ export default function Spreadsheet() {
         toolbar={true}
         formulaField={true}
         statusField={true}
-        maxDisplayColumns={12}
-        maxDisplayRows={12}
+        // maxDisplayColumns={12}
+        // maxDisplayRows={12}
         initialData={{
           A1: 34,
           B1: 45,

@@ -35,21 +35,11 @@ const Sheet = ({
     )
   );
 
-  // const eventHandler = useEventHandler();
-
   useEffect(() => {
     console.log("Sheet recalculation hook triggered");
     dispatch(recalculateFormulae());
     dispatch(addMemento());
   }, []);
-
-  // useEffect(() => {
-  //   console.log("Formula field focus hook triggered");
-
-  //   if ((state as State).isFormulaFieldFocused) {
-  //     eventHandler.formulaFieldRef?.focus({ preventScroll: true });
-  //   }
-  // }, [eventHandler.formulaFieldRef, state]);
 
   return (
     <EventProvider state={state as State} dispatch={dispatch}>

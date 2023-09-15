@@ -318,6 +318,8 @@ export default class EventHandler {
     let nextCell: Cell;
     const { cellAnchor } = this.state.highlighted;
 
+    this.inputRef?.focus();
+
     switch (e.key) {
       case KeyEvent.LOWERCASE_A:
         if (this.isCtrlKeyPressed(e)) {
@@ -379,7 +381,9 @@ export default class EventHandler {
         }
         break;
       default:
+        console.log("Here");
         this.setFocusInput(true);
+        // this.inputRef?.focus({ preventScroll: true });
         break;
     }
   }
@@ -740,6 +744,8 @@ export default class EventHandler {
           highlighted.hasLength &&
             !this.state.dragging &&
             this.dispatch(resetHighlight());
+          this.setFocusInput(false);
+          // this.inputRef?.blur();
           this.dispatch(selectCell(id));
           this.dispatch(highlightCells(id));
         }
