@@ -14,16 +14,33 @@ export const TokenProvider = ({ children }: Props) => {
   const token = (useSelector((state) => (state as any).player).token as string);
   const dispatch = useDispatch();
 
-  return (
-    <TokenContext.Provider
-      value={{
-        jwt: token,
-        decoded: jwtDecode(token),
-        set: (token) => dispatch(setToken(token)),
-        clear: () => dispatch(clearToken()),
-      }}
-    >
-      {children}
-    </TokenContext.Provider>
-  );
+  try {
+    return (
+      <TokenContext.Provider
+        value={{
+          jwt: token,
+          decoded: jwtDecode(token),
+          set: (token) => dispatch(setToken(token)),
+          clear: () => dispatch(clearToken()),
+        }}
+      >
+        {children}
+      </TokenContext.Provider>
+    );
+  } catch {
+    return (
+      <TokenContext.Provider
+        value={{
+          jwt: undefined,
+          decoded: undefined,
+          set: (token) => dispatch(setToken(token)),
+          clear: () => dispatch(clearToken()),
+        }}
+      >
+        {children}
+      </TokenContext.Provider>
+    )
+  }
+
+  
 };

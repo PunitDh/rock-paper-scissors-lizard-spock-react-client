@@ -7,7 +7,7 @@ interface API {}
 
 export type Token = {
   jwt?: string;
-  decoded?: Decoded;
+  decoded?: Decoded | undefined;
   set?: (token: string) => void;
   clear?: () => void;
 };

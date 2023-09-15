@@ -60,7 +60,7 @@ export default function useAPI() {
     notification.error(data.payload);
     if (data.code === 401) {
       console.log("It's the API");
-      navigate(AuthPage.loginWithReferrer());
+      navigate(AuthPage.LOGIN_PAGE);
     }
   };
 
