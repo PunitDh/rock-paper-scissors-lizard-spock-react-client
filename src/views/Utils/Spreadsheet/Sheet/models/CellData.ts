@@ -129,6 +129,7 @@ export default class CellData {
       this.value = value;
       this.setDisplay();
       this.formula = "";
+      this.referenceCells = [];
     }
     return this;
   }
