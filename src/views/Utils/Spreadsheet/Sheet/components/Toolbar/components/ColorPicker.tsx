@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { FieldButton } from "../../styles";
 import { useRef } from "react";
 import { Box, rgbToHex } from "@mui/material";
+import CellFormatting from "../../../models/CellFormatting";
 
 const Input = styled.input({
   width: "1.25rem",
@@ -16,18 +17,25 @@ const Input = styled.input({
   left: "-1.1rem",
 });
 
+type Props = {
+  Icon: any
+  stateCellFormatting: CellFormatting
+  onChange: (color: string) => any
+  property: string
+  defaultValue: string
+}
+
 const ColorPicker = ({
   Icon,
   stateCellFormatting,
   onChange,
   property,
   defaultValue,
-}) => {
+}: Props) => {
+  const style = stateCellFormatting?.styles && stateCellFormatting?.styles[property];
   const inputRef = useRef<HTMLInputElement>(null);
-  const isRgb = /^rgb/g.test(stateCellFormatting[property]);
-  const value = isRgb
-    ? rgbToHex(stateCellFormatting[property])
-    : stateCellFormatting[property];
+  const isRgb = /^rgb/g.test(style);
+  const value = isRgb ? rgbToHex(style) : style;
 
   const handleClick = (e: React.MouseEvent) => () => inputRef.current?.click()
 

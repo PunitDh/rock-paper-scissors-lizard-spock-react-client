@@ -15,14 +15,14 @@ const FontSizeSelect = ({ state, onChange }: Props) => (
     id={"font-size-selector"}
     name="fontSizeSelector"
     onChange={(e) => onChange(e.target.value)}
-    value={state.fontSize || `12px`}
+    value={state.styles?.fontSize || `12px`}
     size="small"
-    sx={formattingSelectStyle({ fontSize: state.fontSize! })}
+    sx={formattingSelectStyle({ fontSize: state.styles?.fontSize! })}
   >
     {fontSizes.map((fontSize) => (
       <MenuItem
         sx={{ fontSize }}
-        selected={state.fontSize === fontSize}
+        selected={state.styles?.fontSize === fontSize}
         key={fontSize}
         value={fontSize}
       >

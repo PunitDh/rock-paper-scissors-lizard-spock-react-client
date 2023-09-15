@@ -32,21 +32,28 @@ type InputFieldProps =
   }
 
 
-const InputField = styled.input(({ width, height, isfocused, formatting }: InputFieldProps) => ({
-  width: `${width}px`,
-  height: `${height}px`,
-  borderRadius: 0,
-  outline: "none",
-  border: "2px solid blue",
-  cursor: "cell",
-  padding: "1px",
-  ...formatting,
-  backgroundColor: isfocused ? "white" : formatting?.backgroundColor || "transparent",
-  color: isfocused ? "black" : formatting?.color || "transparent",
-  "&:focus": {
-    cursor: "text",
-  },
-}));
+const InputField = styled.input(({ width, height, isfocused, formatting }: InputFieldProps) => {
+  console.log(formatting );
+  return {
+    width: `${width}px`,
+    height: `${height}px`,
+    borderRadius: 0,
+    outline: "none",
+    border: "2px solid blue",
+    cursor: "cell",
+    padding: "1px",
+    ...formatting?.styles,
+    backgroundColor: formatting?.styles?.backgroundColor || "transparent",
+    color: formatting?.styles?.color || "transparent",
+    // backgroundColor: isfocused ? "white" : formatting?.styles?.backgroundColor || "transparent",
+    // color: isfocused ? "black" : formatting?.styles?.color || "transparent",
+    "&:focus": {
+      cursor: "text",
+    },
+  }
+}
+
+);
 
 type Props = {
   state: State
@@ -102,6 +109,11 @@ const CellInput = ({ state, dispatch, position, cell, value }: Props): JSX.Eleme
     navigateRef.current = false;
   };
 
+  const formatting = !(state.content.data[cell.id]?.formula?.length as number > 0) ?
+    state.content.data[cell.id]?.formatting : undefined
+
+  console.log(cell.id, { formatting });
+
   return (
     <Container top={position.cellInput.top} left={position.cellInput.left}>
       <InputField
@@ -119,10 +131,7 @@ const CellInput = ({ state, dispatch, position, cell, value }: Props): JSX.Eleme
         onFocus={handleFocus}
         onContextMenu={handleContextMenu}
         onClick={handleClick}
-        formatting={
-          !(state.content.data[cell.id]?.formula?.length as number > 0) ?
-            state.content.data[cell.id]?.formatting : undefined
-        }
+        formatting={formatting}
       />
     </Container>
   );

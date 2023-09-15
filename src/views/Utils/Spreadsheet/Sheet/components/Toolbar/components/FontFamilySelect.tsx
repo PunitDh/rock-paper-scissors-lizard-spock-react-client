@@ -26,16 +26,16 @@ const FontFamilySelect = ({ state, onChange }: Props) => {
       id={"font-selector"}
       name="fontSelector"
       onChange={(e) => onChange(e.target.value)}
-      value={state.fontFamily || "Sans-serif"}
+      value={state.styles?.fontFamily || "Sans-serif"}
       size="small"
       sx={formattingSelectStyle({
-        fontFamily: state.fontFamily!,
+        fontFamily: state.styles?.fontFamily!,
       })}
     >
       {fonts.map((fontFamily) => (
         <MenuItem
           sx={{ fontFamily }}
-          selected={state.fontFamily === fontFamily}
+          selected={state.styles?.fontFamily === fontFamily}
           key={fontFamily}
           value={fontFamily}
         >

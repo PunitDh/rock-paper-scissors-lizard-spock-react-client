@@ -207,19 +207,19 @@ const Toolbar = ({ state, dispatch }) => {
         <FlexBox gap="0.2rem" justifyContent="flex-start" alignItems="center">
           <FormattingButton
             title={"Bold"}
-            isActive={selectedFormatting.fontWeight === "bold"}
+            isActive={selectedFormatting.styles?.fontWeight === "bold"}
             onClick={toggleBold}
             Icon={FormatBold}
           />
           <FormattingButton
             title={"Italics"}
-            isActive={selectedFormatting.fontStyle === "italic"}
+            isActive={selectedFormatting.styles?.fontStyle === "italic"}
             onClick={toggleItalic}
             Icon={FormatItalic}
           />
           <FormattingButton
             title={"Underline"}
-            isActive={selectedFormatting.textDecoration === "underline"}
+            isActive={selectedFormatting.styles?.textDecoration === "underline"}
             onClick={toggleUnderline}
             Icon={FormatUnderlined}
           />
@@ -239,19 +239,19 @@ const Toolbar = ({ state, dispatch }) => {
           />
           <FormattingButton
             title={"Align left"}
-            isActive={selectedFormatting.textAlign === "left"}
+            isActive={selectedFormatting.styles?.textAlign === "left"}
             onClick={setTextAlign("left")}
             Icon={FormatAlignLeft}
           />
           <FormattingButton
             title={"Align center"}
-            isActive={selectedFormatting.textAlign === "center"}
+            isActive={selectedFormatting.styles?.textAlign === "center"}
             onClick={setTextAlign("center")}
             Icon={FormatAlignCenter}
           />
           <FormattingButton
             title={"Align right"}
-            isActive={selectedFormatting.textAlign === "right"}
+            isActive={selectedFormatting.styles?.textAlign === "right"}
             onClick={setTextAlign("right")}
             Icon={FormatAlignRight}
           />

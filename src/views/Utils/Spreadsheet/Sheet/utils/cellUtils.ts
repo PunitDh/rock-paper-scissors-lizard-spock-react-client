@@ -6,6 +6,7 @@ import { initialState } from "../reducer";
 import StateContent from "../models/StateContent";
 import { isObject, isString } from "../../../../../utils";
 import { State } from "../types";
+import StateContentData from "../models/StateContentData";
 
 export const generateClipboardContent = (state: {
   highlighted: { rows: any[]; columns: any[] };
@@ -29,9 +30,26 @@ export const generateClipboardContent = (state: {
 };
 
 export const generateJSONContent = (state: State): string => {
-  const { content } = state;
   const type = FILE_TYPE;
-  return JSON.stringify({ type, content }, null, 2);
+  const { content } = state;
+  const { data } = content;
+  const filtered = Object.keys(data).reduce(
+    (acc: StateContentData, cur: string) => {
+      if (String((data[cur] as CellData)?.value)?.length > 0) {
+        return {
+          ...acc,
+          [cur]: data[cur],
+        } as StateContentData;
+      }
+      return acc as StateContentData;
+    },
+    {} as StateContentData
+  );
+  const filteredContent = {
+    ...content,
+    data: filtered,
+  };
+  return JSON.stringify({ type, content: filteredContent }, null, 2);
 };
 
 function typeInTextField(id: string, newText: string, replace: boolean) {
@@ -200,4 +218,12 @@ const generateInitialContent = (
 
 export const isFormula = (value: string | null) => {
   return Boolean(value?.startsWith("="));
+};
+
+export const getWidth = (id: string): string | undefined => {
+  const element = document.getElementById(id);
+  if (element) {
+    return window.getComputedStyle(element).width;
+  }
+  return undefined;
 };

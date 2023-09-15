@@ -139,12 +139,12 @@ export const Item = styled(TableCell)(({
     formatting
   );
   return {
-    ...formatting,
+    ...formatting.styles,
     backgroundColor: selected
       ? theme.palette.primary.light
-      : formatting.backgroundColor || "#fff",
-    color: formatting.color || theme.palette.text.secondary,
-    textAlign: formatting.textAlign || textalign,
+      : formatting.styles?.backgroundColor || "#fff",
+    color: formatting.styles?.color || theme.palette.text.secondary,
+    textAlign: formatting.styles?.textAlign || textalign,
     ...borderProperties,
     borderRadius: 0,
     cursor: "cell",

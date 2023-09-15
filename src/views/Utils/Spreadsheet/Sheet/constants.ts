@@ -40,10 +40,10 @@ export const Calc = Object.freeze({
   OPERATIONS: ["+", "-", "*", "/", "^"],
 });
 
-export const Dimension = Object.freeze({
-  ROW: "row",
-  COLUMN: "column",
-});
+export enum Dimension {
+  ROW = "row",
+  COLUMN = "column",
+}
 
 export const FILE_TYPE = "_sheet";
 

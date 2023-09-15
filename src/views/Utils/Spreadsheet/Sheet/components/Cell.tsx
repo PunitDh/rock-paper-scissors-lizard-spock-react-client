@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { memo } from "react";
 import { Item } from "../styles";
 import CellFormatting from "../models/CellFormatting";
 import { isNumber } from "../../../../../utils";
 import { baselightTheme } from "../../../../../theme/DefaultColors";
+import { SheetConfig } from "../constants";
+import { getWidth } from "../utils/cellUtils";
 
 type CellProps = {
   id: string
@@ -14,8 +16,8 @@ type CellProps = {
   maxRows: number
   value: string
   display: string
-  width: number
-  formatting: CellFormatting
+  formatting: CellFormatting;
+  width: number;
 }
 
 const Cell = memo(
@@ -28,8 +30,8 @@ const Cell = memo(
     maxRows,
     value,
     display,
-    width,
     formatting,
+    width
   }: CellProps) => {
     // console.log("re-rendering", id);
     return (

@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { HeaderItem } from "../styles";
-import { useRef } from "react";
+import React, { Dispatch, useRef } from "react";
 import {
   addCellsToHighlight,
   addMemento,
@@ -13,19 +13,31 @@ import {
 import { Dimension, SheetConfig } from "../constants";
 import CellRange from "../models/CellRange";
 import useEventHandler from "../hooks/useEventHandler";
+import { Action, State } from "../types";
+import { TableCellProps } from "@mui/material";
 
-const HeaderItemComponent = styled(HeaderItem)(({ dimension, size }) => ({
+type HeaderItemProps = {
+  dimension: Dimension;
+  dimensionsize: number;
+  children?: JSX.Element | JSX.Element[];
+} & TableCellProps
+
+const HeaderItemComponent = styled(HeaderItem)(({ dimension, dimensionsize }: HeaderItemProps) => ({
   cursor: dimension === Dimension.ROW ? "e-resize" : "s-resize",
   position: "relative",
-  width: dimension === Dimension.ROW ? "1.75rem" : size + "px",
+  width: dimension === Dimension.ROW ? "1.75rem" : dimensionsize + "px",
   "&:active": {
     backgroundColor: "#555",
     color: "#FFFFFF",
   },
-  height: dimension === Dimension.ROW ? size + "px" : "initial",
+  height: dimension === Dimension.ROW ? dimensionsize + "px" : "initial",
 }));
 
-const ResizerComponent = styled.div(({ dimension }) => ({
+type ResizerProps = {
+  dimension: Dimension
+}
+
+const ResizerComponent = styled.div(({ dimension }: ResizerProps) => ({
   position: "absolute",
   [dimension === Dimension.ROW ? "bottom" : "top"]: 0,
   [dimension === Dimension.ROW ? "right" : "right"]: 0,
@@ -34,20 +46,27 @@ const ResizerComponent = styled.div(({ dimension }) => ({
   cursor: dimension === Dimension.ROW ? "row-resize" : "col-resize",
   [dimension === Dimension.ROW
     ? "borderBottom"
-    : "borderRight"]: `2px solid #aaa`,
+    : "borderRight"]: `1px solid #aaa`,
 }));
 
-const HeaderCell = ({ state, dispatch, id, dimension }) => {
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+  id: string | number;
+  dimension: Dimension;
+}
+
+const HeaderCell = ({ state, dispatch, id, dimension }: Props) => {
   const eventHandler = useEventHandler();
-  const headerRef = useRef();
-  const posRef = useRef();
-  const selected =
+  const headerRef = useRef<HTMLDivElement>(null);
+  const posRef = useRef<number>(0);
+  const selected: boolean =
     state.selectedCell[dimension] === id ||
     state.highlighted[dimension + "s"].includes(id);
 
-  const handleContextMenu = (e) => eventHandler.handleContextMenu(e);
+  const handleContextMenu = (e: React.MouseEvent) => eventHandler.handleContextMenu(e);
 
-  const handleDragStart = (e) => {
+  const handleDragStart = (e: React.DragEvent) => {
     e.dataTransfer.setData("text/plain", "");
     const rect = headerRef.current?.getBoundingClientRect();
     if (rect) {
@@ -55,7 +74,7 @@ const HeaderCell = ({ state, dispatch, id, dimension }) => {
     }
   };
 
-  const handleDragEnd = (e) => {
+  const handleDragEnd = (e: React.DragEvent) => {
     const newSize =
       dimension === Dimension.ROW
         ? e.clientY - posRef.current
@@ -63,16 +82,16 @@ const HeaderCell = ({ state, dispatch, id, dimension }) => {
 
     const action =
       dimension === Dimension.ROW
-        ? setRowHeight(id, newSize)
-        : setColumnWidth(id, newSize);
+        ? setRowHeight(Number(id), newSize)
+        : setColumnWidth(String(id), newSize);
 
     dispatch(action);
     dispatch(addMemento());
   };
 
-  const handleResizerClick = (e) => e.stopPropagation();
+  const handleResizerClick = (e: React.MouseEvent) => e.stopPropagation();
 
-  const handleClick = (e) => {
+  const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (eventHandler.isCtrlKeyPressed(e)) {
       const start =
@@ -85,7 +104,7 @@ const HeaderCell = ({ state, dispatch, id, dimension }) => {
           : `${id}${state.maxRows}`;
 
       const range = CellRange.createFlat(start, end).cellIds;
-      dispatch(addCellsToHighlight(range));
+      dispatch(addCellsToHighlight(range as string[]));
     } else if (e.shiftKey) {
       const start =
         dimension === Dimension.ROW
@@ -99,8 +118,8 @@ const HeaderCell = ({ state, dispatch, id, dimension }) => {
       dispatch(highlightCells(start, end));
     } else {
       dimension === Dimension.ROW
-        ? dispatch(setSelectedRow(id))
-        : dispatch(setSelectedColumn(id));
+        ? dispatch(setSelectedRow(String(id)))
+        : dispatch(setSelectedColumn(String(id)));
     }
   };
 
@@ -112,8 +131,8 @@ const HeaderCell = ({ state, dispatch, id, dimension }) => {
 
     const action =
       dimension === Dimension.ROW
-        ? setRowHeight(id, defaultSize)
-        : setColumnWidth(id, defaultSize);
+        ? setRowHeight(Number(id), defaultSize)
+        : setColumnWidth(String(id), defaultSize);
 
     dispatch(action);
     dispatch(addMemento());
@@ -125,20 +144,20 @@ const HeaderCell = ({ state, dispatch, id, dimension }) => {
         ? state.content.rowHeights[id]
         : state.defaultRowHeight
       : state.content.columnWidths
-      ? state.content.columnWidths[id]
-      : state.defaultColumnWidth;
+        ? state.content.columnWidths[id]
+        : state.defaultColumnWidth;
 
   return (
     <HeaderItemComponent
       ref={headerRef}
       dimension={dimension}
-      size={String(dimensionSize)}
+      dimensionsize={(dimensionSize)}
       selected={selected}
       onClick={handleClick}
       onContextMenu={handleContextMenu}
       id={`${dimension}-${id}`}
     >
-      {id}
+      <>{id}</>
       <ResizerComponent
         draggable={true}
         dimension={dimension}
