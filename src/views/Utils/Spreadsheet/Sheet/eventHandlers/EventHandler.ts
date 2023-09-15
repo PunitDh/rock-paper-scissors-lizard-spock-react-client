@@ -86,7 +86,6 @@ export default class EventHandler {
     }
 
     const triggerRecalculation =
-      !this.state.formulaMode &&
       (isFormula((e.target as HTMLInputElement).value) ||
         this.state.formulaTrackedCells.includes(this.state.selectedCell.id));
 
@@ -224,7 +223,7 @@ export default class EventHandler {
   handleFunction = () => {
     this.dispatch(setFormulaFieldText("="));
     this.dispatch(setFormulaMode(true));
-    this.formulaFieldRef?.focus();
+    this.formulaFieldRef?.focus({ preventScroll: true });
   };
 
   handleSelectCell = (value) => {

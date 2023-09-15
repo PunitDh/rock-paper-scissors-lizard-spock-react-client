@@ -257,11 +257,12 @@ export const reducer = (state: State, action: Action) => {
 
       const data = Object.keys(state.content.data)
         .filter((cell) => state.highlighted.cells.includes(cell))
-        .reduce(
-          (stateContentData, cell) =>
-            stateContentData.setData(cell, new CellData({ id: cell })),
-          state.content.data
-        );
+        .reduce((stateContentData, cell) => {
+          return {
+            ...stateContentData,
+            [cell]: new CellData({ id: cell }),
+          } as StateContentData;
+        }, state.content.data);
 
       return {
         ...state,
@@ -296,7 +297,10 @@ export const reducer = (state: State, action: Action) => {
           );
           const data = Object.keys(updateObj).reduce(
             (stateContentData: StateContentData, cell: string) => {
-              return stateContentData.setData(cell, updateObj[cell]);
+              return {
+                ...stateContentData,
+                [cell]: updateObj[cell],
+              } as StateContentData;
             },
             state.content.data
           );
@@ -571,10 +575,10 @@ export const reducer = (state: State, action: Action) => {
             state.content.data[cellId],
             state.selectedCell.id
           );
-          return stateContentData.setData(
-            cellId,
-            cellData.setFormatting(action.payload)
-          );
+          return {
+            ...stateContentData,
+            [cellId]: cellData.setFormatting(action.payload),
+          } as StateContentData;
         },
         state.content.data
       );
@@ -611,10 +615,12 @@ export const reducer = (state: State, action: Action) => {
       const formattedData = state.highlighted.cells.reduce(
         (stateContentData: StateContentData, cellId: string) => {
           const cellData = CellData.getOrNew1(state.content.data, cellId);
-          return stateContentData.setData(
-            cellId,
-            cellData.clearBorderFormatting().setFormatting(action.payload)
-          );
+          return {
+            ...stateContentData,
+            [cellId]: cellData
+              .clearBorderFormatting()
+              .setFormatting(action.payload),
+          } as StateContentData;
         },
         state.content.data
       );
@@ -651,10 +657,10 @@ export const reducer = (state: State, action: Action) => {
             cellId: string
           ): StateContentData => {
             const cellData = CellData.getOrNew1(stateContentData, cellId);
-            return stateContentData.setData(
-              cellId,
-              cellData.addBorderFormatting(action.payload, border)
-            );
+            return {
+              ...stateContentData,
+              [cellId]: cellData.addBorderFormatting(action.payload, border),
+            } as StateContentData;
           },
           data
         );
@@ -689,10 +695,10 @@ export const reducer = (state: State, action: Action) => {
           (stateContentData: StateContentData, cellId: string) => {
             const cellData = state.content.data[cellId];
             if (cellData) {
-              return stateContentData.setData(
-                cellId,
-                cellData.clearFormatting()
-              );
+              return {
+                ...stateContentData,
+                [cellId]: cellData.clearFormatting(),
+              } as StateContentData;
             }
             return stateContentData;
           },
