@@ -1,18 +1,20 @@
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router";
-import { setConversations } from "src/redux/conversationSlice";
+import { Buffer } from "buffer";
+import useToken from "./useToken";
+import useNotification from "./useNotification";
+import useSocket from "./useSocket";
+import { AuthPage, SocketRequest } from "../utils/constants";
+import { setSiteSettings } from "../redux/siteSlice";
+import { setConversations } from "../redux/conversationSlice";
 import {
   setCurrentGame,
   setCurrentGames,
   setCurrentUsers,
   setRecentGames,
-} from "src/redux/playerSlice";
-import { setCurrentGamesNav, updateCurrentGameMenu } from "src/redux/menuSlice";
-import { setSiteSettings } from "src/redux/siteSlice";
-import { AuthPage, SocketRequest } from "src/utils/constants";
-import { useNotification, useSocket, useToken } from "src/hooks";
-import { Buffer } from "buffer";
+} from "../redux/playerSlice";
+import { setCurrentGamesNav, updateCurrentGameMenu } from "../redux/menuSlice";
 
 export default function useAPI() {
   const token = useToken();
@@ -57,6 +59,7 @@ export default function useAPI() {
   const handleError = (data) => {
     notification.error(data.payload);
     if (data.code === 401) {
+      console.log("It's the API");
       navigate(AuthPage.loginWithReferrer());
     }
   };

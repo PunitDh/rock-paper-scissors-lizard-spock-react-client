@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
 import EntityButton from "./EntityButton";
 import { Container } from "../styles";
-import { entities } from "src/assets";
-import { Bold, FlexBox } from "src/components/shared/styles";
+import FlexBox from "../../../../../../components/shared/FlexBox";
+import { Bold } from "../../../../../../components/shared/styles";
+import { entities } from "../../../../../../assets";
 
 const ButtonContainer = styled(Container)({
   height: "20%",

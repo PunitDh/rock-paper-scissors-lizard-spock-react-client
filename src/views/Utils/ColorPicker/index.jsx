@@ -1,6 +1,6 @@
 import { Box, Grid } from "@mui/material";
-import PageContainer from "src/components/container/PageContainer";
 import Picker from "./Picker";
+import PageContainer from "../../../components/container/PageContainer";
 
 export default function ColorPicker() {
   return (

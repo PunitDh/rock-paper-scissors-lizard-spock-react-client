@@ -1,4 +1,5 @@
-import PageContainer from "src/components/container/PageContainer";
+
+import PageContainer from "../../../components/container/PageContainer";
 import Rest from "./Rest";
 
 const GetSumRest = () => (

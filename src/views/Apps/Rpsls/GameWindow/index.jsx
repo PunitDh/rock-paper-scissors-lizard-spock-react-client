@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { useAPI, useCurrentGame, useToken } from "src/hooks";
 import { useParams } from "react-router";
-import PageContainer from "src/components/container/PageContainer";
-import GameCard from "src/components/shared/GameCard";
 import styled from "@emotion/styled";
 import PlayButtons from "./components/PlayButtons";
 import ResultTable from "./components/ResultTable";
 import GameActions from "./components/GameActions";
-import { FlexBox } from "src/components/shared/styles";
 import GameTitle from "./components/GameTitle";
-import LoadingScreen from "src/components/shared/LoadingScreen";
+import FlexBox from "../../../../components/shared/FlexBox";
+import { useAPI, useCurrentGame, useToken } from "../../../../hooks";
+import PageContainer from "../../../../components/container/PageContainer";
+import LoadingScreen from "../../../../components/shared/LoadingScreen";
+import GameCard from "../../../../components/shared/GameCard";
 
 const ResultContainer = styled(FlexBox)({
   height: "80%",

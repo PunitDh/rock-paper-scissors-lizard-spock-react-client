@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import { Grid, Box, Card, Stack, Typography } from "@mui/material";
-import PageContainer from "src/components/container/PageContainer";
-import Logo from "src/components/shared/Logo";
 import AuthLogin from "./auth/AuthLogin";
 import { AuthBox } from "./styles";
-import { AuthPage } from "src/utils/constants";
+import PageContainer from "../../components/container/PageContainer";
+import Logo from "../../components/shared/Logo";
+import { AuthPage } from "../../utils/constants";
 
 const Login = () => (
   <PageContainer title="Login" description="Login page">

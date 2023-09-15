@@ -1,8 +1,8 @@
 import { Grid, Box } from "@mui/material";
-import PageContainer from "src/components/container/PageContainer";
 import UpdateProfile from "./components/UpdateProfile";
 import ChangePassword from "./components/ChangePassword";
 import DeleteProfile from "./components/DeleteProfile";
+import PageContainer from "../../components/container/PageContainer";
 
 const Profile = () => {
 

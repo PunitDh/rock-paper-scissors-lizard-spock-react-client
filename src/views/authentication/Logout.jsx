@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useAPI } from "src/hooks";
+import { useAPI } from "../../hooks";
 
 const Logout = () => {
   const api = useAPI();

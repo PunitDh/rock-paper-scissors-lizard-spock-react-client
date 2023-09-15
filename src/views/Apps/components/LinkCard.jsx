@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
-import { Tooltip, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import { FlexBox } from "src/components/shared/styles";
+import FlexBox from "../../../components/shared/FlexBox";
 
 const CardLink = styled(Link)(({ theme }) => ({
   display: "flex",

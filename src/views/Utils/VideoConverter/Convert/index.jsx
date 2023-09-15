@@ -1,9 +1,9 @@
 import { useReducer } from "react";
-import DashboardCard from "src/components/shared/DashboardCard";
 import { ResponsiveFlexBox } from "../styles";
 import UploadForm from "./UploadForm";
 import Output from "./Output";
 import { reducer, initialState } from "./reducer";
+import DashboardCard from "../../../../components/shared/DashboardCard";
 
 const Convert = () => {
   const [state, dispatch] = useReducer(reducer, initialState);

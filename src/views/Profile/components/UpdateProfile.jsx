@@ -1,9 +1,10 @@
 import DashboardCard from "../../../components/shared/DashboardCard";
 import { Box } from "@mui/material";
-import FormField from "src/components/shared/FormField";
 import AvatarSelectField from "../../../components/shared/AvatarSelectField";
-import { FlexBox, TitledButton } from "src/components/shared/styles";
-import { useAPI, useToken } from "src/hooks";
+import { useAPI, useToken } from "../../../hooks";
+import FlexBox from "../../../components/shared/FlexBox";
+import TitledButton from "../../../components/shared/TitledButton";
+import FormField from "../../../components/shared/FormField";
 
 const UpdateProfile = () => {
   const api = useAPI();

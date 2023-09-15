@@ -5,10 +5,13 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import { Bold, FlexBox } from "src/components/shared/styles";
+
 import styled from "@emotion/styled";
 import { setContentType } from "../../../actions";
 import { ContentTypeMenuItems } from "../../../constants";
+import FlexBox from "../../../../../../../components/shared/FlexBox";
+import { Bold } from "../../../../../../../components/shared/styles";
+
 
 const StyledFormControl = styled(FormControl)({
   flexDirection: "row",

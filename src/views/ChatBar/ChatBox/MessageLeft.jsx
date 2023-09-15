@@ -1,9 +1,9 @@
 import { Avatar } from "@mui/material";
-import { FlexBox } from "src/components/shared/styles";
 import styled from "@emotion/styled";
 import { deepOrange } from "@mui/material/colors";
 import { MessageContent, TimeStamp } from "./styles";
 import { DoneAll } from "@mui/icons-material";
+import FlexBox from "../../../components/shared/FlexBox";
 
 const DisplayName = styled.div({
   fontSize: "0.85em",

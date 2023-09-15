@@ -7,9 +7,9 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import { Bold } from "src/components/shared/styles";
-import { useAPI, useToken } from "src/hooks";
 import { showConfirmRename } from "../../actions";
+import { useAPI, useToken } from "../../../../../../hooks";
+import { Bold } from "../../../../../../components/shared/styles";
 
 export default function RenameGameModal({ state, dispatch, selectedGame }) {
   const api = useAPI();

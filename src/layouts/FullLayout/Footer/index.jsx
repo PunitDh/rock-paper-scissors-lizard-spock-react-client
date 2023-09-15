@@ -1,6 +1,6 @@
 import { Toolbar, styled, Stack } from "@mui/material";
 import { useSelector } from "react-redux";
-import ChatBar from "src/views/ChatBar";
+import ChatBar from "../../../views/ChatBar";
 
 const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
   display: "flex",

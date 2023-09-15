@@ -37,13 +37,15 @@ const ResizerComponent = styled.div(({ dimension }) => ({
     : "borderRight"]: `2px solid #aaa`,
 }));
 
-const HeaderCell = ({ state, dispatch, id, onContextMenu, dimension }) => {
+const HeaderCell = ({ state, dispatch, id, dimension }) => {
   const eventHandler = useEventHandler();
   const headerRef = useRef();
   const posRef = useRef();
   const selected =
     state.selectedCell[dimension] === id ||
     state.highlighted[dimension + "s"].includes(id);
+
+  const handleContextMenu = (e) => eventHandler.handleContextMenu(e);
 
   const handleDragStart = (e) => {
     e.dataTransfer.setData("text/plain", "");
@@ -133,7 +135,7 @@ const HeaderCell = ({ state, dispatch, id, onContextMenu, dimension }) => {
       size={String(dimensionSize)}
       selected={selected}
       onClick={handleClick}
-      onContextMenu={onContextMenu}
+      onContextMenu={handleContextMenu}
       id={`${dimension}-${id}`}
     >
       {id}

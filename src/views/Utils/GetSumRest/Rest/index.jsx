@@ -1,14 +1,14 @@
 import { useReducer } from "react";
-import DashboardCard from "src/components/shared/DashboardCard";
 import { initialState, reducer } from "./reducer";
 import { useMediaQuery } from "@mui/material";
-import { FlexBox } from "src/components/shared/styles";
 import URLBar from "./sections/request/URLBar";
 import RequestTabs from "./sections/request/RequestTabs";
 import Response from "./sections/response/Response";
 import { initializeState } from "./utils";
-import { useToken } from "src/hooks";
 import RequestName from "./sections/request/RequestName";
+import { useToken } from "../../../../hooks";
+import DashboardCard from "../../../../components/shared/DashboardCard";
+import FlexBox from "../../../../components/shared/FlexBox";
 
 const Rest = () => {
   const [state, dispatch] = useReducer(reducer, initialState, initializeState);

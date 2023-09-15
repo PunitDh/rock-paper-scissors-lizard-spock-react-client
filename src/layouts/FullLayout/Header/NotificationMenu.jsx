@@ -2,11 +2,11 @@ import { useState } from "react";
 import { Badge, IconButton, Menu, alpha } from "@mui/material";
 import styled from "@emotion/styled";
 import { IconBellRinging } from "@tabler/icons-react";
-import { useToken } from "src/hooks";
 import { useSelector } from "react-redux";
-import { Bold } from "src/components/shared/styles";
 import NotificationItem from "./NotificationItem";
 import { uniqueId } from "lodash";
+import { useToken } from "../../../hooks";
+import { Bold } from "../../../components/shared/styles";
 
 const StyledMenu = styled((props) => (
   <Menu

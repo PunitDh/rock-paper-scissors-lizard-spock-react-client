@@ -1,5 +1,6 @@
+
+import FlexBox from "../../../../../../components/shared/FlexBox";
 import { setFormulaFieldText, highlightFormulaCells } from "../../actions";
-import { FlexBox } from "src/components/shared/styles";
 import CellSelector from "./CellSelector";
 import FormulaField from "./FormulaField";
 import { useEffect } from "react";
@@ -7,7 +8,7 @@ import { useEffect } from "react";
 /**
  *
  * @param {Object} props
- * @param {EventHandler} props.eventHandler
+ * @param {Object} props.state
  * @param {Function} props.dispatch
  * @returns
  */

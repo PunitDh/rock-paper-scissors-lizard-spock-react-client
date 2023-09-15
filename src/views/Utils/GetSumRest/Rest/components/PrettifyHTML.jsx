@@ -1,4 +1,5 @@
-import { isString } from "src/utils";
+
+import { isString } from "../../../../../utils";
 import { Blue, Green, Indent, Purple, Red } from "./styles";
 
 export default function PrettifyHTML({ children }) {

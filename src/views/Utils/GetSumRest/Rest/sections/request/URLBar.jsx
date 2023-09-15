@@ -6,12 +6,12 @@ import {
   CircularProgress,
   TextField,
 } from "@mui/material";
-import { FlexBox } from "src/components/shared/styles";
 import { setMethod, setResponse, setResponseTime, setUrl } from "../../actions";
 import SendIcon from "../../components/SendIcon";
-import { useAPI, useLoading, useNotification } from "src/hooks";
 import { createAuthorizationHeader, createHeaders } from "../../utils";
 import { ContentTypeMenuItems, HttpMethod } from "../../constants";
+import { useAPI, useLoading, useNotification } from "../../../../../../hooks";
+import FlexBox from "../../../../../../components/shared/FlexBox";
 
 const FlexForm = styled.form({
   display: "flex",

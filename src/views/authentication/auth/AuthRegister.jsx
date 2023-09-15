@@ -1,10 +1,10 @@
 import { Box, Typography, Button, CircularProgress } from "@mui/material";
 import { Stack } from "@mui/system";
 import CustomTextField from "../../../components/forms/theme-elements/CustomTextField";
-import { useAPI, useLoading } from "src/hooks";
-import AvatarSelectField from "src/components/shared/AvatarSelectField";
-import { avatars } from "src/assets";
 import { sample } from "lodash";
+import { useAPI, useLoading } from "../../../hooks";
+import AvatarSelectField from "../../../components/shared/AvatarSelectField";
+import { avatars } from "../../../assets";
 
 const AuthRegister = ({ title, subtitle, subtext }) => {
   const api = useAPI();

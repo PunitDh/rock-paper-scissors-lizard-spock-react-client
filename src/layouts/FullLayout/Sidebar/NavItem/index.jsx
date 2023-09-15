@@ -10,10 +10,10 @@ import {
 import ContextMenu from "./ContextMenu";
 import RenameGameModal from "./ContextMenu/Modal/Rename";
 import DeleteConfirmation from "./ContextMenu/Modal/Delete";
-import { FlexBox } from "src/components/shared/styles";
 import { NavLink } from "react-router-dom";
 import { initialState, reducer } from "./reducer";
 import { setAnchorEl } from "./actions";
+import FlexBox from "../../../../components/shared/FlexBox";
 
 const ListItemStyled = styled(ListItem)(({ theme, level }) => ({
   whiteSpace: "nowrap",

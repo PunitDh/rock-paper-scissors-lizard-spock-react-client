@@ -1,8 +1,9 @@
 import CustomTabPanel from "../../../components/CustomTabPanel";
-import { Bold, FlexBox } from "src/components/shared/styles";
 import styled from "@emotion/styled";
 import Selector from "./Selector";
 import { AuthorizationTypeItems } from "../../../constants";
+import { Bold } from "../../../../../../../components/shared/styles";
+import FlexBox from "../../../../../../../components/shared/FlexBox";
 
 const StyledBox = styled.div(({ border, width }) => ({
   borderRight: border ? "1px solid rgba(0,0,0,0.1)" : 0,

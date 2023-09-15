@@ -1,10 +1,13 @@
 import { Tooltip, Typography } from "@mui/material";
-import { Bold, FlexBox } from "src/components/shared/styles";
+
 import { Color } from "../../components/styles";
 import prettyBytes from "pretty-bytes";
 import { Save } from "@mui/icons-material";
 import { createSerializedFilename } from "../../utils";
 import { StatusButton } from "../../styles";
+import FlexBox from "../../../../../../components/shared/FlexBox";
+import { Bold } from "../../../../../../components/shared/styles";
+
 
 const ResponseStatus = ({ state }) => {
   const handleSave = () => {

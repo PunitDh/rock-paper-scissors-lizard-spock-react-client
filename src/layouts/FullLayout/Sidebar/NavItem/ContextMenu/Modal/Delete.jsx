@@ -6,9 +6,9 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import { Bold } from "src/components/shared/styles";
-import { useAPI, useToken } from "src/hooks";
 import { showConfirmDelete } from "../../actions";
+import { useAPI, useToken } from "../../../../../../hooks";
+import { Bold } from "../../../../../../components/shared/styles";
 
 export default function DeleteConfirmation({ state, dispatch, selectedGame }) {
   const api = useAPI();

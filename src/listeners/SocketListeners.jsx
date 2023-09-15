@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import { useAPI, useNotification, useSocket, useToken } from "src/hooks";
+import { useAPI, useNotification, useSocket, useToken } from "../hooks";
 import {
   openConversation,
   startConversation,
-} from "src/redux/conversationSlice";
-import { deleteGameFromMenu, updateCurrentGameMenu } from "src/redux/menuSlice";
-import { setCurrentGame, updateCurrentGame } from "src/redux/playerSlice";
-import { setSiteSettings } from "src/redux/siteSlice";
-import { Status, isSuccess } from "src/utils";
-import { AuthPage, SocketResponse } from "src/utils/constants";
+} from "../redux/conversationSlice";
+import { deleteGameFromMenu, updateCurrentGameMenu } from "../redux/menuSlice";
+import { setCurrentGame, updateCurrentGame } from "../redux/playerSlice";
+import { setSiteSettings } from "../redux/siteSlice";
+import { Status, isSuccess } from "../utils";
+import { AuthPage, SocketResponse } from "../utils/constants";
 
 const SocketListeners = () => {
   const socket = useSocket();
@@ -68,9 +68,10 @@ const SocketListeners = () => {
     socket.on(SocketResponse.DELETE_PROFILE, (response) =>
       isSuccess(response).then(api.logoutPlayer).catch(notification.error)
     );
-    socket.on(Status.UNAUTHORIZED, () =>
-      navigate(AuthPage.loginWithReferrer())
-    );
+    socket.on(Status.UNAUTHORIZED, () => {
+      console.log("It's the socket");
+      navigate(AuthPage.loginWithReferrer());
+    });
     socket.on(SocketResponse.PLAY_MOVE, (response) =>
       handleResponse(response, setCurrentGame)
     );

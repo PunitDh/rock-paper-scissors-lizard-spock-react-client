@@ -1,4 +1,5 @@
-import { FlexBox } from "src/components/shared/styles";
+
+import FlexBox from "../../../../../../components/shared/FlexBox";
 import { setOutputDisplayType } from "../../actions";
 import { DisplayType } from "../../constants";
 import { StatusButton } from "../../styles";

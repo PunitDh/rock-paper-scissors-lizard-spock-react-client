@@ -1,12 +1,12 @@
 import styled from "@emotion/styled";
 import DashboardCard from "../../../../components/shared/DashboardCard";
-import { useAPI } from "src/hooks";
 import { useCallback, useEffect, useReducer } from "react";
 import { Typography } from "@mui/material";
 import LogActions from "./LogActions";
-import { formatDate } from "src/utils";
 import { reducer, initialState } from "./reducer";
 import { setLogs } from "./actions";
+import { useAPI } from "../../../../hooks";
+import { formatDate } from "../../../../utils";
 
 const LogMessage = styled(Typography)(({ theme, type }) => ({
   color: theme.palette[type].main,

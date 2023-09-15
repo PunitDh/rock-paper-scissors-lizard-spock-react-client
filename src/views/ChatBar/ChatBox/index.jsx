@@ -3,17 +3,17 @@ import styled from "@emotion/styled";
 import { TextInput } from "./TextInput";
 import { Close } from "@mui/icons-material";
 import { useCallback, useState } from "react";
-import { useToken } from "src/hooks";
 import { MessageRight } from "./MessageRight";
 import { MessageLeft } from "./MessageLeft";
-import { getAvatar } from "src/assets";
 import { useDispatch } from "react-redux";
+import { ChatBoxStatus, formatDate } from "../constants";
+import { useToken } from "../../../hooks";
 import {
   closeConversation,
   minimizeConversation,
   openConversation,
-} from "src/redux/conversationSlice";
-import { Status, formatDate } from "../constants";
+} from "../../../redux/conversationSlice";
+import { getAvatar } from "../../../assets";
 
 const CloseButton = styled(Close)(({ theme }) => ({
   cursor: "pointer",
@@ -72,8 +72,8 @@ function ChatBox({ conversation }) {
     [messages.length]
   );
 
-  const isMinimized = conversation.status === Status.MINIMIZED;
-  const isOpen = conversation.status === Status.OPEN;
+  const isMinimized = conversation.status === ChatBoxStatus.MINIMIZED;
+  const isOpen = conversation.status === ChatBoxStatus.OPEN;
 
   const closeChatBox = (e) => {
     e.stopPropagation();

@@ -1,8 +1,9 @@
 import { Avatar } from "@mui/material";
 import { MessageContent, TimeStamp } from "./styles";
-import { FlexBox } from "src/components/shared/styles";
+
 import styled from "@emotion/styled";
 import { DoneAll } from "@mui/icons-material";
+import FlexBox from "../../../components/shared/FlexBox";
 
 const MessageOrange = styled.div({
   position: "relative",

@@ -2,8 +2,8 @@ import { useMediaQuery, Box, Drawer } from "@mui/material";
 import Logo from "../../../components/shared/Logo";
 import SidebarItems from "./SidebarItems";
 import { useEffect } from "react";
-import { useAPI } from "src/hooks";
 import styled from "@emotion/styled";
+import { useAPI } from "../../../hooks";
 
 const WideBox = styled(Box)(({ width }) => ({
   width,

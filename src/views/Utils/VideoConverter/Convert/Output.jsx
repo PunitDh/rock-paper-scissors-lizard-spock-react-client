@@ -1,12 +1,10 @@
-import { useAPI, useSocket } from "src/hooks";
-import { SocketResponse } from "src/utils/constants";
 import { useEffect } from "react";
 import InputGroup from "./InputGroup";
 import { List, ListItem, ListItemAvatar } from "@mui/material";
 import { DoneOutline } from "@mui/icons-material";
 import { Download } from "@mui/icons-material";
 import { Fab, Tooltip } from "@mui/material";
-import { Bold } from "src/components/shared/styles";
+
 import {
   IndentedBox,
   ResponsiveFlexBox,
@@ -14,6 +12,9 @@ import {
   ResponsiveTypography,
 } from "../styles";
 import { setDownloadBlob, setProgressUpdate } from "./actions";
+import { SocketResponse } from "../../../../utils/constants";
+import { Bold } from "../../../../components/shared/styles";
+import { useAPI, useSocket } from "../../../../hooks";
 
 const Output = ({ state, dispatch }) => {
   const socket = useSocket();

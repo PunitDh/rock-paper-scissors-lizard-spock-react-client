@@ -1,12 +1,15 @@
 import { useState } from "react";
 import LimitSelect from "../../../../../components/shared/LimitSelect";
 import { Tooltip } from "@mui/material";
-import { useAPI } from "src/hooks";
-import { FlexBox } from "src/components/shared/styles";
-import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
+
+
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import styled from "@emotion/styled";
 import { Chat } from "@mui/icons-material";
+import { useAPI } from "../../../../../hooks";
+import FlexBox from "../../../../../components/shared/FlexBox";
+import ConfirmationDialog from "../../../../../components/shared/ConfirmationDialog";
+
 
 const RestartGameIcon = styled(RestartAltIcon)(({ theme }) => ({
   cursor: "pointer",

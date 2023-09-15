@@ -1,13 +1,13 @@
 import { Avatar, TableRow, Tooltip, Typography } from "@mui/material";
-import ResponsiveTableCell from "src/components/shared/ResponsiveTableCell";
-import StyledTableCell from "src/components/shared/StyledTableCell";
 import StartGame from "./StartGame";
 import styled from "@emotion/styled";
 import { blink } from "./styles";
-import { getAvatar } from "src/assets";
-import { FlexBox } from "src/components/shared/styles";
-import { useToken } from "src/hooks";
 import StartChat from "./StartChat";
+import FlexBox from "../../../../../components/shared/FlexBox";
+import { useToken } from "../../../../../hooks";
+import { getAvatar } from "../../../../../assets";
+import StyledTableCell from "../../../../../components/shared/StyledTableCell";
+import ResponsiveTableCell from "../../../../../components/shared/ResponsiveTableCell";
 
 const OnlineIcon = styled.div(({ online }) => ({
   backgroundColor: online ? "lightgreen" : "red",

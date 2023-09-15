@@ -1,4 +1,4 @@
-import { isObject } from "src/utils";
+import { isObject } from "../../../../../utils";
 import { DisplayType, HttpStatusCode } from "../constants";
 
 export default class Response {

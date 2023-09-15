@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Avatar, TableCell, Typography } from "@mui/material";
-import { FlexBox } from "src/components/shared/styles";
-import { getAvatar } from "src/assets";
+import FlexBox from "../../../../../../components/shared/FlexBox";
+import { getAvatar } from "../../../../../../assets";
 
 const Score = styled(FlexBox)(({ theme }) => ({
   fontSize: "large",
