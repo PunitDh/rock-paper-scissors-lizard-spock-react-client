@@ -34,7 +34,7 @@ import { Action, State } from "../types";
 import { generateClipboardContent, isFormula } from "../utils/cellUtils";
 import CellData from "../models/CellData";
 import Highlight from "../models/Highlight";
-import { Clipboard } from "../../../../../hooks/useClipboard";
+import { Clipboard } from "../../../../../hooks/types";
 
 export default class EventHandler {
   state: State;

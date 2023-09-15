@@ -1,7 +1,4 @@
-export type Clipboard = {
-  get: () => Promise<string | undefined>;
-  copy: (text: string) => void;
-};
+import { Clipboard } from "./types";
 
 export default function useClipboard(): Clipboard {
   async function copy(text: string) {

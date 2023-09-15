@@ -13,7 +13,7 @@ const DebugBar = ({ state }: { state: State }) => {
   const selectedCell: string = state.selectedCell.id;
   const cellData = state.content.data[selectedCell]
   return (
-    token.decoded.isAdmin && (
+    token.decoded?.isAdmin && (
       <FlexForm>
         <DebugButton type="button" onClick={() => console.log(state.content)}>
           Show Content

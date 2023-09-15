@@ -13,7 +13,7 @@ type Props = {
 }
 
 const NumbersBox = ({ state, dispatch }: Props) => {
-  const numberGroups = [
+  const numberGroups: number[][] = [
     // ["(", ")", "%"],
     [7, 8, 9],
     [4, 5, 6],

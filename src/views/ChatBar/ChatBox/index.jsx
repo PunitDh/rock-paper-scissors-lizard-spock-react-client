@@ -3,10 +3,8 @@ import styled from "@emotion/styled";
 import { TextInput } from "./TextInput";
 import { Close } from "@mui/icons-material";
 import { useCallback, useState } from "react";
-
 import { MessageRight } from "./MessageRight";
 import { MessageLeft } from "./MessageLeft";
-
 import { useDispatch } from "react-redux";
 import { ChatBoxStatus, formatDate } from "../constants";
 import { useToken } from "../../../hooks";

@@ -1,6 +1,13 @@
+import React from 'react';
 import { Helmet } from 'react-helmet';
 
-const PageContainer = ({ title, description, children }) => (
+type Props = {
+  title: string;
+  description: string;
+  children: string | JSX.Element;
+}
+
+const PageContainer = ({ title, description, children }: Props) => (
   <div>
     <Helmet>
       <title>{title}</title>

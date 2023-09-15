@@ -20,7 +20,7 @@ const IOBox = ({ state }: Props) => {
           value={state.input.join("")}
           inputProps={{ style: { textAlign: "right" } }}
         />
-        {token.decoded.isAdmin && (
+        {token.decoded?.isAdmin && (
           <TextField
             autoComplete="off"
             sx={{ width: "100%" }}

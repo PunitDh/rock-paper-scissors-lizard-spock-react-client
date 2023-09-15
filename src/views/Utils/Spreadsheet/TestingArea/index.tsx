@@ -54,7 +54,7 @@ const TestingArea = ({ state }: { state: State }) => {
   const token = useToken();
   const eventHandler = useEventHandler();
 
-  return token.decoded.isAdmin ? (
+  return token.decoded?.isAdmin ? (
     <DashboardCard sx={{ height: "100%" }} title="Testing Area" subtitle={undefined} action={undefined} footer={undefined} cardheading={undefined} headtitle={undefined} headsubtitle={undefined} middlecontent={undefined}>
       <FlexBox width="100%" height="100%" gap="0.5rem">
         {/* <StatusCell label="Keyboard">{keyboard && keyboard.key}</StatusCell>

@@ -1,10 +1,18 @@
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { Avatar, Tooltip, Typography } from "@mui/material";
-import { useState } from "react";
 import FlexBox from "./FlexBox";
 import { avatars } from "../../assets";
 
-const SelectableAvatar = styled(Avatar)(({ selected }) => ({
+type Props = {
+  selected: number;
+}
+
+type SelectableAvatarProps = {
+  selected: boolean;
+}
+
+const SelectableAvatar = styled(Avatar)(({ selected }: SelectableAvatarProps) => ({
   cursor: "pointer",
   width: 50,
   height: 50,
@@ -24,7 +32,7 @@ const Container = styled.div({
   marginBottom: "1.25rem",
 });
 
-const AvatarSelectField = ({ selected = 1 }) => {
+const AvatarSelectField = ({ selected = 1 }: Props) => {
   const [selectedAvatar, setSelectedAvatar] = useState(selected);
   return (
     <Container>

@@ -1,19 +1,24 @@
 import jwtDecode from "jwt-decode";
-import { createContext } from "react";
+import React, { createContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearToken, setToken } from "../redux/playerSlice";
+import { Token } from "../hooks/types";
 
-export const TokenContext = createContext();
+export const TokenContext = createContext<Token>({});
 
-export const TokenProvider = ({ children }) => {
-  const { token } = useSelector((state) => state.player);
+type Props = {
+  children: any
+}
+
+export const TokenProvider = ({ children }: Props) => {
+  const token = (useSelector((state) => (state as any).player).token as string);
   const dispatch = useDispatch();
 
   return (
     <TokenContext.Provider
       value={{
         jwt: token,
-        decoded: token && jwtDecode(token),
+        decoded: jwtDecode(token),
         set: (token) => dispatch(setToken(token)),
         clear: () => dispatch(clearToken()),
       }}
