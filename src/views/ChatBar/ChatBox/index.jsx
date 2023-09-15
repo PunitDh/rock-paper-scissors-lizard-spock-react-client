@@ -3,17 +3,15 @@ import styled from "@emotion/styled";
 import { TextInput } from "./TextInput";
 import { Close } from "@mui/icons-material";
 import { useCallback, useState } from "react";
-import { useToken } from "src/hooks";
+
 import { MessageRight } from "./MessageRight";
 import { MessageLeft } from "./MessageLeft";
-import { getAvatar } from "src/assets";
+
 import { useDispatch } from "react-redux";
-import {
-  closeConversation,
-  minimizeConversation,
-  openConversation,
-} from "src/redux/conversationSlice";
 import { Status, formatDate } from "../constants";
+import { useToken } from "../../../hooks";
+import { closeConversation, minimizeConversation, openConversation } from "../../../redux/conversationSlice";
+import { getAvatar } from "../../../assets";
 
 const CloseButton = styled(Close)(({ theme }) => ({
   cursor: "pointer",

@@ -5,9 +5,12 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
-import { Bold, FlexBox } from "src/components/shared/styles";
+
 import { setAuthorization } from "../../../../actions";
 import { AuthorizationType } from "../../../../constants";
+import { Bold } from "../../../../../../../../components/shared/styles";
+import FlexBox from "../../../../../../../../components/shared/FlexBox";
+
 
 export default function BearerToken({ state, dispatch }) {
   const credentials =

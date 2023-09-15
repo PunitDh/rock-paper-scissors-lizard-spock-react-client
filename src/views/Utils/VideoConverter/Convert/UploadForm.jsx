@@ -15,9 +15,6 @@ import {
   Tooltip,
 } from "@mui/material";
 import { useRef } from "react";
-import { languages } from "src/assets";
-import { TitledButton } from "src/components/shared/styles";
-import { useAPI, useNotification, useToken } from "src/hooks";
 import InputGroup from "./InputGroup";
 import { ResponsiveForm } from "../styles";
 import {
@@ -28,6 +25,9 @@ import {
   setSubtitles,
   setVideo,
 } from "./actions";
+import { languages } from "../../../../assets";
+import TitledButton from "../../../../components/shared/TitledButton";
+import { useAPI, useNotification, useToken } from "../../../../hooks";
 
 const FileInput = styled(TextField)({
   display: "none",

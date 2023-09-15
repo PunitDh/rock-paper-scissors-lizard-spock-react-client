@@ -1,7 +1,8 @@
-import { FlexBox } from "src/components/shared/styles";
+
 import CalcButton from "../components/CalcButton";
 import ClearButton from "../components/ClearButton";
 import { resetState } from "../actions";
+import FlexBox from "../../../../../components/shared/FlexBox";
 
 function OperationsBox({ state, dispatch }) {
   const operations = ["+", "-", "×", "÷"];

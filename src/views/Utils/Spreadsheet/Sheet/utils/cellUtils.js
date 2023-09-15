@@ -4,7 +4,7 @@ import CellData from "../models/CellData";
 import CellFormatting from "../models/CellFormatting";
 import { initialState } from "../reducer";
 import StateContent from "../models/StateContent";
-import { isObject, isString } from "src/utils";
+import { isObject, isString } from "../../../../../utils";
 
 export const generateClipboardContent = (state) => {
   const content = state.highlighted.rows.map((row) =>

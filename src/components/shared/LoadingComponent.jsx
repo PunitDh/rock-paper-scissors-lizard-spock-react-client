@@ -1,5 +1,5 @@
 import { CircularProgress } from "@mui/material";
-import { FlexBox } from "./styles";
+import FlexBox from "./FlexBox";
 
 const LoadingComponent = () => {
   return (

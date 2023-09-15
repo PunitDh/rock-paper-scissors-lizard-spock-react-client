@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { TOKEN_KEY } from "src/utils/constants";
+import { TOKEN_KEY } from "../utils/constants";
 
 export const playerSlice = createSlice({
   name: "player",

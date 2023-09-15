@@ -1,7 +1,7 @@
 import { Grid, Box } from "@mui/material";
-import PageContainer from "src/components/container/PageContainer";
 import FeatureToggles from "./components/FeatureToggles";
 import APILogs from "./components/APILogs";
+import PageContainer from "../../components/container/PageContainer";
 
 const Dashboard = () => (
   <PageContainer title="Admin Dashboard" description="Admin dashboard">

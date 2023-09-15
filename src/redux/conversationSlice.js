@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { isBoolean } from "src/utils";
-import { Status } from "src/views/ChatBar/constants";
+import { isBoolean } from "../utils";
+import { Status } from "../views/ChatBar/constants";
 
 const findIndex = (state, action) =>
   state.conversations.findIndex((it) => it.id === action.payload.id);

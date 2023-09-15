@@ -1,23 +1,26 @@
 import styled from "@emotion/styled";
-import { Paper, TableCell } from "@mui/material";
+import { Paper, TableCell, TableCellProps } from "@mui/material";
 import { BorderType } from "./components/Toolbar/constants";
 import CellFormatting from "./models/CellFormatting";
+import { Theme as MuiTheme } from "@mui/material/styles";
 
-export const HeaderItem = styled(TableCell)(({ selected, theme }) => ({
-  backgroundColor: selected ? "#eee" : "#f5f6f7",
-  fontWeight: "700",
-  color: theme.palette.text.secondary,
-  textAlign: "center",
-  border: selected ? "2px solid blue" : "1px solid rgba(0,0,0,0.2)",
-  borderRadius: 0,
-  cursor: "cell",
-  padding: "2px",
-  userSelect: "none",
-  overflowY: "hidden",
-  "&:hover": {
-    border: "2px solid blue",
-  },
-}));
+export const HeaderItem = styled(TableCell)(
+  ({ selected, theme }: { selected: boolean; theme: MuiTheme }) => ({
+    backgroundColor: selected ? "#eee" : "#f5f6f7",
+    fontWeight: "700",
+    color: theme.palette.text.secondary,
+    textAlign: "center",
+    border: selected ? "2px solid blue" : "1px solid rgba(0,0,0,0.2)",
+    borderRadius: 0,
+    cursor: "cell",
+    padding: "2px",
+    userSelect: "none",
+    overflowY: "hidden",
+    "&:hover": {
+      border: "2px solid blue",
+    },
+  })
+);
 
 export const Container = styled.div({
   boxShadow: "8px 8px 18px -10px rgba(0,0,0,0.5)",
@@ -36,7 +39,7 @@ const initialBorders = {
   borderLeft: BorderStyles.NO_BORDER,
 };
 
-const getBorder = (formatting) => {
+const getBorder = (formatting: CellFormatting) => {
   switch (formatting.borderId) {
     case BorderType.BORDER_BOTTOM:
     case BorderType.BORDER_LEFT:
@@ -54,19 +57,25 @@ const getBorder = (formatting) => {
         borderLeft: BorderStyles.THIN_BORDER,
       };
     case BorderType.OUTSIDE_BORDERS:
-      return formatting.borderTypes.reduce((borders, cell) => {
-        return {
-          ...borders,
-          [cell]: BorderStyles.THIN_BORDER,
-        };
-      }, initialBorders);
+      return formatting.borderTypes?.reduce(
+        (borders: string[], cell: string) => {
+          return {
+            ...borders,
+            [cell]: BorderStyles.THIN_BORDER,
+          };
+        },
+        initialBorders
+      );
     case BorderType.THICK_OUTSIDE_BORDERS:
-      return formatting.borderTypes.reduce((borders, cell) => {
-        return {
-          ...borders,
-          [cell]: BorderStyles.THICK_BORDER,
-        };
-      }, initialBorders);
+      return formatting.borderTypes?.reduce(
+        (borders: string[], cell: string) => {
+          return {
+            ...borders,
+            [cell]: BorderStyles.THICK_BORDER,
+          };
+        },
+        initialBorders
+      );
     case BorderType.NO_BORDER:
       return initialBorders;
     default:
@@ -74,8 +83,12 @@ const getBorder = (formatting) => {
   }
 };
 
-export const getBorderProperties = (selected, formulacell, formatting) => {
-  const getProperty = (property) =>
+export const getBorderProperties = (
+  selected: boolean,
+  formulacell: number,
+  formatting: CellFormatting
+): {} => {
+  const getProperty = (property: string) =>
     selected
       ? "2px solid blue"
       : formulacell > 0
@@ -90,6 +103,14 @@ export const getBorderProperties = (selected, formulacell, formatting) => {
   }, {});
 };
 
+type ItemProps = {
+  theme: MuiTheme;
+  selected: boolean;
+  textalign: string;
+  formulacell: number;
+  formatting: CellFormatting;
+} & TableCellProps;
+
 export const Item = styled(TableCell)(({
   theme,
   selected,
@@ -98,7 +119,7 @@ export const Item = styled(TableCell)(({
   width,
   formulacell,
   formatting = new CellFormatting(),
-}) => {
+}: ItemProps) => {
   const borderProperties = getBorderProperties(
     selected,
     formulacell,
@@ -145,51 +166,55 @@ export const Resize = styled.div({
   },
 });
 
-export const CellInput = styled.input(({ selected }) => ({
-  width: "100%",
-  height: "100%",
-  borderRadius: 0,
-  position: "absolute",
-  top: "0",
-  left: "0",
-  outline: "none",
-  border: "none",
-  cursor: "cell",
-  backgroundColor: "transparent",
-  padding: "1px",
-  font: "inherit",
-  color: "inherit",
-  userSelect: selected ? "auto" : "none",
-  "&:focus": {
-    zIndex: "4 !important",
-    cursor: "text",
-  },
-  "&:hover": {
-    // border: "1px solid blue",
-  },
-}));
+export const CellInput = styled.input(
+  ({ selected }: { selected: boolean }) => ({
+    width: "100%",
+    height: "100%",
+    borderRadius: 0,
+    position: "absolute",
+    top: "0",
+    left: "0",
+    outline: "none",
+    border: "none",
+    cursor: "cell",
+    backgroundColor: "transparent",
+    padding: "1px",
+    font: "inherit",
+    color: "inherit",
+    userSelect: selected ? "auto" : "none",
+    "&:focus": {
+      zIndex: "4 !important",
+      cursor: "text",
+    },
+    "&:hover": {
+      // border: "1px solid blue",
+    },
+  })
+);
 
-export const DivItem = styled(Paper)(({ theme, selected }) => ({
-  backgroundColor: selected ? theme.palette.primary.light : "#fff",
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-  boxSizing: "border-box",
-  // outline: selected ? "2px solid blue" : "1px solid rgba(0,0,0,0.2)",
-  borderRadius: 0,
-  cursor: "cell",
-  height: "1.5rem",
-  width: "100%",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  marginRight: "2px",
-  marginTop: "2px",
-  overflowX: "visible",
-  position: "relative",
-  // "&:hover": {
-  //   outline: "2px solid blue",
-  // },
-}));
+export const DivItem = styled(Paper)(
+  ({ theme, selected }: { theme: MuiTheme; selected: boolean }) => ({
+    backgroundColor: selected ? theme.palette.primary.light : "#fff",
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+    boxSizing: "border-box",
+    // outline: selected ? "2px solid blue" : "1px solid rgba(0,0,0,0.2)",
+    borderRadius: 0,
+    cursor: "cell",
+    height: "1.5rem",
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: "2px",
+    marginTop: "2px",
+    overflowX: "visible",
+    position: "relative",
+    // "&:hover": {
+    //   outline: "2px solid blue",
+    // },
+  })
+);
 
 export const CellDiv = styled.div(({ contentEditable }) => ({
   width: "100%",

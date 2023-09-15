@@ -6,9 +6,9 @@ import {
   TableCell,
   TableRow,
 } from "@mui/material";
-import { Bold } from "src/components/shared/styles";
 import { setAuthorizationType } from "../../../actions";
 import { AuthorizationTypeItems } from "../../../constants";
+import { Bold } from "../../../../../../../components/shared/styles";
 
 const Selector = ({ state, dispatch }) => {
   const handleChange = (e) => {

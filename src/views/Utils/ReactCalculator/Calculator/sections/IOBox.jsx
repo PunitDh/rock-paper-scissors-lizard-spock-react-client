@@ -1,7 +1,7 @@
 import { TextField } from "@mui/material";
-import { FlexBox } from "src/components/shared/styles";
 import { CalculatorBox } from "../styles";
-import { useToken } from "src/hooks";
+import { useToken } from "../../../../../hooks";
+import FlexBox from "../../../../../components/shared/FlexBox";
 
 const IOBox = ({ state }) => {
   const token = useToken();

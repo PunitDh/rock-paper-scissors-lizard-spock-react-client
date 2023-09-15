@@ -1,7 +1,7 @@
 import { createContext, useEffect, useReducer } from "react";
-import { NotificationType } from "src/utils/constants";
 import { initialState, reducer } from "./reducer";
 import { closeNotification, showNotification, setMessage } from "./actions";
+import { NotificationType } from "../../utils/constants";
 
 export const NotificationContext = createContext();
 

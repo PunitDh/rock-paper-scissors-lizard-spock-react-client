@@ -11,10 +11,10 @@ import {
   ListItemText,
 } from "@mui/material";
 import { IconUser, IconUserCheck } from "@tabler/icons-react";
-import { ProfileImg, getAvatar } from "src/assets";
 import styled from "@emotion/styled";
-import { useAPI } from "src/hooks";
-import { isObject } from "src/utils";
+import { useAPI } from "../../../hooks";
+import { ProfileImg, getAvatar } from "../../../assets";
+import { isObject } from "../../../utils";
 
 const ProfileAvatar = styled(Avatar)({
   width: 35,

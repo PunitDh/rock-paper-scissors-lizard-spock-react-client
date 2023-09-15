@@ -1,5 +1,5 @@
+import FlexBox from "../../../../../../components/shared/FlexBox";
 import { FlexForm } from "../styles";
-import { FlexBox } from "src/components/shared/styles";
 import HighlightedStats from "./HighlightedStats";
 
 const StatusBar = ({ state, dispatch }) => {

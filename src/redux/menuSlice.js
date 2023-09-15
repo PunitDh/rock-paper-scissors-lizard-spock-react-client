@@ -15,7 +15,7 @@ import {
   IconUser,
 } from "@tabler/icons-react";
 import { uniqueId } from "lodash";
-import { getIcon } from "src/assets";
+import { getIcon } from "../assets";
 
 const CURRENT_GAMES = "Current Games";
 

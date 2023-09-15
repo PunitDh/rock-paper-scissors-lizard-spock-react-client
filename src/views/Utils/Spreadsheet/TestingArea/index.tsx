@@ -1,9 +1,11 @@
+import React from "react";
 import styled from "@emotion/styled";
-import { useCallback, useState } from "react";
-import DashboardCard from "src/components/shared/DashboardCard";
-import { FlexBox } from "src/components/shared/styles";
-import { useToken } from "src/hooks";
 import useEventHandler from "../Sheet/hooks/useEventHandler";
+import DashboardCard from "../../../../components/shared/DashboardCard";
+import FlexBox from "../../../../components/shared/FlexBox";
+import { useToken } from "../../../../hooks";
+import { State } from "../Sheet/types";
+
 
 const CellContainer = styled.div({
   width: "6.5rem",
@@ -26,7 +28,7 @@ const CellLabel = styled.div({
   fontSize: "8px",
 });
 
-const CellContent = styled.div({
+const Contente = styled.div({
   position: "absolute",
   top: "14px",
   left: "0px",
@@ -34,36 +36,26 @@ const CellContent = styled.div({
   textAlign: "center",
 });
 
-const StatusCell = function ({ label, children }) {
+type Props = {
+  label: string
+  children: any
+}
+
+const StatusCell = function ({ label, children }: Props) {
   return (
     <CellContainer>
       <CellLabel>{label}</CellLabel>
-      <CellContent>{children}</CellContent>
+      <Contente>{children}</Contente>
     </CellContainer>
   );
 };
 
-const TestingArea = ({ state }) => {
+const TestingArea = ({ state }: { state: State }) => {
   const token = useToken();
-  const [keyboard, setKeyBoard] = useState(null);
-  const [mouse, setMouse] = useState(null);
   const eventHandler = useEventHandler();
 
-  useCallback(() => {
-    const keyboardEvent = (e) => setKeyBoard(e);
-    const mouseEvent = (e) => setMouse(e);
-
-    document.addEventListener("keydown", keyboardEvent);
-    document.addEventListener("mousemove", mouseEvent);
-
-    return () => {
-      document.removeEventListener("keydown", keyboardEvent);
-      document.removeEventListener("mousemove", mouseEvent);
-    };
-  }, []);
-
   return token.decoded.isAdmin ? (
-    <DashboardCard sx={{ height: "100%" }} title="Testing Area">
+    <DashboardCard sx={{ height: "100%" }} title="Testing Area" subtitle={undefined} action={undefined} footer={undefined} cardheading={undefined} headtitle={undefined} headsubtitle={undefined} middlecontent={undefined}>
       <FlexBox width="100%" height="100%" gap="0.5rem">
         {/* <StatusCell label="Keyboard">{keyboard && keyboard.key}</StatusCell>
         <StatusCell label="Mouse button">{mouse && mouse.buttons}</StatusCell>

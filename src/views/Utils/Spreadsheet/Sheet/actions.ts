@@ -1,3 +1,8 @@
+import CellData from "./models/CellData";
+import StateContent from "./models/StateContent";
+import StateContentData from "./models/StateContentData";
+import { Action } from "./types";
+
 export const SheetAction = Object.freeze({
   SET_SELECTED: "SET_SELECTED",
   SET_INPUT_REF: "SET_INPUT_REF",
@@ -45,71 +50,74 @@ export const SheetAction = Object.freeze({
   RESET_STATE: "RESET_STATE",
 });
 
-export const selectCell = (payload) => ({
+export const selectCell = (payload: string) => ({
   type: SheetAction.SET_SELECTED,
   payload,
 });
 
-export const setInputRef = (payload) => ({
+export const setInputRef = (payload: HTMLInputElement) => ({
   type: SheetAction.SET_INPUT_REF,
   payload,
 });
 
-export const setFillerRef = (payload) => ({
+export const setFillerRef = (payload: HTMLElement) => ({
   type: SheetAction.SET_FILLER_REF,
   payload,
 });
 
-export const setFormulaFieldRef = (payload) => ({
+export const setFormulaFieldRef = (payload: HTMLInputElement) => ({
   type: SheetAction.SET_FORMULA_FIELD_REF,
   payload,
 });
 
-export const addNamedRange = (payload) => ({
+export const addNamedRange = (payload: string): Action => ({
   type: SheetAction.ADD_NAMED_RANGE,
   payload,
 });
 
-export const setFormulaFieldText = (payload) => ({
+export const setFormulaFieldText = (payload: string): Action => ({
   type: SheetAction.SET_FORMULA_FIELD_TEXT,
   payload,
 });
 
-export const resetFormulaField = () => ({
+export const resetFormulaField = (): Action => ({
   type: SheetAction.RESET_FORMULA_FIELD,
 });
 
-export const setFormulaFieldFocused = (payload) => ({
+export const setFormulaFieldFocused = (payload: boolean): Action => ({
   type: SheetAction.SET_FORMULA_FIELD_FOCUSED,
   payload,
 });
 
-export const setFormulaMode = (payload) => ({
+export const setFormulaMode = (payload: boolean): Action => ({
   type: SheetAction.SET_FORMULA_MODE,
   payload,
 });
 
-export const setHovered = (payload) => ({
+export const setHovered = (payload: string): Action => ({
   type: SheetAction.SET_HOVERED,
   payload,
 });
 
-export const setHighlightCellAnchor = (payload) => ({
+export const setHighlightCellAnchor = (payload: string): Action => ({
   type: SheetAction.SET_HIGHLIGHT_CELL_ANCHOR,
   payload,
 });
 
-export const setHighlightRowAnchor = (payload) => ({
+export const setHighlightRowAnchor = (payload: string): Action => ({
   type: SheetAction.SET_HIGHLIGHT_ROW_ANCHOR,
   payload,
 });
 
-export const setHighlightColumnAnchor = (payload) => ({
+export const setHighlightColumnAnchor = (payload: string): Action => ({
   type: SheetAction.SET_HIGHLIGHT_COLUMN_ANCHOR,
   payload,
 });
 
-export const pasteCellContent = (anchor, data) => ({
+export const pasteCellContent = (
+  anchor: string,
+  data: StateContentData
+): Action => ({
   type: SheetAction.PASTE_CELL_CONTENT,
   payload: {
     anchor,
@@ -117,17 +125,17 @@ export const pasteCellContent = (anchor, data) => ({
   },
 });
 
-export const deleteCellContent = (payload) => ({
+export const deleteCellContent = (payload: string) => ({
   type: SheetAction.DELETE_CELL_CONTENT,
   payload,
 });
 
-export const setSelectedRow = (payload) => ({
+export const setSelectedRow = (payload: string): Action => ({
   type: SheetAction.SET_SELECTED_ROW,
   payload,
 });
 
-export const setRowHeight = (row, height) => ({
+export const setRowHeight = (row: number, height: number): Action => ({
   type: SheetAction.SET_ROW_HEIGHT,
   payload: {
     row,
@@ -135,12 +143,12 @@ export const setRowHeight = (row, height) => ({
   },
 });
 
-export const setSelectedColumn = (payload) => ({
+export const setSelectedColumn = (payload: string): Action => ({
   type: SheetAction.SET_SELECTED_COLUMN,
   payload,
 });
 
-export const setColumnWidth = (column, width) => ({
+export const setColumnWidth = (column: string, width: number): Action => ({
   type: SheetAction.SET_COLUMN_WIDTH,
   payload: {
     column,
@@ -148,17 +156,19 @@ export const setColumnWidth = (column, width) => ({
   },
 });
 
-export const selectAll = () => ({
+export const selectAll = (): Action => ({
   type: SheetAction.SELECT_ALL,
 });
 
-export const highlightCells = (start, end) => ({
+export const highlightCells = (start: string, end: string): Action => ({
   type: SheetAction.HIGHLIGHT_CELLS,
-  start,
-  end,
+  payload: { start, end },
 });
 
-export const highlightFormulaCellRange = (start, end) => ({
+export const highlightFormulaCellRange = (
+  start: string,
+  end: string
+): Action => ({
   type: SheetAction.FORMULA_HIGHLIGHT_CELL_RANGE,
   payload: {
     start,
@@ -166,106 +176,110 @@ export const highlightFormulaCellRange = (start, end) => ({
   },
 });
 
-export const highlightFormulaCells = (payload) => ({
+export const highlightFormulaCells = (payload: string[]): Action => ({
   type: SheetAction.FORMULA_HIGHLIGHT_CELLS,
   payload,
 });
 
-export const addCellsToHighlight = (payload) => ({
+export const addCellsToHighlight = (payload: string[]): Action => ({
   type: SheetAction.ADD_CELLS_TO_HIGHLIGHT,
   payload,
 });
 
-export const removeCellsFromHighlight = (payload) => ({
+export const removeCellsFromHighlight = (payload: string[]): Action => ({
   type: SheetAction.REMOVE_CELLS_FROM_HIGHLIGHT,
   payload,
 });
 
-export const openContextMenu = (payload) => ({
+export const openContextMenu = (payload: HTMLElement | null): Action => ({
   type: SheetAction.OPEN_CONTEXT_MENU,
   payload,
 });
 
-export const resetHighlight = () => ({
+export const resetHighlight = (): Action => ({
   type: SheetAction.RESET_HIGHLIGHT,
 });
 
-export const setMouseDown = (payload) => ({
+export const setMouseDown = (payload: boolean): Action => ({
   type: SheetAction.SET_MOUSEDOWN,
   payload,
 });
 
-export const setDragging = (payload) => ({
+export const setDragging = (payload: boolean): Action => ({
   type: SheetAction.SET_DRAGGING,
   payload,
 });
 
-export const setFillerMode = (payload) => ({
+export const setFillerMode = (payload: boolean): Action => ({
   type: SheetAction.SET_FILLER_MODE,
   payload,
 });
 
-export const setCellContent = (cellId, value) => ({
+export const setCellContent = (cellId: string, value: string): Action => ({
   type: SheetAction.SET_CONTENT_DATA,
   payload: { cell: cellId, value },
 });
 
-export const updateReferenceCells = (cell, values, replace) => ({
+export const updateReferenceCells = (
+  cell: string,
+  values: string[],
+  replace: boolean
+): Action => ({
   type: SheetAction.UPDATE_REFERENCE_CELLS,
   payload: { cell, values, replace },
 });
 
-export const setContentBulk = (payload) => ({
+export const setContentBulk = (payload: StateContent): Action => ({
   type: SheetAction.SET_CONTENT_BULK,
   payload,
 });
 
-export const setSelectedCellFormatting = (payload) => ({
+export const setSelectedCellFormatting = (payload: any): Action => ({
   type: SheetAction.SET_CELL_FORMATTING,
   payload,
 });
 
-export const setCellFormattingBulk = (payload) => ({
+export const setCellFormattingBulk = (payload: any): Action => ({
   type: SheetAction.SET_CELL_FORMATTING_BULK,
   payload,
 });
 
-export const setCellBorderFormatting = (payload) => ({
+export const setCellBorderFormatting = (payload: any): Action => ({
   type: SheetAction.SET_CELL_BORDER_FORMATTING,
   payload,
 });
 
-export const setCellBorderFormattingBulk = (payload) => ({
+export const setCellBorderFormattingBulk = (payload: any): Action => ({
   type: SheetAction.SET_CELL_BORDER_FORMATTING_BULK,
   payload,
 });
 
-export const setCellOutsideBorderFormatting = (payload) => ({
+export const setCellOutsideBorderFormatting = (payload: any): Action => ({
   type: SheetAction.SET_CELL_OUTSIDE_BORDER_FORMATTING,
   payload,
 });
 
-export const clearCellFormatting = (payload) => ({
+export const clearCellFormatting = (payload: string): Action => ({
   type: SheetAction.CLEAR_CELL_FORMATTING,
   payload,
 });
 
-export const recalculateFormulae = () => ({
+export const recalculateFormulae = (): Action => ({
   type: SheetAction.RECALCULATE_FORMULAE,
 });
 
-export const addMemento = () => ({
+export const addMemento = (): Action => ({
   type: SheetAction.ADD_MEMENTO,
 });
 
-export const undoState = () => ({
+export const undoState = (): Action => ({
   type: SheetAction.UNDO_STATE,
 });
 
-export const redoState = () => ({
+export const redoState = (): Action => ({
   type: SheetAction.REDO_STATE,
 });
 
-export const resetState = () => ({
+export const resetState = (): Action => ({
   type: SheetAction.RESET_STATE,
 });

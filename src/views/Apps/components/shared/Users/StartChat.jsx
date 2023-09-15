@@ -1,9 +1,11 @@
 import styled from "@emotion/styled";
 import { CircularProgress, Tooltip } from "@mui/material";
 import { Chat } from "@mui/icons-material";
-import { useAPI, useSocket } from "src/hooks";
+
 import { useState } from "react";
-import { SocketResponse } from "src/utils/constants";
+import { useAPI, useSocket } from "../../../../../hooks";
+import { SocketResponse } from "../../../../../utils/constants";
+
 
 const GameButton = styled(Chat)(({ theme }) => ({
   backgroundColor: "primary.main",

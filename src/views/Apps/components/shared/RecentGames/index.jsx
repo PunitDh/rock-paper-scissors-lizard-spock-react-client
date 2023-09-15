@@ -2,9 +2,9 @@ import DashboardCard from "../../../../../components/shared/DashboardCard";
 import { Timeline, timelineOppositeContentClasses } from "@mui/lab";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useAPI, useLoading } from "src/hooks";
 import RecentGame from "./RecentGame";
-import LoadingComponent from "src/components/shared/LoadingComponent";
+import { useAPI, useLoading } from "../../../../../hooks";
+import LoadingComponent from "../../../../../components/shared/LoadingComponent";
 
 const RecentGames = () => {
   const api = useAPI();

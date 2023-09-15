@@ -11,6 +11,9 @@ export default class CellFormatting {
       this.decimals = 0;
       this.numberFormat = null;
     }
+    this.backgroundColor = undefined;
+    this.color = undefined;
+    this.textAlign = undefined;
   }
 
   setFormatting(obj) {

@@ -1,4 +1,5 @@
-import { isNumber } from "src/utils";
+
+import { isNumber } from "../../../../../utils";
 import {
   addCellsToHighlight,
   addMemento,

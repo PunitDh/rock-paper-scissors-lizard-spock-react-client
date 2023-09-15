@@ -7,8 +7,8 @@ import HeadersTab from "./HeadersTab";
 import styled from "@emotion/styled";
 import { RequestTabList, tabProps } from "../../constants";
 import { DividerBox } from "../../styles";
-import { useQueryParam } from "src/hooks";
 import CustomTab from "../../components/CustomTab";
+import { useQueryParam } from "../../../../../../hooks";
 
 const WideBox = styled(Box)({
   width: "100%",

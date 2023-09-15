@@ -5,10 +5,12 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
-import PasswordField from "src/components/shared/PasswordField";
-import { Bold, FlexBox } from "src/components/shared/styles";
+
 import { setAuthorization } from "../../../../actions";
 import { AuthorizationType } from "../../../../constants";
+import FlexBox from "../../../../../../../../components/shared/FlexBox";
+import { Bold } from "../../../../../../../../components/shared/styles";
+
 
 export default function BasicAuth({ state, dispatch }) {
   const credentials = state.request.authorization[AuthorizationType.BASIC_AUTH];

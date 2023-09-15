@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { FlexBox } from "src/components/shared/styles";
+import FlexBox from "../../../../../../../components/shared/FlexBox";
 
 const Table = styled.table(
   ({ borderTop, borderRight, borderBottom, borderLeft }) => ({

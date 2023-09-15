@@ -18,21 +18,38 @@ export const fontSizes = Object.freeze([
   "24px",
 ]);
 
-export const BorderType = Object.freeze({
-  BORDER_TOP: "borderTop",
-  BORDER_RIGHT: "borderRight",
-  BORDER_BOTTOM: "borderBottom",
-  BORDER_LEFT: "borderLeft",
-  NO_BORDER: "NO_BORDER",
-  ALL_BORDERS: "ALL_BORDERS",
-  OUTSIDE_BORDERS: "OUTSIDE_BORDERS",
-  THICK_OUTSIDE_BORDERS: "THICK_OUTSIDE_BORDERS",
-});
+export enum BorderType {
+  BORDER_TOP = "borderTop",
+  BORDER_RIGHT = "borderRight",
+  BORDER_BOTTOM = "borderBottom",
+  BORDER_LEFT = "borderLeft",
+  NO_BORDER = "NO_BORDER",
+  ALL_BORDERS = "ALL_BORDERS",
+  OUTSIDE_BORDERS = "OUTSIDE_BORDERS",
+  THICK_OUTSIDE_BORDERS = "THICK_OUTSIDE_BORDERS",
+}
+
+// export const BorderType = Object.freeze({
+//   BORDER_TOP: "borderTop",
+//   BORDER_RIGHT: "borderRight",
+//   BORDER_BOTTOM: "borderBottom",
+//   BORDER_LEFT: "borderLeft",
+//   NO_BORDER: "NO_BORDER",
+//   ALL_BORDERS: "ALL_BORDERS",
+//   OUTSIDE_BORDERS: "OUTSIDE_BORDERS",
+//   THICK_OUTSIDE_BORDERS: "THICK_OUTSIDE_BORDERS",
+// });
 
 export const outsideBorders = Object.freeze([
   BorderType.OUTSIDE_BORDERS,
   BorderType.THICK_OUTSIDE_BORDERS,
 ]);
+
+export type BorderStyle = {
+  id: BorderType;
+  props: { [key: string]: string };
+  value: string;
+};
 
 export const borderStyles = Object.freeze([
   {
@@ -98,20 +115,31 @@ export const borderStyles = Object.freeze([
   },
 ]);
 
-export const NumberFormat = Object.freeze({
-  GENERAL: "General",
-  NUMBER: "Number",
-  CURRENCY: "Currency",
-  SHORT_DATE: "Short Date",
-  LONG_DATE: "Long Date",
-  TIME: "Time",
-  PERCENTAGE: "Percentage",
-  TEXT: "Text",
-});
+export enum NumberFormat {
+  GENERAL = "General",
+  NUMBER = "Number",
+  CURRENCY = "Currency",
+  SHORT_DATE = "Short Date",
+  LONG_DATE = "Long Date",
+  TIME = "Time",
+  PERCENTAGE = "Percentage",
+  TEXT = "Text",
+}
+
+// export const NumberFormat = Object.freeze({
+//   GENERAL: "General",
+//   NUMBER: "Number",
+//   CURRENCY: "Currency",
+//   SHORT_DATE: "Short Date",
+//   LONG_DATE: "Long Date",
+//   TIME: "Time",
+//   PERCENTAGE: "Percentage",
+//   TEXT: "Text",
+// });
 
 export const numberFormats = Object.freeze([
-  { id: NumberFormat.GENERAL, function: String, Icon: TextFormat },
-  { id: NumberFormat.NUMBER, function: Number, Icon: NumbersOutlined },
+  { id: NumberFormat.GENERAL, Icon: TextFormat },
+  { id: NumberFormat.NUMBER, Icon: NumbersOutlined },
   { id: NumberFormat.CURRENCY, Icon: IconCurrencyDollar },
   { id: NumberFormat.SHORT_DATE, Icon: CalendarMonth },
   { id: NumberFormat.LONG_DATE, Icon: CalendarMonth },

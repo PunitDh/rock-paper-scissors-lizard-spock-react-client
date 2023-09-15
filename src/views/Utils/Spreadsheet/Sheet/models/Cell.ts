@@ -5,23 +5,35 @@ import {
 } from "../constants";
 
 export default class Cell {
-  constructor(id) {
+  id: string;
+  row: number;
+  column: string;
+  columnCharCode?: number;
+
+  constructor(id: string) {
     this.id = id;
     const rowMatch = id?.match(/\d+/g);
     const columnMatch = id?.match(/[A-Z]+/g);
-    if (!rowMatch || !columnMatch || !rowMatch[0] || !columnMatch[0]) {
-      return console.error(`Invalid cell id: ${id}`);
-    }
-    this.row = Number(rowMatch[0]);
-    this.column = columnMatch[0];
+    this.row = Number(rowMatch![0]);
+    this.column = columnMatch![0];
     this.columnCharCode = Number(this.column.charCodeAt(0));
+    if (!rowMatch || !columnMatch || !rowMatch[0] || !columnMatch[0]) {
+      console.error(`Invalid cell id: ${id}`);
+      return;
+    }
   }
 
-  static isValidId(id) {
+  static isValidId(id: string): boolean {
     return /[A-Z]+\d+/gi.test(id);
   }
 
-  getOffset(offsetX, offsetY, wrap = true, maxRows, maxColumns) {
+  getOffset(
+    offsetX: number,
+    offsetY: number,
+    wrap: boolean = true,
+    maxRows: number = SheetConfig.MAX_ROWS,
+    maxColumns: number = SheetConfig.MAX_COLUMNS
+  ): Cell | undefined {
     let offsetRow = +this.row + offsetY;
     let columnIndex = SheetConfig.COLUMNS.indexOf(this.column) + offsetX;
 
@@ -35,55 +47,56 @@ export default class Cell {
 
     // Ensure the resulting cell is valid, otherwise, you might want to throw an error or handle differently
     if (!offsetColumn || offsetRow <= 0) {
-      return console.error(`Invalid cell id: ${offsetColumn}${offsetRow}`); // or throw new Error("Invalid cell position");
+      console.error(`Invalid cell id: ${offsetColumn}${offsetRow}`);
+      return; // or throw new Error("Invalid cell position");
     }
 
     return new Cell(`${offsetColumn}${offsetRow}`);
   }
 
   getNextColumn(
-    maxRows = SheetConfig.MAX_ROWS,
-    maxColumns = SheetConfig.MAX_COLUMNS
-  ) {
+    maxRows: number = SheetConfig.MAX_ROWS,
+    maxColumns: number = SheetConfig.MAX_COLUMNS
+  ): Cell {
     const lastColumnCharCode = getLastColumnCharCode(maxColumns);
     const newRow =
-      this.columnCharCode + 1 > lastColumnCharCode && this.row === maxRows
+      this.columnCharCode! + 1 > lastColumnCharCode && this.row === maxRows
         ? 1
-        : this.row + (this.columnCharCode + 1 > lastColumnCharCode ? 1 : 0);
+        : this.row + (this.columnCharCode! + 1 > lastColumnCharCode ? 1 : 0);
 
     const newColumnCharCode =
-      this.columnCharCode + 1 > lastColumnCharCode
+      this.columnCharCode! + 1 > lastColumnCharCode
         ? getFirstColumnCharCode()
-        : this.columnCharCode + 1;
+        : this.columnCharCode! + 1;
 
     const newColumn = String.fromCharCode(newColumnCharCode);
     const newCellId = `${newColumn}${newRow}`;
     return new Cell(newCellId);
   }
 
-  getNextRow(maxRows = SheetConfig.MAX_ROWS) {
+  getNextRow(maxRows: number = SheetConfig.MAX_ROWS): Cell {
     const nextRow = +this.row === maxRows ? +this.row : +this.row + 1;
     const newCellId = `${this.column}${nextRow}`;
     return new Cell(newCellId);
   }
 
-  getPreviousColumn(maxColumns = SheetConfig.MAX_COLUMNS) {
+  getPreviousColumn(maxColumns: number = SheetConfig.MAX_COLUMNS): Cell {
     const firstColumnCharCode = getFirstColumnCharCode();
     const nextRow =
-      this.columnCharCode - 1 < firstColumnCharCode && this.row > 1
+      this.columnCharCode! - 1 < firstColumnCharCode && this.row > 1
         ? this.row - 1
         : this.row;
 
     const nextColumnCharCode =
-      this.columnCharCode - 1 < firstColumnCharCode
+      this.columnCharCode! - 1 < firstColumnCharCode
         ? getLastColumnCharCode(maxColumns)
-        : this.columnCharCode - 1;
+        : this.columnCharCode! - 1;
 
     const newCellId = `${String.fromCharCode(nextColumnCharCode)}${nextRow}`;
     return new Cell(newCellId);
   }
 
-  getPreviousRow() {
+  getPreviousRow(): Cell {
     const nextRow = +this.row === 1 ? +this.row : +this.row - 1;
     const newCellId = `${this.column}${nextRow}`;
     return new Cell(newCellId);

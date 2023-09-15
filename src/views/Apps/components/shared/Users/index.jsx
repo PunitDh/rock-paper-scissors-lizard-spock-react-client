@@ -9,12 +9,12 @@ import {
   Tooltip,
 } from "@mui/material";
 import DashboardCard from "../../../../../components/shared/DashboardCard";
-import ResponsiveTableCell from "src/components/shared/ResponsiveTableCell";
-import StyledTableCell from "src/components/shared/StyledTableCell";
 import UserRow from "./UserRow";
-import { useAPI, useLoading } from "src/hooks";
 import { useSelector } from "react-redux";
-import LoadingComponent from "src/components/shared/LoadingComponent";
+import { useAPI, useLoading } from "../../../../../hooks";
+import LoadingComponent from "../../../../../components/shared/LoadingComponent";
+import ResponsiveTableCell from "../../../../../components/shared/ResponsiveTableCell";
+import StyledTableCell from "../../../../../components/shared/StyledTableCell";
 
 const Users = ({ search }) => {
   const { currentUsers } = useSelector((state) => state.player);

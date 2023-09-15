@@ -1,11 +1,20 @@
+import React from "react";
 import styled from "@emotion/styled";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Dispatch, SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { openContextMenu, setCellContent, setFormulaMode } from "../actions";
 import { isFormula } from "../utils/cellUtils";
 // eslint-disable-next-line no-unused-vars
 import useEventHandler from "../hooks/useEventHandler";
+import { Action, State } from "../types";
+import CellData from "../models/CellData";
+import CellFormatting from "../models/CellFormatting";
 
-const Container = styled.div(({ top, left }) => ({
+type ContainerProps = {
+  top: number;
+  left: number;
+}
+
+const Container = styled.div(({ top, left }: ContainerProps) => ({
   position: "absolute",
   top: `${top}px`,
   left: `${left}px`,
@@ -13,7 +22,16 @@ const Container = styled.div(({ top, left }) => ({
   zIndex: "50000",
 }));
 
-const InputField = styled.input(({ width, height, isfocused, formatting }) => ({
+type InputFieldProps =
+  {
+    width: number
+    height: number
+    isfocused: boolean
+    formatting: CellFormatting | undefined
+  }
+
+
+const InputField = styled.input(({ width, height, isfocused, formatting }: InputFieldProps) => ({
   width: `${width}px`,
   height: `${height}px`,
   borderRadius: 0,
@@ -21,30 +39,30 @@ const InputField = styled.input(({ width, height, isfocused, formatting }) => ({
   border: "2px solid blue",
   cursor: "cell",
   padding: "1px",
-  backgroundColor: isfocused ? "white" : "transparent",
-  color: isfocused ? "black" : "transparent",
   ...formatting,
+  backgroundColor: isfocused ? "white" : formatting?.backgroundColor || "transparent",
+  color: isfocused ? "black" : formatting?.color || "transparent",
   "&:focus": {
     cursor: "text",
   },
 }));
 
-/**
- *
- * @param {Object} props
- * @returns
- */
-const CellInput = ({ state, dispatch }) => {
+type Props = {
+  state: State
+  dispatch: Dispatch<Action>
+}
+
+const CellInput = ({ state, dispatch }: Props): JSX.Element => {
   const navigateRef = useRef(true);
   const eventHandler = useEventHandler();
 
   const inputRef = useCallback(
-    (node) => eventHandler.setInputRef(node),
+    (node: HTMLInputElement | null) => eventHandler.setInputRef(node),
     [eventHandler]
   );
 
   const cell = useMemo(() => state.selectedCell, [state.selectedCell]);
-  const currentCellContentData = state.content.data[cell.id];
+  const currentCellContentData = state.content.data[cell.id] as CellData;
   const rowHeight = useMemo(
     () => ({
       value:
@@ -113,16 +131,16 @@ const CellInput = ({ state, dispatch }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cell.id]);
 
-  const handleBlur = (e) => eventHandler.handleInputBoxBlur(e);
+  const handleBlur = (e: SyntheticEvent) => eventHandler.handleInputBoxBlur(e);
 
-  const handleChange = (e) => {
-    const newValue = e.target.value;
+  const handleChange = (e: SyntheticEvent) => {
+    const newValue = (e.target as HTMLInputElement).value;
     if (isFormula(newValue)) dispatch(setFormulaMode(true));
     dispatch(setCellContent(cell.id, newValue));
   };
 
   const handleKeyDown = useCallback(
-    (e) =>
+    (e: SyntheticEvent) =>
       eventHandler.handleCellInputKeyDown(
         e,
         originalValue,
@@ -134,12 +152,12 @@ const CellInput = ({ state, dispatch }) => {
 
   const handleFocus = () => eventHandler.setFocusInput(true);
 
-  const handleContextMenu = (e) => {
+  const handleContextMenu = (e: SyntheticEvent) => {
     e.preventDefault();
     dispatch(openContextMenu(document.getElementById(state.selectedCell.id)));
   };
 
-  const handleClick = (e) => {
+  const handleClick = () => {
     navigateRef.current = false;
   };
 
@@ -161,8 +179,8 @@ const CellInput = ({ state, dispatch }) => {
         onContextMenu={handleContextMenu}
         onClick={handleClick}
         formatting={
-          !(state.content.data[cell.id]?.formula?.length > 0) &&
-          state.content.data[cell.id]?.formatting
+          !(state.content.data[cell.id]?.formula?.length as number > 0) ?
+            state.content.data[cell.id]?.formatting : undefined
         }
       />
     </Container>

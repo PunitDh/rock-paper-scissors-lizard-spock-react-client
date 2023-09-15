@@ -1,7 +1,7 @@
 import jwtDecode from "jwt-decode";
 import { createContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { clearToken, setToken } from "src/redux/playerSlice";
+import { clearToken, setToken } from "../redux/playerSlice";
 
 export const TokenContext = createContext();
 

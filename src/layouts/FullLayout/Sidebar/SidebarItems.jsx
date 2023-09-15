@@ -1,8 +1,8 @@
 import { useLocation } from "react-router";
 import { useSelector } from "react-redux";
 import { Box, List } from "@mui/material";
-import { useToken } from "src/hooks";
 import NavGroup from "./NavGroup";
+import { useToken } from "../../../hooks";
 
 const SidebarItems = ({ closeSideBar }) => {
   const { pathname } = useLocation();

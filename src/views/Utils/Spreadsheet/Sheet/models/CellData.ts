@@ -2,10 +2,28 @@ import { isFormula } from "../utils/cellUtils";
 import CellRange from "./CellRange";
 import CellFormatting from "./CellFormatting";
 import { NumberFormat } from "../components/Toolbar/constants";
-import { isFalsy, isNumber } from "src/utils";
 import { isString } from "lodash";
+import { isFalsy, isNumber } from "../../../../../utils";
+import StateContentData from "./StateContentData";
+
+type CellDataShape = {
+  id: string | null;
+  value?: string | number | null;
+  formula?: string | null;
+  referenceCells?: Array<string>;
+  display?: string;
+  formatting?: CellFormatting;
+  error?: string | null;
+};
 
 export default class CellData {
+  id: string | null;
+  value: string | number | null;
+  formula: string | null;
+  referenceCells: Array<string>;
+  display: string;
+  formatting: CellFormatting;
+  error: string | null;
   /**
    * Creates an instance of CellData.
    *
@@ -18,25 +36,22 @@ export default class CellData {
    * @param {Object} [obj.formatting] - The cell formatting attributes.
    * @param {string} [obj.error] - Any error related to the cell.
    */
-  constructor(obj) {
-    if (obj) {
-      this.id = obj.id || null;
-      this.value = obj.value || null;
-      this.formula = obj.formula || null;
-      this.referenceCells = obj.referenceCells || [];
-      this.display = obj.display || "";
-      this.formatting =
-        new CellFormatting(obj.formatting) || new CellFormatting();
-      this.error = obj.error || null;
-    } else {
-      this.id = null;
-      this.value = null;
-      this.display = "";
-      this.formula = null;
-      this.referenceCells = [];
-      this.formatting = new CellFormatting();
-      this.error = null;
-    }
+  constructor({
+    id = null,
+    value = null,
+    formula = null,
+    referenceCells = [],
+    display = "",
+    formatting = new CellFormatting(),
+    error = null,
+  }: CellDataShape) {
+    this.id = id;
+    this.value = value;
+    this.formula = formula;
+    this.referenceCells = referenceCells;
+    this.display = display;
+    this.formatting = new CellFormatting(formatting);
+    this.error = error;
   }
 
   /**
@@ -46,12 +61,12 @@ export default class CellData {
    * @param {string} id - The ID for the new `CellData` instance if one is created.
    * @returns {CellData} An existing or newly created `CellData` instance.
    */
-  static getOrNew(cellData, id) {
+  static getOrNew(cellData: CellData | object, id: string): CellData {
     if (cellData instanceof CellData) {
       return cellData;
     }
 
-    return new CellData(cellData || { id });
+    return new CellData({ id });
   }
 
   /**
@@ -61,7 +76,7 @@ export default class CellData {
    * @param {string} id - The ID for retrieving or creating a `CellData` instance.
    * @returns {CellData} An existing or newly created `CellData` instance.
    */
-  static getOrNew1(stateContentData, id) {
+  static getOrNew1(stateContentData: StateContentData, id: string): CellData {
     if (stateContentData[id] instanceof CellData) {
       return stateContentData[id];
     }
@@ -73,8 +88,8 @@ export default class CellData {
    *
    * @returns {boolean} True if the cell contains a formula, otherwise false.
    */
-  get isFormulaCell() {
-    return isFormula(this.formula) && this.formula?.length > 0;
+  get isFormulaCell(): boolean {
+    return isFormula(this.formula) && this.formula?.length! > 0;
   }
 
   isNumber() {
@@ -87,14 +102,14 @@ export default class CellData {
    * @param {string} id - The ID to set.
    * @returns {CellData} The current `CellData` instance for chaining.
    */
-  setId(id) {
+  setId(id: string): CellData {
     this.id = id || this.id || null;
     return this;
   }
 
-  setValue(value) {
+  setValue(value: string | number): CellData {
     if (isFormula(value)) {
-      const formula = value.toUpperCase();
+      const formula = String(value).toUpperCase();
       this.setFormula(formula);
     } else {
       this.value = value;
@@ -104,25 +119,25 @@ export default class CellData {
     return this;
   }
 
-  setReferenceCells(referenceCells) {
+  setReferenceCells(referenceCells: string[]): CellData {
     this.referenceCells = referenceCells;
     return this;
   }
 
-  setFormula(formula) {
+  setFormula(formula: string): CellData {
     this.formula = formula;
     this.referenceCells = getReferenceCells(formula);
     return this;
   }
 
-  setDisplay() {
-    let display;
+  setDisplay(): CellData {
+    let display: string;
     display = getNumberFormattedDisplay(this.value, this.formatting);
     this.display = display;
     return this;
   }
 
-  setFormatting(formatting) {
+  setFormatting(formatting: CellFormatting): CellData {
     this.formatting = this.formatting.setFormatting(formatting);
     this.setDisplay();
     return this;
@@ -182,7 +197,10 @@ export default class CellData {
  * @param {number} [formatting.decimals] - The number of decimal places to display (relevant for some number formats).
  * @returns {string} The formatted value as a string.
  */
-const getNumberFormattedDisplay = (value, formatting) => {
+const getNumberFormattedDisplay = (
+  value: string | number | null,
+  formatting: { numberFormat: string; decimals?: number }
+): string => {
   if (isFalsy(value)) return "";
   switch (formatting.numberFormat) {
     case NumberFormat.GENERAL: {
@@ -190,35 +208,35 @@ const getNumberFormattedDisplay = (value, formatting) => {
     }
 
     case NumberFormat.NUMBER: {
-      const parsed = parseFloat(value);
-      if (isNaN(parsed)) return value;
+      const parsed = value && parseFloat(String(value));
+      if (!isNumber(parsed)) return String(value);
       return new Intl.NumberFormat(undefined, {
         minimumFractionDigits: formatting.decimals,
         maximumFractionDigits: formatting.decimals,
-      }).format(value);
+      }).format(Number(value));
     }
 
     case NumberFormat.CURRENCY: {
-      const parsed = parseFloat(value);
-      if (isNaN(parsed)) return value;
+      const parsed = parseFloat(String(value));
+      if (isNaN(parsed)) return String(value);
       return new Intl.NumberFormat(undefined, {
         style: "currency",
         currency: "AUD",
         currencyDisplay: "narrowSymbol",
         minimumFractionDigits: formatting.decimals,
         maximumFractionDigits: formatting.decimals,
-      }).format(value);
+      }).format(Number(value));
     }
 
     case NumberFormat.SHORT_DATE: {
-      return new Intl.DateTimeFormat(undefined).format(value);
+      return new Intl.DateTimeFormat(undefined).format(Number(value));
     }
 
     case NumberFormat.LONG_DATE: {
       return new Intl.DateTimeFormat(undefined, {
         dateStyle: "full",
         timeStyle: "long",
-      }).format(value);
+      }).format(Number(value));
     }
 
     case NumberFormat.TIME: {
@@ -226,11 +244,11 @@ const getNumberFormattedDisplay = (value, formatting) => {
         hour: "numeric",
         minute: "numeric",
         second: "numeric",
-      }).format(value);
+      }).format(Number(value));
     }
 
     case NumberFormat.PERCENTAGE: {
-      return parseFloat(value / 100).toLocaleString(undefined, {
+      return Number(Number(value) / 100).toLocaleString(undefined, {
         style: "percent",
         minimumFractionDigits: formatting.decimals,
       });
@@ -243,7 +261,12 @@ const getNumberFormattedDisplay = (value, formatting) => {
   }
 };
 
-const processVLookup = (str, reg, formulaCreator, zeroValue) => {
+const processVLookup = (
+  str: string,
+  reg: RegExp,
+  formulaCreator: Function,
+  zeroValue: undefined | null | 0
+) => {
   const matches = [...str.matchAll(reg)];
   const referenceCells = matches.map(([_, match]) =>
     match.split(",").map((it) => {
@@ -260,12 +283,17 @@ const processVLookup = (str, reg, formulaCreator, zeroValue) => {
   }));
 };
 
-const processLookup = (str, reg, formulaCreator, zeroValue) => {
+const processLookup = (
+  str: string,
+  reg: RegExp,
+  formulaCreator: Function,
+  zeroValue: undefined | null | 0
+) => {
   const matches = [...str.matchAll(reg)];
   const referenceCells = matches.map(([_, match]) =>
     match
       .split(",")
-      .map((it) =>
+      .map((it: string) =>
         it.includes(":")
           ? CellRange.createFlat(it.split(":")[0], it.split(":")[1]).cellIds
           : it
@@ -289,7 +317,12 @@ const processLookup = (str, reg, formulaCreator, zeroValue) => {
  * @param {undefined | null} zeroValue - What to treat a blank value as.
  * @returns {Array} An array of objects containing the matched formulas and reference cells.
  */
-const processMatches = (str, reg, formulaCreator, zeroValue) => {
+const processMatches = (
+  str: string,
+  reg: RegExp,
+  formulaCreator: Function,
+  zeroValue: undefined | null
+): Array<any> => {
   const matches = [...str.matchAll(reg)];
   const referenceCells = matches.map(([_, match]) =>
     match
@@ -317,17 +350,27 @@ const processMatches = (str, reg, formulaCreator, zeroValue) => {
  * @param {*} blankValue - Default value to use when cell value is not found.
  * @returns {string} The processed string with replaced cell values.
  */
-const replaceFormulaWithValues = (str, stateContentData, blankValue) => {
+const replaceFormulaWithValues = (
+  str: string,
+  stateContentData: StateContentData,
+  blankValue: undefined | null | 0
+): string => {
   const cellReg = /([A-Z]\d+)/g;
   const cellMatches = [...new Set([...str.matchAll(cellReg)].flat())].sort(
     (a, b) => {
-      const [aLetters, aNumbers] = a.match(/([A-Z]+)(\d+)/).slice(1);
-      const [bLetters, bNumbers] = b.match(/([A-Z]+)(\d+)/).slice(1);
+      const aMatch = a.match(/([A-Z]+)(\d+)/);
+      const bMatch = b.match(/([A-Z]+)(\d+)/);
 
-      const lettersComparison = bLetters.localeCompare(aLetters);
-      if (lettersComparison !== 0) return lettersComparison;
+      if (aMatch && bMatch) {
+        const [aLetters, aNumbers] = aMatch.slice(1);
+        const [bLetters, bNumbers] = bMatch.slice(1);
 
-      return parseInt(bNumbers) - parseInt(aNumbers);
+        const lettersComparison = bLetters.localeCompare(aLetters);
+        if (lettersComparison !== 0) return lettersComparison;
+
+        return parseInt(bNumbers) - parseInt(aNumbers);
+      }
+      return -1;
     }
   );
 
@@ -352,49 +395,51 @@ const replaceFormulaWithValues = (str, stateContentData, blankValue) => {
  * @param {string} cellValue - The formula string to evaluate.
  * @returns {Array} An array of objects containing parsed formulas and reference cells.
  */
-const evaluateFormula = (cellValue) => {
+const evaluateFormula = (cellValue: string): Array<any> => {
   let str = cellValue.toUpperCase();
 
   const sumMatches = processMatches(
     str,
     /(?:SUM)\(([^)]+)\)/gi,
-    (it) => `(${it.join("+")})`,
+    (it: string[]) => `(${it.join("+")})`,
     null
   );
 
   const avgMatches = processMatches(
     str,
     /(?:AVERAGE)\(([^)]+)\)/gi,
-    (it) => `((${it.join("+")})/${it.filter((it) => it !== null).length})`,
+    (it: string[]) =>
+      `((${it.join("+")})/${it.filter((it) => it !== null).length})`,
     null
   );
 
   const countMatches = processMatches(
     str,
     /(?:COUNT)\(([^)]+)\)/gi,
-    (it) => `(${it.map((i) => `Number(!isNaN(${i}))`).join("+")})`,
+    (it: string[]) =>
+      `(${it.map((i: string) => `Number(!isNaN(${i}))`).join("+")})`,
     undefined
   );
 
   const lookupMatches = processLookup(
     str,
     /(?:\bLOOKUP)\(([^)]+)\)/gi,
-    (it) =>
+    (it: string[][]) =>
       `[${it[2].map((i) => `${i}`).join(",")}][[${it[1]
         .map((i) => `${i}`)
-        .join(",")}].findIndex(it => it === ${it[0]})]`,
+        .join(",")}].findIndex(it => it == ${it[0]})]`,
     null
   );
 
   const vLookupMatches = processVLookup(
     str,
     /(?:\bVLOOKUP)\(([^)]+)\)/gi,
-    (it) => {
+    (it: string[][][]) => {
       console.log(it[0], it[1], it[2]);
       const _0 = it[0];
       const _1 = `[${it[1].map((it) => `[${it.join(",")}]`).join(",")}]`;
       const _2 = it[2];
-      return `${_1}[${_2}-1][${_1}[0].findIndex(it => it === ${_0})]`;
+      return `${_1}[${_2}-1][${_1}[0].findIndex(it => it == ${_0})]`;
     },
     null
   );
@@ -408,14 +453,35 @@ const evaluateFormula = (cellValue) => {
   ].flat();
 };
 
+type Evaluated = {
+  value: string;
+  referenceCells: string[];
+  error?: string | undefined;
+  parsedInput: string
+};
+
+type ReplacedString = {
+  stringValue: string;
+  referenceCells: string[];
+};
+
+interface EvaluatedExpression {
+  value: string;
+  referenceCells: string[];
+  // ... (any other properties)
+}
+
 /**
  * Parses and evaluates a formula string. Replaces formulas with actual values and evaluates the resulting expression.
  *
  * @param {string} str - The formula string to evaluate.
- * @param {Object} stateContent - An object containing cell values.
+ * @param {Object} stateContentData - An object containing cell values.
  * @returns {Object} An object containing the evaluated result and reference cells.
  */
-export const evaluate = (str, stateContent) => {
+export const evaluate = (
+  str: string,
+  stateContentData: StateContentData
+): Evaluated => {
   const parsedStrings = evaluateFormula(str);
 
   const substitutedValues = parsedStrings.map((it) => {
@@ -423,8 +489,8 @@ export const evaluate = (str, stateContent) => {
     return {
       [key]: {
         value: replaceFormulaWithValues(
-          Object.values(it)[0],
-          stateContent,
+          Object.values(it)[0] as string,
+          stateContentData,
           it.zeroValue
         ),
         referenceCells: it.referenceCells,
@@ -442,10 +508,10 @@ export const evaluate = (str, stateContent) => {
     };
   });
 
-  const replacedString = evaluatedExpressions.reduce(
+  const replacedString = evaluatedExpressions.reduce<ReplacedString>(
     (acc, cur) => {
-      const curKey = Object.keys(cur)[0];
-      const curValue = Object.values(cur)[0];
+      const curKey = Object.keys(cur)[0] as string;
+      const curValue = cur[curKey] as { [key: string]: string };
       return {
         stringValue: acc.stringValue.replaceAll(
           curKey,
@@ -461,16 +527,24 @@ export const evaluate = (str, stateContent) => {
 
   const substitutedString = replaceFormulaWithValues(
     replacedString.stringValue,
-    stateContent,
+    stateContentData,
     0
   );
 
-  const finalEvaluation = evaluateExpression(substitutedString);
+  const finalEvaluation: EvaluatedString = evaluateExpression(substitutedString);
 
   return {
-    ...finalEvaluation,
+    value: finalEvaluation.value,
+    parsedInput: finalEvaluation.parsedInput,
+    error: finalEvaluation.error,
     referenceCells: replacedString.referenceCells,
   };
+};
+
+type EvaluatedString = {
+  value: string;
+  parsedInput: string;
+  error?: string;
 };
 
 /**
@@ -479,7 +553,7 @@ export const evaluate = (str, stateContent) => {
  * @param {string} input - The mathematical expression to evaluate.
  * @returns {Object} An object containing the evaluated value, parsed input, and any error if occurred.
  */
-const evaluateExpression = (input) => {
+const evaluateExpression = (input: string): EvaluatedString => {
   let parsedInput, value;
   try {
     parsedInput = input
@@ -527,9 +601,9 @@ const evaluateExpression = (input) => {
     // value = String(Math.round(eval(parsedInput) * 10 ** 13) / 10 ** 13);
 
     return { value, parsedInput };
-  } catch (error) {
-    console.log({error, parsedInput});
-    return { value: "Syntax Error", parsedInput, error };
+  } catch (error: unknown) {
+    console.log({ error, parsedInput });
+    return { value: "Syntax Error", parsedInput, error: error as string };
   }
 };
 
@@ -539,7 +613,7 @@ const evaluateExpression = (input) => {
  * @param {string} formula - The formula string to extract cell references from.
  * @returns {Array} An array of cell references.
  */
-export function getReferenceCells(formula) {
+export function getReferenceCells(formula: string): Array<any> {
   const cells = formula.toUpperCase().match(/([a-z]+[0-9]+)/gi) || [];
   const cellRanges =
     formula.toUpperCase().match(/([a-z]+[0-9]+):([a-z]+[0-9]+)/gi) || [];
@@ -564,7 +638,10 @@ export function getReferenceCells(formula) {
  * @param {Array} stateFormulaTrackedCells - Previously tracked cell references.
  * @returns {Array} An array of combined cell references.
  */
-export function getFormulaTrackedCells(formula, stateFormulaTrackedCells) {
+export function getFormulaTrackedCells(
+  formula: string,
+  stateFormulaTrackedCells: Array<any>
+): Array<any> {
   const referenceCells = getReferenceCells(formula);
 
   const formulaTrackedCells = [

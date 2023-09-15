@@ -1,5 +1,6 @@
+import React from "react";
 import { Grid, Box } from "@mui/material";
-import PageContainer from "src/components/container/PageContainer";
+import PageContainer from "../../components/container/PageContainer";
 
 const Utils = () => (
   <PageContainer title="Utilities" description="Utilities dashboard">

@@ -1,4 +1,5 @@
-import { isBoolean, isNumber, isObject, isString } from "src/utils";
+
+import { isBoolean, isNumber, isObject, isString } from "../../../../../utils";
 import { Blue, Red, Purple, Margin, Black, Green } from "./styles";
 
 const PrettifyObject = ({ children }) => {

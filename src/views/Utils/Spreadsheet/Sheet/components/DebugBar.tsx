@@ -1,13 +1,17 @@
-import { useToken } from "src/hooks";
+import React from "react";
 import { FlexForm } from "./styles";
 import styled from "@emotion/styled";
+import { State } from "../types";
+import { useToken } from "../../../../../hooks";
 
 const DebugButton = styled.button({
   cursor: "pointer",
 });
 
-const DebugBar = ({ state, tableBodyRef }) => {
+const DebugBar = ({ state }: { state: State }) => {
   const token = useToken();
+  const selectedCell: string = state.selectedCell.id;
+  const cellData = state.content.data[selectedCell]
   return (
     token.decoded.isAdmin && (
       <FlexForm>
@@ -20,7 +24,7 @@ const DebugBar = ({ state, tableBodyRef }) => {
             console.log(
               "cell",
               state.selectedCell.id,
-              state.content.data[state.selectedCell.id]
+              cellData.value
             )
           }
         >
@@ -33,7 +37,7 @@ const DebugBar = ({ state, tableBodyRef }) => {
             console.log("formulahighlighted", state.formulaHighlighted);
             console.log(
               "referencecells",
-              state.content.data[state.selectedCell.id]?.referenceCells
+              cellData?.referenceCells
             );
           }}
         >
@@ -41,12 +45,6 @@ const DebugBar = ({ state, tableBodyRef }) => {
         </DebugButton>
         <DebugButton type="button" onClick={() => console.log(state)}>
           Show State
-        </DebugButton>
-        <DebugButton
-          type="button"
-          onClick={() => console.log(tableBodyRef.current.scrollTop)}
-        >
-          Show Scroll Top
         </DebugButton>
       </FlexForm>
     )

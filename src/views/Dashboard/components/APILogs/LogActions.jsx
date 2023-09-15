@@ -5,11 +5,11 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
-import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
-import LimitSelect from "src/components/shared/LimitSelect";
-import { FlexBox } from "src/components/shared/styles";
 import { limits, logTypes, times } from "./constants";
 import { setConfirmClear, setFilter } from "./actions";
+import FlexBox from "../../../../components/shared/FlexBox";
+import ConfirmationDialog from "../../../../components/shared/ConfirmationDialog";
+import LimitSelect from "../../../../components/shared/LimitSelect";
 
 const whiteStyle = {
   color: "white",

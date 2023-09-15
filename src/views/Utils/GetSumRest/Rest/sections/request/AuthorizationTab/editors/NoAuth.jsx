@@ -1,5 +1,5 @@
 import { Table, TableBody, TableCell, TableRow } from "@mui/material";
-import { FlexBox } from "src/components/shared/styles";
+import FlexBox from "../../../../../../../../components/shared/FlexBox";
 
 export default function NoAuth() {
   return (

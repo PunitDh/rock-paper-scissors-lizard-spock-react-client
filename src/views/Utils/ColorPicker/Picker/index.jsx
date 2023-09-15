@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useReducer } from "react";
-import DashboardCard from "src/components/shared/DashboardCard";
 import styled from "@emotion/styled";
 import { initialState, reducer } from "./reducer";
 import { setCarat, setContext, setRGB, setRect } from "./actions";
 import { Slider } from "@mui/material";
 import { ResponsiveFlexBox } from "../styles";
+import DashboardCard from "../../../../components/shared/DashboardCard";
 
 const Container = styled.div({
   position: "relative",

@@ -2,17 +2,12 @@ import axios from "axios";
 import { createContext } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import { setConversations } from "src/redux/conversationSlice";
-import {
-  setCurrentGame,
-  setCurrentGames,
-  setCurrentUsers,
-  setRecentGames,
-} from "src/redux/playerSlice";
-import { setCurrentGamesNav, updateCurrentGameMenu } from "src/redux/menuSlice";
-import { setSiteSettings } from "src/redux/siteSlice";
-import { AuthPage, SocketRequest } from "src/utils/constants";
-import { useNotification, useSocket, useToken } from "src/hooks";
+import { useNotification, useSocket, useToken } from "../hooks";
+import { AuthPage, SocketRequest } from "../utils/constants";
+import { setConversations } from "../redux/conversationSlice";
+import { setCurrentGame, setCurrentGames, setCurrentUsers, setRecentGames } from "../redux/playerSlice";
+import { setCurrentGamesNav, updateCurrentGameMenu } from "../redux/menuSlice";
+import { setSiteSettings } from "../redux/siteSlice";
 
 export const APIContext = createContext();
 

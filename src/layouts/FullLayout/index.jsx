@@ -4,9 +4,9 @@ import { Navigate, Outlet } from "react-router-dom";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import Footer from "./Footer";
-import { useAPI, useNotification, useToken } from "src/hooks";
-import Notification from "src/components/shared/Notification";
-import { AuthPage } from "src/utils/constants";
+import { useAPI, useNotification, useToken } from "../../hooks";
+import { AuthPage } from "../../utils/constants";
+import Notification from "../../components/shared/Notification";
 
 const MainWrapper = styled("div")(() => ({
   display: "flex",

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Grid, Box } from "@mui/material";
-import PageContainer from "src/components/container/PageContainer";
 import RecentGames from "../components/shared/RecentGames";
 import Users from "../components/shared/Users";
 import UserSearchBar from "../components/shared/UserSearchBar";
+import PageContainer from "../../../components/container/PageContainer";
 
 const Rpsls = () => {
   const [search, setSearch] = useState("");

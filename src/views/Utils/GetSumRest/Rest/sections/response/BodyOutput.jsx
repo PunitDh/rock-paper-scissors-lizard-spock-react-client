@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { FlexBox } from "src/components/shared/styles";
 import { DisplayType, JSONEditorColors } from "../../constants";
 import JSONInput from "react-json-editor-ajrm";
 import locale from "react-json-editor-ajrm/locale/en";
@@ -7,7 +6,10 @@ import { OutputPretty, OutputRaw } from "../../styles";
 import PrettifyObject from "../../components/PrettifyObject";
 import PrettifyHTML from "../../components/PrettifyHTML";
 import ResponseType from "./ResponseType";
-import { isObject } from "src/utils";
+import { isObject } from "../../../../../../utils";
+import FlexBox from "../../../../../../components/shared/FlexBox";
+
+
 
 const OutputDisplay = styled.div({
   width: "100%",

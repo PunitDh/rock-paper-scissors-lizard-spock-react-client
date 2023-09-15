@@ -1,4 +1,4 @@
-import { FlexBox } from "src/components/shared/styles";
+import FlexBox from "../../../../../components/shared/FlexBox";
 import MemoryButton from "../components/MemoryButton";
 import { MemoryOperation } from "../constants";
 import InvButton from "./ScientificBox/InverseButton";

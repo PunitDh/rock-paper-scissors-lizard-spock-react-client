@@ -11,7 +11,7 @@ import {
 import { Stack } from "@mui/system";
 import { IconBasket } from "@tabler/icons-react";
 import BlankCard from "../../../components/shared/BlankCard";
-import { Product1, Product2, Product3, Product4 } from "src/assets";
+import { Product1, Product2, Product3, Product4 } from "../../../assets";
 
 const ecoCard = [
   {

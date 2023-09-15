@@ -12,10 +12,10 @@ import {
 } from "@mui/material";
 import DeleteButton from "./DeleteButton";
 import styled from "@emotion/styled";
-import { FlexBox } from "src/components/shared/styles";
 import { useRef } from "react";
 import Tag from "./Tag";
 import { FormDataFieldType } from "../constants";
+import FlexBox from "../../../../../components/shared/FlexBox";
 
 const CheckboxCell = styled(TableCell)({
   width: "1rem",

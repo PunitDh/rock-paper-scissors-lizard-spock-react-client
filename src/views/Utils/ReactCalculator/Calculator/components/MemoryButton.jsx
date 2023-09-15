@@ -11,7 +11,7 @@ import { MemoryOperation } from "../constants";
 import { CalculatorButton } from "../styles";
 import { evaluateExpression } from "../utils";
 import { useState } from "react";
-import { FlexBox } from "src/components/shared/styles";
+import FlexBox from "../../../../../components/shared/FlexBox";
 
 function MemoryButton({ value, state, dispatch }) {
   const [anchorEl, setAnchorEl] = useState(null);

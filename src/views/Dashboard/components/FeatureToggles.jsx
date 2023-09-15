@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useSelector } from "react-redux";
-import { useAPI } from "src/hooks";
+import { useAPI } from "../../../hooks";
 
 const Toggle = styled(Typography)({
   cursor: "pointer",

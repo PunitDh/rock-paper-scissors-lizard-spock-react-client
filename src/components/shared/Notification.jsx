@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { Alert, Snackbar } from "@mui/material";
-import { isObject } from "src/utils";
+import { isObject } from "../../utils";
 
 const WideAlert = styled(Alert)({
   width: "100%",

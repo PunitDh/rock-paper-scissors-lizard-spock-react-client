@@ -4,7 +4,8 @@ import { DataObject } from "@mui/icons-material";
 import { setContentBulk } from "../../../actions";
 import { useRef } from "react";
 import { parseJSON } from "../../../utils/cellUtils";
-import { useNotification } from "src/hooks";
+import { useNotification } from "../../../../../../../hooks";
+
 
 const OpenFileJSON = ({ dispatch }) => {
   const notification = useNotification();

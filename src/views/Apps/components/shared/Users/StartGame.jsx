@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { CircularProgress, Tooltip } from "@mui/material";
 import styled from "@emotion/styled";
-import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
-import { useAPI, useLoading } from "src/hooks";
-import { icons } from "src/assets";
 import { sample } from "lodash";
 import { PlayCircleFilled } from "@mui/icons-material";
+import { useAPI, useLoading } from "../../../../../hooks";
+import { icons } from "../../../../../assets";
+import ConfirmationDialog from "../../../../../components/shared/ConfirmationDialog";
 
 const GameButton = styled(PlayCircleFilled)(({ theme }) => ({
   backgroundColor: "primary.main",

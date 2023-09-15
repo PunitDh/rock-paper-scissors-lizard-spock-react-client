@@ -7,14 +7,17 @@ import CellRange from "./models/CellRange";
 import { isEqual, uniqueId } from "lodash";
 import { BorderType } from "./components/Toolbar/constants";
 import Highlight from "./models/Highlight";
-import { isInstance } from "src/utils";
+import { Action, Memento, State } from "./types";
+import StateContentData from "./models/StateContentData";
+import { isInstance } from "../../../../utils";
+import StateContent from "./models/StateContent";
 
-export const initialState = Object.freeze({
+export const initialState: State = {
   maxRows: SheetConfig.MAX_ROWS,
   maxColumns: SheetConfig.MAX_COLUMNS,
-  inputRef: {},
-  fillerRef: {},
-  formulaFieldRef: {},
+  inputRef: null,
+  fillerRef: null,
+  formulaFieldRef: null,
   defaultRowHeight: 24,
   defaultColumnWidth: 50,
   maxUndos: 32,
@@ -25,12 +28,7 @@ export const initialState = Object.freeze({
   highlighted: new Highlight(),
   formulaTrackedCells: [],
   formulaHighlighted: [],
-  content: {
-    namedRanges: {},
-    data: {},
-    rowHeights: {},
-    columnWidths: {},
-  },
+  content: new StateContent({}, {}, new StateContentData(), {}),
   mouseDown: false,
   dragging: false,
   fillerMode: false,
@@ -39,9 +37,9 @@ export const initialState = Object.freeze({
   menuAnchorElement: null,
   memento: [],
   currentMementoId: null,
-});
+};
 
-export const reducer = (state, action) => {
+export const reducer = (state: State, action: Action) => {
   // action.type !== SheetAction.SET_HOVERED && console.log(action);
 
   switch (action.type) {
@@ -143,15 +141,18 @@ export const reducer = (state, action) => {
       };
 
     case SheetAction.HIGHLIGHT_CELLS: {
-      const range = CellRange.createFlat(action.start, action.end);
+      const range = CellRange.createFlat(
+        action.payload.start,
+        action.payload.end
+      );
       return {
         ...state,
         highlighted: state.highlighted
           .setCells(range.cellIds, state.content.data)
           .setRows(range.rows)
           .setColumns(range.columns)
-          .setRangeStart(action.start)
-          .setRangeEnd(action.end),
+          .setRangeStart(action.payload.start)
+          .setRangeEnd(action.payload.end),
       };
     }
 
@@ -177,19 +178,19 @@ export const reducer = (state, action) => {
       const rowsSet = new Set();
       const columnsSet = new Set();
       const cellsSet = new Set(state.highlighted.cells);
-      action.payload.forEach((id) => {
+      action.payload.forEach((id: string) => {
         const cell = new Cell(id);
         cellsSet.add(cell.id);
         rowsSet.add(cell.row);
         columnsSet.add(cell.column);
       });
-      const rows = [...rowsSet];
-      const columns = [...columnsSet];
+      const rows = Array.from(rowsSet) as number[];
+      const columns = Array.from(columnsSet) as string[];
 
       return {
         ...state,
         highlighted: state.highlighted
-          .setCells([...cellsSet], state.content.data)
+          .setCells(Array.from(cellsSet), state.content.data)
           .setRows(state.highlighted.rows.concat(rows))
           .setColumns(state.highlighted.columns.concat(columns)),
       };
@@ -199,31 +200,35 @@ export const reducer = (state, action) => {
       const rowsToRemove = new Set();
       const columnsToRemove = new Set();
       const updatedCells = new Set(state.highlighted.cells);
-      action.payload.forEach((id) => {
-        const cell = new Cell(id);
-        if (state.highlighted.cells.includes(id)) {
-          updatedCells.delete(id);
+      action.payload.forEach((cellId: string) => {
+        const cell = new Cell(cellId);
+        if (state.highlighted.cells.includes(cellId)) {
+          updatedCells.delete(cellId);
           rowsToRemove.add(cell.row);
           columnsToRemove.add(cell.column);
         }
       });
 
-      const newHighlightedCells = [...updatedCells];
+      const newHighlightedCells = Array.from(updatedCells) as string[];
 
-      const newHighlightedRows = state.highlighted.rows.filter((row) => {
-        if (rowsToRemove.has(row)) {
-          return !newHighlightedCells.some(
-            (cellId) => new Cell(cellId).row === row
-          );
+      const newHighlightedRows = state.highlighted.rows.filter(
+        (row: number): boolean => {
+          if (rowsToRemove.has(row)) {
+            return !newHighlightedCells.some(
+              (cellId: string) => new Cell(cellId).row === row
+            );
+          }
+          return true;
         }
-        return true;
-      });
+      );
+
       const newHighlightedColumns = state.highlighted.columns.filter(
-        (column) => {
+        (column: string) => {
           if (columnsToRemove.has(column)) {
             // Check if there are other highlighted cells in this column
             return !newHighlightedCells.some(
-              (cellId) => new Cell(cellId).column === column
+              (cellId: string): boolean =>
+                (new Cell(cellId).column === column) as boolean
             );
           }
           return true;
@@ -247,7 +252,7 @@ export const reducer = (state, action) => {
             ...state.content,
             data: {
               ...state.content.data,
-              [action.payload]: new CellData().setId(action.payload),
+              [action.payload]: new CellData({ id: action.payload }),
             },
           },
         };
@@ -256,10 +261,8 @@ export const reducer = (state, action) => {
       const data = Object.keys(state.content.data)
         .filter((cell) => state.highlighted.cells.includes(cell))
         .reduce(
-          (stateContentData, cell) => ({
-            ...stateContentData,
-            [cell]: new CellData({ id: cell }),
-          }),
+          (stateContentData, cell) =>
+            stateContentData.setData(cell, new CellData({ id: cell })),
           state.content.data
         );
 
@@ -281,22 +284,25 @@ export const reducer = (state, action) => {
             parsed.content.length - 1,
             false
           );
-          const range = CellRange.createHorizontalSliced(anchor, cellOffset.id);
-          const updateObj = {};
-          range.cells.forEach((row, rowIndex) =>
-            row.forEach((cell, cellIndex) => {
+          const range = CellRange.createHorizontalSliced(
+            anchor,
+            cellOffset?.id
+          );
+          const updateObj: { [key: string]: CellData } = {};
+          range.cells.forEach((row: Cell[], rowIndex: number) =>
+            row.forEach((cell: Cell, cellIndex: number) => {
               updateObj[cell.id] = new CellData({
                 id: cell.id,
                 ...parsed.content[rowIndex][cellIndex],
               });
             })
           );
-          const data = Object.keys(updateObj).reduce((stateContent, cell) => {
-            return {
-              ...stateContent,
-              [cell]: updateObj[cell],
-            };
-          }, state.content.data);
+          const data = Object.keys(updateObj).reduce(
+            (stateContentData: StateContentData, cell: string) => {
+              return stateContentData.setData(cell, updateObj[cell]);
+            },
+            state.content.data
+          );
           return {
             ...state,
             content: {
@@ -427,9 +433,9 @@ export const reducer = (state, action) => {
     }
     case SheetAction.RECALCULATE_FORMULAE: {
       console.log("Recalculation triggered");
-      const formulaCells = Object.values(state.content.data)
-        .filter((cellData) => cellData.isFormulaCell)
-        .map((cellData) => cellData.evaluate(state.content.data));
+      const formulaCells: CellData[] = Object.values(state.content.data)
+        .filter((cellData) => (cellData as CellData).isFormulaCell)
+        .map((cellData) => (cellData as CellData).evaluate(state.content.data));
 
       const formulaTrackedCells = formulaCells
         .filter((it) => !it.error)
@@ -438,7 +444,7 @@ export const reducer = (state, action) => {
 
       return {
         ...state,
-        formulaTrackedCells: [...new Set(formulaTrackedCells)],
+        formulaTrackedCells: Array.from(new Set(formulaTrackedCells)),
       };
     }
     case SheetAction.SET_CONTENT_DATA: {
@@ -476,15 +482,15 @@ export const reducer = (state, action) => {
           : values;
 
       const referenceCells = action.payload.replace
-        ? [...new Set(cellIds)]
-        : [
-            ...new Set(
+        ? Array.from(new Set(cellIds))
+        : Array.from(
+            new Set(
               [
                 ...state.content.data[action.payload.cell].referenceCells,
                 ...cellIds,
               ].flat()
-            ),
-          ];
+            )
+          );
 
       const cellData = CellData.getOrNew(
         state.content.data[action.payload.cell],
@@ -527,15 +533,18 @@ export const reducer = (state, action) => {
 
     case SheetAction.SET_CELL_FORMATTING_BULK: {
       const formattedData = state.highlighted.cells.reduce(
-        (stateContentData, cell) => {
+        (
+          stateContentData: StateContentData,
+          cellId: string
+        ): StateContentData => {
           const cellData = CellData.getOrNew(
-            state.content.data[cell],
+            state.content.data[cellId],
             state.selectedCell.id
           );
-          return {
-            ...stateContentData,
-            [cell]: cellData.setFormatting(action.payload),
-          };
+          return stateContentData.setData(
+            cellId,
+            cellData.setFormatting(action.payload)
+          );
         },
         state.content.data
       );
@@ -570,14 +579,12 @@ export const reducer = (state, action) => {
 
     case SheetAction.SET_CELL_BORDER_FORMATTING_BULK: {
       const formattedData = state.highlighted.cells.reduce(
-        (stateContentData, cell) => {
-          const cellData = CellData.getOrNew1(state.content.data, cell);
-          return {
-            ...stateContentData,
-            [cell]: cellData
-              .clearBorderFormatting()
-              .setFormatting(action.payload),
-          };
+        (stateContentData: StateContentData, cellId: string) => {
+          const cellData = CellData.getOrNew1(state.content.data, cellId);
+          return stateContentData.setData(
+            cellId,
+            cellData.clearBorderFormatting().setFormatting(action.payload)
+          );
         },
         state.content.data
       );
@@ -606,14 +613,28 @@ export const reducer = (state, action) => {
         }
       }
 
-      const applyBorder = (data, cells, border) => {
-        return cells.reduce((stateContentData, cell) => {
-          const cellData = CellData.getOrNew1(stateContentData, cell);
-          return {
-            ...stateContentData,
-            [cell]: cellData.addBorderFormatting(action.payload, border),
-          };
-        }, data);
+      const applyBorder = (
+        data: StateContentData,
+        cells: string[],
+        border: BorderType
+      ) => {
+        return cells.reduce(
+          (
+            stateContentData: StateContentData,
+            cellId: string
+          ): StateContentData => {
+            const cellData = CellData.getOrNew1(stateContentData, cellId);
+            return stateContentData.setData(
+              cellId,
+              cellData.addBorderFormatting(action.payload, border)
+            );
+            // {
+            //   ...stateContentData,
+            //   [cellId]: cellData.addBorderFormatting(action.payload, border),
+            // };
+          },
+          data
+        );
       };
 
       const data = [
@@ -641,18 +662,19 @@ export const reducer = (state, action) => {
     case SheetAction.CLEAR_CELL_FORMATTING: {
       if (state.highlighted.cells.length > 1) {
         const data = state.highlighted.cells.reduce(
-          (stateContentData, cell) => {
-            const cellData = state.content.data[cell];
+          (stateContentData: StateContentData, cellId: string) => {
+            const cellData = state.content.data[cellId];
             if (cellData) {
-              return {
-                ...stateContentData,
-                [cell]: cellData.clearFormatting(),
-              };
+              return stateContentData.setData(
+                cellId,
+                cellData.clearFormatting()
+              );
             }
             return stateContentData;
           },
           state.content.data
         );
+
         return {
           ...state,
           content: {
@@ -680,7 +702,7 @@ export const reducer = (state, action) => {
 
     case SheetAction.ADD_MEMENTO: {
       const currentMemento = state.memento.find(
-        (m) => m.id === state.currentMementoId
+        (memento: Memento) => memento.id === state.currentMementoId
       );
       if (currentMemento && isEqual(currentMemento.content, state.content)) {
         return state;
@@ -690,7 +712,9 @@ export const reducer = (state, action) => {
       let memento = [
         ...state.memento.slice(
           0,
-          state.memento.findIndex((m) => m.id === state.currentMementoId) + 1
+          state.memento.findIndex(
+            (memento: Memento) => memento.id === state.currentMementoId
+          ) + 1
         ),
         { id, content: state.content },
       ];
@@ -708,7 +732,7 @@ export const reducer = (state, action) => {
 
     case SheetAction.UNDO_STATE: {
       const currentIndex = state.memento.findIndex(
-        (m) => m.id === state.currentMementoId
+        (memento: Memento) => memento.id === state.currentMementoId
       );
 
       if (currentIndex <= 0) return state;
@@ -725,7 +749,7 @@ export const reducer = (state, action) => {
 
     case SheetAction.REDO_STATE: {
       const currentIndex = state.memento.findIndex(
-        (m) => m.id === state.currentMementoId
+        (memento: Memento) => memento.id === state.currentMementoId
       );
 
       if (currentIndex === -1 || currentIndex >= state.memento.length - 1)

@@ -5,8 +5,11 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { Bold, FlexBox } from "src/components/shared/styles";
+
 import { Value } from "./styles";
+import FlexBox from "../../../../../../components/shared/FlexBox";
+import { Bold } from "../../../../../../components/shared/styles";
+
 
 const Header = ({ state }) => (
   <FlexBox width="100%" flexGrow={1} flex="1 0 auto">

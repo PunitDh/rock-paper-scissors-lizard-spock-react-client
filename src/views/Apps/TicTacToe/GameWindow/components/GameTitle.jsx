@@ -1,10 +1,9 @@
 import { Tooltip } from "@mui/material";
 import { useEffect, useState } from "react";
-import IconSelectField from "src/components/shared/IconSelectField";
-import { FlexBox } from "src/components/shared/styles";
-import { getIcon } from "src/assets";
-import { useAPI, useCurrentGame } from "src/hooks";
-import { InvisibleTextField } from "src/components/shared/InvisibleTextField";
+import { useAPI, useCurrentGame } from "../../../../../hooks";
+import { getIcon } from "../../../../../assets";
+import FlexBox from "../../../../../components/shared/FlexBox";
+import IconSelectField from "../../../../../components/shared/IconSelectField";
 
 const GameTitle = () => {
   const currentGame = useCurrentGame();

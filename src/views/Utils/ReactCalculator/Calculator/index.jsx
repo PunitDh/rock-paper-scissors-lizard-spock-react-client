@@ -1,10 +1,12 @@
 import { useReducer } from "react";
-import DashboardCard from "src/components/shared/DashboardCard";
+
 import { initialState, reducer } from "./reducer";
 import IOBox from "./sections/IOBox";
 import ButtonsBox from "./sections/ButtonsBox";
 import { Typography, useMediaQuery } from "@mui/material";
-import { FlexBox } from "src/components/shared/styles";
+import DashboardCard from "../../../../components/shared/DashboardCard";
+import FlexBox from "../../../../components/shared/FlexBox";
+
 
 const Calculator = () => {
   const [state, dispatch] = useReducer(reducer, initialState);

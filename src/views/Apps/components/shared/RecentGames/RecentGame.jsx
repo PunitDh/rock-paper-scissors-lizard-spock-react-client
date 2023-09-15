@@ -6,9 +6,9 @@ import {
   TimelineOppositeContent,
   TimelineSeparator,
 } from "@mui/lab";
-import { Bold } from "src/components/shared/styles";
-import { useCurrentGame } from "src/hooks";
-import { formatDate } from "src/utils";
+import { useCurrentGame } from "../../../../../hooks";
+import { formatDate } from "../../../../../utils";
+import { Bold } from "../../../../../components/shared/styles";
 
 const RecentGame = ({ game }) => {
   const currentGame = useCurrentGame(game);

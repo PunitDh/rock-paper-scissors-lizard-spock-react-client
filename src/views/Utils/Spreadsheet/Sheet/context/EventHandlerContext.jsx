@@ -1,6 +1,6 @@
 import { createContext, useRef } from "react";
 import EventHandler from "../eventHandlers/EventHandler";
-import { useClipboard } from "src/hooks";
+import { useClipboard } from "../../../../../hooks";
 
 export const EventDelegatorContext = createContext();
 

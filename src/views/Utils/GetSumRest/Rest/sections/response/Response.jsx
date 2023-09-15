@@ -1,15 +1,17 @@
-import { FlexBox } from "src/components/shared/styles";
-import { Tab, Tabs } from "@mui/material";
+import { Tabs } from "@mui/material";
 import BodyOutput from "./BodyOutput";
 import { DividerBox } from "../../styles";
 import { useState } from "react";
 import { ResponseTabList, tabProps } from "../../constants";
-import { useQueryParam } from "src/hooks";
+
 import CustomTabPanel from "../../components/CustomTabPanel";
 import Cookies from "./Cookies";
 import Header from "./Headers";
 import ResponseStatus from "./ResponseStatus";
 import CustomTab from "../../components/CustomTab";
+import { useQueryParam } from "../../../../../../hooks";
+import FlexBox from "../../../../../../components/shared/FlexBox";
+
 
 const Response = ({ state, dispatch }) => {
   const responseTab = useQueryParam("responseTab");

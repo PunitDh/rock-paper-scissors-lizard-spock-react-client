@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 import { Box, Stack } from "@mui/material";
-import PasswordField from "src/components/shared/PasswordField";
-import { FlexBox } from "src/components/shared/styles";
+import FlexBox from "../../../../components/shared/FlexBox";
 
 const RedBox = styled(Box)({
   color: "red",

@@ -1,8 +1,9 @@
-import { FlexBox } from "src/components/shared/styles";
+
 import CalcButton from "../components/CalcButton";
 import EvalButton from "../components/EvalButton";
 import ClearButton from "../components/ClearButton";
 import { backspace } from "../actions";
+import FlexBox from "../../../../../components/shared/FlexBox";
 
 const NumbersBox = ({ state, dispatch }) => {
   const numberGroups = [

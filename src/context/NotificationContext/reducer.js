@@ -1,4 +1,5 @@
-import { NotificationType } from "src/utils/constants";
+
+import { NotificationType } from "../../utils/constants";
 import { NotificationAction } from "./actions";
 
 export const initialState = {

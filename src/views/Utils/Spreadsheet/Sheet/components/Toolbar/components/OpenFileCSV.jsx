@@ -5,8 +5,8 @@ import CellData from "../../../models/CellData";
 import { setContentBulk } from "../../../actions";
 import { useRef } from "react";
 import { parseCSV } from "../../../utils/cellUtils";
-import { useNotification } from "src/hooks";
 import StateContent from "../../../models/StateContent";
+import { useNotification } from "../../../../../../../hooks";
 
 const OpenFileCSV = ({ dispatch }) => {
   const fileRef = useRef();

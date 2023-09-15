@@ -1,6 +1,6 @@
 import { Grid } from "@mui/material";
-import PageContainer from "src/components/container/PageContainer";
 import Calculator from "./Calculator";
+import PageContainer from "../../../components/container/PageContainer";
 
 const ReactCalculator = () => (
   <PageContainer title="React Calculator">

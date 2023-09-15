@@ -1,11 +1,11 @@
 import styled from "@emotion/styled";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import { Box } from "@mui/material";
-import ConfirmationDialog from "src/components/shared/ConfirmationDialog";
 import { useState } from "react";
 import DialogContent from "./DialogContent";
-import { TitledButton } from "src/components/shared/styles";
-import { useAPI } from "src/hooks";
+import TitledButton from "../../../../components/shared/TitledButton";
+import { useAPI } from "../../../../hooks";
+import ConfirmationDialog from "../../../../components/shared/ConfirmationDialog";
 
 const RedButton = styled(TitledButton)({
   backgroundColor: "red",

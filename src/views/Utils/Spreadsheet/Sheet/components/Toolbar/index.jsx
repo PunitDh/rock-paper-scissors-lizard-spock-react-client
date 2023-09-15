@@ -37,10 +37,10 @@ import SaveFileJSON from "./components/SaveFileJSON";
 import DecimalIcon from "./components/icons/DecimalIcon";
 import { clamp } from "lodash";
 import CellFormatting from "../../models/CellFormatting";
-import { FlexBox } from "src/components/shared/styles";
 import { outsideBorders } from "./constants";
 import OpenFileJSON from "./components/OpenFileJSON";
 import ClearFormattingIcon from "./components/icons/ClearFormatting";
+import FlexBox from "../../../../../../components/shared/FlexBox";
 
 const Toolbar = ({ state, dispatch }) => {
   const canUndo = state.currentMementoId !== state.memento[0]?.id;

@@ -1,9 +1,10 @@
-import { FlexBox } from "src/components/shared/styles";
+
 import AngleButton from "./AngleButton";
 import TrigButton from "./TrigButton";
 import { Sup } from "../../styles";
 import CalcButton from "../../components/CalcButton";
 import InvertedButton from "./InvertedButton";
+import FlexBox from "../../../../../../components/shared/FlexBox";
 
 const ScientificBox = ({ state, dispatch }) => (
   <FlexBox width="100%" flexDirection="column" alignItems="flex-end">

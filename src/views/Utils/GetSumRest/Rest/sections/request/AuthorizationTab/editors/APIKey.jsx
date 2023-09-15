@@ -7,7 +7,6 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
-import { Bold, FlexBox } from "src/components/shared/styles";
 import {
   APIKeyAddTo,
   AuthorizationType,
@@ -22,8 +21,10 @@ import {
   setParams,
 } from "../../../../actions";
 import KeyValuePair from "../../../../models/KeyValuePair";
-import { FlexForm } from "src/views/Utils/Spreadsheet/Sheet/components/styles";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Bold } from "../../../../../../../../components/shared/styles";
+import { FlexForm } from "../../../../../../Spreadsheet/Sheet/components/styles";
+import FlexBox from "../../../../../../../../components/shared/FlexBox";
 
 export default function APIKey({ state, dispatch }) {
   const formRef = useRef();

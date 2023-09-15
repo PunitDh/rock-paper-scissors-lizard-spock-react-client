@@ -1,9 +1,5 @@
-import { useState } from "react";
-import { Grid, Box, Typography } from "@mui/material";
-import PageContainer from "src/components/container/PageContainer";
-import UserSearchBar from "../components/shared/UserSearchBar";
-import Users from "../components/shared/Users";
-import RecentGames from "../components/shared/RecentGames";
+import { Box, Typography } from "@mui/material";
+import PageContainer from "../../../components/container/PageContainer";
 
 const NewGame = () => {
   return (
