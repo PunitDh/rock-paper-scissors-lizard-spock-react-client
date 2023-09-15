@@ -8,7 +8,12 @@ import useSocket from "./useSocket";
 import { AuthPage, SocketRequest } from "../utils/constants";
 import { setSiteSettings } from "../redux/siteSlice";
 import { setConversations } from "../redux/conversationSlice";
-import { setCurrentGame, setCurrentGames, setCurrentUsers, setRecentGames } from "../redux/playerSlice";
+import {
+  setCurrentGame,
+  setCurrentGames,
+  setCurrentUsers,
+  setRecentGames,
+} from "../redux/playerSlice";
 import { setCurrentGamesNav, updateCurrentGameMenu } from "../redux/menuSlice";
 
 export default function useAPI() {
@@ -54,6 +59,7 @@ export default function useAPI() {
   const handleError = (data) => {
     notification.error(data.payload);
     if (data.code === 401) {
+      console.log("It's the API");
       navigate(AuthPage.loginWithReferrer());
     }
   };

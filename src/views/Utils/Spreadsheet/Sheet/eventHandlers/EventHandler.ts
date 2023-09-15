@@ -96,12 +96,7 @@ export default class EventHandler {
     }
   }
 
-  handleCellInputKeyDown(
-    e: React.KeyboardEvent,
-    originalValue: string | number,
-    currentValue: string | number,
-    navigateRefCurrent: boolean
-  ) {
+  handleCellInputKeyDown(e: React.KeyboardEvent, navigateRefCurrent: boolean) {
     const cell = this.state.selectedCell;
     const value = (e.target as HTMLInputElement).value;
     switch (e.key) {
@@ -119,7 +114,8 @@ export default class EventHandler {
         this.dispatch(setCellContent(cell.id, value));
         this.dispatch(setFormulaMode(false));
         triggerRecalculation && this.dispatch(recalculateFormulae());
-        originalValue !== currentValue && this.dispatch(addMemento());
+        // originalValue !== currentValue &&
+        this.dispatch(addMemento());
         this.dispatch(highlightCells(cell.id));
         this.dispatch(
           selectCell(
@@ -476,6 +472,10 @@ export default class EventHandler {
     if (this.inputRef) this.inputRef.style.top = e.target.scrollTop;
   }
 
+  // Private fields
+  #isLastValueRangeRegEx = /([a-z]+[0-9]+):([a-z]+[0-9]+)$/gi;
+  #isLastValueCellRegEx = /([a-z]+[0-9]+)$/gi;
+
   // Private functions
   #determineNextCell(e: React.KeyboardEvent): Cell {
     const { selectedCell, maxRows, maxColumns, formulaMode } = this.state;
@@ -708,10 +708,6 @@ export default class EventHandler {
   };
 
   #addCellToFocusedBox(text: string, replace: boolean) {
-    const isLastValueRange = /([a-z]+[0-9]+):([a-z]+[0-9]+)$/gi;
-    const isLastValueCell = /([a-z]+[0-9]+)$/gi;
-
-    // const currentValue = state.content.data[state.selectedCell.id].formula;
     const element = (
       this.state.isFormulaFieldFocused ? this.formulaFieldRef : this.inputRef
     ) as HTMLInputElement;
@@ -721,26 +717,36 @@ export default class EventHandler {
       element.selectionEnd as number,
     ];
     const currentValue = element.value.slice(0, end);
+
     element.focus();
 
+    const isLastValueRange = this.#isLastValueRangeRegEx.test(currentValue);
+    const isLastValueCell = this.#isLastValueCellRegEx.test(currentValue);
+
     if (end > start) {
-      element.setRangeText(text, start, end, "preserve");
-    } else if (isLastValueRange.test(currentValue)) {
+      element.setRangeText(text, start, end, "end");
+    } else if (isLastValueRange) {
+      if (replace) {
+      }
       element.setRangeText(
-        replace ? currentValue.replace(isLastValueRange, text) : "," + text,
+        replace
+          ? currentValue.replace(this.#isLastValueRangeRegEx, text)
+          : "," + text,
         replace ? 0 : start,
         replace ? element.value.length : end,
-        "preserve"
+        "end"
       );
-    } else if (isLastValueCell.test(currentValue)) {
+    } else if (isLastValueCell) {
       element.setRangeText(
-        replace ? currentValue.replace(isLastValueCell, text) : "," + text,
+        replace
+          ? currentValue.replace(this.#isLastValueCellRegEx, text)
+          : "," + text,
         replace ? 0 : start,
         replace ? element.value.length : end,
-        "preserve"
+        "end"
       );
     } else {
-      element.setRangeText(text, start, end, "preserve");
+      element.setRangeText(text, start, end, "end");
     }
     return element.value;
   }

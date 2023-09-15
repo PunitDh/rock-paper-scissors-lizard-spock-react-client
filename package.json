@@ -1,6 +1,6 @@
 {
   "name": "one-site-to-rule-them-all",
-  "version": "0.1.0",
+  "version": "0.9.0",
   "author": {
     "name": "Punit Dharmadhikari",
     "email": "punit04@gmail.com",
@@ -38,7 +38,7 @@
     "react-toastify": "^9.1.3",
     "react-xml-editor": "^0.10.2",
     "socket.io-client": "^4.7.2",
-    "typescript": "^5.2.2"
+    "typescript": "^4.9.5"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",

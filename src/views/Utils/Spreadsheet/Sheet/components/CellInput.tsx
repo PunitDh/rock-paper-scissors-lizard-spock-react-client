@@ -96,8 +96,8 @@ const CellInput = ({ state, dispatch }: Props): JSX.Element => {
     [currentCellContentData?.formula, currentCellContentData?.value]
   );
 
-  const [originalValue, setOriginalValue] = useState<string | number>(currentValue);
-  const [value, setValue] = useState<string | number>(currentValue);
+  // const [originalValue, setOriginalValue] = useState<string | number>(currentValue);
+  // const [value, setValue] = useState<string | number>(currentValue);
   const [position, setPosition] = useState<Position>({
     top: 0,
     left: 0,
@@ -122,7 +122,7 @@ const CellInput = ({ state, dispatch }: Props): JSX.Element => {
   }, [cell.id, rowHeight, columnWidth]);
 
   useEffect(() => {
-    setValue(currentValue);
+    // setValue(currentValue);
     setTextBoxStats();
 
     const handleResize = () => setTextBoxStats();
@@ -134,7 +134,7 @@ const CellInput = ({ state, dispatch }: Props): JSX.Element => {
   }, [currentValue, dispatch, setTextBoxStats]);
 
   useEffect(() => {
-    setOriginalValue(currentValue);
+    // setOriginalValue(currentValue);
     navigateRef.current = true;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cell.id]);
@@ -151,11 +151,9 @@ const CellInput = ({ state, dispatch }: Props): JSX.Element => {
     (e: React.KeyboardEvent) =>
       eventHandler.handleCellInputKeyDown(
         e,
-        originalValue,
-        currentValue,
         navigateRef.current
       ),
-    [currentValue, eventHandler, originalValue]
+    [eventHandler]
   );
 
   const handleFocus = () => eventHandler.setFocusInput(true);
@@ -174,7 +172,7 @@ const CellInput = ({ state, dispatch }: Props): JSX.Element => {
       <InputField
         type="text"
         ref={inputRef}
-        value={value}
+        value={currentValue}
         id={"input-box"}
         autoComplete="off"
         width={position.width}

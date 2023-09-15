@@ -39,6 +39,7 @@ const FullLayout = () => {
   }, []);
 
   if (!token.decoded) {
+    console.log("It's the full layout page");
     return <Navigate to={AuthPage.loginWithReferrer()} />;
   }
 
