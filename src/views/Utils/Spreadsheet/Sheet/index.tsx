@@ -1,4 +1,4 @@
-import React, { Dispatch, DispatchWithoutAction, Reducer } from "react";
+import React, { Dispatch } from "react";
 import { useEffect, useReducer } from "react";
 import { initialState, reducer } from "./reducer";
 import { recalculateFormulae, addMemento } from "./actions";
@@ -40,10 +40,10 @@ const Sheet = ({
   }, []);
 
   return (
-    <EventProvider state={state} dispatch={dispatch}>
+    <EventProvider state={state as State} dispatch={dispatch}>
       <DashboardCard sx={{ height: "100%" }} title="Spreadsheet" subtitle={undefined} action={undefined} footer={undefined} cardheading={undefined} headtitle={undefined} headsubtitle={undefined} middlecontent={undefined}>
         {(state as State).menuAnchorElement && (
-          <ContextMenu state={state} dispatch={dispatch} />
+          <ContextMenu state={state as State} dispatch={dispatch} />
         )}
         <SheetContent
           state={(state as State)}

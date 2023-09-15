@@ -6,6 +6,8 @@ import StartChat from "./StartChat";
 import FlexBox from "../../../../../components/shared/FlexBox";
 import { useToken } from "../../../../../hooks";
 import { getAvatar } from "../../../../../assets";
+import StyledTableCell from "../../../../../components/shared/StyledTableCell";
+import ResponsiveTableCell from "../../../../../components/shared/ResponsiveTableCell";
 
 const OnlineIcon = styled.div(({ online }) => ({
   backgroundColor: online ? "lightgreen" : "red",

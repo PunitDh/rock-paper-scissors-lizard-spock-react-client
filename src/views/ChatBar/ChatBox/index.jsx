@@ -8,9 +8,13 @@ import { MessageRight } from "./MessageRight";
 import { MessageLeft } from "./MessageLeft";
 
 import { useDispatch } from "react-redux";
-import { Status, formatDate } from "../constants";
+import { ChatBoxStatus, formatDate } from "../constants";
 import { useToken } from "../../../hooks";
-import { closeConversation, minimizeConversation, openConversation } from "../../../redux/conversationSlice";
+import {
+  closeConversation,
+  minimizeConversation,
+  openConversation,
+} from "../../../redux/conversationSlice";
 import { getAvatar } from "../../../assets";
 
 const CloseButton = styled(Close)(({ theme }) => ({
@@ -70,8 +74,8 @@ function ChatBox({ conversation }) {
     [messages.length]
   );
 
-  const isMinimized = conversation.status === Status.MINIMIZED;
-  const isOpen = conversation.status === Status.OPEN;
+  const isMinimized = conversation.status === ChatBoxStatus.MINIMIZED;
+  const isOpen = conversation.status === ChatBoxStatus.OPEN;
 
   const closeChatBox = (e) => {
     e.stopPropagation();

@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { Avatar, TableCell, TableRow } from "@mui/material";
 import { getEntity } from "../../../../../../assets";
+import ResponsiveTableCell from "../../../../../../components/shared/ResponsiveTableCell";
 
 const StyledAvatar = styled(Avatar)({
   borderRadius: 0,

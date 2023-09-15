@@ -8,6 +8,7 @@ import useEventHandler from "../hooks/useEventHandler";
 import { Action, State } from "../types";
 import CellData from "../models/CellData";
 import CellFormatting from "../models/CellFormatting";
+import Cell from "../models/Cell";
 
 type ContainerProps = {
   top: number;
@@ -52,18 +53,25 @@ type Props = {
   dispatch: Dispatch<Action>
 }
 
+type Position = {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+}
+
 const CellInput = ({ state, dispatch }: Props): JSX.Element => {
   const navigateRef = useRef(true);
   const eventHandler = useEventHandler();
 
   const inputRef = useCallback(
-    (node: HTMLInputElement | null) => eventHandler.setInputRef(node),
+    (node: HTMLInputElement) => eventHandler.setInputRef(node),
     [eventHandler]
   );
 
-  const cell = useMemo(() => state.selectedCell, [state.selectedCell]);
+  const cell = useMemo<Cell>(() => state.selectedCell, [state.selectedCell]);
   const currentCellContentData = state.content.data[cell.id] as CellData;
-  const rowHeight = useMemo(
+  const rowHeight = useMemo<{ value: number }>(
     () => ({
       value:
         (state.content.rowHeights && state.content.rowHeights[cell.row]) ||
@@ -72,7 +80,7 @@ const CellInput = ({ state, dispatch }: Props): JSX.Element => {
     [cell.row, state.content.rowHeights, state.defaultRowHeight]
   );
 
-  const columnWidth = useMemo(
+  const columnWidth = useMemo<{ value: number }>(
     () => ({
       value:
         (state.content.columnWidths &&
@@ -82,15 +90,15 @@ const CellInput = ({ state, dispatch }: Props): JSX.Element => {
     [cell.column, state.content.columnWidths, state.defaultColumnWidth]
   );
 
-  const currentValue = useMemo(
+  const currentValue = useMemo<string | number>(
     () =>
       currentCellContentData?.formula || currentCellContentData?.value || "",
     [currentCellContentData?.formula, currentCellContentData?.value]
   );
 
-  const [originalValue, setOriginalValue] = useState(currentValue);
-  const [value, setValue] = useState(currentValue);
-  const [position, setPosition] = useState({
+  const [originalValue, setOriginalValue] = useState<string | number>(currentValue);
+  const [value, setValue] = useState<string | number>(currentValue);
+  const [position, setPosition] = useState<Position>({
     top: 0,
     left: 0,
     width: 0,
@@ -131,16 +139,16 @@ const CellInput = ({ state, dispatch }: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cell.id]);
 
-  const handleBlur = (e: SyntheticEvent) => eventHandler.handleInputBoxBlur(e);
+  const handleBlur = (e: React.FocusEvent) => eventHandler.handleInputBoxBlur(e);
 
-  const handleChange = (e: SyntheticEvent) => {
+  const handleChange = (e: React.ChangeEvent) => {
     const newValue = (e.target as HTMLInputElement).value;
     if (isFormula(newValue)) dispatch(setFormulaMode(true));
     dispatch(setCellContent(cell.id, newValue));
   };
 
   const handleKeyDown = useCallback(
-    (e: SyntheticEvent) =>
+    (e: React.KeyboardEvent) =>
       eventHandler.handleCellInputKeyDown(
         e,
         originalValue,

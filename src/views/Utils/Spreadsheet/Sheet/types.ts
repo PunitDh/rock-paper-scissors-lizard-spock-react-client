@@ -18,7 +18,6 @@ export type State = {
   defaultColumnWidth: number;
   maxUndos: number;
   selectedCell: Cell;
-  selectedRef: null;
   formulaMode: boolean;
   hovered: string;
   highlighted: Highlight;

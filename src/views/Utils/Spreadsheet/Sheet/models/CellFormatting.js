@@ -1,26 +1,55 @@
 export default class CellFormatting {
-  constructor(obj) {
-    if (obj) {
-      Object.entries(obj).forEach(([key, value]) => {
-        this[key] = value;
-      });
-      return this;
-    } else {
-      this.borderId = null;
-      this.borderTypes = [];
-      this.decimals = 0;
-      this.numberFormat = null;
-    }
-    this.backgroundColor = undefined;
-    this.color = undefined;
-    this.textAlign = undefined;
+  // borderId?: string | null;
+  // borderTypes?: string[];
+  // decimals?: number;
+  // numberFormat?: string | null;
+  // backgroundColor?: string | undefined;
+  // color?: string | undefined;
+  // textAlign?: "left" | "right" | "center" | undefined;
+
+  constructor({
+    borderId = null,
+    borderTypes = [],
+    decimals = 0,
+    numberFormat = null,
+    backgroundColor = undefined,
+    color = undefined,
+    textAlign = undefined,
+    fontFamily = undefined,
+    fontSize = undefined,
+  } = {}) {
+    this.borderId = borderId;
+    this.borderTypes = borderTypes;
+    this.decimals = decimals;
+    this.numberFormat = numberFormat;
+    this.backgroundColor = backgroundColor;
+    this.color = color;
+    this.textAlign = textAlign;
+    this.fontFamily = fontFamily;
+    this.fontSize = fontSize;
   }
 
-  setFormatting(obj) {
-    if (!obj) return this;
-    Object.entries(obj).forEach(([key, value]) => {
-      this[key] = value;
-    });
+  setFormatting({
+    borderId = null,
+    borderTypes = [],
+    decimals = 0,
+    numberFormat = null,
+    backgroundColor = undefined,
+    color = undefined,
+    textAlign = undefined,
+    fontFamily = undefined,
+    fontSize = undefined,
+  }) {
+    this.borderId = borderId || this.borderId;
+    this.borderTypes = borderTypes || this.borderTypes;
+    this.decimals = decimals || this.decimals;
+    this.numberFormat = numberFormat || this.numberFormat;
+    this.backgroundColor = backgroundColor || this.backgroundColor;
+    this.color = color || this.color;
+    this.textAlign = textAlign || this.textAlign;
+    this.fontFamily = fontFamily || this.fontFamily;
+    this.fontSize = fontSize || this.fontSize;
+
     return this;
   }
 

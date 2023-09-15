@@ -1,17 +1,18 @@
 import { Box } from '@mui/material';
 import React from 'react'
+import { AlignItems, FlexDirection, FlexWrap, JustifyContent } from './styles';
 
 type FlexBoxProps = {
   children: any,
-  justifyContent?: "center" | "flex-start" | "flex-end" | "space-between"
-  alignItems?: "center" | "flex-start" | "flex-end" | "space-between"
-  flexDirection?: "row" | "column";
-  flexWrap?: "wrap" | "nowrap";
+  justifyContent?: JustifyContent;
+  alignItems?: AlignItems;
+  flexDirection?: FlexDirection;
+  flexWrap?: FlexWrap;
   flexGrow?: number;
   gap?: string;
   height?: string;
   width?: string;
-  styles?: object;
+  styles?: { [key: string]: string };
 }
 
 export function FlexBox({

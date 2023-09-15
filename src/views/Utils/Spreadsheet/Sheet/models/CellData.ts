@@ -50,7 +50,7 @@ export default class CellData {
     this.formula = formula;
     this.referenceCells = referenceCells;
     this.display = display;
-    this.formatting = new CellFormatting(formatting);
+    this.formatting = formatting;
     this.error = error;
   }
 
@@ -89,7 +89,7 @@ export default class CellData {
    * @returns {boolean} True if the cell contains a formula, otherwise false.
    */
   get isFormulaCell(): boolean {
-    return isFormula(this.formula) && this.formula?.length! > 0;
+    return Boolean(isFormula(this.formula) && this.formula?.length! > 0);
   }
 
   isNumber() {
@@ -107,7 +107,7 @@ export default class CellData {
     return this;
   }
 
-  setValue(value: string | number): CellData {
+  setValue(value: string | null): CellData {
     if (isFormula(value)) {
       const formula = String(value).toUpperCase();
       this.setFormula(formula);
@@ -199,7 +199,7 @@ export default class CellData {
  */
 const getNumberFormattedDisplay = (
   value: string | number | null,
-  formatting: { numberFormat: string; decimals?: number }
+  formatting: CellFormatting
 ): string => {
   if (isFalsy(value)) return "";
   switch (formatting.numberFormat) {
@@ -457,7 +457,7 @@ type Evaluated = {
   value: string;
   referenceCells: string[];
   error?: string | undefined;
-  parsedInput: string
+  parsedInput: string;
 };
 
 type ReplacedString = {
@@ -531,7 +531,8 @@ export const evaluate = (
     0
   );
 
-  const finalEvaluation: EvaluatedString = evaluateExpression(substitutedString);
+  const finalEvaluation: EvaluatedString =
+    evaluateExpression(substitutedString);
 
   return {
     value: finalEvaluation.value,

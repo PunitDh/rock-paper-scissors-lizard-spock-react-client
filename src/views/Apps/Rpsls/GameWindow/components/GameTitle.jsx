@@ -4,6 +4,7 @@ import { useAPI, useCurrentGame } from "../../../../../hooks";
 import { getIcon } from "../../../../../assets";
 import FlexBox from "../../../../../components/shared/FlexBox";
 import IconSelectField from "../../../../../components/shared/IconSelectField";
+import { InvisibleTextField } from "../../../../../components/shared/InvisibleTextField";
 
 const GameTitle = () => {
   const currentGame = useCurrentGame();

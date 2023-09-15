@@ -10,6 +10,7 @@ import MoveRow from "./MoveRow";
 import styled from "@emotion/styled";
 import PlayerNameHeaderCell from "./PlayerNameHeaderCell";
 import { useToken } from "../../../../../../hooks";
+import ResponsiveTableCell from "../../../../../../components/shared/ResponsiveTableCell";
 
 const StyledTable = styled(Table)({
   whiteSpace: "nowrap",

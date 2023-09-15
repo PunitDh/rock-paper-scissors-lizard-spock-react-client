@@ -1,3 +1,4 @@
+import Cell from "./models/Cell";
 import CellData from "./models/CellData";
 import StateContent from "./models/StateContent";
 import StateContentData from "./models/StateContentData";
@@ -50,7 +51,7 @@ export const SheetAction = Object.freeze({
   RESET_STATE: "RESET_STATE",
 });
 
-export const selectCell = (payload: string) => ({
+export const selectCell = (payload: string | Cell) => ({
   type: SheetAction.SET_SELECTED,
   payload,
 });
@@ -99,7 +100,7 @@ export const setHovered = (payload: string): Action => ({
   payload,
 });
 
-export const setHighlightCellAnchor = (payload: string): Action => ({
+export const setHighlightCellAnchor = (payload: string | null): Action => ({
   type: SheetAction.SET_HIGHLIGHT_CELL_ANCHOR,
   payload,
 });
@@ -115,7 +116,7 @@ export const setHighlightColumnAnchor = (payload: string): Action => ({
 });
 
 export const pasteCellContent = (
-  anchor: string,
+  anchor: string | undefined,
   data: StateContentData
 ): Action => ({
   type: SheetAction.PASTE_CELL_CONTENT,
@@ -125,7 +126,7 @@ export const pasteCellContent = (
   },
 });
 
-export const deleteCellContent = (payload: string) => ({
+export const deleteCellContent = (payload?: string) => ({
   type: SheetAction.DELETE_CELL_CONTENT,
   payload,
 });
@@ -160,7 +161,7 @@ export const selectAll = (): Action => ({
   type: SheetAction.SELECT_ALL,
 });
 
-export const highlightCells = (start: string, end: string): Action => ({
+export const highlightCells = (start: string, end?: string): Action => ({
   type: SheetAction.HIGHLIGHT_CELLS,
   payload: { start, end },
 });
@@ -259,9 +260,8 @@ export const setCellOutsideBorderFormatting = (payload: any): Action => ({
   payload,
 });
 
-export const clearCellFormatting = (payload: string): Action => ({
+export const clearCellFormatting = (): Action => ({
   type: SheetAction.CLEAR_CELL_FORMATTING,
-  payload,
 });
 
 export const recalculateFormulae = (): Action => ({

@@ -73,10 +73,10 @@ const TestingArea = ({ state }: { state: State }) => {
         <StatusCell label="Formula Mode">
           {String(state.formulaMode)}
         </StatusCell>
-        <StatusCell label="Selection Range">
+        {/* <StatusCell label="Selection Range">
           {eventHandler.formulaFieldRef.selectionStart},
           {eventHandler.formulaFieldRef.selectionEnd}
-        </StatusCell>
+        </StatusCell> */}
       </FlexBox>
     </DashboardCard>
   ) : null;

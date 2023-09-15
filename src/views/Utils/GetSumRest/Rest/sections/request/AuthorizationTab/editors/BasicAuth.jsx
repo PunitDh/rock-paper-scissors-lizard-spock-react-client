@@ -10,6 +10,7 @@ import { setAuthorization } from "../../../../actions";
 import { AuthorizationType } from "../../../../constants";
 import FlexBox from "../../../../../../../../components/shared/FlexBox";
 import { Bold } from "../../../../../../../../components/shared/styles";
+import PasswordField from "../../../../../../../../components/shared/PasswordField";
 
 
 export default function BasicAuth({ state, dispatch }) {

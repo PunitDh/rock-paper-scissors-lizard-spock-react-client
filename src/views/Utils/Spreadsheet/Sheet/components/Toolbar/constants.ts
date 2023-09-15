@@ -7,7 +7,7 @@ import {
 } from "@mui/icons-material";
 import { IconClock, IconCurrencyDollar } from "@tabler/icons-react";
 
-export const fontSizes = Object.freeze([
+export const fontSizes: ReadonlyArray<string> = Object.freeze([
   "8px",
   "10px",
   "12px",
@@ -29,29 +29,18 @@ export enum BorderType {
   THICK_OUTSIDE_BORDERS = "THICK_OUTSIDE_BORDERS",
 }
 
-// export const BorderType = Object.freeze({
-//   BORDER_TOP: "borderTop",
-//   BORDER_RIGHT: "borderRight",
-//   BORDER_BOTTOM: "borderBottom",
-//   BORDER_LEFT: "borderLeft",
-//   NO_BORDER: "NO_BORDER",
-//   ALL_BORDERS: "ALL_BORDERS",
-//   OUTSIDE_BORDERS: "OUTSIDE_BORDERS",
-//   THICK_OUTSIDE_BORDERS: "THICK_OUTSIDE_BORDERS",
-// });
-
-export const outsideBorders = Object.freeze([
+export const outsideBorders: ReadonlyArray<BorderType> = Object.freeze([
   BorderType.OUTSIDE_BORDERS,
   BorderType.THICK_OUTSIDE_BORDERS,
 ]);
 
 export type BorderStyle = {
   id: BorderType;
-  props: { [key: string]: string };
+  props?: { [key: string]: any };
   value: string;
 };
 
-export const borderStyles = Object.freeze([
+export const borderStyles: ReadonlyArray<BorderStyle> = Object.freeze([
   {
     id: BorderType.BORDER_BOTTOM,
     props: { borderBottom: "1px solid black" },
@@ -126,24 +115,20 @@ export enum NumberFormat {
   TEXT = "Text",
 }
 
-// export const NumberFormat = Object.freeze({
-//   GENERAL: "General",
-//   NUMBER: "Number",
-//   CURRENCY: "Currency",
-//   SHORT_DATE: "Short Date",
-//   LONG_DATE: "Long Date",
-//   TIME: "Time",
-//   PERCENTAGE: "Percentage",
-//   TEXT: "Text",
-// });
+type NumberFormatMenuItem = {
+  id: NumberFormat;
+  Icon: any;
+};
 
-export const numberFormats = Object.freeze([
-  { id: NumberFormat.GENERAL, Icon: TextFormat },
-  { id: NumberFormat.NUMBER, Icon: NumbersOutlined },
-  { id: NumberFormat.CURRENCY, Icon: IconCurrencyDollar },
-  { id: NumberFormat.SHORT_DATE, Icon: CalendarMonth },
-  { id: NumberFormat.LONG_DATE, Icon: CalendarMonth },
-  { id: NumberFormat.TIME, Icon: IconClock },
-  { id: NumberFormat.PERCENTAGE, Icon: Percent },
-  { id: NumberFormat.TEXT, Icon: TextFields },
-]);
+export const numberFormats: ReadonlyArray<NumberFormatMenuItem> = Object.freeze(
+  [
+    { id: NumberFormat.GENERAL, Icon: TextFormat },
+    { id: NumberFormat.NUMBER, Icon: NumbersOutlined },
+    { id: NumberFormat.CURRENCY, Icon: IconCurrencyDollar },
+    { id: NumberFormat.SHORT_DATE, Icon: CalendarMonth },
+    { id: NumberFormat.LONG_DATE, Icon: CalendarMonth },
+    { id: NumberFormat.TIME, Icon: IconClock },
+    { id: NumberFormat.PERCENTAGE, Icon: Percent },
+    { id: NumberFormat.TEXT, Icon: TextFields },
+  ]
+);

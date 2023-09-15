@@ -4,11 +4,16 @@ import { BorderType } from "./components/Toolbar/constants";
 import CellFormatting from "./models/CellFormatting";
 import { Theme as MuiTheme } from "@mui/material/styles";
 
+type HeaderItemProps = {
+  selected: boolean;
+  theme?: MuiTheme;
+};
+
 export const HeaderItem = styled(TableCell)(
-  ({ selected, theme }: { selected: boolean; theme: MuiTheme }) => ({
+  ({ selected, theme }: HeaderItemProps) => ({
     backgroundColor: selected ? "#eee" : "#f5f6f7",
     fontWeight: "700",
-    color: theme.palette.text.secondary,
+    color: theme?.palette.text.secondary,
     textAlign: "center",
     border: selected ? "2px solid blue" : "1px solid rgba(0,0,0,0.2)",
     borderRadius: 0,
@@ -108,6 +113,8 @@ type ItemProps = {
   selected: boolean;
   textalign: string;
   formulacell: number;
+  tabIndex: number;
+  width: number;
   formatting: CellFormatting;
 } & TableCellProps;
 
