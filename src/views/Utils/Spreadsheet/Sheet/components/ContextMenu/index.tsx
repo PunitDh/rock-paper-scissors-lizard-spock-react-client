@@ -40,7 +40,7 @@ const ContextMenu = ({ state, dispatch }: Props): JSX.Element => {
 
   const handlePaste = async () => {
     const data = await eventHandler.clipboard.get();
-    console.log(data);
+    // console.log(data);
     dispatch(pasteCellContent(state.menuAnchorElement?.id, data));
     handleClose();
   };

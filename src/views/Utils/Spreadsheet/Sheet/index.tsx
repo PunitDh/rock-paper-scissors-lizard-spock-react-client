@@ -11,6 +11,7 @@ import SheetContent from "./SheetContent";
 import { EventProvider } from "./context/EventHandlerContext";
 import { Action, State } from "./types";
 import DashboardCard from "../../../../components/shared/DashboardCard";
+import useEventHandler from "./hooks/useEventHandler";
 
 const Sheet = ({
   maxRows = SheetConfig.MAX_ROWS,
@@ -35,6 +36,7 @@ const Sheet = ({
   );
 
   useEffect(() => {
+    console.log("Sheet recalculation hook triggered");
     dispatch(recalculateFormulae());
     dispatch(addMemento());
   }, []);

@@ -59,32 +59,17 @@ export default class CellData {
   }
 
   /**
-   * Retrieves an existing `CellData` instance or creates a new one.
-   *
-   * @param {CellData|Object} cellData - An existing `CellData` instance or an object with cell data properties.
-   * @param {string} id - The ID for the new `CellData` instance if one is created.
-   * @returns {CellData} An existing or newly created `CellData` instance.
-   */
-  static getOrNew(cellData: CellData | object, id: string): CellData {
-    if (cellData instanceof CellData) {
-      return cellData;
-    }
-
-    return new CellData({ id });
-  }
-
-  /**
    * Retrieves an existing `CellData` instance from state or creates a new one.
    *
    * @param {Object} stateContentData - The state containing cell data instances.
    * @param {string} id - The ID for retrieving or creating a `CellData` instance.
    * @returns {CellData} An existing or newly created `CellData` instance.
    */
-  static getOrNew1(stateContentData: StateContentData, id: string): CellData {
+  static getOrNew(stateContentData: StateContentData, id: string): CellData {
     if (stateContentData[id] instanceof CellData) {
       return stateContentData[id];
     }
-    return new CellData({ id });
+    return new CellData({ ...stateContentData, id });
   }
 
   /**
@@ -613,7 +598,10 @@ const evaluateExpression = (input: string): EvaluatedString => {
 
     if (diffBrackets > 0) parsedInput += ")".repeat(diffBrackets);
 
+    
     value = eval(parsedInput);
+
+    if (parsedInput === 'null') value = '0';
     // value = String(Math.round(eval(parsedInput) * 10 ** 13) / 10 ** 13);
 
     return { value, parsedInput };
