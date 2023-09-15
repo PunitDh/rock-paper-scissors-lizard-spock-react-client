@@ -1,4 +1,4 @@
-import { NumberFormat } from "../components/Toolbar/constants";
+import { FontSize, NumberFormat } from "../components/Toolbar/constants";
 
 export default class CellFormatting {
   borderId?: string | null;
@@ -9,7 +9,10 @@ export default class CellFormatting {
   color?: string;
   textAlign?: "left" | "right" | "center";
   fontFamily?: string;
-  fontSize?: string;
+  fontSize?: FontSize;
+  fontWeight?: "bold" | "normal";
+  fontStyle?: "italic" | "normal";
+  textDecoration?: "underline" | "none";
 
   constructor({
     borderId = null,
@@ -21,6 +24,9 @@ export default class CellFormatting {
     textAlign = undefined,
     fontFamily = undefined,
     fontSize = undefined,
+    fontWeight = undefined,
+    fontStyle = undefined,
+    textDecoration = undefined,
   } = {}) {
     this.borderId = borderId;
     this.borderTypes = borderTypes;
@@ -31,6 +37,9 @@ export default class CellFormatting {
     this.textAlign = textAlign;
     this.fontFamily = fontFamily;
     this.fontSize = fontSize;
+    this.fontWeight = fontWeight;
+    this.fontStyle = fontStyle;
+    this.textDecoration = textDecoration;
   }
 
   setFormatting(formatting: CellFormatting) {
@@ -43,6 +52,9 @@ export default class CellFormatting {
     this.textAlign = formatting.textAlign || this.textAlign;
     this.fontFamily = formatting.fontFamily || this.fontFamily;
     this.fontSize = formatting.fontSize || this.fontSize;
+    this.fontWeight = formatting.fontWeight || this.fontWeight;
+    this.fontStyle = formatting.fontStyle || this.fontStyle;
+    this.textDecoration = formatting.textDecoration || this.textDecoration;
 
     return this;
   }

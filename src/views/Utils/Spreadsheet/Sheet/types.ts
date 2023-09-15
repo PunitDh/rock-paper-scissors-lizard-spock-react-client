@@ -24,12 +24,7 @@ export type State = {
   highlighted: Highlight;
   formulaTrackedCells: string[];
   formulaHighlighted: string[];
-  content: {
-    namedRanges: object;
-    data: StateContentData;
-    rowHeights: { [key: string]: number };
-    columnWidths: { [key: string]: number };
-  };
+  content: StateContent
   mouseDown: boolean;
   dragging: boolean;
   fillerMode: boolean;

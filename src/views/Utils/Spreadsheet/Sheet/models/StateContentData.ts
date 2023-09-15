@@ -31,7 +31,7 @@ export default class StateContentData {
         }
         return stateContentData;
       },
-      {}
+      this
     );
   }
 

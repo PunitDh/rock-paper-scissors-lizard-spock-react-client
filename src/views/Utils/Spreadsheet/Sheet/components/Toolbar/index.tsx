@@ -23,6 +23,7 @@ import {
   setCellBorderFormatting,
   addMemento,
   clearCellFormatting,
+  autoCalculate,
 } from "../../actions";
 import OpenFileCSV from "./components/OpenFileCSV";
 import SaveFileCSV from "./components/SaveFileCSV";
@@ -37,11 +38,13 @@ import SaveFileJSON from "./components/SaveFileJSON";
 import DecimalIcon from "./components/icons/DecimalIcon";
 import { clamp } from "lodash";
 import CellFormatting from "../../models/CellFormatting";
-import { BorderType, outsideBorders } from "./constants";
+import { AutoCalculate, BorderType, outsideBorders } from "./constants";
 import OpenFileJSON from "./components/OpenFileJSON";
 import ClearFormattingIcon from "./components/icons/ClearFormatting";
 import FlexBox from "../../../../../../components/shared/FlexBox";
 import { SelectChangeEvent } from "@mui/material";
+import { IconSum } from "@tabler/icons-react";
+import MenuButton from "./components/MenuButton";
 
 const Toolbar = ({ state, dispatch }) => {
   const canUndo = state.currentMementoId !== state.memento[0]?.id;
@@ -76,7 +79,7 @@ const Toolbar = ({ state, dispatch }) => {
   }, [currentCellFormatting, state.content.data, state.selectedCell.id]);
 
   const [selectedFormatting, setSelectedFormatting] =
-    useState(stateCellFormatting);
+    useState<CellFormatting>(stateCellFormatting);
 
   useEffect(() => {
     setSelectedFormatting(stateCellFormatting);
@@ -86,12 +89,12 @@ const Toolbar = ({ state, dispatch }) => {
     e.preventDefault();
   };
 
-  const handleUndo = (e) => {
+  const handleUndo = () => {
     canUndo && dispatch(undoState());
     dispatch(recalculateFormulae());
   };
 
-  const handleRedo = (e) => {
+  const handleRedo = () => {
     canRedo && dispatch(redoState());
     dispatch(recalculateFormulae());
   };
@@ -105,16 +108,16 @@ const Toolbar = ({ state, dispatch }) => {
   );
 
   const setFormattingChange = useCallback(
-    (formattingKey) => (event) => {
+    (formattingKey) => (event: any) => {
       const value = event.target?.value || event;
       const formatting = { [formattingKey]: value };
 
-      if (state.highlighted.cells.length > 1)
+      if (state.highlighted.hasLength)
         dispatch(setCellFormattingBulk(formatting));
       else dispatch(setSelectedCellFormatting(formatting));
       dispatch(addMemento());
     },
-    [dispatch, state.highlighted.cells.length]
+    [dispatch, state.highlighted.hasLength]
   );
 
   const setTextAlign = (textAlign) => () => {
@@ -127,14 +130,15 @@ const Toolbar = ({ state, dispatch }) => {
     setFormattingChange("decimals")(newDecimals);
   };
 
-  const clearFormatting = () => dispatch(clearCellFormatting())
+  const clearFormatting = () => dispatch(clearCellFormatting());
+  const handleAutoCalculate = (e: React.MouseEvent, type: AutoCalculate) => dispatch(autoCalculate(type));
 
   const selectBorder = (borderEvent: SelectChangeEvent) => {
     const { value } = borderEvent.target;
     if (outsideBorders.includes(value as BorderType)) {
       dispatch(setCellOutsideBorderFormatting(value));
     } else {
-      if (state.highlighted.cells.length > 1)
+      if (state.highlighted.hasLength)
         dispatch(setCellBorderFormattingBulk({ borderId: value }));
       else dispatch(setCellBorderFormatting({ borderId: value }));
     }
@@ -142,7 +146,7 @@ const Toolbar = ({ state, dispatch }) => {
   };
 
   const createToggleHandler = useCallback(
-    (formattingKey, activeValue, inactiveValue) => () => {
+    (formattingKey: string, activeValue: string, inactiveValue: string) => () => {
       const newValue = toggleStyle(formattingKey, activeValue, inactiveValue);
       setFormattingChange(formattingKey)(newValue);
     },
@@ -269,6 +273,12 @@ const Toolbar = ({ state, dispatch }) => {
             isActive={false}
             Icon={ClearFormattingIcon}
             onClick={clearFormatting}
+          />
+          <MenuButton
+            title={"Auto Sum"}
+            isActive={false}
+            Icon={IconSum}
+            onClick={handleAutoCalculate}
           />
         </FlexBox>
       </FlexForm>

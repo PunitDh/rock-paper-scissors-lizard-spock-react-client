@@ -1,7 +1,7 @@
 import { isFormula } from "../utils/cellUtils";
 import CellRange from "./CellRange";
 import CellFormatting from "./CellFormatting";
-import { NumberFormat } from "../components/Toolbar/constants";
+import { BorderType, NumberFormat } from "../components/Toolbar/constants";
 import { isString } from "lodash";
 import { isFalsy, isNumber } from "../../../../../utils";
 import StateContentData from "./StateContentData";
@@ -153,12 +153,12 @@ export default class CellData {
     return this;
   }
 
-  addBorderFormatting(borderId, borderType) {
+  addBorderFormatting(borderId: any, borderType: BorderType) {
     this.formatting = this.formatting.addBorder(borderId, borderType);
     return this;
   }
 
-  setData(obj) {
+  setData(obj: { value: string | null; id: string; formatting: CellFormatting; }) {
     if (!obj) return this;
     this.setValue(obj.value);
     this.setId(obj.id);
@@ -166,7 +166,7 @@ export default class CellData {
     return this;
   }
 
-  evaluate(stateContentData) {
+  evaluate(stateContentData: StateContentData): CellData {
     if (this.formula) {
       const referenceCells = getReferenceCells(this.formula);
       const evaluated = evaluate(
@@ -321,7 +321,7 @@ const processMatches = (
   str: string,
   reg: RegExp,
   formulaCreator: Function,
-  zeroValue: undefined | null
+  zeroValue: undefined | null | 0
 ): Array<any> => {
   const matches = [...str.matchAll(reg)];
   const referenceCells = matches.map(([_, match]) =>
@@ -435,11 +435,10 @@ const evaluateFormula = (cellValue: string): Array<any> => {
     str,
     /(?:\bVLOOKUP)\(([^)]+)\)/gi,
     (it: string[][][]) => {
-      console.log(it[0], it[1], it[2]);
-      const _0 = it[0];
-      const _1 = `[${it[1].map((it) => `[${it.join(",")}]`).join(",")}]`;
-      const _2 = it[2];
-      return `${_1}[${_2}-1][${_1}[0].findIndex(it => it == ${_0})]`;
+      const cell = it[0];
+      const range = `[${it[1].map((it) => `[${it.join(",")}]`).join(",")}]`;
+      const colNumber = it[2];
+      return `${range}[${colNumber}-1][${range}[0].findIndex(it => it == ${cell})]`;
     },
     null
   );
@@ -464,12 +463,6 @@ type ReplacedString = {
   stringValue: string;
   referenceCells: string[];
 };
-
-interface EvaluatedExpression {
-  value: string;
-  referenceCells: string[];
-  // ... (any other properties)
-}
 
 /**
  * Parses and evaluates a formula string. Replaces formulas with actual values and evaluates the resulting expression.
@@ -555,7 +548,9 @@ type EvaluatedString = {
  * @returns {Object} An object containing the evaluated value, parsed input, and any error if occurred.
  */
 const evaluateExpression = (input: string): EvaluatedString => {
-  let parsedInput, value;
+  let parsedInput: string = input;
+  let value: string;
+
   try {
     parsedInput = input
       .replaceAll("%", "/100")
@@ -591,19 +586,17 @@ const evaluateExpression = (input: string): EvaluatedString => {
       .replaceAll(/(\d+|\))Math/g, "$1*Math")
       .replaceAll(")Math", ")*Math");
 
-    const openBrackets = parsedInput.match(/\(/g)?.length || 0;
-    const closeBrackets = parsedInput.match(/\)/g)?.length || 0;
+    const openBrackets: number = parsedInput.match(/\(/g)?.length || 0;
+    const closeBrackets: number = parsedInput.match(/\)/g)?.length || 0;
+    const diffBrackets: number = openBrackets - closeBrackets;
 
-    const diffBrackets = openBrackets - closeBrackets;
     if (diffBrackets > 0) parsedInput += ")".repeat(diffBrackets);
 
-    console.log({ parsedInput, value });
     value = eval(parsedInput);
     // value = String(Math.round(eval(parsedInput) * 10 ** 13) / 10 ** 13);
 
     return { value, parsedInput };
   } catch (error: unknown) {
-    console.log({ error, parsedInput });
     return { value: "Syntax Error", parsedInput, error: error as string };
   }
 };
@@ -614,14 +607,14 @@ const evaluateExpression = (input: string): EvaluatedString => {
  * @param {string} formula - The formula string to extract cell references from.
  * @returns {Array} An array of cell references.
  */
-export function getReferenceCells(formula: string): Array<any> {
+export function getReferenceCells(formula: string): Array<string> {
   const cells = formula.toUpperCase().match(/([a-z]+[0-9]+)/gi) || [];
   const cellRanges =
     formula.toUpperCase().match(/([a-z]+[0-9]+):([a-z]+[0-9]+)/gi) || [];
 
   // Expand cell ranges into individual cells
   const expandedRanges = cellRanges
-    .map((range) => {
+    .map((range: string) => {
       const [start, end] = range.split(":");
       return CellRange.createFlat(start, end).cellIds;
     })
@@ -641,8 +634,8 @@ export function getReferenceCells(formula: string): Array<any> {
  */
 export function getFormulaTrackedCells(
   formula: string,
-  stateFormulaTrackedCells: Array<any>
-): Array<any> {
+  stateFormulaTrackedCells: Array<string>
+): Array<string> {
   const referenceCells = getReferenceCells(formula);
 
   const formulaTrackedCells = [

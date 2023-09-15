@@ -5,7 +5,7 @@ import Cell from "./models/Cell";
 import CellData, { getFormulaTrackedCells } from "./models/CellData";
 import CellRange from "./models/CellRange";
 import { isEqual, uniqueId } from "lodash";
-import { BorderType } from "./components/Toolbar/constants";
+import { AutoCalculate, BorderType } from "./components/Toolbar/constants";
 import Highlight from "./models/Highlight";
 import { Action, Memento, State } from "./types";
 import StateContentData from "./models/StateContentData";
@@ -79,10 +79,9 @@ export const reducer = (state: State, action: Action) => {
           ...state.content,
           namedRanges: {
             ...state.content.namedRanges,
-            [action.payload]:
-              state.highlighted.cells.length > 1
-                ? state.highlighted.cells
-                : [state.selectedCell.id],
+            [action.payload]: state.highlighted.hasLength
+              ? state.highlighted.cells
+              : [state.selectedCell.id],
           },
         },
       };
@@ -445,6 +444,39 @@ export const reducer = (state: State, action: Action) => {
         formulaTrackedCells: Array.from(new Set(formulaTrackedCells)),
       };
     }
+    case SheetAction.AUTO_CALCULATE: {
+      const { rows, columns, last, hasLength } = state.highlighted;
+      const type = action.payload;
+
+      const value = state.highlighted[type.toLowerCase() as AutoCalculate];
+
+      if (hasLength && last) {
+        const offset: Cell = (
+          rows.length > columns.length
+            ? new Cell(last).getOffset(0, 1)
+            : new Cell(last).getOffset(1, 0)
+        )!;
+
+        const cellData = CellData.getOrNew1(state.content.data, offset.id);
+
+        return {
+          ...state,
+          highlighted: state.highlighted.addCellAndRecalculate(
+            offset.id,
+            state.content.data
+          ),
+          content: {
+            ...state.content,
+            data: {
+              ...state.content.data,
+              [offset.id]: cellData.setValue(String(value)),
+            },
+          },
+        };
+      }
+
+      return state;
+    }
     case SheetAction.SET_CONTENT_DATA: {
       const { value, cell: cellId } = action.payload;
       const formula = value.toUpperCase();
@@ -596,12 +628,9 @@ export const reducer = (state: State, action: Action) => {
     }
 
     case SheetAction.SET_CELL_OUTSIDE_BORDER_FORMATTING: {
-      const { cells } = state.highlighted;
+      const { first, last } = state.highlighted;
 
-      let range = CellRange.createHorizontalSliced(
-        cells[0],
-        cells[cells.length - 1]
-      ).cellIds;
+      let range = CellRange.createHorizontalSliced(first, last).cellIds;
 
       if (!range.length) {
         if (Cell.isValidId(state.selectedCell.id)) {
@@ -655,7 +684,7 @@ export const reducer = (state: State, action: Action) => {
     }
 
     case SheetAction.CLEAR_CELL_FORMATTING: {
-      if (state.highlighted.cells.length > 1) {
+      if (state.highlighted.hasLength) {
         const data = state.highlighted.cells.reduce(
           (stateContentData: StateContentData, cellId: string) => {
             const cellData = state.content.data[cellId];

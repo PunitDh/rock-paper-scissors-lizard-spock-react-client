@@ -13,7 +13,7 @@ type FlexBoxProps = {
   height?: string;
   width?: string;
   styles?: { [key: string]: string };
-}
+} & any
 
 export function FlexBox({
   children,

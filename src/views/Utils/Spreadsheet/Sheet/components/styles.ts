@@ -74,11 +74,12 @@ type FieldButtonProps = {
   variant?: string;
   theme?: MuiTheme;
   isactive?: boolean;
+  width?: string;
 };
 
 export const FieldButton = styled.button(
-  ({ variant, theme, isactive }: FieldButtonProps) => ({
-    width: "1.75rem",
+  ({ variant, theme, isactive, width }: FieldButtonProps) => ({
+    width: width || "1.75rem",
     outline: "none",
     border: isactive ? "1px solid blue" : "1px solid rgba(0,0,0,0.3)",
     height: "1.75rem",

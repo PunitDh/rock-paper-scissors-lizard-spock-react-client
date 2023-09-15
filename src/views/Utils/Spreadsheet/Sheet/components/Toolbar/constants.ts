@@ -7,7 +7,17 @@ import {
 } from "@mui/icons-material";
 import { IconClock, IconCurrencyDollar } from "@tabler/icons-react";
 
-export const fontSizes: ReadonlyArray<string> = Object.freeze([
+export type FontSize =
+  | "8px"
+  | "10px"
+  | "12px"
+  | "14px"
+  | "16px"
+  | "18px"
+  | "20px"
+  | "24px";
+
+export const fontSizes: ReadonlyArray<FontSize> = Object.freeze([
   "8px",
   "10px",
   "12px",
@@ -113,6 +123,12 @@ export enum NumberFormat {
   TIME = "Time",
   PERCENTAGE = "Percentage",
   TEXT = "Text",
+}
+
+export enum AutoCalculate {
+  SUM="SUM",
+  AVERAGE="AVERAGE",
+  COUNT="COUNT",
 }
 
 type NumberFormatMenuItem = {

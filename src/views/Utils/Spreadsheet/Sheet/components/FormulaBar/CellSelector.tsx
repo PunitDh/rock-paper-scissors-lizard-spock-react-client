@@ -11,16 +11,10 @@ const CellSelector = ({ state }: Props) => {
   const eventHandler = useEventHandler();
   const cellInputValue = useMemo(
     () =>
-      state.highlighted.cells.length > 1 && state.mouseDown
+      state.highlighted.hasLength && state.mouseDown
         ? `${state.highlighted.rows.length}R × ${state.highlighted.columns.length}C`
         : state.selectedCell.id,
-    [
-      state.highlighted.cells.length,
-      state.highlighted.columns.length,
-      state.highlighted.rows.length,
-      state.mouseDown,
-      state.selectedCell.id,
-    ]
+    [state.highlighted.columns.length, state.highlighted.hasLength, state.highlighted.rows.length, state.mouseDown, state.selectedCell.id]
   );
 
   const [currentCellInputValue, setCurrentCellInputValue] =

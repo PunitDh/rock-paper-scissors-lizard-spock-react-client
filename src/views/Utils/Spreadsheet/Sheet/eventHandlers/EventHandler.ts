@@ -257,10 +257,15 @@ export default class EventHandler {
             highlightFormulaCellRange(cellAnchor, this.state.hovered)
           );
       }
-      if (this.state.fillerMode) {
-        this.#handleFillerModeFormulaFill();
+    } else {
+      if (this.state.dragging && !this.isCtrlKeyPressed(e)) {
+        if (cellAnchor)
+          this.dispatch(highlightCells(cellAnchor, this.state.hovered));
       }
-    } else if (this.state.fillerMode) {
+    }
+
+    if (this.state.fillerMode) {
+      this.state.formulaMode && this.dispatch(setFormulaMode(false));
       const getBoundingRect = (id: string): DOMRect => {
         const element = document.getElementById(id);
         return (element as HTMLDivElement).getBoundingClientRect();
@@ -280,7 +285,6 @@ export default class EventHandler {
           y: Math.abs(hoveredRect.bottom - cellAnchorRect.bottom),
         };
 
-        // Extract the cell information to avoid repetitive instantiation
         const cellAnchorInstance = new Cell(cellAnchor);
         const hoveredInstance = new Cell(this.state.hovered);
 
@@ -290,12 +294,11 @@ export default class EventHandler {
             : `${hoveredInstance.column}${cellAnchorInstance.row}`;
 
         this.dispatch(highlightCells(cellAnchor, rangeEnd));
-        this.#handleFillerModeValueFill();
-      }
-    } else {
-      if (this.state.dragging && !this.isCtrlKeyPressed(e)) {
-        if (cellAnchor)
-          this.dispatch(highlightCells(cellAnchor, this.state.hovered));
+        if (isFormula(this.state.content.data[cellAnchor]?.formula)) {
+          this.#handleFillerModeFormulaFill();
+        } else {
+          this.#handleFillerModeValueFill();
+        }
       }
     }
   }
@@ -444,7 +447,7 @@ export default class EventHandler {
     }
   }
 
-  handleMouseUp(e) {
+  handleMouseUp(e: React.MouseEvent<Element, MouseEvent>) {
     if (e.button !== MouseButton.LEFT_CLICK) return;
     this.dispatch(setMouseDown(false));
     this.state.fillerMode && this.dispatch(setFillerMode(false));
@@ -456,7 +459,8 @@ export default class EventHandler {
     if (this.state.formulaMode) {
       this.#handleFormulaModeMouseUp(isSameCellHighlighted, isCtrlKeyPressed);
     } else if (this.state.fillerMode) {
-      // this.#handleFillerModeMouseMove(isSameCellHighlighted);
+      this.#handleFillerModeFormulaFill();
+      this.dispatch(recalculateFormulae());
     } else {
       this.#handleRegularModeMouseUp(isCtrlKeyPressed, isCtrlKeyPressed);
     }
@@ -480,7 +484,7 @@ export default class EventHandler {
   #determineNextCell(e: React.KeyboardEvent): Cell {
     const { selectedCell, maxRows, maxColumns, formulaMode } = this.state;
     const shouldResetHighlight =
-      !e.shiftKey && !formulaMode && this.state.highlighted.cells.length;
+      !e.shiftKey && !formulaMode && this.state.highlighted.hasLength;
 
     shouldResetHighlight && this.dispatch(resetHighlight()); // reset highlighting if conditions are met
 
@@ -543,7 +547,7 @@ export default class EventHandler {
         this.dispatch(highlightCells(highlighted.cellAnchor, id));
     } else {
       !this.state.dragging &&
-        this.state.highlighted.cells.length &&
+        this.state.highlighted.hasLength &&
         this.dispatch(resetHighlight());
       this.dispatch(selectCell(id));
       this.dispatch(setHighlightCellAnchor(id));
@@ -551,23 +555,29 @@ export default class EventHandler {
   };
 
   #handleFillerModeFormulaFill() {
-    const { cellAnchor, cells: highlightedCells } = this.state.highlighted;
+    const {
+      cellAnchor,
+      cells: highlightedCells,
+      length: highlightedLength,
+      hasLength,
+      last,
+    } = this.state.highlighted;
 
-    if (highlightedCells.length < 1 || !cellAnchor) return;
+    if (!hasLength || !cellAnchor || !last) return;
 
     const anchorCell = this.state.content.data[cellAnchor];
     const anchorFormula = anchorCell?.formula;
 
     if (isFormula(anchorFormula)) {
       const firstCell = new Cell(cellAnchor);
-      const lastCell = new Cell(highlightedCells[highlightedCells.length - 1]);
+      const lastCell = new Cell(last);
       if (!firstCell?.columnCharCode || !lastCell?.columnCharCode) return;
       const columnFill = lastCell.columnCharCode > firstCell.columnCharCode;
       const rowFill = lastCell.row > firstCell.row;
       const { referenceCells, formula } = this.state.content.data[firstCell.id];
 
       let increment = 0;
-      Array(highlightedCells.length - 1)
+      Array(highlightedLength - 1)
         .fill(0)
         .forEach((_, i) => {
           if (columnFill) {
@@ -597,7 +607,7 @@ export default class EventHandler {
                 if (!columnCharCode) return acc;
                 return acc.replace(
                   id,
-                  `${String.fromCharCode(+columnCharCode + increment)}${row}`
+                  `${String.fromCharCode(columnCharCode)}${row + increment}`
                 );
               },
               formula
@@ -606,14 +616,20 @@ export default class EventHandler {
             this.dispatch(
               setCellContent(highlightedCells[i + 1], String(newFormula))
             );
+            this.state.formulaMode && this.dispatch(setFormulaMode(false));
+            this.dispatch(recalculateFormulae());
           }
         });
     }
   }
 
   #handleFillerModeValueFill() {
-    const highlightedCells = this.state.highlighted.cells;
-    if (highlightedCells.length < 1) return;
+    const {
+      cells: highlightedCells,
+      hasLength,
+      length: highlightedLength,
+    } = this.state.highlighted;
+    if (!hasLength) return;
     const { cellAnchor } = this.state.highlighted;
 
     if (!cellAnchor) return;
@@ -622,7 +638,7 @@ export default class EventHandler {
 
     if (isNumber(anchorValue)) {
       let increment = 0;
-      Array(highlightedCells.length - 1)
+      Array(highlightedLength - 1)
         .fill(0)
         .forEach((_, i) => {
           increment++;
@@ -656,7 +672,10 @@ export default class EventHandler {
     }
   }
 
-  #handleRegularModeMouseUp(isSameCellHighlighted, isCtrlKeyPressed) {
+  #handleRegularModeMouseUp(
+    isSameCellHighlighted: boolean,
+    isCtrlKeyPressed: boolean
+  ) {
     if (!isSameCellHighlighted && isCtrlKeyPressed) {
       this.dispatch(addCellsToHighlight([this.state.hovered]));
     }
@@ -697,7 +716,7 @@ export default class EventHandler {
         } else {
           this.dispatch(setFormulaMode(false));
           this.dispatch(recalculateFormulae());
-          highlighted.cells.length > 0 &&
+          highlighted.hasLength &&
             !this.state.dragging &&
             this.dispatch(resetHighlight());
           this.dispatch(selectCell(id));

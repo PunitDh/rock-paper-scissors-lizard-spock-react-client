@@ -44,7 +44,7 @@ const Filler = ({ state, dispatch }: Props): JSX.Element => {
 
   const cell: Cell = state.selectedCell;
   const selectedCells: string[] = state.highlighted.cells;
-  const lastSelected: string = selectedCells[state.highlighted.cells.length - 1];
+  const lastSelected: string = selectedCells[state.highlighted.length - 1];
 
   const [position, setPosition] = useState({ top: 0, left: 0 });
 

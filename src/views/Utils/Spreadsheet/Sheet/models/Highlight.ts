@@ -1,4 +1,5 @@
 import { isNumber } from "../../../../../utils";
+import Cell from "./Cell";
 import StateContentData from "./StateContentData";
 
 type Props = {
@@ -27,6 +28,8 @@ export default class Highlight {
   sum: number | null = null;
   average: number | null = null;
   count: number | null = null;
+  max: number | null = null;
+  min: number | null = null;
 
   constructor({
     rowAnchor = null,
@@ -46,6 +49,22 @@ export default class Highlight {
     this.columns = columns;
     this.rangeStart = rangeStart;
     this.rangeEnd = rangeEnd;
+  }
+
+  get length(): number {
+    return this.cells.length;
+  }
+
+  get hasLength(): Boolean {
+    return this.cells.length > 1;
+  }
+
+  get first(): string {
+    return this.cells[0];
+  }
+
+  get last(): string {
+    return this.cells[this.cells.length - 1];
   }
 
   setRowAnchor(row: number): Highlight {
@@ -78,9 +97,17 @@ export default class Highlight {
     stateContentData: StateContentData
   ): Highlight {
     this.cells = cellIds;
-    this.calculateSum(stateContentData);
-    this.calculateAverage(stateContentData);
+    this.recalculate(stateContentData);
+    return this;
+  }
+
+  recalculate(stateContentData: StateContentData): Highlight {
+    const numbers = this.getNumbers(stateContentData);
+    this.calculateSum(numbers);
+    this.calculateAverage(numbers);
     this.calculateCount(stateContentData);
+    this.calculateMax(numbers);
+    this.calculateMin(numbers);
     return this;
   }
 
@@ -94,15 +121,27 @@ export default class Highlight {
     return this;
   }
 
-  calculateSum(stateContentData: StateContentData): Highlight {
-    if (this.cells.length > 1) {
-      const sum = this.cells
-        .filter((cell) => isNumber(stateContentData[cell]?.value))
-        .reduce(
-          (acc, cell) =>
-            acc + parseFloat(String(stateContentData[cell]?.value || 0)),
-          0 // Set initial value to 0
-        );
+  addCellAndRecalculate(
+    cellId: string,
+    stateContentData: StateContentData
+  ): Highlight {
+    const cell = new Cell(cellId);
+    const rowsSet = new Set(this.rows);
+    const columnsSet = new Set(this.columns);
+    const cellsSet = new Set(this.cells);
+    cellsSet.add(cell.id);
+    rowsSet.add(cell.row);
+    columnsSet.add(cell.column);
+    this.cells = Array.from(cellsSet);
+    this.rows = Array.from(rowsSet);
+    this.columns = Array.from(columnsSet);
+    this.recalculate(stateContentData);
+    return this;
+  }
+
+  calculateSum(numbers: number[]): Highlight {
+    if (this.hasLength) {
+      const sum = numbers.reduce((acc, cur) => acc + cur || 0, 0);
       this.sum = Number(sum);
     } else {
       this.sum = null;
@@ -115,12 +154,9 @@ export default class Highlight {
    * @param {Object} stateContentData
    * @returns {Highlight}
    */
-  calculateAverage(stateContentData: StateContentData): Highlight {
-    if (this.cells.length > 1) {
-      const average =
-        Number(this.sum) /
-        (this.cells.filter((cell) => isNumber(stateContentData[cell]?.value))
-          .length || 1);
+  calculateAverage(numbers: number[]): Highlight {
+    if (this.hasLength) {
+      const average = Number(this.sum) / (numbers.length || 1);
       this.average = average;
     } else {
       this.average = null;
@@ -134,7 +170,7 @@ export default class Highlight {
    * @returns {Highlight}
    */
   calculateCount(stateContentData: StateContentData): Highlight {
-    if (this.cells.length > 1) {
+    if (this.hasLength) {
       const count = this.cells.filter((cell) =>
         Boolean(stateContentData[cell]?.value?.toString())
       ).length;
@@ -143,5 +179,29 @@ export default class Highlight {
       this.count = null;
     }
     return this;
+  }
+
+  calculateMax(numbers: number[]) {
+    if (this.hasLength) {
+      this.max = Math.max(...numbers);
+    } else {
+      this.count = null;
+    }
+    return this;
+  }
+
+  calculateMin(numbers: number[]) {
+    if (this.hasLength) {
+      this.min = Math.min(...numbers);
+    } else {
+      this.min = null;
+    }
+    return this;
+  }
+
+  private getNumbers(stateContentData: StateContentData): number[] {
+    return this.cells
+      .filter((cell) => isNumber(stateContentData[cell]?.value))
+      .map((cell) => parseFloat(stateContentData[cell]?.value));
   }
 }
