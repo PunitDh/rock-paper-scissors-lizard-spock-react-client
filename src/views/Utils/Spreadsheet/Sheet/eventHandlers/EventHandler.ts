@@ -114,7 +114,7 @@ export default class EventHandler {
         this.dispatch(setCellContent(cell.id, value));
         this.dispatch(setFormulaMode(false));
         triggerRecalculation && this.dispatch(recalculateFormulae());
-        
+
         this.dispatch(addMemento());
         this.dispatch(highlightCells(cell.id));
         this.dispatch(
@@ -672,6 +672,14 @@ export default class EventHandler {
               highlightedCells[i + 1],
               String(+anchorValue + increment)
             )
+          );
+        });
+    } else {
+      Array(highlightedLength - 1)
+        .fill(0)
+        .forEach((_, i) => {
+          this.dispatch(
+            setCellContent(highlightedCells[i + 1], String(anchorValue))
           );
         });
     }
