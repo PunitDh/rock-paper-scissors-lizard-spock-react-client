@@ -1,5 +1,5 @@
 import LinkCard from "./components/LinkCard";
-import { ResponsiveFlexBox } from "../Utils/VideoConverter/styles";
+import { ResponsiveFlexBox } from "./VideoConverter/styles";
 import { DashboardImage } from "../../assets";
 import PageContainer from "../../components/container/PageContainer";
 import DashboardCard from "../../components/shared/DashboardCard";
@@ -41,6 +41,12 @@ const Apps = () => (
           title="Color Picker"
           Icon={DashboardImage.ColorPicker}
           description="A color picker"
+        />
+        <LinkCard
+          to="/utils/recipes"
+          title="Recipes"
+          Icon={DashboardImage.Recipes}
+          description="A recipe recommender"
         />
         <LinkCard
           to="/utils/sheets"

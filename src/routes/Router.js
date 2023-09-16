@@ -9,18 +9,19 @@ const BlankLayout = Loadable(lazy(() => import("../layouts/BlankLayout")));
 /* ****Pages***** */
 const Dashboard = Loadable(lazy(() => import("../views/Dashboard")));
 const VideoConverter = Loadable(
-  lazy(() => import("../views/Utils/VideoConverter"))
+  lazy(() => import("../views/Apps/VideoConverter"))
 );
-const ColorPicker = Loadable(lazy(() => import("../views/Utils/ColorPicker")));
+const ColorPicker = Loadable(lazy(() => import("../views/Apps/ColorPicker")));
 const ReactCalculator = Loadable(
-  lazy(() => import("../views/Utils/ReactCalculator"))
+  lazy(() => import("../views/Apps/ReactCalculator"))
 );
-const Spreadsheet = Loadable(lazy(() => import("../views/Utils/Spreadsheet")));
-const GetSumRest = Loadable(lazy(() => import("../views/Utils/GetSumRest")));
+const Spreadsheet = Loadable(lazy(() => import("../views/Apps/Spreadsheet")));
+const GetSumRest = Loadable(lazy(() => import("../views/Apps/GetSumRest")));
+const Recipes = Loadable(lazy(() => import("../views/Apps/Recipes")));
 const RpslsHome = Loadable(lazy(() => import("../views/Apps/Rpsls")));
 const TicTacToeHome = Loadable(lazy(() => import("../views/Apps/TicTacToe")));
 const Apps = Loadable(lazy(() => import("../views/Apps")));
-const Utils = Loadable(lazy(() => import("../views/Utils")));
+const Utils = Loadable(lazy(() => import("../views/Apps/VideoConverter")));
 const RpslsGameWindow = Loadable(
   lazy(() => import("../views/Apps/Rpsls/GameWindow"))
 );
@@ -70,6 +71,7 @@ const Router = [
       { path: "calculator", exact: true, element: <ReactCalculator /> },
       { path: "sheets", exact: true, element: <Spreadsheet /> },
       { path: "rest", exact: true, element: <GetSumRest /> },
+      { path: "recipes", exact: true, element: <Recipes /> },
     ],
   },
   {

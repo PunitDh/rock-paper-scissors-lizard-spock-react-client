@@ -3,6 +3,7 @@ import {
   Calculate,
   ColorLens,
   ContentCut,
+  FoodBank,
   VideoCall,
 } from "@mui/icons-material";
 import { createSlice } from "@reduxjs/toolkit";
@@ -81,15 +82,21 @@ export const menuSlice = createSlice({
       },
       {
         id: uniqueId("apps-"),
-        title: "Spreadsheet",
-        icon: IconFileSpreadsheet,
-        href: "/utils/sheets",
-      },
-      {
-        id: uniqueId("apps-"),
         title: "Get Sum Rest",
         icon: Api,
         href: "/utils/rest?requestTab=0",
+      },
+      {
+        id: uniqueId("apps-"),
+        title: "Recipe Picker",
+        icon: FoodBank,
+        href: "/utils/recipes",
+      },
+      {
+        id: uniqueId("apps-"),
+        title: "Spreadsheet",
+        icon: IconFileSpreadsheet,
+        href: "/utils/sheets",
       },
       {
         id: uniqueId("apps-"),
