@@ -4,7 +4,11 @@ import {
   NumberFormat,
 } from "../components/Toolbar/constants";
 
-export default class CellFormatting {
+type FontWeight = "bold" | "normal";
+type FontStyle = "italic" | "normal";
+type TextDecoration = "underline" | "none";
+
+type IncomingFormatting = {
   borderId?: string | null;
   borderTypes?: string[];
   decimals?: number;
@@ -12,81 +16,101 @@ export default class CellFormatting {
   styles?: {
     backgroundColor?: string;
     color?: string;
+    fontFamily?: string;
+    fontSize?: FontSize;
+    fontWeight?: FontWeight;
+    fontStyle?: FontStyle;
+    textDecoration?: TextDecoration;
+    textAlign?: "left" | "right" | "center";
+  };
+};
+
+export default class CellFormatting {
+  borderId?: string | null;
+  borderTypes: string[] = [];
+  decimals?: number;
+  numberFormat?: NumberFormat;
+  styles: {
+    backgroundColor?: string;
+    color?: string;
     textAlign?: "left" | "right" | "center";
     fontFamily?: string;
     fontSize?: FontSize;
-    fontWeight?: "bold" | "normal";
-    fontStyle?: "italic" | "normal";
-    textDecoration?: "underline" | "none";
-  };
+    fontWeight?: FontWeight;
+    fontStyle?: FontStyle;
+    textDecoration?: TextDecoration;
+  } = {};
 
   constructor({
     borderId = null,
     borderTypes = [],
     decimals = 0,
     numberFormat = undefined,
-    backgroundColor = undefined,
-    color = undefined,
-    fontFamily = undefined,
-    fontSize = undefined,
-    fontWeight = undefined,
-    fontStyle = undefined,
-    textDecoration = undefined,
-    textAlign = undefined,
-  } = {}) {
+    styles = {},
+  }: IncomingFormatting = {}) {
     this.borderId = borderId;
     this.borderTypes = borderTypes;
     this.decimals = decimals;
     this.numberFormat = numberFormat;
-    this.styles = {
-      backgroundColor,
-      color,
-      fontFamily,
-      fontSize,
-      fontWeight,
-      fontStyle,
-      textDecoration,
-      textAlign,
-    };
+    this.styles = styles;
   }
 
-  setFormatting(formatting: any) {
-    this.borderId = formatting.borderId || this.borderId;
-    this.borderTypes = formatting.borderTypes || this.borderTypes;
-    this.decimals = formatting.decimals || this.decimals;
-    this.numberFormat = formatting.numberFormat || this.numberFormat;
+  setFormatting(formatting: IncomingFormatting): CellFormatting {
+    const newFormatting = new CellFormatting({
+      borderId: formatting.borderId || this.borderId,
+      borderTypes: formatting.borderTypes || this.borderTypes,
+      decimals: formatting.decimals || this.decimals,
+      numberFormat: formatting.numberFormat || this.numberFormat,
+      styles: {
+        ...this.styles,
+        ...formatting.styles,
+      },
+    });
 
-    this.styles = {
-      ...this.styles,
-      ...formatting,
-    };
-
-    console.log("here", formatting);
-
-    return this;
+    return newFormatting;
   }
 
-  clearBorders() {
-    this.borderId = null;
-    this.borderTypes = [];
-    return this;
+  clearBorders(): CellFormatting {
+    const newFormatting = new CellFormatting({
+      ...this,
+      borderId: null,
+      borderTypes: [],
+    });
+
+    return newFormatting;
   }
 
-  addBorder(borderId: string | null | undefined, borderType: BorderType) {
-    this.borderId = borderId;
+  addBorder(
+    borderId: string | null | undefined,
+    borderType: BorderType
+  ): CellFormatting {
     const currentBorderTypes = new Set(this.borderTypes);
     currentBorderTypes.add(borderType);
-    this.borderTypes = [...currentBorderTypes];
-    return this;
+
+    const newFormatting = new CellFormatting({
+      ...this,
+      borderId,
+      borderTypes: [...currentBorderTypes],
+    });
+
+    return newFormatting;
   }
 
-  setDecimals(decimals: number | undefined) {
-    this.decimals = decimals;
-    return this;
+  setDecimals(decimals: number | undefined): CellFormatting {
+    const newFormatting = new CellFormatting({
+      ...this,
+      decimals,
+    });
+
+    return newFormatting;
   }
 
-  setNumberFormatting(numberFormat: NumberFormat) {
-    this.numberFormat = numberFormat;
-    return this;
+  setNumberFormatting(numberFormat: NumberFormat): CellFormatting {
+    const newFormatting = new CellFormatting({
+      ...this,
+      numberFormat,
+    });
+
+    return newFormatting;
   }
 }

@@ -16,13 +16,6 @@ export const IndentedBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-export const ResponsiveFlexBox = styled(FlexBox)(({ theme, reversed }) => ({
-  alignItems: reversed ? "flex-start" : "center",
-  [theme.breakpoints.up("lg")]: {
-    alignItems: reversed ? "center" : "flex-start",
-  },
-}));
-
 export const ResponsiveForm = styled.form(({ theme }) => ({
   display: "flex",
   flexDirection: "column",

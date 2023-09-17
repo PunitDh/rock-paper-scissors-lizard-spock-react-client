@@ -52,15 +52,15 @@ type Borders = {
   borderLeft: string;
 };
 
-const getBorder = (formatting: CellFormatting): Borders => {
-  switch (formatting.borderId) {
+const getBorder = (borderId: string, borderTypes: string[]): Borders => {
+  switch (borderId) {
     case BorderType.BORDER_BOTTOM:
     case BorderType.BORDER_LEFT:
     case BorderType.BORDER_TOP:
     case BorderType.BORDER_RIGHT:
       return {
         ...initialBorders,
-        [formatting.borderId]: BorderStyles.THIN_BORDER,
+        [borderId]: BorderStyles.THIN_BORDER,
       };
     case BorderType.ALL_BORDERS:
       return {
@@ -70,25 +70,19 @@ const getBorder = (formatting: CellFormatting): Borders => {
         borderLeft: BorderStyles.THIN_BORDER,
       };
     case BorderType.OUTSIDE_BORDERS:
-      return formatting.borderTypes?.reduce(
-        (borders: Borders, borderPosition: string) => {
-          return {
-            ...borders,
-            [borderPosition]: BorderStyles.THIN_BORDER,
-          };
-        },
-        initialBorders
-      ) as Borders;
+      return borderTypes?.reduce((borders: Borders, borderPosition: string) => {
+        return {
+          ...borders,
+          [borderPosition]: BorderStyles.THIN_BORDER,
+        };
+      }, initialBorders) as Borders;
     case BorderType.THICK_OUTSIDE_BORDERS:
-      return formatting.borderTypes?.reduce(
-        (borders: Borders, borderPosition: string) => {
-          return {
-            ...borders,
-            [borderPosition]: BorderStyles.THICK_BORDER,
-          };
-        },
-        initialBorders
-      ) as Borders;
+      return borderTypes?.reduce((borders: Borders, borderPosition: string) => {
+        return {
+          ...borders,
+          [borderPosition]: BorderStyles.THICK_BORDER,
+        };
+      }, initialBorders) as Borders;
     case BorderType.NO_BORDER:
       return initialBorders;
     default:
@@ -99,14 +93,15 @@ const getBorder = (formatting: CellFormatting): Borders => {
 export const getBorderProperties = (
   selected: boolean,
   formulacell: number,
-  formatting: CellFormatting
+  borderId: string,
+  borderTypes: string[]
 ): {} => {
   const getProperty = (property: string) =>
     selected
       ? "2px solid blue"
       : formulacell > 0
       ? "2px dashed blue"
-      : getBorder(formatting)[property];
+      : getBorder(borderId, borderTypes)[property];
 
   return Object.keys(initialBorders).reduce((borderProperties, property) => {
     return {
@@ -120,8 +115,8 @@ type ItemProps = {
   theme: MuiTheme;
   selected: boolean;
   textalign: TextAlign;
-  formulacell: number;
   formatting: CellFormatting;
+  borderproperties: { [key: string]: string };
 } & TableCellProps;
 
 export const Item = styled(TableCell)(({
@@ -130,14 +125,9 @@ export const Item = styled(TableCell)(({
   textalign,
   tabIndex,
   width,
-  formulacell,
+  borderproperties,
   formatting = new CellFormatting(),
 }: ItemProps) => {
-  const borderProperties = getBorderProperties(
-    selected,
-    formulacell,
-    formatting
-  );
   return {
     ...formatting.styles,
     backgroundColor: selected
@@ -145,7 +135,7 @@ export const Item = styled(TableCell)(({
       : formatting.styles?.backgroundColor || "#fff",
     color: formatting.styles?.color || theme.palette.text.secondary,
     textAlign: formatting.styles?.textAlign || textalign,
-    ...borderProperties,
+    ...borderproperties,
     borderRadius: 0,
     cursor: "cell",
     height: "1.5rem",

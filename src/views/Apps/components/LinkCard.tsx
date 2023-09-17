@@ -1,9 +1,22 @@
+import React from "react";
 import styled from "@emotion/styled";
-import { Typography } from "@mui/material";
+import { Theme as MuiTheme, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import FlexBox from "../../../components/shared/FlexBox";
 
-const CardLink = styled(Link)(({ theme }) => ({
+type CardLinkProps = {
+  theme?: MuiTheme
+}
+
+type Props = {
+  to: string;
+  Icon: any;
+  title: string;
+  description: string;
+  comingSoon?: boolean;
+}
+
+const CardLink = styled(Link)(({ theme }: CardLinkProps) => ({
   display: "flex",
   gap: "1rem",
   transform: "scale(1.0)",
@@ -19,7 +32,7 @@ const CardLink = styled(Link)(({ theme }) => ({
   width: "15rem",
   aspectRatio: "1/1",
   textDecoration: "none",
-  color: theme.palette.primary.dark,
+  color: theme?.palette.primary.dark,
   padding: "0.75rem 0.75rem 0rem 0.75rem",
   "&:hover": {
     transform: "scale(1.1)",
@@ -42,8 +55,9 @@ const TextContainer = styled.div({
   gap: "0.75rem",
 });
 
-const LinkCard = ({ to, Icon, title, description, comingSoon }) => (
-  <CardLink to={to}>
+
+const LinkCard = ({ to, Icon, title, description, comingSoon }: Props) => (
+  <CardLink to={to} theme={undefined}>
     <ImageContainer>
       <Icon fill="none" width="50%" />
     </ImageContainer>

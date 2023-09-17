@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Position } from "../components/SheetInput/types";
 import CellData from "../models/CellData";
 
 export default function useElementPosition(
   selectedCellData: CellData,
   selectedId: string,
+  firstHighlighted: string,
   lastHighlighted: string,
   rowHeight: { value: number },
   columnWidth: { value: number }
@@ -17,6 +18,12 @@ export default function useElementPosition(
       height: 0,
     },
     filler: { top: 0, left: 0 },
+    highlight: {
+      top: 0,
+      left: 0,
+      width: 0,
+      height: 0,
+    },
   });
 
   const setPositions = useCallback(() => {
@@ -35,9 +42,25 @@ export default function useElementPosition(
         },
       }));
     }
+
+    const firstHighlightedRect = document
+      .getElementById(firstHighlighted)
+      ?.getBoundingClientRect();
+
     const lastHighlightedRect = document
       .getElementById(lastHighlighted || selectedId)
       ?.getBoundingClientRect();
+
+    if (firstHighlightedRect && lastHighlightedRect) {
+      const top = firstHighlightedRect.top + window.scrollY;
+      const left = firstHighlightedRect.left + window.scrollX;
+      const width = lastHighlightedRect.right + window.scrollX - left;
+      const height = lastHighlightedRect.bottom + window.scrollY - top;
+      setPosition((position) => ({
+        ...position,
+        highlight: { top, left, width, height },
+      }));
+    }
 
     if (lastHighlightedRect) {
       const top =
@@ -52,7 +75,7 @@ export default function useElementPosition(
         6;
       setPosition((position) => ({ ...position, filler: { top, left } }));
     }
-  }, [lastHighlighted, selectedId]);
+  }, [firstHighlighted, lastHighlighted, selectedId]);
 
   useEffect(() => {
     setPositions();

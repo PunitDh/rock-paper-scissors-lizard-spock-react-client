@@ -1,8 +1,9 @@
+import React from "react";
 import LinkCard from "./components/LinkCard";
-import { ResponsiveFlexBox } from "./VideoConverter/styles";
 import { DashboardImage } from "../../assets";
 import PageContainer from "../../components/container/PageContainer";
 import DashboardCard from "../../components/shared/DashboardCard";
+import { ResponsiveFlexBox } from "../../components/shared/styles";
 
 const Apps = () => (
   <PageContainer title="Apps" description="Apps dashboard">

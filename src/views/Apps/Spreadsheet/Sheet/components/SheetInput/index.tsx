@@ -6,6 +6,7 @@ import { Action, State } from '../../types'
 import { highlightFormulaCells, setFormulaFieldText } from '../../actions'
 import useElementPosition from '../../hooks/useElementPosition'
 import useInputData from '../../hooks/useInputData'
+import Highlight from './Highlight'
 
 type Props = {
   state: State;
@@ -27,7 +28,7 @@ const SheetInput = ({ state, dispatch, formulaField }: Props) => {
     selectedCell,
   } = useInputData(state);
 
-  const position = useElementPosition(selectedCellData, selectedId, highlighted.last, rowHeight, columnWidth)
+  const position = useElementPosition(selectedCellData, selectedId, highlighted.first, highlighted.last, rowHeight, columnWidth)
 
   const originalValue = useRef<string>(String(formulaBarValue));
   useEffect(() => {
@@ -48,6 +49,7 @@ const SheetInput = ({ state, dispatch, formulaField }: Props) => {
 
   return (<>
     {formulaField && <FormulaBar state={state} dispatch={dispatch} originalValue={originalValue.current} value={String(formulaBarValue)} />}
+    {state.highlighted.cells.length > 1 && <Highlight position={position} />}
     <CellInput state={state} dispatch={dispatch} position={position} cell={selectedCell} value={String(currentCellInputValue)} />
     <Filler state={state} dispatch={dispatch} position={position} />
   </>

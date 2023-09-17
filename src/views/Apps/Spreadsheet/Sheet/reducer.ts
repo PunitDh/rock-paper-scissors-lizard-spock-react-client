@@ -532,7 +532,7 @@ export const reducer = (state: State, action: Action): State => {
             ...state.content.data,
             [action.payload.cell]: cellData.setReferenceCells(referenceCells),
           },
-        }  as StateContent,
+        } as StateContent,
       };
     }
     case SheetAction.SET_CONTENT_BULK:

@@ -1,31 +1,45 @@
+import {
+  Cuisine,
+  Diet,
+  Intolerance,
+  MealType,
+  SortingOption,
+} from "./constants";
+
 export enum RecipeAction {
-  SET_CARAT,
-  SET_CONTEXT,
-  SET_RGB,
-  SET_RECT,
-  RESET_STATE,
+  SET_CUISINE,
+  SET_DIET,
+  SET_INTOLERANCE,
+  SET_MEAL_TYPE,
+  SET_SORTING_OPTION,
+  RESET,
 }
 
-export const setCarat = (payload) => ({
-  type: RecipeAction.SET_CARAT,
+export const setDiet = (payload: Diet) => ({
+  type: RecipeAction.SET_DIET,
   payload,
 });
 
-export const setRGB = (payload) => ({
-  type: RecipeAction.SET_RGB,
+export const setIntolerance = (payload: Intolerance) => ({
+  type: RecipeAction.SET_INTOLERANCE,
   payload,
 });
 
-export const setRect = (payload) => ({
-  type: RecipeAction.SET_RECT,
+export const setCuisine = (payload: Cuisine) => ({
+  type: RecipeAction.SET_CUISINE,
   payload,
 });
 
-export const setContext = (payload) => ({
-  type: RecipeAction.SET_CONTEXT,
+export const setMealType = (payload: MealType) => ({
+  type: RecipeAction.SET_MEAL_TYPE,
+  payload,
+});
+
+export const setSortingOption = (payload: SortingOption) => ({
+  type: RecipeAction.SET_SORTING_OPTION,
   payload,
 });
 
 export const resetState = () => ({
-  type: RecipeAction.RESET_STATE,
+  type: RecipeAction.RESET,
 });

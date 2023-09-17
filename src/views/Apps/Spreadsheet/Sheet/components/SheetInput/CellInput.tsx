@@ -33,7 +33,6 @@ type InputFieldProps =
 
 
 const InputField = styled.input(({ width, height, isfocused, formatting }: InputFieldProps) => {
-  console.log(formatting );
   return {
     width: `${width}px`,
     height: `${height}px`,
@@ -70,6 +69,7 @@ const CellInput = ({ state, dispatch, position, cell, value }: Props): JSX.Eleme
     (node: HTMLInputElement) => eventHandler.setInputRef(node),
     [eventHandler]
   );
+  const currentCell = state.content.data[cell.id];
 
   useEffect(() => {
     navigateRef.current = true;
@@ -109,10 +109,8 @@ const CellInput = ({ state, dispatch, position, cell, value }: Props): JSX.Eleme
     navigateRef.current = false;
   };
 
-  const formatting = !(state.content.data[cell.id]?.formula?.length as number > 0) ?
-    state.content.data[cell.id]?.formatting : undefined
-
-  console.log(cell.id, { formatting });
+  const formatting = !(currentCell?.formula?.length as number > 0) ?
+    currentCell?.formatting : undefined
 
   return (
     <Container top={position.cellInput.top} left={position.cellInput.left}>

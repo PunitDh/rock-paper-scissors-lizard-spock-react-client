@@ -1,4 +1,4 @@
-import React, { Dispatch, useMemo } from "react";
+import React, { Dispatch } from "react";
 import { Dimension, SheetConfig } from "../constants";
 import { TableRow } from "@mui/material";
 import Cell from "./Cell";
@@ -20,9 +20,9 @@ const SheetRow = ({ state, dispatch, row }: Props) => {
           const id = SheetConfig.COLUMNS[column - 1] + (row + 1);
           const cellData = state.content.data[id];
           const isSelected =
-            id === state.selectedCell.id ||
-            state.highlighted.cells.includes(id);
-          const isFormulaHighLighted = state.formulaHighlighted.includes(id);
+            id === state.selectedCell.id
+          // || state.highlighted.cells.includes(id);
+          const isFormulaHighlighted = state.formulaHighlighted.includes(id);
           const width = state.content.columnWidths[SheetConfig.COLUMNS[column - 1]] ||
             state.defaultColumnWidth;
 
@@ -41,11 +41,11 @@ const SheetRow = ({ state, dispatch, row }: Props) => {
               row={row + 1}
               columnCharCode={SheetConfig.COLUMNS[column - 1].charCodeAt(0)}
               isSelected={isSelected}
-              isFormulaHighLighted={isFormulaHighLighted}
               maxRows={state.maxRows}
               value={cellData?.value}
               display={cellData?.display}
               formatting={cellData?.formatting}
+              isFormulaHighlighted={isFormulaHighlighted}
               width={width}
             />
           );

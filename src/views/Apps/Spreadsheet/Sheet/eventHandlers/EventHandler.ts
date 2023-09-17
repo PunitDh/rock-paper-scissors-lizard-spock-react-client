@@ -98,6 +98,7 @@ export default class EventHandler {
   handleCellInputKeyDown(e: React.KeyboardEvent, navigateRefCurrent: boolean) {
     const cell = this.state.selectedCell;
     const value = (e.target as HTMLInputElement).value;
+    console.log("Here", e.key);
     switch (e.key) {
       case KeyEvent.SHIFT:
         this.dispatch(setHighlightCellAnchor(cell.id));
@@ -140,6 +141,7 @@ export default class EventHandler {
         break;
       }
       case KeyEvent.ARROW_LEFT: {
+        this.#handleArrowKeys(e);
         if (this.inputRef?.value.length === 0 || navigateRefCurrent)
           this.dispatch(
             selectCell(cell.getPreviousColumn(this.state.maxColumns))
@@ -147,16 +149,22 @@ export default class EventHandler {
         break;
       }
       case KeyEvent.ARROW_RIGHT: {
+        this.#handleArrowKeys(e);
+
         if (this.inputRef?.value.length === 0 || navigateRefCurrent)
           this.dispatch(selectCell(cell.getNextColumn(this.state.maxRows)));
         break;
       }
       case KeyEvent.ARROW_UP: {
-        this.dispatch(selectCell(cell.getPreviousRow()));
+        this.#handleArrowKeys(e);
+
+        // this.dispatch(selectCell(cell.getPreviousRow()));
         break;
       }
       case KeyEvent.ARROW_DOWN: {
-        this.dispatch(selectCell(cell.getNextRow(this.state.maxRows)));
+        this.#handleArrowKeys(e);
+
+        // this.dispatch(selectCell(cell.getNextRow(this.state.maxRows)));
         break;
       }
       default:
@@ -356,10 +364,10 @@ export default class EventHandler {
         this.dispatch(addMemento());
         break;
       case KeyEvent.ENTER:
+        const selectedCell =
+          this.state.content.data[this.state.selectedCell.id];
         this.dispatch(setFormulaMode(false));
-        if (
-          this.state.content.data[this.state.selectedCell.id]?.isFormulaCell
-        ) {
+        if (selectedCell?.isFormulaCell) {
           this.dispatch(recalculateFormulae());
         }
       // eslint-disable-next-line no-fallthrough
@@ -368,17 +376,7 @@ export default class EventHandler {
       case KeyEvent.ARROW_RIGHT:
       case KeyEvent.ARROW_LEFT:
       case KeyEvent.ARROW_UP:
-        e.preventDefault();
-        e.shiftKey &&
-          !cellAnchor &&
-          this.dispatch(setHighlightCellAnchor(this.state.selectedCell.id));
-        nextCell = this.#determineNextCell(e);
-        this.dispatch(selectCell(nextCell));
-        if (e.shiftKey) {
-          cellAnchor &&
-            nextCell &&
-            this.dispatch(highlightCells(cellAnchor, nextCell.id));
-        }
+        this.#handleArrowKeys(e);
         break;
       default:
         console.log("Here");
@@ -485,6 +483,20 @@ export default class EventHandler {
   #isLastValueCellRegEx = /([a-z]+[0-9]+)$/gi;
 
   // Private functions
+  #handleArrowKeys(e: React.KeyboardEvent) {
+    e.preventDefault();
+    const { cellAnchor } = this.state.highlighted;
+    const nextCell = this.#determineNextCell(e);
+    this.dispatch(selectCell(nextCell));
+    if (e.shiftKey) {
+      cellAnchor &&
+        nextCell &&
+        this.dispatch(highlightCells(cellAnchor, nextCell.id));
+      !cellAnchor &&
+        this.dispatch(setHighlightCellAnchor(this.state.selectedCell.id));
+    }
+  }
+
   #determineNextCell(e: React.KeyboardEvent): Cell {
     const { selectedCell, maxRows, maxColumns, formulaMode } = this.state;
     const shouldResetHighlight =
@@ -573,10 +585,6 @@ export default class EventHandler {
 
   private isFormulaTrackedCell(cellId: string): Boolean {
     return this.state.formulaTrackedCells.includes(cellId);
-  }
-
-  private getData(cellId: string): CellData {
-    return this.state.content.data[cellId];
   }
 
   #handleFillerModeFormulaFill() {

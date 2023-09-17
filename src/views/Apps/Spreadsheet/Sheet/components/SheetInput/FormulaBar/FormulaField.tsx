@@ -32,14 +32,13 @@ const FormulaField = ({ state, dispatch, originalValue, value }: Props) => {
 
   useEffect(() => {
     console.log("Formula focus hook triggered");
-
     if (state.isFormulaFieldFocused) {
       eventHandler.formulaFieldRef?.focus({ preventScroll: true });
     }
     // if (eventHandler.inputFocusRef) {
     //   eventHandler.inputRef?.focus({ preventScroll: true });
     // }
-  }, [eventHandler.formulaFieldRef, state.isFormulaFieldFocused]);
+  }, [state.isFormulaFieldFocused]);
 
   const handleContextMenu = (e: React.MouseEvent) => eventHandler.handleContextMenu(e);
   const handleKeyDown = (e: React.KeyboardEvent) =>

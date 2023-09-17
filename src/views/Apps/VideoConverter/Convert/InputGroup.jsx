@@ -1,7 +1,7 @@
+import { ResponsiveFlexBox } from "../../../../components/shared/styles";
 import {
   IndentedBox,
   ResponsiveTypography,
-  ResponsiveFlexBox,
 } from "../styles";
 
 const InputGroup = ({ title, children }) => (

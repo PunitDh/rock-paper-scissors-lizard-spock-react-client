@@ -67,7 +67,7 @@ export default class CellData {
    */
   static getOrNew(stateContentData: StateContentData, id: string): CellData {
     if (stateContentData[id] instanceof CellData) {
-      return stateContentData[id];
+      return new CellData(stateContentData[id]);
     }
     return new CellData({ ...stateContentData, id });
   }

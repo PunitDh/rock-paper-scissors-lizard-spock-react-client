@@ -23,7 +23,6 @@ export default function useInputData(state: State) {
     };
     const currentCellInputValue =
       selectedCellData?.formula || selectedCellData?.value || "";
-    console.log({ currentCellInputValue });
     const formulaBarValue = formulaFieldText || currentCellInputValue;
 
     return {

@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
-import { Card, TextField } from "@mui/material";
+import { Card, TextField, Theme } from "@mui/material";
+import FlexBox from "./FlexBox";
 
 export type FlexDirection = "row" | "column";
 export type AlignItems = "center" | "flex-start" | "flex-end" | "space-between";
@@ -33,3 +34,15 @@ export const Bold = styled.span({
 export const WideTextField = styled(TextField)({
   width: "100%",
 });
+
+type ResponsiveFlexBoxProps = {
+  theme: Theme;
+  reversed: boolean;
+}
+
+export const ResponsiveFlexBox = styled(FlexBox)(({ theme, reversed }: ResponsiveFlexBoxProps) => ({
+  alignItems: reversed ? "flex-start" : "center",
+  [theme.breakpoints.up("lg")]: {
+    alignItems: reversed ? "center" : "flex-start",
+  },
+}));

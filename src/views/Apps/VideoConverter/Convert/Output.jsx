@@ -4,16 +4,14 @@ import { List, ListItem, ListItemAvatar } from "@mui/material";
 import { DoneOutline } from "@mui/icons-material";
 import { Download } from "@mui/icons-material";
 import { Fab, Tooltip } from "@mui/material";
-
 import {
   IndentedBox,
-  ResponsiveFlexBox,
   ResponsiveTextField,
   ResponsiveTypography,
 } from "../styles";
 import { setDownloadBlob, setProgressUpdate } from "./actions";
 import { SocketResponse } from "../../../../utils/constants";
-import { Bold } from "../../../../components/shared/styles";
+import { Bold, ResponsiveFlexBox } from "../../../../components/shared/styles";
 import { useAPI, useSocket } from "../../../../hooks";
 
 const Output = ({ state, dispatch }) => {
