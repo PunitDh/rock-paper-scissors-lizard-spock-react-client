@@ -29,7 +29,7 @@ const ImageContainer = styled(Paper)({
 
 const RecipeCard = () => {
   const handleSwipe = (event: SwipeEventData) => {
-    if (Math.abs(event.deltaX) > 200) {
+    if (Math.abs(event.deltaX) > 100) {
       const randomRecipeId = sample(recipes.map((it: Recipe) => it.id));
       navigate(`/utils/recipes/${randomRecipeId}`);
     } else {
