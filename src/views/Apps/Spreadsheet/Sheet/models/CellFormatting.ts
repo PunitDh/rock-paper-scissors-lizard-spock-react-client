@@ -55,15 +55,23 @@ export default class CellFormatting {
     this.styles = styles;
   }
 
-  setFormatting(formatting: IncomingFormatting): CellFormatting {
+  setFormatting(formatting: any): CellFormatting {
+    console.log(formatting);
     const newFormatting = new CellFormatting({
       borderId: formatting.borderId || this.borderId,
       borderTypes: formatting.borderTypes || this.borderTypes,
       decimals: formatting.decimals || this.decimals,
       numberFormat: formatting.numberFormat || this.numberFormat,
       styles: {
-        ...this.styles,
-        ...formatting.styles,
+        fontWeight: formatting.fontWeight || this.styles.fontWeight,
+        backgroundColor:
+          formatting.backgroundColor || this.styles.backgroundColor,
+        color: formatting.color || this.styles.color,
+        fontFamily: formatting.fontFamily || this.styles.fontFamily,
+        fontSize: formatting.fontSize || this.styles.fontSize,
+        fontStyle: formatting.fontStyle || this.styles.fontStyle,
+        textDecoration: formatting.textDecoration || this.styles.textDecoration,
+        textAlign: formatting.textAlign || this.styles.textAlign,
       },
     });
 

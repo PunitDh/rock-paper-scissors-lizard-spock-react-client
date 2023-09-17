@@ -31,7 +31,7 @@ const Cell = memo(
     formatting = new CellFormatting(),
     width
   }: Props) => {
-    console.log(id, formatting.borderId, "re-rendering borders");
+    console.log(id, formatting, "re-rendering borders");
     const borderProperties = useMemo(() => {
       return getBorderProperties(
         isSelected,

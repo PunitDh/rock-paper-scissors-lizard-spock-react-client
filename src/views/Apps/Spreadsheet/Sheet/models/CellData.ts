@@ -598,10 +598,9 @@ const evaluateExpression = (input: string): EvaluatedString => {
 
     if (diffBrackets > 0) parsedInput += ")".repeat(diffBrackets);
 
-    
     value = eval(parsedInput);
 
-    if (parsedInput === 'null') value = '0';
+    if (parsedInput === "null") value = "0";
     // value = String(Math.round(eval(parsedInput) * 10 ** 13) / 10 ** 13);
 
     return { value, parsedInput };

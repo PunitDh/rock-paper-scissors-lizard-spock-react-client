@@ -9,6 +9,7 @@ import { Action, State } from "../../types";
 import CellFormatting from "../../models/CellFormatting";
 import Cell from "../../models/Cell";
 import { Position } from "./types";
+import CellData from "../../models/CellData";
 
 type ContainerProps = {
   top: number;
@@ -42,10 +43,10 @@ const InputField = styled.input(({ width, height, isfocused, formatting }: Input
     cursor: "cell",
     padding: "1px",
     ...formatting?.styles,
-    backgroundColor: formatting?.styles?.backgroundColor || "transparent",
-    color: formatting?.styles?.color || "transparent",
-    // backgroundColor: isfocused ? "white" : formatting?.styles?.backgroundColor || "transparent",
-    // color: isfocused ? "black" : formatting?.styles?.color || "transparent",
+    // backgroundColor: formatting?.styles?.backgroundColor || "transparent",
+    // color: formatting?.styles?.color || "transparent",
+    backgroundColor: isfocused ? "white" : formatting?.styles?.backgroundColor || "transparent",
+    color: isfocused ? "black" : formatting?.styles?.color || "transparent",
     "&:focus": {
       cursor: "text",
     },
@@ -69,7 +70,9 @@ const CellInput = ({ state, dispatch, position, cell, value }: Props): JSX.Eleme
     (node: HTMLInputElement) => eventHandler.setInputRef(node),
     [eventHandler]
   );
-  const currentCell = state.content.data[cell.id];
+  const currentCell: CellData | undefined = state.content.data[cell.id];
+
+  console.log({ value });
 
   useEffect(() => {
     navigateRef.current = true;
@@ -109,8 +112,7 @@ const CellInput = ({ state, dispatch, position, cell, value }: Props): JSX.Eleme
     navigateRef.current = false;
   };
 
-  const formatting = !(currentCell?.formula?.length as number > 0) ?
-    currentCell?.formatting : undefined
+  const formatting = (currentCell?.formula?.length !== 0) ? undefined : currentCell?.formatting
 
   return (
     <Container top={position.cellInput.top} left={position.cellInput.left}>
