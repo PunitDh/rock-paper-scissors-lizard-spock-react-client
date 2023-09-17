@@ -175,7 +175,6 @@ export default function IntolerancesSelector() {
   return (
     <Root>
       <div {...getRootProps()}>
-        <Label {...getInputLabelProps()}>Customized hook</Label>
         <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
           {value.map((option: Intolerance, index: number) => (
             <StyledTag label={option} {...getTagProps({ index })} />

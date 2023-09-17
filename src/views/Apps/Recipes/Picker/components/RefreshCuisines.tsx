@@ -3,7 +3,7 @@ import { ReloadIcon } from '../styles';
 import { Tooltip } from '@mui/material';
 
 const RefreshCuisines = ({ onClick }) => {
-  const [rotateIcon, setRotateIcon] = useState(false);
+  const [rotateicon, setRotateIcon] = useState(false);
   const duration = 500;
 
   const handleRefreshCuisines = () => {
@@ -16,7 +16,7 @@ const RefreshCuisines = ({ onClick }) => {
 
   return (
     <Tooltip title="Show more cuisines" disableInteractive onClick={handleRefreshCuisines}>
-      <ReloadIcon rotateIcon={rotateIcon} duration={duration} />
+      <ReloadIcon rotateicon={Number(rotateicon)} duration={duration} />
     </Tooltip>
   )
 }

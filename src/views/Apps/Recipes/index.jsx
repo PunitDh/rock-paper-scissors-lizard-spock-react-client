@@ -9,6 +9,7 @@ export default function Recipes() {
         <Grid>
           <Grid item xs={12} lg={12}>
             <Picker />
+            {/* <Recipe recipe={recipe} /> */}
           </Grid>
         </Grid>
       </Box>

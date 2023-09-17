@@ -3,12 +3,12 @@ import { keyframes } from "@emotion/react";
 import { Paper } from "@mui/material";
 import { IconReload } from "@tabler/icons-react";
 
-type CuisineOptionProps = {
-  active: boolean;
+type SelectableOptionProps = {
+  active: number;
 };
 
-export const CuisineOption = styled(Paper)(
-  ({ active }: CuisineOptionProps) => ({
+export const SelectableOption = styled(Paper)(
+  ({ active }: SelectableOptionProps) => ({
     padding: "0.25rem 1rem 0.25rem 1rem",
     width: "8rem",
     textAlign: "center",
@@ -35,16 +35,15 @@ export const rotate = keyframes`
 `;
 
 type ReloadIconProps = {
-  rotateIcon: boolean;
+  rotateicon: number;
   duration: number;
 };
 
 export const ReloadIcon = styled(IconReload)(
-  ({ rotateIcon, duration }: ReloadIconProps) => ({
+  ({ rotateicon, duration }: ReloadIconProps) => ({
     width: "2rem",
     height: "2rem",
     cursor: "pointer",
-    animation: rotateIcon ? `${rotate} ${duration}ms linear` : "none",
+    animation: rotateicon > 0 ? `${rotate} ${duration}ms linear` : "none",
   })
 );
-

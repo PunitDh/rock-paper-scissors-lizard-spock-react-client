@@ -19,3 +19,8 @@ export type Action = {
   type: RecipeAction;
   payload?: any;
 };
+
+export type Ingredient = {
+  id: string;
+  name: string;
+}

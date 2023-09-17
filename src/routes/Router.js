@@ -18,6 +18,7 @@ const ReactCalculator = Loadable(
 const Spreadsheet = Loadable(lazy(() => import("../views/Apps/Spreadsheet")));
 const GetSumRest = Loadable(lazy(() => import("../views/Apps/GetSumRest")));
 const Recipes = Loadable(lazy(() => import("../views/Apps/Recipes")));
+const Recipe = Loadable(lazy(() => import("../views/Apps/Recipes/Picker/components/Recipe.tsx")));
 const RpslsHome = Loadable(lazy(() => import("../views/Apps/Rpsls")));
 const TicTacToeHome = Loadable(lazy(() => import("../views/Apps/TicTacToe")));
 const Apps = Loadable(lazy(() => import("../views/Apps")));
@@ -72,6 +73,7 @@ const Router = [
       { path: "sheets", exact: true, element: <Spreadsheet /> },
       { path: "rest", exact: true, element: <GetSumRest /> },
       { path: "recipes", exact: true, element: <Recipes /> },
+      { path: "recipes/:recipeId", exact: true, element: <Recipe /> },
     ],
   },
   {

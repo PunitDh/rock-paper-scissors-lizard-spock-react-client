@@ -3,15 +3,16 @@ import { initialState, reducer } from "./reducer";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import { ResponsiveFlexBox } from "../../../../components/shared/styles";
 import { Action, State } from "./types";
-import { Autocomplete, SelectChangeEvent, TextField, Typography } from "@mui/material";
-import { Cuisine, Diet, Intolerance } from "./constants";
+import { Autocomplete, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { Cuisine, Diet } from "./constants";
 import { shuffle } from "lodash";
-import { CuisineOption } from "./styles";
+import { SelectableOption } from "./styles";
 import RefreshCuisines from "./components/RefreshCuisines";
 import { resetState, setCuisine } from "./actions";
 import Debug from "./components/Debug";
 import { useToken } from "../../../../hooks";
 import IntolerancesSelector from "./components/IntolerancesSelector";
+import FlexBox from "../../../../components/shared/FlexBox";
 
 
 const Picker = () => {
@@ -34,16 +35,15 @@ const Picker = () => {
         flexDirection="column"
         gap="2rem"
         alignItems="flex-start"
-
       >
         <Typography>What do you feel like eating today?</Typography>
         <Typography>Choose an option:</Typography>
         <ResponsiveFlexBox justifyContent="space-between" width="100%" alignItems="flex-start">
           <ResponsiveFlexBox flexDirection="column" gap="1rem">
             {cuisines.slice(0, 3).map(cuisine =>
-              <CuisineOption active={state.cuisine === cuisine} key={cuisine} onClick={selectCuisine(cuisine)}>
+              <SelectableOption active={Number(state.cuisine === cuisine)} key={cuisine} onClick={selectCuisine(cuisine)}>
                 {cuisine}
-              </CuisineOption>
+              </SelectableOption>
             )}
           </ResponsiveFlexBox>
           <ResponsiveFlexBox width="100%" flexDirection="column">
@@ -56,9 +56,9 @@ const Picker = () => {
           <ResponsiveFlexBox width="100%" flexDirection="column">
             You selected:
 
-            <CuisineOption active={true}>
+            <SelectableOption active={1}>
               {state.cuisine}
-            </CuisineOption>
+            </SelectableOption>
           </ResponsiveFlexBox>
           <ResponsiveFlexBox width="100%" flexDirection="column" alignItems="flex-start" gap="1rem">
             <Typography>Type of diet?</Typography>
@@ -80,7 +80,17 @@ const Picker = () => {
 
           <ResponsiveFlexBox width="100%" flexDirection="column" alignItems="flex-start" gap="1rem">
             <Typography>How long do you want to spend cooking?</Typography>
-            <IntolerancesSelector />
+            <FlexBox flexDirection="column" gap="1rem" width="100%" justifyContent="center">
+              <SelectableOption active={0}>
+                {"<"} 20 minutes
+              </SelectableOption>
+              <SelectableOption active={0}>
+                20-45 minutes
+              </SelectableOption>
+              <SelectableOption active={0}>
+                45+ minutes
+              </SelectableOption>
+              </FlexBox>
           </ResponsiveFlexBox>
         </>
         }
