@@ -3,14 +3,15 @@ import { useNavigate, useParams } from 'react-router';
 import DashboardCard from '../../../../../components/shared/DashboardCard'
 import { Bold, ResponsiveFlexBox } from '../../../../../components/shared/styles'
 import { Grid, Theme as MuiTheme, Paper, Typography, useMediaQuery } from '@mui/material';
-import { Ingredient } from '../types';
+import { Ingredient, Recipe } from '../types';
 import FlexBox from '../../../../../components/shared/FlexBox';
 import ActionButton from './ActionButton';
 import { Bolt, Close, Refresh, Star } from '@mui/icons-material';
-import recipe from "./recipe.json";
+import recipes from "./recipes.json";
 import { IconHeart } from '@tabler/icons-react';
 import styled from '@emotion/styled';
 import { useSwipeable } from 'react-swipeable';
+import { sample } from 'lodash';
 
 type SwipeContainerProps = {
   delta: number;
@@ -18,7 +19,7 @@ type SwipeContainerProps = {
 
 const SwipeContainer = styled.div(({ delta }: SwipeContainerProps) => ({
   position: "relative",
-  transform: `translateX(${delta}px)`
+  transform: `translateX(${delta}px)`,
 }));
 
 const ImageContainer = styled(Paper)({
@@ -26,7 +27,7 @@ const ImageContainer = styled(Paper)({
   touchAction: "pan-x"
 });
 
-const Recipe = () => {
+const RecipeCard = () => {
   const { recipeId } = useParams();
   const [position, setPosition] = useState(0);
   const navigate = useNavigate();
@@ -35,19 +36,32 @@ const Recipe = () => {
       const delta = event.deltaX;
       setPosition(delta);
     },
-    onSwipedLeft: () => {
-      console.log("Swipe left");
-      setTimeout(() => navigate(`/utils/recipes/${Math.random().toString(16)}`), 100)
+    onSwipedLeft: (event) => {
+      if (Math.abs(event.deltaX) > 200) {
+        console.log("Swipe left", event.deltaX);
+        const randomRecipeId = sample(recipes.map((it: Recipe) => it.id))
+        navigate(`/utils/recipes/${randomRecipeId}`)
+      } else {
+        setPosition(0)
+      }
     },
-    onSwipedRight: () => {
-      console.log("Swipe right");
-      setTimeout(() => navigate(`/utils/recipes/${Math.random().toString(16)}`), 100)
+    onSwipedRight: (event) => {
+      if (Math.abs(event.deltaX) > 200) {
+        console.log("Swipe right", event.deltaX);
+        const randomRecipeId = sample(recipes.map((it: Recipe) => it.id))
+        navigate(`/utils/recipes/${randomRecipeId}`)
+      } else {
+        setPosition(0)
+      }
     },
   });
 
   useEffect(() => {
     setPosition(0);
-  }, [recipeId])
+  }, [recipeId]);
+
+
+  const recipe: Recipe = recipes.find((it: Recipe) => it.id === Number(recipeId));
 
   const mdUp = useMediaQuery((theme: MuiTheme) => theme.breakpoints.up("md"));
   const ingredients = Array.from(new Set<string>(recipe.extendedIngredients.map((it: Ingredient) => it.name))).sort();
@@ -89,4 +103,4 @@ const Recipe = () => {
   )
 }
 
-export default Recipe
+export default RecipeCard
