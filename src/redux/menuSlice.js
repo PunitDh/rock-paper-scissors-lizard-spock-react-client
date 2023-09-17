@@ -17,6 +17,7 @@ import {
 } from "@tabler/icons-react";
 import { uniqueId } from "lodash";
 import { getIcon } from "../assets";
+import { listOf } from "../utils/List";
 
 const CURRENT_GAMES = "Current Games";
 
@@ -67,7 +68,13 @@ export const menuSlice = createSlice({
       },
     ],
 
-    Apps: [
+    Apps: listOf(
+      {
+        id: uniqueId("apps-"),
+        title: "Video Subtitles",
+        icon: VideoCall,
+        href: "/utils/video",
+      },
       {
         id: uniqueId("apps-"),
         title: "Calculator",
@@ -82,29 +89,23 @@ export const menuSlice = createSlice({
       },
       {
         id: uniqueId("apps-"),
+        title: "Flavor Match",
+        icon: FoodBank,
+        href: "/utils/recipes",
+      },
+      {
+        id: uniqueId("apps-"),
         title: "Get Sum Rest",
         icon: Api,
         href: "/utils/rest?requestTab=0",
       },
       {
         id: uniqueId("apps-"),
-        title: "Recipe Picker",
-        icon: FoodBank,
-        href: "/utils/recipes",
-      },
-      {
-        id: uniqueId("apps-"),
         title: "Spreadsheet",
         icon: IconFileSpreadsheet,
         href: "/utils/sheets",
-      },
-      {
-        id: uniqueId("apps-"),
-        title: "Video Subtitles",
-        icon: VideoCall,
-        href: "/utils/video",
-      },
-    ],
+      }
+    ).sortBy((it) => it.title),
     [CURRENT_GAMES]: [],
 
     Settings: [

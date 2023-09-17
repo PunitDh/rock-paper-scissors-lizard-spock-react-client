@@ -18,7 +18,7 @@ const ReactCalculator = Loadable(
 const Spreadsheet = Loadable(lazy(() => import("../views/Apps/Spreadsheet")));
 const GetSumRest = Loadable(lazy(() => import("../views/Apps/GetSumRest")));
 const Recipes = Loadable(lazy(() => import("../views/Apps/Recipes")));
-const Recipe = Loadable(lazy(() => import("../views/Apps/Recipes/Picker/components/Recipe.tsx")));
+const Recipe = Loadable(lazy(() => import("../views/Apps/Recipes/Picker/components/Recipe")));
 const RpslsHome = Loadable(lazy(() => import("../views/Apps/Rpsls")));
 const TicTacToeHome = Loadable(lazy(() => import("../views/Apps/TicTacToe")));
 const Apps = Loadable(lazy(() => import("../views/Apps")));

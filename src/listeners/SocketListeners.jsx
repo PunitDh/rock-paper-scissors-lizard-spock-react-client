@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { useAPI, useNotification, useSocket, useToken } from "../hooks";
@@ -9,8 +9,8 @@ import {
 import { deleteGameFromMenu, updateCurrentGameMenu } from "../redux/menuSlice";
 import { setCurrentGame, updateCurrentGame } from "../redux/playerSlice";
 import { setSiteSettings } from "../redux/siteSlice";
-import { Status, isSuccess } from "../utils";
-import { AuthPage, SocketResponse } from "../utils/constants";
+import { isSuccess } from "../utils";
+import { AuthPage, SocketResponse, Status } from "../utils/constants";
 
 const SocketListeners = () => {
   const socket = useSocket();
@@ -23,7 +23,7 @@ const SocketListeners = () => {
   const handleResponse = (response, dispatchFunction) =>
     isSuccess(response)
       .then((payload) => dispatch(dispatchFunction(payload)))
-      .catch(notification.error);
+      .catch((error) => notification.error(error));
 
   const handleStartConversation = (response) =>
     isSuccess(response)
@@ -31,11 +31,11 @@ const SocketListeners = () => {
         dispatch(
           startConversation({
             ...payload,
-            opener: payload.opener === token.decoded.id,
+            opener: payload.opener === token.decoded?.id,
           })
         )
       )
-      .catch(notification.error);
+      .catch((error) => notification.error(error));
 
   const handleToken = (response, successMessage, navigateTo = "/") =>
     isSuccess(response)
@@ -44,7 +44,7 @@ const SocketListeners = () => {
         notification.success(successMessage);
         navigate(navigateTo);
       })
-      .catch(notification.error);
+      .catch((error) => notification.error(error));
 
   const handleSiteSettings = (response) =>
     handleResponse(response, setSiteSettings);
@@ -56,7 +56,7 @@ const SocketListeners = () => {
         dispatch(updateCurrentGame(game));
         notification.success(successMessage);
       })
-      .catch(notification.error);
+      .catch((error) => notification.error(error));
 
   useEffect(() => {
     api.getSiteSettings();
@@ -66,7 +66,9 @@ const SocketListeners = () => {
       handleToken(response, "Profile updated!", "/profile")
     );
     socket.on(SocketResponse.DELETE_PROFILE, (response) =>
-      isSuccess(response).then(api.logoutPlayer).catch(notification.error)
+      isSuccess(response)
+        .then(api.logoutPlayer)
+        .catch((error) => notification.error(error))
     );
     socket.on(Status.UNAUTHORIZED, () => {
       console.log("It's the socket");

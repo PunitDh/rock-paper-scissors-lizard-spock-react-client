@@ -1,3 +1,4 @@
+import React from "react";
 import { Toolbar, styled, Stack } from "@mui/material";
 import { useSelector } from "react-redux";
 import ChatBar from "../../../views/ChatBar";
@@ -11,7 +12,7 @@ const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
 }));
 
 const Footer = () => {
-  const { siteSettings } = useSelector((state) => state.site);
+  const { siteSettings } = useSelector((state) => (state as any).site);
   return (
     <ToolbarStyled>
       <Stack spacing={1} direction="row" alignItems="center">

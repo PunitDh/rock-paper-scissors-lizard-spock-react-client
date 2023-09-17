@@ -30,7 +30,7 @@ const Picker = () => {
   }
 
   return (<>
-    <DashboardCard sx={{ height: "100%" }} title="Recipe Picker">
+    <DashboardCard sx={{ height: "100%" }} title="Flavor Match">
       <ResponsiveFlexBox
         flexDirection="column"
         gap="2rem"

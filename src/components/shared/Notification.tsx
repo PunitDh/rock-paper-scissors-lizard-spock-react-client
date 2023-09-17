@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "@emotion/styled";
 import { Alert, Snackbar } from "@mui/material";
 import { isObject } from "../../utils";
@@ -8,14 +9,10 @@ const WideAlert = styled(Alert)({
   justifyContent: "center",
 });
 
-const Notification = ({
-  notification,
-  vertical = "bottom",
-  horizontal = "center",
-}) =>
+const Notification = ({ notification }) =>
   notification.message ? (
     <Snackbar
-      anchorOrigin={{ vertical, horizontal }}
+      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       autoHideDuration={notification.duration}
       open={notification.open}
       onClose={notification.close}

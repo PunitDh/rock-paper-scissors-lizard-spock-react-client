@@ -1,9 +1,9 @@
 import React from "react";
 import LinkCard from "./components/LinkCard";
-import { DashboardImage } from "../../assets";
 import PageContainer from "../../components/container/PageContainer";
 import DashboardCard from "../../components/shared/DashboardCard";
 import { ResponsiveFlexBox } from "../../components/shared/styles";
+import { AppList } from "./constants";
 
 const Apps = () => (
   <PageContainer title="Apps" description="Apps dashboard">
@@ -18,55 +18,9 @@ const Apps = () => (
         flexWrap="wrap"
         reversed
       >
-        <LinkCard
-          to="/apps/rpsls"
-          title="Rock Paper Scissors Lizard Spock"
-          Icon={DashboardImage.Rpsls}
-          description="Rock Paper Scissors Lizard Spock"
-        />
-        <LinkCard
-          to="/apps/tictactoe"
-          title="Tic Tac Toe"
-          Icon={DashboardImage.TicTacToe}
-          description="Tic Tac Toe (coming soon)"
-          comingSoon={true}
-        />
-        <LinkCard
-          to="/utils/calculator"
-          title="React Calculator"
-          Icon={DashboardImage.Calculator}
-          description="A calculator made with React"
-        />
-        <LinkCard
-          to="/utils/color"
-          title="Color Picker"
-          Icon={DashboardImage.ColorPicker}
-          description="A color picker"
-        />
-        <LinkCard
-          to="/utils/recipes"
-          title="Recipes"
-          Icon={DashboardImage.Recipes}
-          description="A recipe recommender"
-        />
-        <LinkCard
-          to="/utils/sheets"
-          title="Spreadsheet"
-          Icon={DashboardImage.Spreadsheet}
-          description="Spreadsheet made with React"
-        />
-        <LinkCard
-          to="/utils/rest"
-          title="GetSumRest"
-          Icon={DashboardImage.Rest}
-          description="A Postman / Insomnia clone"
-        />
-        <LinkCard
-          to="/utils/video"
-          title="Video Subtitles"
-          Icon={DashboardImage.VideoSubtitles}
-          description="Generate subtitles for a video in any language"
-        />
+        {AppList.map((app) => (
+          <LinkCard key={app.id} {...app} />
+        ))}
       </ResponsiveFlexBox>
     </DashboardCard>
   </PageContainer>

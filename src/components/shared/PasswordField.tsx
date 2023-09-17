@@ -1,26 +1,30 @@
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { Password, TextFields } from "@mui/icons-material";
-import { Tooltip } from "@mui/material";
-import { useState } from "react";
+import { Theme as MuiTheme, Tooltip } from "@mui/material";
 import { WideTextField } from "./styles";
+
+type IconProps = {
+  theme?: MuiTheme;
+}
 
 const Container = styled.div({
   position: "relative",
   width: "100%",
 });
 
-const Icon = styled.span(({ theme }) => ({
+const Icon = styled.span(({ theme }: IconProps) => ({
   position: "absolute",
   right: "5%",
   top: "25%",
   cursor: "pointer",
   "&:hover": {
-    color: theme.palette.primary.main,
+    color: theme?.palette.primary.main,
   },
 }));
 
-const PasswordField = (props) => {
-  const [show, setShow] = useState(false);
+const PasswordField = (props: any): JSX.Element => {
+  const [show, setShow] = useState<boolean>(false);
   return (
     <Container>
       <WideTextField type={show ? "text" : "password"} {...props} />

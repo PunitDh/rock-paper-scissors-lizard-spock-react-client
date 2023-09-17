@@ -1,15 +1,15 @@
+import React from "react";
 import { Box, Grid } from "@mui/material";
 import Picker from "./Picker";
 import PageContainer from "../../../components/container/PageContainer";
 
-export default function Recipes() {
+export default function ColorPicker() {
   return (
-    <PageContainer title="Recipes">
+    <PageContainer title="Color Picker" description="React color picker">
       <Box>
         <Grid>
           <Grid item xs={12} lg={12}>
             <Picker />
-            {/* <Recipe recipe={recipe} /> */}
           </Grid>
         </Grid>
       </Box>

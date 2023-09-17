@@ -1,10 +1,7 @@
-export const Status = {
-  SUCCESS: "success",
-  ERROR: "error",
-  UNAUTHORIZED: "unauthorized",
-};
+import { Status } from "./constants";
 
-export function isSuccess(response) {
+
+export function isSuccess(response: { status: Status; payload: unknown; }) {
   return new Promise((resolve, reject) =>
     ![Status.ERROR, Status.UNAUTHORIZED].includes(response.status)
       ? resolve(response.payload)
@@ -12,7 +9,7 @@ export function isSuccess(response) {
   );
 }
 
-export const formatDate = (date) =>
+export const formatDate = (date: string | number | Date): string =>
   new Intl.DateTimeFormat(undefined, {
     day: "numeric",
     month: "short",
@@ -22,7 +19,7 @@ export const formatDate = (date) =>
     second: "numeric",
   }).format(new Date(date));
 
-export const isNumber = (value) => {
+export const isNumber = (value: string | number | null) => {
   return (
     typeof value === "number" ||
     (typeof value === "string" && /^-?\d*\.?\d+$/.test(value))

@@ -1,3 +1,4 @@
+import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
   Dialog,
@@ -5,7 +6,6 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
 
 const ConfirmationDialog = ({
   onConfirm,
@@ -32,7 +32,7 @@ const ConfirmationDialog = ({
   }, [valueProp, open]);
 
   const handleEntering = () =>
-    radioGroupRef.current != null && radioGroupRef.current.focus();
+    radioGroupRef.current != null && (radioGroupRef.current as HTMLInputElement).focus();
 
   return (
     <Dialog
