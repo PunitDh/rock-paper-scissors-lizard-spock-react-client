@@ -144,17 +144,17 @@ export default class CellData {
     return this;
   }
 
-  clearFormatting() {
+  clearFormatting(): CellData {
     this.formatting = new CellFormatting();
     return this;
   }
 
-  clearBorderFormatting() {
+  clearBorderFormatting(): CellData {
     this.formatting.clearBorders();
     return this;
   }
 
-  addBorderFormatting(borderId: any, borderType: BorderType) {
+  addBorderFormatting(borderId: any, borderType: BorderType): CellData {
     this.formatting = this.formatting.addBorder(borderId, borderType);
     return this;
   }
