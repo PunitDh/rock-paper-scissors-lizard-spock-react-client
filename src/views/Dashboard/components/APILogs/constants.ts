@@ -19,4 +19,6 @@ export const times = Object.freeze([
   },
 ]);
 
+export type LogType = "ALL" | "INFO" | "ERROR" | "WARN";
+
 export const logTypes = Object.freeze(["ALL", "INFO", "ERROR", "WARN"]);

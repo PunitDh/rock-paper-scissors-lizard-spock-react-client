@@ -1,6 +1,7 @@
 import { APILogsAction } from "./actions";
+import { Action, State } from "./types";
 
-export const initialState = {
+export const initialState: State = {
   type: "ALL",
   limit: 50,
   time: 0,
@@ -8,7 +9,7 @@ export const initialState = {
   logs: [],
 };
 
-export const reducer = (state, action) => {
+export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case APILogsAction.SET_FILTER:
       return {

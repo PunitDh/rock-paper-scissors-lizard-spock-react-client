@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled, Container, Box } from "@mui/material";
 import { Navigate, Outlet } from "react-router-dom";
 import Header from "./Header";
@@ -7,6 +7,7 @@ import Footer from "./Footer";
 import { useAPI, useNotification, useToken } from "../../hooks";
 import { AuthPage } from "../../utils/constants";
 import Notification from "../../components/shared/Notification";
+
 
 const MainWrapper = styled("div")(() => ({
   display: "flex",
