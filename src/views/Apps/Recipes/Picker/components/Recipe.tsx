@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { SyntheticEvent, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router';
 import DashboardCard from '../../../../../components/shared/DashboardCard'
 import { Bold, ResponsiveFlexBox } from '../../../../../components/shared/styles'
@@ -10,7 +10,7 @@ import { Bolt, Close, Refresh, Star } from '@mui/icons-material';
 import recipes from "./recipes.json";
 import { IconHeart } from '@tabler/icons-react';
 import styled from '@emotion/styled';
-import { useSwipeable } from 'react-swipeable';
+import { SwipeEventData, useSwipeable } from 'react-swipeable';
 import { sample } from 'lodash';
 
 type SwipeContainerProps = {
@@ -28,6 +28,15 @@ const ImageContainer = styled(Paper)({
 });
 
 const RecipeCard = () => {
+  const handleSwipe = (event: SwipeEventData) => {
+    if (Math.abs(event.deltaX) > 200) {
+      const randomRecipeId = sample(recipes.map((it: Recipe) => it.id));
+      navigate(`/utils/recipes/${randomRecipeId}`);
+    } else {
+      setPosition(0);
+    }
+  }
+
   const { recipeId } = useParams();
   const [position, setPosition] = useState(0);
   const navigate = useNavigate();
@@ -36,24 +45,8 @@ const RecipeCard = () => {
       const delta = event.deltaX;
       setPosition(delta);
     },
-    onSwipedLeft: (event) => {
-      if (Math.abs(event.deltaX) > 200) {
-        console.log("Swipe left", event.deltaX);
-        const randomRecipeId = sample(recipes.map((it: Recipe) => it.id))
-        navigate(`/utils/recipes/${randomRecipeId}`)
-      } else {
-        setPosition(0)
-      }
-    },
-    onSwipedRight: (event) => {
-      if (Math.abs(event.deltaX) > 200) {
-        console.log("Swipe right", event.deltaX);
-        const randomRecipeId = sample(recipes.map((it: Recipe) => it.id))
-        navigate(`/utils/recipes/${randomRecipeId}`)
-      } else {
-        setPosition(0)
-      }
-    },
+    onSwipedLeft: handleSwipe,
+    onSwipedRight: handleSwipe,
   });
 
   useEffect(() => {
@@ -62,45 +55,46 @@ const RecipeCard = () => {
 
 
   const recipe: Recipe = recipes.find((it: Recipe) => it.id === Number(recipeId));
-
   const mdUp = useMediaQuery((theme: MuiTheme) => theme.breakpoints.up("md"));
-  const ingredients = Array.from(new Set<string>(recipe.extendedIngredients.map((it: Ingredient) => it.name))).sort();
-  return (
+  
+  if (recipe) {
+    const ingredients = Array.from(new Set<string>(recipe.extendedIngredients.map((it: Ingredient) => it.name))).sort();
+    return (
+      <DashboardCard sx={{ height: "90vh", width: "92dvw" }} title={""}>
+        <SwipeContainer {...swipeHandlers} delta={position}>
+          <ResponsiveFlexBox
+            flexDirection="column"
+            gap="1.5rem"
+            alignItems="flex-start"
+            height="100%"
+            top="0"
+            left="0"
+          >
+            <ImageContainer elevation={8}>
+              <img src={recipe.image} alt={recipe.title} style={{ width: "100%" }} />
+            </ImageContainer>
+            <Typography variant="h5" textAlign="center">{recipe.title}</Typography>
+            <Typography><Bold>Cooking time:</Bold> {recipe.readyInMinutes} mins</Typography>
+            <Typography><Bold>Ingredients: ({ingredients.length})</Bold></Typography>
+            <Grid container spacing={2}>
+              {ingredients.map((ingredient: string): JSX.Element =>
+                <Grid xs={6} md={4} item key={ingredient}>{ingredient}</Grid>
+              )}
+            </Grid>
 
-    <DashboardCard sx={{ height: "90vh", width: "92dvw" }} title={""}>
-      <SwipeContainer {...swipeHandlers} delta={position}>
-        <ResponsiveFlexBox
-          flexDirection="column"
-          gap="1.5rem"
-          alignItems="flex-start"
-          height="100%"
-          // position="absolute"
-          top="0"
-          left="0"
-        >
-          <ImageContainer elevation={8}>
-            <img src={recipe.image} alt={recipe.title} style={{ width: "100%" }} />
-          </ImageContainer>
-          <Typography variant="h5" textAlign="center">{recipe.title}</Typography>
-          <Typography><Bold>Cooking time:</Bold> {recipe.readyInMinutes} mins</Typography>
-          <Typography><Bold>Ingredients: ({ingredients.length})</Bold></Typography>
-          <Grid container spacing={2}>
-            {ingredients.map((ingredient: string): JSX.Element =>
-              <Grid xs={6} md={4} item key={ingredient}>{ingredient}</Grid>
-            )}
-          </Grid>
-
-          <FlexBox width="100%" justifyContent={mdUp ? "center" : "space-between"} gap="1rem">
-            <ActionButton Icon={Refresh} color="#BBBB66" title="Rewind" onClick={() => { }} />
-            <ActionButton Icon={Close} color="red" title="Dislike it" onClick={() => { }} />
-            <ActionButton Icon={Star} color="#4466FF" title="Favourite!" onClick={() => { }} />
-            <ActionButton Icon={() => <IconHeart color="green" fill="green" stroke="3" />} onClick={() => { }} color="green" title="Like it" />
-            <ActionButton Icon={Bolt} color="purple" title="Random" onClick={() => { }} />
-          </FlexBox>
-        </ResponsiveFlexBox>
-      </SwipeContainer>
-    </DashboardCard>
-  )
+            <FlexBox width="100%" justifyContent={mdUp ? "center" : "space-between"} gap="1rem">
+              <ActionButton Icon={Refresh} color="#BBBB66" title="Rewind" onClick={() => { }} />
+              <ActionButton Icon={Close} color="red" title="Dislike it" onClick={() => { }} />
+              <ActionButton Icon={Star} color="#4466FF" title="Favourite!" onClick={() => { }} />
+              <ActionButton Icon={() => <IconHeart color="green" fill="green" stroke="3" />} onClick={() => { }} color="green" title="Like it" />
+              <ActionButton Icon={Bolt} color="purple" title="Random" onClick={() => { }} />
+            </FlexBox>
+          </ResponsiveFlexBox>
+        </SwipeContainer>
+      </DashboardCard>
+    );
+  }
+  return <>No recipe found</>
 }
 
 export default RecipeCard
