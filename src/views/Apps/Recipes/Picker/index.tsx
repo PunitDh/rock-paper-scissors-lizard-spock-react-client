@@ -3,7 +3,7 @@ import { initialState, reducer } from "./reducer";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import { ResponsiveFlexBox } from "../../../../components/shared/styles";
 import { Action, State } from "./types";
-import { Autocomplete, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { Autocomplete, TextField, Typography } from "@mui/material";
 import { Cuisine, Diet } from "./constants";
 import { shuffle } from "lodash";
 import { SelectableOption } from "./styles";

@@ -14,12 +14,6 @@ const Root = styled('div')(
 `,
 );
 
-const Label = styled('label')`
-  padding: 0 0 4px;
-  line-height: 1.5;
-  display: block;
-`;
-
 const InputWrapper = styled('div')(
   ({ theme }) => `
   width: 300px;
@@ -155,7 +149,6 @@ const Listbox = styled('ul')(
 export default function IntolerancesSelector() {
   const {
     getRootProps,
-    getInputLabelProps,
     getInputProps,
     getTagProps,
     getListboxProps,
