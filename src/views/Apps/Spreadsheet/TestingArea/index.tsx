@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import useEventHandler from "../Sheet/hooks/useEventHandler";
 import DashboardCard from "../../../../components/shared/DashboardCard";
@@ -53,14 +53,26 @@ const StatusCell = function ({ label, children }: Props) {
 const TestingArea = ({ state }: { state: State }) => {
   const token = useToken();
   const eventHandler = useEventHandler();
+  const [keyboard, setKeyboard] = useState('');
+
+  useEffect(() => {
+    const handlekey = (e: KeyboardEvent) => {
+      setKeyboard(e.key)
+    }
+    window.addEventListener('keydown', handlekey);
+
+    return () => {
+      window.removeEventListener('keydown', handlekey)
+    }
+  }, [])
 
   return token.decoded?.isAdmin ? (
     <DashboardCard sx={{ height: "100%" }} title="Testing Area" subtitle={undefined} action={undefined} footer={undefined} cardheading={undefined} headtitle={undefined} headsubtitle={undefined} middlecontent={undefined}>
       <FlexBox width="100%" height="100%" gap="0.5rem">
-        {/* <StatusCell label="Keyboard">{keyboard && keyboard.key}</StatusCell>
-        <StatusCell label="Mouse button">{mouse && mouse.buttons}</StatusCell>
-        <StatusCell label="MouseDown">{String(state.mouseDown)}</StatusCell> */}
-        <StatusCell label="Hovered">{state.hovered}</StatusCell>
+        <StatusCell label="Keyboard">{keyboard}</StatusCell>
+        {/* <StatusCell label="Mouse button">{mouse}</StatusCell> */}
+        {/* <StatusCell label="MouseDown">{String(state.mouseDown)}</StatusCell>
+        <StatusCell label="Hovered">{state.hovered}</StatusCell> */}
 
         <StatusCell label="Current Cell">{state.selectedCell.id}</StatusCell>
         <StatusCell label="Highlighted Anchor">

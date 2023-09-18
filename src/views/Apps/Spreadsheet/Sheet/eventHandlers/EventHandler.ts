@@ -663,18 +663,20 @@ export default class EventHandler {
       length: highlightedLength,
     } = this.state.highlighted;
     if (!hasLength) return;
-    const { cellAnchor } = this.state.highlighted;
+    const { cellAnchor, second } = this.state.highlighted;
 
     if (!cellAnchor) return;
     const anchorCell = this.state.content.data[cellAnchor];
     const anchorValue = anchorCell?.value;
+    const secondValue = this.state.content.data[second]?.value;
 
-    if (isNumber(anchorValue)) {
+    if (isNumber(anchorValue) && isNumber(secondValue)) {
+      const diff = secondValue - anchorValue;
       let increment = 0;
       Array(highlightedLength - 1)
         .fill(0)
         .forEach((_, i) => {
-          increment++;
+          increment += diff;
           this.dispatch(
             setCellContent(
               highlightedCells[i + 1],

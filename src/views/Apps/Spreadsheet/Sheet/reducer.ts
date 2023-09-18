@@ -810,78 +810,7 @@ export const reducer = (state: State, action: Action): State => {
       };
     }
 
-    // case SheetAction.ADD_MEMENTO: {
-    //   const currentMemento = state.memento.find(
-    //     (memento: Memento) => memento.id === state.currentMementoId
-    //   );
-    //   if (currentMemento && isEqual(currentMemento.content, state.content)) {
-    //     return state;
-    //   }
-
-    //   const id = uniqueId("memento-");
-    //   const mementoIndex =
-    //     state.memento.findIndex(
-    //       (memento: Memento) => memento.id === state.currentMementoId
-    //     ) + 1;
-    //   let memento = [
-    //     ...state.memento.slice(0, mementoIndex),
-    //     { id, content: state.content },
-    //   ];
-
-    //   if (memento.length > state.maxUndos) {
-    //     memento = memento.slice(1);
-    //   }
-
-    //   return {
-    //     ...state,
-    //     memento,
-    //     currentMementoId: id,
-    //   };
-    // }
-
-    // case SheetAction.UNDO_STATE: {
-    //   const currentIndex = state.memento.findIndex(
-    //     (memento: Memento) => memento.id === state.currentMementoId
-    //   );
-
-    //   if (currentIndex <= 0) return state;
-    //   const previousMemento = state.memento[currentIndex - 1];
-
-    //   return {
-    //     ...state,
-    //     content: {
-    //       ...previousMemento.content,
-    //     } as StateContent,
-    //     currentMementoId: previousMemento.id,
-    //   };
-    // }
-
-    // case SheetAction.REDO_STATE: {
-    //   const currentIndex = state.memento.findIndex(
-    //     (memento: Memento) => memento.id === state.currentMementoId
-    //   );
-
-    //   if (currentIndex === -1 || currentIndex >= state.memento.length - 1)
-    //     return state;
-    //   const nextMemento = state.memento[currentIndex + 1];
-
-    //   return {
-    //     ...state,
-    //     content: {
-    //       ...nextMemento.content,
-    //     } as StateContent,
-    //     currentMementoId: nextMemento.id,
-    //   };
-    // }
-
     case SheetAction.ADD_MEMENTO: {
-      // const currentMemento = state.memento.find(
-      //   (memento: Memento) => memento.id === state.currentMementoId
-      // );
-      // if (currentMemento && isEqual(state.initialContent, state.content)) {
-      //   return state;
-      // }
-
       const delta = StateContent.findDelta(state.initialContent, state.content);
       if (Object.keys(delta).length === 0) {
         return state;
@@ -993,7 +922,6 @@ export const reducer = (state: State, action: Action): State => {
         currentMementoId: nextMemento.id,
       };
     }
-
     case SheetAction.RESET_STATE:
       return initialState;
     default:

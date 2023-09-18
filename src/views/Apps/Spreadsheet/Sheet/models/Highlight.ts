@@ -68,6 +68,10 @@ export default class Highlight {
     return this.cells[0];
   }
 
+  get second(): string {
+    return this.cells[1];
+  }
+
   get last(): string {
     return this.cells[this.cells.length - 1];
   }
