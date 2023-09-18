@@ -15,7 +15,7 @@ const Container = styled.div(({ top, left, width, height }: ContainerProps) => (
   left: `${left}px`,
   width: `${width}px`,
   height: `${height}px`,
-  border: `2px solid blue`,
+  border: `1px solid blue`,
   // transition: "top 200ms ease-in-out, left 200ms ease-in-out",
   zIndex: "50000",
   pointerEvents: "none",
@@ -24,6 +24,7 @@ const Container = styled.div(({ top, left, width, height }: ContainerProps) => (
 
 type Props = {
   position: Position;
+  multiSelect?: boolean;
 }
 
 const Highlight = ({ position }: Props): JSX.Element => (

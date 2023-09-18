@@ -14,12 +14,12 @@ export default class CellRange {
 
   constructor(
     cells: Cell[] | Cell[][],
-    ids: string[] | string[][],
+    cellIds: string[] | string[][],
     rows: number[],
-    columns: string[]
+    columns: string[],
   ) {
     this.cells = cells;
-    this.cellIds = Array.from(new Set<any>(ids));
+    this.cellIds = Array.from(new Set<any>(cellIds));
     this.rows = Array.from(new Set<number>(rows));
     this.columns = Array.from(new Set<string>(columns));
   }

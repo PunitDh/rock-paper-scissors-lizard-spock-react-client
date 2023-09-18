@@ -1,7 +1,7 @@
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import { Box } from "@mui/material";
-import { useState } from "react";
 import DialogContent from "./DialogContent";
 import TitledButton from "../../../../components/shared/TitledButton";
 import { useAPI } from "../../../../hooks";
@@ -49,7 +49,7 @@ const DeleteProfile = () => {
           size="large"
           onClick={handleConfirm}
         >
-          Permanently Delete Profile
+          <>Permanently Delete Profile</>
         </RedButton>
       </Box>
     </DashboardCard>

@@ -79,7 +79,7 @@ export function parseCSV(csvString: string) {
     let data: { [key: string]: Partial<CellData> } = {};
 
     rows.forEach((row: string, rowIndex: number) => {
-      row.split(",").forEach((cellValue: any, colIndex: string | number) => {
+      row.split(",").forEach((cellValue: any, colIndex: number) => {
         const colLabel = SheetConfig.COLUMNS[colIndex];
         const cellId = `${colLabel}${rowIndex + 1}`;
         data[cellId] = new CellData({
@@ -144,13 +144,16 @@ export function parseJSON(stringifiedJSON: string): ParsedJSON {
 export const createInitialState = (
   props: SheetProps,
   defaultProps: { [key: string]: any }
-): State => ({
-  // ...initialState,
-  ...cloneDeep(initialState),
-  ...defaultProps,
-  ...props,
-  content: generateInitialContent(props, defaultProps),
-});
+): State => {
+  console.log(cloneDeep(initialState));
+  return {
+    // ...initialState,
+    ...cloneDeep(initialState),
+    ...defaultProps,
+    ...props,
+    content: generateInitialContent(props, defaultProps),
+  };
+};
 
 const generateInitialContent = (
   props: SheetProps,
@@ -202,8 +205,11 @@ const generateInitialContent = (
   } as StateContent;
 };
 
-export const isFormula = (value: string | null) => {
-  return Boolean(value?.startsWith("="));
+export const isFormula = (value: unknown) => {
+  return (
+    (typeof value === "string" || value instanceof String) &&
+    Boolean(value?.startsWith("="))
+  );
 };
 
 export const getWidth = (id: string): string | undefined => {

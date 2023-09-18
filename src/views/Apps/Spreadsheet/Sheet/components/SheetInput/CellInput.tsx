@@ -14,7 +14,7 @@ import CellData from "../../models/CellData";
 type ContainerProps = {
   top: number;
   left: number;
-}
+};
 
 const Container = styled.div(({ top, left }: ContainerProps) => ({
   position: "absolute",
@@ -24,46 +24,52 @@ const Container = styled.div(({ top, left }: ContainerProps) => ({
   zIndex: "50000",
 }));
 
-type InputFieldProps =
-  {
-    width: number
-    height: number
-    isfocused: boolean
-    formatting: CellFormatting | undefined
+type InputFieldProps = {
+  width: number;
+  height: number;
+  isfocused: boolean;
+  formatting: CellFormatting | undefined;
+};
+
+const InputField = styled.input(
+  ({ width, height, isfocused, formatting }: InputFieldProps) => {
+    return {
+      width: `${width}px`,
+      height: `${height}px`,
+      borderRadius: 0,
+      outline: "none",
+      border: "2px solid blue",
+      cursor: "cell",
+      padding: "1px",
+      ...formatting?.styles,
+      // backgroundColor: formatting?.styles?.backgroundColor || "transparent",
+      // color: formatting?.styles?.color || "transparent",
+      backgroundColor: isfocused
+        ? "white"
+        : formatting?.styles?.backgroundColor || "transparent",
+      color: isfocused ? "black" : formatting?.styles?.color || "transparent",
+      "&:focus": {
+        cursor: "text",
+      },
+    };
   }
-
-
-const InputField = styled.input(({ width, height, isfocused, formatting }: InputFieldProps) => {
-  return {
-    width: `${width}px`,
-    height: `${height}px`,
-    borderRadius: 0,
-    outline: "none",
-    border: "2px solid blue",
-    cursor: "cell",
-    padding: "1px",
-    ...formatting?.styles,
-    // backgroundColor: formatting?.styles?.backgroundColor || "transparent",
-    // color: formatting?.styles?.color || "transparent",
-    backgroundColor: isfocused ? "white" : formatting?.styles?.backgroundColor || "transparent",
-    color: isfocused ? "black" : formatting?.styles?.color || "transparent",
-    "&:focus": {
-      cursor: "text",
-    },
-  }
-}
-
 );
 
 type Props = {
-  state: State
-  dispatch: Dispatch<Action>
+  state: State;
+  dispatch: Dispatch<Action>;
   position: Position;
   cell: Cell;
   value: string;
-}
+};
 
-const CellInput = ({ state, dispatch, position, cell, value }: Props): JSX.Element => {
+const CellInput = ({
+  state,
+  dispatch,
+  position,
+  cell,
+  value,
+}: Props): JSX.Element => {
   const eventHandler = useEventHandler();
   const navigateRef = useRef(true);
   const inputRef = useCallback(
@@ -72,17 +78,15 @@ const CellInput = ({ state, dispatch, position, cell, value }: Props): JSX.Eleme
   );
   const currentCell: CellData | undefined = state.content.data[cell.id];
 
-  console.log({ value });
-
   useEffect(() => {
     navigateRef.current = true;
     console.log("Cell input navigateref hook triggered");
-    setTimeout(() => console.log("----------end--------"), 0)
+    setTimeout(() => console.log("----------end--------"), 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cell.id]);
 
-
-  const handleBlur = (e: React.FocusEvent) => eventHandler.handleInputBoxBlur(e, cell.id);
+  const handleBlur = (e: React.FocusEvent) =>
+    eventHandler.handleInputBoxBlur(e, cell.id);
 
   const handleChange = (e: React.ChangeEvent) => {
     const newValue = (e.target as HTMLInputElement).value;
@@ -91,11 +95,8 @@ const CellInput = ({ state, dispatch, position, cell, value }: Props): JSX.Eleme
   };
 
   const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) =>
-      eventHandler.handleCellInputKeyDown(
-        e,
-        navigateRef.current
-      ),
+    (event: React.KeyboardEvent) =>
+      eventHandler.handleCellInputKeyDown(event, navigateRef.current),
     [eventHandler]
   );
 
@@ -112,7 +113,9 @@ const CellInput = ({ state, dispatch, position, cell, value }: Props): JSX.Eleme
     navigateRef.current = false;
   };
 
-  const formatting = (currentCell?.formula?.length !== 0) ? undefined : currentCell?.formatting
+  const formatting = isFormula(currentCell?.formula)
+    ? undefined
+    : currentCell?.formatting;
 
   return (
     <Container top={position.cellInput.top} left={position.cellInput.left}>

@@ -1,7 +1,6 @@
 import { Status } from "./constants";
 
-
-export function isSuccess(response: { status: Status; payload: unknown; }) {
+export function isSuccess(response: { status: Status; payload: unknown }) {
   return new Promise((resolve, reject) =>
     ![Status.ERROR, Status.UNAUTHORIZED].includes(response.status)
       ? resolve(response.payload)
@@ -19,22 +18,22 @@ export const formatDate = (date: string | number | Date): string =>
     second: "numeric",
   }).format(new Date(date));
 
-export const isNumber = (value: string | number | null) => {
+export const isNumber = (value: unknown) => {
   return (
     typeof value === "number" ||
     (typeof value === "string" && /^-?\d*\.?\d+$/.test(value))
   );
 };
 
-export const isFalsy = (value) => {
+export const isFalsy = (value: unknown) => {
   return value === undefined || value === null || value === false;
 };
 
-export const isString = (value) => {
+export const isString = (value: unknown) => {
   return typeof value === "string" || value instanceof String;
 };
 
-export const isObject = (value) => {
+export const isObject = (value: unknown) => {
   return value && typeof value === "object";
 };
 

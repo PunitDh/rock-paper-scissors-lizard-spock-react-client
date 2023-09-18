@@ -1,4 +1,4 @@
-import React, { Dispatch, useEffect } from "react";
+import React, { Dispatch } from "react";
 import { Table } from "@mui/material";
 import Toolbar from "./components/Toolbar";
 import EventDelegator from "./eventHandlers/EventDelegator";
@@ -9,15 +9,14 @@ import SheetTable from "./components/SheetTable";
 import { Action, State } from "./types";
 import StatusBar from "./components/StatusBar";
 import SheetInput from "./components/SheetInput";
-import useEventHandler from "./hooks/useEventHandler";
 
 type SheetContentProps = {
-  state: State
-  dispatch: Dispatch<Action>
-  toolbar: boolean
-  formulaField: boolean
-  statusField: boolean
-}
+  state: State;
+  dispatch: Dispatch<Action>;
+  toolbar: boolean;
+  formulaField: boolean;
+  statusField: boolean;
+};
 
 const SheetContent = ({
   state,
@@ -25,8 +24,8 @@ const SheetContent = ({
   toolbar,
   formulaField,
   statusField,
-}: SheetContentProps): JSX.Element => {
-  return <Container>
+}: SheetContentProps): JSX.Element => (
+  <Container>
     {toolbar && <Toolbar state={state} dispatch={dispatch} />}
     <SheetInput state={state} dispatch={dispatch} formulaField={formulaField} />
     <EventDelegator>
@@ -38,6 +37,6 @@ const SheetContent = ({
       {statusField && <StatusBar state={state} />}
     </EventDelegator>
   </Container>
-};
+);
 
 export default SheetContent;

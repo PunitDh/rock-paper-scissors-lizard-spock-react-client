@@ -37,7 +37,11 @@ const ColorPicker = ({
   const isRgb = /^rgb/g.test(style);
   const value = isRgb ? rgbToHex(style) : style;
 
-  const handleClick = (e: React.MouseEvent) => () => inputRef.current?.click()
+  const handleClick = () => inputRef.current?.click();
+
+  const handleChange = (e) => {
+
+  }
 
   return (
     <FieldButton onClick={handleClick}>

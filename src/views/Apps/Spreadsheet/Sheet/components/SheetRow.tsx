@@ -21,7 +21,6 @@ const SheetRow = ({ state, dispatch, row }: Props) => {
           const cellData = state.content.data[id];
           const isSelected =
             id === state.selectedCell.id
-          // || state.highlighted.cells.includes(id);
           const isFormulaHighlighted = state.formulaHighlighted.includes(id);
           const width = state.content.columnWidths[SheetConfig.COLUMNS[column - 1]] ||
             state.defaultColumnWidth;

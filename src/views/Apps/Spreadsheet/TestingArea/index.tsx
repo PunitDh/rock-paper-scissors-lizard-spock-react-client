@@ -73,6 +73,9 @@ const TestingArea = ({ state }: { state: State }) => {
         <StatusCell label="Formula Mode">
           {String(state.formulaMode)}
         </StatusCell>
+        <StatusCell label="Multi Select">
+          {String(state.highlighted.multiSelect)}
+        </StatusCell>
         {/* <StatusCell label="Selection Range">
           {eventHandler.formulaFieldRef.selectionStart},
           {eventHandler.formulaFieldRef.selectionEnd}

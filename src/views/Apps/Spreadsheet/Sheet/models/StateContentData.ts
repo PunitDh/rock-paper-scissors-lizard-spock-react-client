@@ -27,8 +27,8 @@ export default class StateContentData {
           stateContentData[cell] = cellData;
         } else {
           stateContentData[cell] = new CellData({
-            id: cell,
             ...initialData[it],
+            id: cell,
           });
         }
         return stateContentData;

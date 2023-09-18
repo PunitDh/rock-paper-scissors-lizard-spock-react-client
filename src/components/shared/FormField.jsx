@@ -1,3 +1,4 @@
+import React from "react";
 import { Typography } from "@mui/material";
 import CustomTextField from "../forms/theme-elements/CustomTextField";
 import { camelCase, kebabCase } from "lodash";
@@ -11,7 +12,7 @@ const WideTextField = styled(CustomTextField)({
 const Container = styled.div({
   width: "100%",
   display: "flex",
-  flexDirection: "column"
+  flexDirection: "column",
 });
 
 const FormField = ({

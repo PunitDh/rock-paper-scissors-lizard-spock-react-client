@@ -172,24 +172,24 @@ export const reducer = (state: State, action: Action): State => {
     }
 
     case SheetAction.ADD_CELLS_TO_HIGHLIGHT: {
-      const rowsSet = new Set();
-      const columnsSet = new Set();
-      const cellsSet = new Set(state.highlighted.cells);
-      action.payload.forEach((id: string) => {
+      const rows = new Set<number>();
+      const columns = new Set<string>();
+      const cells = new Set<string>(state.highlighted.cells);
+
+      action.payload.cellIds.forEach((id: string) => {
         const cell = new Cell(id);
-        cellsSet.add(cell.id);
-        rowsSet.add(cell.row);
-        columnsSet.add(cell.column);
+        cells.add(cell.id);
+        rows.add(cell.row);
+        columns.add(cell.column);
       });
-      const rows = Array.from(rowsSet) as number[];
-      const columns = Array.from(columnsSet) as string[];
 
       return {
         ...state,
         highlighted: state.highlighted
-          .setCells(Array.from(cellsSet), state.content.data)
-          .setRows(state.highlighted.rows.concat(rows))
-          .setColumns(state.highlighted.columns.concat(columns)),
+          .setCells(Array.from(cells), state.content.data)
+          .setRows(state.highlighted.rows.concat(Array.from(rows)))
+          .setColumns(state.highlighted.columns.concat(Array.from(columns)))
+          .setMultiSelect(action.payload.multiSelect),
       };
     }
 
@@ -199,7 +199,7 @@ export const reducer = (state: State, action: Action): State => {
       const updatedCells = new Set(state.highlighted.cells);
       action.payload.forEach((cellId: string) => {
         const cell = new Cell(cellId);
-        if (state.highlighted.cells.includes(cellId)) {
+        if (state.highlighted.includes(cellId)) {
           updatedCells.delete(cellId);
           rowsToRemove.add(cell.row);
           columnsToRemove.add(cell.column);
@@ -256,7 +256,7 @@ export const reducer = (state: State, action: Action): State => {
       }
 
       const data = Object.keys(state.content.data)
-        .filter((cell) => state.highlighted.cells.includes(cell))
+        .filter((cell) => state.highlighted.includes(cell))
         .reduce((stateContentData, cell) => {
           return {
             ...stateContentData,

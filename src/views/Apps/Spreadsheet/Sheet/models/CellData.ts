@@ -5,11 +5,12 @@ import { BorderType, NumberFormat } from "../components/Toolbar/constants";
 import { isString } from "lodash";
 import { isFalsy, isNumber } from "../../../../../utils";
 import StateContentData from "./StateContentData";
+import { CellFormula, CellValue } from "../types";
 
 type CellDataShape = {
   id: string | null;
-  value?: string | number | null;
-  formula?: string | null;
+  value?: CellValue;
+  formula?: CellFormula;
   referenceCells?: Array<string>;
   display?: string;
   formatting?: CellFormatting;
@@ -18,10 +19,10 @@ type CellDataShape = {
 
 export default class CellData {
   id: string | null;
-  value: string | number | null;
-  previousValue: string | number | null;
-  formula: string | null;
-  previousFormula: string | number | null;
+  value: CellValue;
+  previousValue: CellValue;
+  formula: CellFormula;
+  previousFormula: CellFormula;
   referenceCells: Array<string>;
   display: string;
   formatting: CellFormatting;
@@ -113,7 +114,7 @@ export default class CellData {
       this.previousValue = this.value;
       this.value = value;
       this.setDisplay();
-      this.formula = "";
+      this.formula = null;
       this.referenceCells = [];
     }
     return this;
@@ -204,7 +205,7 @@ export default class CellData {
  * @returns {string} The formatted value as a string.
  */
 const getNumberFormattedDisplay = (
-  value: string | number | null,
+  value: CellValue,
   formatting: CellFormatting
 ): string => {
   if (isFalsy(value)) return "";

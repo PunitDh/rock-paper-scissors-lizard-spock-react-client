@@ -1,14 +1,7 @@
 import { SheetAction } from "./actions";
 import Cell from "./models/Cell";
-import CellData from "./models/CellData";
 import Highlight from "./models/Highlight";
 import StateContent from "./models/StateContent";
-import StateContentData from "./models/StateContentData";
-
-export type Memento = {
-  id: string;
-  content: StateContent;
-};
 
 export type State = {
   maxRows: number;
@@ -52,3 +45,12 @@ export type SheetProps = {
   defaultRowHeight?: number;
   defaultColumnWidth?: number;
 };
+
+export type Memento = {
+  id: string;
+  content: StateContent;
+};
+
+export type CellValue = string | number | null;
+
+export type CellFormula = string | null;

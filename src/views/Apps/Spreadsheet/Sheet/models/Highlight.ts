@@ -11,6 +11,7 @@ type Props = {
   columns?: string[];
   rangeStart?: null | string;
   rangeEnd?: null | string;
+  multiSelect?: boolean;
   sum?: number | null;
   average?: number | null;
   count?: number | null;
@@ -30,6 +31,7 @@ export default class Highlight {
   count: number | null = null;
   max: number | null = null;
   min: number | null = null;
+  multiSelect: boolean;
 
   constructor({
     rowAnchor = null,
@@ -40,6 +42,7 @@ export default class Highlight {
     columns = [],
     rangeStart = null,
     rangeEnd = null,
+    multiSelect = false,
   }: Partial<Props> = {}) {
     this.rowAnchor = rowAnchor;
     this.columnAnchor = columnAnchor;
@@ -49,6 +52,7 @@ export default class Highlight {
     this.columns = columns;
     this.rangeStart = rangeStart;
     this.rangeEnd = rangeEnd;
+    this.multiSelect = multiSelect;
   }
 
   get length(): number {
@@ -65,6 +69,10 @@ export default class Highlight {
 
   get last(): string {
     return this.cells[this.cells.length - 1];
+  }
+
+  includes(cellId: string): Boolean {
+    return this.cells.includes(cellId);
   }
 
   setRowAnchor(row: number): Highlight {
@@ -89,6 +97,11 @@ export default class Highlight {
 
   setRangeEnd(cellId: string): Highlight {
     this.rangeEnd = cellId;
+    return this;
+  }
+
+  setMultiSelect(multiSelect: boolean): Highlight {
+    this.multiSelect = multiSelect;
     return this;
   }
 

@@ -56,15 +56,17 @@ const Toolbar = ({ state, dispatch }: Props) => {
   const canUndo = state.currentMementoId !== state.memento[0]?.id;
   const canRedo =
     state.currentMementoId !== state.memento[state.memento.length - 1]?.id;
+  const selectedCell = state.selectedCell.id;
+  const selectedCellData = state.content.data[selectedCell];
 
   const currentCellFormatting = useMemo(() => {
-    const element = document.getElementById(state.selectedCell.id);
+    const element = document.getElementById(selectedCell);
     if (!element) return new CellFormatting();
     const styles = getComputedStyle(element);
     return {
       fontWeight: styles?.fontWeight,
       fontStyle: styles?.fontStyle,
-      // fontFamily: styles?.fontFamily,
+      fontFamily: styles?.fontFamily,
       fontSize: styles?.fontSize,
       textAlign: styles?.textAlign,
       textDecoration: styles?.textDecoration,
@@ -75,21 +77,21 @@ const Toolbar = ({ state, dispatch }: Props) => {
       color: styles?.color,
       backgroundColor: styles?.backgroundColor,
     };
-  }, [state.selectedCell.id]);
+  }, [selectedCell]);
 
   const stateCellFormatting = useMemo(() => {
     return (
-      state.content.data[state.selectedCell.id]?.formatting ||
+      selectedCellData?.formatting ||
       currentCellFormatting
     );
-  }, [currentCellFormatting, state.content.data, state.selectedCell.id]);
+  }, [currentCellFormatting, selectedCellData?.formatting]);
 
   const [selectedFormatting, setSelectedFormatting] =
     useState<CellFormatting>(stateCellFormatting);
 
   useEffect(() => {
     setSelectedFormatting(stateCellFormatting);
-    console.log("stateCellFormatting hook triggered");
+    console.log("setSelectedFormatting hook triggered for Toolbar");
   }, [stateCellFormatting]);
 
   const handleSubmit = (e: React.FormEvent) => {

@@ -10,10 +10,10 @@ import SheetContent from "./SheetContent";
 import { EventProvider } from "./context/EventHandlerContext";
 import { Action, SheetProps, State } from "./types";
 import DashboardCard from "../../../../components/shared/DashboardCard";
-import { defaultProps } from "./constants";
+import { defaultInitialStateProps } from "./constants";
 
-const Sheet = (props: SheetProps = defaultProps): JSX.Element => {
-  const [state, dispatch]: [state: State, dispatch: Dispatch<Action>] = useReducer(reducer, initialState, () => createInitialState(props, defaultProps));
+const Sheet = (props: SheetProps = defaultInitialStateProps): JSX.Element => {
+  const [state, dispatch]: [state: State, dispatch: Dispatch<Action>] = useReducer(reducer, initialState, () => createInitialState(props, defaultInitialStateProps));
 
   useEffect(() => {
     console.log("Sheet recalculation hook triggered");
@@ -30,9 +30,9 @@ const Sheet = (props: SheetProps = defaultProps): JSX.Element => {
         <SheetContent
           state={(state)}
           dispatch={dispatch}
-          toolbar={props.toolbar || defaultProps.toolbar}
-          formulaField={props.formulaField || defaultProps.formulaField}
-          statusField={props.statusField || defaultProps.statusField}
+          toolbar={props.toolbar || defaultInitialStateProps.toolbar}
+          formulaField={props.formulaField || defaultInitialStateProps.formulaField}
+          statusField={props.statusField || defaultInitialStateProps.statusField}
         />
         <DebugBar state={(state)} />
       </DashboardCard>

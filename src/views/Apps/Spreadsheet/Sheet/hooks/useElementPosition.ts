@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Position } from "../components/SheetInput/types";
-import CellData from "../models/CellData";
 
 export default function useElementPosition(
-  selectedCellData: CellData,
   selectedId: string,
   firstHighlighted: string,
   lastHighlighted: string,
@@ -32,6 +30,10 @@ export default function useElementPosition(
       ?.getBoundingClientRect();
 
     if (cellInputRect) {
+      const fillerTop =
+        cellInputRect.top + window.scrollY + cellInputRect.height - 6;
+      const fillerLeft =
+        cellInputRect.left + window.scrollX + cellInputRect.width - 6;
       setPosition((position) => ({
         ...position,
         cellInput: {
@@ -39,6 +41,10 @@ export default function useElementPosition(
           left: cellInputRect.left + window.scrollX,
           width: cellInputRect.width,
           height: cellInputRect.height,
+        },
+        filler: {
+          top: fillerTop,
+          left: fillerLeft,
         },
       }));
     }
@@ -48,7 +54,7 @@ export default function useElementPosition(
       ?.getBoundingClientRect();
 
     const lastHighlightedRect = document
-      .getElementById(lastHighlighted || selectedId)
+      .getElementById(lastHighlighted)
       ?.getBoundingClientRect();
 
     if (firstHighlightedRect && lastHighlightedRect) {
@@ -60,20 +66,19 @@ export default function useElementPosition(
         ...position,
         highlight: { top, left, width, height },
       }));
-    }
-
-    if (lastHighlightedRect) {
-      const top =
-        lastHighlightedRect.top +
-        window.scrollY +
-        lastHighlightedRect.height -
-        6;
-      const left =
-        lastHighlightedRect.left +
-        window.scrollX +
-        lastHighlightedRect.width -
-        6;
-      setPosition((position) => ({ ...position, filler: { top, left } }));
+      if (lastHighlightedRect) {
+        const top =
+          lastHighlightedRect.top +
+          window.scrollY +
+          lastHighlightedRect.height -
+          6;
+        const left =
+          lastHighlightedRect.left +
+          window.scrollX +
+          lastHighlightedRect.width -
+          6;
+        setPosition((position) => ({ ...position, filler: { top, left } }));
+      }
     }
   }, [firstHighlighted, lastHighlighted, selectedId]);
 
@@ -85,7 +90,7 @@ export default function useElementPosition(
     return () => {
       window.removeEventListener("resize", setPositions);
     };
-  }, [setPositions, rowHeight, columnWidth, selectedCellData]);
+  }, [setPositions, rowHeight, columnWidth]);
 
   return position;
 }

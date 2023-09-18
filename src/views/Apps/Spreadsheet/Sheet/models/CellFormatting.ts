@@ -56,7 +56,6 @@ export default class CellFormatting {
   }
 
   setFormatting(formatting: any): CellFormatting {
-    console.log(formatting);
     const newFormatting = new CellFormatting({
       borderId: formatting.borderId || this.borderId,
       borderTypes: formatting.borderTypes || this.borderTypes,

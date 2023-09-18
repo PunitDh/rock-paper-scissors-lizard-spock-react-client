@@ -15,7 +15,7 @@ export const SheetConfig = Object.freeze({
   MAX_COLUMNS: 12,
 });
 
-export const defaultProps = {
+export const defaultInitialStateProps = {
   maxRows: SheetConfig.MAX_ROWS,
   maxColumns: SheetConfig.MAX_COLUMNS,
   maxUndos: 32,

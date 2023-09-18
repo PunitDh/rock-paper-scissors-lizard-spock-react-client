@@ -236,7 +236,7 @@ export default class EventHandler {
     this.formulaFieldRef?.focus({ preventScroll: true });
   };
 
-  handleSelectCell = (value) => {
+  handleSelectCell = (value: string) => {
     if (Cell.isValidId(value.toUpperCase())) {
       this.dispatch(selectCell(value.toUpperCase()));
     } else {
@@ -379,9 +379,7 @@ export default class EventHandler {
         this.#handleArrowKeys(e);
         break;
       default:
-        console.log("Here");
         this.setFocusInput(true);
-        // this.inputRef?.focus({ preventScroll: true });
         break;
     }
   }
@@ -553,10 +551,12 @@ export default class EventHandler {
     isShiftPressed: boolean
   ) => {
     if (isCtrlPressed) {
-      if (highlighted.cells.includes(id)) {
+      if (highlighted.includes(id)) {
         this.dispatch(removeCellsFromHighlight([id]));
       } else {
-        this.dispatch(addCellsToHighlight([id]));
+        this.dispatch(
+          addCellsToHighlight([this.state.selectedCell.id, id], true)
+        );
       }
     } else if (isShiftPressed) {
       highlighted.cellAnchor &&
@@ -687,7 +687,7 @@ export default class EventHandler {
         .fill(0)
         .forEach((_, i) => {
           this.dispatch(
-            setCellContent(highlightedCells[i + 1], String(anchorValue))
+            setCellContent(highlightedCells[i + 1], String(anchorValue || ""))
           );
         });
     }

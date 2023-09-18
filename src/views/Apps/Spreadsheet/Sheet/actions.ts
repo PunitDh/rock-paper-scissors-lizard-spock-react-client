@@ -2,7 +2,7 @@ import { AutoCalculate } from "./components/Toolbar/constants";
 import Cell from "./models/Cell";
 import StateContent from "./models/StateContent";
 import StateContentData from "./models/StateContentData";
-import { Action } from "./types";
+import { Action, CellValue } from "./types";
 
 export enum SheetAction {
   SET_SELECTED,
@@ -77,7 +77,7 @@ export const addNamedRange = (payload: string): Action => ({
   payload,
 });
 
-export const setFormulaFieldText = (payload: string): Action => ({
+export const setFormulaFieldText = (payload: CellValue): Action => ({
   type: SheetAction.SET_FORMULA_FIELD_TEXT,
   payload,
 });
@@ -183,9 +183,15 @@ export const highlightFormulaCells = (payload: string[]): Action => ({
   payload,
 });
 
-export const addCellsToHighlight = (payload: string[]): Action => ({
+export const addCellsToHighlight = (
+  cellIds: string[],
+  multiSelect: boolean = false
+): Action => ({
   type: SheetAction.ADD_CELLS_TO_HIGHLIGHT,
-  payload,
+  payload: {
+    cellIds,
+    multiSelect,
+  },
 });
 
 export const removeCellsFromHighlight = (payload: string[]): Action => ({
