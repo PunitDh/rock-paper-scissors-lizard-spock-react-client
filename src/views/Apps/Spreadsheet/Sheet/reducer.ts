@@ -400,8 +400,9 @@ export const reducer = (state: State, action: Action): State => {
       const { row: selectedCellRow } = state.selectedCell;
       const location: InsertRowLocation = action.payload;
 
-      const data = Object.keys(state.content.data).reverse().reduce(
-        (stateContentData: StateContentData, cellId: string) => {
+      const data = Object.keys(state.content.data)
+        .reverse()
+        .reduce((stateContentData: StateContentData, cellId: string) => {
           const cell = new Cell(cellId);
           const isGreater: boolean =
             location === "above"
@@ -420,9 +421,7 @@ export const reducer = (state: State, action: Action): State => {
             } as StateContentData;
           }
           return stateContentData;
-        },
-        state.content.data
-      );
+        }, state.content.data);
 
       return {
         ...state,
@@ -437,8 +436,9 @@ export const reducer = (state: State, action: Action): State => {
       const { columnCharCode: selectedCellColumnCharCode } = state.selectedCell;
       const location: InsertColumnLocation = action.payload;
 
-      const data = Object.keys(state.content.data).reverse().reduce(
-        (stateContentData: StateContentData, cellId: string) => {
+      const data = Object.keys(state.content.data)
+        .reverse()
+        .reduce((stateContentData: StateContentData, cellId: string) => {
           const cell = new Cell(cellId);
           const isGreater: boolean =
             location === "left"
@@ -459,9 +459,7 @@ export const reducer = (state: State, action: Action): State => {
             } as StateContentData;
           }
           return stateContentData;
-        },
-        state.content.data
-      );
+        }, state.content.data);
 
       return {
         ...state,

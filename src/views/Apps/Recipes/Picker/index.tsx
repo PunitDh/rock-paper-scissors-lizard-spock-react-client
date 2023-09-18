@@ -2,10 +2,10 @@ import React, { Dispatch, Reducer, SyntheticEvent, useReducer, useState } from "
 import { initialState, reducer } from "./reducer";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import { ResponsiveFlexBox } from "../../../../components/shared/styles";
-import { Action, State } from "./types";
+import { Action, Recipe, State } from "./types";
 import { Autocomplete, TextField, Typography } from "@mui/material";
 import { Cuisine, Diet } from "./constants";
-import { shuffle } from "lodash";
+import { sample, shuffle } from "lodash";
 import { SelectableOption } from "./styles";
 import RefreshCuisines from "./components/RefreshCuisines";
 import { resetState, setCuisine } from "./actions";
@@ -13,10 +13,14 @@ import Debug from "./components/Debug";
 import { useToken } from "../../../../hooks";
 import IntolerancesSelector from "./components/IntolerancesSelector";
 import FlexBox from "../../../../components/shared/FlexBox";
+import { useNavigate } from "react-router";
+import recipes from "./components/recipes.json";
 
 
 const Picker = () => {
   const token = useToken();
+  const navigate = useNavigate();
+
   const [state, dispatch]: [State, Dispatch<Action>] = useReducer<Reducer<State, Action>>(reducer, initialState);
   const [cuisines, setCuisines] = useState(shuffle(Object.values(Cuisine)));
   const handleReloadCuisines = () => {
@@ -28,6 +32,8 @@ const Picker = () => {
     console.log(e);
     console.log((e.target as HTMLInputElement).value)
   }
+
+  const recipeId = sample(recipes.map((recipe: Recipe) => recipe.id))
 
   return (<>
     <DashboardCard sx={{ height: "100%" }} title="Flavor Match">
@@ -81,16 +87,16 @@ const Picker = () => {
           <ResponsiveFlexBox width="100%" flexDirection="column" alignItems="flex-start" gap="1rem">
             <Typography>How long do you want to spend cooking?</Typography>
             <FlexBox flexDirection="column" gap="1rem" width="100%" justifyContent="center">
-              <SelectableOption active={0}>
+              <SelectableOption active={0} onClick={() => navigate(`/utils/recipes/${recipeId}`)}>
                 {"<"} 20 minutes
               </SelectableOption>
-              <SelectableOption active={0}>
+              <SelectableOption active={0} onClick={() => navigate(`/utils/recipes/${recipeId}`)}>
                 20-45 minutes
               </SelectableOption>
-              <SelectableOption active={0}>
+              <SelectableOption active={0} onClick={() => navigate(`/utils/recipes/${recipeId}`)}>
                 45+ minutes
               </SelectableOption>
-              </FlexBox>
+            </FlexBox>
           </ResponsiveFlexBox>
         </>
         }

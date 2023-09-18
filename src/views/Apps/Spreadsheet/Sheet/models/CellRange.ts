@@ -1,3 +1,4 @@
+import { List, listOf } from "../../../../../utils/List";
 import Cell from "./Cell";
 
 type CellId = {
@@ -27,10 +28,10 @@ export default class CellRange {
   static createFlat(start: string, end: string): CellRange {
     const { minC, maxC, minR, maxR } = getCellMinMax([start, end]);
 
-    const cells: Cell[] = [];
-    const rows: number[] = [];
-    const columns: string[] = [];
-    const ids: string[] = [];
+    const cells: List<Cell> = listOf();
+    const rows: List<number> = listOf();
+    const columns: List<string> = listOf();
+    const ids: List<string> = listOf();
     for (let col = minC; col <= maxC; col++) {
       for (let row = minR; row <= maxR; row++) {
         const column = String.fromCharCode(col);
@@ -49,13 +50,13 @@ export default class CellRange {
     const { minC, maxC, minR, maxR } = getCellMinMax([start, end]);
 
     const cells: Cell[][] = [];
-    const rows: number[] = [];
-    const columns: string[] = [];
+    const rows: List<number> = listOf();
+    const columns: List<string> = listOf();
     const ids: string[][] = [];
 
     for (let row = minR; row <= maxR; row++) {
-      const createdRow: Cell[] = [];
-      const createdIds: string[] = [];
+      const createdRow: List<Cell> = listOf();
+      const createdIds: List<string> = listOf();
       for (let col = minC; col <= maxC; col++) {
         const column = String.fromCharCode(col);
         const id = `${column}${row}`;
@@ -74,14 +75,14 @@ export default class CellRange {
   static createVerticalSliced(start: string, end: string): CellRange {
     const { minC, maxC, minR, maxR } = getCellMinMax([start, end]);
 
-    const cells: Cell[][] = [];
-    const rows: number[] = [];
-    const columns: string[] = [];
-    const ids: string[][] = [];
+    const cells: List<List<Cell>> = listOf();
+    const rows: List<number> = listOf();
+    const columns: List<string> = listOf();
+    const ids: List<List<string>> = listOf();
 
     for (let col = minC; col <= maxC; col++) {
-      const createdColumns: Cell[] = [];
-      const createdIds: string[] = [];
+      const createdColumns: List<Cell> = listOf();
+      const createdIds: List<string> = listOf();
       for (let row = minR; row <= maxR; row++) {
         const column = String.fromCharCode(col);
         const id = `${column}${row}`;

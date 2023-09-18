@@ -9,8 +9,8 @@ type Props = {
 }
 
 const SheetTable = ({ state, dispatch }: Props) => {
-  return <Table width="100%">
-    <TableBody sx={{ width: "100%", tableLayout: "fixed" }}>
+  return <Table width="100%" sx={{tableLayout: "fixed" }}>
+    <TableBody sx={{ width: "100%" }}>
       {Array(state.maxRows)
         .fill(0)
         .map((_, row) => (

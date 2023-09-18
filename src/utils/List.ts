@@ -961,6 +961,18 @@ class List<T> extends Array<T> {
   }
 
   /**
+   * Clamps all numerical values in the list between the min and max
+   * @param min {Number}
+   * @param max {Number}
+   * @returns {List<number>}
+   */
+  clamp(min: number, max: number): List<number> {
+    return this.map((it: T) =>
+      (it as number) < min ? min : (it as number) > max ? max : (it as number)
+    ) as List<number>;
+  }
+
+  /**
    * Returns a list containing only elements from the given collection having distinct keys returned by the given selector function.
    * @param {Function} keySelector
    * @returns {List}
@@ -969,6 +981,7 @@ class List<T> extends Array<T> {
     const distinctList = listOf();
     for (const it of this) {
       const notInList = !distinctList.find(
+        // eslint-disable-next-line eqeqeq
         (item) => keySelector(it) == keySelector(item)
       );
       if (notInList) {
