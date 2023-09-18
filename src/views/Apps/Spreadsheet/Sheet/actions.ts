@@ -48,6 +48,7 @@ export enum SheetAction {
   RECALCULATE_FORMULAE,
   AUTO_CALCULATE,
   OPEN_CONTEXT_MENU,
+  SAVE_INITIAL_STATE,
   ADD_MEMENTO,
   UNDO_STATE,
   REDO_STATE,
@@ -290,6 +291,10 @@ export const autoCalculate = (payload: AutoCalculate): Action => ({
 
 export const recalculateFormulae = (): Action => ({
   type: SheetAction.RECALCULATE_FORMULAE,
+});
+
+export const saveInitialState = (): Action => ({
+  type: SheetAction.SAVE_INITIAL_STATE,
 });
 
 export const addMemento = (): Action => ({

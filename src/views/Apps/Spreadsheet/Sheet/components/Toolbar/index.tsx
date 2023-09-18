@@ -53,9 +53,9 @@ type Props = {
 }
 
 const Toolbar = ({ state, dispatch }: Props) => {
-  const canUndo = state.currentMementoId !== state.memento[0]?.id;
-  const canRedo =
-    state.currentMementoId !== state.memento[state.memento.length - 1]?.id;
+  const canUndo = state.memento.length > 0 && state.currentMementoId !== state.memento[0].id;
+  const canRedo = state.memento.length > 0 &&
+    state.currentMementoId !== state.memento[state.memento.length - 1].id;
   const selectedCell = state.selectedCell.id;
   const selectedCellData = state.content.data[selectedCell];
 

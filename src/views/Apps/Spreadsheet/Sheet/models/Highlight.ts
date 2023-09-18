@@ -1,4 +1,5 @@
 import { isNumber } from "../../../../../utils";
+import { List, listOf } from "../../../../../utils/List";
 import Cell from "./Cell";
 import StateContentData from "./StateContentData";
 
@@ -37,9 +38,9 @@ export default class Highlight {
     rowAnchor = null,
     columnAnchor = null,
     cellAnchor = null,
-    cells = [],
-    rows = [],
-    columns = [],
+    cells = listOf(),
+    rows = listOf(),
+    columns = listOf(),
     rangeStart = null,
     rangeEnd = null,
     multiSelect = false,
@@ -106,7 +107,7 @@ export default class Highlight {
   }
 
   setCells(
-    cellIds: Array<string>,
+    cellIds: List<string>,
     stateContentData: StateContentData
   ): Highlight {
     this.cells = cellIds;
@@ -145,9 +146,9 @@ export default class Highlight {
     cellsSet.add(cell.id);
     rowsSet.add(cell.row);
     columnsSet.add(cell.column);
-    this.cells = Array.from(cellsSet);
-    this.rows = Array.from(rowsSet);
-    this.columns = Array.from(columnsSet);
+    this.cells = List.from(cellsSet);
+    this.rows = List.from(rowsSet);
+    this.columns = List.from(columnsSet);
     this.recalculate(stateContentData);
     return this;
   }
@@ -162,11 +163,6 @@ export default class Highlight {
     return this;
   }
 
-  /**
-   *
-   * @param {Object} stateContentData
-   * @returns {Highlight}
-   */
   calculateAverage(numbers: number[]): Highlight {
     if (this.hasLength) {
       const average = Number(this.sum) / (numbers.length || 1);

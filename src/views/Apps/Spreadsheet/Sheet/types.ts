@@ -1,3 +1,4 @@
+import { List } from "../../../../utils/List";
 import { SheetAction } from "./actions";
 import Cell from "./models/Cell";
 import Highlight from "./models/Highlight";
@@ -16,8 +17,9 @@ export type State = {
   formulaMode: boolean;
   hovered: string;
   highlighted: Highlight;
-  formulaTrackedCells: string[];
-  formulaHighlighted: string[];
+  formulaTrackedCells: List<string>;
+  formulaHighlighted: List<string>;
+  initialContent: StateContent;
   content: StateContent;
   mouseDown: boolean;
   dragging: boolean;
@@ -46,9 +48,14 @@ export type SheetProps = {
   defaultColumnWidth?: number;
 };
 
+// export type Memento = {
+//   id: string;
+//   content: StateContent;
+// };
+
 export type Memento = {
   id: string;
-  content: StateContent;
+  delta: { [key: string]: any };
 };
 
 export type CellValue = string | number | null;

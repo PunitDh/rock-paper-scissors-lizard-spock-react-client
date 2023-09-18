@@ -1,4 +1,10 @@
-import React, { Dispatch, Reducer, SyntheticEvent, useReducer, useState } from "react";
+import React, {
+  Dispatch,
+  Reducer,
+  SyntheticEvent,
+  useReducer,
+  useState,
+} from "react";
 import { initialState, reducer } from "./reducer";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import { ResponsiveFlexBox } from "../../../../components/shared/styles";
@@ -16,95 +22,134 @@ import FlexBox from "../../../../components/shared/FlexBox";
 import { useNavigate } from "react-router";
 import recipes from "./components/recipes.json";
 
-
 const Picker = () => {
   const token = useToken();
   const navigate = useNavigate();
 
-  const [state, dispatch]: [State, Dispatch<Action>] = useReducer<Reducer<State, Action>>(reducer, initialState);
+  const [state, dispatch]: [State, Dispatch<Action>] = useReducer<
+    Reducer<State, Action>
+  >(reducer, initialState);
   const [cuisines, setCuisines] = useState(shuffle(Object.values(Cuisine)));
   const handleReloadCuisines = () => {
     setCuisines(shuffle(cuisines));
     dispatch(resetState());
   };
-  const selectCuisine = (cuisine: Cuisine) => () => dispatch(setCuisine(cuisine));
+  const selectCuisine = (cuisine: Cuisine) => () =>
+    dispatch(setCuisine(cuisine));
   const selectDiet = (e: SyntheticEvent) => {
     console.log(e);
-    console.log((e.target as HTMLInputElement).value)
-  }
+    console.log((e.target as HTMLInputElement).value);
+  };
 
-  const recipeId = sample(recipes.map((recipe: Recipe) => recipe.id))
+  const recipeId = sample(recipes.map((recipe: Recipe) => recipe.id));
 
-  return (<>
-    <DashboardCard sx={{ height: "100%" }} title="Flavor Match">
-      <ResponsiveFlexBox
-        flexDirection="column"
-        gap="2rem"
-        alignItems="flex-start"
-      >
-        <Typography>What do you feel like eating today?</Typography>
-        <Typography>Choose an option:</Typography>
-        <ResponsiveFlexBox justifyContent="space-between" width="100%" alignItems="flex-start">
-          <ResponsiveFlexBox flexDirection="column" gap="1rem">
-            {cuisines.slice(0, 3).map(cuisine =>
-              <SelectableOption active={Number(state.cuisine === cuisine)} key={cuisine} onClick={selectCuisine(cuisine)}>
-                {cuisine}
-              </SelectableOption>
-            )}
+  return (
+    <>
+      <DashboardCard sx={{ height: "100%" }} title="Flavor Match">
+        <ResponsiveFlexBox
+          flexDirection="column"
+          gap="2rem"
+          alignItems="flex-start"
+        >
+          <Typography>What do you feel like eating today?</Typography>
+          <Typography>Choose an option:</Typography>
+          <ResponsiveFlexBox
+            justifyContent="space-between"
+            width="100%"
+            alignItems="flex-start"
+          >
+            <ResponsiveFlexBox flexDirection="column" gap="1rem">
+              {cuisines.slice(0, 3).map((cuisine) => (
+                <SelectableOption
+                  active={Number(state.cuisine === cuisine)}
+                  key={cuisine}
+                  onClick={selectCuisine(cuisine)}
+                >
+                  {cuisine}
+                </SelectableOption>
+              ))}
+            </ResponsiveFlexBox>
+            <ResponsiveFlexBox width="100%" flexDirection="column">
+              Or load more cuisines:
+              <RefreshCuisines onClick={handleReloadCuisines} />
+            </ResponsiveFlexBox>
           </ResponsiveFlexBox>
-          <ResponsiveFlexBox width="100%" flexDirection="column">
-            Or load more cuisines:
-            <RefreshCuisines onClick={handleReloadCuisines} />
-          </ResponsiveFlexBox>
+
+          {state.cuisine && (
+            <>
+              <ResponsiveFlexBox width="100%" flexDirection="column">
+                You selected:
+                <SelectableOption active={1}>{state.cuisine}</SelectableOption>
+              </ResponsiveFlexBox>
+              <ResponsiveFlexBox
+                width="100%"
+                flexDirection="column"
+                alignItems="flex-start"
+                gap="1rem"
+              >
+                <Typography>Type of diet?</Typography>
+                <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  options={Object.values(Diet)}
+                  sx={{ width: 300 }}
+                  value={state.diet}
+                  onChange={selectDiet}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Diet" />
+                  )}
+                />
+              </ResponsiveFlexBox>
+
+              <ResponsiveFlexBox
+                width="100%"
+                flexDirection="column"
+                alignItems="flex-start"
+                gap="1rem"
+              >
+                <Typography>Select any intolerances</Typography>
+                <IntolerancesSelector />
+              </ResponsiveFlexBox>
+
+              <ResponsiveFlexBox
+                width="100%"
+                flexDirection="column"
+                alignItems="flex-start"
+                gap="1rem"
+              >
+                <Typography>How long do you want to spend cooking?</Typography>
+                <FlexBox
+                  flexDirection="column"
+                  gap="1rem"
+                  width="100%"
+                  justifyContent="center"
+                >
+                  <SelectableOption
+                    active={0}
+                    onClick={() => navigate(`/utils/recipes/${recipeId}`)}
+                  >
+                    {"<"} 20 minutes
+                  </SelectableOption>
+                  <SelectableOption
+                    active={0}
+                    onClick={() => navigate(`/utils/recipes/${recipeId}`)}
+                  >
+                    20-45 minutes
+                  </SelectableOption>
+                  <SelectableOption
+                    active={0}
+                    onClick={() => navigate(`/utils/recipes/${recipeId}`)}
+                  >
+                    45+ minutes
+                  </SelectableOption>
+                </FlexBox>
+              </ResponsiveFlexBox>
+            </>
+          )}
         </ResponsiveFlexBox>
-
-        {state.cuisine && <>
-          <ResponsiveFlexBox width="100%" flexDirection="column">
-            You selected:
-
-            <SelectableOption active={1}>
-              {state.cuisine}
-            </SelectableOption>
-          </ResponsiveFlexBox>
-          <ResponsiveFlexBox width="100%" flexDirection="column" alignItems="flex-start" gap="1rem">
-            <Typography>Type of diet?</Typography>
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={Object.values(Diet)}
-              sx={{ width: 300 }}
-              value={state.diet}
-              onChange={selectDiet}
-              renderInput={(params) => <TextField {...params} label="Diet" />}
-            />
-          </ResponsiveFlexBox>
-
-          <ResponsiveFlexBox width="100%" flexDirection="column" alignItems="flex-start" gap="1rem">
-            <Typography>Select any intolerances</Typography>
-            <IntolerancesSelector />
-          </ResponsiveFlexBox>
-
-          <ResponsiveFlexBox width="100%" flexDirection="column" alignItems="flex-start" gap="1rem">
-            <Typography>How long do you want to spend cooking?</Typography>
-            <FlexBox flexDirection="column" gap="1rem" width="100%" justifyContent="center">
-              <SelectableOption active={0} onClick={() => navigate(`/utils/recipes/${recipeId}`)}>
-                {"<"} 20 minutes
-              </SelectableOption>
-              <SelectableOption active={0} onClick={() => navigate(`/utils/recipes/${recipeId}`)}>
-                20-45 minutes
-              </SelectableOption>
-              <SelectableOption active={0} onClick={() => navigate(`/utils/recipes/${recipeId}`)}>
-                45+ minutes
-              </SelectableOption>
-            </FlexBox>
-          </ResponsiveFlexBox>
-        </>
-        }
-
-
-      </ResponsiveFlexBox>
-    </DashboardCard>
-    {token.decoded?.isAdmin && <Debug state={state} />}</>
+      </DashboardCard>
+      {token.decoded?.isAdmin && <Debug state={state} />}
+    </>
   );
 };
 

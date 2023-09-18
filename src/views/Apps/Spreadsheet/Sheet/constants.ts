@@ -12,7 +12,7 @@ export const SheetConfig = {
 export const defaultInitialStateProps = {
   maxRows: SheetConfig.MAX_ROWS,
   maxColumns: SheetConfig.MAX_COLUMNS,
-  maxUndos: 32,
+  maxUndos: 64,
   toolbar: true,
   formulaField: true,
   statusField: true,

@@ -44,6 +44,60 @@ export default class StateContent {
     this.namedRanges[name] = range;
   }
 
+  static findDelta(
+    obj1?: { [key: string]: any },
+    obj2?: { [key: string]: any }
+  ): { [key: string]: any } {
+    if (!obj1 || !obj2) return {};
+    const compare = (
+      thisObj: { [key: string]: any },
+      otherObj: { [key: string]: any }
+    ) => {
+      const diff = {};
+
+      for (const key in otherObj) {
+        if (!(key in thisObj)) {
+          diff[key] = otherObj[key];
+        } else if (
+          Array.isArray(thisObj[key]) &&
+          Array.isArray(otherObj[key])
+        ) {
+          if (!arraysEqual(thisObj[key], otherObj[key])) {
+            diff[key] = otherObj[key];
+          }
+        } else if (
+          typeof thisObj[key] === "object" &&
+          typeof otherObj[key] === "object"
+        ) {
+          const nestedDiff = compare(thisObj[key], otherObj[key]);
+          if (Object.keys(nestedDiff).length > 0) {
+            diff[key] = nestedDiff;
+          }
+        } else if (thisObj[key] !== otherObj[key]) {
+          diff[key] = otherObj[key];
+        }
+      }
+
+      return diff;
+    };
+
+    const arraysEqual = (arr1, arr2) => {
+      if (arr1.length !== arr2.length) {
+        return false;
+      }
+
+      for (let i = 0; i < arr1.length; i++) {
+        if (arr1[i] !== arr2[i]) {
+          return false;
+        }
+      }
+
+      return true;
+    };
+
+    return compare(obj1, obj2);
+  }
+
   static createFrom(
     initialData: { [key: string]: any },
     defaultRowHeight = 24,

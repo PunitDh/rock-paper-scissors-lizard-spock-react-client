@@ -1,7 +1,7 @@
 import React, { Dispatch } from "react";
 import { useEffect, useReducer } from "react";
 import { initialState, reducer } from "./reducer";
-import { recalculateFormulae, addMemento } from "./actions";
+import { recalculateFormulae, addMemento, saveInitialState } from "./actions";
 import { createInitialState } from "./utils/cellUtils";
 import ContextMenu from "./components/ContextMenu";
 import DebugBar from "./components/DebugBar";
@@ -19,6 +19,7 @@ const Sheet = (props: SheetProps = defaultInitialStateProps): JSX.Element => {
     console.log("Sheet recalculation hook triggered");
     dispatch(recalculateFormulae());
     dispatch(addMemento());
+    dispatch(saveInitialState());
   }, []);
 
   return (

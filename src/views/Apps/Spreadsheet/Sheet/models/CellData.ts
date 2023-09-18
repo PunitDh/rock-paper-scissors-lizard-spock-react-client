@@ -6,6 +6,7 @@ import { isString } from "lodash";
 import { isFalsy, isNumber } from "../../../../../utils";
 import StateContentData from "./StateContentData";
 import { CellFormula, CellValue } from "../types";
+import { List } from "../../../../../utils/List";
 
 type CellDataShape = {
   id: string | null;
@@ -616,7 +617,7 @@ const evaluateExpression = (input: string): EvaluatedString => {
  * @param {string} formula - The formula string to extract cell references from.
  * @returns {Array} An array of cell references.
  */
-export function getReferenceCells(formula: string): Array<string> {
+export function getReferenceCells(formula: string): List<string> {
   const cells = formula.toUpperCase().match(/([a-z]+[0-9]+)/gi) || [];
   const cellRanges =
     formula.toUpperCase().match(/([a-z]+[0-9]+):([a-z]+[0-9]+)/gi) || [];
@@ -630,7 +631,7 @@ export function getReferenceCells(formula: string): Array<string> {
     .flat();
 
   // Combine all cell references without duplicates
-  return [...new Set(expandedRanges.concat(cells))].flat();
+  return List.from(new Set(expandedRanges.concat(cells))).flat() as List<string>;
 }
 
 /**
@@ -643,12 +644,12 @@ export function getReferenceCells(formula: string): Array<string> {
  */
 export function getFormulaTrackedCells(
   formula: string,
-  stateFormulaTrackedCells: Array<string>
-): Array<string> {
+  stateFormulaTrackedCells: List<string>
+): List<string> {
   const referenceCells = getReferenceCells(formula);
 
-  const formulaTrackedCells = [
-    ...new Set(referenceCells.concat(stateFormulaTrackedCells)),
-  ];
-  return formulaTrackedCells;
+  const formulaTrackedCells = List.from(
+    new Set(referenceCells.concat(stateFormulaTrackedCells))
+  );
+  return formulaTrackedCells as List<string>;
 }

@@ -4,7 +4,7 @@ import { SheetAction } from "./actions";
 import Cell from "./models/Cell";
 import CellData, { getFormulaTrackedCells } from "./models/CellData";
 import CellRange from "./models/CellRange";
-import { isEqual, uniqueId } from "lodash";
+import { cloneDeep, isEqual, uniqueId } from "lodash";
 import { AutoCalculate, BorderType } from "./components/Toolbar/constants";
 import Highlight from "./models/Highlight";
 import {
@@ -17,6 +17,7 @@ import {
 import StateContentData from "./models/StateContentData";
 import { isInstance } from "../../../../utils";
 import StateContent from "./models/StateContent";
+import { List, listOf, toList } from "../../../../utils/List";
 
 export const initialState: State = {
   maxRows: SheetConfig.MAX_ROWS,
@@ -26,13 +27,14 @@ export const initialState: State = {
   formulaFieldRef: null,
   defaultRowHeight: 24,
   defaultColumnWidth: 50,
-  maxUndos: 32,
+  maxUndos: 64,
   selectedCell: new Cell("A1"),
   formulaMode: false,
   hovered: "",
   highlighted: new Highlight(),
-  formulaTrackedCells: [],
-  formulaHighlighted: [],
+  formulaTrackedCells: listOf(),
+  formulaHighlighted: listOf(),
+  initialContent: new StateContent(),
   content: new StateContent({}, {}, new StateContentData(), {}),
   mouseDown: false,
   dragging: false,
@@ -46,7 +48,6 @@ export const initialState: State = {
 
 export const reducer = (state: State, action: Action): State => {
   // action.type !== SheetAction.SET_HOVERED && console.log(action);
-
   switch (action.type) {
     case SheetAction.SET_SELECTED: {
       let selectedCell: Cell;
@@ -151,7 +152,7 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         highlighted: state.highlighted
-          .setCells(range.cellIds.flat(), state.content.data)
+          .setCells(toList(range.cellIds.flat()), state.content.data)
           .setRows(range.rows)
           .setColumns(range.columns)
           .setRangeStart(action.payload.start)
@@ -162,7 +163,7 @@ export const reducer = (state: State, action: Action): State => {
     case SheetAction.FORMULA_HIGHLIGHT_CELLS: {
       return {
         ...state,
-        formulaHighlighted: action.payload.flat(),
+        formulaHighlighted: toList(action.payload.flat()),
       };
     }
 
@@ -173,7 +174,7 @@ export const reducer = (state: State, action: Action): State => {
       );
       return {
         ...state,
-        formulaHighlighted: range.cellIds as string[],
+        formulaHighlighted: toList(range.cellIds),
       };
     }
 
@@ -192,7 +193,7 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         highlighted: state.highlighted
-          .setCells(Array.from(cells), state.content.data)
+          .setCells(List.from(cells) as List<string>, state.content.data)
           .setRows(state.highlighted.rows.concat(Array.from(rows)))
           .setColumns(state.highlighted.columns.concat(Array.from(columns)))
           .setMultiSelect(action.payload.multiSelect),
@@ -241,7 +242,7 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         highlighted: state.highlighted
-          .setCells(newHighlightedCells, state.content.data)
+          .setCells(toList(newHighlightedCells), state.content.data)
           .setRows(newHighlightedRows)
           .setColumns(newHighlightedColumns),
       };
@@ -352,7 +353,7 @@ export const reducer = (state: State, action: Action): State => {
         ...state,
         selectedCell: new Cell(state.selectedCell.column + action.payload),
         highlighted: state.highlighted
-          .setCells(range.cellIds.flat(), state.content.data)
+          .setCells(toList(range.cellIds.flat()), state.content.data)
           .setRows(range.rows)
           .setColumns(range.columns),
       };
@@ -378,7 +379,7 @@ export const reducer = (state: State, action: Action): State => {
         ...state,
         selectedCell: new Cell(action.payload + state.selectedCell.row),
         highlighted: state.highlighted
-          .setCells(range.cellIds.flat(), state.content.data)
+          .setCells(toList(range.cellIds.flat()), state.content.data)
           .setRows(range.rows)
           .setColumns(range.columns),
       };
@@ -444,7 +445,6 @@ export const reducer = (state: State, action: Action): State => {
             location === "left"
               ? cell.columnCharCode >= selectedCellColumnCharCode
               : cell.columnCharCode > selectedCellColumnCharCode;
-          console.log(cell.id, isGreater);
           if (isGreater) {
             const newId =
               String.fromCharCode(cell.columnCharCode + 1) + cell.row;
@@ -478,7 +478,7 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         highlighted: state.highlighted
-          .setCells(range.cellIds.flat(), state.content.data)
+          .setCells(toList(range.cellIds.flat()), state.content.data)
           .setRows(range.rows)
           .setColumns(range.columns),
       };
@@ -520,7 +520,9 @@ export const reducer = (state: State, action: Action): State => {
 
       return {
         ...state,
-        formulaTrackedCells: Array.from(new Set(formulaTrackedCells)),
+        formulaTrackedCells: List.from(
+          new Set(formulaTrackedCells)
+        ) as List<string>,
       };
     }
     case SheetAction.AUTO_CALCULATE: {
@@ -801,11 +803,87 @@ export const reducer = (state: State, action: Action): State => {
       }
     }
 
+    case SheetAction.SAVE_INITIAL_STATE: {
+      return {
+        ...state,
+        initialContent: Object.freeze(cloneDeep(state.content)),
+      };
+    }
+
+    // case SheetAction.ADD_MEMENTO: {
+    //   const currentMemento = state.memento.find(
+    //     (memento: Memento) => memento.id === state.currentMementoId
+    //   );
+    //   if (currentMemento && isEqual(currentMemento.content, state.content)) {
+    //     return state;
+    //   }
+
+    //   const id = uniqueId("memento-");
+    //   const mementoIndex =
+    //     state.memento.findIndex(
+    //       (memento: Memento) => memento.id === state.currentMementoId
+    //     ) + 1;
+    //   let memento = [
+    //     ...state.memento.slice(0, mementoIndex),
+    //     { id, content: state.content },
+    //   ];
+
+    //   if (memento.length > state.maxUndos) {
+    //     memento = memento.slice(1);
+    //   }
+
+    //   return {
+    //     ...state,
+    //     memento,
+    //     currentMementoId: id,
+    //   };
+    // }
+
+    // case SheetAction.UNDO_STATE: {
+    //   const currentIndex = state.memento.findIndex(
+    //     (memento: Memento) => memento.id === state.currentMementoId
+    //   );
+
+    //   if (currentIndex <= 0) return state;
+    //   const previousMemento = state.memento[currentIndex - 1];
+
+    //   return {
+    //     ...state,
+    //     content: {
+    //       ...previousMemento.content,
+    //     } as StateContent,
+    //     currentMementoId: previousMemento.id,
+    //   };
+    // }
+
+    // case SheetAction.REDO_STATE: {
+    //   const currentIndex = state.memento.findIndex(
+    //     (memento: Memento) => memento.id === state.currentMementoId
+    //   );
+
+    //   if (currentIndex === -1 || currentIndex >= state.memento.length - 1)
+    //     return state;
+    //   const nextMemento = state.memento[currentIndex + 1];
+
+    //   return {
+    //     ...state,
+    //     content: {
+    //       ...nextMemento.content,
+    //     } as StateContent,
+    //     currentMementoId: nextMemento.id,
+    //   };
+    // }
+
     case SheetAction.ADD_MEMENTO: {
-      const currentMemento = state.memento.find(
-        (memento: Memento) => memento.id === state.currentMementoId
-      );
-      if (currentMemento && isEqual(currentMemento.content, state.content)) {
+      // const currentMemento = state.memento.find(
+      //   (memento: Memento) => memento.id === state.currentMementoId
+      // );
+      // if (currentMemento && isEqual(state.initialContent, state.content)) {
+      //   return state;
+      // }
+
+      const delta = StateContent.findDelta(state.initialContent, state.content);
+      if (Object.keys(delta).length === 0) {
         return state;
       }
 
@@ -817,7 +895,7 @@ export const reducer = (state: State, action: Action): State => {
             (memento: Memento) => memento.id === state.currentMementoId
           ) + 1
         ),
-        { id, content: state.content },
+        { id, delta },
       ];
 
       if (memento.length > state.maxUndos) {
@@ -839,10 +917,35 @@ export const reducer = (state: State, action: Action): State => {
       if (currentIndex <= 0) return state;
       const previousMemento = state.memento[currentIndex - 1];
 
+      let data = { ...state.initialContent.data };
+
+      if (previousMemento.delta.data) {
+        for (const cellId in previousMemento.delta.data) {
+          data[cellId] = new CellData({
+            ...previousMemento.delta.data[cellId],
+            ...(data[cellId] || {}),
+          }).setId(cellId);
+        }
+      }
+
       return {
         ...state,
         content: {
-          ...previousMemento.content,
+          ...state.content,
+          ...previousMemento.delta,
+          rowHeights: {
+            ...state.content.rowHeights,
+            ...previousMemento.delta.rowHeights,
+          },
+          columnWidths: {
+            ...state.content.columnWidths,
+            ...previousMemento.delta.columnWidths,
+          },
+          namedRanges: {
+            ...state.content.namedRanges,
+            ...previousMemento.delta.namedRanges,
+          },
+          data,
         } as StateContent,
         currentMementoId: previousMemento.id,
       };
@@ -857,14 +960,40 @@ export const reducer = (state: State, action: Action): State => {
         return state;
       const nextMemento = state.memento[currentIndex + 1];
 
+      let data = { ...state.initialContent.data };
+
+      if (nextMemento.delta.data) {
+        for (const cellId in nextMemento.delta.data) {
+          data[cellId] = new CellData({
+            ...nextMemento.delta.data[cellId],
+            ...(data[cellId] || {}),
+          }).setId(cellId);
+        }
+      }
+
       return {
         ...state,
         content: {
-          ...nextMemento.content,
+          ...state.content,
+          ...nextMemento.delta,
+          rowHeights: {
+            ...state.content.rowHeights,
+            ...nextMemento.delta.rowHeights,
+          },
+          columnWidths: {
+            ...state.content.columnWidths,
+            ...nextMemento.delta.columnWidths,
+          },
+          namedRanges: {
+            ...state.content.namedRanges,
+            ...nextMemento.delta.namedRanges,
+          },
+          data,
         } as StateContent,
         currentMementoId: nextMemento.id,
       };
     }
+
     case SheetAction.RESET_STATE:
       return initialState;
     default:
