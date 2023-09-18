@@ -1,23 +1,17 @@
-import React, { Dispatch } from "react";
+import React, { Dispatch, useRef, useState } from "react";
 import { Box, ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
-import { IconCopy, IconCut } from "@tabler/icons-react";
+import { IconCopy, IconCut, IconPlus } from "@tabler/icons-react";
 import {
   deleteCellContent,
   pasteCellContent,
   openContextMenu,
   addMemento,
-  insertRow,
-  insertColumn,
 } from "../../actions";
-import { ContentPaste, Delete, PlusOne } from "@mui/icons-material";
+import { ArrowRight, ContentPaste, Delete } from "@mui/icons-material";
 import { generateClipboardContent } from "../../utils/cellUtils";
 import useEventHandler from "../../hooks/useEventHandler";
-import {
-  Action,
-  InsertColumnLocation,
-  InsertRowLocation,
-  State,
-} from "../../types";
+import { Action, State } from "../../types";
+import InsertMenu from "./InsertMenu";
 
 type Props = {
   state: State;
@@ -26,19 +20,15 @@ type Props = {
 
 const ContextMenu = ({ state, dispatch }: Props): JSX.Element => {
   const eventHandler = useEventHandler();
+  const [insertMenuOpen, setInsertMenuOpen] = useState(false);
+  const insertMenuRef = useRef(null);
 
   const closeMenu = () => {
     dispatch(openContextMenu(null));
   };
 
-  const handleInsertRow = (location: InsertRowLocation) => () => {
-    dispatch(insertRow(location));
-    closeMenu();
-  };
-
-  const handleInsertColumn = (location: InsertColumnLocation) => () => {
-    dispatch(insertColumn(location));
-    closeMenu();
+  const toggleInsertMenu = () => {
+    setInsertMenuOpen((toggle) => !toggle);
   };
 
   const handleCut = async () => {
@@ -57,7 +47,6 @@ const ContextMenu = ({ state, dispatch }: Props): JSX.Element => {
 
   const handlePaste = async () => {
     const data = await eventHandler.clipboard.get();
-    // console.log(data);
     dispatch(pasteCellContent(state.menuAnchorElement?.id, data));
     closeMenu();
   };
@@ -91,29 +80,23 @@ const ContextMenu = ({ state, dispatch }: Props): JSX.Element => {
           },
         }}
       >
-        <MenuItem onClick={handleInsertRow("above")}>
+        {insertMenuOpen && (
+          <InsertMenu
+            state={state}
+            dispatch={dispatch}
+            open={insertMenuOpen}
+            menuRef={insertMenuRef.current}
+            onClose={() => setInsertMenuOpen(false)}
+          />
+        )}
+        <MenuItem ref={insertMenuRef} onClick={() => setInsertMenuOpen(true)}>
           <ListItemIcon>
-            <PlusOne width={20} />
+            <IconPlus width={20} />
           </ListItemIcon>
-          <ListItemText>Insert Row Above</ListItemText>
-        </MenuItem>
-        <MenuItem onClick={handleInsertRow("below")}>
-          <ListItemIcon>
-            <PlusOne width={20} />
-          </ListItemIcon>
-          <ListItemText>Insert Row Below</ListItemText>
-        </MenuItem>
-        <MenuItem onClick={handleInsertColumn("left")}>
-          <ListItemIcon>
-            <PlusOne width={20} />
-          </ListItemIcon>
-          <ListItemText>Insert Column Left</ListItemText>
-        </MenuItem>
-        <MenuItem onClick={handleInsertColumn("right")}>
-          <ListItemIcon>
-            <PlusOne width={20} />
-          </ListItemIcon>
-          <ListItemText>Insert Column Right</ListItemText>
+          <ListItemText>
+            <>Insert</>
+          </ListItemText>
+          <ArrowRight width={20} />
         </MenuItem>
         <MenuItem onClick={handleCut}>
           <ListItemIcon>
