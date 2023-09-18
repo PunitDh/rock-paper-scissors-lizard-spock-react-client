@@ -6,22 +6,39 @@ import {
   pasteCellContent,
   openContextMenu,
   addMemento,
+  insertRow,
+  insertColumn,
 } from "../../actions";
-import { ContentPaste, Delete } from "@mui/icons-material";
+import { ContentPaste, Delete, PlusOne } from "@mui/icons-material";
 import { generateClipboardContent } from "../../utils/cellUtils";
 import useEventHandler from "../../hooks/useEventHandler";
-import { Action, State } from "../../types";
+import {
+  Action,
+  InsertColumnLocation,
+  InsertRowLocation,
+  State,
+} from "../../types";
 
 type Props = {
   state: State;
-  dispatch: Dispatch<Action>
-}
+  dispatch: Dispatch<Action>;
+};
 
 const ContextMenu = ({ state, dispatch }: Props): JSX.Element => {
   const eventHandler = useEventHandler();
 
-  const handleClose = () => {
+  const closeMenu = () => {
     dispatch(openContextMenu(null));
+  };
+
+  const handleInsertRow = (location: InsertRowLocation) => () => {
+    dispatch(insertRow(location));
+    closeMenu();
+  };
+
+  const handleInsertColumn = (location: InsertColumnLocation) => () => {
+    dispatch(insertColumn(location));
+    closeMenu();
   };
 
   const handleCut = async () => {
@@ -29,26 +46,26 @@ const ContextMenu = ({ state, dispatch }: Props): JSX.Element => {
     await eventHandler.clipboard.copy(content);
     dispatch(deleteCellContent());
     dispatch(addMemento());
-    handleClose();
+    closeMenu();
   };
 
   const handleCopy = async () => {
     const content = generateClipboardContent(state);
     await eventHandler.clipboard.copy(content);
-    handleClose();
+    closeMenu();
   };
 
   const handlePaste = async () => {
     const data = await eventHandler.clipboard.get();
     // console.log(data);
     dispatch(pasteCellContent(state.menuAnchorElement?.id, data));
-    handleClose();
+    closeMenu();
   };
 
   const handleDelete = () => {
     dispatch(deleteCellContent());
     dispatch(addMemento());
-    handleClose();
+    closeMenu();
   };
 
   return (
@@ -57,7 +74,7 @@ const ContextMenu = ({ state, dispatch }: Props): JSX.Element => {
         id="context-menu"
         keepMounted
         open={Boolean(state.menuAnchorElement)}
-        onClose={handleClose}
+        onClose={closeMenu}
         anchorEl={state.menuAnchorElement}
         MenuListProps={{ "aria-labelledby": state.selectedCell.id }}
         anchorOrigin={{
@@ -74,6 +91,30 @@ const ContextMenu = ({ state, dispatch }: Props): JSX.Element => {
           },
         }}
       >
+        <MenuItem onClick={handleInsertRow("above")}>
+          <ListItemIcon>
+            <PlusOne width={20} />
+          </ListItemIcon>
+          <ListItemText>Insert Row Above</ListItemText>
+        </MenuItem>
+        <MenuItem onClick={handleInsertRow("below")}>
+          <ListItemIcon>
+            <PlusOne width={20} />
+          </ListItemIcon>
+          <ListItemText>Insert Row Below</ListItemText>
+        </MenuItem>
+        <MenuItem onClick={handleInsertColumn("left")}>
+          <ListItemIcon>
+            <PlusOne width={20} />
+          </ListItemIcon>
+          <ListItemText>Insert Column Left</ListItemText>
+        </MenuItem>
+        <MenuItem onClick={handleInsertColumn("right")}>
+          <ListItemIcon>
+            <PlusOne width={20} />
+          </ListItemIcon>
+          <ListItemText>Insert Column Right</ListItemText>
+        </MenuItem>
         <MenuItem onClick={handleCut}>
           <ListItemIcon>
             <IconCut width={20} />

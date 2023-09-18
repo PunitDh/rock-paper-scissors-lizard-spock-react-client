@@ -7,7 +7,13 @@ import CellRange from "./models/CellRange";
 import { isEqual, uniqueId } from "lodash";
 import { AutoCalculate, BorderType } from "./components/Toolbar/constants";
 import Highlight from "./models/Highlight";
-import { Action, Memento, State } from "./types";
+import {
+  Action,
+  InsertColumnLocation,
+  InsertRowLocation,
+  Memento,
+  State,
+} from "./types";
 import StateContentData from "./models/StateContentData";
 import { isInstance } from "../../../../utils";
 import StateContent from "./models/StateContent";
@@ -389,6 +395,83 @@ export const reducer = (state: State, action: Action): State => {
         } as StateContent,
       };
     }
+
+    case SheetAction.INSERT_ROW: {
+      const { row: selectedCellRow } = state.selectedCell;
+      const location: InsertRowLocation = action.payload;
+
+      const data = Object.keys(state.content.data).reverse().reduce(
+        (stateContentData: StateContentData, cellId: string) => {
+          const cell = new Cell(cellId);
+          const isGreater: boolean =
+            location === "above"
+              ? cell.row >= selectedCellRow
+              : cell.row > selectedCellRow;
+          if (isGreater) {
+            const newId = cell.column + (cell.row + 1);
+            const cellData = CellData.getOrNew(
+              state.content.data,
+              cellId
+            ).setId(newId);
+            return {
+              ...stateContentData,
+              [cellId]: new CellData({ id: cellId }),
+              [newId]: cellData,
+            } as StateContentData;
+          }
+          return stateContentData;
+        },
+        state.content.data
+      );
+
+      return {
+        ...state,
+        content: {
+          ...state.content,
+          data,
+        } as StateContent,
+      };
+    }
+
+    case SheetAction.INSERT_COLUMN: {
+      const { columnCharCode: selectedCellColumnCharCode } = state.selectedCell;
+      const location: InsertColumnLocation = action.payload;
+
+      const data = Object.keys(state.content.data).reverse().reduce(
+        (stateContentData: StateContentData, cellId: string) => {
+          const cell = new Cell(cellId);
+          const isGreater: boolean =
+            location === "left"
+              ? cell.columnCharCode >= selectedCellColumnCharCode
+              : cell.columnCharCode > selectedCellColumnCharCode;
+          console.log(cell.id, isGreater);
+          if (isGreater) {
+            const newId =
+              String.fromCharCode(cell.columnCharCode + 1) + cell.row;
+            const cellData = CellData.getOrNew(
+              state.content.data,
+              cellId
+            ).setId(newId);
+            return {
+              ...stateContentData,
+              [cellId]: new CellData({ id: cellId }),
+              [newId]: cellData,
+            } as StateContentData;
+          }
+          return stateContentData;
+        },
+        state.content.data
+      );
+
+      return {
+        ...state,
+        content: {
+          ...state.content,
+          data,
+        } as StateContent,
+      };
+    }
+
     case SheetAction.SELECT_ALL: {
       const range = CellRange.createFlat(
         `A1`,
@@ -785,10 +868,9 @@ export const reducer = (state: State, action: Action): State => {
       };
     }
     case SheetAction.RESET_STATE:
-    default:
       return initialState;
+    default:
+      return state as never;
   }
-  // It should never come here
-  console.error("It should never come here");
-  return state;
+  return state as never;
 };

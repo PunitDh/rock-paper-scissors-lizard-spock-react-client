@@ -8,7 +8,7 @@ export default class Cell {
   id: string;
   row: number;
   column: string;
-  columnCharCode?: number;
+  columnCharCode: number;
 
   constructor(id: string) {
     this.id = id;

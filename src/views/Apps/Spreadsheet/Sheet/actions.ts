@@ -2,7 +2,7 @@ import { AutoCalculate } from "./components/Toolbar/constants";
 import Cell from "./models/Cell";
 import StateContent from "./models/StateContent";
 import StateContentData from "./models/StateContentData";
-import { Action, CellValue } from "./types";
+import { Action, CellValue, InsertColumnLocation, InsertRowLocation } from "./types";
 
 export enum SheetAction {
   SET_SELECTED,
@@ -19,6 +19,8 @@ export enum SheetAction {
   SET_SELECTED_COLUMN,
   SET_ROW_HEIGHT,
   SET_COLUMN_WIDTH,
+  INSERT_ROW,
+  INSERT_COLUMN,
   SELECT_ALL,
   HIGHLIGHT_CELLS,
   FORMULA_HIGHLIGHT_CELL_RANGE,
@@ -156,6 +158,16 @@ export const setColumnWidth = (column: string, width: number): Action => ({
     column,
     width,
   },
+});
+
+export const insertRow = (payload: InsertRowLocation): Action => ({
+  type: SheetAction.INSERT_ROW,
+  payload,
+});
+
+export const insertColumn = (payload: InsertColumnLocation): Action => ({
+  type: SheetAction.INSERT_COLUMN,
+  payload,
 });
 
 export const selectAll = (): Action => ({

@@ -70,7 +70,7 @@ export default class CellData {
     if (stateContentData[id] instanceof CellData) {
       return new CellData(stateContentData[id]);
     }
-    return new CellData({ ...stateContentData, id });
+    return new CellData({ ...stateContentData[id], id });
   }
 
   /**

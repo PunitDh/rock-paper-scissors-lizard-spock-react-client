@@ -54,3 +54,6 @@ export type Memento = {
 export type CellValue = string | number | null;
 
 export type CellFormula = string | null;
+
+export type InsertColumnLocation = "left" | "right";
+export type InsertRowLocation = "above" | "below";
