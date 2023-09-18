@@ -1,9 +1,9 @@
 import { uniqueId } from "lodash";
 import { DashboardImage } from "../../assets";
 import { LinkCardProps } from "./types";
-import { List, listOf } from "../../utils/List";
+import { listOf } from "../../utils/List";
 
-export const AppList: List<LinkCardProps> = listOf(
+export const AppList = listOf<LinkCardProps>(
   {
     id: uniqueId("app-"),
     to: "/apps/rpsls",

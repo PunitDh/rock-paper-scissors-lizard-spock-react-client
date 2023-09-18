@@ -1,12 +1,13 @@
 import { NavItemAction } from "./actions";
+import { Action, State } from "../types";
 
-export const initialState = {
+export const initialState: State = {
   anchorEl: null,
   confirmRename: false,
   confirmDelete: false,
 };
 
-export const reducer = (state, action) => {
+export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case NavItemAction.CONFIRM_RENAME:
       return {
@@ -31,7 +32,8 @@ export const reducer = (state, action) => {
         anchorEl: null,
       };
     case NavItemAction.RESET_STATE:
-    default:
       return initialState;
+    default:
+      return {} as never;
   }
 };

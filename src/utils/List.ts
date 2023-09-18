@@ -1082,7 +1082,7 @@ class List<T> extends Array<T> {
    */
   chunked(size: number): List<List<any>> {
     if (size < 1) return this as List<any>;
-    const chunkedList = listOf();
+    const chunkedList = listOf<any>();
     for (let i = 0; i < this.length; i += Math.abs(size)) {
       chunkedList.push(this.slice(i, i + Math.abs(size)));
     }
@@ -1145,7 +1145,7 @@ class List<T> extends Array<T> {
   ): List<{ index: number; this: any; other: any }> | null {
     if (!list || !(list instanceof Array)) return null;
 
-    const diff = listOf();
+    const diff = listOf<{ index: number; this: any; other: any }>();
     const maxLength = List.longestFirst(this, toList(list)).length;
 
     for (let index = 0; index < maxLength; index++) {
@@ -1802,7 +1802,7 @@ class List<T> extends Array<T> {
         `Both 'size' and 'step' must be greater than zero. Found: size ${size} step ${step}`
       );
     }
-    const output = listOf();
+    const output = listOf<any>();
     let [start, end] = [0, size];
 
     do {
@@ -1820,7 +1820,7 @@ class List<T> extends Array<T> {
    */
   unzip(): List<any> {
     const maxLength = Math.max(...this.map((arr) => (arr as List<any>).length));
-    const result = listOf(...List.from({ length: maxLength }, () => []));
+    const result = listOf<any>(...List.from({ length: maxLength }, () => []));
     this.forEach((arr) => {
       for (let i = 0; i < maxLength; i++) {
         result[i].push(arr[i]);
@@ -1919,7 +1919,7 @@ class List<T> extends Array<T> {
    * @param {Function} selector
    * @returns {List}
    */
-  sortBy(selector: (arg0: this[number]) => number): List<any> {
+  sortBy(selector: (arg0: this[number]) => string | number): List<any> {
     return [...this].sort((a, b) =>
       selector(a) > selector(b) ? 1 : -1
     ) as List<any>;
@@ -2462,7 +2462,7 @@ class List<T> extends Array<T> {
    */
   static longest(...lists: any[]): List<List<any>> {
     let longestLength = 0;
-    const longestLists = listOf();
+    const longestLists = listOf<any>();
 
     for (const list of lists) {
       if (list.length > longestLength) {
@@ -2540,7 +2540,7 @@ class List<T> extends Array<T> {
    */
   static shortest(...lists: (string | any[])[]): List<List<any>> {
     let shortestLength = lists[0].length;
-    const shortestLists = listOf();
+    const shortestLists = listOf<any>();
 
     for (const list of lists) {
       if (list.length < shortestLength) {
@@ -2597,7 +2597,7 @@ class List<T> extends Array<T> {
       const message = `Invalid range parameters`;
       throw new IllegalArgumentError(message);
     }
-    const arr = listOf();
+    const arr = listOf<number>();
     for (
       let i = start;
       start < end ? i < end : i > end;
@@ -2797,11 +2797,11 @@ function isString(argument: any): boolean {
   return typeof argument === "string" || argument instanceof String;
 }
 
-function listOf(...args: any[]): List<any> {
+function listOf<T>(...args: any[]): List<T> {
   if (args.length === 1) {
-    return new List().fill(args[0]);
+    return new List<T>().fill(args[0]);
   }
-  return new List(...args);
+  return new List<T>(...args);
 }
 
 function emptyList() {

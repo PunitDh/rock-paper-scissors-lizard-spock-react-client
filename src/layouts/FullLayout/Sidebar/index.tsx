@@ -1,17 +1,21 @@
-import { useMediaQuery, Box, Drawer } from "@mui/material";
+import { useMediaQuery, Box, Drawer, Theme } from "@mui/material";
 import Logo from "../../../components/shared/Logo";
 import SidebarItems from "./SidebarItems";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "@emotion/styled";
 import { useAPI } from "../../../hooks";
 
-const WideBox = styled(Box)(({ width }) => ({
+type WideBoxProps = {
+  width: string;
+}
+
+const WideBox = styled(Box)(({ width }: WideBoxProps) => ({
   width,
   flexShrink: 0,
 }));
 
 const Sidebar = ({ isSidebarOpen, isMobileSidebarOpen, onSidebarClose }) => {
-  const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
+  const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up("lg"));
   const api = useAPI();
   const sidebarWidth = "270px";
 

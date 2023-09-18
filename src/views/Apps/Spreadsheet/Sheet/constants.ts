@@ -3,17 +3,11 @@ export enum MouseButton {
   RIGHT_CLICK,
 }
 
-export enum HighlightMode {
-  REGULAR,
-  FORMULA,
-  FILLER,
-}
-
-export const SheetConfig = Object.freeze({
+export const SheetConfig = {
   COLUMNS: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
   MAX_ROWS: 12,
   MAX_COLUMNS: 12,
-});
+} as const;
 
 export const defaultInitialStateProps = {
   maxRows: SheetConfig.MAX_ROWS,
@@ -53,9 +47,8 @@ export enum Dimension {
 
 export const FILE_TYPE = "_sheet";
 
-export const Formula = ["SUM(", "AVG("];
-
-export const getFirstColumnCharCode = () =>
+export const getFirstColumnCharCode = (): number =>
   SheetConfig.COLUMNS[0].charCodeAt(0);
-export const getLastColumnCharCode = (maxColumns) =>
+
+export const getLastColumnCharCode = (maxColumns: number): number =>
   SheetConfig.COLUMNS[maxColumns].charCodeAt(0);

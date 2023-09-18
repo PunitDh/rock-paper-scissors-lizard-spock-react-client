@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import React, { ForwardRefExoticComponent, RefAttributes, useReducer } from "react";
 import {
   ListItemIcon,
   ListItem,
@@ -6,16 +6,26 @@ import {
   styled,
   ListItemText,
   useTheme,
+  Theme,
 } from "@mui/material";
 import ContextMenu from "./ContextMenu";
 import RenameGameModal from "./ContextMenu/Modal/Rename";
 import DeleteConfirmation from "./ContextMenu/Modal/Delete";
-import { NavLink } from "react-router-dom";
+import { NavLink, NavLinkProps } from "react-router-dom";
 import { initialState, reducer } from "./reducer";
 import { setAnchorEl } from "./actions";
 import FlexBox from "../../../../components/shared/FlexBox";
 
-const ListItemStyled = styled(ListItem)(({ theme, level }) => ({
+type ListItemStyledProps = {
+  theme: Theme;
+  level: number;
+  component: string | ForwardRefExoticComponent<NavLinkProps & RefAttributes<HTMLAnchorElement>>;
+  to: string;
+  href: string;
+  target: string;
+}
+
+const ListItemStyled = styled(ListItem)(({ theme, level }: ListItemStyledProps) => ({
   whiteSpace: "nowrap",
   marginBottom: "2px",
   padding: "8px 10px",
@@ -103,7 +113,6 @@ const NavItem = ({
         <ListItemStyled
           theme={theme}
           level={level}
-          button
           component={item.external ? "a" : NavLink}
           to={item.href}
           id={item.id}

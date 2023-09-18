@@ -1,12 +1,17 @@
 import { useLocation } from "react-router";
+import React from "react";
 import { useSelector } from "react-redux";
 import { Box, List } from "@mui/material";
 import NavGroup from "./NavGroup";
 import { useToken } from "../../../hooks";
 
-const SidebarItems = ({ closeSideBar }) => {
+type Props = {
+  closeSideBar?: () => void
+}
+
+const SidebarItems = ({ closeSideBar }: Props) => {
   const { pathname } = useLocation();
-  const menuItems = useSelector((state) => state.menu);
+  const menuItems = useSelector((state: any) => state.menu);
   const token = useToken();
   const navGroups = Object.keys(menuItems);
 
@@ -18,7 +23,7 @@ const SidebarItems = ({ closeSideBar }) => {
             groupName={group}
             key={group}
             navItems={menuItems[group].filter(
-              (navItem) => !navItem.restricted || token.decoded.isAdmin
+              (navItem) => !navItem.restricted || token.decoded?.isAdmin
             )}
             pathDirect={pathname}
             closeSideBar={closeSideBar}

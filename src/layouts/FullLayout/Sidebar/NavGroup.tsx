@@ -1,8 +1,9 @@
 import React from "react";
 import { ListSubheader, styled } from "@mui/material";
 import NavItem from "./NavItem";
+import { NavItemType } from "./types";
 
-const ListSubheaderStyle = styled((props) => (
+const ListSubheaderStyle = styled((props: any) => (
   <ListSubheader disableSticky {...props} />
 ))(({ theme }) => ({
   ...theme.typography.overline,
@@ -17,8 +18,9 @@ const ListSubheaderStyle = styled((props) => (
 const NavGroup = ({ groupName, navItems, pathDirect, closeSideBar }) => (
   <>
     <ListSubheaderStyle>{groupName}</ListSubheaderStyle>
-    {navItems.map((navItem) => (
+    {navItems.map((navItem: NavItemType) => (
       <NavItem
+        level={0}
         item={navItem}
         key={navItem.id}
         pathDirect={pathDirect}
