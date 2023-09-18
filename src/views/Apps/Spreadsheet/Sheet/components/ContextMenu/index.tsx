@@ -93,9 +93,7 @@ const ContextMenu = ({ state, dispatch }: Props): JSX.Element => {
           <ListItemIcon>
             <IconPlus width={20} />
           </ListItemIcon>
-          <ListItemText>
-            <>Insert</>
-          </ListItemText>
+          <ListItemText>Insert</ListItemText>
           <ArrowRight width={20} />
         </MenuItem>
         <MenuItem onClick={handleCut}>

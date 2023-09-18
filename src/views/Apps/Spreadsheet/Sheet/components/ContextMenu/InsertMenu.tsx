@@ -6,7 +6,13 @@ import {
   insertRow,
   insertColumn,
 } from "../../actions";
-import { PlusOne } from "@mui/icons-material";
+import {
+  ArrowBack,
+  ArrowDownward,
+  ArrowForward,
+  ArrowUpward,
+  PlusOne,
+} from "@mui/icons-material";
 import {
   Action,
   InsertColumnLocation,
@@ -67,26 +73,30 @@ const InsertMenu = ({
         }}
       >
         <MenuItem onClick={handleInsertRow("above")}>
-          <ListItemIcon>
+          <ListItemIcon sx={{ mr: 0.5 }}>
             <PlusOne width={20} />
+            <ArrowUpward sx={{ width: "0.8rem" }} />
           </ListItemIcon>
           <ListItemText>Insert Row Above</ListItemText>
         </MenuItem>
         <MenuItem onClick={handleInsertRow("below")}>
-          <ListItemIcon>
+          <ListItemIcon sx={{ mr: 0.5 }}>
             <PlusOne width={20} />
+            <ArrowDownward sx={{ width: "0.8rem" }} />
           </ListItemIcon>
           <ListItemText>Insert Row Below</ListItemText>
         </MenuItem>
         <MenuItem onClick={handleInsertColumn("left")}>
-          <ListItemIcon>
+          <ListItemIcon sx={{ mr: 0.5 }}>
             <PlusOne width={20} />
+            <ArrowBack sx={{ width: "0.8rem" }} />
           </ListItemIcon>
           <ListItemText>Insert Column Left</ListItemText>
         </MenuItem>
         <MenuItem onClick={handleInsertColumn("right")}>
-          <ListItemIcon>
+          <ListItemIcon sx={{ mr: 0.5 }}>
             <PlusOne width={20} />
+            <ArrowForward sx={{ width: "0.8rem" }} />
           </ListItemIcon>
           <ListItemText>Insert Column Right</ListItemText>
         </MenuItem>
