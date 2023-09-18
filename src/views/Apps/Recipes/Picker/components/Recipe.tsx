@@ -123,7 +123,7 @@ const RecipeCard = () => {
                 Icon={Refresh}
                 color="#BBBB66"
                 title="Rewind"
-                onClick={() => { }}
+                onClick={loadNext}
               />
               <ActionButton
                 Icon={Close}
