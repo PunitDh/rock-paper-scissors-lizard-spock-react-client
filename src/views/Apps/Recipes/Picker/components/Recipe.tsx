@@ -39,12 +39,16 @@ const ImageContainer = styled(Paper)({
 const RecipeCard = () => {
   const handleSwipe = (event: SwipeEventData) => {
     if (Math.abs(event.deltaX) > 100) {
-      const randomRecipeId = sample(recipes.map((it: Recipe) => it.id));
-      navigate(`/utils/recipes/${randomRecipeId}`);
+      loadNext();
     } else {
       setPosition(0);
     }
   };
+
+  const loadNext = () => {
+    const randomRecipeId = sample(recipes.map((it: Recipe) => it.id));
+    navigate(`/utils/recipes/${randomRecipeId}`);
+  }
 
   const { recipeId } = useParams();
   const [position, setPosition] = useState(0);
@@ -74,7 +78,7 @@ const RecipeCard = () => {
       )
     ).sort();
     return (
-      <DashboardCard sx={{ height: "90vh", width: "92dvw" }} title={""}>
+      <DashboardCard sx={{ height: "100%", width: "92dvw" }} title={""}>
         <SwipeContainer {...swipeHandlers} delta={position}>
           <ResponsiveFlexBox
             flexDirection="column"
@@ -125,7 +129,7 @@ const RecipeCard = () => {
                 Icon={Close}
                 color="red"
                 title="Dislike it"
-                onClick={() => { }}
+                onClick={loadNext}
               />
               <ActionButton
                 Icon={Star}
@@ -135,7 +139,7 @@ const RecipeCard = () => {
               />
               <ActionButton
                 Icon={() => <IconHeart color="green" fill="green" stroke="3" />}
-                onClick={() => { }}
+                onClick={loadNext}
                 color="green"
                 title="Like it"
               />
@@ -143,7 +147,7 @@ const RecipeCard = () => {
                 Icon={Bolt}
                 color="purple"
                 title="Random"
-                onClick={() => { }}
+                onClick={loadNext}
               />
             </FlexBox>
           </ResponsiveFlexBox>

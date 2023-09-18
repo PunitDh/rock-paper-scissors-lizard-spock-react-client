@@ -9,6 +9,13 @@ const Container = styled(Paper)({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  cursor: "pointer",
+  "&:hover": {
+    backgroundColor: "rgba(0,0,0,0.1)"
+  },
+  "&:active": {
+    backgroundColor: "rgba(0,0,0,0.1)"
+  },
 });
 
 type Props = {
