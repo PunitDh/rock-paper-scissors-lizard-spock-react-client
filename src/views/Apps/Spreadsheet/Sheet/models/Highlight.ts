@@ -1,5 +1,5 @@
 import { isNumber } from "../../../../../utils";
-import SetExtended, { setOf } from "../../../../../utils/SetExtended";
+import SetExtended, { setOf } from "../../../../../utils/Set";
 import Cell from "./Cell";
 import StateContentData from "./StateContentData";
 

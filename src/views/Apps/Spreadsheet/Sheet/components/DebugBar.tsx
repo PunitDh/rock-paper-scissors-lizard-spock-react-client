@@ -3,8 +3,8 @@ import { FlexForm } from "./styles";
 import styled from "@emotion/styled";
 import { State } from "../types";
 import { useToken } from "../../../../../hooks";
-import { ObjectExtended } from "../../../../../utils/Object";
 import CellData from "../models/CellData";
+import { objectOf } from "../../../../../utils/Object";
 
 const DebugButton = styled.button({
   cursor: "pointer",
@@ -19,7 +19,7 @@ const DebugBar = ({ state }: Props) => {
   const selectedCell: string = state.selectedCell.id;
   const cellData = state.content.data[selectedCell];
 
-  const testObj = new ObjectExtended({
+  const testObj = objectOf({
     A1: new CellData({ id: "A1" }),
     B1: new CellData({ id: "B1" }),
     G1: new CellData({ id: "G1" }),
@@ -28,7 +28,7 @@ const DebugBar = ({ state }: Props) => {
     F1: new CellData({ id: "F1" }),
   });
 
-  const testObj1 = new ObjectExtended({
+  const testObj1 = objectOf({
     A2: new CellData({ id: "A1" }),
   });
 

@@ -28,8 +28,14 @@ export const HeaderItem = styled(TableCell)(
   })
 );
 
-export const Container = styled.div({
+export const SheetContainer = styled.div({
+  backgroundColor: "#eaedef",
   boxShadow: "8px 8px 18px -10px rgba(0,0,0,0.5)",
+  width: "100%",
+})
+
+export const Container = styled.div({
+  width: "100%"
 });
 
 const BorderStyles = Object.freeze({

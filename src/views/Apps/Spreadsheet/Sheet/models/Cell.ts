@@ -54,6 +54,15 @@ export default class Cell {
     return new Cell(`${offsetColumn}${offsetRow}`);
   }
 
+  equals(cell: Cell): boolean {
+    return (
+      cell.id === this.id &&
+      cell.row === this.row &&
+      cell.column === this.column &&
+      cell.columnCharCode === this.columnCharCode
+    );
+  }
+
   getNextColumn(
     maxRows: number = SheetConfig.MAX_ROWS,
     maxColumns: number = SheetConfig.MAX_COLUMNS

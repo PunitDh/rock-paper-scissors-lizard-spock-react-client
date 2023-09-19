@@ -12,13 +12,14 @@ import {
   InsertColumnLocation,
   InsertRowLocation,
   Memento,
+  Sheet,
   State,
 } from "./types";
 import StateContentData from "./models/StateContentData";
 import { isInstance } from "../../../../utils";
 import StateContent from "./models/StateContent";
-import { toList } from "../../../../utils/List";
-import SetExtended, { setOf } from "../../../../utils/SetExtended";
+import { listOf, toList } from "../../../../utils/List";
+import SetExtended, { setOf } from "../../../../utils/Set";
 
 export const initialState: State = {
   maxRows: SheetConfig.MAX_ROWS,
@@ -33,6 +34,8 @@ export const initialState: State = {
   formulaMode: false,
   hovered: "",
   highlighted: new Highlight(),
+  activeSheet: "sheet-1",
+  sheets: [{ id: "sheet-1", name: "Sheet 1" }],
   formulaTrackedCells: setOf<string>(),
   formulaHighlighted: setOf<string>(),
   initialContent: new StateContent(),
@@ -52,6 +55,7 @@ export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case SheetAction.SET_SELECTED: {
       let selectedCell: Cell;
+
       if (Cell.isValidId(action.payload) || Cell.isValidId(action.payload.id)) {
         selectedCell = isInstance(action.payload, Cell)
           ? action.payload
@@ -159,6 +163,7 @@ export const reducer = (state: State, action: Action): State => {
         action.payload.start,
         action.payload.end
       );
+
       return {
         ...state,
         highlighted: state.highlighted
@@ -167,6 +172,43 @@ export const reducer = (state: State, action: Action): State => {
           .setColumns(setOf(range.columns))
           .setRangeStart(action.payload.start)
           .setRangeEnd(action.payload.end),
+      };
+    }
+
+    case SheetAction.ADD_SHEET: {
+      const newSheet = {
+        id: `sheet-${state.sheets.length + 1}`,
+        name: `Sheet ${state.sheets.length + 1}`,
+      };
+      const sheets = [...state.sheets, newSheet];
+      return {
+        ...state,
+        sheets,
+        activeSheet: newSheet.id,
+      };
+    }
+
+    case SheetAction.DELETE_SHEET: {
+      if (state.sheets.length === 1) {
+        return state;
+      }
+
+      const index = state.sheets.findIndex((it) => it.id === action.payload);
+      const sheets = toList<Sheet>(
+        state.sheets.filter((it) => it.id !== action.payload)
+      );
+
+      return {
+        ...state,
+        sheets,
+        activeSheet: sheets[index - 1].id,
+      };
+    }
+
+    case SheetAction.SET_ACTIVE_SHEET: {
+      return {
+        ...state,
+        activeSheet: action.payload,
       };
     }
 

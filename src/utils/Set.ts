@@ -17,6 +17,10 @@ export default class SetExtended<T> extends Set<T> {
     return this.toList().last();
   }
 
+  sort(sortFunction: ((a: T, b: T) => number) | undefined): SetExtended<T> {
+    return this.toList().sort(sortFunction).toSetExtended();
+  }
+
   addAll(array: Array<T>): SetExtended<T> {
     array.forEach((element) => {
       this.add(element);

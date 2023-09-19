@@ -6,7 +6,7 @@ import { isString } from "lodash";
 import { isFalsy, isNumber } from "../../../../../utils";
 import StateContentData from "./StateContentData";
 import { CellFormula, CellValue } from "../types";
-import SetExtended, { setOf } from "../../../../../utils/SetExtended";
+import SetExtended, { setOf } from "../../../../../utils/Set";
 
 type CellDataShape = {
   id: string | null;

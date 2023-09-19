@@ -7,7 +7,7 @@ import StateContent from "../models/StateContent";
 import { isObject, isString } from "../../../../../utils";
 import { SheetProps, State } from "../types";
 import StateContentData from "../models/StateContentData";
-import SetExtended from "../../../../../utils/SetExtended";
+import SetExtended from "../../../../../utils/Set";
 
 export const generateClipboardContent = (state: {
   highlighted: { rows: SetExtended<number>; columns: SetExtended<string> };
@@ -146,13 +146,13 @@ export const createInitialState = (
   props: SheetProps,
   defaultProps: { [key: string]: any }
 ): State => {
-  return {
-    // ...initialState,
-    ...cloneDeep(initialState),
+  const createdState = {
+    ...initialState,
     ...defaultProps,
     ...props,
     content: generateInitialContent(props, defaultProps),
   };
+  return createdState;
 };
 
 const generateInitialContent = (

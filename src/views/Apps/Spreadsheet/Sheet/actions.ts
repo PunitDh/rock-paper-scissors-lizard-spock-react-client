@@ -1,4 +1,4 @@
-import SetExtended from "../../../../utils/SetExtended";
+import SetExtended from "../../../../utils/Set";
 import { AutoCalculate } from "./components/Toolbar/constants";
 import Cell from "./models/Cell";
 import StateContent from "./models/StateContent";
@@ -31,6 +31,9 @@ export enum SheetAction {
   DELETE_COLUMN,
   SELECT_ALL,
   HIGHLIGHT_CELLS,
+  ADD_SHEET,
+  DELETE_SHEET,
+  SET_ACTIVE_SHEET,
   FORMULA_HIGHLIGHT_CELL_RANGE,
   FORMULA_HIGHLIGHT_CELLS,
   ADD_CELLS_TO_HIGHLIGHT,
@@ -196,6 +199,20 @@ export const highlightCells = (start: string, end?: string): Action => ({
   payload: { start, end },
 });
 
+export const addSheet = (): Action => ({
+  type: SheetAction.ADD_SHEET,
+});
+
+export const deleteSheet = (payload: string): Action => ({
+  type: SheetAction.DELETE_SHEET,
+  payload,
+});
+
+export const setActiveSheet = (payload: string): Action => ({
+  type: SheetAction.SET_ACTIVE_SHEET,
+  payload,
+});
+
 export const highlightFormulaCellRange = (
   start: string,
   end: string
@@ -207,7 +224,9 @@ export const highlightFormulaCellRange = (
   },
 });
 
-export const highlightFormulaCells = (payload: SetExtended<string>): Action => ({
+export const highlightFormulaCells = (
+  payload: SetExtended<string>
+): Action => ({
   type: SheetAction.FORMULA_HIGHLIGHT_CELLS,
   payload,
 });
@@ -258,12 +277,12 @@ export const setCellContent = (cellId: string, value: string): Action => ({
 });
 
 export const updateReferenceCells = (
-  cell: string,
+  cellId: string,
   values: string[],
   replace: boolean
 ): Action => ({
   type: SheetAction.UPDATE_REFERENCE_CELLS,
-  payload: { cell, values, replace },
+  payload: { cell: cellId, values, replace },
 });
 
 export const setContentBulk = (payload: StateContent): Action => ({

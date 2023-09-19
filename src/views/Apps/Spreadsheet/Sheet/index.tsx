@@ -11,9 +11,14 @@ import { EventProvider } from "./context/EventHandlerContext";
 import { Action, SheetProps, State } from "./types";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import { defaultInitialStateProps } from "./constants";
+import { SheetContainer } from "./styles";
+import SheetSelect from "./components/SheetSelect";
 
 const Sheet = (props: SheetProps = defaultInitialStateProps): JSX.Element => {
-  const [state, dispatch]: [state: State, dispatch: Dispatch<Action>] = useReducer(reducer, initialState, () => createInitialState(props, defaultInitialStateProps));
+  const [state, dispatch]: [state: State, dispatch: Dispatch<Action>] =
+    useReducer(reducer, initialState, () =>
+      createInitialState(props, defaultInitialStateProps)
+    );
 
   useEffect(() => {
     console.log("Sheet initial hook triggered");
@@ -25,19 +30,26 @@ const Sheet = (props: SheetProps = defaultInitialStateProps): JSX.Element => {
   return (
     <EventProvider state={state as State} dispatch={dispatch}>
       <DashboardCard sx={{ height: "100%" }} title="Spreadsheet">
-        {(state).menuAnchorElement && (
+        {state.menuAnchorElement && (
           <ContextMenu state={state} dispatch={dispatch} />
         )}
-        <SheetContent
-          state={(state)}
-          dispatch={dispatch}
-          toolbar={props.toolbar || defaultInitialStateProps.toolbar}
-          formulaField={props.formulaField || defaultInitialStateProps.formulaField}
-          statusField={props.statusField || defaultInitialStateProps.statusField}
-        />
-        <DebugBar state={(state)} />
+        <SheetContainer>
+          <SheetContent
+            state={state}
+            dispatch={dispatch}
+            toolbar={props.toolbar || defaultInitialStateProps.toolbar}
+            formulaField={
+              props.formulaField || defaultInitialStateProps.formulaField
+            }
+            statusField={
+              props.statusField || defaultInitialStateProps.statusField
+            }
+          />
+          <SheetSelect state={state} dispatch={dispatch} />
+          <DebugBar state={state} />
+          <TestingArea state={state} />
+        </SheetContainer>
       </DashboardCard>
-      <TestingArea state={(state)} />
     </EventProvider>
   );
 };

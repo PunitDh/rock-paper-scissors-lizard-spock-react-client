@@ -1,6 +1,11 @@
 import styled from "@emotion/styled";
 import { Autocomplete, Theme as MuiTheme } from "@mui/material";
-import { AlignItems, FlexDirection, FlexWrap, JustifyContent } from "../../../../../components/shared/styles";
+import {
+  AlignItems,
+  FlexDirection,
+  FlexWrap,
+  JustifyContent,
+} from "../../../../../components/shared/styles";
 
 export const InputTextField = styled.input({
   width: "100%",
@@ -37,6 +42,7 @@ type FlexFormProps = {
   backgroundColor?: string;
   paddingRight?: string;
   paddingLeft?: string;
+  borderRadius?: string;
 };
 
 export const FlexForm = styled.form(
@@ -52,11 +58,13 @@ export const FlexForm = styled.form(
     backgroundColor,
     paddingRight = "0.5rem",
     paddingLeft = "0.5rem",
+    borderRadius = "0",
   }: FlexFormProps) => ({
     display: "flex",
     paddingTop: "0.5rem",
     paddingBottom: "0.5rem",
-    backgroundColor: backgroundColor || "rgba(0,0,0,0.1)",
+    backgroundColor: backgroundColor || "#eaedef",
+    borderRadius,
     gap,
     flexWrap,
     flexDirection,
@@ -81,7 +89,7 @@ export const FieldButton = styled.button(
   ({ variant, theme, isactive, width }: FieldButtonProps) => ({
     width: width || "1.75rem",
     outline: "none",
-    border: isactive ? "1px solid blue" : "1px solid rgba(0,0,0,0.3)",
+    border: isactive ? "1px solid black" : "1px solid rgba(0,0,0,0.3)",
     height: "1.75rem",
     display: "flex",
     alignItems: "center",
@@ -89,10 +97,10 @@ export const FieldButton = styled.button(
     borderRadius: "3px",
     cursor: "pointer",
     color: theme?.palette[variant!]?.dark || "black",
-    backgroundColor: isactive ? "#eeeeee" : "inherit",
+    backgroundColor: isactive ? "#E0E9F7" : "inherit",
     "&:hover": {
       color: "blue",
-      backgroundColor: "#eee",
+      backgroundColor: "#E0E9F7",
       border: "1px solid blue",
     },
     "&:active": {

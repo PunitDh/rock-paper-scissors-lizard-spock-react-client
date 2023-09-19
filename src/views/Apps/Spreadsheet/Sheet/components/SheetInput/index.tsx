@@ -7,7 +7,7 @@ import { highlightFormulaCells, setFormulaFieldText } from "../../actions";
 import useElementPosition from "../../hooks/useElementPosition";
 import useInputData from "../../hooks/useInputData";
 import Highlight from "./Highlight";
-import SetExtended from "../../../../../../utils/SetExtended";
+import SetExtended, { setOf } from "../../../../../../utils/Set";
 
 type Props = {
   state: State;
@@ -51,7 +51,7 @@ const SheetInput = ({ state, dispatch, formulaField }: Props) => {
       dispatch(highlightFormulaCells(referenceCells));
     } else {
       dispatch(setFormulaFieldText(""));
-      dispatch(highlightFormulaCells(new SetExtended<string>()));
+      dispatch(highlightFormulaCells(setOf<string>()));
     }
   }, [dispatch, referenceCells, selectedCellData, selectedId]);
 

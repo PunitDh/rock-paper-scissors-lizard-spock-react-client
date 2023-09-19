@@ -2,7 +2,8 @@ import { SheetAction } from "./actions";
 import Cell from "./models/Cell";
 import Highlight from "./models/Highlight";
 import StateContent from "./models/StateContent";
-import SetExtended from "../../../../utils/SetExtended";
+import SetExtended from "../../../../utils/Set";
+import { List } from "../../../../utils/List";
 
 export type State = {
   maxRows: number;
@@ -17,6 +18,8 @@ export type State = {
   formulaMode: boolean;
   hovered: string;
   highlighted: Highlight;
+  activeSheet: string;
+  sheets: Array<Sheet>;
   formulaTrackedCells: SetExtended<string>;
   formulaHighlighted: SetExtended<string>;
   initialContent: StateContent;
@@ -46,6 +49,11 @@ export type SheetProps = {
   initialData?: { [key: string]: any };
   defaultRowHeight?: number;
   defaultColumnWidth?: number;
+};
+
+export type Sheet = {
+  id: string;
+  name: string;
 };
 
 // export type Memento = {

@@ -1,4 +1,4 @@
-import SetExtended from "./SetExtended";
+import SetExtended from "./Set";
 
 class IndexOutOfBoundsError extends Error {}
 class NoSuchElementError extends Error {}
@@ -2901,7 +2901,7 @@ class Utils {
   }
 }
 
-function toList(any: any[]): List<any> {
+function toList<T>(any: any[]): List<T> {
   return new List(...any);
 }
 

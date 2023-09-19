@@ -1,6 +1,6 @@
 export const formattingSelectStyle = (styles?: { [key: string]: string }) => ({
   color: "black",
-  backgroundColor: "#eee",
+  backgroundColor: "#eaedef",
   height: "1.75rem",
   border: "1px solid rgba(0,0,0,0.3)",
   cursor: "pointer",

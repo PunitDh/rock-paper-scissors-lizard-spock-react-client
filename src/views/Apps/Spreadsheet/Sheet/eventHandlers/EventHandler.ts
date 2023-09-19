@@ -35,7 +35,7 @@ import { generateClipboardContent, isFormula } from "../utils/cellUtils";
 import CellData from "../models/CellData";
 import Highlight from "../models/Highlight";
 import { Clipboard } from "../../../../../hooks/types";
-import { setOf } from "../../../../../utils/SetExtended";
+import { setOf } from "../../../../../utils/Set";
 
 export default class EventHandler {
   state: State;
@@ -166,7 +166,10 @@ export default class EventHandler {
       }
       case KeyEvent.ARROW_LEFT: {
         this.#handleArrowKeys(e);
-        if (this.inputRef?.value.length === 0 || navigateRefCurrent)
+        if (
+          this.inputRef?.value.length === 0 ||
+          (navigateRefCurrent && !this.state.formulaMode)
+        )
           this.dispatch(
             selectCell(cell.getPreviousColumn(this.state.maxColumns))
           );
@@ -175,7 +178,10 @@ export default class EventHandler {
       case KeyEvent.ARROW_RIGHT: {
         this.#handleArrowKeys(e);
 
-        if (this.inputRef?.value.length === 0 || navigateRefCurrent)
+        if (
+          this.inputRef?.value.length === 0 ||
+          (navigateRefCurrent && !this.state.formulaMode)
+        )
           this.dispatch(selectCell(cell.getNextColumn(this.state.maxRows)));
         break;
       }
@@ -402,11 +408,11 @@ export default class EventHandler {
     this.dispatch(openContextMenu(element));
   }
 
-  handleDoubleClick() {
+  handleDoubleClick(): void {
     this.setFocusInput(true);
   }
 
-  handleMouseDown(e: React.MouseEvent) {
+  handleMouseDown(e: React.MouseEvent): void {
     if (e.button !== MouseButton.LEFT_CLICK) return;
     this.dispatch(setMouseDown(true));
 
@@ -441,7 +447,7 @@ export default class EventHandler {
     }
   }
 
-  handleMouseUp(e: React.MouseEvent<Element, MouseEvent>) {
+  handleMouseUp(e: React.MouseEvent<Element, MouseEvent>): void {
     if (e.button !== MouseButton.LEFT_CLICK) return;
     this.dispatch(setMouseDown(false));
     this.state.fillerMode && this.dispatch(setFillerMode(false));
@@ -479,13 +485,26 @@ export default class EventHandler {
     e.preventDefault();
     const { cellAnchor } = this.state.highlighted;
     const nextCell = this.#determineNextCell(e);
-    this.dispatch(selectCell(nextCell));
-    if (e.shiftKey) {
-      cellAnchor &&
-        nextCell &&
-        this.dispatch(highlightCells(cellAnchor, nextCell.id));
-      !cellAnchor &&
-        this.dispatch(setHighlightCellAnchor(this.state.selectedCell.id));
+
+    if (this.state.formulaMode) {
+      if (e.shiftKey) {
+      } else {
+        const value = this.#addTextToFocusedBox(nextCell.id, true);
+        this.dispatch(setCellContent(this.state.selectedCell.id, value));
+        this.dispatch(
+          updateReferenceCells(this.state.selectedCell.id, [nextCell.id], true)
+        );
+      }
+    } else {
+      if (e.shiftKey) {
+        cellAnchor &&
+          nextCell &&
+          this.dispatch(highlightCells(cellAnchor, nextCell.id));
+        !cellAnchor &&
+          this.dispatch(setHighlightCellAnchor(this.state.selectedCell.id));
+      } else {
+        this.dispatch(selectCell(nextCell));
+      }
     }
   }
 
@@ -531,7 +550,7 @@ export default class EventHandler {
   }
 
   #addCellsToFormula = (id: string, isCtrlPressed = false) => {
-    const value = this.#addCellToFocusedBox(id, !isCtrlPressed);
+    const value = this.#addTextToFocusedBox(id, !isCtrlPressed);
     this.dispatch(setCellContent(this.state.selectedCell.id, value));
     this.dispatch(
       updateReferenceCells(this.state.selectedCell.id, [id], !isCtrlPressed)
@@ -697,7 +716,7 @@ export default class EventHandler {
       const { cellAnchor } = this.state.highlighted;
       if (!cellAnchor) return;
       const range = `${cellAnchor}:${this.state.hovered}`;
-      const value = this.#addCellToFocusedBox(range, true);
+      const value = this.#addTextToFocusedBox(range, true);
       this.dispatch(setCellContent(this.state.selectedCell.id, value));
       this.dispatch(
         updateReferenceCells(
@@ -715,8 +734,9 @@ export default class EventHandler {
   ) {
     if (!isSameCellHighlighted && isCtrlKeyPressed) {
       this.dispatch(addCellsToHighlight([this.state.hovered]));
+    } else {
+      this.dispatch(selectCell(this.state.hovered));
     }
-    this.dispatch(selectCell(this.state.hovered));
   }
 
   #handleFormulaModeMouseDown = (
@@ -765,7 +785,7 @@ export default class EventHandler {
     }
   };
 
-  #addCellToFocusedBox(text: string, replace: boolean) {
+  #addTextToFocusedBox(text: string, replace: boolean) {
     const element = (
       this.state.isFormulaFieldFocused ? this.formulaFieldRef : this.inputRef
     ) as HTMLInputElement;

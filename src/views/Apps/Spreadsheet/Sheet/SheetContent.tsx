@@ -29,7 +29,7 @@ const SheetContent = ({
     {toolbar && <Toolbar state={state} dispatch={dispatch} />}
     <SheetInput state={state} dispatch={dispatch} formulaField={formulaField} />
     <EventDelegator>
-      <Table width="100%" sx={{ mb: 0, tableLayout: "fixed" }}>
+      <Table sx={{ mb: 0, tableLayout: "fixed", width: "100%" }}>
         <HeaderRow state={state} dispatch={dispatch} />
       </Table>
       <SheetTable state={state} dispatch={dispatch} />

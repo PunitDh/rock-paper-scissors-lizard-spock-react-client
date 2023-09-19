@@ -16,7 +16,6 @@ export const defaultInitialStateProps = {
   toolbar: true,
   formulaField: true,
   statusField: true,
-  initialData: {},
   defaultRowHeight: 24,
   defaultColumnWidth: 80,
 };

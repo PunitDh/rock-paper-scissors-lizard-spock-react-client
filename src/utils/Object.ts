@@ -5,7 +5,7 @@ type SearchResult = {
   value: string;
 };
 
-class ObjectExtended {
+export default class ObjectExtended {
   constructor(object: { [key: string]: any }) {
     Object.keys(object).forEach((key) => {
       // if (object[key] !== null && typeof object[key] === "object") {
@@ -18,6 +18,16 @@ class ObjectExtended {
 
   get length(): number {
     return Object.keys(this).length;
+  }
+
+  copy(updateValues: { [key: string]: any }): ObjectExtended {
+    return Object.keys(updateValues).reduce(
+      (acc, cur) => ({
+        ...acc,
+        [cur]: updateValues[cur],
+      }),
+      this
+    );
   }
 
   to(Constructor: new (arg0: this) => any) {
@@ -269,8 +279,6 @@ const arraysEqual = (arr1: any[], arr2: any[]): boolean => {
   return true;
 };
 
-function objectOf(object: { [key: string]: any }): ObjectExtended {
+export function objectOf(object: { [key: string]: any }): ObjectExtended {
   return new ObjectExtended(object);
 }
-
-export { ObjectExtended, objectOf };
