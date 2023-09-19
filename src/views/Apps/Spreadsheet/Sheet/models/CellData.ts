@@ -54,7 +54,9 @@ export default class CellData {
     this.previousValue = value;
     this.formula = formula;
     this.previousFormula = formula;
-    this.referenceCells = referenceCells;
+    this.referenceCells = Array.isArray(referenceCells)
+      ? new SetExtended(referenceCells)
+      : referenceCells;
     this.display = display;
     this.formatting = formatting;
     this.error = error;

@@ -37,7 +37,10 @@ export const generateJSONContent = (state: State): string => {
       if (String((data[cur] as CellData)?.value)?.length > 0) {
         return {
           ...acc,
-          [cur]: data[cur],
+          [cur]: {
+            ...data[cur],
+            referenceCells: [...data[cur].referenceCells],
+          },
         } as StateContentData;
       }
       return acc as StateContentData;

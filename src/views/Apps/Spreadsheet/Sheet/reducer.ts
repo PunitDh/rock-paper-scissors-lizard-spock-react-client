@@ -907,13 +907,23 @@ export const reducer = (state: State, action: Action): State => {
     }
 
     case SheetAction.SET_CONTENT_BULK:
+      const data = Object.keys(action.payload.data).reduce((acc, cur) => {
+        return {
+          ...acc,
+          [cur]: new CellData(acc[cur]),
+        };
+      }, action.payload.data);
+
       return {
         ...state,
         sheets: {
           ...state.sheets,
           [state.activeSheet]: {
             ...activeSheet,
-            content: action.payload,
+            content: {
+              ...action.payload,
+              data,
+            },
           },
         },
       };
