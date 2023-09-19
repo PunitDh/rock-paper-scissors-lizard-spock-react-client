@@ -61,9 +61,7 @@ const SheetSelectMenu = ({
     if (anchor) {
       dispatch(protectSheet(anchor.id, credentials.password));
       setCredentials({ password: "", confirmPassword: "" });
-      notification.success(
-        `${state.sheets[anchor.id].name} locked`
-      );
+      notification.success(`'${state.sheets[anchor.id].name}' locked`);
     }
     onClose();
   };

@@ -69,11 +69,12 @@ const SheetButton = ({
   };
 
   useEffect(() => {
+    console.log("Sheet button hook triggered", sheet.id);
     if (renameMode && sheetRenameRef.current) {
       sheetRenameRef.current.focus();
       sheetRenameRef.current.setSelectionRange(0, sheet.name.length);
     }
-  }, [renameMode, sheet.name.length]);
+  }, [renameMode, sheet.id, sheet.name.length]);
 
   return (
     <form onSubmit={handleRename}>

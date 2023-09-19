@@ -15,6 +15,7 @@ import {
   FormatColorText,
   FormatItalic,
   FormatUnderlined,
+  Percent,
   Redo,
   Undo,
 } from "@mui/icons-material";
@@ -44,12 +45,17 @@ import SaveFileJSON from "./components/SaveFileJSON";
 import DecimalIcon from "./components/icons/DecimalIcon";
 import { clamp } from "lodash";
 import CellFormatting from "../../models/CellFormatting";
-import { AutoCalculate, BorderType, outsideBorders } from "./constants";
+import {
+  AutoCalculate,
+  BorderType,
+  NumberFormat,
+  outsideBorders,
+} from "./constants";
 import OpenFileJSON from "./components/OpenFileJSON";
 import ClearFormattingIcon from "./components/icons/ClearFormatting";
 import FlexBox from "../../../../../../components/shared/FlexBox";
 import { SelectChangeEvent } from "@mui/material";
-import { IconSum } from "@tabler/icons-react";
+import { IconCurrencyDollar, IconSum } from "@tabler/icons-react";
 import MenuButton from "./components/MenuButton";
 import { Action, State } from "../../types";
 
@@ -285,17 +291,33 @@ const Toolbar = ({ state, dispatch }: Props) => {
           >
             <DecimalIcon type="decrease" />
           </FormattingButton>
-          <FormattingButton
-            title={"Clear Formatting"}
-            isActive={false}
-            Icon={ClearFormattingIcon}
-            onClick={clearFormatting}
-          />
           <MenuButton
             title={"Auto Sum"}
             isActive={false}
             Icon={IconSum}
             onClick={handleAutoCalculate}
+          />
+          <FormattingButton
+            title={"Format as Currency"}
+            isActive={false}
+            Icon={IconCurrencyDollar}
+            onClick={() =>
+              setFormattingChange("numberFormat")(NumberFormat.CURRENCY)
+            }
+          />
+          <FormattingButton
+            title={"Format as Percentage"}
+            isActive={false}
+            Icon={Percent}
+            onClick={() =>
+              setFormattingChange("numberFormat")(NumberFormat.PERCENTAGE)
+            }
+          />
+          <FormattingButton
+            title={"Clear Formatting"}
+            isActive={false}
+            Icon={ClearFormattingIcon}
+            onClick={clearFormatting}
           />
         </FlexBox>
       </FlexForm>

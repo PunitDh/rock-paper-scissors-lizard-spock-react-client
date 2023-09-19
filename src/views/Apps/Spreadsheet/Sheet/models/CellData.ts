@@ -148,6 +148,7 @@ export default class CellData {
 
   clearFormatting(): CellData {
     this.formatting = new CellFormatting();
+    this.setDisplay();
     return this;
   }
 
