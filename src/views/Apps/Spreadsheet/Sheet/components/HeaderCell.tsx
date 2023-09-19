@@ -145,11 +145,11 @@ const HeaderCell = ({ state, dispatch, id, dimension }: Props): JSX.Element => {
 
   const dimensionSize =
     dimension === Dimension.ROW
-      ? state.content.rowHeights
-        ? state.content.rowHeights[id]
+      ? state.sheets[state.activeSheet].content.rowHeights
+        ? state.sheets[state.activeSheet].content.rowHeights[id]
         : state.defaultRowHeight
-      : state.content.columnWidths
-        ? state.content.columnWidths[id]
+      : state.sheets[state.activeSheet].content.columnWidths
+        ? state.sheets[state.activeSheet].content.columnWidths[id]
         : state.defaultColumnWidth;
 
   return (

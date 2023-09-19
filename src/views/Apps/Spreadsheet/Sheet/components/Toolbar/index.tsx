@@ -1,4 +1,10 @@
-import React, { Dispatch, useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  Dispatch,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { FlexForm } from "../styles";
 import {
   FormatAlignCenter,
@@ -49,15 +55,18 @@ import { Action, State } from "../../types";
 
 type Props = {
   state: State;
-  dispatch: Dispatch<Action>
-}
+  dispatch: Dispatch<Action>;
+};
 
 const Toolbar = ({ state, dispatch }: Props) => {
-  const canUndo = state.memento.length > 0 && state.currentMementoId !== state.memento[0].id;
-  const canRedo = state.memento.length > 0 &&
+  const canUndo =
+    state.memento.length > 0 && state.currentMementoId !== state.memento[0].id;
+  const canRedo =
+    state.memento.length > 0 &&
     state.currentMementoId !== state.memento[state.memento.length - 1].id;
   const selectedCell = state.selectedCell.id;
-  const selectedCellData = state.content.data[selectedCell];
+  const selectedCellData =
+    state.sheets[state.activeSheet].content.data[selectedCell];
 
   const currentCellFormatting = useMemo(() => {
     const element = document.getElementById(selectedCell);
@@ -80,10 +89,7 @@ const Toolbar = ({ state, dispatch }: Props) => {
   }, [selectedCell]);
 
   const stateCellFormatting = useMemo(() => {
-    return (
-      selectedCellData?.formatting ||
-      currentCellFormatting
-    );
+    return selectedCellData?.formatting || currentCellFormatting;
   }, [currentCellFormatting, selectedCellData?.formatting]);
 
   const [selectedFormatting, setSelectedFormatting] =
@@ -140,7 +146,8 @@ const Toolbar = ({ state, dispatch }: Props) => {
   };
 
   const clearFormatting = () => dispatch(clearCellFormatting());
-  const handleAutoCalculate = (e: React.MouseEvent, type: AutoCalculate) => dispatch(autoCalculate(type));
+  const handleAutoCalculate = (e: React.MouseEvent, type: AutoCalculate) =>
+    dispatch(autoCalculate(type));
 
   const selectBorder = (borderEvent: SelectChangeEvent) => {
     const { value } = borderEvent.target;
@@ -155,10 +162,11 @@ const Toolbar = ({ state, dispatch }: Props) => {
   };
 
   const createToggleHandler = useCallback(
-    (formattingKey: string, activeValue: string, inactiveValue: string) => () => {
-      const newValue = toggleStyle(formattingKey, activeValue, inactiveValue);
-      setFormattingChange(formattingKey)(newValue);
-    },
+    (formattingKey: string, activeValue: string, inactiveValue: string) =>
+      () => {
+        const newValue = toggleStyle(formattingKey, activeValue, inactiveValue);
+        setFormattingChange(formattingKey)(newValue);
+      },
     [setFormattingChange, toggleStyle]
   );
 

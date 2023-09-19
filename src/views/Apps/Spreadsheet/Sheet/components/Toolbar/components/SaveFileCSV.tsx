@@ -9,7 +9,7 @@ import Cell from "../../../models/Cell";
 
 type Props = {
   state: State;
-}
+};
 
 const SaveFileCSV = ({ state }: Props) => {
   const handleExportAsCsv = () => {
@@ -19,7 +19,12 @@ const SaveFileCSV = ({ state }: Props) => {
     );
     const content = (range.cells as Cell[][])
       .map((row: Cell[]) =>
-        row.map((cell: Cell) => state.content.data[cell.id]?.value || "").join(",")
+        row
+          .map(
+            (cell: Cell) =>
+              state.sheets[state.activeSheet].content.data[cell.id]?.value || ""
+          )
+          .join(",")
       )
       .join("\n");
 

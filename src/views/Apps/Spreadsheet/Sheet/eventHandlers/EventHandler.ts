@@ -270,10 +270,14 @@ export default class EventHandler {
     if (Cell.isValidId(value.toUpperCase())) {
       this.dispatch(selectCell(value.toUpperCase()));
     } else {
-      if (value in this.state.content.namedRanges) {
+      if (
+        value in this.state.sheets[this.state.activeSheet].content.namedRanges
+      ) {
         this.dispatch(resetHighlight());
         this.dispatch(
-          addCellsToHighlight(this.state.content.namedRanges[value])
+          addCellsToHighlight(
+            this.state.sheets[this.state.activeSheet].content.namedRanges[value]
+          )
         );
       }
     }
@@ -333,7 +337,12 @@ export default class EventHandler {
             : `${hoveredInstance.column}${cellAnchorInstance.row}`;
 
         this.dispatch(highlightCells(cellAnchor, rangeEnd));
-        if (isFormula(this.state.content.data[cellAnchor]?.formula)) {
+        if (
+          isFormula(
+            this.state.sheets[this.state.activeSheet].content.data[cellAnchor]
+              ?.formula
+          )
+        ) {
           this.#handleFillerModeFormulaFill();
         } else {
           this.#handleFillerModeValueFill();
@@ -365,7 +374,9 @@ export default class EventHandler {
         break;
       case KeyEvent.ENTER:
         const selectedCell =
-          this.state.content.data[this.state.selectedCell.id];
+          this.state.sheets[this.state.activeSheet].content.data[
+            this.state.selectedCell.id
+          ];
         this.dispatch(setFormulaMode(false));
         if (selectedCell?.isFormulaCell) {
           this.dispatch(recalculateFormulae());
@@ -419,11 +430,13 @@ export default class EventHandler {
     const {
       hovered: id,
       selectedCell,
-      content: { data: contentData },
       formulaMode,
       highlighted,
       isFormulaFieldFocused,
     } = this.state;
+
+    const { data: contentData } =
+      this.state.sheets[this.state.activeSheet].content;
 
     const isCtrlPressed = this.isCtrlKeyPressed(e);
 
@@ -593,7 +606,7 @@ export default class EventHandler {
   };
 
   private getSelectedCellData(): CellData | undefined {
-    return this.state.content.data[this.state.selectedCell.id];
+    return this.state.sheets[this.state.activeSheet].content.data[this.state.selectedCell.id];
   }
 
   private isFormulaTrackedCell(cellId: string): Boolean {
@@ -611,7 +624,7 @@ export default class EventHandler {
 
     if (!hasLength || !cellAnchor || !last) return;
 
-    const anchorCell = this.state.content.data[cellAnchor];
+    const anchorCell = this.state.sheets[this.state.activeSheet].content.data[cellAnchor];
     const anchorFormula = anchorCell?.formula;
 
     if (isFormula(anchorFormula)) {
@@ -620,7 +633,7 @@ export default class EventHandler {
       if (!firstCell?.columnCharCode || !lastCell?.columnCharCode) return;
       const columnFill = lastCell.columnCharCode > firstCell.columnCharCode;
       const rowFill = lastCell.row > firstCell.row;
-      const { referenceCells, formula } = this.state.content.data[firstCell.id];
+      const { referenceCells, formula } = this.state.sheets[this.state.activeSheet].content.data[firstCell.id];
 
       let increment = 0;
       Array(highlightedLength - 1)
@@ -679,9 +692,9 @@ export default class EventHandler {
     const { cellAnchor, second } = this.state.highlighted;
 
     if (!cellAnchor) return;
-    const anchorCell = this.state.content.data[cellAnchor];
+    const anchorCell = this.state.sheets[this.state.activeSheet].content.data[cellAnchor];
     const anchorValue = anchorCell?.value;
-    const secondValue = this.state.content.data[second]?.value;
+    const secondValue = this.state.sheets[this.state.activeSheet].content.data[second]?.value;
 
     if (isNumber(anchorValue) && isNumber(secondValue)) {
       const diff = secondValue - anchorValue;

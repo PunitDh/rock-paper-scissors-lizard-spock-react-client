@@ -76,7 +76,8 @@ const CellInput = ({
     (node: HTMLInputElement) => eventHandler.setInputRef(node),
     [eventHandler]
   );
-  const currentCell: CellData | undefined = state.content.data[cell.id];
+  const currentCell: CellData | undefined =
+    state.sheets[state.activeSheet].content.data[cell.id];
 
   useEffect(() => {
     navigateRef.current = true;

@@ -17,7 +17,7 @@ type Props = {
 const DebugBar = ({ state }: Props) => {
   const token = useToken();
   const selectedCell: string = state.selectedCell.id;
-  const cellData = state.content.data[selectedCell];
+  const cellData = state.sheets[state.activeSheet].content.data[selectedCell];
 
   const testObj = objectOf({
     A1: new CellData({ id: "A1" }),
@@ -34,7 +34,10 @@ const DebugBar = ({ state }: Props) => {
 
   return token.decoded?.isAdmin ? (
     <FlexForm>
-      <DebugButton type="button" onClick={() => console.log(state.content)}>
+      <DebugButton
+        type="button"
+        onClick={() => console.log(state.sheets[state.activeSheet].content)}
+      >
         Show Content
       </DebugButton>
       <DebugButton type="button" onClick={() => console.log("cell", cellData)}>

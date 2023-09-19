@@ -9,7 +9,7 @@ type Props = {
   state: State;
   dispatch: Dispatch<Action>;
   row: number;
-}
+};
 
 const SheetRow = ({ state, dispatch, row }: Props) => {
   return (
@@ -18,12 +18,13 @@ const SheetRow = ({ state, dispatch, row }: Props) => {
         .fill(0)
         .map((_, column) => {
           const id = SheetConfig.COLUMNS[column - 1] + (row + 1);
-          const cellData = state.content.data[id];
-          const isSelected =
-            id === state.selectedCell.id
+          const cellData = state.sheets[state.activeSheet].content.data[id];
+          const isSelected = id === state.selectedCell.id;
           const isFormulaHighlighted = state.formulaHighlighted.has(id);
-          const width = state.content.columnWidths[SheetConfig.COLUMNS[column - 1]] ||
-            state.defaultColumnWidth;
+          const width =
+            state.sheets[state.activeSheet].content.columnWidths[
+              SheetConfig.COLUMNS[column - 1]
+            ] || state.defaultColumnWidth;
 
           return column === 0 ? (
             <HeaderCell

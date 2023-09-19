@@ -1,4 +1,3 @@
-import { cloneDeep } from "lodash";
 import { FILE_TYPE, SheetConfig } from "../constants";
 import CellData from "../models/CellData";
 import CellFormatting from "../models/CellFormatting";
@@ -9,14 +8,13 @@ import { SheetProps, State } from "../types";
 import StateContentData from "../models/StateContentData";
 import SetExtended from "../../../../../utils/Set";
 
-export const generateClipboardContent = (state: {
-  highlighted: { rows: SetExtended<number>; columns: SetExtended<string> };
-  content: { data: { [x: string]: { formula: any } } };
-}) => {
+export const generateClipboardContent = (state: State) => {
   const content = state.highlighted.rows.toArray().map((row: any) =>
     state.highlighted.columns.toArray().map((column: any) => {
       const id = `${column}${row}`;
-      const cellData = state.content.data[id] as CellData;
+      const cellData = state.sheets[state.activeSheet].content.data[
+        id
+      ] as CellData;
 
       return new CellData({
         id,
@@ -32,7 +30,7 @@ export const generateClipboardContent = (state: {
 
 export const generateJSONContent = (state: State): string => {
   const type = FILE_TYPE;
-  const { content } = state;
+  const { content } = state.sheets[state.activeSheet];
   const { data } = content;
   const filtered = Object.keys(data).reduce(
     (acc: StateContentData, cur: string) => {

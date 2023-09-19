@@ -46,8 +46,8 @@ const SheetSelect = ({ state, dispatch }: Props) => {
   };
 
   const selectSheet = (sheetId: string) => () => {
-    dispatch(setActiveSheet(sheetId))
-  }
+    dispatch(setActiveSheet(sheetId));
+  };
 
   const handleAddSheet = () => {
     dispatch(addSheet());
@@ -73,7 +73,7 @@ const SheetSelect = ({ state, dispatch }: Props) => {
       <SheetButton onClick={handleAddSheet}>
         <IconPlus width={20} />
       </SheetButton>
-      {state.sheets.map((sheet: Sheet) => (
+      {Object.values(state.sheets).map((sheet: Sheet) => (
         <SheetButton
           key={sheet.id}
           onClick={selectSheet(sheet.id)}

@@ -3,7 +3,6 @@ import Cell from "./models/Cell";
 import Highlight from "./models/Highlight";
 import StateContent from "./models/StateContent";
 import SetExtended from "../../../../utils/Set";
-import { List } from "../../../../utils/List";
 
 export type State = {
   maxRows: number;
@@ -19,11 +18,11 @@ export type State = {
   hovered: string;
   highlighted: Highlight;
   activeSheet: string;
-  sheets: Array<Sheet>;
+  sheets: { [key: string]: Sheet };
   formulaTrackedCells: SetExtended<string>;
   formulaHighlighted: SetExtended<string>;
-  initialContent: StateContent;
-  content: StateContent;
+  // initialContent: StateContent;
+  // content: StateContent;
   mouseDown: boolean;
   dragging: boolean;
   fillerMode: boolean;
@@ -54,6 +53,8 @@ export type SheetProps = {
 export type Sheet = {
   id: string;
   name: string;
+  content: StateContent;
+  initialContent: StateContent;
 };
 
 // export type Memento = {

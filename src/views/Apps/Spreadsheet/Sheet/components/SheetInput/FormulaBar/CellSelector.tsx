@@ -4,8 +4,8 @@ import useEventHandler from "../../../hooks/useEventHandler";
 import { State } from "../../../types";
 
 type Props = {
-  state: State
-}
+  state: State;
+};
 
 const CellSelector = ({ state }: Props) => {
   const { id: selectedId } = state.selectedCell;
@@ -14,13 +14,20 @@ const CellSelector = ({ state }: Props) => {
       state.highlighted.hasLength && state.mouseDown
         ? `${state.highlighted.rows.length}R × ${state.highlighted.columns.length}C`
         : selectedId,
-    [state.highlighted.columns.length, state.highlighted.hasLength, state.highlighted.rows.length, state.mouseDown, selectedId]
+    [
+      state.highlighted.columns.length,
+      state.highlighted.hasLength,
+      state.highlighted.rows.length,
+      state.mouseDown,
+      selectedId,
+    ]
   );
 
   const eventHandler = useEventHandler();
   const [currentCellSelectorValue, setCurrentCellSelectorValue] =
     useState(cellSelectorValue);
-  const handleSelectCellSubmit = (e: React.FormEvent) => eventHandler.handleSelectCellSubmit(e);
+  const handleSelectCellSubmit = (e: React.FormEvent) =>
+    eventHandler.handleSelectCellSubmit(e);
 
   const handleSelectCell = (e: React.ChangeEvent) => {
     const value = (e.target as HTMLInputElement).value;
@@ -47,12 +54,14 @@ const CellSelector = ({ state }: Props) => {
         list="cells"
       />
       <datalist id="cells">
-        {state.content.namedRanges &&
-          Object.keys(state.content.namedRanges).map((range) => (
-            <option key={range} value={range}>
-              {range}
-            </option>
-          ))}
+        {state.sheets[state.activeSheet].content.namedRanges &&
+          Object.keys(state.sheets[state.activeSheet].content.namedRanges).map(
+            (range) => (
+              <option key={range} value={range}>
+                {range}
+              </option>
+            )
+          )}
       </datalist>
     </FlexForm>
   );
