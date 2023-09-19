@@ -3,6 +3,8 @@ import { FlexForm } from "./styles";
 import styled from "@emotion/styled";
 import { State } from "../types";
 import { useToken } from "../../../../../hooks";
+import { ObjectExtended } from "../../../../../utils/Object";
+import CellData from "../models/CellData";
 
 const DebugButton = styled.button({
   cursor: "pointer",
@@ -16,19 +18,39 @@ const DebugBar = ({ state }: Props) => {
   const token = useToken();
   const selectedCell: string = state.selectedCell.id;
   const cellData = state.content.data[selectedCell];
+
+  const testObj = new ObjectExtended({
+    A1: new CellData({ id: "A1" }),
+    B1: new CellData({ id: "B1" }),
+    G1: new CellData({ id: "G1" }),
+    D1: new CellData({ id: "D1" }),
+    E1: new CellData({ id: "E1" }),
+    F1: new CellData({ id: "F1" }),
+  });
+
+  const testObj1 = new ObjectExtended({
+    A2: new CellData({ id: "A1" }),
+  });
+
   return token.decoded?.isAdmin ? (
     <FlexForm>
       <DebugButton type="button" onClick={() => console.log(state.content)}>
         Show Content
       </DebugButton>
-      <DebugButton
-        type="button"
-        onClick={() => console.log("cell", cellData)}
-      >
+      <DebugButton type="button" onClick={() => console.log("cell", cellData)}>
         Show Current Cell
       </DebugButton>
       <DebugButton type="button" onClick={() => console.log(state)}>
         Show State
+      </DebugButton>
+      <DebugButton
+        type="button"
+        onClick={() => {
+          const cellA1 = new CellData({ id: "A1" });
+          console.log(testObj1.findKey(cellA1));
+        }}
+      >
+        Test Object
       </DebugButton>
     </FlexForm>
   ) : null;

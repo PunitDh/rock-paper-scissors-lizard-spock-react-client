@@ -16,7 +16,7 @@ const Sheet = (props: SheetProps = defaultInitialStateProps): JSX.Element => {
   const [state, dispatch]: [state: State, dispatch: Dispatch<Action>] = useReducer(reducer, initialState, () => createInitialState(props, defaultInitialStateProps));
 
   useEffect(() => {
-    console.log("Sheet recalculation hook triggered");
+    console.log("Sheet initial hook triggered");
     dispatch(recalculateFormulae());
     dispatch(addMemento());
     dispatch(saveInitialState());

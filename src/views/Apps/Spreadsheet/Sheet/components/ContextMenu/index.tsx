@@ -1,6 +1,6 @@
 import React, { Dispatch, useRef, useState } from "react";
-import { Box, ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
-import { IconCopy, IconCut, IconPlus } from "@tabler/icons-react";
+import { Box, Divider, ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
+import { IconCopy, IconCut, IconPlus, IconTrash } from "@tabler/icons-react";
 import {
   deleteCellContent,
   pasteCellContent,
@@ -12,6 +12,7 @@ import { generateClipboardContent } from "../../utils/cellUtils";
 import useEventHandler from "../../hooks/useEventHandler";
 import { Action, State } from "../../types";
 import InsertMenu from "./InsertMenu";
+import DeleteMenu from "./DeleteMenu";
 
 type Props = {
   state: State;
@@ -21,14 +22,12 @@ type Props = {
 const ContextMenu = ({ state, dispatch }: Props): JSX.Element => {
   const eventHandler = useEventHandler();
   const [insertMenuOpen, setInsertMenuOpen] = useState(false);
+  const [deleteMenuOpen, setDeleteMenuOpen] = useState(false);
   const insertMenuRef = useRef(null);
+  const deleteMenuRef = useRef(null);
 
   const closeMenu = () => {
     dispatch(openContextMenu(null));
-  };
-
-  const toggleInsertMenu = () => {
-    setInsertMenuOpen((toggle) => !toggle);
   };
 
   const handleCut = async () => {
@@ -89,6 +88,15 @@ const ContextMenu = ({ state, dispatch }: Props): JSX.Element => {
             onClose={() => setInsertMenuOpen(false)}
           />
         )}
+        {deleteMenuOpen && (
+          <DeleteMenu
+            state={state}
+            dispatch={dispatch}
+            open={deleteMenuOpen}
+            menuRef={deleteMenuRef.current}
+            onClose={() => setDeleteMenuOpen(false)}
+          />
+        )}
         <MenuItem ref={insertMenuRef} onClick={() => setInsertMenuOpen(true)}>
           <ListItemIcon>
             <IconPlus width={20} />
@@ -96,6 +104,14 @@ const ContextMenu = ({ state, dispatch }: Props): JSX.Element => {
           <ListItemText>Insert</ListItemText>
           <ArrowRight width={20} />
         </MenuItem>
+        <MenuItem ref={deleteMenuRef} onClick={() => setDeleteMenuOpen(true)}>
+          <ListItemIcon>
+            <IconTrash width={20} />
+          </ListItemIcon>
+          <ListItemText>Delete</ListItemText>
+          <ArrowRight width={20} />
+        </MenuItem>
+        <Divider />
         <MenuItem onClick={handleCut}>
           <ListItemIcon>
             <IconCut width={20} />

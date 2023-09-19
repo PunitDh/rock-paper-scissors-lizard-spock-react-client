@@ -219,3 +219,19 @@ export const getWidth = (id: string): string | undefined => {
   }
   return undefined;
 };
+
+export const cellSorter = (a: string, b: string) => {
+  const aMatch = a.match(/([A-Z]+)(\d+)/);
+  const bMatch = b.match(/([A-Z]+)(\d+)/);
+
+  if (aMatch && bMatch) {
+    const [aLetters, aNumbers] = aMatch.slice(1);
+    const [bLetters, bNumbers] = bMatch.slice(1);
+
+    const lettersComparison = bLetters.localeCompare(aLetters);
+    if (lettersComparison !== 0) return lettersComparison;
+
+    return parseInt(bNumbers) - parseInt(aNumbers);
+  }
+  return -1;
+};

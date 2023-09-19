@@ -5,6 +5,7 @@ import DashboardCard from "../../../../components/shared/DashboardCard";
 import FlexBox from "../../../../components/shared/FlexBox";
 import { useToken } from "../../../../hooks";
 import { State } from "../Sheet/types";
+import { ObjectExtended } from "../../../../utils/Object";
 
 
 const CellContainer = styled.div({
@@ -62,12 +63,22 @@ const TestingArea = ({ state }: { state: State }) => {
     window.addEventListener('keydown', handlekey);
 
     return () => {
+      console.log("Debug key listener removed");
       window.removeEventListener('keydown', handlekey)
     }
   }, [])
 
+  const testObj = new ObjectExtended({
+    a: "Debug key listener removed",
+    b: "Cell selector current input value hook triggered",
+    c: "Cell input navigateref hook triggered",
+    d: "Formula field value hook triggered",
+    e: "setSelectedFormatting hook triggered for Toolbar",
+    f: "Sheet initial hook triggered"
+  });
+
   return token.decoded?.isAdmin ? (
-    <DashboardCard sx={{ height: "100%" }} title="Testing Area" subtitle={undefined} action={undefined} footer={undefined} cardheading={undefined} headtitle={undefined} headsubtitle={undefined} middlecontent={undefined}>
+    <DashboardCard sx={{ height: "100%" }} title="Testing Area">
       <FlexBox width="100%" height="100%" gap="0.5rem">
         <StatusCell label="Keyboard">{keyboard}</StatusCell>
         {/* <StatusCell label="Mouse button">{mouse}</StatusCell> */}
@@ -75,6 +86,9 @@ const TestingArea = ({ state }: { state: State }) => {
         <StatusCell label="Hovered">{state.hovered}</StatusCell> */}
 
         <StatusCell label="Current Cell">{state.selectedCell.id}</StatusCell>
+        <StatusCell label="Highlighted Anchor">
+          {state.highlighted.cellAnchor}
+        </StatusCell>
         <StatusCell label="Highlighted Anchor">
           {state.highlighted.cellAnchor}
         </StatusCell>

@@ -10,7 +10,7 @@ import { Action, State } from "../types";
 const SelectAllItem = styled(HeaderItem)({
   height: "1.5rem",
   width: "3%",
-  cursor: "se-resize",
+  cursor: "cell",
 });
 
 const Corner = styled.div({

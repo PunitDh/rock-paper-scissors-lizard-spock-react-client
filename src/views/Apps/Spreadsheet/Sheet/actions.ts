@@ -2,7 +2,12 @@ import { AutoCalculate } from "./components/Toolbar/constants";
 import Cell from "./models/Cell";
 import StateContent from "./models/StateContent";
 import StateContentData from "./models/StateContentData";
-import { Action, CellValue, InsertColumnLocation, InsertRowLocation } from "./types";
+import {
+  Action,
+  CellValue,
+  InsertColumnLocation,
+  InsertRowLocation,
+} from "./types";
 
 export enum SheetAction {
   SET_SELECTED,
@@ -21,6 +26,8 @@ export enum SheetAction {
   SET_COLUMN_WIDTH,
   INSERT_ROW,
   INSERT_COLUMN,
+  DELETE_ROW,
+  DELETE_COLUMN,
   SELECT_ALL,
   HIGHLIGHT_CELLS,
   FORMULA_HIGHLIGHT_CELL_RANGE,
@@ -169,6 +176,14 @@ export const insertRow = (payload: InsertRowLocation): Action => ({
 export const insertColumn = (payload: InsertColumnLocation): Action => ({
   type: SheetAction.INSERT_COLUMN,
   payload,
+});
+
+export const deleteRow = (): Action => ({
+  type: SheetAction.DELETE_ROW,
+});
+
+export const deleteColumn = (): Action => ({
+  type: SheetAction.DELETE_COLUMN,
 });
 
 export const selectAll = (): Action => ({

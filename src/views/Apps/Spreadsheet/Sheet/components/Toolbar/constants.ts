@@ -126,9 +126,9 @@ export enum NumberFormat {
 }
 
 export enum AutoCalculate {
-  SUM="SUM",
-  AVERAGE="AVERAGE",
-  COUNT="COUNT",
+  SUM = "SUM",
+  AVERAGE = "AVERAGE",
+  COUNT = "COUNT",
 }
 
 type NumberFormatMenuItem = {

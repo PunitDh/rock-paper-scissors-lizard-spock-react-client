@@ -1,4 +1,4 @@
-import { isFormula } from "../utils/cellUtils";
+import { cellSorter, isFormula } from "../utils/cellUtils";
 import CellRange from "./CellRange";
 import CellFormatting from "./CellFormatting";
 import { BorderType, NumberFormat } from "../components/Toolbar/constants";
@@ -365,21 +365,7 @@ const replaceFormulaWithValues = (
 ): string => {
   const cellReg = /([A-Z]\d+)/g;
   const cellMatches = [...new Set([...str.matchAll(cellReg)].flat())].sort(
-    (a, b) => {
-      const aMatch = a.match(/([A-Z]+)(\d+)/);
-      const bMatch = b.match(/([A-Z]+)(\d+)/);
-
-      if (aMatch && bMatch) {
-        const [aLetters, aNumbers] = aMatch.slice(1);
-        const [bLetters, bNumbers] = bMatch.slice(1);
-
-        const lettersComparison = bLetters.localeCompare(aLetters);
-        if (lettersComparison !== 0) return lettersComparison;
-
-        return parseInt(bNumbers) - parseInt(aNumbers);
-      }
-      return -1;
-    }
+    cellSorter
   );
 
   return cellMatches.reduce((acc, cell) => {
@@ -631,7 +617,9 @@ export function getReferenceCells(formula: string): List<string> {
     .flat();
 
   // Combine all cell references without duplicates
-  return List.from(new Set(expandedRanges.concat(cells))).flat() as List<string>;
+  return List.from(
+    new Set(expandedRanges.concat(cells))
+  ).flat() as List<string>;
 }
 
 /**

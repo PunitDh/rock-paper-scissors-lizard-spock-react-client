@@ -1,10 +1,10 @@
 import { FILE_TYPE, SheetConfig } from "./constants";
-import { isFormula, typeInInputBox } from "./utils/cellUtils";
+import { cellSorter, isFormula, typeInInputBox } from "./utils/cellUtils";
 import { SheetAction } from "./actions";
 import Cell from "./models/Cell";
 import CellData, { getFormulaTrackedCells } from "./models/CellData";
 import CellRange from "./models/CellRange";
-import { cloneDeep, isEqual, uniqueId } from "lodash";
+import { cloneDeep, uniqueId } from "lodash";
 import { AutoCalculate, BorderType } from "./components/Toolbar/constants";
 import Highlight from "./models/Highlight";
 import {
@@ -401,9 +401,8 @@ export const reducer = (state: State, action: Action): State => {
       const { row: selectedCellRow } = state.selectedCell;
       const location: InsertRowLocation = action.payload;
 
-      const data = Object.keys(state.content.data)
-        .reverse()
-        .reduce((stateContentData: StateContentData, cellId: string) => {
+      const data = Object.keys(state.content.data).reduceRight(
+        (stateContentData: StateContentData, cellId: string) => {
           const cell = new Cell(cellId);
           const isGreater: boolean =
             location === "above"
@@ -411,6 +410,84 @@ export const reducer = (state: State, action: Action): State => {
               : cell.row > selectedCellRow;
           if (isGreater) {
             const newId = cell.column + (cell.row + 1);
+            const cellData = CellData.getOrNew(
+              state.content.data,
+              cellId
+            ).setId(newId);
+            return {
+              ...stateContentData,
+              [cellId]: new CellData({ id: cellId }),
+              [newId]: cellData,
+            } as StateContentData;
+          }
+          return stateContentData;
+        },
+        state.content.data
+      );
+
+      return {
+        ...state,
+        content: {
+          ...state.content,
+          data,
+        } as StateContent,
+      };
+    }
+
+    case SheetAction.INSERT_COLUMN: {
+      const { columnCharCode: selectedCellColumnCharCode } = state.selectedCell;
+      const location: InsertColumnLocation = action.payload;
+
+      const data = Object.keys(state.content.data).reduceRight(
+        (stateContentData: StateContentData, cellId: string) => {
+          const cell = new Cell(cellId);
+          const isGreater: boolean =
+            location === "left"
+              ? cell.columnCharCode >= selectedCellColumnCharCode
+              : cell.columnCharCode > selectedCellColumnCharCode;
+          if (isGreater) {
+            const newId =
+              String.fromCharCode(cell.columnCharCode + 1) + cell.row;
+            const cellData = CellData.getOrNew(
+              state.content.data,
+              cellId
+            ).setId(newId);
+            return {
+              ...stateContentData,
+              [cellId]: new CellData({ id: cellId }),
+              [newId]: cellData,
+            } as StateContentData;
+          }
+          return stateContentData;
+        },
+        state.content.data
+      );
+
+      return {
+        ...state,
+        content: {
+          ...state.content,
+          data,
+        } as StateContent,
+      };
+    }
+
+    case SheetAction.DELETE_ROW: {
+      const { row: selectedCellRow } = state.selectedCell;
+
+      const data = Object.keys(state.content.data)
+        .sort(cellSorter)
+        .reduceRight((stateContentData: StateContentData, cellId: string) => {
+          const cell = new Cell(cellId);
+          const isEqual: boolean = cell.row === selectedCellRow;
+          const isGreater: boolean = cell.row > selectedCellRow;
+          if (isEqual) {
+            return {
+              ...stateContentData,
+              [cellId]: new CellData({ id: cellId }),
+            } as StateContentData;
+          } else if (isGreater) {
+            const newId = cell.column + (cell.row - 1);
             const cellData = CellData.getOrNew(
               state.content.data,
               cellId
@@ -433,25 +510,22 @@ export const reducer = (state: State, action: Action): State => {
       };
     }
 
-    case SheetAction.INSERT_COLUMN: {
+    case SheetAction.DELETE_COLUMN: {
       const { columnCharCode: selectedCellColumnCharCode } = state.selectedCell;
-      const location: InsertColumnLocation = action.payload;
 
-      const data = Object.keys(state.content.data)
-        .reverse()
-        .reduce((stateContentData: StateContentData, cellId: string) => {
+      const data = Object.keys(state.content.data).reduce(
+        (stateContentData: StateContentData, cellId: string) => {
           const cell = new Cell(cellId);
           const isGreater: boolean =
-            location === "left"
-              ? cell.columnCharCode >= selectedCellColumnCharCode
-              : cell.columnCharCode > selectedCellColumnCharCode;
+            cell.columnCharCode > selectedCellColumnCharCode;
           if (isGreater) {
             const newId =
-              String.fromCharCode(cell.columnCharCode + 1) + cell.row;
+              String.fromCharCode(cell.columnCharCode - 1) + cell.row;
             const cellData = CellData.getOrNew(
               state.content.data,
               cellId
             ).setId(newId);
+
             return {
               ...stateContentData,
               [cellId]: new CellData({ id: cellId }),
@@ -459,7 +533,9 @@ export const reducer = (state: State, action: Action): State => {
             } as StateContentData;
           }
           return stateContentData;
-        }, state.content.data);
+        },
+        state.content.data
+      );
 
       return {
         ...state,
