@@ -44,6 +44,7 @@ export const initialState: State = {
       name: "Sheet 1",
       content: new StateContent(),
       initialContent: new StateContent(),
+      protected: false,
     },
   },
   formulaTrackedCells: setOf<string>(),
@@ -200,6 +201,7 @@ export const reducer = (state: State, action: Action): State => {
         name: `Sheet ${Object.keys(state.sheets).length + 1}`,
         content: new StateContent(),
         initialContent: new StateContent(),
+        protected: false,
       };
 
       return {
@@ -261,6 +263,24 @@ export const reducer = (state: State, action: Action): State => {
         ...state,
         sheets: reIndexSheets(sheets),
         activeSheet: sheetIds[index - 1],
+      };
+    }
+
+    case SheetAction.PROTECT_SHEET: {
+      const { sheetId, password } = action.payload;
+
+      console.log({sheetId, password});
+
+      return {
+        ...state,
+        sheets: {
+          ...state.sheets,
+          [sheetId]: {
+            ...state.sheets[sheetId],
+            protected: true,
+            password,
+          },
+        },
       };
     }
 

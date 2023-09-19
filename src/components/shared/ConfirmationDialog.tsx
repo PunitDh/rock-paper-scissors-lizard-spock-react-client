@@ -49,7 +49,7 @@ const ConfirmationDialog = ({
         <Button autoFocus onClick={onCancel}>
           Cancel
         </Button>
-        <Button onClick={onHandleConfirm}>{confirmBtnText}</Button>
+        <Button onClick={onHandleConfirm} disabled={other.confirmdisabled > 0}>{confirmBtnText}</Button>
       </DialogActions>
     </Dialog>
   );

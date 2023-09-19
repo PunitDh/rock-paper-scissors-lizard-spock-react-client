@@ -56,6 +56,8 @@ export type Sheet = {
   name: string;
   content: StateContent;
   initialContent: StateContent;
+  protected: boolean;
+  password?: string;
 };
 
 // export type Memento = {

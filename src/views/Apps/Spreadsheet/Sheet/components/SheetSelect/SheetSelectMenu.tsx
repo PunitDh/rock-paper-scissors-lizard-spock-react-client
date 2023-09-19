@@ -1,9 +1,24 @@
 import React, { Dispatch, useState } from "react";
-import { Box, ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
-import { deleteSheet, moveSheet } from "../../actions";
-import { ArrowBack, ArrowForward, Delete } from "@mui/icons-material";
+import {
+  Box,
+  Divider,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+} from "@mui/material";
+import { deleteSheet, moveSheet, protectSheet } from "../../actions";
+import {
+  ArrowBack,
+  ArrowForward,
+  Delete,
+  Lock,
+  TextFields,
+} from "@mui/icons-material";
 import { Action, State } from "../../types";
 import ConfirmationDialog from "../../../../../../components/shared/ConfirmationDialog";
+import Protect from "./Protect";
+import { Credentials } from "./types";
 
 type Props = {
   state: State;
@@ -21,18 +36,29 @@ const SheetSelectMenu = ({
   onRename,
 }: Props): JSX.Element => {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState<boolean>(false);
-  const [value, setValue] = useState<string>("");
+  const [protectConfirmOpen, setProtectConfirmOpen] = useState<boolean>(false);
+  const [credentials, setCredentials] = useState<Credentials>({
+    password: "",
+    confirmPassword: "",
+  });
 
-  const handleClose = (newValue: string) => {
+  const handleCloseDelete = () => {
     setDeleteConfirmOpen(false);
-    if (newValue) {
-      setValue(newValue);
-    }
+  };
+
+  const handleCloseProtect = () => {
+    setProtectConfirmOpen(false);
   };
 
   const handleRename = () => {
     if (anchor) onRename(anchor.id);
     onClose();
+  };
+
+  const handleProtectSheet = () => {
+    if (anchor) dispatch(protectSheet(anchor.id, credentials.password));
+    onClose();
+    setCredentials({ password: "", confirmPassword: "" });
   };
 
   const handleMoveSheet = (offset: number) => () => {
@@ -52,20 +78,43 @@ const SheetSelectMenu = ({
   return (
     <Box>
       {anchor?.id && (
-        <ConfirmationDialog
-          id="delete-sheet-confirmation-dialog"
-          keepMounted
-          open={deleteConfirmOpen}
-          onCancel={handleClose}
-          onConfirm={handleDelete}
-          value={value}
-          title="Delete"
-          confirmBtnText="Delete Sheet"
-          content={`Are you sure you want to delete '${
-            state.sheets[anchor.id].name
-          }'?`}
-        />
+        <>
+          <ConfirmationDialog
+            id="delete-sheet-confirmation-dialog"
+            keepMounted
+            open={deleteConfirmOpen}
+            onCancel={handleCloseDelete}
+            onConfirm={handleDelete}
+            value={deleteConfirmOpen}
+            title="Delete"
+            confirmBtnText="Delete Sheet"
+            content={`Are you sure you want to delete '${
+              state.sheets[anchor.id].name
+            }'?`}
+          />
+          <ConfirmationDialog
+            id="protect-sheet-confirmation-dialog"
+            keepMounted
+            onConfirm={handleProtectSheet}
+            onCancel={handleCloseProtect}
+            value={protectConfirmOpen}
+            title="Protect"
+            confirmBtnText="Set Password"
+            confirmdisabled={Number(
+              credentials.password.length < 1 ||
+                credentials.confirmPassword !== credentials.password
+            )}
+            content={
+              <Protect
+                credentials={credentials}
+                setCredentials={setCredentials}
+              />
+            }
+            open={protectConfirmOpen}
+          />
+        </>
       )}
+
       <Menu
         id="sheet-select-context-menu"
         keepMounted={true}
@@ -100,9 +149,17 @@ const SheetSelectMenu = ({
           </ListItemIcon>
           <ListItemText>Move Right</ListItemText>
         </MenuItem>
+        <Divider />
+        <MenuItem onClick={() => setProtectConfirmOpen(true)}>
+          <ListItemIcon>
+            <Lock width={20} />
+          </ListItemIcon>
+          <ListItemText>Protect Sheet</ListItemText>
+        </MenuItem>
+        <Divider />
         <MenuItem onClick={handleRename}>
           <ListItemIcon>
-            <Delete width={20} />
+            <TextFields width={20} />
           </ListItemIcon>
           <ListItemText>Rename</ListItemText>
         </MenuItem>

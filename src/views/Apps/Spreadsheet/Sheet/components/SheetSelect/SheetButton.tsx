@@ -2,6 +2,9 @@ import React, { Dispatch, useEffect, useRef, useState } from "react";
 import { renameSheet, setActiveSheet } from "../../actions";
 import { SheetButtonItem, SheetInputItem } from "./styles";
 import { Action, Sheet, State } from "../../types";
+import ConfirmationDialog from "../../../../../../components/shared/ConfirmationDialog";
+import EnterPassword from "./EnterPassword";
+import { useNotification } from "../../../../../../hooks";
 
 type SheetButtonProps = {
   state: State;
@@ -23,11 +26,18 @@ const SheetButton = ({
   onDoubleClick,
 }: SheetButtonProps) => {
   const [sheetName, setSheetName] = useState(sheet.name);
+  const [passwordPromptOpen, setPasswordPromptOpen] = useState<boolean>(false);
+  const [password, setPassword] = useState<string>("");
   const sheetRenameRef = useRef<HTMLInputElement | null>(null);
   const renameMode = sheet.id === rename;
+  const notification = useNotification();
 
   const selectSheet = (sheetId: string) => () => {
-    dispatch(setActiveSheet(sheetId));
+    if (state.sheets[sheetId].protected) {
+      setPasswordPromptOpen(true);
+    } else {
+      dispatch(setActiveSheet(sheetId));
+    }
   };
 
   const handleChangeName = (e: React.ChangeEvent) => {
@@ -43,6 +53,19 @@ const SheetButton = ({
 
   const handleDoubleClick = () => {
     onDoubleClick(sheet.id);
+  };
+
+  const handleClosePasswordPrompt = () => {
+    setPasswordPromptOpen(false);
+  };
+
+  const checkPassword = () => {
+    if (password === state.sheets[sheet.id].password) {
+      dispatch(setActiveSheet(sheet.id));
+    } else {
+      notification.error("Wrong password entered");
+    }
+    setPassword("");
   };
 
   useEffect(() => {
@@ -77,6 +100,21 @@ const SheetButton = ({
         >
           {sheet.name}
         </SheetButtonItem>
+      )}
+      {state.sheets[sheet.id].protected && (
+        <ConfirmationDialog
+          id="sheet-password-prompt-confirmation-dialog"
+          keepMounted
+          open={passwordPromptOpen}
+          onCancel={handleClosePasswordPrompt}
+          onConfirm={checkPassword}
+          value={password}
+          title="Protected"
+          confirmBtnText="Submit"
+          content={
+            <EnterPassword password={password} setPassword={setPassword} />
+          }
+        />
       )}
     </form>
   );

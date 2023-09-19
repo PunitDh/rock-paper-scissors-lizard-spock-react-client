@@ -35,6 +35,7 @@ export enum SheetAction {
   RENAME_SHEET,
   MOVE_SHEET,
   DELETE_SHEET,
+  PROTECT_SHEET,
   SET_ACTIVE_SHEET,
   FORMULA_HIGHLIGHT_CELL_RANGE,
   FORMULA_HIGHLIGHT_CELLS,
@@ -224,6 +225,14 @@ export const moveSheet = (sheetId: string, offset: number): Action => ({
 export const deleteSheet = (payload: string): Action => ({
   type: SheetAction.DELETE_SHEET,
   payload,
+});
+
+export const protectSheet = (sheetId: string, password: string): Action => ({
+  type: SheetAction.PROTECT_SHEET,
+  payload: {
+    sheetId,
+    password,
+  },
 });
 
 export const setActiveSheet = (payload: string): Action => ({
