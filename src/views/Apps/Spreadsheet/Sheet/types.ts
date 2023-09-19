@@ -52,6 +52,7 @@ export type SheetProps = {
 
 export type Sheet = {
   id: string;
+  index: number;
   name: string;
   content: StateContent;
   initialContent: StateContent;

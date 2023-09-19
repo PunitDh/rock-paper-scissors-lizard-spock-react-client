@@ -148,7 +148,13 @@ export const createInitialState = (
     ...initialState,
     ...defaultProps,
     ...props,
-    content: generateInitialContent(props, defaultProps),
+    sheets: {
+      ...initialState.sheets,
+      [initialState.activeSheet]: {
+        ...initialState.sheets[initialState.activeSheet],
+        content: generateInitialContent(props, defaultProps),
+      },
+    },
   };
   return createdState;
 };

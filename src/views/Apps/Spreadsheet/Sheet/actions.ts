@@ -32,6 +32,8 @@ export enum SheetAction {
   SELECT_ALL,
   HIGHLIGHT_CELLS,
   ADD_SHEET,
+  RENAME_SHEET,
+  MOVE_SHEET,
   DELETE_SHEET,
   SET_ACTIVE_SHEET,
   FORMULA_HIGHLIGHT_CELL_RANGE,
@@ -201,6 +203,22 @@ export const highlightCells = (start: string, end?: string): Action => ({
 
 export const addSheet = (): Action => ({
   type: SheetAction.ADD_SHEET,
+});
+
+export const renameSheet = (sheetId: string, sheetName: string): Action => ({
+  type: SheetAction.RENAME_SHEET,
+  payload: {
+    sheetId,
+    sheetName,
+  },
+});
+
+export const moveSheet = (sheetId: string, offset: number): Action => ({
+  type: SheetAction.MOVE_SHEET,
+  payload: {
+    sheetId,
+    offset,
+  },
 });
 
 export const deleteSheet = (payload: string): Action => ({

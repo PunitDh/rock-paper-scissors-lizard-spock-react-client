@@ -12,6 +12,8 @@ type Props = {
 };
 
 const SaveFileCSV = ({ state }: Props) => {
+  const activeSheet = state.sheets[state.activeSheet];
+
   const handleExportAsCsv = () => {
     const range = CellRange.createHorizontalSliced(
       `A1`,
@@ -22,7 +24,7 @@ const SaveFileCSV = ({ state }: Props) => {
         row
           .map(
             (cell: Cell) =>
-              state.sheets[state.activeSheet].content.data[cell.id]?.value || ""
+              activeSheet.content.data[cell.id]?.value || ""
           )
           .join(",")
       )
@@ -32,7 +34,7 @@ const SaveFileCSV = ({ state }: Props) => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", `Sheet1.csv`);
+    link.setAttribute("download", `${activeSheet.name}.csv`);
     document.body.appendChild(link);
     link.click();
     link.parentNode?.removeChild(link);
