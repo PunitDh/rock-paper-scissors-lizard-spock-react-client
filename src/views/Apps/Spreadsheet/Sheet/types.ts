@@ -1,8 +1,8 @@
-import { List } from "../../../../utils/List";
 import { SheetAction } from "./actions";
 import Cell from "./models/Cell";
 import Highlight from "./models/Highlight";
 import StateContent from "./models/StateContent";
+import SetExtended from "../../../../utils/SetExtended";
 
 export type State = {
   maxRows: number;
@@ -17,8 +17,8 @@ export type State = {
   formulaMode: boolean;
   hovered: string;
   highlighted: Highlight;
-  formulaTrackedCells: List<string>;
-  formulaHighlighted: List<string>;
+  formulaTrackedCells: SetExtended<string>;
+  formulaHighlighted: SetExtended<string>;
   initialContent: StateContent;
   content: StateContent;
   mouseDown: boolean;

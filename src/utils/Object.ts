@@ -20,6 +20,10 @@ class ObjectExtended {
     return Object.keys(this).length;
   }
 
+  to(Constructor: new (arg0: this) => any) {
+    return new Constructor(this);
+  }
+
   forEach(
     forEachFunction: (value: any, index: number, list: any[]) => void
   ): void {

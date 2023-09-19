@@ -20,7 +20,7 @@ type Props = {
   dispatch: Dispatch<Action>;
   originalValue: string;
   value: string;
-}
+};
 
 const FormulaField = ({ state, dispatch, originalValue, value }: Props) => {
   const eventHandler = useEventHandler();
@@ -40,17 +40,19 @@ const FormulaField = ({ state, dispatch, originalValue, value }: Props) => {
     // }
   }, [state.isFormulaFieldFocused]);
 
-  const handleContextMenu = (e: React.MouseEvent) => eventHandler.handleContextMenu(e);
+  const handleContextMenu = (e: React.MouseEvent) =>
+    eventHandler.handleContextMenu(e);
   const handleKeyDown = (e: React.KeyboardEvent) =>
     eventHandler.handleFormulaFieldKeyDown(e, originalValue);
-  const handleSubmit = (e: React.FormEvent) => eventHandler.handleFormulaFieldSubmit(e);
+  const handleSubmit = (e: React.FormEvent) =>
+    eventHandler.handleFormulaFieldSubmit(e);
   const handleBlur = (e: React.FocusEvent) =>
     eventHandler.handleFormulaFieldBlur(e, originalValue);
 
   const resetField = () => {
     dispatch(resetFormulaField());
     dispatch(deleteCellContent(state.selectedCell.id));
-    if (state.formulaTrackedCells.includes(state.selectedCell.id)) {
+    if (state.formulaTrackedCells.has(state.selectedCell.id)) {
       dispatch(recalculateFormulae());
     }
     dispatch(addMemento());
@@ -65,7 +67,7 @@ const FormulaField = ({ state, dispatch, originalValue, value }: Props) => {
 
   const handleChange = useCallback(
     (e: React.ChangeEvent) => {
-      const value = (e.target as HTMLInputElement).value
+      const value = (e.target as HTMLInputElement).value;
       // e.preventDefault();
       dispatch(setFormulaFieldText(value));
       dispatch(setFormulaMode(isFormula(value)));
@@ -75,7 +77,7 @@ const FormulaField = ({ state, dispatch, originalValue, value }: Props) => {
   );
 
   const handleFocus = (e: React.FocusEvent) => {
-    const value = (e.target as HTMLInputElement).value
+    const value = (e.target as HTMLInputElement).value;
     if (isFormula(value)) {
       dispatch(setFormulaMode(true));
     }

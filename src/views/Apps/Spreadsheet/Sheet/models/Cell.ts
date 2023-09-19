@@ -33,7 +33,7 @@ export default class Cell {
     wrap: boolean = true,
     maxRows: number = SheetConfig.MAX_ROWS,
     maxColumns: number = SheetConfig.MAX_COLUMNS
-  ): Cell | undefined {
+  ): Cell {
     let offsetRow = +this.row + offsetY;
     let columnIndex = SheetConfig.COLUMNS.indexOf(this.column) + offsetX;
 
@@ -48,7 +48,7 @@ export default class Cell {
     // Ensure the resulting cell is valid, otherwise, you might want to throw an error or handle differently
     if (!offsetColumn || offsetRow <= 0) {
       console.error(`Invalid cell id: ${offsetColumn}${offsetRow}`);
-      return; // or throw new Error("Invalid cell position");
+      return this; // or throw new Error("Invalid cell position");
     }
 
     return new Cell(`${offsetColumn}${offsetRow}`);

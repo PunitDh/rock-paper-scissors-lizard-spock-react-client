@@ -6,13 +6,13 @@ import { isString } from "lodash";
 import { isFalsy, isNumber } from "../../../../../utils";
 import StateContentData from "./StateContentData";
 import { CellFormula, CellValue } from "../types";
-import { List } from "../../../../../utils/List";
+import SetExtended, { setOf } from "../../../../../utils/SetExtended";
 
 type CellDataShape = {
   id: string | null;
   value?: CellValue;
   formula?: CellFormula;
-  referenceCells?: Array<string>;
+  referenceCells?: SetExtended<string>;
   display?: string;
   formatting?: CellFormatting;
   error?: string | null;
@@ -24,7 +24,7 @@ export default class CellData {
   previousValue: CellValue;
   formula: CellFormula;
   previousFormula: CellFormula;
-  referenceCells: Array<string>;
+  referenceCells: SetExtended<string>;
   display: string;
   formatting: CellFormatting;
   error: string | null;
@@ -44,7 +44,7 @@ export default class CellData {
     id = null,
     value = null,
     formula = null,
-    referenceCells = [],
+    referenceCells = setOf<string>(),
     display = "",
     formatting = new CellFormatting(),
     error = null,
@@ -116,12 +116,12 @@ export default class CellData {
       this.value = value;
       this.setDisplay();
       this.formula = null;
-      this.referenceCells = [];
+      this.referenceCells = setOf<string>();
     }
     return this;
   }
 
-  setReferenceCells(referenceCells: string[]): CellData {
+  setReferenceCells(referenceCells: SetExtended<string>): CellData {
     this.referenceCells = referenceCells;
     return this;
   }
@@ -183,11 +183,11 @@ export default class CellData {
 
       if (evaluated.error) {
         this.error = evaluated.error;
-        this.referenceCells = [];
+        // this.referenceCells = [];
       } else {
         this.error = null;
-        this.referenceCells = referenceCells.flat();
       }
+      this.referenceCells = referenceCells;
       this.previousValue = this.value;
       this.value = evaluated.value;
       this.setDisplay();
@@ -287,7 +287,6 @@ const processVLookup = (
   return referenceCells.map((it, idx) => ({
     [matches[idx][0]]: formulaCreator(it),
     zeroValue,
-    referenceCells,
   }));
 };
 
@@ -311,7 +310,6 @@ const processLookup = (
   return referenceCells.map((it, idx) => ({
     [matches[idx][0]]: formulaCreator(it),
     zeroValue,
-    referenceCells,
   }));
 };
 
@@ -346,7 +344,6 @@ const processMatches = (
   return referenceCells.map((it, idx) => ({
     [matches[idx][0]]: formulaCreator(it),
     zeroValue,
-    referenceCells,
   }));
 };
 
@@ -362,15 +359,17 @@ const replaceFormulaWithValues = (
   str: string,
   stateContentData: StateContentData,
   blankValue: undefined | null | 0
-): string => {
+): { string: string; referenceCells: SetExtended<string> } => {
   const cellReg = /([A-Z]\d+)/g;
   const cellMatches = [...new Set([...str.matchAll(cellReg)].flat())].sort(
     cellSorter
   );
 
-  return cellMatches.reduce((acc, cell) => {
-    const cellDataValue = stateContentData[cell]?.value;
+  const referenceCells = setOf<string>();
 
+  const string = cellMatches.reduce((acc, cell) => {
+    const cellDataValue = stateContentData[cell]?.value;
+    referenceCells.add(cell);
     return acc.replaceAll(
       cell,
       isNumber(cellDataValue)
@@ -380,6 +379,8 @@ const replaceFormulaWithValues = (
         : `null`
     );
   }, str);
+
+  return { string, referenceCells };
 };
 
 // Core evaluation functions
@@ -448,14 +449,14 @@ const evaluateFormula = (cellValue: string): Array<any> => {
 
 type Evaluated = {
   value: string;
-  referenceCells: string[];
+  referenceCells: SetExtended<string>;
   error?: string | undefined;
   parsedInput: string;
 };
 
 type ReplacedString = {
   stringValue: string;
-  referenceCells: string[];
+  referenceCells: SetExtended<string>;
 };
 
 /**
@@ -473,14 +474,15 @@ export const evaluate = (
 
   const substitutedValues = parsedStrings.map((it) => {
     const key = Object.keys(it)[0];
+    const replaced = replaceFormulaWithValues(
+      Object.values(it)[0] as string,
+      stateContentData,
+      it.zeroValue
+    );
     return {
       [key]: {
-        value: replaceFormulaWithValues(
-          Object.values(it)[0] as string,
-          stateContentData,
-          it.zeroValue
-        ),
-        referenceCells: it.referenceCells,
+        value: replaced.string,
+        referenceCells: replaced.referenceCells,
       },
     };
   });
@@ -498,7 +500,10 @@ export const evaluate = (
   const replacedString = evaluatedExpressions.reduce<ReplacedString>(
     (acc, cur) => {
       const curKey = Object.keys(cur)[0] as string;
-      const curValue = cur[curKey] as { [key: string]: string };
+      const curValue: Evaluated = cur[curKey];
+      [...curValue.referenceCells].forEach((cell) => {
+        acc.referenceCells.add(cell);
+      });
       return {
         stringValue: acc.stringValue.replaceAll(
           curKey,
@@ -506,10 +511,13 @@ export const evaluate = (
             ? `"${curValue.value}"`
             : `(${curValue.value})`
         ),
-        referenceCells: [...acc.referenceCells, ...curValue.referenceCells],
+        referenceCells: acc.referenceCells,
       };
     },
-    { stringValue: str.toUpperCase(), referenceCells: [] }
+    {
+      stringValue: str.toUpperCase(),
+      referenceCells: setOf<string>(),
+    }
   );
 
   const substitutedString = replaceFormulaWithValues(
@@ -518,14 +526,17 @@ export const evaluate = (
     0
   );
 
-  const finalEvaluation: EvaluatedString =
-    evaluateExpression(substitutedString);
+  const finalEvaluation: EvaluatedString = evaluateExpression(
+    substitutedString.string
+  );
 
   return {
     value: finalEvaluation.value,
     parsedInput: finalEvaluation.parsedInput,
     error: finalEvaluation.error,
-    referenceCells: replacedString.referenceCells,
+    referenceCells: replacedString.referenceCells.mergeWith(
+      substitutedString.referenceCells
+    ),
   };
 };
 
@@ -603,7 +614,7 @@ const evaluateExpression = (input: string): EvaluatedString => {
  * @param {string} formula - The formula string to extract cell references from.
  * @returns {Array} An array of cell references.
  */
-export function getReferenceCells(formula: string): List<string> {
+export function getReferenceCells(formula: string): SetExtended<string> {
   const cells = formula.toUpperCase().match(/([a-z]+[0-9]+)/gi) || [];
   const cellRanges =
     formula.toUpperCase().match(/([a-z]+[0-9]+):([a-z]+[0-9]+)/gi) || [];
@@ -617,9 +628,7 @@ export function getReferenceCells(formula: string): List<string> {
     .flat();
 
   // Combine all cell references without duplicates
-  return List.from(
-    new Set(expandedRanges.concat(cells))
-  ).flat() as List<string>;
+  return setOf<string>(expandedRanges.concat(cells).flat());
 }
 
 /**
@@ -632,12 +641,11 @@ export function getReferenceCells(formula: string): List<string> {
  */
 export function getFormulaTrackedCells(
   formula: string,
-  stateFormulaTrackedCells: List<string>
-): List<string> {
+  stateFormulaTrackedCells: SetExtended<string>
+): SetExtended<string> {
   const referenceCells = getReferenceCells(formula);
-
-  const formulaTrackedCells = List.from(
-    new Set(referenceCells.concat(stateFormulaTrackedCells))
+  const formulaTrackedCells = setOf<string>(
+    referenceCells.mergeWith(stateFormulaTrackedCells)
   );
-  return formulaTrackedCells as List<string>;
+  return formulaTrackedCells;
 }

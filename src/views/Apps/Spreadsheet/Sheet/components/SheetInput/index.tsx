@@ -7,6 +7,7 @@ import { highlightFormulaCells, setFormulaFieldText } from "../../actions";
 import useElementPosition from "../../hooks/useElementPosition";
 import useInputData from "../../hooks/useInputData";
 import Highlight from "./Highlight";
+import SetExtended from "../../../../../../utils/SetExtended";
 
 type Props = {
   state: State;
@@ -47,10 +48,10 @@ const SheetInput = ({ state, dispatch, formulaField }: Props) => {
       dispatch(
         setFormulaFieldText(selectedCellData.formula || selectedCellData.value)
       );
-      dispatch(highlightFormulaCells(referenceCells || []));
+      dispatch(highlightFormulaCells(referenceCells));
     } else {
       dispatch(setFormulaFieldText(""));
-      dispatch(highlightFormulaCells([]));
+      dispatch(highlightFormulaCells(new SetExtended<string>()));
     }
   }, [dispatch, referenceCells, selectedCellData, selectedId]);
 
@@ -66,7 +67,7 @@ const SheetInput = ({ state, dispatch, formulaField }: Props) => {
       )}
       {state.highlighted.hasLength &&
         (state.highlighted.multiSelect ? (
-          state.highlighted.cells.map((cellId) => {
+          state.highlighted.cells.toArray().map((cellId) => {
             const cellRect = document
               .getElementById(cellId)
               ?.getBoundingClientRect();

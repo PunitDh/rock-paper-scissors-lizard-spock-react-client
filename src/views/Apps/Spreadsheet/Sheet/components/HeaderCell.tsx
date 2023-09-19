@@ -20,22 +20,24 @@ type HeaderItemProps = {
   dimension: Dimension;
   dimensionsize: number;
   children?: JSX.Element | JSX.Element[];
-} & TableCellProps
+} & TableCellProps;
 
-const HeaderItemComponent = styled(HeaderItem)(({ dimension, dimensionsize }: HeaderItemProps) => ({
-  cursor: dimension === Dimension.ROW ? "e-resize" : "s-resize",
-  position: "relative",
-  width: dimension === Dimension.ROW ? "1.75rem" : dimensionsize + "px",
-  "&:active": {
-    backgroundColor: "#555",
-    color: "#FFFFFF",
-  },
-  height: dimension === Dimension.ROW ? dimensionsize + "px" : "initial",
-}));
+const HeaderItemComponent = styled(HeaderItem)(
+  ({ dimension, dimensionsize }: HeaderItemProps) => ({
+    cursor: dimension === Dimension.ROW ? "e-resize" : "s-resize",
+    position: "relative",
+    width: dimension === Dimension.ROW ? "1.75rem" : dimensionsize + "px",
+    "&:active": {
+      backgroundColor: "#555",
+      color: "#FFFFFF",
+    },
+    height: dimension === Dimension.ROW ? dimensionsize + "px" : "initial",
+  })
+);
 
 type ResizerProps = {
-  dimension: Dimension
-}
+  dimension: Dimension;
+};
 
 const ResizerComponent = styled.div(({ dimension }: ResizerProps) => ({
   position: "absolute",
@@ -54,7 +56,7 @@ type Props = {
   dispatch: Dispatch<Action>;
   id: string | number;
   dimension: Dimension;
-}
+};
 
 const HeaderCell = ({ state, dispatch, id, dimension }: Props): JSX.Element => {
   const eventHandler = useEventHandler();
@@ -62,9 +64,12 @@ const HeaderCell = ({ state, dispatch, id, dimension }: Props): JSX.Element => {
   const posRef = useRef<number>(0);
   const selected: boolean =
     state.selectedCell[dimension] === id ||
-    state.highlighted[dimension + "s"].includes(id);
+    (dimension === Dimension.ROW
+      ? state.highlighted.rows.has(Number(id))
+      : state.highlighted.columns.has(String(id)));
 
-  const handleContextMenu = (e: React.MouseEvent) => eventHandler.handleContextMenu(e);
+  const handleContextMenu = (e: React.MouseEvent) =>
+    eventHandler.handleContextMenu(e);
 
   const handleDragStart = (e: React.DragEvent) => {
     e.dataTransfer.setData("text/plain", "");
@@ -151,7 +156,7 @@ const HeaderCell = ({ state, dispatch, id, dimension }: Props): JSX.Element => {
     <HeaderItemComponent
       ref={headerRef}
       dimension={dimension}
-      dimensionsize={(dimensionSize)}
+      dimensionsize={dimensionSize}
       selected={selected}
       onClick={handleClick}
       onContextMenu={handleContextMenu}

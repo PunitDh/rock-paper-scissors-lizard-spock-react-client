@@ -1,3 +1,5 @@
+import SetExtended from "./SetExtended";
+
 class IndexOutOfBoundsError extends Error {}
 class NoSuchElementError extends Error {}
 class IllegalArgumentError extends Error {}
@@ -2653,6 +2655,10 @@ class List<T> extends Array<T> {
    */
   toSet(): Set<any> {
     return new Set(this);
+  }
+
+  toSetExtended(): SetExtended<any> {
+    return new SetExtended(this);
   }
 
   /**

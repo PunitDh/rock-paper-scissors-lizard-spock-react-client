@@ -17,7 +17,7 @@ export default class CellRange {
     cells: Cell[] | Cell[][],
     cellIds: string[] | string[][],
     rows: number[],
-    columns: string[],
+    columns: string[]
   ) {
     this.cells = cells;
     this.cellIds = Array.from(new Set<any>(cellIds));

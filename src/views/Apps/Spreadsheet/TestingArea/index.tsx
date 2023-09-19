@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import useEventHandler from "../Sheet/hooks/useEventHandler";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import FlexBox from "../../../../components/shared/FlexBox";
 import { useToken } from "../../../../hooks";
 import { State } from "../Sheet/types";
-import { ObjectExtended } from "../../../../utils/Object";
 
 
 const CellContainer = styled.div({
@@ -53,7 +51,6 @@ const StatusCell = function ({ label, children }: Props) {
 
 const TestingArea = ({ state }: { state: State }) => {
   const token = useToken();
-  const eventHandler = useEventHandler();
   const [keyboard, setKeyboard] = useState('');
 
   useEffect(() => {
@@ -68,23 +65,17 @@ const TestingArea = ({ state }: { state: State }) => {
     }
   }, [])
 
-  const testObj = new ObjectExtended({
-    a: "Debug key listener removed",
-    b: "Cell selector current input value hook triggered",
-    c: "Cell input navigateref hook triggered",
-    d: "Formula field value hook triggered",
-    e: "setSelectedFormatting hook triggered for Toolbar",
-    f: "Sheet initial hook triggered"
-  });
+  
 
   return token.decoded?.isAdmin ? (
     <DashboardCard sx={{ height: "100%" }} title="Testing Area">
       <FlexBox width="100%" height="100%" gap="0.5rem">
+        {/* <StatusCell label="Test Obj">{state.selectedCell.id}</StatusCell> */}
         <StatusCell label="Keyboard">{keyboard}</StatusCell>
         {/* <StatusCell label="Mouse button">{mouse}</StatusCell> */}
         {/* <StatusCell label="MouseDown">{String(state.mouseDown)}</StatusCell>
-        <StatusCell label="Hovered">{state.hovered}</StatusCell> */}
 
+        <StatusCell label="Hovered">{state.hovered}</StatusCell> */}
         <StatusCell label="Current Cell">{state.selectedCell.id}</StatusCell>
         <StatusCell label="Highlighted Anchor">
           {state.highlighted.cellAnchor}
@@ -93,7 +84,7 @@ const TestingArea = ({ state }: { state: State }) => {
           {state.highlighted.cellAnchor}
         </StatusCell>
         <StatusCell label="Highlighted Cells">
-          {state.highlighted.cells.join(",")}
+          {state.highlighted.cells.toArray().join(",")}
         </StatusCell>
         <StatusCell label="Filler Mode">{String(state.fillerMode)}</StatusCell>
         <StatusCell label="Formula Mode">

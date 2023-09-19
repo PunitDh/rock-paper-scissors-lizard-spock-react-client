@@ -35,6 +35,7 @@ import { generateClipboardContent, isFormula } from "../utils/cellUtils";
 import CellData from "../models/CellData";
 import Highlight from "../models/Highlight";
 import { Clipboard } from "../../../../../hooks/types";
+import { setOf } from "../../../../../utils/SetExtended";
 
 export default class EventHandler {
   state: State;
@@ -87,7 +88,7 @@ export default class EventHandler {
 
     const triggerRecalculation =
       isFormula((e.target as HTMLInputElement).value) ||
-      this.state.formulaTrackedCells.includes(cellId);
+      this.state.formulaTrackedCells.has(cellId);
 
     if (triggerRecalculation) {
       this.dispatch(recalculateFormulae());
@@ -98,7 +99,6 @@ export default class EventHandler {
   handleCellInputKeyDown(e: React.KeyboardEvent, navigateRefCurrent: boolean) {
     const cell = this.state.selectedCell;
     const value = (e.target as HTMLInputElement).value;
-    console.log("Here", e.key);
     switch (e.key) {
       case KeyEvent.SHIFT:
         this.dispatch(setHighlightCellAnchor(cell.id));
@@ -111,7 +111,7 @@ export default class EventHandler {
         break;
       case KeyEvent.ENTER:
         const triggerRecalculation =
-          this.state.formulaTrackedCells.includes(cell.id) || isFormula(value);
+          this.state.formulaTrackedCells.has(cell.id) || isFormula(value);
         this.dispatch(setCellContent(cell.id, value));
         this.dispatch(setFormulaMode(false));
         triggerRecalculation && this.dispatch(recalculateFormulae());
@@ -128,7 +128,31 @@ export default class EventHandler {
         break;
       case KeyEvent.LOWERCASE_A:
         if (this.isCtrlKeyPressed(e)) {
-          e.stopPropagation();
+          e.preventDefault();
+          this.dispatch(selectAll());
+        }
+        break;
+      case KeyEvent.LOWERCASE_Z:
+        if (this.isCtrlKeyPressed(e)) {
+          e.preventDefault();
+          e.shiftKey ? this.dispatch(redoState()) : this.dispatch(undoState());
+          this.dispatch(recalculateFormulae());
+        }
+        break;
+      case KeyEvent.LOWERCASE_C:
+        if (this.isCtrlKeyPressed(e)) {
+          e.preventDefault();
+          const content = generateClipboardContent(this.state);
+          console.log(content);
+        }
+        break;
+      case KeyEvent.LOWERCASE_X:
+        if (this.isCtrlKeyPressed(e)) {
+          e.preventDefault();
+          const content = generateClipboardContent(this.state);
+          console.log(content);
+
+          this.dispatch(deleteCellContent());
         }
         break;
       case KeyEvent.TAB: {
@@ -208,7 +232,7 @@ export default class EventHandler {
   handleFormulaFieldSubmit(e) {
     const triggerRecalculation =
       isFormula(e.target.formulaFieldText.value) ||
-      this.state.formulaTrackedCells.includes(this.state.selectedCell.id);
+      this.state.formulaTrackedCells.has(this.state.selectedCell.id);
     e.preventDefault();
     this.dispatch(setFormulaFieldText(e.target.formulaFieldText.value));
     this.dispatch(setFormulaFieldFocused(false));
@@ -223,7 +247,7 @@ export default class EventHandler {
   handleFormulaFieldBlur(e, originalValue) {
     const triggerRecalculation =
       isFormula(e.target.value) ||
-      this.state.formulaTrackedCells.includes(this.state.selectedCell.id) ||
+      this.state.formulaTrackedCells.has(this.state.selectedCell.id) ||
       originalValue !== e.target.value;
     if (!this.state.formulaMode) {
       triggerRecalculation && this.dispatch(recalculateFormulae());
@@ -323,39 +347,9 @@ export default class EventHandler {
   }
 
   handleKeyDown(e: React.KeyboardEvent): void {
-    let nextCell: Cell;
-    const { cellAnchor } = this.state.highlighted;
-
     this.inputRef?.focus();
 
     switch (e.key) {
-      case KeyEvent.LOWERCASE_A:
-        if (this.isCtrlKeyPressed(e)) {
-          e.preventDefault();
-          this.dispatch(selectAll());
-        }
-        break;
-      case KeyEvent.LOWERCASE_Z:
-        if (this.isCtrlKeyPressed(e)) {
-          e.preventDefault();
-          e.shiftKey ? this.dispatch(redoState()) : this.dispatch(undoState());
-          this.dispatch(recalculateFormulae());
-        }
-        break;
-      case KeyEvent.LOWERCASE_C:
-        if (this.isCtrlKeyPressed(e)) {
-          e.preventDefault();
-          const content = generateClipboardContent(this.state);
-        }
-        break;
-      case KeyEvent.LOWERCASE_X:
-        if (this.isCtrlKeyPressed(e)) {
-          e.preventDefault();
-          const content = generateClipboardContent(this.state);
-
-          this.dispatch(deleteCellContent());
-        }
-        break;
       case KeyEvent.SHIFT:
         this.dispatch(setHighlightCellAnchor(this.state.selectedCell.id));
         break;
@@ -584,7 +578,7 @@ export default class EventHandler {
   }
 
   private isFormulaTrackedCell(cellId: string): Boolean {
-    return this.state.formulaTrackedCells.includes(cellId);
+    return this.state.formulaTrackedCells.has(cellId);
   }
 
   #handleFillerModeFormulaFill() {
@@ -742,7 +736,7 @@ export default class EventHandler {
     const isSameCellSelected = id === selectedCellId;
 
     if (isCtrlPressed) {
-      this.dispatch(highlightFormulaCells([id]));
+      this.dispatch(highlightFormulaCells(setOf<string>([id])));
       this.#addCellsToFormula(id, isCtrlPressed);
     } else if (isShiftPressed) {
       // TODO

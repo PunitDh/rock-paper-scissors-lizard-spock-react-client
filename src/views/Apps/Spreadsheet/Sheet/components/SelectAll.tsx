@@ -46,11 +46,11 @@ const SelectAll = ({ state, dispatch }: Props) => {
       Array(state.maxRows)
         .fill(0)
         .map((_, it) => it + 1)
-        .every((row) => state.highlighted.rows.includes(row)) &&
+        .every((row) => state.highlighted.rows.has(row)) &&
       Array(state.maxColumns)
         .fill(0)
         .map((_, it) => SheetConfig.COLUMNS[it])
-        .every((column) => state.highlighted.columns.includes(column)),
+        .every((column) => state.highlighted.columns.has(column)),
     [
       state.highlighted.columns,
       state.highlighted.rows,

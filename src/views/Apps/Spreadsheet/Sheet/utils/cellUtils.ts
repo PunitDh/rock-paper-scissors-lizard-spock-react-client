@@ -7,13 +7,14 @@ import StateContent from "../models/StateContent";
 import { isObject, isString } from "../../../../../utils";
 import { SheetProps, State } from "../types";
 import StateContentData from "../models/StateContentData";
+import SetExtended from "../../../../../utils/SetExtended";
 
 export const generateClipboardContent = (state: {
-  highlighted: { rows: any[]; columns: any[] };
+  highlighted: { rows: SetExtended<number>; columns: SetExtended<string> };
   content: { data: { [x: string]: { formula: any } } };
 }) => {
-  const content = state.highlighted.rows.map((row: any) =>
-    state.highlighted.columns.map((column: any) => {
+  const content = state.highlighted.rows.toArray().map((row: any) =>
+    state.highlighted.columns.toArray().map((column: any) => {
       const id = `${column}${row}`;
       const cellData = state.content.data[id] as CellData;
 
@@ -145,7 +146,6 @@ export const createInitialState = (
   props: SheetProps,
   defaultProps: { [key: string]: any }
 ): State => {
-  console.log(cloneDeep(initialState));
   return {
     // ...initialState,
     ...cloneDeep(initialState),
@@ -220,9 +220,9 @@ export const getWidth = (id: string): string | undefined => {
   return undefined;
 };
 
-export const cellSorter = (a: string, b: string) => {
-  const aMatch = a.match(/([A-Z]+)(\d+)/);
-  const bMatch = b.match(/([A-Z]+)(\d+)/);
+export const cellSorter = (cellIdA: string, cellIdB: string): number => {
+  const aMatch = cellIdA.match(/([A-Z]+)(\d+)/);
+  const bMatch = cellIdB.match(/([A-Z]+)(\d+)/);
 
   if (aMatch && bMatch) {
     const [aLetters, aNumbers] = aMatch.slice(1);

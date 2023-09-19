@@ -1,5 +1,5 @@
 import { isNumber } from "../../../../../utils";
-import { List, listOf } from "../../../../../utils/List";
+import SetExtended, { setOf } from "../../../../../utils/SetExtended";
 import Cell from "./Cell";
 import StateContentData from "./StateContentData";
 
@@ -7,9 +7,9 @@ type Props = {
   rowAnchor?: null | number;
   columnAnchor?: null | string;
   cellAnchor?: null | string;
-  cells?: string[];
-  rows?: number[];
-  columns?: string[];
+  cells?: SetExtended<string>;
+  rows?: SetExtended<number>;
+  columns?: SetExtended<string>;
   rangeStart?: null | string;
   rangeEnd?: null | string;
   multiSelect?: boolean;
@@ -22,9 +22,9 @@ export default class Highlight {
   rowAnchor: null | number = null;
   columnAnchor: null | string = null;
   cellAnchor: null | string = null;
-  cells: string[] = [];
-  rows: number[] = [];
-  columns: string[] = [];
+  cells: SetExtended<string> = setOf<string>();
+  rows: SetExtended<number> = setOf<number>();
+  columns: SetExtended<string> = setOf<string>();
   rangeStart: null | string = null;
   rangeEnd: null | string = null;
   sum: number | null = null;
@@ -38,9 +38,9 @@ export default class Highlight {
     rowAnchor = null,
     columnAnchor = null,
     cellAnchor = null,
-    cells = listOf(),
-    rows = listOf(),
-    columns = listOf(),
+    cells = setOf<string>(),
+    rows = setOf<number>(),
+    columns = setOf<string>(),
     rangeStart = null,
     rangeEnd = null,
     multiSelect = false,
@@ -65,19 +65,19 @@ export default class Highlight {
   }
 
   get first(): string {
-    return this.cells[0];
+    return this.cells.first();
   }
 
   get second(): string {
-    return this.cells[1];
+    return this.cells.second();
   }
 
   get last(): string {
-    return this.cells[this.cells.length - 1];
+    return this.cells.last();
   }
 
   includes(cellId: string): Boolean {
-    return this.cells.includes(cellId);
+    return this.cells.has(cellId);
   }
 
   setRowAnchor(row: number): Highlight {
@@ -111,10 +111,10 @@ export default class Highlight {
   }
 
   setCells(
-    cellIds: List<string>,
+    cellIds: SetExtended<string>,
     stateContentData: StateContentData
   ): Highlight {
-    this.cells = cellIds;
+    this.cells = setOf<string>(cellIds);
     this.recalculate(stateContentData);
     return this;
   }
@@ -129,12 +129,12 @@ export default class Highlight {
     return this;
   }
 
-  setRows(rowIds: Array<number>): Highlight {
+  setRows(rowIds: SetExtended<number>): Highlight {
     this.rows = rowIds;
     return this;
   }
 
-  setColumns(columnIds: string[]): Highlight {
+  setColumns(columnIds: SetExtended<string>): Highlight {
     this.columns = columnIds;
     return this;
   }
@@ -144,15 +144,15 @@ export default class Highlight {
     stateContentData: StateContentData
   ): Highlight {
     const cell = new Cell(cellId);
-    const rowsSet = new Set(this.rows);
-    const columnsSet = new Set(this.columns);
-    const cellsSet = new Set(this.cells);
+    const rowsSet = setOf<number>(this.rows);
+    const columnsSet = setOf<string>(this.columns);
+    const cellsSet = setOf<string>(this.cells);
     cellsSet.add(cell.id);
     rowsSet.add(cell.row);
     columnsSet.add(cell.column);
-    this.cells = List.from(cellsSet);
-    this.rows = List.from(rowsSet);
-    this.columns = List.from(columnsSet);
+    this.cells = cellsSet;
+    this.rows = rowsSet;
+    this.columns = columnsSet;
     this.recalculate(stateContentData);
     return this;
   }
@@ -184,9 +184,11 @@ export default class Highlight {
    */
   calculateCount(stateContentData: StateContentData): Highlight {
     if (this.hasLength) {
-      const count = this.cells.filter((cell) =>
-        Boolean(stateContentData[cell]?.value?.toString())
-      ).length;
+      const count = this.cells
+        .toArray()
+        .filter((cell) =>
+          Boolean(stateContentData[cell]?.value?.toString())
+        ).length;
       this.count = count;
     } else {
       this.count = null;
@@ -214,6 +216,7 @@ export default class Highlight {
 
   private getNumbers(stateContentData: StateContentData): number[] {
     return this.cells
+      .toArray()
       .filter((cell) => isNumber(stateContentData[cell]?.value))
       .map((cell) => parseFloat(stateContentData[cell]?.value));
   }

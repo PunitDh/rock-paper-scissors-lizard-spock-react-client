@@ -1,3 +1,4 @@
+import SetExtended from "../../../../utils/SetExtended";
 import { AutoCalculate } from "./components/Toolbar/constants";
 import Cell from "./models/Cell";
 import StateContent from "./models/StateContent";
@@ -206,7 +207,7 @@ export const highlightFormulaCellRange = (
   },
 });
 
-export const highlightFormulaCells = (payload: string[]): Action => ({
+export const highlightFormulaCells = (payload: SetExtended<string>): Action => ({
   type: SheetAction.FORMULA_HIGHLIGHT_CELLS,
   payload,
 });

@@ -18,29 +18,23 @@ export const formatDate = (date: string | number | Date): string =>
     second: "numeric",
   }).format(new Date(date));
 
-export const isNumber = (value: unknown) => {
-  return (
-    typeof value === "number" ||
-    (typeof value === "string" && /^-?\d*\.?\d+$/.test(value))
-  );
-};
+export const isNumber = (value: unknown) =>
+  typeof value === "number" ||
+  (typeof value === "string" && /^-?\d*\.?\d+$/.test(value));
 
-export const isFalsy = (value: unknown) => {
-  return value === undefined || value === null || value === false;
-};
+export const isFalsy = (value: unknown) =>
+  value === undefined || value === null || value === false;
 
-export const isString = (value: unknown) => {
-  return typeof value === "string" || value instanceof String;
-};
+export const isString = (value: unknown) =>
+  typeof value === "string" || value instanceof String;
 
-export const isObject = (value: unknown) => {
-  return value && typeof value === "object";
-};
+export const isObject = (value: unknown) => value && typeof value === "object";
 
-export const isInstance = (value, clazz) => {
-  return isObject(value) && value instanceof clazz;
-};
+type Class = { new (...args: any[]): any };
 
-export const isBoolean = (value) => {
+export const isInstance = (value: unknown, clazz: Class): boolean =>
+  Boolean(isObject(value) && value instanceof clazz);
+
+export const isBoolean = (value: unknown): boolean => {
   return typeof value === "boolean";
 };
