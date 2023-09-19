@@ -19,6 +19,7 @@ import { Action, State } from "../../types";
 import ConfirmationDialog from "../../../../../../components/shared/ConfirmationDialog";
 import Protect from "./Protect";
 import { Credentials } from "./types";
+import { useNotification } from "../../../../../../hooks";
 
 type Props = {
   state: State;
@@ -41,6 +42,7 @@ const SheetSelectMenu = ({
     password: "",
     confirmPassword: "",
   });
+  const notification = useNotification();
 
   const handleCloseDelete = () => {
     setDeleteConfirmOpen(false);
@@ -56,9 +58,14 @@ const SheetSelectMenu = ({
   };
 
   const handleProtectSheet = () => {
-    if (anchor) dispatch(protectSheet(anchor.id, credentials.password));
+    if (anchor) {
+      dispatch(protectSheet(anchor.id, credentials.password));
+      setCredentials({ password: "", confirmPassword: "" });
+      notification.success(
+        `${state.sheets[anchor.id].name} locked`
+      );
+    }
     onClose();
-    setCredentials({ password: "", confirmPassword: "" });
   };
 
   const handleMoveSheet = (offset: number) => () => {

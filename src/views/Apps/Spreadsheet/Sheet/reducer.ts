@@ -269,8 +269,6 @@ export const reducer = (state: State, action: Action): State => {
     case SheetAction.PROTECT_SHEET: {
       const { sheetId, password } = action.payload;
 
-      console.log({sheetId, password});
-
       return {
         ...state,
         sheets: {

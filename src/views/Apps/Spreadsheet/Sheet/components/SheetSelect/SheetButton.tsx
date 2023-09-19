@@ -33,7 +33,7 @@ const SheetButton = ({
   const notification = useNotification();
 
   const selectSheet = (sheetId: string) => () => {
-    if (state.sheets[sheetId].protected) {
+    if (state.sheets[sheetId].protected && state.activeSheet !== sheet.id) {
       setPasswordPromptOpen(true);
     } else {
       dispatch(setActiveSheet(sheetId));
