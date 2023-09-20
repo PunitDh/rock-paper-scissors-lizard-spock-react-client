@@ -40,9 +40,9 @@ const SheetButton = ({
     }
   };
 
-  const handleChangeName = (e: React.ChangeEvent) => {
+  const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    setSheetName((e.target as HTMLInputElement).value);
+    setSheetName(e.target.value);
   };
 
   const handleRename = (e: React.FormEvent) => {
@@ -113,7 +113,11 @@ const SheetButton = ({
           title="Protected"
           confirmBtnText="Submit"
           content={
-            <EnterPassword password={password} setPassword={setPassword} />
+            <EnterPassword
+              password={password}
+              setPassword={setPassword}
+              onSubmit={checkPassword}
+            />
           }
         />
       )}

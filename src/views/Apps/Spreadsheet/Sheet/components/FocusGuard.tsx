@@ -12,13 +12,13 @@ const ZeroInput = styled.input({
 
 type Props = {
   state: State;
-  dispatch: Dispatch<Action>
-}
+  dispatch: Dispatch<Action>;
+};
 
 const FocusGuard = ({ state, dispatch }: Props) => {
-  const handleFocusGuard = (e: React.FocusEvent): void => {
+  const handleFocusGuard = (e: React.FocusEvent<HTMLInputElement>): void => {
     e.preventDefault();
-    (e.target as HTMLElement).blur();
+    e.target.blur();
     dispatch(selectCell("A1"));
   };
 

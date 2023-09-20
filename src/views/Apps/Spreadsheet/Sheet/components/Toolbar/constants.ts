@@ -7,17 +7,8 @@ import {
 } from "@mui/icons-material";
 import { IconClock, IconCurrencyDollar } from "@tabler/icons-react";
 
-export type FontSize =
-  | "8px"
-  | "10px"
-  | "12px"
-  | "14px"
-  | "16px"
-  | "18px"
-  | "20px"
-  | "24px";
-
-export const fontSizes: ReadonlyArray<FontSize> = Object.freeze([
+export type FontSize = (typeof fontSizes)[number];
+export const fontSizes = [
   "8px",
   "10px",
   "12px",
@@ -26,7 +17,27 @@ export const fontSizes: ReadonlyArray<FontSize> = Object.freeze([
   "18px",
   "20px",
   "24px",
-]);
+] as const;
+
+//   | "8px"
+//   | "10px"
+//   | "12px"
+//   | "14px"
+//   | "16px"
+//   | "18px"
+//   | "20px"
+//   | "24px";
+
+// export const fontSizes: ReadonlyArray<FontSize> = Object.freeze([
+//   "8px",
+//   "10px",
+//   "12px",
+//   "14px",
+//   "16px",
+//   "18px",
+//   "20px",
+//   "24px",
+// ]);
 
 export enum BorderType {
   BORDER_TOP = "borderTop",

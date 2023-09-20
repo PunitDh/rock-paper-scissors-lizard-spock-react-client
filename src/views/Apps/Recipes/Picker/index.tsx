@@ -30,12 +30,15 @@ const Picker = () => {
     Reducer<State, Action>
   >(reducer, initialState);
   const [cuisines, setCuisines] = useState(shuffle(Object.values(Cuisine)));
+
   const handleReloadCuisines = () => {
     setCuisines(shuffle(cuisines));
     dispatch(resetState());
   };
+
   const selectCuisine = (cuisine: Cuisine) => () =>
     dispatch(setCuisine(cuisine));
+
   const selectDiet = (e: SyntheticEvent) => {
     console.log(e);
     console.log((e.target as HTMLInputElement).value);

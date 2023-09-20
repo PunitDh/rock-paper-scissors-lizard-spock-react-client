@@ -18,7 +18,7 @@ const ConfirmationDialog = ({
   ...other
 }) => {
   const [value, setValue] = useState(valueProp);
-  const radioGroupRef = useRef(null);
+  const radioGroupRef = useRef<HTMLInputElement | null>(null);
 
   const onHandleConfirm = () => {
     onConfirm();
@@ -31,8 +31,7 @@ const ConfirmationDialog = ({
     }
   }, [valueProp, open]);
 
-  const handleEntering = () =>
-    radioGroupRef.current != null && (radioGroupRef.current as HTMLInputElement).focus();
+  const handleEntering = () => radioGroupRef.current?.focus();
 
   return (
     <Dialog
@@ -46,10 +45,16 @@ const ConfirmationDialog = ({
       <DialogContent>{content}</DialogContent>
 
       <DialogActions>
-        <Button autoFocus onClick={onCancel}>
+        <Button type="button" autoFocus onClick={onCancel}>
           Cancel
         </Button>
-        <Button onClick={onHandleConfirm} disabled={other.confirmdisabled > 0}>{confirmBtnText}</Button>
+        <Button
+          type="submit"
+          onClick={onHandleConfirm}
+          disabled={other.confirmdisabled > 0}
+        >
+          {confirmBtnText}
+        </Button>
       </DialogActions>
     </Dialog>
   );

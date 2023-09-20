@@ -49,15 +49,22 @@ import {
   AutoCalculate,
   BorderType,
   NumberFormat,
+  fontSizes,
   outsideBorders,
 } from "./constants";
 import OpenFileJSON from "./components/OpenFileJSON";
 import ClearFormattingIcon from "./components/icons/ClearFormatting";
 import FlexBox from "../../../../../../components/shared/FlexBox";
 import { SelectChangeEvent } from "@mui/material";
-import { IconCurrencyDollar, IconSum } from "@tabler/icons-react";
+import {
+  IconCurrencyDollar,
+  IconMinus,
+  IconPlus,
+  IconSum,
+} from "@tabler/icons-react";
 import MenuButton from "./components/MenuButton";
 import { Action, State } from "../../types";
+import { TextAlign } from "../../../../../../components/shared/styles";
 
 type Props = {
   state: State;
@@ -121,7 +128,7 @@ const Toolbar = ({ state, dispatch }: Props) => {
   };
 
   const toggleStyle = useCallback(
-    (styleKey, activeValue, inactiveValue) => {
+    (styleKey: string | number, activeValue: string, inactiveValue: string) => {
       const currentValue = stateCellFormatting?.[styleKey];
       return currentValue === activeValue ? inactiveValue : activeValue;
     },
@@ -129,8 +136,10 @@ const Toolbar = ({ state, dispatch }: Props) => {
   );
 
   const setFormattingChange = useCallback(
-    (formattingKey) => (event: any) => {
-      const value = event.target?.value || event;
+    (formattingKey: string) => (event) => {
+      const value = ["string", "number"].includes(typeof event)
+        ? event
+        : (event.target as HTMLButtonElement)?.value;
       const formatting = { [formattingKey]: value };
 
       if (state.highlighted.hasLength)
@@ -141,11 +150,11 @@ const Toolbar = ({ state, dispatch }: Props) => {
     [dispatch, state.highlighted.hasLength]
   );
 
-  const setTextAlign = (textAlign) => () => {
+  const setTextAlign = (textAlign: TextAlign) => () => {
     setFormattingChange("textAlign")(textAlign);
   };
 
-  const setDecimals = (decimals) => () => {
+  const setDecimals = (decimals: number) => () => {
     const currentDecimals = stateCellFormatting.decimals || 0;
     const newDecimals = clamp(currentDecimals + decimals, 0, 10);
     setFormattingChange("decimals")(newDecimals);
@@ -184,6 +193,13 @@ const Toolbar = ({ state, dispatch }: Props) => {
     "none"
   );
 
+  const index = fontSizes.findIndex(
+    (it) => it === (selectedFormatting.styles?.fontSize || "12px")
+  );
+
+  console.log(index);
+  console.log(fontSizes[index - 1], fontSizes[index + 1]);
+
   return (
     <div tabIndex={1000}>
       <FlexForm
@@ -213,9 +229,23 @@ const Toolbar = ({ state, dispatch }: Props) => {
             state={selectedFormatting}
             onChange={setFormattingChange("fontFamily")}
           />
+          <FormattingButton
+            onClick={setFormattingChange("fontSize")}
+            title="Decrease Font Size"
+            isActive={false}
+            Icon={IconMinus}
+            value={fontSizes[0]}
+          />
           <FontSizeSelect
             state={selectedFormatting}
             onChange={setFormattingChange("fontSize")}
+          />
+          <FormattingButton
+            onClick={setFormattingChange("fontSize")}
+            title="Increase Font Size"
+            isActive={false}
+            Icon={IconPlus}
+            value={fontSizes[fontSizes.length - 1]}
           />
           <BorderStyleSelect
             state={selectedFormatting}

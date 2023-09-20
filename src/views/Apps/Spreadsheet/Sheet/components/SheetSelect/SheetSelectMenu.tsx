@@ -113,6 +113,7 @@ const SheetSelectMenu = ({
               <Protect
                 credentials={credentials}
                 setCredentials={setCredentials}
+                onSubmit={handleProtectSheet}
               />
             }
             open={protectConfirmOpen}

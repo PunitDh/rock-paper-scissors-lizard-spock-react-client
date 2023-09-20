@@ -29,8 +29,8 @@ const CellSelector = ({ state }: Props) => {
   const handleSelectCellSubmit = (e: React.FormEvent) =>
     eventHandler.handleSelectCellSubmit(e);
 
-  const handleSelectCell = (e: React.ChangeEvent) => {
-    const value = (e.target as HTMLInputElement).value;
+  const handleSelectCell = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
     e.preventDefault();
     setCurrentCellSelectorValue(value);
     eventHandler.handleSelectCell(value);

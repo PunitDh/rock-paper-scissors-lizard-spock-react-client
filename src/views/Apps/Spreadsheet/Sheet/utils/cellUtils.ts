@@ -55,7 +55,7 @@ export const generateJSONContent = (state: State): string => {
 };
 
 function typeInTextField(id: string, newText: string, replace: boolean) {
-  const el: HTMLInputElement = document.getElementById(id) as HTMLInputElement;
+  const el: HTMLInputElement | null = document.getElementById(id) as HTMLInputElement;
   if (!el) return;
   const [start, end] = [
     (el as HTMLInputElement).selectionStart,
