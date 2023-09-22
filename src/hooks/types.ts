@@ -1,6 +1,6 @@
 export type Clipboard = {
   get: () => Promise<string | undefined>;
-  copy: (text: string) => void;
+  copy: (text: string) => Promise<boolean | void>;
 };
 
 interface API {}

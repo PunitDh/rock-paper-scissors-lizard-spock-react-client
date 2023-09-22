@@ -9,8 +9,8 @@ import { useNotification } from "../../../../../../../hooks";
 import { Action } from "../../../types";
 
 type Props = {
-  dispatch: Dispatch<Action>
-}
+  dispatch: Dispatch<Action>;
+};
 
 const OpenFileJSON = ({ dispatch }: Props) => {
   const notification = useNotification();

@@ -1,5 +1,4 @@
-import { cloneDeep } from "lodash";
-import { FILE_TYPE, SheetConfig } from "../constants";
+import { SheetConfig } from "../constants";
 import CellData from "../models/CellData";
 import CellFormatting from "../models/CellFormatting";
 import { initialState } from "../reducer";
@@ -7,16 +6,14 @@ import StateContent from "../models/StateContent";
 import { isObject, isString } from "../../../../../utils";
 import { SheetProps, State } from "../types";
 import StateContentData from "../models/StateContentData";
-import SetExtended from "../../../../../utils/Set";
 
-export const generateClipboardContent = (state: {
-  highlighted: { rows: SetExtended<number>; columns: SetExtended<string> };
-  content: { data: { [x: string]: { formula: any } } };
-}) => {
-  const content = state.highlighted.rows.toArray().map((row: any) =>
-    state.highlighted.columns.toArray().map((column: any) => {
+export const generateClipboardContent = (state: State): string => {
+  const content = state.highlighted.rows.toArray().map((row: number) =>
+    state.highlighted.columns.toArray().map((column: string) => {
       const id = `${column}${row}`;
-      const cellData = state.content.data[id] as CellData;
+      const cellData = state.sheets[state.activeSheet].content.data[
+        id
+      ] as CellData;
 
       return new CellData({
         id,
@@ -26,20 +23,23 @@ export const generateClipboardContent = (state: {
       });
     })
   );
-  const type = FILE_TYPE;
+  const type = SheetConfig.FILE_TYPE;
   return JSON.stringify({ type, content });
 };
 
 export const generateJSONContent = (state: State): string => {
-  const type = FILE_TYPE;
-  const { content } = state;
+  const type = SheetConfig.FILE_TYPE;
+  const { content } = state.sheets[state.activeSheet];
   const { data } = content;
   const filtered = Object.keys(data).reduce(
     (acc: StateContentData, cur: string) => {
       if (String((data[cur] as CellData)?.value)?.length > 0) {
         return {
           ...acc,
-          [cur]: data[cur],
+          [cur]: {
+            ...data[cur],
+            referenceCells: [...data[cur].referenceCells],
+          },
         } as StateContentData;
       }
       return acc as StateContentData;
@@ -54,7 +54,9 @@ export const generateJSONContent = (state: State): string => {
 };
 
 function typeInTextField(id: string, newText: string, replace: boolean) {
-  const el: HTMLInputElement = document.getElementById(id) as HTMLInputElement;
+  const el: HTMLInputElement | null = document.getElementById(
+    id
+  ) as HTMLInputElement;
   if (!el) return;
   const [start, end] = [
     (el as HTMLInputElement).selectionStart,
@@ -70,7 +72,7 @@ function typeInTextField(id: string, newText: string, replace: boolean) {
   }
 }
 
-export function typeInInputBox(text: any, replace = false) {
+export function typeInInputBox(text: string, replace = false) {
   return typeInTextField("input-box", text, replace);
 }
 
@@ -80,7 +82,7 @@ export function parseCSV(csvString: string) {
     let data: { [key: string]: Partial<CellData> } = {};
 
     rows.forEach((row: string, rowIndex: number) => {
-      row.split(",").forEach((cellValue: any, colIndex: number) => {
+      row.split(",").forEach((cellValue: string, colIndex: number) => {
         const colLabel = SheetConfig.COLUMNS[colIndex];
         const cellId = `${colLabel}${rowIndex + 1}`;
         data[cellId] = new CellData({
@@ -106,7 +108,7 @@ type ParsedJSON = {
 export function parseJSON(stringifiedJSON: string): ParsedJSON {
   try {
     const jsonObject = JSON.parse(stringifiedJSON);
-    if (jsonObject.type !== FILE_TYPE) {
+    if (jsonObject.type !== SheetConfig.FILE_TYPE) {
       return {
         error: true,
         message: `Invalid or unknown JSON file`,
@@ -137,8 +139,12 @@ export function parseJSON(stringifiedJSON: string): ParsedJSON {
     );
 
     return { error: false, content };
-  } catch (error: any) {
-    return { error: true, message: error!.message, content: undefined };
+  } catch (error: unknown) {
+    return {
+      error: true,
+      message: (error as Error).message,
+      content: undefined,
+    };
   }
 }
 
@@ -148,9 +154,22 @@ export const createInitialState = (
 ): State => {
   const createdState = {
     ...initialState,
-    ...defaultProps,
-    ...props,
-    content: generateInitialContent(props, defaultProps),
+    maxRows: props.maxRows || defaultProps.maxRows,
+    maxColumns: props.maxColumns || defaultProps.maxColumns,
+    maxUndos: props.maxUndos || defaultProps.maxUndos,
+    toolbar: props.toolbar || defaultProps.toolbar,
+    formulaField: props.formulaField || defaultProps.formulaField,
+    statusField: props.statusField || defaultProps.statusField,
+    defaultRowHeight: props.defaultRowHeight || defaultProps.defaultRowHeight,
+    defaultColumnWidth:
+      props.defaultColumnWidth || defaultProps.defaultColumnWidth,
+    sheets: {
+      ...initialState.sheets,
+      [initialState.activeSheet]: {
+        ...initialState.sheets[initialState.activeSheet],
+        content: generateInitialContent(props, defaultProps),
+      },
+    },
   };
   return createdState;
 };
@@ -166,7 +185,7 @@ const generateInitialContent = (
       return acc;
     }, {});
 
-  const rowHeights = Array(props.maxRows || defaultProps.maxRows + 1)
+  const rowHeights = Array((props.maxRows || defaultProps.maxRows) + 1)
     .fill(0)
     .reduce((acc, _, idx) => {
       acc[idx] = props.defaultRowHeight;
@@ -205,7 +224,7 @@ const generateInitialContent = (
   } as StateContent;
 };
 
-export const isFormula = (value: unknown) => {
+export const isFormula = (value: unknown): boolean => {
   return (
     (typeof value === "string" || value instanceof String) &&
     Boolean(value?.startsWith("="))

@@ -8,17 +8,15 @@ type Props = {
   others?: { [key: string]: string }
 }
 
-const DelayedTooltip = ({ title, delay = 1000, children, ...others }: Props) => {
-  return (
-    <Tooltip
-      title={title}
-      enterDelay={delay}
-      enterNextDelay={delay}
-      {...others}
-    >
-      {children}
-    </Tooltip>
-  );
-};
+const DelayedTooltip = ({ title, delay = 1000, children, ...others }: Props) => (
+  <Tooltip
+    title={title}
+    enterDelay={delay}
+    enterNextDelay={delay}
+    {...others}
+  >
+    {children}
+  </Tooltip>
+);
 
 export default DelayedTooltip;

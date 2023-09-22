@@ -21,6 +21,7 @@ const AuthLogin = ({ title, subtitle, subtext }) => {
     const payload = {
       email: e.target.email.value,
       password: e.target.password.value,
+      remember: e.target.remember.checked,
     };
     loginPlayer(payload);
   };
@@ -77,8 +78,8 @@ const AuthLogin = ({ title, subtitle, subtext }) => {
           >
             <FormGroup>
               <FormControlLabel
-                control={<Checkbox defaultChecked />}
-                label="Remember this Device"
+                control={<Checkbox name="remember" />}
+                label="Remember for 30 Days"
               />
             </FormGroup>
             <Typography

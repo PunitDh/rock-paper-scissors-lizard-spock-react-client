@@ -25,12 +25,12 @@ type Props = {
 const FormulaField = ({ state, dispatch, originalValue, value }: Props) => {
   const eventHandler = useEventHandler();
 
-  const formulaFieldRef = useCallback(
+  const formulaFieldRef: (node: HTMLInputElement) => void = useCallback(
     (node: HTMLInputElement) => eventHandler.setFormulaFieldRef(node),
     [eventHandler]
   );
 
-  useEffect(() => {
+  useEffect((): void => {
     console.log("Formula focus hook triggered");
     if (state.isFormulaFieldFocused) {
       eventHandler.formulaFieldRef?.focus({ preventScroll: true });
@@ -38,6 +38,7 @@ const FormulaField = ({ state, dispatch, originalValue, value }: Props) => {
     // if (eventHandler.inputFocusRef) {
     //   eventHandler.inputRef?.focus({ preventScroll: true });
     // }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.isFormulaFieldFocused]);
 
   const handleContextMenu = (e: React.MouseEvent) =>
@@ -46,7 +47,7 @@ const FormulaField = ({ state, dispatch, originalValue, value }: Props) => {
     eventHandler.handleFormulaFieldKeyDown(e, originalValue);
   const handleSubmit = (e: React.FormEvent) =>
     eventHandler.handleFormulaFieldSubmit(e);
-  const handleBlur = (e: React.FocusEvent) =>
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) =>
     eventHandler.handleFormulaFieldBlur(e, originalValue);
 
   const resetField = () => {
@@ -63,22 +64,22 @@ const FormulaField = ({ state, dispatch, originalValue, value }: Props) => {
     dispatch(setFormulaFieldFocused(false));
   };
 
-  const handleFunction = () => eventHandler.handleFunction();
+  const handleFunction = () =>
+    eventHandler.handleFormulaFieldFunctionKeyClick();
 
-  const handleChange = useCallback(
-    (e: React.ChangeEvent) => {
-      const value = (e.target as HTMLInputElement).value;
-      // e.preventDefault();
-      dispatch(setFormulaFieldText(value));
-      dispatch(setFormulaMode(isFormula(value)));
-      dispatch(setCellContent(state.selectedCell.id, value));
-    },
-    [dispatch, state.selectedCell.id]
-  );
+  const handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void =
+    useCallback(
+      (e: React.ChangeEvent<HTMLInputElement>) => {
+        // e.preventDefault();
+        dispatch(setFormulaFieldText(e.target.value));
+        dispatch(setFormulaMode(isFormula(e.target.value)));
+        dispatch(setCellContent(state.selectedCell.id, e.target.value));
+      },
+      [dispatch, state.selectedCell.id]
+    );
 
-  const handleFocus = (e: React.FocusEvent) => {
-    const value = (e.target as HTMLInputElement).value;
-    if (isFormula(value)) {
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (isFormula(e.target.value)) {
       dispatch(setFormulaMode(true));
     }
     dispatch(setFormulaFieldFocused(true));

@@ -12,15 +12,15 @@ import StateContentData from "../../../models/StateContentData";
 import { Action } from "../../../types";
 
 type Props = {
-  dispatch: Dispatch<Action>
-}
+  dispatch: Dispatch<Action>;
+};
 
 const OpenFileCSV = ({ dispatch }: Props) => {
   const fileRef = useRef<HTMLInputElement>(null);
   const notification = useNotification();
 
-  const handleOpenFile = (e: React.ChangeEvent) => {
-    const file = (e.target as HTMLInputElement).files![0];
+  const handleOpenFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files![0];
     const errorMessage = `Selected file '${file.name}' is not a valid CSV file or is unable to be parsed correctly`;
     const errorDuration = 10000;
 
@@ -48,7 +48,7 @@ const OpenFileCSV = ({ dispatch }: Props) => {
       dispatch(setContentBulk(content));
     };
     if (file.type === "text/csv") {
-      reader.readAsText((e.target as HTMLInputElement).files![0]);
+      reader.readAsText(e.target.files![0]);
     } else {
       notification.error(errorMessage, errorDuration);
     }

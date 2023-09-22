@@ -1,12 +1,13 @@
 export enum MouseButton {
-  LEFT_CLICK,
-  RIGHT_CLICK,
+  LEFT_CLICK = 0,
+  RIGHT_CLICK = 1,
 }
 
 export const SheetConfig = {
   COLUMNS: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
   MAX_ROWS: 12,
   MAX_COLUMNS: 12,
+  FILE_TYPE: "_sheet",
 } as const;
 
 export const defaultInitialStateProps = {
@@ -18,7 +19,7 @@ export const defaultInitialStateProps = {
   statusField: true,
   defaultRowHeight: 24,
   defaultColumnWidth: 80,
-};
+} as const;
 
 export enum KeyEvent {
   ENTER = "Enter",
@@ -44,10 +45,8 @@ export enum Dimension {
   COLUMN = "column",
 }
 
-export const FILE_TYPE = "_sheet";
-
 export const getFirstColumnCharCode = (): number =>
   SheetConfig.COLUMNS[0].charCodeAt(0);
 
-export const getLastColumnCharCode = (maxColumns: number): number =>
-  SheetConfig.COLUMNS[maxColumns].charCodeAt(0);
+export const getLastColumnCharCode = (maxColumns?: number): number =>
+  SheetConfig.COLUMNS[maxColumns || SheetConfig.MAX_COLUMNS].charCodeAt(0);

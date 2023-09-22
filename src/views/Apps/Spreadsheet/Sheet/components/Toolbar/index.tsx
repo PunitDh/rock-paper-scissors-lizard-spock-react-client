@@ -1,4 +1,10 @@
-import React, { Dispatch, useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  Dispatch,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { FlexForm } from "../styles";
 import {
   FormatAlignCenter,
@@ -9,6 +15,7 @@ import {
   FormatColorText,
   FormatItalic,
   FormatUnderlined,
+  Percent,
   Redo,
   Undo,
 } from "@mui/icons-material";
@@ -38,26 +45,41 @@ import SaveFileJSON from "./components/SaveFileJSON";
 import DecimalIcon from "./components/icons/DecimalIcon";
 import { clamp } from "lodash";
 import CellFormatting from "../../models/CellFormatting";
-import { AutoCalculate, BorderType, outsideBorders } from "./constants";
+import {
+  AutoCalculate,
+  BorderType,
+  NumberFormat,
+  fontSizes,
+  outsideBorders,
+} from "./constants";
 import OpenFileJSON from "./components/OpenFileJSON";
 import ClearFormattingIcon from "./components/icons/ClearFormatting";
 import FlexBox from "../../../../../../components/shared/FlexBox";
 import { SelectChangeEvent } from "@mui/material";
-import { IconSum } from "@tabler/icons-react";
+import {
+  IconCurrencyDollar,
+  IconMinus,
+  IconPlus,
+  IconSum,
+} from "@tabler/icons-react";
 import MenuButton from "./components/MenuButton";
 import { Action, State } from "../../types";
+import { TextAlign } from "../../../../../../components/shared/styles";
 
 type Props = {
   state: State;
-  dispatch: Dispatch<Action>
-}
+  dispatch: Dispatch<Action>;
+};
 
 const Toolbar = ({ state, dispatch }: Props) => {
-  const canUndo = state.memento.length > 0 && state.currentMementoId !== state.memento[0].id;
-  const canRedo = state.memento.length > 0 &&
+  const canUndo =
+    state.memento.length > 0 && state.currentMementoId !== state.memento[0].id;
+  const canRedo =
+    state.memento.length > 0 &&
     state.currentMementoId !== state.memento[state.memento.length - 1].id;
   const selectedCell = state.selectedCell.id;
-  const selectedCellData = state.content.data[selectedCell];
+  const selectedCellData =
+    state.sheets[state.activeSheet].content.data[selectedCell];
 
   const currentCellFormatting = useMemo(() => {
     const element = document.getElementById(selectedCell);
@@ -80,10 +102,7 @@ const Toolbar = ({ state, dispatch }: Props) => {
   }, [selectedCell]);
 
   const stateCellFormatting = useMemo(() => {
-    return (
-      selectedCellData?.formatting ||
-      currentCellFormatting
-    );
+    return selectedCellData?.formatting || currentCellFormatting;
   }, [currentCellFormatting, selectedCellData?.formatting]);
 
   const [selectedFormatting, setSelectedFormatting] =
@@ -108,17 +127,19 @@ const Toolbar = ({ state, dispatch }: Props) => {
     dispatch(recalculateFormulae());
   };
 
-  const toggleStyle = useCallback(
-    (styleKey, activeValue, inactiveValue) => {
+  const toggleStyle: (...args: any[]) => any = useCallback(
+    (styleKey: string | number, activeValue: string, inactiveValue: string) => {
       const currentValue = stateCellFormatting?.[styleKey];
       return currentValue === activeValue ? inactiveValue : activeValue;
     },
     [stateCellFormatting]
   );
 
-  const setFormattingChange = useCallback(
-    (formattingKey) => (event: any) => {
-      const value = event.target?.value || event;
+  const setFormattingChange: (...args: any[]) => any = useCallback(
+    (formattingKey: string) => (event) => {
+      const value = ["string", "number"].includes(typeof event)
+        ? event
+        : (event.target as HTMLButtonElement)?.value;
       const formatting = { [formattingKey]: value };
 
       if (state.highlighted.hasLength)
@@ -129,20 +150,21 @@ const Toolbar = ({ state, dispatch }: Props) => {
     [dispatch, state.highlighted.hasLength]
   );
 
-  const setTextAlign = (textAlign) => () => {
+  const setTextAlign = (textAlign: TextAlign) => (): void => {
     setFormattingChange("textAlign")(textAlign);
   };
 
-  const setDecimals = (decimals) => () => {
+  const setDecimals = (decimals: number) => () => {
     const currentDecimals = stateCellFormatting.decimals || 0;
     const newDecimals = clamp(currentDecimals + decimals, 0, 10);
     setFormattingChange("decimals")(newDecimals);
   };
 
   const clearFormatting = () => dispatch(clearCellFormatting());
-  const handleAutoCalculate = (e: React.MouseEvent, type: AutoCalculate) => dispatch(autoCalculate(type));
+  const handleAutoCalculate = (e: React.MouseEvent, type: AutoCalculate) =>
+    dispatch(autoCalculate(type));
 
-  const selectBorder = (borderEvent: SelectChangeEvent) => {
+  const selectBorder = (borderEvent: SelectChangeEvent): void => {
     const { value } = borderEvent.target;
     if (outsideBorders.includes(value as BorderType)) {
       dispatch(setCellOutsideBorderFormatting(value));
@@ -154,11 +176,16 @@ const Toolbar = ({ state, dispatch }: Props) => {
     dispatch(addMemento());
   };
 
-  const createToggleHandler = useCallback(
-    (formattingKey: string, activeValue: string, inactiveValue: string) => () => {
-      const newValue = toggleStyle(formattingKey, activeValue, inactiveValue);
-      setFormattingChange(formattingKey)(newValue);
-    },
+  const createToggleHandler: (
+    formattingKey: string,
+    activeValue: string,
+    inactiveValue: string
+  ) => () => void = useCallback(
+    (formattingKey: string, activeValue: string, inactiveValue: string) =>
+      () => {
+        const newValue = toggleStyle(formattingKey, activeValue, inactiveValue);
+        setFormattingChange(formattingKey)(newValue);
+      },
     [setFormattingChange, toggleStyle]
   );
 
@@ -199,9 +226,23 @@ const Toolbar = ({ state, dispatch }: Props) => {
             state={selectedFormatting}
             onChange={setFormattingChange("fontFamily")}
           />
+          <FormattingButton
+            onClick={setFormattingChange("fontSize")}
+            title="Decrease Font Size"
+            isActive={false}
+            Icon={IconMinus}
+            value={fontSizes[0]}
+          />
           <FontSizeSelect
             state={selectedFormatting}
             onChange={setFormattingChange("fontSize")}
+          />
+          <FormattingButton
+            onClick={setFormattingChange("fontSize")}
+            title="Increase Font Size"
+            isActive={false}
+            Icon={IconPlus}
+            value={fontSizes[fontSizes.length - 1]}
           />
           <BorderStyleSelect
             state={selectedFormatting}
@@ -277,17 +318,33 @@ const Toolbar = ({ state, dispatch }: Props) => {
           >
             <DecimalIcon type="decrease" />
           </FormattingButton>
-          <FormattingButton
-            title={"Clear Formatting"}
-            isActive={false}
-            Icon={ClearFormattingIcon}
-            onClick={clearFormatting}
-          />
           <MenuButton
             title={"Auto Sum"}
             isActive={false}
             Icon={IconSum}
             onClick={handleAutoCalculate}
+          />
+          <FormattingButton
+            title={"Format as Currency"}
+            isActive={false}
+            Icon={IconCurrencyDollar}
+            onClick={() =>
+              setFormattingChange("numberFormat")(NumberFormat.CURRENCY)
+            }
+          />
+          <FormattingButton
+            title={"Format as Percentage"}
+            isActive={false}
+            Icon={Percent}
+            onClick={() =>
+              setFormattingChange("numberFormat")(NumberFormat.PERCENTAGE)
+            }
+          />
+          <FormattingButton
+            title={"Clear Formatting"}
+            isActive={false}
+            Icon={ClearFormattingIcon}
+            onClick={clearFormatting}
           />
         </FlexBox>
       </FlexForm>

@@ -1,43 +1,21 @@
 import React, { Dispatch, useState } from "react";
 import { Action, Sheet, State } from "../../types";
 import FlexBox from "../../../../../../components/shared/FlexBox";
-import { addSheet, setActiveSheet } from "../../actions";
-import styled from "@emotion/styled";
+import SheetSelectMenu from "./SheetSelectMenu";
+import SheetButton from "./SheetButton";
+import { addSheet } from "../../actions";
+import { DragArea, SheetButtonItem } from "./styles";
 import { IconPlus } from "@tabler/icons-react";
-import SheetSelectMenu from "../ContextMenu/SheetSelectMenu";
+import { toList } from "../../../../../../utils/List";
 
 type Props = {
   state: State;
   dispatch: Dispatch<Action>;
 };
 
-type SheetButtonProps = {
-  active?: boolean;
-};
-
-const SheetButton = styled.button(({ active }: SheetButtonProps) => ({
-  backgroundColor: active ? "#E0E9FF" : "#EAEAEA",
-  border: active ? "1px solid black" : "1px solid rgba(0,0,0,0.1)",
-  outline: "none",
-  cursor: "pointer",
-  padding: "0.5rem 1rem 0.5rem 1rem",
-  height: "2rem",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  userSelect: "element",
-  "&:hover": {
-    backgroundColor: "#E0E9F7",
-    border: "1px solid black",
-  },
-  "&:active": {
-    backgroundColor: "#E0E9FF",
-    border: "1px solid black",
-  },
-}));
-
 const SheetSelect = ({ state, dispatch }: Props) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [renameState, setRenameState] = useState<string | null>(null);
 
   const handleContextMenu = (sheetId: string) => (e: React.MouseEvent) => {
     e.preventDefault();
@@ -45,16 +23,20 @@ const SheetSelect = ({ state, dispatch }: Props) => {
     setAnchorEl(element);
   };
 
-  const selectSheet = (sheetId: string) => () => {
-    dispatch(setActiveSheet(sheetId))
-  }
+  const closeMenu = () => {
+    setAnchorEl(null);
+  };
 
   const handleAddSheet = () => {
     dispatch(addSheet());
   };
 
-  const closeMenu = () => {
-    setAnchorEl(null);
+  const handleRename = (sheetId: string) => {
+    setRenameState(sheetId);
+  };
+
+  const handleCloseRename = () => {
+    setRenameState(null);
   };
 
   return (
@@ -69,21 +51,27 @@ const SheetSelect = ({ state, dispatch }: Props) => {
         dispatch={dispatch}
         anchor={anchorEl}
         onClose={closeMenu}
+        onRename={handleRename}
       />
-      <SheetButton onClick={handleAddSheet}>
+      <SheetButtonItem onClick={handleAddSheet}>
         <IconPlus width={20} />
-      </SheetButton>
-      {state.sheets.map((sheet: Sheet) => (
-        <SheetButton
-          key={sheet.id}
-          onClick={selectSheet(sheet.id)}
-          onContextMenu={handleContextMenu(sheet.id)}
-          active={state.activeSheet === sheet.id}
-          id={sheet.id}
-        >
-          {sheet.name}
-        </SheetButton>
-      ))}
+      </SheetButtonItem>
+      <DragArea id="sheet-select-drag-area">
+        {toList<Sheet>(Object.values(state.sheets))
+          .sortBy((it) => it.index)
+          .map((sheet: Sheet) => (
+            <SheetButton
+              key={sheet.id}
+              state={state}
+              dispatch={dispatch}
+              sheet={sheet}
+              rename={renameState}
+              onContextMenu={handleContextMenu(sheet.id)}
+              onRename={handleCloseRename}
+              onDoubleClick={handleRename}
+            />
+          ))}
+      </DragArea>
     </FlexBox>
   );
 };

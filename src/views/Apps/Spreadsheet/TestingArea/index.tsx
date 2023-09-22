@@ -69,7 +69,7 @@ const TestingArea = ({ state }: { state: State }) => {
 
   return token.decoded?.isAdmin ? (
     <DashboardCard sx={{ height: "100%" }} title="Testing Area">
-      <FlexBox width="100%" height="100%" gap="0.5rem">
+      <FlexBox width="100%" height="100%" gap="0.5rem" flexWrap="wrap">
         {/* <StatusCell label="Test Obj">{state.selectedCell.id}</StatusCell> */}
         <StatusCell label="Keyboard">{keyboard}</StatusCell>
         {/* <StatusCell label="Mouse button">{mouse}</StatusCell> */}
@@ -92,6 +92,9 @@ const TestingArea = ({ state }: { state: State }) => {
         </StatusCell>
         <StatusCell label="Multi Select">
           {String(state.highlighted.multiSelect)}
+        </StatusCell>
+        <StatusCell label="Active Sheet">
+          {String(state.activeSheet)}
         </StatusCell>
         {/* <StatusCell label="Selection Range">
           {eventHandler.formulaFieldRef.selectionStart},

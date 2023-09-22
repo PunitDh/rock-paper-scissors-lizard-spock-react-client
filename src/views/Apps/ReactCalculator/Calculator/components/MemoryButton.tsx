@@ -23,10 +23,10 @@ type Props = {
 
 function MemoryButton({ value, state, dispatch }: Props) {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const openMenu = (event: React.MouseEvent) => setAnchorEl(event.currentTarget as HTMLElement);
+  const openMenu = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const closeMenu = () => setAnchorEl(null);
 
-  const handleMemory = (address) => () => {
+  const handleMemory = (address: string) => () => {
     switch (value) {
       case MemoryOperation.ADD:
         if (state.evaled) {
@@ -52,7 +52,7 @@ function MemoryButton({ value, state, dispatch }: Props) {
     closeMenu();
   };
 
-  const handleClick = (event: React.MouseEvent) => {
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     switch (value) {
       case MemoryOperation.ADD:
       case MemoryOperation.REMOVE:

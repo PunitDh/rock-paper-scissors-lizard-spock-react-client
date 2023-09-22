@@ -7,7 +7,7 @@ import CellFormatting from "../../../models/CellFormatting";
 type Props = {
   state: CellFormatting;
   onChange: (text: string) => void;
-}
+};
 
 const FontSizeSelect = ({ state, onChange }: Props) => (
   <Select

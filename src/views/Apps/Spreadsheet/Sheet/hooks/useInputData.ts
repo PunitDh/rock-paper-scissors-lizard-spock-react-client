@@ -5,13 +5,13 @@ import { State } from "../types";
 export default function useInputData(state: State) {
   return useMemo(() => {
     const {
-      content,
       selectedCell,
       defaultRowHeight,
       defaultColumnWidth,
       formulaFieldText,
       highlighted,
     } = state;
+    const { content } = state.sheets[state.activeSheet];
     const { rowHeights, columnWidths, data } = content;
     const { id: selectedId, row, column } = selectedCell;
     const selectedCellData = data[selectedId] as CellData;

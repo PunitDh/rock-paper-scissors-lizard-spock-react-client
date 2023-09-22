@@ -1,3 +1,4 @@
+import React from "react";
 import { lazy } from "react";
 import { Navigate } from "react-router-dom";
 import Loadable from "../components/shared/Loadable";

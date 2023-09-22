@@ -7,7 +7,7 @@ import PasswordField from "../../../../components/shared/PasswordField";
 type Props = {
   password: string;
   setPassword: (password: string) => void;
-}
+};
 
 const RedBox = styled(Box)({
   color: "red",
@@ -23,7 +23,9 @@ const DialogContent = ({ password, setPassword }: Props) => (
       <RedBox>Enter your password below to delete your profile.</RedBox>
       <PasswordField
         value={password}
-        onChange={(e: React.ChangeEvent) => setPassword((e.target as HTMLInputElement).value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setPassword(e.target.value)
+        }
       />
     </FlexBox>
   </Stack>

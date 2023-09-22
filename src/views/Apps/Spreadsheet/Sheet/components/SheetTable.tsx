@@ -5,11 +5,11 @@ import { Action, State } from "../types";
 
 type Props = {
   state: State;
-  dispatch: Dispatch<Action>
-}
+  dispatch: Dispatch<Action>;
+};
 
-const SheetTable = ({ state, dispatch }: Props) => {
-  return <Table sx={{tableLayout: "fixed", width: "100%" }}>
+const SheetTable = ({ state, dispatch }: Props) => (
+  <Table sx={{ tableLayout: "fixed", width: "100%" }}>
     <TableBody sx={{ width: "100%" }}>
       {Array(state.maxRows)
         .fill(0)
@@ -18,6 +18,6 @@ const SheetTable = ({ state, dispatch }: Props) => {
         ))}
     </TableBody>
   </Table>
-};
+);
 
 export default SheetTable;

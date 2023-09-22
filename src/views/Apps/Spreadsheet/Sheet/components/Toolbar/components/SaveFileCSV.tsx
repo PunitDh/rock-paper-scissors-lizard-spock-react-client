@@ -9,9 +9,11 @@ import Cell from "../../../models/Cell";
 
 type Props = {
   state: State;
-}
+};
 
 const SaveFileCSV = ({ state }: Props) => {
+  const activeSheet = state.sheets[state.activeSheet];
+
   const handleExportAsCsv = () => {
     const range = CellRange.createHorizontalSliced(
       `A1`,
@@ -19,7 +21,12 @@ const SaveFileCSV = ({ state }: Props) => {
     );
     const content = (range.cells as Cell[][])
       .map((row: Cell[]) =>
-        row.map((cell: Cell) => state.content.data[cell.id]?.value || "").join(",")
+        row
+          .map(
+            (cell: Cell) =>
+              activeSheet.content.data[cell.id]?.value || ""
+          )
+          .join(",")
       )
       .join("\n");
 
@@ -27,7 +34,7 @@ const SaveFileCSV = ({ state }: Props) => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", `Sheet1.csv`);
+    link.setAttribute("download", `${activeSheet.name}.csv`);
     document.body.appendChild(link);
     link.click();
     link.parentNode?.removeChild(link);

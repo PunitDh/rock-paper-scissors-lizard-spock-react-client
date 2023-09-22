@@ -54,7 +54,9 @@ export default class CellData {
     this.previousValue = value;
     this.formula = formula;
     this.previousFormula = formula;
-    this.referenceCells = referenceCells;
+    this.referenceCells = Array.isArray(referenceCells)
+      ? new SetExtended(referenceCells)
+      : referenceCells;
     this.display = display;
     this.formatting = formatting;
     this.error = error;
@@ -148,6 +150,7 @@ export default class CellData {
 
   clearFormatting(): CellData {
     this.formatting = new CellFormatting();
+    this.setDisplay();
     return this;
   }
 
@@ -156,7 +159,7 @@ export default class CellData {
     return this;
   }
 
-  addBorderFormatting(borderId: any, borderType: BorderType): CellData {
+  addBorderFormatting(borderId: string, borderType: BorderType): CellData {
     this.formatting = this.formatting.addBorder(borderId, borderType);
     return this;
   }

@@ -7,7 +7,7 @@ import { highlightFormulaCells, setFormulaFieldText } from "../../actions";
 import useElementPosition from "../../hooks/useElementPosition";
 import useInputData from "../../hooks/useInputData";
 import Highlight from "./Highlight";
-import SetExtended, { setOf } from "../../../../../../utils/Set";
+import { setOf } from "../../../../../../utils/Set";
 
 type Props = {
   state: State;
