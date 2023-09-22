@@ -4,7 +4,7 @@ import FlexBox from "../../../../../../components/shared/FlexBox";
 import SheetSelectMenu from "./SheetSelectMenu";
 import SheetButton from "./SheetButton";
 import { addSheet } from "../../actions";
-import { SheetButtonItem } from "./styles";
+import { DragArea, SheetButtonItem } from "./styles";
 import { IconPlus } from "@tabler/icons-react";
 import { toList } from "../../../../../../utils/List";
 
@@ -56,20 +56,22 @@ const SheetSelect = ({ state, dispatch }: Props) => {
       <SheetButtonItem onClick={handleAddSheet}>
         <IconPlus width={20} />
       </SheetButtonItem>
-      {toList<Sheet>(Object.values(state.sheets))
-        .sortBy((it) => it.index)
-        .map((sheet: Sheet) => (
-          <SheetButton
-            key={sheet.id}
-            state={state}
-            dispatch={dispatch}
-            sheet={sheet}
-            rename={renameState}
-            onContextMenu={handleContextMenu(sheet.id)}
-            onRename={handleCloseRename}
-            onDoubleClick={handleRename}
-          />
-        ))}
+      <DragArea id="sheet-select-drag-area">
+        {toList<Sheet>(Object.values(state.sheets))
+          .sortBy((it) => it.index)
+          .map((sheet: Sheet) => (
+            <SheetButton
+              key={sheet.id}
+              state={state}
+              dispatch={dispatch}
+              sheet={sheet}
+              rename={renameState}
+              onContextMenu={handleContextMenu(sheet.id)}
+              onRename={handleCloseRename}
+              onDoubleClick={handleRename}
+            />
+          ))}
+      </DragArea>
     </FlexBox>
   );
 };

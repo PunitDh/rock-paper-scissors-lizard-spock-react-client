@@ -38,3 +38,8 @@ export const SheetButtonItem = styled.button(
     },
   })
 );
+
+export const DragArea = styled.div({
+  display: "inline-flex",
+  gap: "0.5rem",
+});

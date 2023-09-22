@@ -127,7 +127,7 @@ const Toolbar = ({ state, dispatch }: Props) => {
     dispatch(recalculateFormulae());
   };
 
-  const toggleStyle = useCallback(
+  const toggleStyle: (...args: any[]) => any = useCallback(
     (styleKey: string | number, activeValue: string, inactiveValue: string) => {
       const currentValue = stateCellFormatting?.[styleKey];
       return currentValue === activeValue ? inactiveValue : activeValue;
@@ -135,7 +135,7 @@ const Toolbar = ({ state, dispatch }: Props) => {
     [stateCellFormatting]
   );
 
-  const setFormattingChange = useCallback(
+  const setFormattingChange: (...args: any[]) => any = useCallback(
     (formattingKey: string) => (event) => {
       const value = ["string", "number"].includes(typeof event)
         ? event
@@ -150,7 +150,7 @@ const Toolbar = ({ state, dispatch }: Props) => {
     [dispatch, state.highlighted.hasLength]
   );
 
-  const setTextAlign = (textAlign: TextAlign) => () => {
+  const setTextAlign = (textAlign: TextAlign) => (): void => {
     setFormattingChange("textAlign")(textAlign);
   };
 
@@ -164,7 +164,7 @@ const Toolbar = ({ state, dispatch }: Props) => {
   const handleAutoCalculate = (e: React.MouseEvent, type: AutoCalculate) =>
     dispatch(autoCalculate(type));
 
-  const selectBorder = (borderEvent: SelectChangeEvent) => {
+  const selectBorder = (borderEvent: SelectChangeEvent): void => {
     const { value } = borderEvent.target;
     if (outsideBorders.includes(value as BorderType)) {
       dispatch(setCellOutsideBorderFormatting(value));
@@ -176,7 +176,11 @@ const Toolbar = ({ state, dispatch }: Props) => {
     dispatch(addMemento());
   };
 
-  const createToggleHandler = useCallback(
+  const createToggleHandler: (
+    formattingKey: string,
+    activeValue: string,
+    inactiveValue: string
+  ) => () => void = useCallback(
     (formattingKey: string, activeValue: string, inactiveValue: string) =>
       () => {
         const newValue = toggleStyle(formattingKey, activeValue, inactiveValue);
@@ -192,13 +196,6 @@ const Toolbar = ({ state, dispatch }: Props) => {
     "underline",
     "none"
   );
-
-  const index = fontSizes.findIndex(
-    (it) => it === (selectedFormatting.styles?.fontSize || "12px")
-  );
-
-  console.log(index);
-  console.log(fontSizes[index - 1], fontSizes[index + 1]);
 
   return (
     <div tabIndex={1000}>

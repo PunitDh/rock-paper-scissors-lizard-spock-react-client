@@ -123,7 +123,7 @@ export default function useAPI() {
 
     loginPlayer: (formData) => {
       return request
-        .post("/player/login", {}, createBasicAuth(formData))
+        .post("/player/login", { remember: formData.remember }, createBasicAuth(formData))
         .then((response) => handleToken(response, "Login successful!"))
         .catch(handleError);
     },

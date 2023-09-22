@@ -55,7 +55,7 @@ export default class CellFormatting {
     this.styles = styles;
   }
 
-  setFormatting(formatting: any): CellFormatting {
+  setFormatting(formatting: { [key: string]: any }): CellFormatting {
     const newFormatting = new CellFormatting({
       borderId: formatting.borderId || this.borderId,
       borderTypes: formatting.borderTypes || this.borderTypes,

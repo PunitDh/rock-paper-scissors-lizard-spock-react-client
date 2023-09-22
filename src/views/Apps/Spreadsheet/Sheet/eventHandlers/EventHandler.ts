@@ -30,7 +30,7 @@ import {
 } from "../actions";
 import { KeyEvent, MouseButton, SheetConfig } from "../constants";
 import Cell from "../models/Cell";
-import { Action, State } from "../types";
+import { Action, Sheet, State } from "../types";
 import { generateClipboardContent, isFormula } from "../utils/cellUtils";
 import CellData from "../models/CellData";
 import Highlight from "../models/Highlight";
@@ -40,7 +40,7 @@ import { setOf } from "../../../../../utils/Set";
 export default class EventHandler {
   state: State;
   dispatch: Dispatch<Action>;
-  clipboard: any;
+  clipboard: Clipboard;
   inputFocusRef: { current: boolean };
   inputRef: HTMLInputElement | null;
   formulaFieldRef: HTMLInputElement | null;
@@ -61,27 +61,31 @@ export default class EventHandler {
     this.fillerRef = null;
   }
 
-  isCtrlKeyPressed = (e) => {
+  get activeSheet(): Sheet {
+    return this.state.sheets[this.state.activeSheet];
+  }
+
+  isCtrlKeyPressed = (e): boolean => {
     return /mac/i.test(navigator.platform) ? e.metaKey : e.ctrlKey;
   };
 
-  setInputRef(ref: HTMLInputElement) {
+  setInputRef(ref: HTMLInputElement): void {
     this.inputRef = ref;
   }
 
-  setFormulaFieldRef(ref: HTMLInputElement) {
+  setFormulaFieldRef(ref: HTMLInputElement): void {
     this.formulaFieldRef = ref;
   }
 
-  setFillerRef(ref: HTMLDivElement) {
+  setFillerRef(ref: HTMLDivElement): void {
     this.fillerRef = ref;
   }
 
-  setFocusInput(value: boolean) {
+  setFocusInput(value: boolean): void {
     if (this.inputFocusRef) this.inputFocusRef.current = value;
   }
 
-  handleInputBoxBlur(e: React.FocusEvent, cellId) {
+  handleInputBoxBlur(e: React.FocusEvent, cellId: string): void {
     if (!this.state.formulaMode) {
       this.setFocusInput(false);
     }
@@ -96,7 +100,10 @@ export default class EventHandler {
     }
   }
 
-  handleCellInputKeyDown(e: React.KeyboardEvent, navigateRefCurrent: boolean) {
+  handleCellInputKeyDown(
+    e: React.KeyboardEvent,
+    navigateRefCurrent: boolean
+  ): void {
     const cell = this.state.selectedCell;
     const value = (e.target as HTMLInputElement).value;
     switch (e.key) {
@@ -207,7 +214,10 @@ export default class EventHandler {
    * @param {Event} e
    * @param {String} originalValue
    */
-  handleFormulaFieldKeyDown(e: React.KeyboardEvent, originalValue) {
+  handleFormulaFieldKeyDown(
+    e: React.KeyboardEvent,
+    originalValue: string
+  ): void {
     switch (e.key) {
       case KeyEvent.ESCAPE:
         this.dispatch(setFormulaMode(false));
@@ -224,9 +234,9 @@ export default class EventHandler {
     }
   }
 
-  handleSelectCellSubmit(e) {
+  handleSelectCellSubmit(e: React.FormEvent): void {
     e.preventDefault();
-    const value = e.target.currentCell.value;
+    const value = (e.target as HTMLFormElement).currentCell.value;
     if (Cell.isValidId(value)) {
       this.dispatch(selectCell(value));
     } else {
@@ -235,12 +245,15 @@ export default class EventHandler {
     }
   }
 
-  handleFormulaFieldSubmit(e) {
+  handleFormulaFieldSubmit(e: React.FormEvent) {
+    const target = (e.target as HTMLFormElement)
+      .formulaFieldText as HTMLInputElement;
+
     const triggerRecalculation =
-      isFormula(e.target.formulaFieldText.value) ||
+      isFormula(target.value) ||
       this.state.formulaTrackedCells.has(this.state.selectedCell.id);
     e.preventDefault();
-    this.dispatch(setFormulaFieldText(e.target.formulaFieldText.value));
+    this.dispatch(setFormulaFieldText(target.value));
     this.dispatch(setFormulaFieldFocused(false));
     this.dispatch(
       selectCell(this.state.selectedCell.getNextRow(this.state.maxRows))
@@ -250,7 +263,10 @@ export default class EventHandler {
     this.dispatch(addMemento());
   }
 
-  handleFormulaFieldBlur(e, originalValue) {
+  handleFormulaFieldBlur(
+    e: React.FocusEvent<HTMLInputElement>,
+    originalValue: string
+  ) {
     const triggerRecalculation =
       isFormula(e.target.value) ||
       this.state.formulaTrackedCells.has(this.state.selectedCell.id) ||
@@ -260,7 +276,7 @@ export default class EventHandler {
     }
   }
 
-  handleFunction = () => {
+  handleFormulaFieldFunctionKeyClick = () => {
     this.dispatch(setFormulaFieldText("="));
     this.dispatch(setFormulaMode(true));
     this.formulaFieldRef?.focus({ preventScroll: true });
@@ -270,14 +286,10 @@ export default class EventHandler {
     if (Cell.isValidId(value.toUpperCase())) {
       this.dispatch(selectCell(value.toUpperCase()));
     } else {
-      if (
-        value in this.state.sheets[this.state.activeSheet].content.namedRanges
-      ) {
+      if (value in this.activeSheet.content.namedRanges) {
         this.dispatch(resetHighlight());
         this.dispatch(
-          addCellsToHighlight(
-            this.state.sheets[this.state.activeSheet].content.namedRanges[value]
-          )
+          addCellsToHighlight(this.activeSheet.content.namedRanges[value])
         );
       }
     }
@@ -337,12 +349,7 @@ export default class EventHandler {
             : `${hoveredInstance.column}${cellAnchorInstance.row}`;
 
         this.dispatch(highlightCells(cellAnchor, rangeEnd));
-        if (
-          isFormula(
-            this.state.sheets[this.state.activeSheet].content.data[cellAnchor]
-              ?.formula
-          )
-        ) {
+        if (isFormula(this.activeSheet.content.data[cellAnchor]?.formula)) {
           this.#handleFillerModeFormulaFill();
         } else {
           this.#handleFillerModeValueFill();
@@ -374,9 +381,7 @@ export default class EventHandler {
         break;
       case KeyEvent.ENTER:
         const selectedCell =
-          this.state.sheets[this.state.activeSheet].content.data[
-            this.state.selectedCell.id
-          ];
+          this.activeSheet.content.data[this.state.selectedCell.id];
         this.dispatch(setFormulaMode(false));
         if (selectedCell?.isFormulaCell) {
           this.dispatch(recalculateFormulae());
@@ -395,22 +400,24 @@ export default class EventHandler {
     }
   }
 
-  async handleCopyCapture(e) {
+  async handleCopyCapture(e: React.SyntheticEvent) {
     e.preventDefault();
     const content = generateClipboardContent(this.state);
     await this.clipboard.copy(content);
   }
 
-  handleCutCapture(e) {
+  handleCutCapture(e: React.SyntheticEvent) {
     this.handleCopyCapture(e);
     this.dispatch(deleteCellContent());
     this.dispatch(addMemento());
   }
 
-  async handlePasteCapture(e) {
-    e.preventDefault();
+  async handlePasteCapture(e: React.SyntheticEvent) {
     const data = await this.clipboard.get();
-    this.dispatch(pasteCellContent(this.state.selectedCell.id, data));
+    if (data) {
+      e.preventDefault();
+      this.dispatch(pasteCellContent(this.state.selectedCell.id, data));
+    }
   }
 
   handleContextMenu(e: React.MouseEvent) {
@@ -435,8 +442,7 @@ export default class EventHandler {
       isFormulaFieldFocused,
     } = this.state;
 
-    const { data: contentData } =
-      this.state.sheets[this.state.activeSheet].content;
+    const { data: contentData } = this.activeSheet.content;
 
     const isCtrlPressed = this.isCtrlKeyPressed(e);
 
@@ -606,7 +612,7 @@ export default class EventHandler {
   };
 
   private getSelectedCellData(): CellData | undefined {
-    return this.state.sheets[this.state.activeSheet].content.data[this.state.selectedCell.id];
+    return this.activeSheet.content.data[this.state.selectedCell.id];
   }
 
   private isFormulaTrackedCell(cellId: string): Boolean {
@@ -624,7 +630,7 @@ export default class EventHandler {
 
     if (!hasLength || !cellAnchor || !last) return;
 
-    const anchorCell = this.state.sheets[this.state.activeSheet].content.data[cellAnchor];
+    const anchorCell = this.activeSheet.content.data[cellAnchor];
     const anchorFormula = anchorCell?.formula;
 
     if (isFormula(anchorFormula)) {
@@ -633,7 +639,8 @@ export default class EventHandler {
       if (!firstCell?.columnCharCode || !lastCell?.columnCharCode) return;
       const columnFill = lastCell.columnCharCode > firstCell.columnCharCode;
       const rowFill = lastCell.row > firstCell.row;
-      const { referenceCells, formula } = this.state.sheets[this.state.activeSheet].content.data[firstCell.id];
+      const { referenceCells, formula } =
+        this.activeSheet.content.data[firstCell.id];
 
       let increment = 0;
       Array(highlightedLength - 1)
@@ -692,9 +699,9 @@ export default class EventHandler {
     const { cellAnchor, second } = this.state.highlighted;
 
     if (!cellAnchor) return;
-    const anchorCell = this.state.sheets[this.state.activeSheet].content.data[cellAnchor];
+    const anchorCell = this.activeSheet.content.data[cellAnchor];
     const anchorValue = anchorCell?.value;
-    const secondValue = this.state.sheets[this.state.activeSheet].content.data[second]?.value;
+    const secondValue = this.activeSheet.content.data[second]?.value;
 
     if (isNumber(anchorValue) && isNumber(secondValue)) {
       const diff = secondValue - anchorValue;

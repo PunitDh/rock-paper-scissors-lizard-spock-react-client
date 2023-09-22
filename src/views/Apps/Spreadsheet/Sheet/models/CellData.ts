@@ -159,7 +159,7 @@ export default class CellData {
     return this;
   }
 
-  addBorderFormatting(borderId: any, borderType: BorderType): CellData {
+  addBorderFormatting(borderId: string, borderType: BorderType): CellData {
     this.formatting = this.formatting.addBorder(borderId, borderType);
     return this;
   }

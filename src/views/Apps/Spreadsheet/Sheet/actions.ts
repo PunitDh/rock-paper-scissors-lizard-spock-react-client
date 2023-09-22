@@ -37,6 +37,7 @@ export enum SheetAction {
   DELETE_SHEET,
   PROTECT_SHEET,
   SET_ACTIVE_SHEET,
+  SET_SHEET_INDEX,
   FORMULA_HIGHLIGHT_CELL_RANGE,
   FORMULA_HIGHLIGHT_CELLS,
   ADD_CELLS_TO_HIGHLIGHT,
@@ -135,7 +136,7 @@ export const setHighlightColumnAnchor = (payload: string): Action => ({
 
 export const pasteCellContent = (
   anchor: string | undefined,
-  data: StateContentData
+  data: StateContentData | string
 ): Action => ({
   type: SheetAction.PASTE_CELL_CONTENT,
   payload: {
@@ -238,6 +239,14 @@ export const protectSheet = (sheetId: string, password: string): Action => ({
 export const setActiveSheet = (payload: string): Action => ({
   type: SheetAction.SET_ACTIVE_SHEET,
   payload,
+});
+
+export const setSheetIndex = (sheetId: string, index: number): Action => ({
+  type: SheetAction.SET_SHEET_INDEX,
+  payload: {
+    sheetId,
+    index,
+  },
 });
 
 export const highlightFormulaCellRange = (

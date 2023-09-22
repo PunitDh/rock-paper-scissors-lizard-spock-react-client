@@ -24,7 +24,7 @@ export default function useElementPosition(
     },
   });
 
-  const setPositions = useCallback(() => {
+  const setPositions: () => void = useCallback(() => {
     const cellInputRect = document
       .getElementById(selectedId)
       ?.getBoundingClientRect();

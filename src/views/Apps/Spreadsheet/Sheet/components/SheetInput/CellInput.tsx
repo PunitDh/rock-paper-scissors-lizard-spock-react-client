@@ -72,7 +72,7 @@ const CellInput = ({
 }: Props): JSX.Element => {
   const eventHandler = useEventHandler();
   const navigateRef = useRef(true);
-  const inputRef = useCallback(
+  const inputRef: (node: HTMLInputElement) => void = useCallback(
     (node: HTMLInputElement) => eventHandler.setInputRef(node),
     [eventHandler]
   );
@@ -95,7 +95,7 @@ const CellInput = ({
     dispatch(setCellContent(cell.id, newValue));
   };
 
-  const handleKeyDown = useCallback(
+  const handleKeyDown: (event: React.KeyboardEvent) => void = useCallback(
     (event: React.KeyboardEvent) =>
       eventHandler.handleCellInputKeyDown(event, navigateRef.current),
     [eventHandler]

@@ -3,6 +3,7 @@ import Cell from "./models/Cell";
 import Highlight from "./models/Highlight";
 import StateContent from "./models/StateContent";
 import SetExtended from "../../../../utils/Set";
+import CellData from "./models/CellData";
 
 export type State = {
   maxRows: number;
@@ -45,7 +46,7 @@ export type SheetProps = {
   toolbar?: boolean;
   formulaField?: boolean;
   statusField?: boolean;
-  initialData?: { [key: string]: any };
+  initialData?: { [key: string]: CellData };
   defaultRowHeight?: number;
   defaultColumnWidth?: number;
 };

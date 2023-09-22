@@ -1,4 +1,4 @@
-import { FILE_TYPE, SheetConfig } from "./constants";
+import { SheetConfig } from "./constants";
 import { cellSorter, isFormula, typeInInputBox } from "./utils/cellUtils";
 import { SheetAction } from "./actions";
 import Cell from "./models/Cell";
@@ -62,6 +62,7 @@ export const initialState: State = {
 export const reducer = (state: State, action: Action): State => {
   const activeSheet = state.sheets[state.activeSheet];
   // action.type !== SheetAction.SET_HOVERED && console.log(action);
+
   switch (action.type) {
     case SheetAction.SET_SELECTED: {
       let selectedCell: Cell;
@@ -289,6 +290,21 @@ export const reducer = (state: State, action: Action): State => {
       };
     }
 
+    case SheetAction.SET_SHEET_INDEX: {
+      const { sheetId, index } = action.payload;
+
+      return {
+        ...state,
+        sheets: {
+          ...state.sheets,
+          [sheetId]: {
+            ...state.sheets[sheetId],
+            index,
+          },
+        },
+      };
+    }
+
     case SheetAction.FORMULA_HIGHLIGHT_CELLS: {
       return {
         ...state,
@@ -423,7 +439,7 @@ export const reducer = (state: State, action: Action): State => {
       const { data, anchor } = action.payload;
       try {
         const parsed = JSON.parse(data);
-        if (parsed.type === FILE_TYPE) {
+        if (parsed.type === SheetConfig.FILE_TYPE) {
           const cellOffset = new Cell(anchor).getOffset(
             parsed.content[0].length - 1,
             parsed.content.length - 1,

@@ -1,5 +1,5 @@
 import React, { Dispatch, useEffect, useRef, useState } from "react";
-import { renameSheet, setActiveSheet } from "../../actions";
+import { renameSheet, setActiveSheet, setSheetIndex } from "../../actions";
 import { SheetButtonItem, SheetInputItem } from "./styles";
 import { Action, Sheet, State } from "../../types";
 import ConfirmationDialog from "../../../../../../components/shared/ConfirmationDialog";
@@ -48,7 +48,12 @@ const SheetButton = ({
   const handleRename = (e: React.FormEvent) => {
     e.preventDefault();
     onRename();
-    dispatch(renameSheet(sheet.id, sheetName));
+    if (sheetName.trim().length > 0) {
+      dispatch(renameSheet(sheet.id, sheetName.trim()));
+      setSheetName(sheetName.trim());
+    } else {
+      setSheetName(sheet.name);
+    }
   };
 
   const handleDoubleClick = () => {
@@ -76,8 +81,50 @@ const SheetButton = ({
     }
   }, [renameMode, sheet.id, sheet.name.length]);
 
+  function drag(e: React.DragEvent<HTMLFormElement>) {
+    e.dataTransfer.setData("text", (e.target as HTMLFormElement).id);
+    e.dataTransfer.effectAllowed = "move";
+  }
+
+  function drop(e: React.DragEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const data = e.dataTransfer.getData("text");
+    const sourceIndex = state.sheets[data].index;
+    const targetIndex = state.sheets[(e.target as HTMLFormElement).id].index;
+
+    if (sourceIndex !== undefined && targetIndex !== undefined) {
+      const newSheets = { ...state.sheets };
+      newSheets[data].index = targetIndex;
+      newSheets[(e.target as HTMLFormElement).id].index = sourceIndex;
+
+      // Sort the sheets by index to ensure correct rendering order
+      const sortedSheets = Object.values(newSheets).sort(
+        (sheetA, sheetB) => sheetA.index - sheetB.index
+      );
+
+      // Create an object with the sorted sheets
+      const sortedSheetObject = {};
+      sortedSheets.forEach((sheet) => {
+        sortedSheetObject[sheet.id] = sheet;
+      });
+
+      // dispatch(setSheets(sortedSheetObject));
+    }
+  }
+
+  function allowDrop(e: React.DragEvent) {
+    e.preventDefault();
+  }
+
   return (
-    <form onSubmit={handleRename}>
+    <form
+      onSubmit={handleRename}
+      draggable={true}
+      onDragStart={drag}
+      id={`form-${sheet.id}`}
+      onDrop={drop}
+      onDragOver={allowDrop}
+    >
       {renameMode ? (
         <>
           <SheetInputItem
@@ -91,7 +138,6 @@ const SheetButton = ({
         </>
       ) : (
         <SheetButtonItem
-          draggable={true}
           type="button"
           onClick={selectSheet(sheet.id)}
           onContextMenu={onContextMenu}

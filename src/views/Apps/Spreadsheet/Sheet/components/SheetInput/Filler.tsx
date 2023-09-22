@@ -37,7 +37,7 @@ type Props = {
 
 const Filler = ({ dispatch, position }: Props): JSX.Element => {
   const eventHandler = useEventHandler();
-  const fillerRef = useCallback(
+  const fillerRef: (node: HTMLInputElement) => void = useCallback(
     (node: HTMLDivElement) => eventHandler.setFillerRef(node),
     [eventHandler]
   );

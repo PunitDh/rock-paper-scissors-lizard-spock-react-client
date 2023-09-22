@@ -39,7 +39,7 @@ const Picker = () => {
   const selectCuisine = (cuisine: Cuisine) => () =>
     dispatch(setCuisine(cuisine));
 
-  const selectDiet = (e: SyntheticEvent) => {
+  const selectDiet = (e: SyntheticEvent<Element, Event>) => {
     console.log(e);
     console.log((e.target as HTMLInputElement).value);
   };
