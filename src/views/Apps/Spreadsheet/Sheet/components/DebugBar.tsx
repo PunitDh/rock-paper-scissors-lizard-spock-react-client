@@ -1,10 +1,11 @@
-import React from "react";
+import React, { Dispatch } from "react";
 import { FlexForm } from "./styles";
 import styled from "@emotion/styled";
-import { State } from "../types";
+import { Action, State } from "../types";
 import { useToken } from "../../../../../hooks";
 import CellData from "../models/CellData";
 import { objectOf } from "../../../../../utils/Object";
+import { resetState } from "../actions";
 
 const DebugButton = styled.button({
   cursor: "pointer",
@@ -12,9 +13,10 @@ const DebugButton = styled.button({
 
 type Props = {
   state: State;
+  dispatch: Dispatch<Action>;
 };
 
-const DebugBar = ({ state }: Props) => {
+const DebugBar = ({ state, dispatch }: Props) => {
   const token = useToken();
   const selectedCell: string = state.selectedCell.id;
   const cellData = state.sheets[state.activeSheet].content.data[selectedCell];
@@ -48,12 +50,9 @@ const DebugBar = ({ state }: Props) => {
       </DebugButton>
       <DebugButton
         type="button"
-        onClick={() => {
-          const cellA1 = new CellData({ id: "A1" });
-          console.log(testObj1.findKey(cellA1));
-        }}
+        onClick={() => dispatch(resetState())}
       >
-        Test Object
+        Reset State
       </DebugButton>
     </FlexForm>
   ) : null;

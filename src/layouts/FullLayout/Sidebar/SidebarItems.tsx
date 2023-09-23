@@ -4,10 +4,11 @@ import { useSelector } from "react-redux";
 import { Box, List } from "@mui/material";
 import NavGroup from "./NavGroup";
 import { useToken } from "../../../hooks";
+import { NavItemType } from "./types";
 
 type Props = {
-  closeSideBar?: () => void
-}
+  closeSideBar?: () => void;
+};
 
 const SidebarItems = ({ closeSideBar }: Props) => {
   const { pathname } = useLocation();
@@ -21,9 +22,11 @@ const SidebarItems = ({ closeSideBar }: Props) => {
         {navGroups.map((group) => (
           <NavGroup
             groupName={group}
+            maximized={menuItems[group].maximized}
             key={group}
-            navItems={menuItems[group].filter(
-              (navItem) => !navItem.restricted || token.decoded?.isAdmin
+            navItems={menuItems[group].items.filter(
+              (navItem: NavItemType) =>
+                !navItem.restricted || token.decoded?.isAdmin
             )}
             pathDirect={pathname}
             closeSideBar={closeSideBar}

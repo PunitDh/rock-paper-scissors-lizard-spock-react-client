@@ -2818,7 +2818,7 @@ function isString(argument: any): boolean {
 
 function listOf<T>(...args: any[]): List<T> {
   if (args.length === 1) {
-    return new List<T>().fill(args[0]);
+    return new List<T>(...args);
   }
   return new List<T>(...args);
 }

@@ -46,7 +46,7 @@ const Sheet = (props: SheetProps = defaultInitialStateProps): JSX.Element => {
             }
           />
           <SheetSelect state={state} dispatch={dispatch} />
-          <DebugBar state={state} />
+          <DebugBar state={state} dispatch={dispatch} />
           <TestingArea state={state} />
         </SheetContainer>
       </DashboardCard>

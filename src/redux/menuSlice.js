@@ -34,118 +34,145 @@ const menuMapper = (game) => ({
 export const menuSlice = createSlice({
   name: "menu",
   initialState: {
-    Admin: [
-      {
-        id: uniqueId("admin-"),
-        title: "Dashboard",
-        icon: IconDashboard,
-        href: "/dashboard",
-        restricted: true,
-      },
-    ],
-    Home: [
-      {
-        id: uniqueId("apps-"),
-        title: "Apps",
-        icon: IconDeviceGamepad,
-        href: "/apps",
-      },
-    ],
-
-    Games: [
-      {
-        id: uniqueId("games-"),
-        title: "Rock Paper Scissors",
-        icon: ContentCut,
-        href: "/apps/rpsls",
-      },
-      {
-        id: uniqueId("games-"),
-        title: "Tic Tac Toe (Coming Soon)",
-        icon: IconTicTac,
-        href: "/apps/tictactoe",
-        restricted: true,
-      },
-    ],
-
-    Apps: listOf(
-      {
-        id: uniqueId("apps-"),
-        title: "Video Subtitles",
-        icon: VideoCall,
-        href: "/utils/video",
-      },
-      {
-        id: uniqueId("apps-"),
-        title: "Calculator",
-        icon: Calculate,
-        href: "/utils/calculator",
-      },
-      {
-        id: uniqueId("apps-"),
-        title: "Color Picker",
-        icon: ColorLens,
-        href: "/utils/color",
-      },
-      {
-        id: uniqueId("apps-"),
-        title: "Flavor Match",
-        icon: FoodBank,
-        href: "/utils/recipes",
-      },
-      {
-        id: uniqueId("apps-"),
-        title: "Get Sum Rest",
-        icon: Api,
-        href: "/utils/rest?requestTab=0",
-      },
-      {
-        id: uniqueId("apps-"),
-        title: "Spreadsheet",
-        icon: IconFileSpreadsheet,
-        href: "/utils/sheets",
-      }
-    ).sortBy((it) => it.title),
-    [CURRENT_GAMES]: [],
-
-    Settings: [
-      {
-        id: uniqueId("settings-"),
-        title: "Profile",
-        icon: IconUser,
-        href: "/profile",
-      },
-      {
-        id: uniqueId("settings-"),
-        title: "Logout",
-        icon: IconLogout,
-        href: "/auth/logout",
-      },
-    ],
+    Admin: {
+      maximized: false,
+      items: [
+        {
+          id: uniqueId("admin-"),
+          title: "Dashboard",
+          icon: IconDashboard,
+          href: "/dashboard",
+          restricted: true,
+        },
+      ],
+    },
+    Home: {
+      maximized: false,
+      items: [
+        {
+          id: uniqueId("apps-"),
+          title: "Apps",
+          icon: IconDeviceGamepad,
+          href: "/apps",
+        },
+      ],
+    },
+    Games: {
+      maximized: false,
+      items: [
+        {
+          id: uniqueId("games-"),
+          title: "Rock Paper Scissors",
+          icon: ContentCut,
+          href: "/apps/rpsls",
+        },
+        {
+          id: uniqueId("games-"),
+          title: "Tic Tac Toe (Coming Soon)",
+          icon: IconTicTac,
+          href: "/apps/tictactoe",
+          restricted: true,
+        },
+      ],
+    },
+    Apps: {
+      maximized: false,
+      items: listOf(
+        {
+          id: uniqueId("apps-"),
+          title: "Video Subtitles",
+          icon: VideoCall,
+          href: "/utils/video",
+        },
+        {
+          id: uniqueId("apps-"),
+          title: "Calculator",
+          icon: Calculate,
+          href: "/utils/calculator",
+        },
+        {
+          id: uniqueId("apps-"),
+          title: "Color Picker",
+          icon: ColorLens,
+          href: "/utils/color",
+        },
+        {
+          id: uniqueId("apps-"),
+          title: "Flavor Match",
+          icon: FoodBank,
+          href: "/utils/recipes",
+        },
+        {
+          id: uniqueId("apps-"),
+          title: "Get Sum Rest",
+          icon: Api,
+          href: "/utils/rest?requestTab=0",
+        },
+        {
+          id: uniqueId("apps-"),
+          title: "Spreadsheet",
+          icon: IconFileSpreadsheet,
+          href: "/utils/sheets",
+        }
+      ).sortBy((it) => it.title),
+    },
+    Messages: {
+      maximized: false,
+      items: [],
+    },
+    [CURRENT_GAMES]: { maximized: false, items: [] },
+    Settings: {
+      maximized: false,
+      items: [
+        {
+          id: uniqueId("settings-"),
+          title: "Profile",
+          icon: IconUser,
+          href: "/profile",
+        },
+        {
+          id: uniqueId("settings-"),
+          title: "Logout",
+          icon: IconLogout,
+          href: "/auth/logout",
+        },
+      ],
+    },
   },
   reducers: {
     setCurrentGamesNav: (state, { payload = [] }) => {
-      state[CURRENT_GAMES] = payload.map(menuMapper);
+      state[CURRENT_GAMES].items = payload.map(menuMapper);
+    },
+    setMessagesNav: (state, { payload = [] }) => {
+      state.Messages.items = payload.map(menuMapper);
+    },
+    toggleShowNavGroup: (state, action) => {
+      state[action.payload].maximized = !state[action.payload].maximized;
     },
     updateCurrentGameMenu: (state, action) => {
-      const gameIndex = state[CURRENT_GAMES].findIndex(
+      const gameIndex = state[CURRENT_GAMES].items.findIndex(
         (it) => it.id === action.payload.id
       );
       if (gameIndex > -1) {
-        state[CURRENT_GAMES][gameIndex] = menuMapper(action.payload);
+        state[CURRENT_GAMES].items[gameIndex] = menuMapper(action.payload);
       } else {
-        state[CURRENT_GAMES].push(menuMapper(action.payload));
+        state[CURRENT_GAMES].items.push(menuMapper(action.payload));
       }
     },
     deleteGameFromMenu: (state, action) => {
-      state[CURRENT_GAMES] = state[CURRENT_GAMES].filter(
+      state[CURRENT_GAMES].items = state[CURRENT_GAMES].items.filter(
         (game) => game.id !== action.payload.id
       );
     },
   },
 });
 
-export const { setCurrentGamesNav, updateCurrentGameMenu, deleteGameFromMenu } =
-  menuSlice.actions;
+export const {
+  setCurrentGamesNav,
+  setMessagesNav,
+  toggleShowNavGroup,
+  updateCurrentGameMenu,
+  deleteGameFromMenu,
+} = menuSlice.actions;
 
 export default menuSlice.reducer;

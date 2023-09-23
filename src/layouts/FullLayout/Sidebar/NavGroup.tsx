@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ListSubheader, styled } from "@mui/material";
 import NavItem from "./NavItem";
 import { NavItemType } from "./types";
+import FlexBox from "../../../components/shared/FlexBox";
+import { ArrowDropDown, ArrowRight } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
+import { toggleShowNavGroup } from "../../../redux/menuSlice";
 
 const ListSubheaderStyle = styled((props: any) => (
   <ListSubheader disableSticky {...props} />
@@ -15,21 +19,42 @@ const ListSubheaderStyle = styled((props: any) => (
   padding: "3px 12px",
 }));
 
-const NavGroup = ({ groupName, navItems, pathDirect, closeSideBar }) => (
-  <>
-    <ListSubheaderStyle>{groupName}</ListSubheaderStyle>
-    {navItems.map((navItem: NavItemType) => (
-      <NavItem
-        level={0}
-        item={navItem}
-        key={navItem.id}
-        pathDirect={pathDirect}
-        closeSideBar={closeSideBar}
-        onClick={navItem.onClick}
-        hasContextMenu={navItem.gameContext}
-      />
-    ))}
-  </>
-);
+const NavGroup = ({
+  groupName,
+  navItems,
+  pathDirect,
+  closeSideBar,
+  maximized,
+}) => {
+  const dispatch = useDispatch();
+  const handleMaximize = () => dispatch(toggleShowNavGroup(groupName));
+
+  return (
+    <>
+      <ListSubheaderStyle>
+        <FlexBox
+          alignItems="center"
+          justifyContent="flex-start"
+          cursor="pointer"
+          onClick={handleMaximize}
+        >
+          {groupName} {maximized ? <ArrowDropDown /> : <ArrowRight />}
+        </FlexBox>
+      </ListSubheaderStyle>
+      {maximized &&
+        navItems.map((navItem: NavItemType) => (
+          <NavItem
+            level={0}
+            item={navItem}
+            key={navItem.id}
+            pathDirect={pathDirect}
+            closeSideBar={closeSideBar}
+            onClick={navItem.onClick}
+            hasContextMenu={navItem.gameContext}
+          />
+        ))}
+    </>
+  );
+};
 
 export default NavGroup;

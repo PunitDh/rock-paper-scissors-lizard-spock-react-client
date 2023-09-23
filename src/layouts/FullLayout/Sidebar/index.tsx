@@ -7,7 +7,7 @@ import { useAPI } from "../../../hooks";
 
 type WideBoxProps = {
   width: string;
-}
+};
 
 const WideBox = styled(Box)(({ width }: WideBoxProps) => ({
   width,
