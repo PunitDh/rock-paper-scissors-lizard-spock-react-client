@@ -15,11 +15,13 @@ import {
   Lock,
   TextFields,
 } from "@mui/icons-material";
-import { Action, State } from "../../types";
-import ConfirmationDialog from "../../../../../../components/shared/ConfirmationDialog";
-import Protect from "./Protect";
+import { Action, Sheet, State } from "../../types";
 import { Credentials } from "./types";
 import { useNotification } from "../../../../../../hooks";
+import { handleExportAsCsv } from "../../utils/sheetUtils";
+import ConfirmDeleteSheet from "./Dialog/ConfirmDeleteSheet";
+import ConfirmProtectSheet from "./Dialog/ConfirmProtectSheet";
+import { IconCsv } from "@tabler/icons-react";
 
 type Props = {
   state: State;
@@ -43,6 +45,7 @@ const SheetSelectMenu = ({
     confirmPassword: "",
   });
   const notification = useNotification();
+  const sheet: Sheet | null = anchor?.id ? state.sheets[anchor.id] : null;
 
   const handleCloseDelete = () => {
     setDeleteConfirmOpen(false);
@@ -61,7 +64,7 @@ const SheetSelectMenu = ({
     if (anchor) {
       dispatch(protectSheet(anchor.id, credentials.password));
       setCredentials({ password: "", confirmPassword: "" });
-      notification.success(`'${state.sheets[anchor.id].name}' locked`);
+      notification.success(`'${sheet?.name}' locked`);
     }
     onClose();
   };
@@ -80,43 +83,26 @@ const SheetSelectMenu = ({
     setDeleteConfirmOpen(true);
   };
 
+  const exportAsCSV = () =>
+    sheet &&
+    handleExportAsCsv(sheet, state.maxRows, state.maxColumns, sheet.name);
+
   return (
     <Box>
       {anchor?.id && (
         <>
-          <ConfirmationDialog
-            id="delete-sheet-confirmation-dialog"
-            keepMounted
+          <ConfirmDeleteSheet
+            sheetName={sheet?.name}
             open={deleteConfirmOpen}
             onCancel={handleCloseDelete}
             onConfirm={handleDelete}
-            value={deleteConfirmOpen}
-            title="Delete"
-            confirmBtnText="Delete Sheet"
-            content={`Are you sure you want to delete '${
-              state.sheets[anchor.id].name
-            }'?`}
           />
-          <ConfirmationDialog
-            id="protect-sheet-confirmation-dialog"
-            keepMounted
+          <ConfirmProtectSheet
+            value={protectConfirmOpen}
             onConfirm={handleProtectSheet}
             onCancel={handleCloseProtect}
-            value={protectConfirmOpen}
-            title="Protect"
-            confirmBtnText="Set Password"
-            confirmdisabled={Number(
-              credentials.password.length < 1 ||
-                credentials.confirmPassword !== credentials.password
-            )}
-            content={
-              <Protect
-                credentials={credentials}
-                setCredentials={setCredentials}
-                onSubmit={handleProtectSheet}
-              />
-            }
-            open={protectConfirmOpen}
+            credentials={credentials}
+            setCredentials={setCredentials}
           />
         </>
       )}
@@ -148,7 +134,6 @@ const SheetSelectMenu = ({
           </ListItemIcon>
           <ListItemText>Move Left</ListItemText>
         </MenuItem>
-
         <MenuItem onClick={handleMoveSheet(1)}>
           <ListItemIcon>
             <ArrowForward width={20} />
@@ -161,6 +146,16 @@ const SheetSelectMenu = ({
             <Lock width={20} />
           </ListItemIcon>
           <ListItemText>Protect Sheet</ListItemText>
+        </MenuItem>
+        <MenuItem
+          onClick={
+            sheet?.protected ? () => setProtectConfirmOpen(true) : exportAsCSV
+          }
+        >
+          <ListItemIcon>
+            <IconCsv width={20} />
+          </ListItemIcon>
+          <ListItemText>Export As CSV</ListItemText>
         </MenuItem>
         <Divider />
         <MenuItem onClick={handleRename}>

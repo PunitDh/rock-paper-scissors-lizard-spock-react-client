@@ -850,6 +850,7 @@ export const reducer = (state: State, action: Action): State => {
 
     case SheetAction.SET_CELL_CONTENT: {
       const { value, cell: cellId } = action.payload;
+      // console.log("Here");
       const formula = value.toUpperCase();
       const formulaMode = isFormula(formula);
       const formulaTrackedCells = getFormulaTrackedCells(
@@ -861,6 +862,8 @@ export const reducer = (state: State, action: Action): State => {
         activeSheet.content.data,
         cellId
       ).setValue(value);
+
+      // console.log(cellId, action.payload);
 
       return {
         ...state,
