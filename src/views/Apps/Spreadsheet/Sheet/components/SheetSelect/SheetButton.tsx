@@ -1,10 +1,9 @@
 import React, { Dispatch, useEffect, useRef, useState } from "react";
-import { renameSheet, setActiveSheet, setSheetIndex } from "../../actions";
+import { renameSheet, setActiveSheet } from "../../actions";
 import { SheetButtonItem, SheetInputItem } from "./styles";
 import { Action, Sheet, State } from "../../types";
-import ConfirmationDialog from "../../../../../../components/shared/ConfirmationDialog";
-import EnterPassword from "./EnterPassword";
 import { useNotification } from "../../../../../../hooks";
+import PasswordPrompt from "./Dialog/PasswordPrompt";
 
 type SheetButtonProps = {
   state: State;
@@ -25,12 +24,14 @@ const SheetButton = ({
   onRename,
   onDoubleClick,
 }: SheetButtonProps) => {
+  const notification = useNotification();
   const [sheetName, setSheetName] = useState(sheet.name);
   const [passwordPromptOpen, setPasswordPromptOpen] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
+
   const sheetRenameRef = useRef<HTMLInputElement | null>(null);
-  const renameMode = sheet.id === rename;
-  const notification = useNotification();
+  const renameMode: boolean = sheet.id === rename;
+  const selectedSheet: Sheet = state.sheets[sheet.id];
 
   const selectSheet = (sheetId: string) => () => {
     if (state.sheets[sheetId].protected && state.activeSheet !== sheet.id) {
@@ -56,16 +57,11 @@ const SheetButton = ({
     }
   };
 
-  const handleDoubleClick = () => {
-    onDoubleClick(sheet.id);
-  };
-
-  const handleClosePasswordPrompt = () => {
-    setPasswordPromptOpen(false);
-  };
+  const handleDoubleClick = () => onDoubleClick(sheet.id);
+  const handleClosePasswordPrompt = () => setPasswordPromptOpen(false);
 
   const checkPassword = () => {
-    if (password === state.sheets[sheet.id].password) {
+    if (password === selectedSheet.password) {
       dispatch(setActiveSheet(sheet.id));
     } else {
       notification.error("Wrong password entered");
@@ -148,23 +144,13 @@ const SheetButton = ({
           {sheet.name}
         </SheetButtonItem>
       )}
-      {state.sheets[sheet.id].protected && (
-        <ConfirmationDialog
-          id="sheet-password-prompt-confirmation-dialog"
-          keepMounted
+      {selectedSheet.protected && (
+        <PasswordPrompt
           open={passwordPromptOpen}
           onCancel={handleClosePasswordPrompt}
           onConfirm={checkPassword}
           value={password}
-          title="Protected"
-          confirmBtnText="Submit"
-          content={
-            <EnterPassword
-              password={password}
-              setPassword={setPassword}
-              onSubmit={checkPassword}
-            />
-          }
+          setValue={setPassword}
         />
       )}
     </form>

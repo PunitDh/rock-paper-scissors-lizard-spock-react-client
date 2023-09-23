@@ -639,8 +639,10 @@ export default class EventHandler {
       if (!firstCell?.columnCharCode || !lastCell?.columnCharCode) return;
       const columnFill = lastCell.columnCharCode > firstCell.columnCharCode;
       const rowFill = lastCell.row > firstCell.row;
-      const { referenceCells, formula } =
-        this.activeSheet.content.data[firstCell.id];
+      const { referenceCells, formula } = this.activeSheet.content.data[
+        firstCell.id
+      ] as CellData;
+      const referenceCellsArray = referenceCells.toArray();
 
       let increment = 0;
       Array(highlightedLength - 1)
@@ -649,7 +651,7 @@ export default class EventHandler {
           if (columnFill) {
             increment++;
 
-            const newFormula = referenceCells.reduce(
+            const newFormula = referenceCellsArray.reduce(
               (acc: string, cur: string) => {
                 const { columnCharCode, row, id } = new Cell(cur);
                 if (!columnCharCode) return acc;
@@ -658,16 +660,19 @@ export default class EventHandler {
                   `${String.fromCharCode(+columnCharCode + increment)}${row}`
                 );
               },
-              formula
+              formula as string
             );
 
             this.dispatch(
-              setCellContent(highlightedCells[i + 1], String(newFormula))
+              setCellContent(
+                highlightedCells.toArray()[i + 1],
+                String(newFormula)
+              )
             );
           } else if (rowFill) {
             increment++;
 
-            const newFormula = referenceCells.reduce(
+            const newFormula = referenceCellsArray.reduce(
               (acc: string, cur: string) => {
                 const { columnCharCode, row, id } = new Cell(cur);
                 if (!columnCharCode) return acc;
@@ -676,11 +681,14 @@ export default class EventHandler {
                   `${String.fromCharCode(columnCharCode)}${row + increment}`
                 );
               },
-              formula
+              formula as string
             );
 
             this.dispatch(
-              setCellContent(highlightedCells[i + 1], String(newFormula))
+              setCellContent(
+                highlightedCells.toArray()[i + 1],
+                String(newFormula)
+              )
             );
             this.state.formulaMode && this.dispatch(setFormulaMode(false));
             this.dispatch(recalculateFormulae());
@@ -703,6 +711,7 @@ export default class EventHandler {
     const anchorValue = anchorCell?.value;
     const secondValue = this.activeSheet.content.data[second]?.value;
 
+    console.log(isNumber(anchorValue), isNumber(secondValue));
     if (isNumber(anchorValue) && isNumber(secondValue)) {
       const diff = secondValue - anchorValue;
       let increment = 0;
@@ -712,7 +721,7 @@ export default class EventHandler {
           increment += diff;
           this.dispatch(
             setCellContent(
-              highlightedCells[i + 1],
+              highlightedCells.toArray()[i + 1],
               String(+anchorValue + increment)
             )
           );
@@ -722,7 +731,10 @@ export default class EventHandler {
         .fill(0)
         .forEach((_, i) => {
           this.dispatch(
-            setCellContent(highlightedCells[i + 1], String(anchorValue || ""))
+            setCellContent(
+              highlightedCells.toArray()[i + 1],
+              String(anchorValue || "")
+            )
           );
         });
     }

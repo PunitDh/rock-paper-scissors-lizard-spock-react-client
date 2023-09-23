@@ -23,21 +23,10 @@ const SheetSelect = ({ state, dispatch }: Props) => {
     setAnchorEl(element);
   };
 
-  const closeMenu = () => {
-    setAnchorEl(null);
-  };
-
-  const handleAddSheet = () => {
-    dispatch(addSheet());
-  };
-
-  const handleRename = (sheetId: string) => {
-    setRenameState(sheetId);
-  };
-
-  const handleCloseRename = () => {
-    setRenameState(null);
-  };
+  const closeMenu = () => setAnchorEl(null);
+  const handleAddSheet = () => dispatch(addSheet());
+  const handleRename = (sheetId: string) => setRenameState(sheetId);
+  const handleCloseRename = () => setRenameState(null);
 
   return (
     <FlexBox
