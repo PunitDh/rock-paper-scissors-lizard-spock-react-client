@@ -14,7 +14,11 @@ import {
   setCurrentUsers,
   setRecentGames,
 } from "../redux/playerSlice";
-import { setCurrentGamesNav, updateCurrentGameMenu } from "../redux/menuSlice";
+import {
+  setCurrentGamesNav,
+  setMessagesNav,
+  updateCurrentGameMenu,
+} from "../redux/menuSlice";
 
 export default function useAPI() {
   const token = useToken();
@@ -123,7 +127,11 @@ export default function useAPI() {
 
     loginPlayer: (formData) => {
       return request
-        .post("/player/login", { remember: formData.remember }, createBasicAuth(formData))
+        .post(
+          "/player/login",
+          { remember: formData.remember },
+          createBasicAuth(formData)
+        )
         .then((response) => handleToken(response, "Login successful!"))
         .catch(handleError);
     },
@@ -149,7 +157,20 @@ export default function useAPI() {
         socket.emit(SocketRequest.JOIN_CHATS, secure());
         return request
           .get("/player/chats", authHeaders)
-          .then((data) => dispatch(setConversations(data.payload)))
+          .then((data) => {
+            dispatch(
+              setMessagesNav({
+                items: data.payload,
+                currentUser: token.decoded,
+                onClick: (request) =>
+                  socket.emit(
+                    SocketRequest.START_CONVERSATION,
+                    secure(request)
+                  ),
+              })
+            );
+            dispatch(setConversations(data.payload));
+          })
           .catch(handleError);
       }
     },

@@ -1,9 +1,11 @@
 import {
   Api,
   Calculate,
+  Chat,
   ColorLens,
   ContentCut,
   FoodBank,
+  MessageOutlined,
   VideoCall,
 } from "@mui/icons-material";
 import { createSlice } from "@reduxjs/toolkit";
@@ -30,6 +32,16 @@ const menuMapper = (game) => ({
   players: game.players,
   movePlayed: false,
 });
+
+const chatMapper = (chat, currentUser, onClick) => {
+  const player = chat.players.find((it) => it.id !== currentUser.id);
+  return {
+    id: chat.id,
+    title: player.firstName,
+    onClick: () => onClick({ player: player.id }),
+    icon: Chat,
+  };
+};
 
 export const menuSlice = createSlice({
   name: "menu",
@@ -143,8 +155,10 @@ export const menuSlice = createSlice({
     setCurrentGamesNav: (state, { payload = [] }) => {
       state[CURRENT_GAMES].items = payload.map(menuMapper);
     },
-    setMessagesNav: (state, { payload = [] }) => {
-      state.Messages.items = payload.map(menuMapper);
+    setMessagesNav: (state, action) => {
+      state.Messages.items = action.payload.items.map((item) =>
+        chatMapper(item, action.payload.currentUser, action.payload.onClick)
+      );
     },
     toggleShowNavGroup: (state, action) => {
       state[action.payload].maximized = !state[action.payload].maximized;
