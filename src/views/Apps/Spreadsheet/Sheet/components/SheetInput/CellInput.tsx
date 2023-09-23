@@ -21,7 +21,7 @@ const Container = styled.div(({ top, left }: ContainerProps) => ({
   top: `${top}px`,
   left: `${left}px`,
   transition: "top 200ms ease-in-out, left 200ms ease-in-out",
-  zIndex: "50000",
+  zIndex: "5",
 }));
 
 type InputFieldProps = {

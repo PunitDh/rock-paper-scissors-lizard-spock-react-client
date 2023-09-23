@@ -1,8 +1,11 @@
 import React from "react";
 import PageContainer from "../../../components/container/PageContainer";
 import Sheet from "./Sheet";
+import { useQueryParam } from "../../../hooks";
 
 export default function Spreadsheet() {
+  const activeSheet = useQueryParam("activeSheet");
+  console.log({ activeSheet });
   return (
     <PageContainer title="Spreadsheet" description="React-based spreadsheet">
       <Sheet
@@ -12,9 +15,11 @@ export default function Spreadsheet() {
         toolbar={true}
         formulaField={true}
         statusField={true}
+        activeSheet={activeSheet}
         // maxDisplayColumns={12}
         // maxDisplayRows={12}
-        initialData={{}
+        initialData={
+          {}
           //   {
           //   A1: 34,
           //   B1: 45,

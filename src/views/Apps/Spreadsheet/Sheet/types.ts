@@ -43,6 +43,7 @@ export type SheetProps = {
   maxRows?: number;
   maxColumns?: number;
   maxUndos?: number;
+  activeSheet?: string | null;
   toolbar?: boolean;
   formulaField?: boolean;
   statusField?: boolean;

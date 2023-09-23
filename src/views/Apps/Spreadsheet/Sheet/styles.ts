@@ -129,7 +129,6 @@ export const Item = styled(TableCell)(({
   theme,
   selected,
   textalign,
-  tabIndex,
   width,
   borderproperties,
   formatting = new CellFormatting(),
@@ -150,7 +149,7 @@ export const Item = styled(TableCell)(({
     position: "relative",
     whiteSpace: "nowrap",
     userSelect: "none",
-    zIndex: tabIndex,
+    // zIndex: tabIndex,
     borderCollapse: "collapse",
     width,
     "&:hover": {
@@ -163,7 +162,7 @@ export const Item = styled(TableCell)(({
 export const Resize = styled.div({
   "&:after": {
     content: '""',
-    zIndex: "500000 !important",
+    zIndex: "5 !important",
     position: "absolute",
     right: "0",
     bottom: "0",
@@ -207,7 +206,6 @@ export const DivItem = styled(Paper)(
     textAlign: "center",
     color: theme.palette.text.secondary,
     boxSizing: "border-box",
-    // outline: selected ? "2px solid blue" : "1px solid rgba(0,0,0,0.2)",
     borderRadius: 0,
     cursor: "cell",
     height: "1.5rem",
@@ -219,9 +217,6 @@ export const DivItem = styled(Paper)(
     marginTop: "2px",
     overflowX: "visible",
     position: "relative",
-    // "&:hover": {
-    //   outline: "2px solid blue",
-    // },
   })
 );
 
@@ -239,7 +234,7 @@ export const CellDiv = styled.div(({ contentEditable }) => ({
   userSelect: contentEditable ? "auto" : "none",
   "&:focus": {
     cursor: contentEditable ? "text" : "cell",
-    zIndex: "999",
+    zIndex: "9",
     overflowX: "auto",
     position: "absolute",
     width: "auto",

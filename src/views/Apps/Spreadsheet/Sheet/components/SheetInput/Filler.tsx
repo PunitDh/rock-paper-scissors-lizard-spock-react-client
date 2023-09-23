@@ -15,7 +15,7 @@ const Container = styled.div(({ top, left }: ContainerProps) => ({
   position: "absolute",
   top: `${top}px`,
   left: `${left}px`,
-  zIndex: "60000",
+  zIndex: "6",
   userSelect: "none",
 }));
 

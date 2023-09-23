@@ -2,7 +2,7 @@ import { toList } from "../../../../../utils/List";
 import { SheetConfig } from "../constants";
 import Cell from "../models/Cell";
 import CellRange from "../models/CellRange";
-import { Sheet, State } from "../types";
+import { Sheet } from "../types";
 
 export const reIndexSheets = (sheets: {
   [key: string]: Sheet;

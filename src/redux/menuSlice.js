@@ -5,7 +5,6 @@ import {
   ColorLens,
   ContentCut,
   FoodBank,
-  MessageOutlined,
   VideoCall,
 } from "@mui/icons-material";
 import { createSlice } from "@reduxjs/toolkit";

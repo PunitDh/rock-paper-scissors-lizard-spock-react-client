@@ -17,7 +17,7 @@ const Container = styled.div(({ top, left, width, height }: ContainerProps) => (
   height: `${height}px`,
   border: `1px solid blue`,
   // transition: "top 200ms ease-in-out, left 200ms ease-in-out",
-  zIndex: "50000",
+  zIndex: "5",
   pointerEvents: "none",
   backgroundColor: "rgba(0,0,255,0.1)"
 }));

@@ -34,6 +34,7 @@ const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
   borderTopRightRadius: "0.5rem",
   borderTopLeftRadius: "0.5rem",
   cursor: "pointer",
+  zIndex: "5"
 }));
 
 const StyledPaper = styled(Paper)(({ maximized, toolbarheight }) => ({
@@ -47,6 +48,7 @@ const StyledPaper = styled(Paper)(({ maximized, toolbarheight }) => ({
   boxShadow: "-1rem -1rem 3rem -1rem rgba(0,0,0,0.7)",
   borderTopRightRadius: "0.5rem",
   borderTopLeftRadius: "0.5rem",
+  zIndex: "1500",
 }));
 
 const MessageBody = styled(Paper)({

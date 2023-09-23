@@ -28,7 +28,7 @@ export const CellItem = styled(Paper)(
     overflowX: "hidden",
     position: "relative",
     whiteSpace: "nowrap",
-    zIndex: "50",
+    zIndex: "5",
     "&:hover": {
       outline: "2px solid blue",
     },
@@ -38,7 +38,7 @@ export const CellItem = styled(Paper)(
 export const Resize = styled.div({
   "&:after": {
     content: '""',
-    zIndex: "500000 !important",
+    zIndex: "5 !important",
     position: "absolute",
     right: "0",
     bottom: "0",
