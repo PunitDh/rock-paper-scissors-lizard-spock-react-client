@@ -15,9 +15,6 @@ const ColorPicker = Loadable(lazy(() => import("../views/Apps/ColorPicker")));
 const ReactCalculator = Loadable(
   lazy(() => import("../views/Apps/ReactCalculator")),
 );
-const GraphingCalculator = Loadable(
-  lazy(() => import("../views/Apps/GraphingCalculator")),
-);
 const Spreadsheet = Loadable(lazy(() => import("../views/Apps/Spreadsheet")));
 const GetSumRest = Loadable(lazy(() => import("../views/Apps/GetSumRest")));
 const Recipes = Loadable(lazy(() => import("../views/Apps/Recipes")));
@@ -75,7 +72,6 @@ const Router = [
       { path: "video", exact: true, element: <VideoConverter /> },
       { path: "color", exact: true, element: <ColorPicker /> },
       { path: "calculator", exact: true, element: <ReactCalculator /> },
-      { path: "graphing", exact: true, element: <GraphingCalculator /> },
       { path: "sheets", exact: true, element: <Spreadsheet /> },
       { path: "rest", exact: true, element: <GetSumRest /> },
       { path: "recipes", exact: true, element: <Recipes /> },

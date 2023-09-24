@@ -1,6 +1,11 @@
-import { MenuItem, Select, Tooltip } from "@mui/material";
+import { MenuItem, Select, SelectChangeEvent, Tooltip } from "@mui/material";
 import { useAPI } from "../../hooks";
 import { icons } from "../../assets";
+
+type Props = {
+  selected: number;
+  gameId: string;
+}
 
 const selectStyles = {
   ".MuiOutlinedInput-notchedOutline": {
@@ -16,9 +21,9 @@ const selectStyles = {
   },
 };
 
-const IconSelectField = ({ selected = 1, gameId }) => {
+const IconSelectField = ({ selected = 1, gameId }: Props) => {
   const api = useAPI();
-  const handleChange = (e) =>
+  const handleChange = (e: SelectChangeEvent) =>
     api.changeGameIcon({ gameId, icon: e.target.value });
 
   return (
@@ -26,7 +31,7 @@ const IconSelectField = ({ selected = 1, gameId }) => {
       <Select
         labelId="icon-select"
         id="icon-select"
-        value={selected}
+        value={String(selected)}
         label="Icon"
         onChange={handleChange}
         size="small"

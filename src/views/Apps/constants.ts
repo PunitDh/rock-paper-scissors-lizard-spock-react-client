@@ -28,13 +28,6 @@ export const AppList = listOf<LinkCardProps>(
   },
   {
     id: uniqueId("app-"),
-    to: "/utils/graphing",
-    title: "Graphing Calculator",
-    Icon: DashboardImage.Graphing,
-    description: "A graphing calculator made with React",
-  },
-  {
-    id: uniqueId("app-"),
     to: "/utils/color",
     title: "Color Picker",
     Icon: DashboardImage.ColorPicker,

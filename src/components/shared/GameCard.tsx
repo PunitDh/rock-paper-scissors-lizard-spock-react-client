@@ -1,7 +1,13 @@
 import { Box, CardContent, Stack, Typography } from "@mui/material";
 import { ResponsiveCard } from "./styles";
 
-const GameCard = ({ title, children, action }) => (
+type Props = {
+  title: string;
+  children: JSX.Element | string;
+  action: JSX.Element | string | undefined;
+}
+
+const GameCard = ({ title, children, action }: Props) => (
   <ResponsiveCard elevation={9}>
     <CardContent>
       <Stack direction="row" justifyContent="space-between" alignItems="center">

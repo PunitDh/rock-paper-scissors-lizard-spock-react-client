@@ -7,6 +7,7 @@ import DashboardCard from "../../../../components/shared/DashboardCard";
 import FlexBox from "../../../../components/shared/FlexBox";
 import { Theme as MuiTheme } from "@mui/material";
 import { Memory } from "./types";
+import GraphBox from "./sections/GraphBox";
 
 const Calculator = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -30,6 +31,7 @@ const Calculator = () => {
         >
           <IOBox state={state} />
           <ButtonsBox state={state} dispatch={dispatch} />
+          <GraphBox state={state} dispatch={dispatch} />
         </FlexBox>
         <FlexBox
           gap="0.5rem"

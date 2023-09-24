@@ -4,6 +4,7 @@ export type State = {
   // input: "4sin(90)+8cos(10)+9tan(80)+4log(4)+2.5ln(5)+24atan(4)+14Ans+14E-4π-2√3",
   input: string[];
   output: number;
+  outputs: Coord[];
   evaled: boolean;
   degrees: boolean;
   inverse: boolean;
@@ -22,6 +23,11 @@ export type State = {
   history: HistoryItem[];
 };
 
+export type Coord = {
+  x: number;
+  y: number;
+}
+
 export type Memory = {
   value: number;
   filled: boolean;
@@ -39,6 +45,7 @@ export type Action = {
 
 export type Output = {
   value: string;
+  values: Coord[];
   parsedInput: any;
   error: boolean;
 };

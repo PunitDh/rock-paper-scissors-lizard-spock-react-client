@@ -37,7 +37,7 @@ function MemoryButton({ value, state, dispatch }: Props) {
             state.input.length === 0 ? { ...state, input: ["0"] } : state,
           );
           dispatch(setOutput(output));
-          dispatch(addMemory(address, output.value));
+          dispatch(addMemory(address, Number(output.value)));
         }
         break;
       case MemoryOperation.REMOVE:

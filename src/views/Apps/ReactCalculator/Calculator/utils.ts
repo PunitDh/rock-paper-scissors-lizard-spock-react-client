@@ -1,42 +1,38 @@
 import { Calc } from "./constants";
+import { Coord, Output, State } from "./types";
 
-export const evaluateExpression = (state) => {
-  let parsedInput, value;
+enum Limit {
+  LOWER = -10,
+  UPPER = 10,
+}
+
+export const evaluateExpression = (state: State): Output => {
+  const _input = Calc.OPERATIONS.includes(state.input[state.input.length - 1])
+    ? state.input.concat(Calc.ANS)
+    : state.input;
+
+  let parsedInput: string = _input.join(""),
+    value: string,
+    values: Coord[] = [];
   try {
-    const _input = Calc.OPERATIONS.includes(state.input[state.input.length - 1])
-      ? state.input.concat(Calc.ANS)
-      : state.input;
-
-    parsedInput = _input
-      .join("")
+    parsedInput = parsedInput
       .replaceAll("×", "*")
       .replaceAll("÷", "/")
       .replaceAll(/((\d+|\w+)|\(([^)]*)(\)))+(?:%)/g, "($&/100)")
       .replaceAll("%", "")
+      // .replaceAll(/(-?\d+\.?\d+)|(-?\d+)/g, "($&)")
       .replaceAll("²", "**(2)")
       .replaceAll("^", "**")
       .replaceAll(/(\b)e(\b|\B)/g, "(1e0)")
       .replaceAll(/(\d+)(?=\()/g, "$&*")
+      .replaceAll(/(\d+)(?=x)/g, "$&*")
+      .replaceAll(/(?<=\))(\d+)/g, "*$&")
       .replaceAll(/(?<=\))(\d+)/g, "*$&")
       .replaceAll(
         /(\d+|\))(?=\s*(atan|acos|asin| sin| cos| tan|log|ln|Ans|Rnd|E|π))/g,
-        "$&* ",
+        "$&* "
       )
-      .replaceAll(
-        /(\d+)(!+)/g,
-        "(Array($1).fill(0).map((_,i)=>i+1).reduce((a,c)=>a*c,1))",
-      )
-      .replaceAll(/(\d+)(√\()(\d+)/g, "(Math.pow($3, 1/$1))")
-      .replaceAll("√(", "(Math.sqrt(")
-      .replaceAll("π", "(Math.PI)")
-      .replaceAll("E", "(Math.E)")
-      .replaceAll("√(", "")
       .replaceAll("Rnd", `(Math.random())`)
-      .replaceAll("Ans", `(${state.answer})`)
-      .replaceAll(
-        /\((\d+)\)!/g,
-        "(Array($1).fill(0).map((_,i)=>i+1).reduce((a,c)=>a*c,1))",
-      )
       .replaceAll("M1", `(${state.memory.M1.value})`)
       .replaceAll("M2", `(${state.memory.M2.value})`)
       .replaceAll("M3", `(${state.memory.M3.value})`)
@@ -46,12 +42,26 @@ export const evaluateExpression = (state) => {
       .replaceAll("M7", `(${state.memory.M7.value})`)
       .replaceAll("M8", `(${state.memory.M8.value})`)
       .replaceAll(
-        /(asin|acos|atan)/g,
-        `${state.degrees ? "(180/Math.PI*" : "(1*"}Math.$1(`,
+        /(\d+|x)(!+)/g,
+        "(Array($1).fill(0).map((_,i)=>i+1).reduce((a,c)=>a*c,1))"
+      )
+      .replaceAll(/(\d+)(√\()(\d+)/g, "(Math.pow($3, 1/$1))")
+      .replaceAll("√(", "(Math.sqrt(")
+      .replaceAll("π", "(Math.PI)")
+      .replaceAll("E", "(Math.E)")
+      .replaceAll("√(", "")
+      .replaceAll(
+        /\((\d+)\)!/g,
+        "(Array($1).fill(0).map((_,i)=>i+1).reduce((a,c)=>a*c,1))"
+      )
+
+      .replaceAll(
+        /(asin|acos|atan)\(/g,
+        `${state.degrees ? "(180/Math.PI*" : "(1*"}Math.$1(`
       )
       .replaceAll(
-        /(?: )(sin|cos|tan)/g,
-        `Math.$1(${state.degrees ? `Math.PI/180*` : `1*`}`,
+        /(?: )(sin|cos|tan)\(/g,
+        `Math.$1(${state.degrees ? `Math.PI/180*` : `1*`}`
       )
       .replaceAll(/(?:log)\(([^)]*)(\)|)/g, "Math.log10($1)")
       .replaceAll(/(?:ln)\(([^)]*)(\)|)/g, " Math.log($1)")
@@ -65,11 +75,29 @@ export const evaluateExpression = (state) => {
     const diffBrackets = openBrackets - closeBrackets;
     if (diffBrackets > 0) parsedInput += ")".repeat(diffBrackets);
 
-    value = String(Math.round(eval(parsedInput) * 10 ** 13) / 10 ** 13);
+    if (/x/g.test(parsedInput)) {
+      for (let x = Limit.LOWER; x <= Limit.UPPER; x += 0.1) {
+        const parsed = parsedInput.replaceAll("x", String(`(${x.toFixed(1)})`));
 
-    return { value, parsedInput, error: false };
+        try {
+          const y = Math.round(eval(parsed) * 10 ** 13) / 10 ** 13;
+          if (isFinite(y)) {
+            values.push({
+              x: Number(x.toFixed(1)),
+              y,
+            } as Coord);
+          }
+        } catch {}
+      }
+
+      return { values, value: "0", parsedInput, error: false };
+    } else {
+      value = String(Math.round(eval(parsedInput) * 10 ** 13) / 10 ** 13);
+      return { values: [], value, parsedInput, error: false };
+    }
   } catch (error) {
     return {
+      values: [],
       value: "Syntax Error",
       parsedInput,
       error: true,

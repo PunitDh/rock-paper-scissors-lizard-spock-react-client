@@ -4,9 +4,18 @@ import { camelCase, kebabCase } from "lodash";
 import PasswordField from "./PasswordField";
 import styled from "@emotion/styled";
 
-const WideTextField = styled(CustomTextField)({
+type Props = {
+  value: string;
+  label: string;
+  type: "text" | "password" | "url" | "email";
+  name?: string;
+  id?: string;
+  disabled: boolean;
+};
+
+const WideTextField = styled(CustomTextField)((props: any) => ({
   width: "100%",
-});
+}));
 
 const Container = styled.div({
   width: "100%",
@@ -21,7 +30,7 @@ const FormField = ({
   name,
   id,
   disabled = false,
-}) => {
+}: Props) => {
   const autoId = kebabCase(label);
   const autoName = camelCase(label);
 
