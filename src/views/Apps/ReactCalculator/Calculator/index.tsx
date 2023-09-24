@@ -8,12 +8,15 @@ import FlexBox from "../../../../components/shared/FlexBox";
 import { Theme as MuiTheme } from "@mui/material";
 import { Memory } from "./types";
 import GraphBox from "./sections/GraphBox";
+import { CalculatorAction } from "./actions";
 
 const Calculator = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const mdUp = useMediaQuery((theme) =>
     (theme as MuiTheme).breakpoints.up("md"),
   );
+
+  console.log(CalculatorAction);
 
   return (
     <DashboardCard sx={{ height: "100%" }} title="Calculator">
@@ -31,7 +34,7 @@ const Calculator = () => {
         >
           <IOBox state={state} />
           <ButtonsBox state={state} dispatch={dispatch} />
-          <GraphBox state={state} dispatch={dispatch} />
+          <GraphBox state={state} />
         </FlexBox>
         <FlexBox
           gap="0.5rem"

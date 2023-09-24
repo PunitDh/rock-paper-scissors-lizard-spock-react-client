@@ -1,14 +1,12 @@
-import { Dispatch } from "react";
 import Chart from "react-apexcharts";
 import { CalculatorBox } from "../styles";
-import { Action, State } from "../types";
+import { State } from "../types";
 
 type Props = {
   state: State;
-  dispatch: Dispatch<Action>;
 };
 
-const GraphBox = ({ state, dispatch }: Props) => {
+const GraphBox = ({ state }: Props) => {
   const chartOptions = {
     series: [
       {

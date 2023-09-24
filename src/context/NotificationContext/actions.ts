@@ -1,10 +1,10 @@
 import { Action } from "./types";
 
 export enum NotificationAction {
-  RESET_STATE = "RESET_STATE",
-  SET_MESSAGE = "SET_MESSAGE",
-  SHOW_NOTIFICATION = "SHOW_NOTIFICATION",
-  CLOSE_NOTIFICATION = "CLOSE_NOTIFICATION",
+  RESET_STATE,
+  SET_MESSAGE,
+  SHOW_NOTIFICATION,
+  CLOSE_NOTIFICATION,
 }
 
 export const setMessage = (payload): Action => ({

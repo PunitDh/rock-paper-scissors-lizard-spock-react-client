@@ -19,26 +19,6 @@ export const fontSizes = [
   "24px",
 ] as const;
 
-//   | "8px"
-//   | "10px"
-//   | "12px"
-//   | "14px"
-//   | "16px"
-//   | "18px"
-//   | "20px"
-//   | "24px";
-
-// export const fontSizes: ReadonlyArray<FontSize> = Object.freeze([
-//   "8px",
-//   "10px",
-//   "12px",
-//   "14px",
-//   "16px",
-//   "18px",
-//   "20px",
-//   "24px",
-// ]);
-
 export enum BorderType {
   BORDER_TOP = "borderTop",
   BORDER_RIGHT = "borderRight",
