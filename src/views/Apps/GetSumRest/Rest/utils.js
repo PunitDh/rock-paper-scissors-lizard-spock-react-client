@@ -55,7 +55,7 @@ export const updateList = (currentList, keyValuePair) => {
 export const createHeaders = (headers) => {
   return headers.reduce(
     (acc, it) => (it.key?.length > 0 ? { ...acc, [it.key]: it.value } : acc),
-    {}
+    {},
   );
 };
 
@@ -69,7 +69,7 @@ export const createAuthorizationHeader = (stateAuthorization) => {
     case AuthorizationType.BASIC_AUTH: {
       const createBasicAuth = (data) => {
         const credentials = Buffer.from(
-          `${data.username}:${data.password}`
+          `${data.username}:${data.password}`,
         ).toString("base64");
 
         return `Basic ${credentials}`;
@@ -83,7 +83,7 @@ export const createAuthorizationHeader = (stateAuthorization) => {
           : authorization.token;
       };
       return createBearerToken(
-        stateAuthorization[AuthorizationType.BEARER_TOKEN]
+        stateAuthorization[AuthorizationType.BEARER_TOKEN],
       );
     }
     default:

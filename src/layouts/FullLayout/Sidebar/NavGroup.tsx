@@ -1,4 +1,3 @@
-import React from "react";
 import { ListSubheader, styled } from "@mui/material";
 import NavItem from "./NavItem";
 import { NavItemType } from "./types";
@@ -41,7 +40,7 @@ const NavGroup = ({ groupName, navItems, pathDirect, closeSideBar }) => {
         navItems.items
           .filter(
             (navItem: NavItemType) =>
-              !navItem.restricted || token.decoded?.isAdmin
+              !navItem.restricted || token.decoded?.isAdmin,
           )
           .map((navItem: NavItemType) => (
             <NavItem

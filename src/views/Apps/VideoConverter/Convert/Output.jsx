@@ -28,7 +28,7 @@ const Output = ({ state, dispatch }) => {
 
   useEffect(() => {
     socket.on(SocketResponse.PROGRESS_UPDATE, (update) =>
-      dispatch(setProgressUpdate(update))
+      dispatch(setProgressUpdate(update)),
     );
 
     return () => {

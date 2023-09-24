@@ -1,4 +1,3 @@
-import React from "react";
 import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { formattingSelectStyle } from "../styles";
 import { BorderType, borderStyles } from "../constants";
@@ -7,8 +6,8 @@ import CellFormatting from "../../../models/CellFormatting";
 
 type Props = {
   state: CellFormatting;
-  onChange: (e: SelectChangeEvent) => void
-}
+  onChange: (e: SelectChangeEvent) => void;
+};
 
 const BorderStyleSelect = ({ state, onChange }: Props) => (
   <Select

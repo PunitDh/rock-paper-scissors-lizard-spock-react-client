@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import FlexBox from "../../../../components/shared/FlexBox";
 import { useToken } from "../../../../hooks";
 import { State } from "../Sheet/types";
-
 
 const CellContainer = styled.div({
   width: "6.5rem",
@@ -36,9 +35,9 @@ const Contente = styled.div({
 });
 
 type Props = {
-  label: string
-  children: any
-}
+  label: string;
+  children: any;
+};
 
 const StatusCell = function ({ label, children }: Props) {
   return (
@@ -51,21 +50,19 @@ const StatusCell = function ({ label, children }: Props) {
 
 const TestingArea = ({ state }: { state: State }) => {
   const token = useToken();
-  const [keyboard, setKeyboard] = useState('');
+  const [keyboard, setKeyboard] = useState("");
 
   useEffect(() => {
     const handlekey = (e: KeyboardEvent) => {
-      setKeyboard(e.key)
-    }
-    window.addEventListener('keydown', handlekey);
+      setKeyboard(e.key);
+    };
+    window.addEventListener("keydown", handlekey);
 
     return () => {
       console.log("Debug key listener removed");
-      window.removeEventListener('keydown', handlekey)
-    }
-  }, [])
-
-  
+      window.removeEventListener("keydown", handlekey);
+    };
+  }, []);
 
   return token.decoded?.isAdmin ? (
     <DashboardCard sx={{ height: "100%" }} title="Testing Area">

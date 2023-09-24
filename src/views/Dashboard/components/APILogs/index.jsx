@@ -30,7 +30,7 @@ const APILogs = () => {
     (scrollNode) => {
       scrollNode?.scrollIntoView();
     },
-    [state.logs.length]
+    [state.logs.length],
   );
 
   useEffect(() => {

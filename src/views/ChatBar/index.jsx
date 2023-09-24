@@ -22,7 +22,7 @@ const ChatBar = () => {
   const limit = mdUp ? 4 : 1;
 
   const openConversations = [...conversations].filter(
-    (conversation) => conversation.status !== ChatBoxStatus.CLOSED
+    (conversation) => conversation.status !== ChatBoxStatus.CLOSED,
   );
 
   return (

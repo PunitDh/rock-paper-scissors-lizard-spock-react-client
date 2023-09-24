@@ -1,4 +1,4 @@
-import React, { Dispatch } from "react";
+import { Dispatch } from "react";
 import { SheetConfig } from "../constants";
 import { HeaderItem } from "../styles";
 import { selectAll } from "../actions";
@@ -31,15 +31,16 @@ const Corner = styled.div({
 
 type Props = {
   state: State;
-  dispatch: Dispatch<Action>
-}
+  dispatch: Dispatch<Action>;
+};
 
 const SelectAll = ({ state, dispatch }: Props) => {
   const eventHandler = useEventHandler();
   const handleClick = () => {
     dispatch(selectAll());
   };
-  const handleContextMenu = (e: React.MouseEvent) => eventHandler.handleContextMenu(e);
+  const handleContextMenu = (e: React.MouseEvent) =>
+    eventHandler.handleContextMenu(e);
 
   const selected = useMemo<boolean>(
     () =>
@@ -56,7 +57,7 @@ const SelectAll = ({ state, dispatch }: Props) => {
       state.highlighted.rows,
       state.maxColumns,
       state.maxRows,
-    ]
+    ],
   );
 
   return (

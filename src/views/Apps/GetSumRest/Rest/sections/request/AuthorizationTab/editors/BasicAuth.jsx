@@ -12,7 +12,6 @@ import FlexBox from "../../../../../../../../components/shared/FlexBox";
 import { Bold } from "../../../../../../../../components/shared/styles";
 import PasswordField from "../../../../../../../../components/shared/PasswordField";
 
-
 export default function BasicAuth({ state, dispatch }) {
   const credentials = state.request.authorization[AuthorizationType.BASIC_AUTH];
   const handleChange = (e) =>
@@ -20,8 +19,8 @@ export default function BasicAuth({ state, dispatch }) {
       setAuthorization(
         AuthorizationType.BASIC_AUTH,
         e.target.name,
-        e.target.value
-      )
+        e.target.value,
+      ),
     );
 
   return (

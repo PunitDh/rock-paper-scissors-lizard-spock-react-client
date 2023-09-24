@@ -12,7 +12,7 @@ type HeaderItemProps = {
 
 export const HeaderItem = styled(TableCell)(
   ({ selected, theme }: HeaderItemProps) => ({
-    backgroundColor: selected ? "#eee" : "#f5f6f7",
+    backgroundColor: selected ? theme?.palette.primary.light : "#f5f6f7",
     fontWeight: "700",
     color: theme?.palette.text.secondary,
     textAlign: "center",
@@ -25,17 +25,17 @@ export const HeaderItem = styled(TableCell)(
     "&:hover": {
       border: "2px solid blue",
     },
-  })
+  }),
 );
 
 export const SheetContainer = styled.div({
   backgroundColor: "#eaedef",
   boxShadow: "8px 8px 18px -10px rgba(0,0,0,0.5)",
   width: "100%",
-})
+});
 
 export const Container = styled.div({
-  width: "100%"
+  width: "100%",
 });
 
 const BorderStyles = Object.freeze({
@@ -100,7 +100,7 @@ export const getBorderProperties = (
   selected: boolean,
   formulacell: number,
   borderId: string,
-  borderTypes: string[]
+  borderTypes: string[],
 ): {} => {
   const getProperty = (property: string) =>
     selected
@@ -197,7 +197,7 @@ export const CellInput = styled.input(
     "&:hover": {
       // border: "1px solid blue",
     },
-  })
+  }),
 );
 
 export const DivItem = styled(Paper)(
@@ -217,7 +217,7 @@ export const DivItem = styled(Paper)(
     marginTop: "2px",
     overflowX: "visible",
     position: "relative",
-  })
+  }),
 );
 
 export const CellDiv = styled.div(({ contentEditable }) => ({

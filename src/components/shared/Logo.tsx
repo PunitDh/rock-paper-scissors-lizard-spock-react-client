@@ -1,10 +1,14 @@
-import React from "react";
 import { Link } from "react-router-dom";
-import { Typography, styled } from "@mui/material";
+import { Theme, Typography, styled } from "@mui/material";
 import { useTheme } from "@emotion/react";
 import { LogoImage } from "../../assets";
 
-const LinkStyled = styled(Link)(({ color, hovercolor }) => ({
+type LinkStyledProps = {
+  color: string;
+  hovercolor: string;
+};
+
+const LinkStyled = styled(Link)(({ color, hovercolor }: LinkStyledProps) => ({
   height: "70px",
   width: "100%",
   overflow: "hidden",
@@ -20,7 +24,7 @@ const LinkStyled = styled(Link)(({ color, hovercolor }) => ({
 }));
 
 const Logo = () => {
-  const theme = useTheme();
+  const theme: Theme = useTheme();
   return (
     <LinkStyled
       color="#5D87FF"

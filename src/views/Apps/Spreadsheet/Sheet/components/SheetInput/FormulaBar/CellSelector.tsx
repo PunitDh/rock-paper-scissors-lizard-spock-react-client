@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FlexForm, SmallInputField } from "../../styles";
 import useEventHandler from "../../../hooks/useEventHandler";
 import { State } from "../../../types";
@@ -20,7 +20,7 @@ const CellSelector = ({ state }: Props) => {
       state.highlighted.rows.length,
       state.mouseDown,
       selectedId,
-    ]
+    ],
   );
 
   const eventHandler = useEventHandler();
@@ -60,7 +60,7 @@ const CellSelector = ({ state }: Props) => {
               <option key={range} value={range}>
                 {range}
               </option>
-            )
+            ),
           )}
       </datalist>
     </FlexForm>

@@ -13,7 +13,7 @@ function calculateScore(game) {
   });
 
   const tieScore = game.rounds?.filter(
-    (round) => round.winner.method?.toLowerCase() === "tie"
+    (round) => round.winner.method?.toLowerCase() === "tie",
   ).length;
   score.ties = {
     name: "Ties",

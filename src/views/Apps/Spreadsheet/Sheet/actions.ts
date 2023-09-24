@@ -136,7 +136,7 @@ export const setHighlightColumnAnchor = (payload: string): Action => ({
 
 export const pasteCellContent = (
   anchor: string | undefined,
-  data: StateContentData | string
+  data: StateContentData | string,
 ): Action => ({
   type: SheetAction.PASTE_CELL_CONTENT,
   payload: {
@@ -251,7 +251,7 @@ export const setSheetIndex = (sheetId: string, index: number): Action => ({
 
 export const highlightFormulaCellRange = (
   start: string,
-  end: string
+  end: string,
 ): Action => ({
   type: SheetAction.FORMULA_HIGHLIGHT_CELL_RANGE,
   payload: {
@@ -261,7 +261,7 @@ export const highlightFormulaCellRange = (
 });
 
 export const highlightFormulaCells = (
-  payload: SetExtended<string>
+  payload: SetExtended<string>,
 ): Action => ({
   type: SheetAction.FORMULA_HIGHLIGHT_CELLS,
   payload,
@@ -269,7 +269,7 @@ export const highlightFormulaCells = (
 
 export const addCellsToHighlight = (
   cellIds: string[],
-  multiSelect: boolean = false
+  multiSelect: boolean = false,
 ): Action => ({
   type: SheetAction.ADD_CELLS_TO_HIGHLIGHT,
   payload: {
@@ -315,7 +315,7 @@ export const setCellContent = (cellId: string, value: string): Action => ({
 export const updateReferenceCells = (
   cellId: string,
   values: string[],
-  replace: boolean
+  replace: boolean,
 ): Action => ({
   type: SheetAction.UPDATE_REFERENCE_CELLS,
   payload: { cell: cellId, values, replace },

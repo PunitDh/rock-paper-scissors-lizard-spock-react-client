@@ -36,7 +36,7 @@ export default function useAPI() {
 
   const createBasicAuth = (formData) => {
     const credentials = Buffer.from(
-      `${formData.email}:${formData.password}`
+      `${formData.email}:${formData.password}`,
     ).toString("base64");
 
     return {
@@ -75,9 +75,9 @@ export default function useAPI() {
           .then((response) =>
             response.status < 400
               ? resolve(response.data)
-              : reject(response.data)
+              : reject(response.data),
           )
-          .catch((error) => reject(error.response.data))
+          .catch((error) => reject(error.response.data)),
       );
     },
 
@@ -130,7 +130,7 @@ export default function useAPI() {
         .post(
           "/player/login",
           { remember: formData.remember },
-          createBasicAuth(formData)
+          createBasicAuth(formData),
         )
         .then((response) => handleToken(response, "Login successful!"))
         .catch(handleError);
@@ -165,9 +165,9 @@ export default function useAPI() {
                 onClick: (request) =>
                   socket.emit(
                     SocketRequest.START_CONVERSATION,
-                    secure(request)
+                    secure(request),
                   ),
-              })
+              }),
             );
             dispatch(setConversations(data.payload));
           })

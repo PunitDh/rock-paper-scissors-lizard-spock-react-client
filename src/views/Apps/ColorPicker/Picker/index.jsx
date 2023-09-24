@@ -77,7 +77,7 @@ const Picker = () => {
     const { data: pixel } = state.context.getImageData(x, y, 1, 1);
     setRGB({ r: pixel[0], g: pixel[1], b: pixel[2] });
     dispatch(
-      setCarat((x / (state.rect.right - state.rect.left)) * state.maxCarat)
+      setCarat((x / (state.rect.right - state.rect.left)) * state.maxCarat),
     );
   };
 

@@ -1,4 +1,3 @@
-import React from "react";
 import { useReducer } from "react";
 import { initialState, reducer } from "./reducer";
 import IOBox from "./sections/IOBox";
@@ -9,10 +8,11 @@ import FlexBox from "../../../../components/shared/FlexBox";
 import { Theme as MuiTheme } from "@mui/material";
 import { Memory } from "./types";
 
-
 const Calculator = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const mdUp = useMediaQuery((theme) => (theme as MuiTheme).breakpoints.up("md"));
+  const mdUp = useMediaQuery((theme) =>
+    (theme as MuiTheme).breakpoints.up("md"),
+  );
 
   return (
     <DashboardCard sx={{ height: "100%" }} title="Calculator">

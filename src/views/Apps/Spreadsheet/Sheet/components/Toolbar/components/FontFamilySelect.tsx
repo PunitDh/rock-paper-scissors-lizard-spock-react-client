@@ -1,4 +1,3 @@
-import React from "react";
 import { MenuItem, Select } from "@mui/material";
 import { useEffect, useState } from "react";
 import { formattingSelectStyle } from "../styles";
@@ -7,8 +6,8 @@ import CellFormatting from "../../../models/CellFormatting";
 
 type Props = {
   state: CellFormatting;
-  onChange: (text: string) => void
-}
+  onChange: (text: string) => void;
+};
 
 const FontFamilySelect = ({ state, onChange }: Props) => {
   const [fonts, setFonts] = useState<string[]>(["Sans-serif"]);
@@ -16,7 +15,7 @@ const FontFamilySelect = ({ state, onChange }: Props) => {
   useEffect(() => {
     console.log("Get fonts hook triggered");
     getFonts().then((data) =>
-      setFonts((fonts) => [...new Set(fonts.concat(data).sort())])
+      setFonts((fonts) => [...new Set(fonts.concat(data).sort())]),
     );
   }, []);
 

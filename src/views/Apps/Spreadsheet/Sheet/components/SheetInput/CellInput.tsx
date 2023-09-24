@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import styled from "@emotion/styled";
 import { Dispatch, SyntheticEvent, useCallback, useRef } from "react";
 import { openContextMenu, setCellContent, setFormulaMode } from "../../actions";
@@ -10,6 +10,7 @@ import CellFormatting from "../../models/CellFormatting";
 import Cell from "../../models/Cell";
 import { Position } from "./types";
 import CellData from "../../models/CellData";
+import { Theme } from "@mui/material";
 
 type ContainerProps = {
   top: number;
@@ -28,17 +29,18 @@ type InputFieldProps = {
   width: number;
   height: number;
   isfocused: boolean;
+  theme?: Theme;
   formatting: CellFormatting | undefined;
 };
 
 const InputField = styled.input(
-  ({ width, height, isfocused, formatting }: InputFieldProps) => {
+  ({ width, height, isfocused, formatting, theme }: InputFieldProps) => {
     return {
       width: `${width}px`,
       height: `${height}px`,
       borderRadius: 0,
       outline: "none",
-      border: "2px solid blue",
+      border: `2px solid ${theme?.palette.primary.dark}`,
       cursor: "cell",
       padding: "1px",
       ...formatting?.styles,
@@ -52,7 +54,7 @@ const InputField = styled.input(
         cursor: "text",
       },
     };
-  }
+  },
 );
 
 type Props = {
@@ -74,7 +76,7 @@ const CellInput = ({
   const navigateRef = useRef(true);
   const inputRef: (node: HTMLInputElement) => void = useCallback(
     (node: HTMLInputElement) => eventHandler.setInputRef(node),
-    [eventHandler]
+    [eventHandler],
   );
   const currentCell: CellData | undefined =
     state.sheets[state.activeSheet].content.data[cell.id];
@@ -98,7 +100,7 @@ const CellInput = ({
   const handleKeyDown: (event: React.KeyboardEvent) => void = useCallback(
     (event: React.KeyboardEvent) =>
       eventHandler.handleCellInputKeyDown(event, navigateRef.current),
-    [eventHandler]
+    [eventHandler],
   );
 
   const handleFocus = () => {

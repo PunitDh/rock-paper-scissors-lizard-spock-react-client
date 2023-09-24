@@ -14,7 +14,7 @@ const StyledAvatar = styled(Avatar)({
 const MoveRow = ({ firstPlayer, secondPlayer, moves, winner }) => {
   const firstPlayerMove = moves.find((move) => move.player === firstPlayer.id);
   const secondPlayerMove = moves.find(
-    (move) => move.player === secondPlayer.id
+    (move) => move.player === secondPlayer.id,
   );
   const getImage = (move) =>
     move && <StyledAvatar src={getEntity(move).image} />;

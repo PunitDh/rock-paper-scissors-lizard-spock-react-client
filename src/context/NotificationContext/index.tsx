@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useReducer } from "react";
+import { createContext, useEffect, useReducer } from "react";
 import { initialState, reducer } from "./reducer";
 import { closeNotification, showNotification, setMessage } from "./actions";
 import { NotificationType } from "../../utils/constants";
@@ -12,7 +12,11 @@ export const NotificationProvider = ({ children }) => {
     dispatch(showNotification());
   }, [state.message]);
 
-  const set = (message: string | null, type = NotificationType.SUCCESS, duration = 6000) => {
+  const set = (
+    message: string | null,
+    type = NotificationType.SUCCESS,
+    duration = 6000,
+  ) => {
     dispatch(setMessage({ message, type, duration }));
   };
 

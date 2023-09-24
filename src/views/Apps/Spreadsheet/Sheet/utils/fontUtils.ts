@@ -122,7 +122,7 @@ const fontCheck = new Set(
     "Trebuchet MS",
     "Verdana",
     "Zapfino",
-  ].sort()
+  ].sort(),
 );
 
 // export function listFonts() {

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { useAPI, useNotification, useSocket, useToken } from "../hooks";
@@ -32,8 +32,8 @@ const SocketListeners = () => {
           startConversation({
             ...payload,
             opener: payload.opener === token.decoded?.id,
-          })
-        )
+          }),
+        ),
       )
       .catch((error) => notification.error(error));
 
@@ -63,35 +63,35 @@ const SocketListeners = () => {
     socket.on("online-status-changed", (player) => console.log({ player }));
     socket.on(SocketResponse.UPDATE_SITE_SETTINGS, handleSiteSettings);
     socket.on(SocketResponse.UPDATE_PROFILE, (response) =>
-      handleToken(response, "Profile updated!", "/profile")
+      handleToken(response, "Profile updated!", "/profile"),
     );
     socket.on(SocketResponse.DELETE_PROFILE, (response) =>
       isSuccess(response)
         .then(api.logoutPlayer)
-        .catch((error) => notification.error(error))
+        .catch((error) => notification.error(error)),
     );
     socket.on(Status.UNAUTHORIZED, () => {
       console.log("It's the socket");
       navigate(AuthPage.loginWithReferrer());
     });
     socket.on(SocketResponse.PLAY_MOVE, (response) =>
-      handleResponse(response, setCurrentGame)
+      handleResponse(response, setCurrentGame),
     );
     socket.on(SocketResponse.START_CONVERSATION, handleStartConversation);
     socket.on(SocketResponse.SEND_MESSAGE, (response) =>
-      handleResponse(response, openConversation)
+      handleResponse(response, openConversation),
     );
     socket.on(SocketResponse.MARK_AS_READ, (response) =>
-      handleResponse(response, openConversation)
+      handleResponse(response, openConversation),
     );
     socket.on(SocketResponse.RENAME_GAME, updateGame);
     socket.on(SocketResponse.CHANGE_ICON, updateGame);
     socket.on(SocketResponse.RESET_GAME_ROUNDS, (response) =>
-      handleResponse(response, setCurrentGame)
+      handleResponse(response, setCurrentGame),
     );
 
     socket.on(SocketResponse.DELETE_GAME, (response) =>
-      handleResponse(response, deleteGameFromMenu)
+      handleResponse(response, deleteGameFromMenu),
     );
 
     return () => {

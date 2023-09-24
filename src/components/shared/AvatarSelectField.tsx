@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "@emotion/styled";
 import { Avatar, Tooltip, Typography } from "@mui/material";
 import FlexBox from "./FlexBox";
@@ -6,26 +6,28 @@ import { avatars } from "../../assets";
 
 type Props = {
   selected: number;
-}
+};
 
 type SelectableAvatarProps = {
   selected: boolean;
-}
+};
 
-const SelectableAvatar = styled(Avatar)(({ selected }: SelectableAvatarProps) => ({
-  cursor: "pointer",
-  width: 50,
-  height: 50,
-  opacity: selected ? "1" : "0.5",
-  outline: selected ? "0.25rem solid #5D87FF" : "none",
-  transform: selected ? "scale(1.1)" : "scale(1.0)",
-  "&:hover": {
-    outline: selected ? "0.25rem solid #5D87FF" : "0.25rem solid #5D87AA",
-    opacity: "1",
-    transform: "scale(1.1)",
-    transition: "transform 50ms ease-in",
-  },
-}));
+const SelectableAvatar = styled(Avatar)(
+  ({ selected }: SelectableAvatarProps) => ({
+    cursor: "pointer",
+    width: 50,
+    height: 50,
+    opacity: selected ? "1" : "0.5",
+    outline: selected ? "0.25rem solid #5D87FF" : "none",
+    transform: selected ? "scale(1.1)" : "scale(1.0)",
+    "&:hover": {
+      outline: selected ? "0.25rem solid #5D87FF" : "0.25rem solid #5D87AA",
+      opacity: "1",
+      transform: "scale(1.1)",
+      transition: "transform 50ms ease-in",
+    },
+  }),
+);
 
 const Container = styled.div({
   marginTop: "1.25rem",

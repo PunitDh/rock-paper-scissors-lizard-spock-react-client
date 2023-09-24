@@ -1,4 +1,3 @@
-import React from "react";
 import { SvgIconTypeMap, Tooltip } from "@mui/material";
 import { FieldButton } from "../../styles";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
@@ -7,8 +6,8 @@ type Props = {
   onClick: (e: React.MouseEvent) => void;
   title: string;
   disabled: boolean;
-  Icon: OverridableComponent<SvgIconTypeMap<{}, "svg">> & { muiName: string; };
-}
+  Icon: OverridableComponent<SvgIconTypeMap<{}, "svg">> & { muiName: string };
+};
 
 const HistoryButton = ({ title, disabled, onClick, Icon }: Props) => (
   <Tooltip title={`${title} ${disabled ? "(disabled)" : ""}`}>

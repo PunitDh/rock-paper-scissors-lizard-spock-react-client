@@ -36,7 +36,7 @@ export const SheetButtonItem = styled.button(
       backgroundColor: "#A0A9FF",
       border: "1px solid black",
     },
-  })
+  }),
 );
 
 export const DragArea = styled.div({

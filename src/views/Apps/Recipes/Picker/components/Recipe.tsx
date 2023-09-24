@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import DashboardCard from "../../../../../components/shared/DashboardCard";
 import {
@@ -48,7 +48,7 @@ const RecipeCard = () => {
   const loadNext = () => {
     const randomRecipeId = sample(recipes.map((it: Recipe) => it.id));
     navigate(`/utils/recipes/${randomRecipeId}`);
-  }
+  };
 
   const { recipeId } = useParams();
   const [position, setPosition] = useState(0);
@@ -67,15 +67,15 @@ const RecipeCard = () => {
   }, [recipeId]);
 
   const recipe: Recipe = recipes.find(
-    (it: Recipe) => it.id === Number(recipeId)
+    (it: Recipe) => it.id === Number(recipeId),
   );
   const mdUp = useMediaQuery((theme: MuiTheme) => theme.breakpoints.up("md"));
 
   if (recipe) {
     const ingredients = Array.from(
       new Set<string>(
-        recipe.extendedIngredients.map((it: Ingredient) => it.name)
-      )
+        recipe.extendedIngredients.map((it: Ingredient) => it.name),
+      ),
     ).sort();
     return (
       <DashboardCard sx={{ height: "100%", width: "92dvw" }} title={""}>
@@ -110,7 +110,7 @@ const RecipeCard = () => {
                   <Grid xs={6} md={4} item key={ingredient}>
                     {ingredient}
                   </Grid>
-                )
+                ),
               )}
             </Grid>
 
@@ -135,7 +135,7 @@ const RecipeCard = () => {
                 Icon={Star}
                 color="#4466FF"
                 title="Favourite!"
-                onClick={() => { }}
+                onClick={() => {}}
               />
               <ActionButton
                 Icon={() => <IconHeart color="green" fill="green" stroke="3" />}

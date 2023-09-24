@@ -29,12 +29,7 @@
       "originalName": "1/4 cups dried cannellini (white kidney) beans cooked)",
       "amount": 3.75,
       "unit": "cups",
-      "meta": [
-        "dried",
-        "white",
-        "cooked",
-        "( kidney)"
-      ],
+      "meta": ["dried", "white", "cooked", "( kidney)"],
       "measures": {
         "us": {
           "amount": 3.75,
@@ -59,11 +54,7 @@
       "originalName": "dried curry leaves, crumbled (or 1 bay leaf)",
       "amount": 1.0,
       "unit": "handful",
-      "meta": [
-        "dried",
-        "crumbled",
-        "(or 1 bay leaf)"
-      ],
+      "meta": ["dried", "crumbled", "(or 1 bay leaf)"],
       "measures": {
         "us": {
           "amount": 1.0,
@@ -88,9 +79,7 @@
       "originalName": "fresh tarragon",
       "amount": 0.25,
       "unit": "cup",
-      "meta": [
-        "fresh"
-      ],
+      "meta": ["fresh"],
       "measures": {
         "us": {
           "amount": 0.25,
@@ -115,10 +104,7 @@
       "originalName": "garlic, minced or crushed",
       "amount": 1.0,
       "unit": "clove",
-      "meta": [
-        "minced",
-        "crushed"
-      ],
+      "meta": ["minced", "crushed"],
       "measures": {
         "us": {
           "amount": 1.0,
@@ -168,9 +154,7 @@
       "originalName": "grated lemon zest",
       "amount": 1.0,
       "unit": "teaspoon",
-      "meta": [
-        "grated"
-      ],
+      "meta": ["grated"],
       "measures": {
         "us": {
           "amount": 1.0,
@@ -245,11 +229,7 @@
       "originalName": "fresh cracked black pepper to taste",
       "amount": 6.0,
       "unit": "servings",
-      "meta": [
-        "fresh",
-        "black",
-        "to taste"
-      ],
+      "meta": ["fresh", "black", "to taste"],
       "measures": {
         "us": {
           "amount": 6.0,
@@ -274,9 +254,7 @@
       "originalName": "sea salt, or to taste",
       "amount": 1.0,
       "unit": "teaspoon",
-      "meta": [
-        "to taste"
-      ],
+      "meta": ["to taste"],
       "measures": {
         "us": {
           "amount": 1.0,
@@ -301,10 +279,7 @@
       "originalName": "white mushrooms, sliced",
       "amount": 8.0,
       "unit": "large",
-      "meta": [
-        "white",
-        "sliced"
-      ],
+      "meta": ["white", "sliced"],
       "measures": {
         "us": {
           "amount": 8.0,
@@ -329,10 +304,7 @@
       "originalName": "white mushrooms, sliced",
       "amount": 8.0,
       "unit": "large",
-      "meta": [
-        "white",
-        "sliced"
-      ],
+      "meta": ["white", "sliced"],
       "measures": {
         "us": {
           "amount": 8.0,
@@ -357,9 +329,7 @@
       "originalName": "Dijon or grain mustard, to taste",
       "amount": 1.0,
       "unit": "teaspoons",
-      "meta": [
-        "to taste"
-      ],
+      "meta": ["to taste"],
       "measures": {
         "us": {
           "amount": 1.0,
@@ -391,19 +361,10 @@
     "main dish",
     "dinner"
   ],
-  "diets": [
-    "gluten free",
-    "dairy free",
-    "lacto ovo vegetarian",
-    "vegan"
-  ],
+  "diets": ["gluten free", "dairy free", "lacto ovo vegetarian", "vegan"],
   "occasions": [],
   "winePairing": {
-    "pairedWines": [
-      "chardonnay",
-      "sauvignon blanc",
-      "gruener veltliner"
-    ],
+    "pairedWines": ["chardonnay", "sauvignon blanc", "gruener veltliner"],
     "pairingText": "Chardonnay, Sauvignon Blanc, and Gruener Veltliner are great choices for Salad. Sauvignon Blanc and Gruner Veltliner both have herby notes that complement salads with enough acid to match tart vinaigrettes, while a Chardonnay can be a good pick for creamy salad dressings. The Billecart-Salmon Blanc de Blancs Grand Cru with a 4.7 out of 5 star rating seems like a good match. It costs about 80 dollars per bottle.",
     "productMatches": [
       {

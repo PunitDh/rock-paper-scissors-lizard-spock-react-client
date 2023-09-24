@@ -7,7 +7,7 @@ export default function sendRequest(
   headers,
   contentType,
   authorization,
-  body
+  body,
 ) {
   const controller = new AbortController();
   // controller.abort();

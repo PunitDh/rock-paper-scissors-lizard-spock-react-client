@@ -1,4 +1,4 @@
-import React, { Dispatch } from "react";
+import { Dispatch } from "react";
 import { Dimension, SheetConfig } from "../constants";
 import { TableRow } from "@mui/material";
 import Cell from "./Cell";

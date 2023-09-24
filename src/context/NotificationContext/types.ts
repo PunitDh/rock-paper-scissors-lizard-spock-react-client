@@ -10,5 +10,5 @@ export type State = {
   message: string | null;
   type: NotificationType;
   duration: number;
-  open:  boolean;
-}
+  open: boolean;
+};

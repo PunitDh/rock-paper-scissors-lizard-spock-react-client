@@ -14,5 +14,5 @@ export type Position = {
     left: number;
     width: number;
     height: number;
-  }
+  };
 };

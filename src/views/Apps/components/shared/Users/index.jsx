@@ -30,7 +30,7 @@ const Users = ({ search }) => {
       ? currentUsers.filter((user) =>
           `${user.id} ${user.firstName} ${user.lastName}`
             .toLowerCase()
-            .includes(search.toLowerCase())
+            .includes(search.toLowerCase()),
         )
       : currentUsers;
 

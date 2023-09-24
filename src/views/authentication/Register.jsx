@@ -1,13 +1,11 @@
 import { Grid, Box, Card, Typography, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
 
-
 import AuthRegister from "./auth/AuthRegister";
 import { AuthBox } from "./styles";
 import PageContainer from "../../components/container/PageContainer";
 import Logo from "../../components/shared/Logo";
 import { AuthPage } from "../../utils/constants";
-
 
 const Register = () => (
   <PageContainer title="Register" description="Register page">

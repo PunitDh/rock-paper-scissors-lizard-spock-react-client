@@ -1,4 +1,3 @@
-import React from "react";
 import DashboardCard from "../../../components/shared/DashboardCard";
 import { Box, Stack } from "@mui/material";
 import { useAPI } from "../../../hooks";
@@ -7,7 +6,7 @@ import FormField from "../../../components/shared/FormField";
 
 const ChangePassword = () => {
   const api = useAPI();
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const { oldPassword, newPassword, confirmNewPassword } = e.target;

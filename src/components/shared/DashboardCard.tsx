@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, CardContent, Typography, Stack, Box } from "@mui/material";
 
 type Props = {
@@ -8,11 +7,11 @@ type Props = {
   action?: any;
   footer?: string;
   cardheading?: string;
-  headtitle?: string
-  headsubtitle?: string
-  middlecontent?: string
-  sx?: any
-}
+  headtitle?: string;
+  headsubtitle?: string;
+  middlecontent?: string;
+  sx?: any;
+};
 
 const DashboardCard = ({
   title,

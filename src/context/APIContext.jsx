@@ -5,7 +5,12 @@ import { useNavigate } from "react-router";
 import { useNotification, useSocket, useToken } from "../hooks";
 import { AuthPage, SocketRequest } from "../utils/constants";
 import { setConversations } from "../redux/conversationSlice";
-import { setCurrentGame, setCurrentGames, setCurrentUsers, setRecentGames } from "../redux/playerSlice";
+import {
+  setCurrentGame,
+  setCurrentGames,
+  setCurrentUsers,
+  setRecentGames,
+} from "../redux/playerSlice";
 import { setCurrentGamesNav, updateCurrentGameMenu } from "../redux/menuSlice";
 import { setSiteSettings } from "../redux/siteSlice";
 
@@ -45,9 +50,9 @@ export const APIProvider = ({ children }) => {
           .then((response) =>
             response.status < 400
               ? resolve(response.data)
-              : reject(response.data)
+              : reject(response.data),
           )
-          .catch((error) => reject(error.response.data))
+          .catch((error) => reject(error.response.data)),
       );
     },
 

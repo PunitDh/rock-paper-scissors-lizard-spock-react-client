@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "@emotion/styled";
 import { Paper, Tooltip } from "@mui/material";
 
@@ -11,10 +10,10 @@ const Container = styled(Paper)({
   justifyContent: "center",
   cursor: "pointer",
   "&:hover": {
-    backgroundColor: "rgba(0,0,0,0.1)"
+    backgroundColor: "rgba(0,0,0,0.1)",
   },
   "&:active": {
-    backgroundColor: "rgba(0,0,0,0.1)"
+    backgroundColor: "rgba(0,0,0,0.1)",
   },
 });
 

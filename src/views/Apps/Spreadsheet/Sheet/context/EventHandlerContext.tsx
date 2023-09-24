@@ -1,4 +1,4 @@
-import React, { Dispatch, createContext, useRef } from "react";
+import { Dispatch, createContext, useRef } from "react";
 import EventHandler from "../eventHandlers/EventHandler";
 import { useClipboard } from "../../../../../hooks";
 import { Action, State } from "../types";
@@ -6,11 +6,13 @@ import { Clipboard } from "../../../../../hooks/types";
 
 type Props = {
   state: State;
-  dispatch: Dispatch<Action>
+  dispatch: Dispatch<Action>;
   children: any;
-}
+};
 
-export const EventDelegatorContext = createContext<EventHandler>({} as EventHandler);
+export const EventDelegatorContext = createContext<EventHandler>(
+  {} as EventHandler,
+);
 
 export const EventProvider = ({ state, dispatch, children }: Props) => {
   const inputFocusRef = useRef(false);
@@ -20,7 +22,7 @@ export const EventProvider = ({ state, dispatch, children }: Props) => {
     state,
     dispatch,
     clipboard,
-    inputFocusRef
+    inputFocusRef,
   );
 
   return (

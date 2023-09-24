@@ -6,7 +6,6 @@ import { useState } from "react";
 import { useAPI, useSocket } from "../../../../../hooks";
 import { SocketResponse } from "../../../../../utils/constants";
 
-
 const GameButton = styled(Chat)(({ theme }) => ({
   backgroundColor: "primary.main",
   color: theme.palette.primary.main,
@@ -17,7 +16,7 @@ export default function StartChat({ user }) {
   const [loading, setLoading] = useState(false);
   const socket = useSocket();
   const api = useAPI();
-  
+
   const handleStartChat = () => {
     setLoading(true);
     socket.on(SocketResponse.START_CONVERSATION, () => setLoading(false));

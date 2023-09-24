@@ -1,10 +1,4 @@
-import React, {
-  Dispatch,
-  Reducer,
-  SyntheticEvent,
-  useReducer,
-  useState,
-} from "react";
+import { Dispatch, Reducer, SyntheticEvent, useReducer, useState } from "react";
 import { initialState, reducer } from "./reducer";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import { ResponsiveFlexBox } from "../../../../components/shared/styles";

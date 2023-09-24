@@ -105,11 +105,7 @@
         "display": "Characters",
         "formatting": {
           "borderId": "THICK_OUTSIDE_BORDERS",
-          "borderTypes": [
-            "borderTop",
-            "borderBottom",
-            "borderLeft"
-          ],
+          "borderTypes": ["borderTop", "borderBottom", "borderLeft"],
           "decimals": 0,
           "numberFormat": null,
           "fontSize": "16px",
@@ -127,9 +123,7 @@
         "display": "Sean Astin",
         "formatting": {
           "borderId": "THICK_OUTSIDE_BORDERS",
-          "borderTypes": [
-            "borderRight"
-          ],
+          "borderTypes": ["borderRight"],
           "decimals": 0,
           "numberFormat": null
         },
@@ -145,9 +139,7 @@
         "display": "Frodo",
         "formatting": {
           "borderId": "THICK_OUTSIDE_BORDERS",
-          "borderTypes": [
-            "borderLeft"
-          ],
+          "borderTypes": ["borderLeft"],
           "decimals": 0,
           "numberFormat": null,
           "fontWeight": "normal"
@@ -164,9 +156,7 @@
         "display": "Aragorn",
         "formatting": {
           "borderId": "THICK_OUTSIDE_BORDERS",
-          "borderTypes": [
-            "borderLeft"
-          ],
+          "borderTypes": ["borderLeft"],
           "decimals": 0,
           "numberFormat": null
         },
@@ -298,11 +288,7 @@
         "display": "Actors",
         "formatting": {
           "borderId": "THICK_OUTSIDE_BORDERS",
-          "borderTypes": [
-            "borderTop",
-            "borderBottom",
-            "borderRight"
-          ],
+          "borderTypes": ["borderTop", "borderBottom", "borderRight"],
           "decimals": 0,
           "numberFormat": null,
           "fontSize": "16px",
@@ -320,9 +306,7 @@
         "display": "Samwise",
         "formatting": {
           "borderId": "THICK_OUTSIDE_BORDERS",
-          "borderTypes": [
-            "borderLeft"
-          ],
+          "borderTypes": ["borderLeft"],
           "decimals": 0,
           "numberFormat": null
         },
@@ -338,9 +322,7 @@
         "display": "Legolas",
         "formatting": {
           "borderId": "THICK_OUTSIDE_BORDERS",
-          "borderTypes": [
-            "borderLeft"
-          ],
+          "borderTypes": ["borderLeft"],
           "decimals": 0,
           "numberFormat": null
         },
@@ -356,9 +338,7 @@
         "display": "Pippin",
         "formatting": {
           "borderId": "THICK_OUTSIDE_BORDERS",
-          "borderTypes": [
-            "borderLeft"
-          ],
+          "borderTypes": ["borderLeft"],
           "decimals": 0,
           "numberFormat": null
         },
@@ -374,10 +354,7 @@
         "display": "Gandalf",
         "formatting": {
           "borderId": "THICK_OUTSIDE_BORDERS",
-          "borderTypes": [
-            "borderBottom",
-            "borderLeft"
-          ],
+          "borderTypes": ["borderBottom", "borderLeft"],
           "decimals": 0,
           "numberFormat": null
         },
@@ -393,9 +370,7 @@
         "display": "Elijah Wood",
         "formatting": {
           "borderId": "THICK_OUTSIDE_BORDERS",
-          "borderTypes": [
-            "borderRight"
-          ],
+          "borderTypes": ["borderRight"],
           "decimals": 0,
           "numberFormat": null
         },
@@ -411,9 +386,7 @@
         "display": "Viggo Mortensen",
         "formatting": {
           "borderId": "THICK_OUTSIDE_BORDERS",
-          "borderTypes": [
-            "borderRight"
-          ],
+          "borderTypes": ["borderRight"],
           "decimals": 0,
           "numberFormat": null
         },
@@ -429,9 +402,7 @@
         "display": "Orlando Bloom",
         "formatting": {
           "borderId": "THICK_OUTSIDE_BORDERS",
-          "borderTypes": [
-            "borderRight"
-          ],
+          "borderTypes": ["borderRight"],
           "decimals": 0,
           "numberFormat": null
         },
@@ -447,9 +418,7 @@
         "display": "Billy Boyd",
         "formatting": {
           "borderId": "THICK_OUTSIDE_BORDERS",
-          "borderTypes": [
-            "borderRight"
-          ],
+          "borderTypes": ["borderRight"],
           "decimals": 0,
           "numberFormat": null
         },
@@ -465,10 +434,7 @@
         "display": "Ian McKellen",
         "formatting": {
           "borderId": "THICK_OUTSIDE_BORDERS",
-          "borderTypes": [
-            "borderBottom",
-            "borderRight"
-          ],
+          "borderTypes": ["borderBottom", "borderRight"],
           "decimals": 0,
           "numberFormat": null
         },

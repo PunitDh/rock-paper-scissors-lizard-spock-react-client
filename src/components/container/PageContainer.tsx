@@ -1,11 +1,10 @@
-import React from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from "react-helmet";
 
 type Props = {
   title: string;
   description: string;
   children: string | JSX.Element;
-}
+};
 
 const PageContainer = ({ title, description, children }: Props) => (
   <div>

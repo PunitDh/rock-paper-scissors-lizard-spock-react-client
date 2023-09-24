@@ -1,4 +1,4 @@
-import React, { Dispatch, useEffect, useRef } from "react";
+import { Dispatch, useEffect, useRef } from "react";
 import FormulaBar from "./FormulaBar";
 import CellInput from "./CellInput";
 import Filler from "./Filler";
@@ -33,7 +33,7 @@ const SheetInput = ({ state, dispatch, formulaField }: Props) => {
     highlighted.first,
     highlighted.last,
     rowHeight,
-    columnWidth
+    columnWidth,
   );
 
   const originalValue = useRef<string>(String(formulaBarValue));
@@ -46,7 +46,7 @@ const SheetInput = ({ state, dispatch, formulaField }: Props) => {
   useEffect(() => {
     if (selectedCellData) {
       dispatch(
-        setFormulaFieldText(selectedCellData.formula || selectedCellData.value)
+        setFormulaFieldText(selectedCellData.formula || selectedCellData.value),
       );
       dispatch(highlightFormulaCells(referenceCells));
     } else {

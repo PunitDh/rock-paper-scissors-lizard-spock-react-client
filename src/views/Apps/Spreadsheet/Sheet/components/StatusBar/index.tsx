@@ -1,4 +1,3 @@
-import React from "react";
 import FlexBox from "../../../../../../components/shared/FlexBox";
 import { State } from "../../types";
 import { FlexForm } from "../styles";
@@ -6,7 +5,7 @@ import HighlightedStats from "./HighlightedStats";
 
 type Props = {
   state: State;
-}
+};
 
 const StatusBar = ({ state }: Props) => {
   const handleSubmit = (e: React.FormEvent) => e.preventDefault();

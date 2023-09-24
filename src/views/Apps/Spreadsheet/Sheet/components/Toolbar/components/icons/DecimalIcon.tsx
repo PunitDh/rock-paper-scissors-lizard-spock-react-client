@@ -1,8 +1,7 @@
-import React from "react";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import styled from "@emotion/styled";
 import { capitalize } from "lodash";
-import Decimal from "./decimal.svg"
+import Decimal from "./decimal.svg";
 
 const Container = styled.span({
   width: "100%",
@@ -26,8 +25,8 @@ const IconContainer = styled.span({
 });
 
 type Props = {
-  type: "increase" | "decrease"
-}
+  type: "increase" | "decrease";
+};
 
 const DecimalIcon = ({ type }: Props) => {
   const Icon = type === "increase" ? ArrowForward : ArrowBack;

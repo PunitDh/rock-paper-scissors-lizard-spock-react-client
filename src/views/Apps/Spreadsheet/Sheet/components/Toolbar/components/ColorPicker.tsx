@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "@emotion/styled";
 import { FieldButton } from "../../styles";
 import { useRef } from "react";
@@ -18,12 +17,12 @@ const Input = styled.input({
 });
 
 type Props = {
-  Icon: any
-  stateCellFormatting: CellFormatting
-  onChange: (color: string) => any
-  property: string
-  defaultValue: string
-}
+  Icon: any;
+  stateCellFormatting: CellFormatting;
+  onChange: (color: string) => any;
+  property: string;
+  defaultValue: string;
+};
 
 const ColorPicker = ({
   Icon,
@@ -32,16 +31,15 @@ const ColorPicker = ({
   property,
   defaultValue,
 }: Props) => {
-  const style = stateCellFormatting?.styles && stateCellFormatting?.styles[property];
+  const style =
+    stateCellFormatting?.styles && stateCellFormatting?.styles[property];
   const inputRef = useRef<HTMLInputElement>(null);
   const isRgb = /^rgb/g.test(style);
   const value = isRgb ? rgbToHex(style) : style;
 
   const handleClick = () => inputRef.current?.click();
 
-  const handleChange = (e) => {
-
-  }
+  const handleChange = (e) => {};
 
   return (
     <FieldButton onClick={handleClick}>

@@ -10,7 +10,6 @@ import { Value } from "./styles";
 import FlexBox from "../../../../../../components/shared/FlexBox";
 import { Bold } from "../../../../../../components/shared/styles";
 
-
 const Cookies = ({ state }) => {
   const cookies = decodeURIComponent(document.cookie)
     .split(";")

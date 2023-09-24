@@ -22,7 +22,7 @@ export const SelectableOption = styled(Paper)(
     "&:active": {
       backgroundColor: "rgba(0,0,0,0.1)",
     },
-  })
+  }),
 );
 
 export const rotate = keyframes`
@@ -45,5 +45,5 @@ export const ReloadIcon = styled(IconReload)(
     height: "2rem",
     cursor: "pointer",
     animation: rotateicon > 0 ? `${rotate} ${duration}ms linear` : "none",
-  })
+  }),
 );

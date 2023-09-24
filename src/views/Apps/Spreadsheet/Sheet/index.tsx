@@ -1,4 +1,4 @@
-import React, { Dispatch } from "react";
+import { Dispatch } from "react";
 import { useEffect, useReducer } from "react";
 import { initialState, reducer } from "./reducer";
 import { recalculateFormulae, addMemento, saveInitialState } from "./actions";
@@ -17,7 +17,7 @@ import SheetSelect from "./components/SheetSelect";
 const Sheet = (props: SheetProps = defaultInitialStateProps): JSX.Element => {
   const [state, dispatch]: [state: State, dispatch: Dispatch<Action>] =
     useReducer(reducer, initialState, () =>
-      createInitialState(props, defaultInitialStateProps)
+      createInitialState(props, defaultInitialStateProps),
     );
 
   useEffect(() => {

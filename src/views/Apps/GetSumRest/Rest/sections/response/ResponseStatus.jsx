@@ -8,7 +8,6 @@ import { StatusButton } from "../../styles";
 import FlexBox from "../../../../../../components/shared/FlexBox";
 import { Bold } from "../../../../../../components/shared/styles";
 
-
 const ResponseStatus = ({ state }) => {
   const handleSave = () => {
     const content = JSON.stringify(state.response.output, null, 2);

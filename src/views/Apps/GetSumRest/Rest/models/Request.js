@@ -12,9 +12,13 @@ export default class Request {
     this.urlDisplay = obj.urlDisplay || "";
     this.isValidUrl = obj.isValidUrl || false;
     this.method = obj.method || HttpMethod.GET;
-    this.params = obj.params || [createBlankKeyValuePair(KeyValuePairType.PARAM)];
+    this.params = obj.params || [
+      createBlankKeyValuePair(KeyValuePairType.PARAM),
+    ];
     this.authorization = new Authorization();
-    this.headers = obj.headers || [createBlankKeyValuePair(KeyValuePairType.HEADER)];
+    this.headers = obj.headers || [
+      createBlankKeyValuePair(KeyValuePairType.HEADER),
+    ];
     this.body = obj.body || new RequestBody();
     this.contentType = obj.contentType || ContentType.NONE;
   }

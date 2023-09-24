@@ -36,14 +36,14 @@ export default class StateContentData {
         }
         return stateContentData;
       },
-      this
+      this,
     );
   }
 
   insertRowOrColumn(
     dimension: Dimension,
     selectedCell: Cell,
-    location: -1 | 1
+    location: -1 | 1,
   ): StateContentData {
     return Object.keys(this).reduce(
       (stateContentData: StateContentData, cellId: string) => {
@@ -63,7 +63,7 @@ export default class StateContentData {
         }
         return stateContentData;
       },
-      this
+      this,
     );
   }
 

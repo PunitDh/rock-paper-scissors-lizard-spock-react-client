@@ -1,4 +1,4 @@
-import React, { Dispatch, useEffect, useRef, useState } from "react";
+import { Dispatch, useEffect, useRef, useState } from "react";
 import { renameSheet, setActiveSheet } from "../../actions";
 import { SheetButtonItem, SheetInputItem } from "./styles";
 import { Action, Sheet, State } from "../../types";
@@ -95,7 +95,7 @@ const SheetButton = ({
 
       // Sort the sheets by index to ensure correct rendering order
       const sortedSheets = Object.values(newSheets).sort(
-        (sheetA, sheetB) => sheetA.index - sheetB.index
+        (sheetA, sheetB) => sheetA.index - sheetB.index,
       );
 
       // Create an object with the sorted sheets

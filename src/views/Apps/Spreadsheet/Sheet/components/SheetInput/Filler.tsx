@@ -1,4 +1,4 @@
-import React, { Dispatch } from "react";
+import { Dispatch } from "react";
 import styled from "@emotion/styled";
 import { useCallback } from "react";
 import useEventHandler from "../../hooks/useEventHandler";
@@ -9,7 +9,7 @@ import { Position } from "./types";
 type ContainerProps = {
   top: number;
   left: number;
-}
+};
 
 const Container = styled.div(({ top, left }: ContainerProps) => ({
   position: "absolute",
@@ -33,23 +33,20 @@ type Props = {
   state: State;
   dispatch: Dispatch<Action>;
   position: Position;
-}
+};
 
 const Filler = ({ dispatch, position }: Props): JSX.Element => {
   const eventHandler = useEventHandler();
   const fillerRef: (node: HTMLInputElement) => void = useCallback(
     (node: HTMLDivElement) => eventHandler.setFillerRef(node),
-    [eventHandler]
+    [eventHandler],
   );
 
   const handleMouseDown = () => dispatch(setFillerMode(true));
 
   return (
     <Container top={position.filler.top} left={position.filler.left}>
-      <FillerObject
-        onMouseDown={handleMouseDown}
-        ref={fillerRef}
-      />
+      <FillerObject onMouseDown={handleMouseDown} ref={fillerRef} />
     </Container>
   );
 };

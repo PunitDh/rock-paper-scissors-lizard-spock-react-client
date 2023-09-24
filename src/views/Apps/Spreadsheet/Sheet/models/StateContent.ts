@@ -12,7 +12,7 @@ export default class StateContent {
     rowHeights = {},
     columnWidths = {},
     data = new StateContentData(),
-    namedRanges = {}
+    namedRanges = {},
   ) {
     this.rowHeights = rowHeights;
     this.columnWidths = columnWidths;
@@ -46,12 +46,12 @@ export default class StateContent {
 
   static findDelta(
     obj1?: { [key: string]: any },
-    obj2?: { [key: string]: any }
+    obj2?: { [key: string]: any },
   ): { [key: string]: any } {
     if (!obj1 || !obj2) return {};
     const compare = (
       thisObj: { [key: string]: any },
-      otherObj: { [key: string]: any }
+      otherObj: { [key: string]: any },
     ) => {
       const diff = {};
 
@@ -103,7 +103,7 @@ export default class StateContent {
     defaultRowHeight = 24,
     defaultColumnWidth = 80,
     maxRows = SheetConfig.MAX_ROWS,
-    maxColumns = SheetConfig.MAX_COLUMNS
+    maxColumns = SheetConfig.MAX_COLUMNS,
   ) {
     const columnWidths = Array(maxColumns)
       .fill(0)

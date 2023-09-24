@@ -32,7 +32,7 @@ export const CellItem = styled(Paper)(
     "&:hover": {
       outline: "2px solid blue",
     },
-  })
+  }),
 );
 
 export const Resize = styled.div({

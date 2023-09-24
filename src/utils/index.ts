@@ -7,7 +7,7 @@ export function isSuccess(response: {
   return new Promise((resolve, reject) =>
     ![Status.ERROR, Status.UNAUTHORIZED].includes(response.status)
       ? resolve(response.payload)
-      : reject(response.payload)
+      : reject(response.payload),
   );
 }
 

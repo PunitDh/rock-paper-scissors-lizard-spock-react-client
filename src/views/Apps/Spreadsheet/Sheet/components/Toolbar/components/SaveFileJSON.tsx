@@ -1,4 +1,3 @@
-import React from "react";
 import { Tooltip } from "@mui/material";
 import { FieldButton } from "../../styles";
 import { generateJSONContent } from "../../../utils/cellUtils";

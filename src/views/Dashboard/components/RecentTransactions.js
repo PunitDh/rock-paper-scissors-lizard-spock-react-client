@@ -1,4 +1,4 @@
-import DashboardCard from '../../../components/shared/DashboardCard';
+import DashboardCard from "../../../components/shared/DashboardCard";
 import {
   Timeline,
   TimelineItem,
@@ -8,8 +8,8 @@ import {
   TimelineConnector,
   TimelineContent,
   timelineOppositeContentClasses,
-} from '@mui/lab';
-import { Link, Typography } from '@mui/material';
+} from "@mui/lab";
+import { Link, Typography } from "@mui/material";
 
 const RecentTransactions = () => {
   return (
@@ -20,10 +20,10 @@ const RecentTransactions = () => {
           nonce={undefined}
           sx={{
             p: 0,
-            mb: '-40px',
-            '& .MuiTimelineConnector-root': {
-              width: '1px',
-              backgroundColor: '#efefef'
+            mb: "-40px",
+            "& .MuiTimelineConnector-root": {
+              width: "1px",
+              backgroundColor: "#efefef",
             },
             [`& .${timelineOppositeContentClasses.root}`]: {
               flex: 0.5,
@@ -37,7 +37,9 @@ const RecentTransactions = () => {
               <TimelineDot color="primary" variant="outlined" />
               <TimelineConnector />
             </TimelineSeparator>
-            <TimelineContent>Payment received from John Doe of $385.90</TimelineContent>
+            <TimelineContent>
+              Payment received from John Doe of $385.90
+            </TimelineContent>
           </TimelineItem>
           <TimelineItem>
             <TimelineOppositeContent>10:00 am</TimelineOppositeContent>
@@ -46,7 +48,7 @@ const RecentTransactions = () => {
               <TimelineConnector />
             </TimelineSeparator>
             <TimelineContent>
-              <Typography fontWeight="600">New sale recorded</Typography>{' '}
+              <Typography fontWeight="600">New sale recorded</Typography>{" "}
               <Link href="/" underline="none">
                 #ML-3467
               </Link>
@@ -58,7 +60,9 @@ const RecentTransactions = () => {
               <TimelineDot color="success" variant="outlined" />
               <TimelineConnector />
             </TimelineSeparator>
-            <TimelineContent>Payment was made of $64.95 to Michael</TimelineContent>
+            <TimelineContent>
+              Payment was made of $64.95 to Michael
+            </TimelineContent>
           </TimelineItem>
           <TimelineItem>
             <TimelineOppositeContent>09:30 am</TimelineOppositeContent>
@@ -67,7 +71,7 @@ const RecentTransactions = () => {
               <TimelineConnector />
             </TimelineSeparator>
             <TimelineContent>
-              <Typography fontWeight="600">New sale recorded</Typography>{' '}
+              <Typography fontWeight="600">New sale recorded</Typography>{" "}
               <Link href="/" underline="none">
                 #ML-3467
               </Link>

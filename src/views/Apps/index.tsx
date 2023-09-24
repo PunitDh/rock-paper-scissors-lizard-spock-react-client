@@ -1,4 +1,3 @@
-import React from "react";
 import LinkCard from "./components/LinkCard";
 import PageContainer from "../../components/container/PageContainer";
 import DashboardCard from "../../components/shared/DashboardCard";

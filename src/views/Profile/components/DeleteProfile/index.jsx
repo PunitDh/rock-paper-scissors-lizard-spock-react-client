@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "@emotion/styled";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import { Box } from "@mui/material";

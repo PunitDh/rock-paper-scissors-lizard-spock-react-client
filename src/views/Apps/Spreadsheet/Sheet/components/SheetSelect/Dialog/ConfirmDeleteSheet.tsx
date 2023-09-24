@@ -1,4 +1,3 @@
-import React from "react";
 import ConfirmationDialog from "../../../../../../../components/shared/ConfirmationDialog";
 
 const ConfirmDeleteSheet = ({ sheetName, open, onCancel, onConfirm }) => (

@@ -1,10 +1,4 @@
-import React, {
-  Dispatch,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { Dispatch, useCallback, useEffect, useMemo, useState } from "react";
 import { FlexForm } from "../styles";
 import {
   FormatAlignCenter,
@@ -132,7 +126,7 @@ const Toolbar = ({ state, dispatch }: Props) => {
       const currentValue = stateCellFormatting?.[styleKey];
       return currentValue === activeValue ? inactiveValue : activeValue;
     },
-    [stateCellFormatting]
+    [stateCellFormatting],
   );
 
   const setFormattingChange: (...args: any[]) => any = useCallback(
@@ -147,7 +141,7 @@ const Toolbar = ({ state, dispatch }: Props) => {
       else dispatch(setSelectedCellFormatting(formatting));
       dispatch(addMemento());
     },
-    [dispatch, state.highlighted.hasLength]
+    [dispatch, state.highlighted.hasLength],
   );
 
   const setTextAlign = (textAlign: TextAlign) => (): void => {
@@ -179,14 +173,14 @@ const Toolbar = ({ state, dispatch }: Props) => {
   const createToggleHandler: (
     formattingKey: string,
     activeValue: string,
-    inactiveValue: string
+    inactiveValue: string,
   ) => () => void = useCallback(
     (formattingKey: string, activeValue: string, inactiveValue: string) =>
       () => {
         const newValue = toggleStyle(formattingKey, activeValue, inactiveValue);
         setFormattingChange(formattingKey)(newValue);
       },
-    [setFormattingChange, toggleStyle]
+    [setFormattingChange, toggleStyle],
   );
 
   const toggleBold = createToggleHandler("fontWeight", "bold", "normal");
@@ -194,7 +188,7 @@ const Toolbar = ({ state, dispatch }: Props) => {
   const toggleUnderline = createToggleHandler(
     "textDecoration",
     "underline",
-    "none"
+    "none",
   );
 
   return (

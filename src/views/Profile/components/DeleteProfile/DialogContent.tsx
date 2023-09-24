@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "@emotion/styled";
 import { Box, Stack } from "@mui/material";
 import FlexBox from "../../../../components/shared/FlexBox";

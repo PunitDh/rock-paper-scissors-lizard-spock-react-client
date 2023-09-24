@@ -1,4 +1,3 @@
-import React from "react";
 import { Tooltip } from "@mui/material";
 import { FieldButton } from "../../styles";
 import CSVIcon from "./icons/CSVIcon";
@@ -17,7 +16,7 @@ const SaveFileCSV = ({ state }: Props) => {
       activeSheet,
       state.maxRows,
       state.maxColumns,
-      activeSheet.name
+      activeSheet.name,
     );
 
   return (

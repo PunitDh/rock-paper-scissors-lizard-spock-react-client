@@ -11,7 +11,7 @@ const Scrollbar = (props) => {
   const { children, sx, ...other } = props;
   const isMobile =
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
+      navigator.userAgent,
     );
 
   if (isMobile) {

@@ -1,4 +1,4 @@
-import React, { Dispatch } from "react";
+import { Dispatch } from "react";
 import { FlexForm } from "./styles";
 import styled from "@emotion/styled";
 import { Action, State } from "../types";
@@ -48,10 +48,7 @@ const DebugBar = ({ state, dispatch }: Props) => {
       <DebugButton type="button" onClick={() => console.log(state)}>
         Show State
       </DebugButton>
-      <DebugButton
-        type="button"
-        onClick={() => dispatch(resetState())}
-      >
+      <DebugButton type="button" onClick={() => dispatch(resetState())}>
         Reset State
       </DebugButton>
     </FlexForm>

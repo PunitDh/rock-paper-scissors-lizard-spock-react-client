@@ -12,7 +12,6 @@ import { ContentTypeMenuItems } from "../../../constants";
 import FlexBox from "../../../../../../../components/shared/FlexBox";
 import { Bold } from "../../../../../../../components/shared/styles";
 
-
 const StyledFormControl = styled(FormControl)({
   flexDirection: "row",
 });

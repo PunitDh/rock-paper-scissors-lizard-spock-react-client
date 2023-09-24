@@ -34,7 +34,7 @@ const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
   borderTopRightRadius: "0.5rem",
   borderTopLeftRadius: "0.5rem",
   cursor: "pointer",
-  zIndex: "5"
+  zIndex: "5",
 }));
 
 const StyledPaper = styled(Paper)(({ maximized, toolbarheight }) => ({
@@ -71,7 +71,7 @@ function ChatBox({ conversation }) {
 
   const scrollToBottomRef = useCallback(
     (node) => node?.scrollIntoView(),
-    [messages.length]
+    [messages.length],
   );
 
   const isMinimized = conversation.status === ChatBoxStatus.MINIMIZED;
@@ -88,7 +88,7 @@ function ChatBox({ conversation }) {
   };
 
   const receiver = conversation.players.find(
-    (player) => player.id !== token.decoded.id
+    (player) => player.id !== token.decoded.id,
   );
 
   const allRead = messages
@@ -125,7 +125,7 @@ function ChatBox({ conversation }) {
               displayName={receiver.firstName}
               avatarDisp={true}
             />
-          )
+          ),
         )}
         <div ref={scrollToBottomRef} />
       </MessageBody>

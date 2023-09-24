@@ -14,7 +14,13 @@ const TableHeaderCell = styled(TableCell)(({ width }) => ({
   width: width || "calc((100%)/3)",
 }));
 
-const KeyValueComponent = ({ property, onChange, onDelete, fileUpload, type }) => (
+const KeyValueComponent = ({
+  property,
+  onChange,
+  onDelete,
+  fileUpload,
+  type,
+}) => (
   <Table style={{ tableLayout: "fixed" }}>
     <TableHead style={{ borderBottom: "1px solid rgba(0,0,0,1)" }}>
       <TableRow>

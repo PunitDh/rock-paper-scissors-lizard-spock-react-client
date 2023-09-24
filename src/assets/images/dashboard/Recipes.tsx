@@ -1,6 +1,4 @@
-import React from "react";
-
-function Recipes(props) {
+export default function Recipes(props: { [key: string]: string }): JSX.Element {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -19,5 +17,3 @@ function Recipes(props) {
     </svg>
   );
 }
-
-export default Recipes;

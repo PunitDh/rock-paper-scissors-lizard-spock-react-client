@@ -24,17 +24,17 @@ export const handleExportAsCsv = (
   sheet: Sheet,
   maxRows: number,
   maxColumns: number,
-  filename: string
+  filename: string,
 ) => {
   const range = CellRange.createHorizontalSliced(
     `A1`,
-    `${SheetConfig.COLUMNS[maxColumns - 1]}${maxRows}`
+    `${SheetConfig.COLUMNS[maxColumns - 1]}${maxRows}`,
   );
   const content = (range.cells as Cell[][])
     .map((row: Cell[]) =>
       row
         .map((cell: Cell) => sheet.content.data[cell.id]?.value || "")
-        .join(",")
+        .join(","),
     )
     .join("\n");
 

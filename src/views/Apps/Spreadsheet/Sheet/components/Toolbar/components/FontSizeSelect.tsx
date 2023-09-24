@@ -1,4 +1,3 @@
-import React from "react";
 import { MenuItem, Select } from "@mui/material";
 import { formattingSelectStyle } from "../styles";
 import { fontSizes } from "../constants";

@@ -18,7 +18,7 @@ export const setRGB = (payload) => ({
 
 export const setRect = (payload) => ({
   type: PickerAction.SET_RECT,
-  payload
+  payload,
 });
 
 export const setContext = (payload) => ({

@@ -11,7 +11,6 @@ import { AuthorizationType } from "../../../../constants";
 import { Bold } from "../../../../../../../../components/shared/styles";
 import FlexBox from "../../../../../../../../components/shared/FlexBox";
 
-
 export default function BearerToken({ state, dispatch }) {
   const credentials =
     state.request.authorization[AuthorizationType.BEARER_TOKEN];
@@ -20,8 +19,8 @@ export default function BearerToken({ state, dispatch }) {
       setAuthorization(
         AuthorizationType.BEARER_TOKEN,
         e.target.name,
-        e.target.value
-      )
+        e.target.value,
+      ),
     );
   };
 

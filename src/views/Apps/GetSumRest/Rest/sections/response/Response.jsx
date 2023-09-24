@@ -12,7 +12,6 @@ import CustomTab from "../../components/CustomTab";
 import { useQueryParam } from "../../../../../../hooks";
 import FlexBox from "../../../../../../components/shared/FlexBox";
 
-
 const Response = ({ state, dispatch }) => {
   const responseTab = useQueryParam("responseTab");
   const [tab, setTab] = useState(Number(responseTab) || 0);

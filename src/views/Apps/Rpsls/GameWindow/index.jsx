@@ -32,7 +32,7 @@ const Game = () => {
     currentGame.rounds && currentGame.rounds[currentGame.rounds.length - 1];
 
   const opponent = currentGame.players?.find(
-    (player) => player.id !== token.decoded.id
+    (player) => player.id !== token.decoded.id,
   );
 
   return currentGame.id ? (

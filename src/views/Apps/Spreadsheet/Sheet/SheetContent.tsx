@@ -1,4 +1,4 @@
-import React, { Dispatch } from "react";
+import { Dispatch } from "react";
 import { Table } from "@mui/material";
 import Toolbar from "./components/Toolbar";
 import EventDelegator from "./eventHandlers/EventDelegator";

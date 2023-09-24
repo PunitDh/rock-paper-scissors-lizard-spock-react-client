@@ -1,3 +1,1 @@
-export default class Sheet {
-  
-}
+export default class Sheet {}

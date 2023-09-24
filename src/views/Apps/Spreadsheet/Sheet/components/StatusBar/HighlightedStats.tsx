@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "@emotion/styled";
 import DelayedTooltip from "../DelayedTooltip";
 import { Box, Typography } from "@mui/material";
@@ -7,7 +6,7 @@ import useEventHandler from "../../hooks/useEventHandler";
 
 type StatusBoxProps = {
   active: number;
-}
+};
 
 const StatusBox = styled(Box)(({ active }: StatusBoxProps) => ({
   cursor: "pointer",

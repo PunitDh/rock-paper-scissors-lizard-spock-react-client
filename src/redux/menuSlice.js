@@ -103,6 +103,12 @@ export const menuSlice = createSlice({
         },
         {
           id: uniqueId("apps-"),
+          title: "Graphing Calculator",
+          icon: Calculate,
+          href: "/utils/graphing",
+        },
+        {
+          id: uniqueId("apps-"),
           title: "Color Picker",
           icon: ColorLens,
           href: "/utils/color",
@@ -124,7 +130,7 @@ export const menuSlice = createSlice({
           title: "Spreadsheet",
           icon: IconFileSpreadsheet,
           href: "/utils/sheets",
-        }
+        },
       ).sortBy((it) => it.title),
     },
     Messages: {
@@ -156,7 +162,7 @@ export const menuSlice = createSlice({
     },
     setMessagesNav: (state, action) => {
       state.Messages.items = action.payload.items.map((item) =>
-        chatMapper(item, action.payload.currentUser, action.payload.onClick)
+        chatMapper(item, action.payload.currentUser, action.payload.onClick),
       );
     },
     toggleShowNavGroup: (state, action) => {
@@ -164,7 +170,7 @@ export const menuSlice = createSlice({
     },
     updateCurrentGameMenu: (state, action) => {
       const gameIndex = state[CURRENT_GAMES].items.findIndex(
-        (it) => it.id === action.payload.id
+        (it) => it.id === action.payload.id,
       );
       if (gameIndex > -1) {
         state[CURRENT_GAMES].items[gameIndex] = menuMapper(action.payload);
@@ -174,7 +180,7 @@ export const menuSlice = createSlice({
     },
     deleteGameFromMenu: (state, action) => {
       state[CURRENT_GAMES].items = state[CURRENT_GAMES].items.filter(
-        (game) => game.id !== action.payload.id
+        (game) => game.id !== action.payload.id,
       );
     },
   },

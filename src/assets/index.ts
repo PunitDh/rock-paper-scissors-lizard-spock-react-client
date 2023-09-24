@@ -16,6 +16,7 @@ import {
   IconChessRook,
   IconGoGame,
   IconTrophy,
+  TablerIconsProps,
 } from "@tabler/icons-react";
 import astronaut from "./images/avatar/astronaut.png";
 import bear from "./images/avatar/bear.png";
@@ -47,13 +48,20 @@ import encoder from "../utils/encoder";
 import Rpsls from "./images/dashboard/Rpsls";
 import TicTacToe from "./images/dashboard/TicTacToe";
 import Calculator from "./images/dashboard/Calculator";
+import Graphing from "./images/dashboard/Graphing";
 import Rest from "./images/dashboard/Rest";
 import ColorPicker from "./images/dashboard/ColorPicker";
 import Spreadsheet from "./images/dashboard/Spreadsheet";
 import VideoSubtitles from "./images/dashboard/VideoSubtitles";
 import Recipes from "./images/dashboard/Recipes";
 
-const avatars = [
+type Avatar = {
+  id: number;
+  name: string;
+  image: string;
+};
+
+const avatars: ReadonlyArray<Avatar> = [
   { id: 1, image: astronaut, name: "Astronaut" },
   { id: 2, image: bear, name: "Bear" },
   { id: 3, image: cat, name: "Cat" },
@@ -68,11 +76,17 @@ const avatars = [
   { id: 12, image: user1, name: "User1" },
   { id: 13, image: winkingFemale, name: "Winking Woman" },
   { id: 14, image: woman, name: "Woman" },
-];
+] as const;
 
-const getAvatar = (id) => avatars.find((it) => it.id === id)?.image;
+const getAvatar = (id: number): string | undefined =>
+  avatars.find((it) => it.id === id)?.image;
 
-const icons = [
+type GameIcon = {
+  id: number;
+  icon: (props: TablerIconsProps) => JSX.Element;
+};
+
+const icons: ReadonlyArray<GameIcon> = [
   { id: 1, icon: IconChess },
   { id: 2, icon: IconGoGame },
   { id: 3, icon: IconTrophy },
@@ -90,11 +104,19 @@ const icons = [
   { id: 15, icon: IconBallFootball },
   { id: 16, icon: IconBallTennis },
   { id: 17, icon: IconBallVolleyball },
-];
+] as const;
 
-const getIcon = (id) => icons.find((it) => it.id === id);
+const getIcon = (id: number): GameIcon | undefined =>
+  icons.find((it) => it.id === id);
 
-const entities = [
+type RpslsEntity = {
+  id: number;
+  color: string;
+  name: "Rock" | "Paper" | "Scissors" | "Lizard" | "Spock";
+  image: string;
+};
+
+const entities: ReadonlyArray<RpslsEntity> = [
   { id: 1, color: "brown", name: "Rock", image: Rock },
   { id: 2, color: "gray", name: "Paper", image: Paper },
   { id: 3, color: "silver", name: "Scissors", image: Scissors },
@@ -102,15 +124,15 @@ const entities = [
   { id: 5, color: "blue", name: "Spock", image: Spock },
 ];
 
-const getEntity = (entity) => {
+const getEntity = (entity: string): RpslsEntity | undefined => {
   const decoded = encoder.decodeString(
     entity,
-    process.env.REACT_APP_GAME_ENCRYPTION_KEY
+    process.env.REACT_APP_GAME_ENCRYPTION_KEY,
   );
   return entities.find((it) => decoded === it.name);
 };
 
-const languages = [
+const languages: ReadonlyArray<string> = [
   "Arabic",
   "Bengali",
   "Chinese (Mandarin)",
@@ -135,18 +157,19 @@ const languages = [
   "Turkish",
   "Urdu",
   "Vietnamese",
-];
+] as const;
 
 const DashboardImage = {
   Rpsls,
   TicTacToe,
   Recipes,
   Calculator,
+  Graphing,
   ColorPicker,
   Spreadsheet,
   VideoSubtitles,
   Rest,
-};
+} as const;
 
 export {
   avatars,

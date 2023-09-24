@@ -38,11 +38,13 @@ export const WideTextField = styled(TextField)({
 type ResponsiveFlexBoxProps = {
   theme: Theme;
   reversed: boolean;
-}
+};
 
-export const ResponsiveFlexBox = styled(FlexBox)(({ theme, reversed }: ResponsiveFlexBoxProps) => ({
-  alignItems: reversed ? "flex-start" : "center",
-  [theme.breakpoints.up("lg")]: {
-    alignItems: reversed ? "center" : "flex-start",
-  },
-}));
+export const ResponsiveFlexBox = styled(FlexBox)(
+  ({ theme, reversed }: ResponsiveFlexBoxProps) => ({
+    alignItems: reversed ? "flex-start" : "center",
+    [theme.breakpoints.up("lg")]: {
+      alignItems: reversed ? "center" : "flex-start",
+    },
+  }),
+);

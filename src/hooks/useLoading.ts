@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export default function useLoading(
-  action: (...args: any[]) => any
+  action: (...args: any[]) => any,
 ): [actionFunction: (...args: any[]) => any, loading: boolean] {
   const [loading, setLoading] = useState<boolean>(false);
 

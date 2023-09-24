@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, Grid } from "@mui/material";
 import Picker from "./Picker";
 import PageContainer from "../../../components/container/PageContainer";

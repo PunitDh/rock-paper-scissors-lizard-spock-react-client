@@ -1,4 +1,4 @@
-import React, { Dispatch, useCallback, useEffect } from "react";
+import { Dispatch, useCallback, useEffect } from "react";
 import {
   addMemento,
   deleteCellContent,
@@ -27,7 +27,7 @@ const FormulaField = ({ state, dispatch, originalValue, value }: Props) => {
 
   const formulaFieldRef: (node: HTMLInputElement) => void = useCallback(
     (node: HTMLInputElement) => eventHandler.setFormulaFieldRef(node),
-    [eventHandler]
+    [eventHandler],
   );
 
   useEffect((): void => {
@@ -75,7 +75,7 @@ const FormulaField = ({ state, dispatch, originalValue, value }: Props) => {
         dispatch(setFormulaMode(isFormula(e.target.value)));
         dispatch(setCellContent(state.selectedCell.id, e.target.value));
       },
-      [dispatch, state.selectedCell.id]
+      [dispatch, state.selectedCell.id],
     );
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {

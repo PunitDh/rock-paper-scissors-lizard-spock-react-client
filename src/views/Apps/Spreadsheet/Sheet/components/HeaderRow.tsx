@@ -1,4 +1,4 @@
-import React, { Dispatch } from "react";
+import { Dispatch } from "react";
 import { TableHead, TableRow } from "@mui/material";
 import SelectAll from "./SelectAll";
 import { Dimension, SheetConfig } from "../constants";
@@ -7,8 +7,8 @@ import { Action, State } from "../types";
 
 type Props = {
   state: State;
-  dispatch: Dispatch<Action>
-}
+  dispatch: Dispatch<Action>;
+};
 
 const HeaderRow = ({ state, dispatch }: Props): JSX.Element => (
   <TableHead sx={{ width: "100%" }}>

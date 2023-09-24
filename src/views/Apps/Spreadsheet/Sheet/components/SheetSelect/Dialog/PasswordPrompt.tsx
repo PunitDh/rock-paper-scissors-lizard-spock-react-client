@@ -1,4 +1,3 @@
-import React from "react";
 import ConfirmationDialog from "../../../../../../../components/shared/ConfirmationDialog";
 import EnterPassword from "./components/EnterPassword";
 

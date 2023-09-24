@@ -6,7 +6,7 @@ export default function useElementPosition(
   firstHighlighted: string,
   lastHighlighted: string,
   rowHeight: { value: number },
-  columnWidth: { value: number }
+  columnWidth: { value: number },
 ) {
   const [position, setPosition] = useState<Position>({
     cellInput: {

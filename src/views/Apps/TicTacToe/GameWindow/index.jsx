@@ -9,7 +9,6 @@ import PageContainer from "../../../../components/container/PageContainer";
 import LoadingScreen from "../../../../components/shared/LoadingScreen";
 import GameCard from "../../../../components/shared/GameCard";
 
-
 const ResultContainer = styled(FlexBox)({
   height: "80%",
   flexDirection: "column",
@@ -28,7 +27,7 @@ const Game = () => {
   }, [gameId]);
 
   const opponent = currentGame.players?.find(
-    (player) => player.id !== token.decoded.id
+    (player) => player.id !== token.decoded.id,
   );
 
   return currentGame.id ? (

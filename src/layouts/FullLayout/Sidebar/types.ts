@@ -21,4 +21,3 @@ export type NavItemType = {
   onClick?: (...args: any[]) => any;
   gameContext?: boolean;
 };
- 

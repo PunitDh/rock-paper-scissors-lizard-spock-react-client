@@ -7,7 +7,7 @@ const XMLEditor = ({ state }) => {
   const [prettified, setPrettified] = useState("");
   const inputRef = useRef(prettified);
   const textRef = useRef();
-  
+
   const handleInput = (e) => {
     inputRef.current = textRef.current.textContent;
   };

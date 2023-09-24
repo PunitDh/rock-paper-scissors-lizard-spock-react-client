@@ -32,7 +32,7 @@ export default class Cell {
     offsetY: number,
     wrap: boolean = true,
     maxRows: number = SheetConfig.MAX_ROWS,
-    maxColumns: number = SheetConfig.MAX_COLUMNS
+    maxColumns: number = SheetConfig.MAX_COLUMNS,
   ): Cell {
     let offsetRow = +this.row + offsetY;
     let columnIndex = SheetConfig.COLUMNS.indexOf(this.column) + offsetX;
@@ -65,7 +65,7 @@ export default class Cell {
 
   getNextColumn(
     maxRows: number = SheetConfig.MAX_ROWS,
-    maxColumns: number = SheetConfig.MAX_COLUMNS
+    maxColumns: number = SheetConfig.MAX_COLUMNS,
   ): Cell {
     const lastColumnCharCode = getLastColumnCharCode(maxColumns);
     const newRow =

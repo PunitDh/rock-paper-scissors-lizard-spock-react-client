@@ -1,7 +1,7 @@
 import { useMediaQuery, Box, Drawer, Theme } from "@mui/material";
 import Logo from "../../../components/shared/Logo";
 import SidebarItems from "./SidebarItems";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import styled from "@emotion/styled";
 import { useAPI } from "../../../hooks";
 

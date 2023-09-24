@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "@emotion/styled";
 import { Theme as MuiTheme, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -48,7 +47,13 @@ const TextContainer = styled.div({
   gap: "0.75rem",
 });
 
-const LinkCard = ({ to, Icon, title, description, comingSoon }: LinkCardProps) => (
+const LinkCard = ({
+  to,
+  Icon,
+  title,
+  description,
+  comingSoon,
+}: LinkCardProps) => (
   <CardLink to={to} theme={undefined}>
     <ImageContainer>
       <Icon fill="none" width="50%" />

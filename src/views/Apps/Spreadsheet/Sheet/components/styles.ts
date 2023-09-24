@@ -75,7 +75,7 @@ export const FlexForm = styled.form(
     marginLeft,
     paddingRight,
     paddingLeft,
-  })
+  }),
 );
 
 type FieldButtonProps = {
@@ -112,7 +112,7 @@ export const FieldButton = styled.button(
       color: "#bbb",
       backgroundColor: "#eee",
     },
-  })
+  }),
 );
 
 export const SheetTab = styled.div({

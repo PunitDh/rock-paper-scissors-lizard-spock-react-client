@@ -15,7 +15,7 @@ export default class KeyValuePair {
 
   get filled() {
     return Boolean(
-      this.key?.length > 0 || this.value?.length > 0 || this.isFile
+      this.key?.length > 0 || this.value?.length > 0 || this.isFile,
     );
   }
 

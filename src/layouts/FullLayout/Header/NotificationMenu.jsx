@@ -55,7 +55,7 @@ const StyledMenu = styled((props) => (
       "&:active": {
         backgroundColor: alpha(
           theme.palette.primary.main,
-          theme.palette.action.selectedOpacity
+          theme.palette.action.selectedOpacity,
         ),
       },
     },
@@ -83,7 +83,7 @@ const NotificationMenu = () => {
     .filter((game) => game.rounds.some(opponentPlayed))
     .map(function (game) {
       const player = game.players.find(
-        (player) => player.id !== token.decoded.id
+        (player) => player.id !== token.decoded.id,
       );
       return {
         id: uniqueId("notification-"),

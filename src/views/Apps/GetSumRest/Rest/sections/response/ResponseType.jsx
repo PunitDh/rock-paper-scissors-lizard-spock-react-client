@@ -1,4 +1,3 @@
-
 import FlexBox from "../../../../../../components/shared/FlexBox";
 import { setOutputDisplayType } from "../../actions";
 import { DisplayType } from "../../constants";

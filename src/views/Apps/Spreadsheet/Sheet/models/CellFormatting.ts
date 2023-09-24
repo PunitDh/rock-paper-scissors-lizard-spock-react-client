@@ -89,7 +89,7 @@ export default class CellFormatting {
 
   addBorder(
     borderId: string | null | undefined,
-    borderType: BorderType
+    borderType: BorderType,
   ): CellFormatting {
     const currentBorderTypes = new Set(this.borderTypes);
     currentBorderTypes.add(borderType);

@@ -1,4 +1,3 @@
-
 import { isString } from "../../../../../utils";
 import { Blue, Green, Indent, Purple, Red } from "./styles";
 
@@ -44,7 +43,7 @@ export default function PrettifyHTML({ children }) {
             {match[2]}
             {match[3]}
             {match[4]}
-          </Green>
+          </Green>,
         );
 
         lastIndex = match.index + match[0].length;

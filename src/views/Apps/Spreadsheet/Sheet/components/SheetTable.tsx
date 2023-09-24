@@ -1,4 +1,4 @@
-import React, { Dispatch } from "react";
+import { Dispatch } from "react";
 import { Table, TableBody } from "@mui/material";
 import SheetRow from "./SheetRow";
 import { Action, State } from "../types";

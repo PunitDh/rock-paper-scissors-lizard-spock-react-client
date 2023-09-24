@@ -1,4 +1,3 @@
-
 import { isBoolean, isNumber, isObject, isString } from "../../../../../utils";
 import { Blue, Red, Purple, Margin, Black, Green } from "./styles";
 

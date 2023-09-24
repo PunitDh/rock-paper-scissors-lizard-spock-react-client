@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { HeaderItem } from "../styles";
-import React, { Dispatch, useRef } from "react";
+import { Dispatch, useRef } from "react";
 import {
   addCellsToHighlight,
   addMemento,
@@ -32,7 +32,7 @@ const HeaderItemComponent = styled(HeaderItem)(
       color: "#FFFFFF",
     },
     height: dimension === Dimension.ROW ? dimensionsize + "px" : "initial",
-  })
+  }),
 );
 
 type ResizerProps = {
@@ -149,8 +149,8 @@ const HeaderCell = ({ state, dispatch, id, dimension }: Props): JSX.Element => {
         ? state.sheets[state.activeSheet].content.rowHeights[id]
         : state.defaultRowHeight
       : state.sheets[state.activeSheet].content.columnWidths
-        ? state.sheets[state.activeSheet].content.columnWidths[id]
-        : state.defaultColumnWidth;
+      ? state.sheets[state.activeSheet].content.columnWidths[id]
+      : state.defaultColumnWidth;
 
   return (
     <HeaderItemComponent

@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "@emotion/styled";
 import FlexBox from "../../../../../../../components/shared/FlexBox";
 
@@ -7,7 +6,7 @@ type BorderProps = {
   borderRight: string;
   borderBottom: string;
   borderLeft: string;
-}
+};
 
 const Table = styled.table(
   ({ borderTop, borderRight, borderBottom, borderLeft }: BorderProps) => ({
@@ -20,7 +19,7 @@ const Table = styled.table(
     borderLeft: borderLeft || "1px dotted rgba(0,0,0,0.4)",
     padding: 0,
     borderSpacing: 0,
-  })
+  }),
 );
 
 const Body = styled.tbody({
@@ -39,7 +38,7 @@ const Cell = styled.td(
     borderBottom: borderBottom || "1px dotted rgba(0,0,0,0.4)",
     borderLeft: borderLeft || "1px dotted rgba(0,0,0,0.4)",
     margin: 0,
-  })
+  }),
 );
 
 const BorderTypeMenuItem = (props: any) => {

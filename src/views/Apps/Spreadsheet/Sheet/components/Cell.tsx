@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { memo } from "react";
 import { Item, getBorderProperties } from "../styles";
 import CellFormatting from "../models/CellFormatting";
@@ -16,7 +16,7 @@ type Props = {
   isFormulaHighlighted: boolean;
   formatting: CellFormatting;
   width: number;
-}
+};
 
 const Cell = memo(
   ({
@@ -29,7 +29,7 @@ const Cell = memo(
     display,
     isFormulaHighlighted,
     formatting = new CellFormatting(),
-    width
+    width,
   }: Props) => {
     // console.log(id, formatting, "re-rendering cell formatting");
     const borderProperties = useMemo(() => {
@@ -38,8 +38,13 @@ const Cell = memo(
         Number(isFormulaHighlighted),
         formatting.borderId!,
         formatting.borderTypes,
-      )
-    }, [formatting.borderId, formatting.borderTypes, isFormulaHighlighted, isSelected]);
+      );
+    }, [
+      formatting.borderId,
+      formatting.borderTypes,
+      isFormulaHighlighted,
+      isSelected,
+    ]);
 
     return (
       <Item
@@ -56,7 +61,7 @@ const Cell = memo(
         {display}
       </Item>
     );
-  }
+  },
 );
 
 export default Cell;

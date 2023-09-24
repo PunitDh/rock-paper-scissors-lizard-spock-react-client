@@ -1,4 +1,4 @@
-import React, { Dispatch } from "react";
+import { Dispatch } from "react";
 import styled from "@emotion/styled";
 import { selectCell } from "../actions";
 import { Action, State } from "../types";

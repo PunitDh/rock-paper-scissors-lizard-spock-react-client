@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "@emotion/styled";
 import { Password, TextFields } from "@mui/icons-material";
 import { Theme as MuiTheme, Tooltip } from "@mui/material";
@@ -6,7 +6,7 @@ import { WideTextField } from "./styles";
 
 type IconProps = {
   theme?: MuiTheme;
-}
+};
 
 const Container = styled.div({
   position: "relative",

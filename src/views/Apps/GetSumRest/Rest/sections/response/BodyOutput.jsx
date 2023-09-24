@@ -9,8 +9,6 @@ import ResponseType from "./ResponseType";
 import { isObject } from "../../../../../../utils";
 import FlexBox from "../../../../../../components/shared/FlexBox";
 
-
-
 const OutputDisplay = styled.div({
   width: "100%",
   height: "30rem",

@@ -1,4 +1,4 @@
-import React, { ForwardRefExoticComponent, RefAttributes, useReducer } from "react";
+import { ForwardRefExoticComponent, RefAttributes, useReducer } from "react";
 import {
   ListItemIcon,
   ListItem,
@@ -19,33 +19,39 @@ import FlexBox from "../../../../components/shared/FlexBox";
 type ListItemStyledProps = {
   theme: Theme;
   level: number;
-  component: string | ForwardRefExoticComponent<NavLinkProps & RefAttributes<HTMLAnchorElement>>;
+  component:
+    | string
+    | ForwardRefExoticComponent<
+        NavLinkProps & RefAttributes<HTMLAnchorElement>
+      >;
   to: string;
   href: string;
   target: string;
-}
+};
 
-const ListItemStyled = styled(ListItem)(({ theme, level }: ListItemStyledProps) => ({
-  whiteSpace: "nowrap",
-  marginBottom: "2px",
-  padding: "8px 10px",
-  borderRadius: "8px",
-  backgroundColor: level > 1 ? "transparent !important" : "inherit",
-  color: theme.palette.text.secondary,
-  paddingLeft: "10px",
-  "&:hover": {
-    backgroundColor: theme.palette.primary.light,
-    color: theme.palette.primary.main,
-  },
-  "&.Mui-selected": {
-    color: "white",
-    backgroundColor: theme.palette.primary.main,
+const ListItemStyled = styled(ListItem)(
+  ({ theme, level }: ListItemStyledProps) => ({
+    whiteSpace: "nowrap",
+    marginBottom: "2px",
+    padding: "8px 10px",
+    borderRadius: "8px",
+    backgroundColor: level > 1 ? "transparent !important" : "inherit",
+    color: theme.palette.text.secondary,
+    paddingLeft: "10px",
     "&:hover": {
-      backgroundColor: theme.palette.primary.main,
-      color: "white",
+      backgroundColor: theme.palette.primary.light,
+      color: theme.palette.primary.main,
     },
-  },
-}));
+    "&.Mui-selected": {
+      color: "white",
+      backgroundColor: theme.palette.primary.main,
+      "&:hover": {
+        backgroundColor: theme.palette.primary.main,
+        color: "white",
+      },
+    },
+  }),
+);
 
 const MovePlayedNotification = styled(FlexBox)({
   fontSize: "small",

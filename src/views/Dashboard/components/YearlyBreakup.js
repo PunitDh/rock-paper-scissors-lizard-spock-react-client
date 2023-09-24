@@ -1,41 +1,41 @@
-import Chart from 'react-apexcharts';
-import { useTheme } from '@mui/material/styles';
-import { Grid, Stack, Typography, Avatar } from '@mui/material';
-import { IconArrowUpLeft } from '@tabler/icons-react';
+import Chart from "react-apexcharts";
+import { useTheme } from "@mui/material/styles";
+import { Grid, Stack, Typography, Avatar } from "@mui/material";
+import { IconArrowUpLeft } from "@tabler/icons-react";
 
-import DashboardCard from '../../../components/shared/DashboardCard';
+import DashboardCard from "../../../components/shared/DashboardCard";
 
 const YearlyBreakup = () => {
   // chart color
   const theme = useTheme();
   const primary = theme.palette.primary.main;
-  const primarylight = '#ecf2ff';
+  const primarylight = "#ecf2ff";
   const successlight = theme.palette.success.light;
 
   // chart
   const optionscolumnchart = {
     chart: {
-      type: 'donut',
+      type: "donut",
       fontFamily: "'Plus Jakarta Sans', sans-serif;",
-      foreColor: '#adb0bb',
+      foreColor: "#adb0bb",
       toolbar: {
         show: false,
       },
       height: 155,
     },
-    colors: [primary, primarylight, '#F9F9FD'],
+    colors: [primary, primarylight, "#F9F9FD"],
     plotOptions: {
       pie: {
         startAngle: 0,
         endAngle: 360,
         donut: {
-          size: '75%',
-          background: 'transparent',
+          size: "75%",
+          background: "transparent",
         },
       },
     },
     tooltip: {
-      theme: theme.palette.mode === 'dark' ? 'dark' : 'light',
+      theme: theme.palette.mode === "dark" ? "dark" : "light",
       fillSeriesColor: false,
     },
     stroke: {
@@ -82,7 +82,12 @@ const YearlyBreakup = () => {
           <Stack spacing={3} mt={5} direction="row">
             <Stack direction="row" spacing={1} alignItems="center">
               <Avatar
-                sx={{ width: 9, height: 9, bgcolor: primary, svg: { display: 'none' } }}
+                sx={{
+                  width: 9,
+                  height: 9,
+                  bgcolor: primary,
+                  svg: { display: "none" },
+                }}
               ></Avatar>
               <Typography variant="subtitle2" color="textSecondary">
                 2022
@@ -90,7 +95,12 @@ const YearlyBreakup = () => {
             </Stack>
             <Stack direction="row" spacing={1} alignItems="center">
               <Avatar
-                sx={{ width: 9, height: 9, bgcolor: primarylight, svg: { display: 'none' } }}
+                sx={{
+                  width: 9,
+                  height: 9,
+                  bgcolor: primarylight,
+                  svg: { display: "none" },
+                }}
               ></Avatar>
               <Typography variant="subtitle2" color="textSecondary">
                 2023

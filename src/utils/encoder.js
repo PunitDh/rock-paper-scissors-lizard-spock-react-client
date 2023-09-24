@@ -7,7 +7,7 @@ const encoder = {
       let decodedStr = "";
       for (let i = 0; i < string.length; i++) {
         decodedStr += String.fromCharCode(
-          string.charCodeAt(i) ^ privateKey.charCodeAt(i % privateKey.length)
+          string.charCodeAt(i) ^ privateKey.charCodeAt(i % privateKey.length),
         );
       }
       return decodedStr;

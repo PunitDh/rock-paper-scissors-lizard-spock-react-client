@@ -157,5 +157,5 @@ export const numberFormats: ReadonlyArray<NumberFormatMenuItem> = Object.freeze(
     { id: NumberFormat.TIME, Icon: IconClock },
     { id: NumberFormat.PERCENTAGE, Icon: Percent },
     { id: NumberFormat.TEXT, Icon: TextFields },
-  ]
+  ],
 );

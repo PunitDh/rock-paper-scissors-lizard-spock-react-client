@@ -1,5 +1,3 @@
-import React from "react";
-
 const Debug = ({ state }) => {
   return (
     <div style={{ marginTop: "1rem" }}>

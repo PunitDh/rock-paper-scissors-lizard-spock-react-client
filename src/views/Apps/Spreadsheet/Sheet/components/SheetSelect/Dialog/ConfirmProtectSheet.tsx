@@ -1,4 +1,3 @@
-import React from "react";
 import ConfirmationDialog from "../../../../../../../components/shared/ConfirmationDialog";
 import Protect from "./components/Protect";
 
@@ -20,7 +19,7 @@ const ConfirmProtectSheet = ({
     confirmBtnText="Set Password"
     confirmdisabled={Number(
       credentials.password.length < 1 ||
-        credentials.confirmPassword !== credentials.password
+        credentials.confirmPassword !== credentials.password,
     )}
     content={
       <Protect

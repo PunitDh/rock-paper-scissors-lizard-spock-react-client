@@ -21,7 +21,7 @@ export const generateClipboardContent = (state: State): string => {
         display: cellData?.display || "",
         formula: cellData?.formula || "",
       });
-    })
+    }),
   );
   const type = SheetConfig.FILE_TYPE;
   return JSON.stringify({ type, content });
@@ -44,7 +44,7 @@ export const generateJSONContent = (state: State): string => {
       }
       return acc as StateContentData;
     },
-    {} as StateContentData
+    {} as StateContentData,
   );
   const filteredContent = {
     ...content,
@@ -55,7 +55,7 @@ export const generateJSONContent = (state: State): string => {
 
 function typeInTextField(id: string, newText: string, replace: boolean) {
   const el: HTMLInputElement | null = document.getElementById(
-    id
+    id,
   ) as HTMLInputElement;
   if (!el) return;
   const [start, end] = [
@@ -135,7 +135,7 @@ export function parseJSON(stringifiedJSON: string): ParsedJSON {
       jsonObject.content.rowHeights,
       jsonObject.content.columnWidths,
       data,
-      jsonObject.content.namedRanges
+      jsonObject.content.namedRanges,
     );
 
     return { error: false, content };
@@ -150,7 +150,7 @@ export function parseJSON(stringifiedJSON: string): ParsedJSON {
 
 export const createInitialState = (
   props: SheetProps,
-  defaultProps: { [key: string]: any }
+  defaultProps: { [key: string]: any },
 ): State => {
   const createdState = {
     ...initialState,
@@ -176,7 +176,7 @@ export const createInitialState = (
 
 const generateInitialContent = (
   props: SheetProps,
-  defaultProps: { [key: string]: any }
+  defaultProps: { [key: string]: any },
 ): StateContent => {
   const columnWidths = Array(props.maxColumns)
     .fill(0)

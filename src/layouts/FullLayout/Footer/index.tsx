@@ -1,4 +1,3 @@
-import React from "react";
 import { Toolbar, styled, Stack } from "@mui/material";
 import { useSelector } from "react-redux";
 import ChatBar from "../../../views/ChatBar";

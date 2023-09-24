@@ -14,5 +14,5 @@ ReactDOM.render(
       </BrowserRouter>
     </ReduxProvider>
   </Suspense>,
-  document.getElementById("root")
+  document.getElementById("root"),
 );

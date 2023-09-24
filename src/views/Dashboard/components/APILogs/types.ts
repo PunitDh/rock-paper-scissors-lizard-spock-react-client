@@ -19,4 +19,4 @@ export type LogMessage = {
   type: LogType;
   content: string;
   timestamp: string;
-}
+};

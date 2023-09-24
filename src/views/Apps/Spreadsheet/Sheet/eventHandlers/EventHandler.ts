@@ -1,4 +1,4 @@
-import React, { Dispatch } from "react";
+import { Dispatch } from "react";
 import { isNumber } from "../../../../../utils";
 import {
   addCellsToHighlight,
@@ -50,7 +50,7 @@ export default class EventHandler {
     state: State,
     dispatch: Dispatch<Action>,
     clipboard: Clipboard,
-    inputFocusRef: { current: boolean }
+    inputFocusRef: { current: boolean },
   ) {
     this.state = state;
     this.dispatch = dispatch;
@@ -102,7 +102,7 @@ export default class EventHandler {
 
   handleCellInputKeyDown(
     e: React.KeyboardEvent,
-    navigateRefCurrent: boolean
+    navigateRefCurrent: boolean,
   ): void {
     const cell = this.state.selectedCell;
     const value = (e.target as HTMLInputElement).value;
@@ -129,8 +129,8 @@ export default class EventHandler {
           selectCell(
             e.shiftKey
               ? cell.getPreviousRow()
-              : cell.getNextRow(this.state.maxRows)
-          )
+              : cell.getNextRow(this.state.maxRows),
+          ),
         );
         break;
       case KeyEvent.LOWERCASE_A:
@@ -166,7 +166,7 @@ export default class EventHandler {
         e.preventDefault();
         e.shiftKey
           ? this.dispatch(
-              selectCell(cell.getPreviousColumn(this.state.maxColumns))
+              selectCell(cell.getPreviousColumn(this.state.maxColumns)),
             )
           : this.dispatch(selectCell(cell.getNextColumn(this.state.maxRows)));
         break;
@@ -178,7 +178,7 @@ export default class EventHandler {
           (navigateRefCurrent && !this.state.formulaMode)
         )
           this.dispatch(
-            selectCell(cell.getPreviousColumn(this.state.maxColumns))
+            selectCell(cell.getPreviousColumn(this.state.maxColumns)),
           );
         break;
       }
@@ -216,7 +216,7 @@ export default class EventHandler {
    */
   handleFormulaFieldKeyDown(
     e: React.KeyboardEvent,
-    originalValue: string
+    originalValue: string,
   ): void {
     switch (e.key) {
       case KeyEvent.ESCAPE:
@@ -256,7 +256,7 @@ export default class EventHandler {
     this.dispatch(setFormulaFieldText(target.value));
     this.dispatch(setFormulaFieldFocused(false));
     this.dispatch(
-      selectCell(this.state.selectedCell.getNextRow(this.state.maxRows))
+      selectCell(this.state.selectedCell.getNextRow(this.state.maxRows)),
     );
     this.dispatch(setFormulaMode(false));
     triggerRecalculation && this.dispatch(recalculateFormulae());
@@ -265,7 +265,7 @@ export default class EventHandler {
 
   handleFormulaFieldBlur(
     e: React.FocusEvent<HTMLInputElement>,
-    originalValue: string
+    originalValue: string,
   ) {
     const triggerRecalculation =
       isFormula(e.target.value) ||
@@ -289,7 +289,7 @@ export default class EventHandler {
       if (value in this.activeSheet.content.namedRanges) {
         this.dispatch(resetHighlight());
         this.dispatch(
-          addCellsToHighlight(this.activeSheet.content.namedRanges[value])
+          addCellsToHighlight(this.activeSheet.content.namedRanges[value]),
         );
       }
     }
@@ -309,7 +309,7 @@ export default class EventHandler {
       if (this.state.dragging && !this.isCtrlKeyPressed(e)) {
         if (cellAnchor)
           this.dispatch(
-            highlightFormulaCellRange(cellAnchor, this.state.hovered)
+            highlightFormulaCellRange(cellAnchor, this.state.hovered),
           );
       }
     } else {
@@ -454,14 +454,14 @@ export default class EventHandler {
         contentData[selectedCell.id],
         highlighted,
         isCtrlPressed,
-        e.shiftKey
+        e.shiftKey,
       );
     } else {
       this.#handleRegularModeMouseDown(
         id,
         highlighted,
         isCtrlPressed,
-        e.shiftKey
+        e.shiftKey,
       );
     }
   }
@@ -511,7 +511,7 @@ export default class EventHandler {
         const value = this.#addTextToFocusedBox(nextCell.id, true);
         this.dispatch(setCellContent(this.state.selectedCell.id, value));
         this.dispatch(
-          updateReferenceCells(this.state.selectedCell.id, [nextCell.id], true)
+          updateReferenceCells(this.state.selectedCell.id, [nextCell.id], true),
         );
       }
     } else {
@@ -552,7 +552,7 @@ export default class EventHandler {
           ? new Cell(
               `${SheetConfig.COLUMNS[this.state.maxColumns - 1]}${
                 selectedCell.row
-              }`
+              }`,
             )
           : selectedCell.getNextColumn(maxRows, maxColumns);
       case KeyEvent.ARROW_LEFT:
@@ -572,7 +572,7 @@ export default class EventHandler {
     const value = this.#addTextToFocusedBox(id, !isCtrlPressed);
     this.dispatch(setCellContent(this.state.selectedCell.id, value));
     this.dispatch(
-      updateReferenceCells(this.state.selectedCell.id, [id], !isCtrlPressed)
+      updateReferenceCells(this.state.selectedCell.id, [id], !isCtrlPressed),
     );
   };
 
@@ -580,14 +580,14 @@ export default class EventHandler {
     id: string,
     highlighted: Highlight,
     isCtrlPressed: boolean,
-    isShiftPressed: boolean
+    isShiftPressed: boolean,
   ) => {
     if (isCtrlPressed) {
       if (highlighted.includes(id)) {
         this.dispatch(removeCellsFromHighlight([id]));
       } else {
         this.dispatch(
-          addCellsToHighlight([this.state.selectedCell.id, id], true)
+          addCellsToHighlight([this.state.selectedCell.id, id], true),
         );
       }
     } else if (isShiftPressed) {
@@ -657,17 +657,17 @@ export default class EventHandler {
                 if (!columnCharCode) return acc;
                 return acc.replace(
                   id,
-                  `${String.fromCharCode(+columnCharCode + increment)}${row}`
+                  `${String.fromCharCode(+columnCharCode + increment)}${row}`,
                 );
               },
-              formula as string
+              formula as string,
             );
 
             this.dispatch(
               setCellContent(
                 highlightedCells.toArray()[i + 1],
-                String(newFormula)
-              )
+                String(newFormula),
+              ),
             );
           } else if (rowFill) {
             increment++;
@@ -678,17 +678,17 @@ export default class EventHandler {
                 if (!columnCharCode) return acc;
                 return acc.replace(
                   id,
-                  `${String.fromCharCode(columnCharCode)}${row + increment}`
+                  `${String.fromCharCode(columnCharCode)}${row + increment}`,
                 );
               },
-              formula as string
+              formula as string,
             );
 
             this.dispatch(
               setCellContent(
                 highlightedCells.toArray()[i + 1],
-                String(newFormula)
-              )
+                String(newFormula),
+              ),
             );
             this.state.formulaMode && this.dispatch(setFormulaMode(false));
             this.dispatch(recalculateFormulae());
@@ -722,8 +722,8 @@ export default class EventHandler {
           this.dispatch(
             setCellContent(
               highlightedCells.toArray()[i + 1],
-              String(+anchorValue + increment)
-            )
+              String(+anchorValue + increment),
+            ),
           );
         });
     } else {
@@ -733,8 +733,8 @@ export default class EventHandler {
           this.dispatch(
             setCellContent(
               highlightedCells.toArray()[i + 1],
-              String(anchorValue || "")
-            )
+              String(anchorValue || ""),
+            ),
           );
         });
     }
@@ -742,7 +742,7 @@ export default class EventHandler {
 
   #handleFormulaModeMouseUp(
     isSameCellHighlighted: boolean,
-    isCtrlKeyPressed: boolean
+    isCtrlKeyPressed: boolean,
   ) {
     if (this.state.dragging && !isSameCellHighlighted && !isCtrlKeyPressed) {
       const { cellAnchor } = this.state.highlighted;
@@ -754,15 +754,15 @@ export default class EventHandler {
         updateReferenceCells(
           this.state.selectedCell.id,
           [cellAnchor, this.state.hovered],
-          true
-        )
+          true,
+        ),
       );
     }
   }
 
   #handleRegularModeMouseUp(
     isSameCellHighlighted: boolean,
-    isCtrlKeyPressed: boolean
+    isCtrlKeyPressed: boolean,
   ) {
     if (!isSameCellHighlighted && isCtrlKeyPressed) {
       this.dispatch(addCellsToHighlight([this.state.hovered]));
@@ -778,7 +778,7 @@ export default class EventHandler {
     selectedCellData: CellData,
     highlighted: Highlight,
     isCtrlPressed: boolean,
-    isShiftPressed: boolean
+    isShiftPressed: boolean,
   ) => {
     if (!selectedCellData) return;
     const { formula } = selectedCellData;
@@ -844,7 +844,7 @@ export default class EventHandler {
           : "," + text,
         replace ? 0 : start,
         replace ? element.value.length : end,
-        "end"
+        "end",
       );
     } else if (isLastValueCell) {
       element.setRangeText(
@@ -853,7 +853,7 @@ export default class EventHandler {
           : "," + text,
         replace ? 0 : start,
         replace ? element.value.length : end,
-        "end"
+        "end",
       );
     } else {
       element.setRangeText(text, start, end, "end");

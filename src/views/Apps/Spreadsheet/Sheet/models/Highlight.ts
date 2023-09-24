@@ -76,6 +76,17 @@ export default class Highlight {
     return this.cells.last();
   }
 
+  lastNotEmpty(stateContentData: StateContentData): Cell {
+    const cells = [...this.cells];
+    let last = cells[0];
+    for (let i = 0; i < cells.length; i++) {
+      if (stateContentData[cells[i]]?.isNotEmpty()) {
+        last = cells[i];
+      }
+    }
+    return new Cell(last);
+  }
+
   includes(cellId: string): Boolean {
     return this.cells.has(cellId);
   }
@@ -112,7 +123,7 @@ export default class Highlight {
 
   setCells(
     cellIds: SetExtended<string>,
-    stateContentData: StateContentData
+    stateContentData: StateContentData,
   ): Highlight {
     this.cells = setOf<string>(cellIds);
     this.recalculate(stateContentData);
@@ -141,7 +152,7 @@ export default class Highlight {
 
   addCellAndRecalculate(
     cellId: string,
-    stateContentData: StateContentData
+    stateContentData: StateContentData,
   ): Highlight {
     const cell = new Cell(cellId);
     const rowsSet = setOf<number>(this.rows);
@@ -187,7 +198,7 @@ export default class Highlight {
       const count = this.cells
         .toArray()
         .filter((cell) =>
-          Boolean(stateContentData[cell]?.value?.toString())
+          Boolean(stateContentData[cell]?.value?.toString()),
         ).length;
       this.count = count;
     } else {

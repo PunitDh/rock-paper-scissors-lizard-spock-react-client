@@ -1,4 +1,3 @@
-import React from "react";
 import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { numberFormats } from "../constants";
 import { formattingSelectStyle } from "../styles";
@@ -7,8 +6,8 @@ import CellFormatting from "../../../models/CellFormatting";
 
 type Props = {
   state: CellFormatting;
-  onChange: (e: SelectChangeEvent<string>) => void
-}
+  onChange: (e: SelectChangeEvent<string>) => void;
+};
 
 const NumberFormattingSelect = ({ state, onChange }: Props) => {
   return (

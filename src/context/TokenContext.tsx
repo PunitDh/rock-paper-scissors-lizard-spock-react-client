@@ -1,5 +1,5 @@
 import jwtDecode from "jwt-decode";
-import React, { createContext } from "react";
+import { createContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearToken, setToken } from "../redux/playerSlice";
 import { Token } from "../hooks/types";
@@ -7,11 +7,11 @@ import { Token } from "../hooks/types";
 export const TokenContext = createContext<Token>({});
 
 type Props = {
-  children: any
-}
+  children: any;
+};
 
 export const TokenProvider = ({ children }: Props) => {
-  const token = (useSelector((state) => (state as any).player).token as string);
+  const token = useSelector((state) => (state as any).player).token as string;
   const dispatch = useDispatch();
 
   try {
@@ -39,8 +39,6 @@ export const TokenProvider = ({ children }: Props) => {
       >
         {children}
       </TokenContext.Provider>
-    )
+    );
   }
-
-  
 };
