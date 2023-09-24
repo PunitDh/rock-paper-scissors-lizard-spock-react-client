@@ -62,9 +62,9 @@ const MenuButton = ({ onClick, title, isActive, Icon, children }: Props) => {
               <MenuItem
                 value={calc}
                 key={calc}
-                onClick={(e) => handleSelect(e, calc as AutoCalculate)}
+                onClick={(e) => handleSelect(e, calc)}
               >
-                {capitalize(calc.toString())}
+                {capitalize(calc)}
               </MenuItem>
             ))}
           </Menu>
