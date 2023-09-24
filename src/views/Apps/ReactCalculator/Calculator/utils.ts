@@ -32,6 +32,7 @@ export const evaluateExpression = (state: State): Output => {
         /(\d+|\))(?=\s*(atan|acos|asin| sin| cos| tan|log|ln|Ans|Rnd|E|π))/g,
         "$&* "
       )
+      .replaceAll("Ans", `(${state.answer})`)
       .replaceAll("Rnd", `(Math.random())`)
       .replaceAll("M1", `(${state.memory.M1.value})`)
       .replaceAll("M2", `(${state.memory.M2.value})`)
@@ -51,7 +52,7 @@ export const evaluateExpression = (state: State): Output => {
       .replaceAll("E", "(Math.E)")
       .replaceAll("√(", "")
       .replaceAll(
-        /\((\d+)\)!/g,
+        /\((\d+|x)\)!/g,
         "(Array($1).fill(0).map((_,i)=>i+1).reduce((a,c)=>a*c,1))"
       )
 
@@ -89,7 +90,6 @@ export const evaluateExpression = (state: State): Output => {
           }
         } catch {}
       }
-
       return { values, value: "0", parsedInput, error: false };
     } else {
       value = String(Math.round(eval(parsedInput) * 10 ** 13) / 10 ** 13);
