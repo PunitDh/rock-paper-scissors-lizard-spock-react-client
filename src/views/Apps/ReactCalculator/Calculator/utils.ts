@@ -77,13 +77,13 @@ export const evaluateExpression = (state: State): Output => {
 
     if (/x/g.test(parsedInput)) {
       for (let x = Limit.LOWER; x <= Limit.UPPER; x += 0.1) {
-        const parsed = parsedInput.replaceAll("x", String(`(${x.toFixed(1)})`));
+        const parsed = parsedInput.replaceAll("x", String(`(${x})`));
 
         try {
           const y = Math.round(eval(parsed) * 10 ** 13) / 10 ** 13;
           if (isFinite(y)) {
             values.push({
-              x: Number(x.toFixed(1)),
+              x: Number(x.toFixed(2)),
               y,
             } as Coord);
           }
