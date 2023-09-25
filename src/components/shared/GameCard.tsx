@@ -5,7 +5,7 @@ type Props = {
   title: string;
   children: JSX.Element | string;
   action: JSX.Element | string | undefined;
-}
+};
 
 const GameCard = ({ title, children, action }: Props) => (
   <ResponsiveCard elevation={9}>

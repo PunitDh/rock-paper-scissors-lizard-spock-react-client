@@ -1,14 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { TOKEN_KEY } from "../utils/constants";
+import { PlayerState } from "./types";
+
+const initialState: PlayerState = {
+  token: localStorage.getItem(TOKEN_KEY),
+  currentGame: {},
+  currentGames: [],
+  currentUsers: [],
+  recentGames: [],
+};
 
 export const playerSlice = createSlice({
   name: "player",
-  initialState: {
-    token: localStorage.getItem(TOKEN_KEY),
-    currentGame: {},
-    currentGames: [],
-    recentGames: [],
-  },
+  initialState,
   reducers: {
     setToken: (state, action) => {
       state.token = action.payload;

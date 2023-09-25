@@ -32,7 +32,7 @@ export type State = {
 export type Coord = {
   x: number;
   y: number;
-}
+};
 
 export type Memory = {
   value: number;

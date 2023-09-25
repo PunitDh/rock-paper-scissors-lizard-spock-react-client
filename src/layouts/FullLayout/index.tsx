@@ -54,7 +54,7 @@ const FullLayout = () => {
         />
         <PageWrapper className="page-wrapper">
           <Header
-            toggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
+            // toggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
             toggleMobileSidebar={() => setMobileSidebarOpen(true)}
           />
           <Container

@@ -6,6 +6,7 @@ import StateContent from "../models/StateContent";
 import { isObject, isString } from "../../../../../utils";
 import { SheetProps, State } from "../types";
 import StateContentData from "../models/StateContentData";
+import { setOf } from "../../../../../utils/Set";
 
 export const generateClipboardContent = (state: State): string => {
   const content = state.highlighted.rows.toArray().map((row: number) =>
@@ -21,7 +22,7 @@ export const generateClipboardContent = (state: State): string => {
         display: cellData?.display || "",
         formula: cellData?.formula || "",
       });
-    })
+    }),
   );
   const type = SheetConfig.FILE_TYPE;
   return JSON.stringify({ type, content });
@@ -36,7 +37,7 @@ export const generateJSONContent = (state: State): string => {
       ...acc,
       [rangeName]: [...namedRanges[rangeName]],
     }),
-    {}
+    {},
   );
 
   const filtered = Object.keys(data).reduce(
@@ -52,7 +53,7 @@ export const generateJSONContent = (state: State): string => {
       }
       return acc as StateContentData;
     },
-    {} as StateContentData
+    {} as StateContentData,
   );
 
   const filteredContent = {
@@ -66,7 +67,7 @@ export const generateJSONContent = (state: State): string => {
 
 function typeInTextField(id: string, newText: string, replace: boolean) {
   const el: HTMLInputElement | null = document.getElementById(
-    id
+    id,
   ) as HTMLInputElement;
   if (!el) return;
   const [start, end] = [
@@ -142,11 +143,19 @@ export function parseJSON(stringifiedJSON: string): ParsedJSON {
       return acc;
     }, jsonObject.content.data);
 
+    const namedRanges = Object.keys(jsonObject.content.namedRanges).reduce(
+      (acc, rangeName) => ({
+        ...acc,
+        [rangeName]: setOf(acc[rangeName]),
+      }),
+      jsonObject.content.namedRanges,
+    );
+
     const content = new StateContent(
       jsonObject.content.rowHeights,
       jsonObject.content.columnWidths,
       data,
-      jsonObject.content.namedRanges
+      namedRanges,
     );
 
     return { error: false, content };
@@ -161,7 +170,7 @@ export function parseJSON(stringifiedJSON: string): ParsedJSON {
 
 export const createInitialState = (
   props: SheetProps,
-  defaultProps: { [key: string]: any }
+  defaultProps: { [key: string]: any },
 ): State => {
   const createdState = {
     ...initialState,
@@ -187,7 +196,7 @@ export const createInitialState = (
 
 const generateInitialContent = (
   props: SheetProps,
-  defaultProps: { [key: string]: any }
+  defaultProps: { [key: string]: any },
 ): StateContent => {
   const columnWidths = Array(props.maxColumns)
     .fill(0)

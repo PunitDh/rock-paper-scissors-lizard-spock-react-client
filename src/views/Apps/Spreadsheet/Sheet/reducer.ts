@@ -319,7 +319,9 @@ export const reducer = (state: State, action: Action): State => {
       );
       return {
         ...state,
-        formulaHighlighted: toList(range.cellIds as string[][]).toSetExtended(),
+        formulaHighlighted: toList<string>(
+          range.cellIds as string[],
+        ).toSetExtended(),
       };
     }
 

@@ -127,7 +127,7 @@ const entities: ReadonlyArray<RpslsEntity> = [
 const getEntity = (entity: string): RpslsEntity | undefined => {
   const decoded = encoder.decodeString(
     entity,
-    process.env.REACT_APP_GAME_ENCRYPTION_KEY
+    process.env.REACT_APP_GAME_ENCRYPTION_KEY,
   );
   return entities.find((it) => decoded === it.name);
 };

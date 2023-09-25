@@ -1,9 +1,21 @@
 import { Button, MenuItem } from "@mui/material";
 import { useNavigate } from "react-router";
 
-const NotificationItem = ({ handleClose, link, children, buttonText }) => {
+type Props = {
+  handleClose: (any: any) => void;
+  link: string;
+  children: string | JSX.Element;
+  buttonText: string;
+};
+
+const NotificationItem = ({
+  handleClose,
+  link,
+  children,
+  buttonText,
+}: Props) => {
   const navigate = useNavigate();
-  const navigateTo = (to) => () => handleClose(navigate(to));
+  const navigateTo = (to: string) => () => handleClose(navigate(to));
 
   return (
     <MenuItem onClick={navigateTo(link)} disableRipple>

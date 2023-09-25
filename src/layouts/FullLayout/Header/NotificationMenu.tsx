@@ -7,6 +7,7 @@ import NotificationItem from "./NotificationItem";
 import { uniqueId } from "lodash";
 import { useToken } from "../../../hooks";
 import { Bold } from "../../../components/shared/styles";
+import { GameType, PlayerType } from "../../../views/Apps/types";
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -63,12 +64,12 @@ const StyledMenu = styled((props) => (
 }));
 
 const NotificationMenu = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
-  const { currentGames } = useSelector((state) => state.player);
+  const { currentGames } = useSelector((state) => (state as any).player);
   const token = useToken();
 
-  const handleClick = (event) => {
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -77,13 +78,13 @@ const NotificationMenu = () => {
   };
 
   const opponentPlayed = (round) =>
-    round.moves.length === 1 && round.moves[0].player !== token.decoded.id;
+    round.moves.length === 1 && round.moves[0].player !== token.decoded?.id;
 
   const notifications = currentGames
-    .filter((game) => game.rounds.some(opponentPlayed))
-    .map(function (game) {
+    .filter((game: GameType) => game.rounds.some(opponentPlayed))
+    .map(function (game: GameType) {
       const player = game.players.find(
-        (player) => player.id !== token.decoded.id,
+        (player: PlayerType) => player.id !== token.decoded?.id,
       );
       return {
         id: uniqueId("notification-"),
@@ -92,7 +93,7 @@ const NotificationMenu = () => {
         buttonText: "Go to Game",
         content: (
           <>
-            <Bold>{player.firstName}</Bold>&nbsp;
+            <Bold>{player!.firstName}</Bold>&nbsp;
             <span>has played a move</span>
           </>
         ),
@@ -104,7 +105,7 @@ const NotificationMenu = () => {
     <div>
       <IconButton
         size="large"
-        onClick={notifications.length ? handleClick : null}
+        onClick={notifications.length ? handleClick : undefined}
       >
         {notifications.length ? (
           <Badge badgeContent={notifications.length} color="error">

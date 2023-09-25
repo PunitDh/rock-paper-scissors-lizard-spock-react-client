@@ -5,7 +5,7 @@ import { icons } from "../../assets";
 type Props = {
   selected: number;
   gameId: string;
-}
+};
 
 const selectStyles = {
   ".MuiOutlinedInput-notchedOutline": {

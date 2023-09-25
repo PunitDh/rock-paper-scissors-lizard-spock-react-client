@@ -18,7 +18,7 @@ const Calculator = () => {
   >(reducer, initialState);
 
   const mdUp = useMediaQuery((theme) =>
-    (theme as MuiTheme).breakpoints.up("md")
+    (theme as MuiTheme).breakpoints.up("md"),
   );
 
   return (

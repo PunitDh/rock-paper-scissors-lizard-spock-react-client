@@ -43,7 +43,7 @@ const GraphBox = ({ state, dispatch }: Props) => {
       const valueIsBetween = isBetween(
         value,
         state.graph.coords[i].y,
-        state.graph.coords[i + 1].y
+        state.graph.coords[i + 1].y,
       );
       if (valueIsBetween) {
         closest.low = state.graph.coords[i];

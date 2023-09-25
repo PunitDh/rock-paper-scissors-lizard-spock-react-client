@@ -22,14 +22,15 @@ const ProfileAvatar = styled(Avatar)({
 });
 
 const CornerProfile = ({ decoded }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const navigate = useNavigate();
   const api = useAPI();
   const profileImage = getAvatar(decoded.avatar) || ProfileImg;
 
-  const openMenu = (event) => setAnchorEl(event.currentTarget);
-  const closeMenu = () => setAnchorEl(null);
-  const navigateTo = (to) => () => closeMenu(navigate(to));
+  const openMenu = (event: React.MouseEvent<HTMLElement>) =>
+    setAnchorEl(event.currentTarget);
+  const closeMenu = (_: any) => setAnchorEl(null);
+  const navigateTo = (to: string) => () => closeMenu(navigate(to));
 
   return (
     <Box>

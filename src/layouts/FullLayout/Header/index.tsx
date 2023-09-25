@@ -4,6 +4,10 @@ import { IconMenu } from "@tabler/icons-react";
 import NotificationMenu from "./NotificationMenu";
 import { useToken } from "../../../hooks";
 
+type Props = {
+  toggleMobileSidebar: () => void;
+};
+
 const AppBarStyled = styled(AppBar)(({ theme }) => ({
   boxShadow: "none",
   background: theme.palette.background.paper,
@@ -19,7 +23,7 @@ const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const Header = ({ toggleMobileSidebar }) => {
+const Header = ({ toggleMobileSidebar }: Props) => {
   const token = useToken();
 
   return (
@@ -41,7 +45,7 @@ const Header = ({ toggleMobileSidebar }) => {
         <NotificationMenu />
         <Box flexGrow={1} />
         <Stack spacing={1} direction="row" alignItems="center">
-          {token.decoded.firstName} {token.decoded.lastName}
+          {token.decoded?.firstName} {token.decoded?.lastName}
           <CornerProfile decoded={token.decoded} />
         </Stack>
       </ToolbarStyled>

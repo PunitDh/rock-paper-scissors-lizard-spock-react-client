@@ -4,7 +4,7 @@ import { Coord, Output, State } from "./types";
 export const isBetween = (
   value: number,
   low: number,
-  high: number
+  high: number,
 ): boolean => {
   return value > 0 ? value > low && value < high : value < low && value > high;
 };
@@ -40,7 +40,7 @@ export const evaluateExpression = (state: State): Output => {
       .replaceAll(/(?<=\))(\d+)/g, "*$&")
       .replaceAll(
         /(\d+|\))(?=\s*(atan|acos|asin| sin| cos| tan|log|ln|Ans|Rnd|E|π))/g,
-        "$&* "
+        "$&* ",
       )
       .replaceAll("Ans", `(${state.answer})`)
       .replaceAll("Rnd", `(Math.random())`)
@@ -54,7 +54,7 @@ export const evaluateExpression = (state: State): Output => {
       .replaceAll("M8", `(${state.memory.M8.value})`)
       .replaceAll(
         /(\d+|x)(!+)/g,
-        "(Array($1).fill(0).map((_,i)=>i+1).reduce((a,c)=>a*c,1))"
+        "(Array($1).fill(0).map((_,i)=>i+1).reduce((a,c)=>a*c,1))",
       )
       .replaceAll(/(\d+|x)(√\()(\d+|x)/g, "(Math.pow($3, 1/$1))")
       .replaceAll("√(", "(Math.sqrt(")
@@ -63,16 +63,16 @@ export const evaluateExpression = (state: State): Output => {
       .replaceAll("√(", "")
       .replaceAll(
         /\((\d+|x)\)!/g,
-        "(Array($1).fill(0).map((_,i)=>i+1).reduce((a,c)=>a*c,1))"
+        "(Array($1).fill(0).map((_,i)=>i+1).reduce((a,c)=>a*c,1))",
       )
 
       .replaceAll(
         /(asin|acos|atan)\(/g,
-        `${state.degrees ? "(180/Math.PI*" : "(1*"}Math.$1(`
+        `${state.degrees ? "(180/Math.PI*" : "(1*"}Math.$1(`,
       )
       .replaceAll(
         /(?: )(sin|cos|tan)\(/g,
-        `Math.$1(${state.degrees ? `Math.PI/180*` : `1*`}`
+        `Math.$1(${state.degrees ? `Math.PI/180*` : `1*`}`,
       )
       .replaceAll(/(?:log)\(([^)]*)(\)|)/g, "Math.log10($1)")
       .replaceAll(/(?:ln)\(([^)]*)(\)|)/g, " Math.log($1)")

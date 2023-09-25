@@ -1,15 +1,16 @@
 import { Outlet } from "react-router-dom";
 import { useNotification } from "../../hooks";
-import Notification from "../../components/shared/Notification";
+import NotificationComponent from "../../components/shared/Notification";
 
-const BlankLayout = () => {
+function BlankLayout() {
   const notification = useNotification();
+
   return (
     <>
-      <Notification notification={notification} />
+      <NotificationComponent notification={notification} />
       <Outlet />
     </>
   );
-};
+}
 
 export default BlankLayout;
