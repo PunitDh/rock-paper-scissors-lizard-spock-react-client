@@ -38,6 +38,7 @@ export const generateJSONContent = (state: State): string => {
     }),
     {}
   );
+
   const filtered = Object.keys(data).reduce(
     (acc: StateContentData, cur: string) => {
       if (String((data[cur] as CellData)?.value)?.length > 0) {
@@ -53,11 +54,13 @@ export const generateJSONContent = (state: State): string => {
     },
     {} as StateContentData
   );
+
   const filteredContent = {
     ...content,
     namedRanges: filteredNamedRanges,
     data: filtered,
   };
+
   return JSON.stringify({ type, content: filteredContent }, null, 2);
 };
 

@@ -26,7 +26,7 @@ export default class ObjectExtended {
         ...acc,
         [cur]: updateValues[cur],
       }),
-      this,
+      this
     );
   }
 
@@ -35,13 +35,13 @@ export default class ObjectExtended {
   }
 
   forEach(
-    forEachFunction: (value: any, index: number, list: any[]) => void,
+    forEachFunction: (value: any, index: number, list: any[]) => void
   ): void {
     Object.keys(this).forEach(forEachFunction);
   }
 
   map(
-    mapFunction: (value: any, index: number, list: any[]) => List<any>,
+    mapFunction: (value: any, index: number, list: any[]) => List<any>
   ): List<any> {
     return toList(Object.keys(this).map(mapFunction));
   }
@@ -54,7 +54,7 @@ export default class ObjectExtended {
     return toList(Object.values(this));
   }
 
-  entries(): List<List<any>> {
+  entries(): List<[string, any]> {
     return toList(Object.entries(this));
   }
 
@@ -68,7 +68,7 @@ export default class ObjectExtended {
 
   includes(
     pairOrKey: { [key: string]: any } | string,
-    value?: string,
+    value?: string
   ): boolean {
     if (typeof pairOrKey === "object") {
       const key = Object.keys(pairOrKey)[0];
@@ -80,13 +80,13 @@ export default class ObjectExtended {
   }
 
   mapKeys(
-    mapFunction: (value: string, index: number, list: string[]) => List<any>,
+    mapFunction: (value: string, index: number, list: string[]) => List<any>
   ): List<any> {
     return toList(Object.keys(this).map(mapFunction));
   }
 
   mapValues(
-    mapFunction: (value: any, index: number, list: string[]) => List<any>,
+    mapFunction: (value: any, index: number, list: string[]) => List<any>
   ): List<any> {
     return toList(Object.values(this).map(mapFunction));
   }
@@ -95,8 +95,8 @@ export default class ObjectExtended {
     mapFunction: (
       value: [string, any],
       index: number,
-      list: [string, any][],
-    ) => List<any>,
+      list: [string, any][]
+    ) => List<any>
   ): List<any> {
     return toList(Object.entries(mapFunction).map(mapFunction));
   }
@@ -129,7 +129,7 @@ export default class ObjectExtended {
   search(query: string, caseSensitive = false): List<SearchResult> {
     const getResults = (
       object: { [key: string]: any },
-      results = listOf<SearchResult>(),
+      results = listOf<SearchResult>()
     ) => {
       const keys = Object.keys(object);
       for (const key of keys) {
@@ -181,7 +181,7 @@ export default class ObjectExtended {
               [cur]: object[cur],
             }
           : acc,
-      this,
+      this
     );
   }
 
@@ -191,7 +191,7 @@ export default class ObjectExtended {
         ...acc,
         [cur]: applyFn(this[cur]),
       }),
-      this,
+      this
     );
   }
 
