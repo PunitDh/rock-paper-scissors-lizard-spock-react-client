@@ -7,7 +7,7 @@ export type State = {
   debugMode: boolean;
   loading: boolean;
   updates: string[];
-  subtitles: {};
+  subtitles: Partial<Subtitles>;
   downloadBlob: string | null;
 };
 

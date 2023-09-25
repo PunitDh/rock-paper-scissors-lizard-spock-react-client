@@ -1,6 +1,6 @@
-import { keyframes } from "@emotion/react";
+import { Keyframes, keyframes } from "@emotion/react";
 
-export const blink = keyframes`
+export const blink: Keyframes = keyframes`
   0% {
     background-color: lightgreen;
   }

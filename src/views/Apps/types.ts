@@ -13,9 +13,19 @@ export type GameType = {
   id: string;
   name: string;
   icon: number;
-  rounds: string[];
+  rounds: GameRound[];
   players: PlayerType[];
 };
+
+type GameRound = {
+  moves: string[];
+  winner: {
+    playerId: string;
+    name: string;
+    method: string;
+    reason: string;
+  }
+}
 
 export type ChatType = {
   players: PlayerType[];

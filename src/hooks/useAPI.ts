@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router";
 import { Buffer } from "buffer";
@@ -19,8 +19,16 @@ import {
   setMessagesNav,
   updateCurrentGameMenu,
 } from "../redux/menuSlice";
+import {
+  API,
+  Data,
+  GameData,
+  LogRequest,
+  PlayerLogin,
+  PlayerRegistration,
+} from "./types";
 
-export default function useAPI() {
+export default function useAPI(): API {
   const token = useToken();
   const notification = useNotification();
   const dispatch = useDispatch();
@@ -36,7 +44,7 @@ export default function useAPI() {
 
   const createBasicAuth = (formData) => {
     const credentials = Buffer.from(
-      `${formData.email}:${formData.password}`,
+      `${formData.email}:${formData.password}`
     ).toString("base64");
 
     return {
@@ -46,13 +54,13 @@ export default function useAPI() {
     };
   };
 
-  const secure = (request) => ({
+  const secure = (request?: { [key: string]: any }) => ({
     ...request,
     _jwt: token.jwt,
   });
 
   const restricted = (request) => {
-    if (token.decoded.isAdmin) {
+    if (token.decoded?.isAdmin) {
       return {
         ...request,
         _jwt: token.jwt,
@@ -60,8 +68,8 @@ export default function useAPI() {
     }
   };
 
-  const handleError = (data) => {
-    notification.error(data.payload);
+  const handleError = (data: Data) => {
+    notification.error((data as Data).payload);
     if (data.code === 401) {
       console.log("It's the API");
       navigate(AuthPage.LOGIN_PAGE);
@@ -69,33 +77,33 @@ export default function useAPI() {
   };
 
   const request = {
-    send: function (method, endpoint, ...args) {
+    send: function (method: string, url: string, args: any[]) {
       return new Promise((resolve, reject) =>
-        axios[method](`${process.env.REACT_APP_SERVER_URL}${endpoint}`, ...args)
-          .then((response) =>
+        axios[method](`${process.env.REACT_APP_SERVER_URL}${url}`, ...args)
+          .then((response: AxiosResponse) =>
             response.status < 400
               ? resolve(response.data)
-              : reject(response.data),
+              : reject(response.data)
           )
-          .catch((error) => reject(error.response.data)),
+          .catch((error: AxiosError) => reject(error.response?.data))
       );
     },
 
-    get: function (...args) {
-      return this.send("get", ...args);
+    get: function (url: string, ...args: any[]) {
+      return this.send("get", url, args);
     },
-    post: function (...args) {
-      return this.send("post", ...args);
+    post: function (url: string, ...args: any[]) {
+      return this.send("post", url, args);
     },
-    put: function (...args) {
-      return this.send("put", ...args);
+    put: function (url: string, ...args: any[]) {
+      return this.send("put", url, args);
     },
-    delete: function (...args) {
-      return this.send("delete", ...args);
+    delete: function (url: string, ...args: any[]) {
+      return this.send("delete", url, args);
     },
   };
 
-  const handleToken = (data, successMessage) => {
+  const handleToken = (data: Data, successMessage: string) => {
     if (data.code >= 300) {
       handleError(data);
       return;
@@ -119,27 +127,29 @@ export default function useAPI() {
   };
 
   return {
-    registerPlayer: (formData) =>
+    registerPlayer: (playerRegistration: PlayerRegistration) =>
       request
-        .post("/player/register", formData)
-        .then((response) => handleToken(response, "Registration successful!"))
+        .post("/player/register", playerRegistration)
+        .then((response) =>
+          handleToken(response as Data, "Registration successful!")
+        )
         .catch(handleError),
 
-    loginPlayer: (formData) => {
+    loginPlayer: (playerLogin: PlayerLogin) => {
       return request
         .post(
           "/player/login",
-          { remember: formData.remember },
-          createBasicAuth(formData),
+          { remember: playerLogin.remember },
+          createBasicAuth(playerLogin)
         )
-        .then((response) => handleToken(response, "Login successful!"))
+        .then((response) => handleToken(response as Data, "Login successful!"))
         .catch(handleError);
     },
 
     getSiteSettings: () =>
       request
         .get("/admin/settings")
-        .then((data) => dispatch(setSiteSettings(data.payload)))
+        .then((data) => dispatch(setSiteSettings((data as Data).payload)))
         .catch(handleError),
 
     // updateProfile: (formData) =>
@@ -160,28 +170,28 @@ export default function useAPI() {
           .then((data) => {
             dispatch(
               setMessagesNav({
-                items: data.payload,
+                items: (data as Data).payload,
                 currentUser: token.decoded,
                 onClick: (request) =>
                   socket.emit(
                     SocketRequest.START_CONVERSATION,
-                    secure(request),
+                    secure(request)
                   ),
-              }),
+              })
             );
-            dispatch(setConversations(data.payload));
+            dispatch(setConversations((data as Data).payload));
           })
           .catch(handleError);
       }
     },
 
-    createGame: (data) => {
+    createGame: (data: GameData) => {
       return request
         .post("/games/new", data, authHeaders)
         .then((data) => {
-          dispatch(setCurrentGame(data.payload));
-          dispatch(updateCurrentGameMenu(data.payload));
-          navigate(`/apps/${data.payload.id}`);
+          dispatch(setCurrentGame((data as Data).payload));
+          dispatch(updateCurrentGameMenu((data as Data).payload));
+          navigate(`/apps/${(data as Data).payload.id}`);
         })
         .catch(handleError);
     },
@@ -191,35 +201,35 @@ export default function useAPI() {
       request
         .get("/player/games", authHeaders)
         .then((data) => {
-          dispatch(setCurrentGames(data.payload));
-          dispatch(setCurrentGamesNav(data.payload));
+          dispatch(setCurrentGames((data as Data).payload));
+          dispatch(setCurrentGamesNav((data as Data).payload));
         })
         .catch(handleError),
 
     getRecentGames: (limit) =>
       request
         .get("/games/recent", { ...authHeaders, params: { limit } })
-        .then((data) => dispatch(setRecentGames(data.payload)))
+        .then((data) => dispatch(setRecentGames((data as Data).payload)))
         .catch(handleError),
 
     getCurrentUsers: () =>
       request
         .get("/player/players", authHeaders)
-        .then((data) => dispatch(setCurrentUsers(data.payload)))
+        .then((data) => dispatch(setCurrentUsers((data as Data).payload)))
         .catch(handleError),
 
-    getGame: (gameId) => {
+    getGame: (gameId: string) => {
       socket.emit(SocketRequest.JOIN_CHAT, secure({ gameId }));
       return request
         .get(`/games/${gameId}`, authHeaders)
-        .then((data) => dispatch(setCurrentGame(data.payload)))
+        .then((data) => dispatch(setCurrentGame((data as Data).payload)))
         .catch((data) => {
           navigate("/apps");
-          notification.error(data.payload);
+          notification.error((data as Data).payload);
         });
     },
 
-    getLogs: ({ limit, type, time }) =>
+    getLogs: ({ limit, type, time }: LogRequest) =>
       request.get(`/admin/logs`, {
         ...authHeaders,
         params: { limit, type, time },
@@ -227,17 +237,17 @@ export default function useAPI() {
 
     clearLogs: () => request.delete(`/admin/logs`, authHeaders),
 
-    translateSubtitles: (formData, sessionId) => {
+    translateSubtitles: (formData, sessionId: string) => {
       socket.emit(SocketRequest.PROGRESS_UPDATE, secure({ sessionId }));
       return request.post("/video/subtitles/translate", formData, authHeaders);
     },
 
-    getDownloadFile: (location) =>
+    getDownloadFile: (location: string) =>
       request.get(`/${location}`, {
         responseType: "blob",
       }),
 
-    sendRestRequest: (config) => axios(config),
+    sendRestRequest: (config: AxiosRequestConfig) => axios(config),
 
     sendProxyRestRequest: (data) =>
       axios.post(`${process.env.REACT_APP_SERVER_URL}/rest`, data, authHeaders),

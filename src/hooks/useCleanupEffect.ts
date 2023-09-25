@@ -1,7 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef } from "react";
 
-export default function useCleanupEffect(callback, dependencies = []) {
+export default function useCleanupEffect(
+  callback: () => void,
+  dependencies: any[] = []
+) {
   const mounted = useRef(true);
 
   useEffect(() => {

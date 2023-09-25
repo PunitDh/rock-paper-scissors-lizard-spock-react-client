@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { Dispatch, useEffect } from "react";
 import InputGroup from "./InputGroup";
 import { List, ListItem, ListItemAvatar } from "@mui/material";
 import { DoneOutline } from "@mui/icons-material";
@@ -13,8 +13,14 @@ import { setDownloadBlob, setProgressUpdate } from "./actions";
 import { SocketResponse } from "../../../../utils/constants";
 import { Bold, ResponsiveFlexBox } from "../../../../components/shared/styles";
 import { useAPI, useSocket } from "../../../../hooks";
+import { Action, State } from "../types";
 
-const Output = ({ state, dispatch }) => {
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+}
+
+const Output = ({ state, dispatch }: Props) => {
   const socket = useSocket();
   const api = useAPI();
 
@@ -42,7 +48,7 @@ const Output = ({ state, dispatch }) => {
         <InputGroup title="Progress Update:">
           <List dense={false}>
             {state.updates.map((update) => (
-              <ListItem key={update} variant="body-2">
+              <ListItem key={update}>
                 <ListItemAvatar>
                   <DoneOutline sx={{ color: "green" }} />
                 </ListItemAvatar>

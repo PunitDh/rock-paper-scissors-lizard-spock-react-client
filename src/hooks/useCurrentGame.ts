@@ -1,7 +1,15 @@
 import { useSelector } from "react-redux";
+import { GameType } from "../views/Apps/types";
 
-function calculateScore(game) {
-  const score = {};
+type Score = {
+  [key: string]: {
+    name: string;
+    score: number;
+  };
+};
+
+function calculateScore(game: GameType): Score {
+  const score: Score = {};
 
   game.players?.forEach((player) => {
     const { id: playerId } = player;
@@ -13,7 +21,7 @@ function calculateScore(game) {
   });
 
   const tieScore = game.rounds?.filter(
-    (round) => round.winner.method?.toLowerCase() === "tie",
+    (round) => round.winner.method?.toLowerCase() === "tie"
   ).length;
   score.ties = {
     name: "Ties",
@@ -23,8 +31,8 @@ function calculateScore(game) {
   return score;
 }
 
-export default function useCurrentGame(game) {
-  const { currentGame } = useSelector((state) => state.player);
+export default function useCurrentGame(game: GameType): GameType & Score {
+  const { currentGame } = useSelector((state) => (state as any).player);
 
   return game
     ? { ...game, score: calculateScore(game) }

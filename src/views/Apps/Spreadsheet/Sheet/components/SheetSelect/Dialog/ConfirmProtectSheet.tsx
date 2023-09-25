@@ -17,10 +17,10 @@ const ConfirmProtectSheet = ({
     value={value}
     title="Protect"
     confirmBtnText="Set Password"
-    confirmdisabled={Number(
+    confirmdisabled={
       credentials.password.length < 1 ||
-        credentials.confirmPassword !== credentials.password,
-    )}
+      credentials.confirmPassword !== credentials.password
+    }
     content={
       <Protect
         credentials={credentials}

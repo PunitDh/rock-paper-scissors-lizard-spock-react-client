@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearToken, setToken } from "../redux/playerSlice";
 import { Token } from "../hooks/types";
 
-export const TokenContext = createContext<Token>({});
+export const TokenContext = createContext<Token>({} as Token);
 
 type Props = {
-  children: any;
+  children: string | JSX.Element;
 };
 
 export const TokenProvider = ({ children }: Props) => {

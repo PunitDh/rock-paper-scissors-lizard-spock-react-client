@@ -1,7 +1,15 @@
-import { MenuItem, Select } from "@mui/material";
+import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { uniqueId } from "lodash";
 
-const LimitSelect = ({ sx = {}, label, value, onChange, limits }) => {
+type Props = {
+  limits: number[];
+  value: any;
+  onChange: (e: SelectChangeEvent) => void;
+  label?: String;
+  sx?: { [key: string]: any };
+};
+
+const LimitSelect = ({ sx = {}, label, value, onChange, limits }: Props) => {
   const id = uniqueId("select-");
   return (
     <Select

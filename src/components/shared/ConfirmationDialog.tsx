@@ -7,6 +7,18 @@ import {
   DialogTitle,
 } from "@mui/material";
 
+type Props = {
+  onConfirm: (...args: any[]) => void;
+  onCancel: (...args: any[]) => void;
+  value?: string;
+  open: boolean;
+  title: string;
+  content: string | JSX.Element;
+  confirmBtnText: string;
+  confirmdisabled?: boolean;
+  [x: string]: any;
+};
+
 const ConfirmationDialog = ({
   onConfirm,
   onCancel,
@@ -15,8 +27,9 @@ const ConfirmationDialog = ({
   title,
   content,
   confirmBtnText,
+  confirmdisabled,
   ...other
-}) => {
+}: Props) => {
   const [value, setValue] = useState(valueProp);
   const radioGroupRef = useRef<HTMLInputElement | null>(null);
 
@@ -51,7 +64,7 @@ const ConfirmationDialog = ({
         <Button
           type="submit"
           onClick={onHandleConfirm}
-          disabled={other.confirmdisabled > 0}
+          disabled={confirmdisabled}
         >
           {confirmBtnText}
         </Button>
