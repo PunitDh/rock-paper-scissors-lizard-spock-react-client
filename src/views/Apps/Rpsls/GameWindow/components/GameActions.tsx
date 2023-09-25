@@ -8,6 +8,14 @@ import { Chat } from "@mui/icons-material";
 import { useAPI } from "../../../../../hooks";
 import FlexBox from "../../../../../components/shared/FlexBox";
 import ConfirmationDialog from "../../../../../components/shared/ConfirmationDialog";
+import { PlayerType } from "../../../types";
+
+type Props = {
+  onMaxRoundsChange: (value: number) => void;
+  maxRounds: number;
+  gameId: string;
+  opponent: PlayerType;
+};
 
 const RestartGameIcon = styled(RestartAltIcon)(({ theme }) => ({
   cursor: "pointer",
@@ -19,7 +27,12 @@ const ChatIcon = styled(Chat)(({ theme }) => ({
   color: theme.palette.primary.main,
 }));
 
-const GameActions = ({ onMaxRoundsChange, maxRounds, gameId, opponent }) => {
+const GameActions = ({
+  onMaxRoundsChange,
+  maxRounds,
+  gameId,
+  opponent,
+}: Props) => {
   const [confirmReset, setConfirmReset] = useState(false);
   const api = useAPI();
   const limits = [3, 5, 8];
@@ -45,7 +58,7 @@ const GameActions = ({ onMaxRoundsChange, maxRounds, gameId, opponent }) => {
         <RestartGameIcon onClick={() => setConfirmReset(true)} />
       </Tooltip>
       <LimitSelect
-        onChange={(e) => onMaxRoundsChange(e.target.value)}
+        onChange={(e) => onMaxRoundsChange(Number(e.target.value))}
         value={maxRounds}
         limits={limits}
       />

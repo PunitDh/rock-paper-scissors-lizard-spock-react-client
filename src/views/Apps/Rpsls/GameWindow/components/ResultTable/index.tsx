@@ -11,6 +11,15 @@ import styled from "@emotion/styled";
 import PlayerNameHeaderCell from "./PlayerNameHeaderCell";
 import { useToken } from "../../../../../../hooks";
 import ResponsiveTableCell from "../../../../../../components/shared/ResponsiveTableCell";
+import { GameRound, PlayerType } from "../../../../types";
+import { Score } from "../../../../../../hooks/types";
+
+type Props = {
+  rounds: GameRound[];
+  maxRounds: number;
+  players: PlayerType[];
+  score: Score;
+};
 
 const StyledTable = styled(Table)({
   whiteSpace: "nowrap",
@@ -19,10 +28,14 @@ const StyledTable = styled(Table)({
   height: "60%",
 });
 
-const ResultTable = ({ rounds, maxRounds, players = [], score }) => {
+const ResultTable = ({ rounds, maxRounds, players = [], score }: Props) => {
   const token = useToken();
-  const firstPlayer = players.find((it) => it.id === token.decoded.id);
-  const secondPlayer = players.find((it) => it.id !== token.decoded.id);
+  const firstPlayer: PlayerType | undefined = players.find(
+    (it) => it.id === token.decoded?.id
+  );
+  const secondPlayer: PlayerType | undefined = players.find(
+    (it) => it.id !== token.decoded?.id
+  );
 
   return (
     players.length > 0 && (
@@ -30,12 +43,12 @@ const ResultTable = ({ rounds, maxRounds, players = [], score }) => {
         <TableHead>
           <TableRow>
             <PlayerNameHeaderCell
-              player={firstPlayer}
-              score={score[firstPlayer?.id]?.score}
+              player={firstPlayer!}
+              score={score[firstPlayer?.id!]?.score}
             />
             <PlayerNameHeaderCell
-              player={secondPlayer}
-              score={score[secondPlayer?.id]?.score}
+              player={secondPlayer!}
+              score={score[secondPlayer?.id!]?.score}
             />
             <TableCell align="right">
               <Typography variant="subtitle2" fontWeight={600}>
@@ -53,8 +66,8 @@ const ResultTable = ({ rounds, maxRounds, players = [], score }) => {
           {rounds.slice(-maxRounds).map((round) => (
             <MoveRow
               key={round.id}
-              firstPlayer={firstPlayer}
-              secondPlayer={secondPlayer}
+              firstPlayer={firstPlayer!}
+              secondPlayer={secondPlayer!}
               moves={round.moves}
               winner={round.winner}
             />

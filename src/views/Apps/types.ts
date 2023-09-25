@@ -17,14 +17,30 @@ export type GameType = {
   players: PlayerType[];
 };
 
-type GameRound = {
-  moves: string[];
-  winner: {
-    playerId: string;
+export type GameRound = {
+  id: string;
+  moves: GameMove[];
+  winner: GameWinner;
+}
+
+export type GameMove = {
+  id: string;
+  player: string;
+  move: string;
+}
+
+export type GameScore = {
+  [key: string]: {
     name: string;
-    method: string;
-    reason: string;
-  }
+    score: number;
+  };
+};
+
+export type GameWinner = {
+  playerId: string;
+  firstName: string;
+  method: string;
+  reason: string;
 }
 
 export type ChatType = {
@@ -35,4 +51,5 @@ export type ChatType = {
 export type PlayerType = {
   id: string;
   firstName: string;
+  avatar: number;
 };

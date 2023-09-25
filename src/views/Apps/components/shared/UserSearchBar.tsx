@@ -2,6 +2,12 @@ import { IconSearch } from "@tabler/icons-react";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import CustomTextField from "../../../../components/forms/theme-elements/CustomTextField";
 import styled from "@emotion/styled";
+import { Dispatch, SetStateAction } from "react";
+
+type Props = {
+  search: string;
+  setSearch: Dispatch<SetStateAction<string>>;
+}
 
 const SearchGroup = styled.span({
   display: "flex",
@@ -22,7 +28,7 @@ const FloatingFab = styled.div({
   cursor: "pointer",
 });
 
-const UserSearchBar = ({ search, setSearch }) => (
+const UserSearchBar = ({ search, setSearch }: Props) => (
   <DashboardCard title="Search User">
     <SearchGroup>
       <SearchField
@@ -31,9 +37,9 @@ const UserSearchBar = ({ search, setSearch }) => (
         autoComplete="off"
         placeholder="Search for a user"
         search={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
       />
-      <FloatingFab size="medium">
+      <FloatingFab>
         <IconSearch />
       </FloatingFab>
     </SearchGroup>

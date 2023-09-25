@@ -12,12 +12,12 @@ const GameTitle = () => {
   const icon = getIcon(currentGame.icon);
   const api = useAPI();
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setGameName(e.target.value);
   };
 
-  const handleRename = (e) => {
+  const handleRename = (e: React.FocusEvent | React.FormEvent) => {
     e.preventDefault();
     api.renameGame({ gameId: currentGame.id, name: gameName });
   };
@@ -28,7 +28,7 @@ const GameTitle = () => {
 
   return (
     <FlexBox gap="0" alignItems="stretch" justifyContent="flex-start">
-      <IconSelectField selected={icon.id} gameId={currentGame.id} />
+      <IconSelectField selected={icon!.id} gameId={currentGame.id} />
       <form onSubmit={handleRename}>
         <Tooltip title="Rename game">
           <InvisibleTextField

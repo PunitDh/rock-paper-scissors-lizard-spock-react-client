@@ -27,13 +27,13 @@ export type GameData = {
   game: "rpsls";
   opponent: string;
   icon: number;
-}
+};
 
 export type LogRequest = {
   limit: number;
   type: string;
   time: number;
-}
+};
 
 export interface API {
   registerPlayer: (playerRegistration: PlayerRegistration) => void;

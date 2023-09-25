@@ -2,8 +2,8 @@ import { Box, CardContent, Stack, Typography } from "@mui/material";
 import { ResponsiveCard } from "./styles";
 
 type Props = {
-  title: string;
-  children: JSX.Element | string;
+  title: JSX.Element | string;
+  children: any;
   action: JSX.Element | string | undefined;
 };
 

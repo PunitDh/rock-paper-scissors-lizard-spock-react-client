@@ -187,4 +187,5 @@ export {
   LogoImage,
   Languages,
   DashboardImage,
+  RpslsEntity
 };

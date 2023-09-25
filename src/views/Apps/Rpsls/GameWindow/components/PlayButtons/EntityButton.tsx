@@ -1,8 +1,14 @@
 import styled from "@emotion/styled";
 import { Avatar, Button, Tooltip } from "@mui/material";
 import { useAPI, useToken } from "../../../../../../hooks";
+import { RpslsEntity } from "../../../../../../assets";
 
-const Entity = styled(Button)(({ btncolor }) => ({
+type Props = {
+  gameId: string;
+  entity: RpslsEntity;
+};
+
+const Entity = styled(Button)(({ btncolor }: { btncolor: string }) => ({
   color: btncolor,
 }));
 
@@ -12,13 +18,13 @@ const ButtonAvatar = styled(Avatar)({
   height: "2rem",
 });
 
-const EntityButton = ({ gameId, entity }) => {
+const EntityButton = ({ gameId, entity }: Props) => {
   const token = useToken();
   const api = useAPI();
 
   const handleMove = () => {
     const payload = {
-      playerId: token.decoded.id,
+      playerId: token.decoded?.id,
       move: entity.name,
       gameId,
     };

@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { Avatar, TableCell, Typography } from "@mui/material";
 import FlexBox from "../../../../../../components/shared/FlexBox";
 import { getAvatar } from "../../../../../../assets";
+import { PlayerType } from "../../../../types";
 
 const Score = styled(FlexBox)(({ theme }) => ({
   fontSize: "large",
@@ -12,7 +13,12 @@ const Score = styled(FlexBox)(({ theme }) => ({
   borderRadius: "1rem",
 }));
 
-const PlayerNameHeaderCell = ({ player, score }) => {
+type Props = {
+  player: PlayerType;
+  score: number;
+};
+
+const PlayerNameHeaderCell = ({ player, score }: Props) => {
   if (!player) return null;
   const avatar = getAvatar(player.avatar);
 

@@ -1,12 +1,6 @@
 import { useSelector } from "react-redux";
 import { GameType } from "../views/Apps/types";
-
-type Score = {
-  [key: string]: {
-    name: string;
-    score: number;
-  };
-};
+import { Score } from "./types";
 
 function calculateScore(game: GameType): Score {
   const score: Score = {};
@@ -31,7 +25,7 @@ function calculateScore(game: GameType): Score {
   return score;
 }
 
-export default function useCurrentGame(game: GameType): GameType & Score {
+export default function useCurrentGame(game?: GameType): GameType & Score {
   const { currentGame } = useSelector((state) => (state as any).player);
 
   return game

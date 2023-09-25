@@ -4,6 +4,14 @@ import { Container } from "../styles";
 import FlexBox from "../../../../../../components/shared/FlexBox";
 import { Bold } from "../../../../../../components/shared/styles";
 import { entities } from "../../../../../../assets";
+import { GameRound, PlayerType } from "../../../../types";
+
+type Props = {
+  id: string;
+  playerId: string;
+  lastRound: GameRound;
+  opponent: PlayerType;
+};
 
 const ButtonContainer = styled(Container)({
   height: "20%",
@@ -12,7 +20,7 @@ const ButtonContainer = styled(Container)({
   flexWrap: "wrap",
 });
 
-const PlayButtons = ({ id, playerId, lastRound, opponent }) =>
+const PlayButtons = ({ id, playerId, lastRound, opponent }: Props) =>
   lastRound.moves && (
     <ButtonContainer>
       {lastRound.moves.length === 1 &&
