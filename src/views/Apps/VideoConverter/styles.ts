@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { Box, TextField, Typography } from "@mui/material";
-import FlexBox from "../../../components/shared/FlexBox";
 
 export const IndentedBox = styled(Box)(({ theme }) => ({
   marginLeft: "auto",

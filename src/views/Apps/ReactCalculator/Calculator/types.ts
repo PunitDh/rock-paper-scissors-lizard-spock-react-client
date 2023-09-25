@@ -4,7 +4,13 @@ export type State = {
   // input: "4sin(90)+8cos(10)+9tan(80)+4log(4)+2.5ln(5)+24atan(4)+14Ans+14E-4π-2√3",
   input: string[];
   output: number;
-  outputs: Coord[];
+  graph: {
+    coords: Coord[];
+    minX: number;
+    maxX: number;
+    minY: number;
+    maxY: number;
+  };
   evaled: boolean;
   degrees: boolean;
   inverse: boolean;

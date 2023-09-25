@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { Dispatch, Reducer, useReducer } from "react";
 import { initialState, reducer } from "./reducer";
 import IOBox from "./sections/IOBox";
 import ButtonsBox from "./sections/ButtonsBox";
@@ -6,17 +6,20 @@ import { Typography, useMediaQuery } from "@mui/material";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import FlexBox from "../../../../components/shared/FlexBox";
 import { Theme as MuiTheme } from "@mui/material";
-import { Memory } from "./types";
+import { Action, Memory, State } from "./types";
 import GraphBox from "./sections/GraphBox";
-import { CalculatorAction } from "./actions";
+import Debug from "./components/Debug";
+import { useToken } from "../../../../hooks";
 
 const Calculator = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const mdUp = useMediaQuery((theme) =>
-    (theme as MuiTheme).breakpoints.up("md"),
-  );
+  const token = useToken();
+  const [state, dispatch]: [State, Dispatch<Action>] = useReducer<
+    Reducer<State, Action>
+  >(reducer, initialState);
 
-  console.log(CalculatorAction);
+  const mdUp = useMediaQuery((theme) =>
+    (theme as MuiTheme).breakpoints.up("md")
+  );
 
   return (
     <DashboardCard sx={{ height: "100%" }} title="Calculator">
@@ -34,7 +37,7 @@ const Calculator = () => {
         >
           <IOBox state={state} />
           <ButtonsBox state={state} dispatch={dispatch} />
-          <GraphBox state={state} />
+          <GraphBox state={state} dispatch={dispatch} />
         </FlexBox>
         <FlexBox
           gap="0.5rem"
@@ -86,6 +89,7 @@ const Calculator = () => {
           </FlexBox>
         </FlexBox>
       </FlexBox>
+      {token.decoded?.isAdmin && <Debug state={state} />}
     </DashboardCard>
   );
 };

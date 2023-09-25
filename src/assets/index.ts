@@ -127,12 +127,12 @@ const entities: ReadonlyArray<RpslsEntity> = [
 const getEntity = (entity: string): RpslsEntity | undefined => {
   const decoded = encoder.decodeString(
     entity,
-    process.env.REACT_APP_GAME_ENCRYPTION_KEY,
+    process.env.REACT_APP_GAME_ENCRYPTION_KEY
   );
   return entities.find((it) => decoded === it.name);
 };
 
-const languages: ReadonlyArray<string> = [
+const Languages: ReadonlyArray<string> = [
   "Arabic",
   "Bengali",
   "Chinese (Mandarin)",
@@ -185,6 +185,6 @@ export {
   Product4,
   ProfileImg,
   LogoImage,
-  languages,
+  Languages,
   DashboardImage,
 };

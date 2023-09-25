@@ -1,6 +1,7 @@
+import { Action, State } from "../types";
 import { ConvertAction } from "./actions";
 
-export const initialState = {
+export const initialState: State = {
   video: null,
   language: "Spanish",
   format: "vtt",
@@ -11,7 +12,7 @@ export const initialState = {
   downloadBlob: null,
 };
 
-export const reducer = (state, action) => {
+export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case ConvertAction.SET_VIDEO:
       return {

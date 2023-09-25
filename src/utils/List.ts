@@ -8,28 +8,28 @@ class List<T> extends Array<T> {
   /**
    * Size of the list
    */
-  get size() {
+  get size(): number {
     return this.length;
   }
 
   /**
    * Returns the valid indices of the list
    */
-  get indices() {
+  get indices(): List<number> {
     return toList(Object.keys(this).map((n) => parseInt(n)));
   }
 
   /**
    * Returns the last valid index of the list
    */
-  get lastIndex() {
+  get lastIndex(): number {
     return this.length - 1;
   }
 
   /**
    * Returns the depth of the list
    */
-  get depth() {
+  get depth(): number {
     function getDepth(list: List<any>, depth = 0) {
       for (const item of list) {
         if (Array.isArray(item) || List.isList(item)) {
@@ -46,7 +46,7 @@ class List<T> extends Array<T> {
    * @param {Number} index
    * @returns {*}
    */
-  get(index: number, optional: any): any {
+  get(index: number, optional: T): T {
     const adjustedIndex = index < 0 ? this.length + index : index;
     return Object.keys(this).includes(String(adjustedIndex))
       ? this[adjustedIndex]
@@ -58,7 +58,7 @@ class List<T> extends Array<T> {
    * @param {*} elements
    * @returns {Boolean}
    */
-  contains(...elements: any[]): boolean {
+  contains(...elements: T[]): boolean {
     return this.some((item) => elements.includes(item));
   }
 
@@ -67,7 +67,7 @@ class List<T> extends Array<T> {
    * @param  {...any} elements
    * @returns {Boolean}
    */
-  containsAll(...elements: any[]): boolean {
+  containsAll(...elements: T[]): boolean {
     return this.includesAll(...elements);
   }
 
@@ -77,11 +77,8 @@ class List<T> extends Array<T> {
    * @param {Number} toIndex
    * @returns {List}
    */
-  subList(
-    fromIndex: number | undefined,
-    toIndex: number | undefined,
-  ): List<any> {
-    return this.slice(fromIndex, toIndex) as List<any>;
+  subList(fromIndex: number | undefined, toIndex: number | undefined): List<T> {
+    return this.slice(fromIndex, toIndex) as List<T>;
   }
 
   /**
@@ -375,7 +372,7 @@ class List<T> extends Array<T> {
    */
   lastOfEach(): List<any> {
     return this.map(
-      (list) => list[(list as string | List<any>).length - 1],
+      (list) => list[(list as string | List<any>).length - 1]
     ) as List<any>;
   }
 
@@ -399,7 +396,7 @@ class List<T> extends Array<T> {
   joinWith(
     separator: string | undefined,
     prefix: string = "",
-    postfix: string = "",
+    postfix: string = ""
   ): string {
     return `${prefix}${this.join(separator)}${postfix}`;
   }
@@ -415,10 +412,10 @@ class List<T> extends Array<T> {
   joinEach(
     separator: any,
     prefix: string = "",
-    postfix: string = "",
+    postfix: string = ""
   ): List<string> {
     return this.map((list) =>
-      toList(list as List<List<string>>).joinWith(separator, prefix, postfix),
+      toList(list as List<List<string>>).joinWith(separator, prefix, postfix)
     ) as List<any>;
   }
 
@@ -432,7 +429,7 @@ class List<T> extends Array<T> {
     const pattern = separators.join("|");
     const regex = new RegExp(pattern, "gi");
     return this.map((list) =>
-      toList((list as string).split(regex)),
+      toList((list as string).split(regex))
     ) as List<any>;
   }
 
@@ -713,7 +710,7 @@ class List<T> extends Array<T> {
     if (!clazz.name) return this;
     return this.filter(
       (item) =>
-        item instanceof clazz || typeof item === clazz.name.toLowerCase(),
+        item instanceof clazz || typeof item === clazz.name.toLowerCase()
     ) as List<any>;
   }
 
@@ -782,7 +779,7 @@ class List<T> extends Array<T> {
    */
   filterTruthy(zeroTruthy: boolean = true): List<any> {
     return this.filter((it) =>
-      zeroTruthy ? it === 0 || Boolean(it) : Boolean(it),
+      zeroTruthy ? it === 0 || Boolean(it) : Boolean(it)
     ) as List<any>;
   }
 
@@ -795,7 +792,7 @@ class List<T> extends Array<T> {
    */
   filterFalsy(zeroTruthy: boolean = false): List<any> {
     return this.filter((it) =>
-      zeroTruthy ? it !== 0 && !Boolean(it) : !Boolean(it),
+      zeroTruthy ? it !== 0 && !Boolean(it) : !Boolean(it)
     ) as List<any>;
   }
 
@@ -826,7 +823,7 @@ class List<T> extends Array<T> {
    */
   filterTo(
     destination: any[],
-    predicate: (value: any, index: number, array: any[]) => value is any,
+    predicate: (value: any, index: number, array: any[]) => value is any
   ): List<any> {
     const filtered = this.filter(predicate);
     return new List(...destination.concat(filtered));
@@ -872,9 +869,9 @@ class List<T> extends Array<T> {
       previousValue: any,
       currentValue: any,
       currentIndex: number,
-      array: any[],
+      array: any[]
     ) => any,
-    initialValue: number,
+    initialValue: number
   ): any {
     if (!initialValue && initialValue !== 0) {
       throw new IllegalArgumentError(`Initial value must be specified`);
@@ -894,14 +891,14 @@ class List<T> extends Array<T> {
     list: any[],
     separator: string | undefined,
     prefix: string = "",
-    postfix: string = "",
+    postfix: string = ""
   ): List<string> {
     if (!Array.isArray(list)) {
       const message = `Argument 'list' must be a type of Array or List. Found: ${typeof list}`;
       throw new IllegalArgumentError(message);
     }
     return (toList(list) as List<string>).add(
-      `${prefix}${this.join(separator)}${postfix}`,
+      `${prefix}${this.join(separator)}${postfix}`
     );
   }
 
@@ -912,7 +909,7 @@ class List<T> extends Array<T> {
    * @returns {List}
    */
   async mapAsync(
-    callback: (arg0: number, arg1: any) => any,
+    callback: (arg0: number, arg1: any) => any
   ): Promise<List<any>> {
     let result = listOf();
     for (let [it, idx] of this.entries()) {
@@ -938,7 +935,7 @@ class List<T> extends Array<T> {
    * @returns {List}
    */
   onEach(
-    callback: (value: any, index: number, array: any[]) => void,
+    callback: (value: any, index: number, array: any[]) => void
   ): List<any> {
     this.forEach(callback);
     return this;
@@ -970,7 +967,7 @@ class List<T> extends Array<T> {
    */
   clamp(min: number, max: number): List<number> {
     return this.map((it: T) =>
-      (it as number) < min ? min : (it as number) > max ? max : (it as number),
+      (it as number) < min ? min : (it as number) > max ? max : (it as number)
     ) as List<number>;
   }
 
@@ -984,7 +981,7 @@ class List<T> extends Array<T> {
     for (const it of this) {
       const notInList = !distinctList.find(
         // eslint-disable-next-line eqeqeq
-        (item) => keySelector(it) == keySelector(item),
+        (item) => keySelector(it) == keySelector(item)
       );
       if (notInList) {
         distinctList.push(it);
@@ -1036,7 +1033,7 @@ class List<T> extends Array<T> {
   sum(initialValue = 0): number {
     return this.reduce(
       (acc, cur) => +(acc as number) + (cur as number),
-      initialValue,
+      initialValue
     );
   }
 
@@ -1059,7 +1056,7 @@ class List<T> extends Array<T> {
   product(initialValue = 1): number {
     return this.reduce(
       (acc, cur) => (acc as number) * (cur as number),
-      initialValue,
+      initialValue
     );
   }
 
@@ -1069,7 +1066,7 @@ class List<T> extends Array<T> {
    */
   productOf(
     selector: (value: any, index: number, array: any[]) => unknown,
-    initialValue = 1,
+    initialValue = 1
   ): number {
     return (this.map(selector) as List<number>).product(initialValue);
   }
@@ -1146,7 +1143,7 @@ class List<T> extends Array<T> {
    */
   intersection(list: string | any[]): List<any> {
     return List.from(
-      new Set(this.filter((item) => (list as List<any>).includes(item))),
+      new Set(this.filter((item) => (list as List<any>).includes(item)))
     ) as List<any>;
   }
 
@@ -1156,7 +1153,7 @@ class List<T> extends Array<T> {
    * @returns {List<{ index: Number, this: any, other: any }>}
    */
   orderedDifference(
-    list: any[],
+    list: any[]
   ): List<{ index: number; this: any; other: any }> | null {
     if (!list || !(list instanceof Array)) return null;
 
@@ -1182,9 +1179,9 @@ class List<T> extends Array<T> {
     return List.from(
       new Set(
         this.concat(list).filter(
-          (item) => !(this.includes(item) && list.includes(item)),
-        ),
-      ),
+          (item) => !(this.includes(item) && list.includes(item))
+        )
+      )
     ) as List<any>;
   }
 
@@ -1246,7 +1243,7 @@ class List<T> extends Array<T> {
    */
   maxBy(
     selector: (value: any, index: number, array: any[]) => any,
-    findAll: boolean = false,
+    findAll: boolean = false
   ): any {
     const max = (this.map(selector) as List<number>).max();
     return findAll
@@ -1277,7 +1274,7 @@ class List<T> extends Array<T> {
     selector:
       | ((value: any, index: number, array: any[]) => any)
       | ((arg0: any) => any),
-    findAll: boolean = false,
+    findAll: boolean = false
   ): number | List<number> {
     const min = (this.map(selector) as List<number>).min();
     return findAll
@@ -1412,7 +1409,7 @@ class List<T> extends Array<T> {
    */
   scan(
     operation: (arg0: any, arg1: any) => any,
-    initialValue: any = 0,
+    initialValue: any = 0
   ): List<any> {
     const accumulated = listOf();
     const finalValue = this.reduce((acc, cur) => {
@@ -1430,7 +1427,7 @@ class List<T> extends Array<T> {
    * @returns {*}
    */
   single(
-    predicate: (value: any, index: number, array: any[]) => value is any,
+    predicate: (value: any, index: number, array: any[]) => value is any
   ): any {
     const found = listOf(...this.filter(predicate));
     if (found.length !== 1) {
@@ -1447,7 +1444,7 @@ class List<T> extends Array<T> {
    * @returns {List}
    */
   singleOrNull(
-    predicate: (value: any, index: number, array: any[]) => value is any,
+    predicate: (value: any, index: number, array: any[]) => value is any
   ): List<any> | null {
     const found = (this as List<any>).filter(predicate) as List<any>;
     if (found.length !== 1) {
@@ -1464,7 +1461,7 @@ class List<T> extends Array<T> {
    */
   round(nearest: number = 1): List<number> {
     return (this as List<number>).map(
-      (number) => Math.round(number / nearest) * nearest,
+      (number) => Math.round(number / nearest) * nearest
     ) as List<number>;
   }
 
@@ -1475,7 +1472,7 @@ class List<T> extends Array<T> {
    */
   ceil(nearest = 1): List<number> {
     return (this as List<number>).map(
-      (number) => Math.ceil(number / nearest) * nearest,
+      (number) => Math.ceil(number / nearest) * nearest
     ) as List<number>;
   }
 
@@ -1486,7 +1483,7 @@ class List<T> extends Array<T> {
    */
   floor(nearest = 1): List<number> {
     return this.map(
-      (number) => Math.floor((number as number) / nearest) * nearest,
+      (number) => Math.floor((number as number) / nearest) * nearest
     ) as List<number>;
   }
 
@@ -1512,7 +1509,7 @@ class List<T> extends Array<T> {
     return List.from(
       Object.entries(this.counts())
         .filter(([_, value]) => value > 1)
-        .map((it) => it[0]),
+        .map((it) => it[0])
     );
   }
 
@@ -1610,7 +1607,7 @@ class List<T> extends Array<T> {
    */
   all(
     predicate: (value: any, index: number, array: any[]) => value is any,
-    thisArg: any = undefined,
+    thisArg: any = undefined
   ): boolean {
     return this.every(predicate, thisArg);
   }
@@ -1623,7 +1620,7 @@ class List<T> extends Array<T> {
    */
   any(
     predicate: (value: any, index: number, array: any[]) => unknown,
-    thisArg: any = undefined,
+    thisArg: any = undefined
   ): boolean {
     return this.some(predicate, thisArg);
   }
@@ -1637,7 +1634,7 @@ class List<T> extends Array<T> {
   groupBy(keySelector: (arg0: any) => any): { [key: string]: any } {
     const grouped = {};
     const distinctProperties: List<string> = List.from(
-      new Set(this.map(keySelector)),
+      new Set(this.map(keySelector))
     ) as List<string>;
     distinctProperties.forEach((property) => {
       grouped[property] = this.filter((item) => keySelector(item) === property);
@@ -1654,7 +1651,7 @@ class List<T> extends Array<T> {
    */
   groupByTo(
     destination: { [x: string]: any; hasOwnProperty: (arg0: string) => any },
-    keySelector: any,
+    keySelector: any
   ): object {
     const grouped = this.groupBy(keySelector);
     for (const key of Object.keys(grouped)) {
@@ -1678,7 +1675,7 @@ class List<T> extends Array<T> {
   binarySearch(
     element: number,
     fromIndex: number = 0,
-    toIndex: number = this.length,
+    toIndex: number = this.length
   ): any {
     const halfIndex = Math.floor((toIndex - fromIndex) / 2 + fromIndex);
     if (element === this[halfIndex]) return halfIndex;
@@ -1701,7 +1698,7 @@ class List<T> extends Array<T> {
     element: number,
     keySelector: (arg0: any) => any,
     fromIndex: number = 0,
-    toIndex: number = this.length,
+    toIndex: number = this.length
   ): any {
     const halfIndex = Math.floor((toIndex - fromIndex) / 2 + fromIndex);
     const keySelect = keySelector(this[halfIndex]);
@@ -1719,7 +1716,7 @@ class List<T> extends Array<T> {
    */
   mapTo(
     destination: any[],
-    transform: (value: any, index: number, array: any[]) => unknown,
+    transform: (value: any, index: number, array: any[]) => unknown
   ) {
     const mapped = this.map(transform);
     return new List(...destination.concat(mapped));
@@ -1749,7 +1746,7 @@ class List<T> extends Array<T> {
    */
   mapNotNullTo(
     destination: any[],
-    transform: (arg0: any, arg1: number) => any,
+    transform: (arg0: any, arg1: number) => any
   ): List<any> {
     if (!Array.isArray(destination)) {
       const error = `Parameter 'destination' must be an Array or a List`;
@@ -1810,11 +1807,11 @@ class List<T> extends Array<T> {
   windowed(
     size: number,
     step: number = 1,
-    partialWindows: boolean = false,
+    partialWindows: boolean = false
   ): List<List<number>> {
     if (size < 1 || step < 1) {
       throw new IllegalArgumentError(
-        `Both 'size' and 'step' must be greater than zero. Found: size ${size} step ${step}`,
+        `Both 'size' and 'step' must be greater than zero. Found: size ${size} step ${step}`
       );
     }
     const output = listOf<any>();
@@ -1855,7 +1852,7 @@ class List<T> extends Array<T> {
       this.map((item, index) => [
         item,
         ...toList(lists.map((list) => list[index])),
-      ]),
+      ])
     );
   }
 
@@ -1922,10 +1919,10 @@ class List<T> extends Array<T> {
   search(query: string, caseSensitive = false): List<string> {
     if (caseSensitive)
       return (this as List<string>).filter((element) =>
-        String(element).includes(query),
+        String(element).includes(query)
       ) as List<string>;
     return (this as List<string>).filter((element) =>
-      (element as string).toLowerCase().includes(query.toLowerCase()),
+      (element as string).toLowerCase().includes(query.toLowerCase())
     ) as List<string>;
   }
 
@@ -1936,7 +1933,7 @@ class List<T> extends Array<T> {
    */
   sortBy(selector: (arg0: this[number]) => string | number): List<any> {
     return [...this].sort((a, b) =>
-      selector(a) > selector(b) ? 1 : -1,
+      selector(a) > selector(b) ? 1 : -1
     ) as List<any>;
   }
 
@@ -1957,7 +1954,7 @@ class List<T> extends Array<T> {
    */
   sortByDescending(selector: (arg0: this[number]) => number): List<any> {
     return [...(this as List<any>)].sort((a, b) =>
-      selector(a) > selector(b) ? -1 : 1,
+      selector(a) > selector(b) ? -1 : 1
     ) as List<any>;
   }
 
@@ -2078,7 +2075,7 @@ class List<T> extends Array<T> {
    */
   filterOddNumbers(): List<number> {
     return (this as List<number>).filter(
-      (it) => (it as number) % 2 === 1,
+      (it) => (it as number) % 2 === 1
     ) as List<number>;
   }
 
@@ -2184,7 +2181,7 @@ class List<T> extends Array<T> {
   multiplyBy(num: number | any[]): List<number> {
     if (Array.isArray(num)) {
       return this.map(
-        (element, index) => (element as number) * (num[index] || 1),
+        (element, index) => (element as number) * (num[index] || 1)
       ) as List<number>;
     }
     return this.map((n) => (n as number) * num) as List<number>;
@@ -2199,7 +2196,7 @@ class List<T> extends Array<T> {
   divideBy(num: number | any[]): List<any> {
     if (Array.isArray(num)) {
       return this.map(
-        (element, index) => (element as number) / (num[index] || 1),
+        (element, index) => (element as number) / (num[index] || 1)
       ) as List<any>;
     }
     return this.map((n) => (n as number) / num) as List<any>;
@@ -2231,7 +2228,7 @@ class List<T> extends Array<T> {
    */
   toEnglish(): List<string> {
     return this.map((num) =>
-      !isNaN(num as any) ? numToEnglish(num as number) : (num as any),
+      !isNaN(num as any) ? numToEnglish(num as number) : (num as any)
     ) as List<string>;
     function numToEnglish(num: number) {
       const dictionary = {
@@ -2275,7 +2272,7 @@ class List<T> extends Array<T> {
         "Septillion",
         "Octillion",
         "Nonillion",
-        "Decillion",
+        "Decillion"
       );
       const sign = Math.sign(num);
       const number = Math.abs(num);
@@ -2314,7 +2311,7 @@ class List<T> extends Array<T> {
       }
 
       const thousandthChunks = chunks.map((chunk) =>
-        parseThreeDigits(Number(chunk.reverse().join(""))),
+        parseThreeDigits(Number(chunk.reverse().join("")))
       );
 
       const integerEnglish =
@@ -2421,7 +2418,7 @@ class List<T> extends Array<T> {
     return this.map((item) =>
       typeof item === "object" && item !== null && !primitives
         ? item.constructor.name
-        : typeof item,
+        : typeof item
     ) as List<string>;
   }
 
@@ -2461,12 +2458,12 @@ class List<T> extends Array<T> {
   static generateRandomIntegers(
     size: number = 1,
     min: number = Number.MIN_SAFE_INTEGER,
-    max: number = Number.MAX_SAFE_INTEGER,
+    max: number = Number.MAX_SAFE_INTEGER
   ): List<number> {
     return List.from(
       Array(size)
         .fill(null)
-        .map(() => Math.floor(Math.random() * (max - min + 1) + min)),
+        .map(() => Math.floor(Math.random() * (max - min + 1) + min))
     ) as List<number>;
   }
 
@@ -2633,20 +2630,20 @@ class List<T> extends Array<T> {
     return listOf(
       ...Array(times)
         .fill(null)
-        .map(() => (isFn(callback) ? callback() : callback)),
+        .map(() => (isFn(callback) ? callback() : callback))
     );
   }
 
-  static emptyList() {
-    return listOf();
+  static emptyList<T>(): List<T> {
+    return listOf<T>();
   }
 
   /**
    * Converts a list to an array
    * @returns {Array}
    */
-  toArray(): Array<any> {
-    return Array.from(this);
+  toArray(): Array<T> {
+    return Array.from<T>(this);
   }
 
   /**
@@ -2706,7 +2703,7 @@ class OrderedDifference {
   constructor(list: any[]) {
     this.list = list.map(
       (item: { index: any; this: any; other: any }) =>
-        new OrderedDifference.Diff(item.index, item.this, item.other),
+        new OrderedDifference.Diff(item.index, item.this, item.other)
     );
   }
 
@@ -2728,7 +2725,7 @@ class ImmutableList<T> extends List<T> {
   }
 }
 
-class Triple extends Array {
+class Triplet extends Array {
   constructor(first: any, second: any, third: any) {
     super();
     this[0] = first;
@@ -2749,8 +2746,8 @@ class Triple extends Array {
     return this[2];
   }
 
-  toList() {
-    return listOf(this[0], this[1], this[2]);
+  toList<T>(): List<T> {
+    return listOf<T>(this[0], this[1], this[2]);
   }
 }
 
@@ -2769,8 +2766,8 @@ class Pair extends Array {
     return this[1];
   }
 
-  toList() {
-    return listOf(this[0], this[1]);
+  toList<T>(): List<T> {
+    return listOf<T>(this[0], this[1]);
   }
 }
 
@@ -2790,7 +2787,7 @@ function isMatch(predicate: (arg0: any) => any, element: any): boolean {
  * @param {*} argument
  * @returns {Boolean}
  */
-function isFn(argument: any): boolean {
+function isFn(argument: unknown): boolean {
   return typeof argument === "function";
 }
 
@@ -2812,19 +2809,19 @@ function isObjectArg(argumentsArray: string | any[]): boolean {
  * @param {*} argument
  * @returns {Boolean}
  */
-function isString(argument: any): boolean {
+function isString(argument: unknown): boolean {
   return typeof argument === "string" || argument instanceof String;
 }
 
-function listOf<T>(...args: any[]): List<T> {
+function listOf<T>(...args: T[]): List<T> {
   if (args.length === 1) {
-    return new List<T>(...args);
+    return new List<T>(1).fill(args[0]);
   }
   return new List<T>(...args);
 }
 
-function emptyList() {
-  return List.emptyList();
+function emptyList<T>(): List<T> {
+  return List.emptyList<T>();
 }
 
 function setOf(...args: any[]) {
@@ -2864,7 +2861,7 @@ function tripleOf(first: any, second: any, third: any) {
     const error = `Argument length of three expected`;
     throw new IllegalArgumentError(error);
   }
-  return new Triple(first, second, third);
+  return new Triplet(first, second, third);
 }
 
 function mapOf(...pairs: any[]) {
@@ -2876,8 +2873,8 @@ function mapOf(...pairs: any[]) {
       .map((it, idx) => `${it.constructor.name} at ${idx}`);
     throw new IllegalArgumentError(
       `Arguments must be of type 'Pair'. Found:\n\t- ${foundTypes.join(
-        "\n\t- ",
-      )}`,
+        "\n\t- "
+      )}`
     );
   }
   pairs.forEach((pair) => {
@@ -2895,13 +2892,13 @@ class Utils {
         Array(len)
           .fill(null)
           .map(() => chars.random())
-          .join(""),
+          .join("")
       )
       .join("-");
   }
 }
 
-function toList<T>(any: any[]): List<T> {
+function toList<T>(any: T[]): List<T> {
   return new List(...any);
 }
 
@@ -2913,7 +2910,7 @@ function capitalize(string: string, joiner: string = " "): string {
     .split(regex)
     .map(
       (part) =>
-        (part[0] ? part[0].toUpperCase() : "") + part.slice(1).toLowerCase(),
+        (part[0] ? part[0].toUpperCase() : "") + part.slice(1).toLowerCase()
     )
     .join(joiner);
 }
@@ -2930,7 +2927,7 @@ export {
   mapOf,
   ImmutableList,
   Pair,
-  Triple,
+  Triplet as Triple,
   List,
   SortedSet,
   Utils,

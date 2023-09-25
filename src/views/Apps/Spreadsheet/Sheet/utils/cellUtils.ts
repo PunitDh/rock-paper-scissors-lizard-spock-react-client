@@ -21,7 +21,7 @@ export const generateClipboardContent = (state: State): string => {
         display: cellData?.display || "",
         formula: cellData?.formula || "",
       });
-    }),
+    })
   );
   const type = SheetConfig.FILE_TYPE;
   return JSON.stringify({ type, content });
@@ -30,7 +30,14 @@ export const generateClipboardContent = (state: State): string => {
 export const generateJSONContent = (state: State): string => {
   const type = SheetConfig.FILE_TYPE;
   const { content } = state.sheets[state.activeSheet];
-  const { data } = content;
+  const { data, namedRanges } = content;
+  const filteredNamedRanges = Object.keys(namedRanges).reduce(
+    (acc, rangeName) => ({
+      ...acc,
+      [rangeName]: [...namedRanges[rangeName]],
+    }),
+    {}
+  );
   const filtered = Object.keys(data).reduce(
     (acc: StateContentData, cur: string) => {
       if (String((data[cur] as CellData)?.value)?.length > 0) {
@@ -44,10 +51,11 @@ export const generateJSONContent = (state: State): string => {
       }
       return acc as StateContentData;
     },
-    {} as StateContentData,
+    {} as StateContentData
   );
   const filteredContent = {
     ...content,
+    namedRanges: filteredNamedRanges,
     data: filtered,
   };
   return JSON.stringify({ type, content: filteredContent }, null, 2);
@@ -55,7 +63,7 @@ export const generateJSONContent = (state: State): string => {
 
 function typeInTextField(id: string, newText: string, replace: boolean) {
   const el: HTMLInputElement | null = document.getElementById(
-    id,
+    id
   ) as HTMLInputElement;
   if (!el) return;
   const [start, end] = [
@@ -135,7 +143,7 @@ export function parseJSON(stringifiedJSON: string): ParsedJSON {
       jsonObject.content.rowHeights,
       jsonObject.content.columnWidths,
       data,
-      jsonObject.content.namedRanges,
+      jsonObject.content.namedRanges
     );
 
     return { error: false, content };
@@ -150,7 +158,7 @@ export function parseJSON(stringifiedJSON: string): ParsedJSON {
 
 export const createInitialState = (
   props: SheetProps,
-  defaultProps: { [key: string]: any },
+  defaultProps: { [key: string]: any }
 ): State => {
   const createdState = {
     ...initialState,
@@ -176,7 +184,7 @@ export const createInitialState = (
 
 const generateInitialContent = (
   props: SheetProps,
-  defaultProps: { [key: string]: any },
+  defaultProps: { [key: string]: any }
 ): StateContent => {
   const columnWidths = Array(props.maxColumns)
     .fill(0)

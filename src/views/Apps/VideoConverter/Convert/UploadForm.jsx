@@ -25,7 +25,7 @@ import {
   setSubtitles,
   setVideo,
 } from "./actions";
-import { languages } from "../../../../assets";
+import { Languages } from "../../../../assets";
 import TitledButton from "../../../../components/shared/TitledButton";
 import { useAPI, useNotification, useToken } from "../../../../hooks";
 
@@ -134,7 +134,7 @@ const UploadForm = ({ dispatch, state }) => {
           maxRows={6}
           onChange={handleSetOption}
         >
-          {languages.map((lang) => (
+          {Languages.map((lang) => (
             <MenuItem key={lang} value={lang}>
               {lang}
             </MenuItem>

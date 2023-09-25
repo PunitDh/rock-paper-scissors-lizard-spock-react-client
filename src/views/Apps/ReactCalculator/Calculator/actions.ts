@@ -3,6 +3,7 @@ import { Action, Output } from "./types";
 export enum CalculatorAction {
   ADD_INPUT,
   SET_OUTPUT,
+  SET_GRAPH_RANGE,
   SET_EVALED,
   SET_DEBUG_VALUE,
   SET_INVERSE_MODE,
@@ -24,6 +25,14 @@ export const addInput = (...payload: string[]): Action => ({
 export const setOutput = (payload: Output): Action => ({
   type: CalculatorAction.SET_OUTPUT,
   payload,
+});
+
+export const setGraphRange = (key: string, value: number): Action => ({
+  type: CalculatorAction.SET_GRAPH_RANGE,
+  payload: {
+    key,
+    value,
+  },
 });
 
 export const setDegreesMode = (payload: boolean): Action => ({
