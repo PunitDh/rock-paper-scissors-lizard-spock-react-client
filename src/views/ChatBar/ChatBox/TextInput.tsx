@@ -1,10 +1,16 @@
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Theme } from "@mui/material";
 import { Send } from "@mui/icons-material";
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { useAPI } from "../../../hooks";
 
-const Form = styled.form(({ theme }) => ({
+type Props = {
+  conversationId: string;
+  receiver: string;
+  allRead: boolean;
+};
+
+const Form = styled.form(({ theme }: { theme: Theme }) => ({
   display: "flex",
   justifyContent: "center",
   width: "95%",
@@ -17,20 +23,21 @@ const MessageField = styled(TextField)({
   width: "100%",
 });
 
-export const TextInput = ({ conversationId, receiver, allRead }) => {
+export const TextInput = ({ conversationId, receiver, allRead }: Props) => {
   const [messageLength, setMessageLength] = useState(0);
   const api = useAPI();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    const target = e.target as HTMLFormElement;
     e.preventDefault();
-    const message = e.target.message.value;
+    const message = target.message.value;
     const request = {
       conversationId,
       receiver,
       message,
     };
     api.sendMessage(request);
-    e.target.reset();
+    target.reset();
     setMessageLength(0);
   };
 

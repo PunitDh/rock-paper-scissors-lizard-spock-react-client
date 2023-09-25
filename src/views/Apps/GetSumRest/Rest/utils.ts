@@ -4,8 +4,10 @@ import { Buffer } from "buffer";
 import Request from "./models/Request";
 import { AuthorizationType, KeyValuePairType } from "./constants";
 import RequestBody from "./models/RequestBody";
+import { State } from "./types";
+import Authorization from "./models/Authorization";
 
-export const initializeState = () => {
+export const initializeState = (): State => {
   return {
     ...initialState,
     request: new Request({
@@ -27,7 +29,10 @@ export const initializeState = () => {
  * @param {Boolean} include
  * @returns {KeyValuePair}
  */
-export const createBlankKeyValuePair = (prefix, include = true) => {
+export const createBlankKeyValuePair = (
+  prefix: string,
+  include: boolean = true
+): KeyValuePair => {
   return new KeyValuePair().setUniqueId(prefix).setInclude(include);
 };
 
@@ -37,7 +42,7 @@ export const createBlankKeyValuePair = (prefix, include = true) => {
  * @param {KeyValuePair} keyValuePair
  * @returns {Array}
  */
-export const updateList = (currentList, keyValuePair) => {
+export const updateList = (currentList: any[], keyValuePair: KeyValuePair): any[] => {
   const index = currentList.findIndex((it) => it.id === keyValuePair.id);
   let updatedList = [...currentList];
   if (index < 0) {
@@ -55,7 +60,7 @@ export const updateList = (currentList, keyValuePair) => {
 export const createHeaders = (headers) => {
   return headers.reduce(
     (acc, it) => (it.key?.length > 0 ? { ...acc, [it.key]: it.value } : acc),
-    {},
+    {}
   );
 };
 
@@ -64,12 +69,14 @@ export const createHeaders = (headers) => {
  * @param {Authorization} stateAuthorization
  * @returns {String}
  */
-export const createAuthorizationHeader = (stateAuthorization) => {
+export const createAuthorizationHeader = (
+  stateAuthorization: Authorization
+): string => {
   switch (stateAuthorization.type) {
     case AuthorizationType.BASIC_AUTH: {
       const createBasicAuth = (data) => {
         const credentials = Buffer.from(
-          `${data.username}:${data.password}`,
+          `${data.username}:${data.password}`
         ).toString("base64");
 
         return `Basic ${credentials}`;
@@ -83,12 +90,13 @@ export const createAuthorizationHeader = (stateAuthorization) => {
           : authorization.token;
       };
       return createBearerToken(
-        stateAuthorization[AuthorizationType.BEARER_TOKEN],
+        stateAuthorization[AuthorizationType.BEARER_TOKEN]
       );
     }
     default:
       break;
   }
+  return "" as never;
 };
 
 /**
@@ -96,7 +104,7 @@ export const createAuthorizationHeader = (stateAuthorization) => {
  * @param {String} name
  * @returns {String}
  */
-export const createSerializedFilename = (name) => {
+export const createSerializedFilename = (name: string): string => {
   const date = new Date();
   return name
     .concat(`-${date.toLocaleDateString()}-${date.toLocaleTimeString()}`)

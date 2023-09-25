@@ -15,6 +15,7 @@ export type GameType = {
   icon: number;
   rounds: GameRound[];
   players: PlayerType[];
+  updatedAt: Date;
 };
 
 export type GameRound = {
@@ -51,5 +52,10 @@ export type ChatType = {
 export type PlayerType = {
   id: string;
   firstName: string;
+  lastName: string;
   avatar: number;
+  isOnline: boolean;
+  hidden: boolean;
+  wins: number;
+  losses: number;
 };

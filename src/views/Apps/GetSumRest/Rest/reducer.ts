@@ -5,9 +5,10 @@ import KeyValuePair from "./models/KeyValuePair";
 import Request from "./models/Request";
 import RequestBody from "./models/RequestBody";
 import Response from "./models/Response";
+import { Action, State } from "./types";
 import { createBlankKeyValuePair, updateList } from "./utils";
 
-export const initialState = {
+export const initialState: State = {
   loading: false,
   requests: [new Request()],
   request: new Request({
@@ -51,7 +52,7 @@ export const initialState = {
   history: [],
 };
 
-export const reducer = (state, action) => {
+export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case RestAction.SET_URL:
       try {

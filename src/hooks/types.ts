@@ -54,9 +54,9 @@ export interface API {
 
   getGame: (gameId: string) => void;
 
-  getLogs: ({ limit, type, time }: LogRequest) => void;
+  getLogs: ({ limit, type, time }: LogRequest) => Promise<Data>;
 
-  clearLogs: () => void;
+  clearLogs: () => Promise<Data>;
 
   translateSubtitles: (formData, sessionId) => void;
 

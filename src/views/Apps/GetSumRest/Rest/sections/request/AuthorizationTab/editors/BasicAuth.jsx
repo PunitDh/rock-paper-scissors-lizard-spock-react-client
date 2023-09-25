@@ -5,7 +5,6 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
-
 import { setAuthorization } from "../../../../actions";
 import { AuthorizationType } from "../../../../constants";
 import FlexBox from "../../../../../../../../components/shared/FlexBox";

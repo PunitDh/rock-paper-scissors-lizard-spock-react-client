@@ -4,9 +4,12 @@ import { useSelector } from "react-redux";
 import PageContainer from "../../../components/container/PageContainer";
 
 export default function VideoConverter() {
-  const { videoConverter } = useSelector((state) => state.site.siteSettings);
+  const { videoConverter } = useSelector((state) => (state as any).site.siteSettings);
   return (
-    <PageContainer title="Video Subtitle Generator">
+    <PageContainer
+      title="Video Subtitle Generator"
+      description="Generate subtitles for a video in any language"
+    >
       {videoConverter ? (
         <Box>
           <Grid container spacing={3}>

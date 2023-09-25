@@ -8,28 +8,28 @@ import APIKey from "./sections/request/AuthorizationTab/editors/APIKey";
 import BasicAuth from "./sections/request/AuthorizationTab/editors/BasicAuth";
 import BearerToken from "./sections/request/AuthorizationTab/editors/BearerToken";
 
-export const FormDataFieldType = Object.freeze({
-  TEXT: "Text",
-  FILE: "File",
-});
+export enum FormDataFieldType {
+  TEXT = "Text",
+  FILE = "File",
+}
 
-export const HttpMethod = Object.freeze({
-  GET: "GET",
-  POST: "POST",
-  PUT: "PUT",
-  PATCH: "PATCH",
-  DELETE: "DELETE",
-});
+export enum HttpMethod {
+  GET = "GET",
+  POST = "POST",
+  PUT = "PUT",
+  PATCH = "PATCH",
+  DELETE = "DELETE",
+}
 
-export const ContentType = Object.freeze({
-  NONE: "NONE",
-  FORM_DATA: "formData",
-  FORM_ENCODED: "formEncoded",
-  JSON: "json",
-  XML: "xml",
-});
+export enum ContentType {
+  NONE = "NONE",
+  FORM_DATA = "formData",
+  FORM_ENCODED = "formEncoded",
+  JSON = "json",
+  XML = "xml",
+}
 
-export const ContentTypeMenuItems = Object.freeze({
+export const ContentTypeMenuItems = {
   [ContentType.NONE]: {
     id: uniqueId("content-type-"),
     label: "none",
@@ -60,25 +60,25 @@ export const ContentTypeMenuItems = Object.freeze({
   //   value: "application/xml",
   //   Component: ApplicationXML,
   // },
-});
+} as const;
 
-export const DisplayType = Object.freeze({
-  PRETTY: "Pretty",
-  RAW: "Raw",
-  PREVIEW: "Preview",
-});
+export enum DisplayType {
+  PRETTY = "Pretty",
+  RAW = "Raw",
+  PREVIEW = "Preview",
+}
 
-export const AuthorizationType = Object.freeze({
-  NO_AUTH: "NO_AUTH",
-  API_KEY: "API_KEY",
-  BEARER_TOKEN: "BEARER_TOKEN",
-  BASIC_AUTH: "BASIC_AUTH",
-});
+export enum AuthorizationType {
+  NO_AUTH = "NO_AUTH",
+  API_KEY = "API_KEY",
+  BEARER_TOKEN = "BEARER_TOKEN",
+  BASIC_AUTH = "BASIC_AUTH",
+}
 
-export const APIKeyAddTo = Object.freeze({
-  HEADER: "Header",
-  QUERY_PARAMS: "Query Params",
-});
+export enum APIKeyAddTo {
+  HEADER = "Header",
+  QUERY_PARAMS = "Query Params",
+}
 
 export const RequestTabList = Object.freeze([
   {
@@ -148,85 +148,85 @@ export const AuthorizationTypeItems = Object.freeze({
   },
 });
 
-export const KeyValuePairType = Object.freeze({
-  PARAM: "params",
-  HEADER: "header",
-  FORM_DATA: "formData",
-  FORM_ENCODED: "formEncoded",
-  API_KEY: "apiKey",
-});
+export enum KeyValuePairType {
+  PARAM = "params",
+  HEADER = "header",
+  FORM_DATA = "formData",
+  FORM_ENCODED = "formEncoded",
+  API_KEY = "apiKey",
+}
 
-export const HttpStatusCode = Object.freeze({
+export enum HttpStatusCode {
   // 1xx: Informational responses
-  100: "Continue",
-  101: "Switching Protocols",
-  102: "Processing",
+  Continue = 100,
+  SwitchingProtocols = 101,
+  Processing = 102,
 
   // 2xx: Successful responses
-  200: "OK",
-  201: "Created",
-  202: "Accepted",
-  203: "Non-Authoritative Information",
-  204: "No Content",
-  205: "Reset Content",
-  206: "Partial Content",
-  207: "Multi-Status",
-  208: "Already Reported",
-  226: "IM Used",
+  OK = 200,
+  Created = 201,
+  Accepted = 202,
+  NonAuthoritativeInformation = 203,
+  NoContent = 204,
+  ResetContent = 205,
+  PartialContent = 206,
+  MultiStatus = 207,
+  AlreadyReported = 208,
+  IMUsed = 226,
 
   // 3xx: Redirection messages
-  300: "Multiple Choices",
-  301: "Moved Permanently",
-  302: "Found",
-  303: "See Other",
-  304: "Not Modified",
-  305: "Use Proxy",
-  307: "Temporary Redirect",
-  308: "Permanent Redirect",
+  MultipleChoices = 300,
+  MovedPermanently = 301,
+  Found = 302,
+  SeeOther = 303,
+  NotModified = 304,
+  UseProxy = 305,
+  TemporaryRedirect = 307,
+  PermanentRedirect = 308,
 
   // 4xx: Client error responses
-  400: "Bad Request",
-  401: "Unauthorized",
-  402: "Payment Required",
-  403: "Forbidden",
-  404: "Not Found",
-  405: "Method Not Allowed",
-  406: "Not Acceptable",
-  407: "Proxy Authentication Required",
-  408: "Request Timeout",
-  409: "Conflict",
-  410: "Gone",
-  411: "Length Required",
-  412: "Precondition Failed",
-  413: "Payload Too Large",
-  414: "URI Too Long",
-  415: "Unsupported Media Type",
-  416: "Range Not Satisfiable",
-  417: "Expectation Failed",
-  418: "I'm a teapot", // April Fools joke in 1998 by RFC 2324
-  421: "Misdirected Request",
-  422: "Unprocessable Entity",
-  423: "Locked",
-  424: "Failed Dependency",
-  426: "Upgrade Required",
-  428: "Precondition Required",
-  429: "Too Many Requests",
-  431: "Request Header Fields Too Large",
-  451: "Unavailable For Legal Reasons",
+  BadRequest = 400,
+  Unauthorized = 401,
+  PaymentRequired = 402,
+  Forbidden = 403,
+  NotFound = 404,
+  MethodNotAllowed = 405,
+  NotAcceptable = 406,
+  ProxyAuthenticationRequired = 407,
+  RequestTimeout = 408,
+  Conflict = 409,
+  Gone = 410,
+  LengthRequired = 411,
+  PreconditionFailed = 412,
+  PayloadTooLarge = 413,
+  URITooLong = 414,
+  UnsupportedMediaType = 415,
+  RangeNotSatisfiable = 416,
+  ExpectationFailed = 417,
+  ImATeapot = 418, // April Fools joke in 1998 by RFC 2324
+  MisdirectedRequest = 421,
+  UnprocessableEntity = 422,
+  Locked = 423,
+  FailedDependency = 424,
+  UpgradeRequired = 426,
+  PreconditionRequired = 428,
+  TooManyRequests = 429,
+  RequestHeaderFieldsTooLarge = 431,
+  UnavailableForLegalReasons = 451,
 
   // 5xx: Server error responses
-  500: "Internal Server Error",
-  501: "Not Implemented",
-  502: "Bad Gateway",
-  503: "Service Unavailable",
-  504: "Gateway Timeout",
-  505: "HTTP Version Not Supported",
-  506: "Variant Also Negotiates",
-  507: "Insufficient Storage",
-  508: "Loop Detected",
-  510: "Not Extended",
-  511: "Network Authentication Required",
-});
+  InternalServerError = 500,
+  NotImplemented = 501,
+  BadGateway = 502,
+  ServiceUnavailable = 503,
+  GatewayTimeout = 504,
+  HTTPVersionNotSupported = 505,
+  VariantAlsoNegotiates = 506,
+  InsufficientStorage = 507,
+  LoopDetected = 508,
+  NotExtended = 510,
+  NetworkAuthenticationRequired = 511,
+}
 
 export const JSONEditorColors = Object.freeze({
   default: "#333",

@@ -93,7 +93,7 @@ const LogActions = ({ state, dispatch, onClearLogs }) => {
         <LimitSelect
           sx={whiteStyle}
           value={state.limit}
-          limits={limits}
+          limits={limits as unknown as number[]}
           label="Limit"
           onChange={handleFilter}
         />

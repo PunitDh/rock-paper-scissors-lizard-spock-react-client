@@ -1,6 +1,5 @@
 import { useReducer } from "react";
 import { initialState, reducer } from "./reducer";
-import { useMediaQuery } from "@mui/material";
 import URLBar from "./sections/request/URLBar";
 import RequestTabs from "./sections/request/RequestTabs";
 import Response from "./sections/response/Response";
@@ -12,7 +11,6 @@ import FlexBox from "../../../../components/shared/FlexBox";
 
 const Rest = () => {
   const [state, dispatch] = useReducer(reducer, initialState, initializeState);
-  const mdUp = useMediaQuery((theme) => theme.breakpoints.up("md"));
   const token = useToken();
 
   return (
@@ -24,7 +22,7 @@ const Rest = () => {
         gap="2rem"
         width="100%"
       >
-        {token.decoded.isAdmin && (
+        {token.decoded?.isAdmin && (
           <button type="button" onClick={() => console.log(state)}>
             Show State
           </button>

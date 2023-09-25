@@ -15,9 +15,14 @@ import { useAPI, useLoading } from "../../../../../hooks";
 import LoadingComponent from "../../../../../components/shared/LoadingComponent";
 import ResponsiveTableCell from "../../../../../components/shared/ResponsiveTableCell";
 import StyledTableCell from "../../../../../components/shared/StyledTableCell";
+import { PlayerType } from "../../../types";
 
-const Users = ({ search }) => {
-  const { currentUsers } = useSelector((state) => state.player);
+type Props = {
+  search: string;
+};
+
+const Users = ({ search }: Props) => {
+  const { currentUsers } = useSelector((state) => (state as any).player);
   const api = useAPI();
   const [getCurrentUsers, loading] = useLoading(api.getCurrentUsers);
 
@@ -27,10 +32,10 @@ const Users = ({ search }) => {
 
   const currentUsersFiltered =
     search.length > 0
-      ? currentUsers.filter((user) =>
+      ? currentUsers.filter((user: PlayerType) =>
           `${user.id} ${user.firstName} ${user.lastName}`
             .toLowerCase()
-            .includes(search.toLowerCase()),
+            .includes(search.toLowerCase())
         )
       : currentUsers;
 
@@ -55,7 +60,7 @@ const Users = ({ search }) => {
               </TableRow>
             </TableHead>
             <TableBody style={{ width: "100%" }}>
-              {currentUsersFiltered?.map((user) => (
+              {currentUsersFiltered?.map((user: PlayerType) => (
                 <UserRow key={user.id} user={user} />
               ))}
             </TableBody>

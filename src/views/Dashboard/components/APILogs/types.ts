@@ -11,12 +11,12 @@ export type State = {
   limit: number;
   time: number;
   confirmClear: boolean;
-  logs: string[];
+  logs: LogMessage[];
 };
 
 export type LogMessage = {
   id: string;
   type: LogType;
   content: string;
-  timestamp: string;
+  timeStamp: string;
 };

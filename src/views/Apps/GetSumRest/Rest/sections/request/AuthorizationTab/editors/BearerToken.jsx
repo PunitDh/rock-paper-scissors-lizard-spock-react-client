@@ -5,7 +5,6 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
-
 import { setAuthorization } from "../../../../actions";
 import { AuthorizationType } from "../../../../constants";
 import { Bold } from "../../../../../../../../components/shared/styles";

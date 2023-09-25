@@ -8,8 +8,13 @@ import { useToken } from "../../../../../hooks";
 import { getAvatar } from "../../../../../assets";
 import StyledTableCell from "../../../../../components/shared/StyledTableCell";
 import ResponsiveTableCell from "../../../../../components/shared/ResponsiveTableCell";
+import { PlayerType } from "../../../types";
 
-const OnlineIcon = styled.div(({ online }) => ({
+type Props = {
+  user: PlayerType;
+};
+
+const OnlineIcon = styled.div(({ online }: { online: boolean }) => ({
   backgroundColor: online ? "lightgreen" : "red",
   borderRadius: "0.5rem",
   width: "0.5rem",
@@ -27,14 +32,14 @@ const SmallAvatar = styled(Avatar)({
   cursor: "pointer",
 });
 
-const UserRow = ({ user }) => {
+const UserRow = ({ user }: Props) => {
   const token = useToken();
   const onlineIconTitle = `${user.firstName} is ${
     user.isOnline ? "online" : "offline"
   }`;
 
   return (
-    (!user.hidden || token.decoded.isAdmin) && (
+    (!user.hidden || token.decoded?.isAdmin) ? (
       <TableRow>
         <StyledTableCell>
           <NameBox gap="0.5rem" alignItems="center" justifyContent="flex-start">
@@ -61,7 +66,7 @@ const UserRow = ({ user }) => {
           </Typography>
         </ResponsiveTableCell>
       </TableRow>
-    )
+    ) : <></>
   );
 };
 

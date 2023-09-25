@@ -1,14 +1,20 @@
 import styled from "@emotion/styled";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import { useCallback, useEffect, useReducer } from "react";
-import { Typography } from "@mui/material";
+import { Theme, Typography, useTheme } from "@mui/material";
 import LogActions from "./LogActions";
 import { reducer, initialState } from "./reducer";
 import { setLogs } from "./actions";
 import { useAPI } from "../../../../hooks";
 import { formatDate } from "../../../../utils";
+import { LogType } from "./constants";
 
-const LogMessage = styled(Typography)(({ theme, type }) => ({
+type LogMessageType = {
+  theme: Theme;
+  type: LogType;
+};
+
+const LogMessage = styled(Typography)(({ theme, type }: LogMessageType) => ({
   color: theme.palette[type].main,
   fontFamily: "monospace",
   Width: "100%",
@@ -20,6 +26,7 @@ const LogMessage = styled(Typography)(({ theme, type }) => ({
 
 const APILogs = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const theme = useTheme();
   const api = useAPI();
 
   const handleClearLogs = () => {
@@ -27,10 +34,10 @@ const APILogs = () => {
   };
 
   const scrollRef = useCallback(
-    (scrollNode) => {
+    (scrollNode: HTMLDivElement) => {
       scrollNode?.scrollIntoView();
     },
-    [state.logs.length],
+    [state.logs.length]
   );
 
   useEffect(() => {
@@ -55,7 +62,7 @@ const APILogs = () => {
       }
     >
       {state.logs.map((message) => (
-        <LogMessage type={message.type} key={message.id}>
+        <LogMessage theme={theme} type={message.type} key={message.id}>
           [{message.type.toUpperCase()}] [{formatDate(message.timeStamp)}]{" "}
           {message.content}
         </LogMessage>

@@ -1,10 +1,14 @@
 import styled from "@emotion/styled";
 import { CircularProgress, Tooltip } from "@mui/material";
 import { Chat } from "@mui/icons-material";
-
 import { useState } from "react";
 import { useAPI, useSocket } from "../../../../../hooks";
 import { SocketResponse } from "../../../../../utils/constants";
+import { PlayerType } from "../../../types";
+
+type Props = {
+  user: PlayerType;
+}
 
 const GameButton = styled(Chat)(({ theme }) => ({
   backgroundColor: "primary.main",
@@ -12,7 +16,7 @@ const GameButton = styled(Chat)(({ theme }) => ({
   cursor: "pointer",
 }));
 
-export default function StartChat({ user }) {
+export default function StartChat({ user }: Props) {
   const [loading, setLoading] = useState(false);
   const socket = useSocket();
   const api = useAPI();

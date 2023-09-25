@@ -9,12 +9,17 @@ import {
 import { useCurrentGame } from "../../../../../hooks";
 import { formatDate } from "../../../../../utils";
 import { Bold } from "../../../../../components/shared/styles";
+import { GameType } from "../../../types";
 
-const RecentGame = ({ game }) => {
+type Props = {
+  game: GameType;
+};
+
+const RecentGame = ({ game }: Props) => {
   const currentGame = useCurrentGame(game);
 
   const playerScores = Object.values(currentGame.score)
-    .map((player) => `${player.name}: ${player.score}`)
+    .map((player) => `${(player as any).name}: ${(player as any).score}`)
     .join(", ");
 
   const rounds = currentGame.rounds.filter((it) => it.moves.length > 0).length;

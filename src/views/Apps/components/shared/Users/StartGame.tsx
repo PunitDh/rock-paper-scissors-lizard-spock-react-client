@@ -1,13 +1,18 @@
 import { useState } from "react";
-import { CircularProgress, Tooltip } from "@mui/material";
+import { CircularProgress, Theme, Tooltip } from "@mui/material";
 import styled from "@emotion/styled";
 import { sample } from "lodash";
 import { PlayCircleFilled } from "@mui/icons-material";
 import { useAPI, useLoading } from "../../../../../hooks";
 import { icons } from "../../../../../assets";
 import ConfirmationDialog from "../../../../../components/shared/ConfirmationDialog";
+import { PlayerType } from "../../../types";
 
-const GameButton = styled(PlayCircleFilled)(({ theme }) => ({
+type Props = {
+  user: PlayerType;
+};
+
+const GameButton = styled(PlayCircleFilled)(({ theme }: { theme: Theme }) => ({
   backgroundColor: "primary.main",
   color: theme.palette.primary.main,
   cursor: "pointer",
@@ -15,24 +20,24 @@ const GameButton = styled(PlayCircleFilled)(({ theme }) => ({
   height: "1.5rem",
 }));
 
-export default function StartGame({ user }) {
+export default function StartGame({ user }: Props) {
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [value, setValue] = useState();
+  const [value, setValue] = useState<string>("");
   const api = useAPI();
   const [createGame, loading] = useLoading(api.createGame);
 
-  const handleStartGame = (opponent) => {
+  const handleStartGame = (opponentId: string) => {
     const payload = {
       game: "rpsls",
-      opponent,
+      opponent: opponentId,
       icon: sample(icons.map((it) => it.id)),
     };
     createGame(payload);
   };
 
-  const handleClose = (newValue) => {
+  const handleClose = (newValue: string) => {
     setConfirmOpen(false);
-    if (newValue) {
+    if (Boolean(newValue)) {
       setValue(newValue);
     }
   };

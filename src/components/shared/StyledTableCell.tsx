@@ -2,7 +2,7 @@ import { TableCell, Typography } from "@mui/material";
 
 type Props = {
   children: JSX.Element | string;
-  props: { [key: string]: any }[];
+  props?: { [key: string]: any }[];
 };
 
 const StyledTableCell = ({ children, ...props }: Props) => (
