@@ -233,9 +233,9 @@ export default function useAPI(): API {
       request.get(`/admin/logs`, {
         ...authHeaders,
         params: { limit, type, time },
-      }),
+      }) as Promise<Data>,
 
-    clearLogs: () => request.delete(`/admin/logs`, authHeaders),
+    clearLogs: () => request.delete(`/admin/logs`, authHeaders) as Promise<Data>,
 
     translateSubtitles: (formData, sessionId: string) => {
       socket.emit(SocketRequest.PROGRESS_UPDATE, secure({ sessionId }));
