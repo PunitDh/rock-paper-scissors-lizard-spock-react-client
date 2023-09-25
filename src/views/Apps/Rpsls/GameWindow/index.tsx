@@ -10,7 +10,7 @@ import { useAPI, useCurrentGame, useToken } from "../../../../hooks";
 import PageContainer from "../../../../components/container/PageContainer";
 import LoadingScreen from "../../../../components/shared/LoadingScreen";
 import GameCard from "../../../../components/shared/GameCard";
-import { GameRound, PlayerType } from "../../types";
+import { GameRound, GameScore, PlayerType } from "../../types";
 
 const ResultContainer = styled(FlexBox)({
   height: "80%",
@@ -59,14 +59,14 @@ const Game = () => {
             )}
             maxRounds={maxRounds}
             players={currentGame.players}
-            score={currentGame.score}
+            score={(currentGame.score as unknown) as GameScore}
           />
         </ResultContainer>
         <PlayButtons
           id={gameId!}
           playerId={token.decoded?.id!}
           lastRound={lastRound}
-          opponent={opponent}
+          opponent={opponent!}
         />
       </GameCard>
     </PageContainer>

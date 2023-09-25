@@ -11,14 +11,13 @@ import styled from "@emotion/styled";
 import PlayerNameHeaderCell from "./PlayerNameHeaderCell";
 import { useToken } from "../../../../../../hooks";
 import ResponsiveTableCell from "../../../../../../components/shared/ResponsiveTableCell";
-import { GameRound, PlayerType } from "../../../../types";
-import { Score } from "../../../../../../hooks/types";
+import { GameRound, GameScore, PlayerType } from "../../../../types";
 
 type Props = {
   rounds: GameRound[];
   maxRounds: number;
   players: PlayerType[];
-  score: Score;
+  score: GameScore;
 };
 
 const StyledTable = styled(Table)({
@@ -38,7 +37,7 @@ const ResultTable = ({ rounds, maxRounds, players = [], score }: Props) => {
   );
 
   return (
-    players.length > 0 && (
+    players.length > 0 ? (
       <StyledTable>
         <TableHead>
           <TableRow>
@@ -74,7 +73,7 @@ const ResultTable = ({ rounds, maxRounds, players = [], score }: Props) => {
           ))}
         </TableBody>
       </StyledTable>
-    )
+    ) : <></>
   );
 };
 

@@ -1,11 +1,11 @@
-import { Suspense } from "react";
+import { LazyExoticComponent, Suspense } from "react";
 
 type Props = {
   [x: string]: any;
 };
 
 const Loadable =
-  (Component: () => JSX.Element) =>
+  (Component: LazyExoticComponent<() => JSX.Element>) =>
   (props: Props): JSX.Element => (
     <Suspense>
       <Component {...props} />

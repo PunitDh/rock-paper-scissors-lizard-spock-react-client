@@ -1,9 +1,8 @@
 import { useSelector } from "react-redux";
-import { GameType } from "../views/Apps/types";
-import { Score } from "./types";
+import { GameScore, GameType } from "../views/Apps/types";
 
-function calculateScore(game: GameType): Score {
-  const score: Score = {};
+function calculateScore(game: GameType): GameScore {
+  const score: GameScore = {};
 
   game.players?.forEach((player) => {
     const { id: playerId } = player;
@@ -25,10 +24,10 @@ function calculateScore(game: GameType): Score {
   return score;
 }
 
-export default function useCurrentGame(game?: GameType): GameType & Score {
+export default function useCurrentGame(game?: GameType): GameType & GameScore {
   const { currentGame } = useSelector((state) => (state as any).player);
 
   return game
-    ? { ...game, score: calculateScore(game) }
-    : { ...currentGame, score: calculateScore(currentGame) };
+    ? { ...game, score: calculateScore(game) as GameScore }
+    : { ...currentGame, score: calculateScore(currentGame) as GameScore };
 }
