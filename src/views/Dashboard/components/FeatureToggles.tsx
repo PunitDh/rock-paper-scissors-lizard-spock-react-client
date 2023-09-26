@@ -19,10 +19,10 @@ const Toggle = styled(Typography)({
 });
 
 const FeatureToggles = () => {
-  const { siteSettings } = useSelector((state) => state.site);
+  const { siteSettings } = useSelector((state) => (state as any).site);
   const api = useAPI();
 
-  const handleToggle = (e) => {
+  const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
     api.setSiteSettings({
       siteSettings: { [e.target.name]: e.target.checked },
     });

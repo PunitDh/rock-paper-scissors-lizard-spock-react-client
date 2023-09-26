@@ -46,7 +46,7 @@ const MonthlyEarnings = () => {
     tooltip: {
       theme: theme.palette.mode === "dark" ? "dark" : "light",
     },
-  };
+  } as ApexCharts.ApexOptions;
   const seriescolumnchart = [
     {
       name: "",

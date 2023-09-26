@@ -7,7 +7,7 @@ import { Token } from "../hooks/types";
 export const TokenContext = createContext<Token>({} as Token);
 
 type Props = {
-  children: string | JSX.Element;
+  children: any;
 };
 
 export const TokenProvider = ({ children }: Props) => {

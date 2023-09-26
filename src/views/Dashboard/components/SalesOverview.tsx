@@ -1,4 +1,4 @@
-import { Select, MenuItem } from "@mui/material";
+import { Select, MenuItem, SelectChangeEvent } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import DashboardCard from "../../../components/shared/DashboardCard";
 import Chart from "react-apexcharts";
@@ -7,7 +7,7 @@ import { useState } from "react";
 const SalesOverview = () => {
   const [month, setMonth] = useState("1");
 
-  const handleChange = (event) => {
+  const handleChange = (event: SelectChangeEvent) => {
     setMonth(event.target.value);
   };
 
@@ -82,7 +82,7 @@ const SalesOverview = () => {
       theme: theme.palette.mode === "dark" ? "dark" : "light",
       fillSeriesColor: false,
     },
-  };
+  } as any;
   const seriescolumnchart = [
     {
       name: "Eanings this month",

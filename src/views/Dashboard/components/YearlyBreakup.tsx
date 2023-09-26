@@ -57,7 +57,7 @@ const YearlyBreakup = () => {
         },
       },
     ],
-  };
+  } as ApexCharts.ApexOptions;
   const seriescolumnchart = [38, 40, 25];
 
   return (

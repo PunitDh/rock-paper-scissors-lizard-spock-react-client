@@ -5,12 +5,12 @@ import PasswordField from "./PasswordField";
 import styled from "@emotion/styled";
 
 type Props = {
-  value: string;
-  label: string;
-  type: "text" | "password" | "url" | "email";
+  value?: string;
+  label?: string;
+  type?: "text" | "password" | "url" | "email";
   name?: string;
   id?: string;
-  disabled: boolean;
+  disabled?: boolean;
 };
 
 const WideTextField = styled(CustomTextField)((props: any) => ({

@@ -7,9 +7,9 @@ import FormField from "../../../components/shared/FormField";
 const ChangePassword = () => {
   const api = useAPI();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { oldPassword, newPassword, confirmNewPassword } = e.target;
+    const { oldPassword, newPassword, confirmNewPassword } = e.target as HTMLFormElement;
     const payload = {
       oldPassword: oldPassword.value,
       newPassword: newPassword.value,

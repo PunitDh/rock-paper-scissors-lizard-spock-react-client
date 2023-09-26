@@ -7,7 +7,7 @@ import LoadingScreen from "./components/shared/LoadingScreen";
 
 import { createRoot } from "react-dom/client";
 const container = document.getElementById("root");
-const root = createRoot(container); // createRoot(container!) if you use TypeScript
+const root = createRoot(container!); // createRoot(container!) if you use TypeScript
 root.render(
   <Suspense fallback={<LoadingScreen />}>
     <ReduxProvider store={store}>
@@ -15,5 +15,5 @@ root.render(
         <App />
       </BrowserRouter>
     </ReduxProvider>
-  </Suspense>,
+  </Suspense>
 );
