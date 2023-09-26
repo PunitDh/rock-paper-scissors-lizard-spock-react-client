@@ -36,7 +36,7 @@ const URLBar = ({ state, dispatch }) => {
     if (state.request.isValidUrl) {
       const headers = createHeaders(state.request.headers);
       const authorization = createAuthorizationHeader(
-        state.request.authorization,
+        state.request.authorization
       );
 
       const requestConfig = {
@@ -58,9 +58,9 @@ const URLBar = ({ state, dispatch }) => {
             .then((response) => handleResponse(response))
             .catch(() =>
               notification.error(
-                `Unable to get a response from '${requestConfig.url}'`,
-              ),
-            ),
+                `Unable to get a response from '${requestConfig.url}'`
+              )
+            )
         )
         .finally(() => {
           dispatch(setResponseTime(Date.now() - startTime.current));
@@ -79,12 +79,7 @@ const URLBar = ({ state, dispatch }) => {
   const handleSetMethod = (e, value) => dispatch(setMethod(value));
 
   return (
-    <FlexForm
-      width="100%"
-      gap="0.5rem"
-      alignItems="stretch"
-      onSubmit={handleSubmit}
-    >
+    <FlexForm onSubmit={handleSubmit}>
       <div>
         <Autocomplete
           inputValue={state.request.method}

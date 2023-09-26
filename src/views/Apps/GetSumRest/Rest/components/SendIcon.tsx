@@ -1,4 +1,10 @@
-function SendIcon(props) {
+type Props = {
+  width?: string | number;
+  height?: string | number;
+  fill?: string;
+};
+
+function SendIcon(props: Props) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

@@ -1,6 +1,7 @@
 import {
   MenuItem,
   Select,
+  SelectChangeEvent,
   Table,
   TableBody,
   TableCell,
@@ -9,9 +10,16 @@ import {
 import { setAuthorizationType } from "../../../actions";
 import { AuthorizationTypeItems } from "../../../constants";
 import { Bold } from "../../../../../../../components/shared/styles";
+import { Dispatch } from "react";
+import { Action, State } from "../../../types";
 
-const Selector = ({ state, dispatch }) => {
-  const handleChange = (e) => {
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+};
+
+const Selector = ({ state, dispatch }: Props) => {
+  const handleChange = (e: SelectChangeEvent) => {
     dispatch(setAuthorizationType(e.target.value));
   };
   return (

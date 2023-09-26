@@ -9,17 +9,25 @@ import { setAuthorization } from "../../../../actions";
 import { AuthorizationType } from "../../../../constants";
 import { Bold } from "../../../../../../../../components/shared/styles";
 import FlexBox from "../../../../../../../../components/shared/FlexBox";
+import { Action, State } from "../../../../types";
+import { Dispatch } from "react";
 
-export default function BearerToken({ state, dispatch }) {
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+};
+
+export default function BearerToken({ state, dispatch }: Props) {
   const credentials =
     state.request.authorization[AuthorizationType.BEARER_TOKEN];
-  const handleChange = (e) => {
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(
       setAuthorization(
         AuthorizationType.BEARER_TOKEN,
         e.target.name,
-        e.target.value,
-      ),
+        e.target.value
+      )
     );
   };
 

@@ -5,6 +5,14 @@ import { MessageContent, TimeStamp } from "./styles";
 import { DoneAll } from "@mui/icons-material";
 import FlexBox from "../../../components/shared/FlexBox";
 
+type Props = {
+  content: string;
+  timestamp: string;
+  photoURL: string;
+  displayName: string;
+  read: boolean;
+};
+
 const DisplayName = styled.div({
   fontSize: "0.85em",
   marginLeft: "10px",
@@ -57,7 +65,7 @@ export const MessageLeft = ({
   photoURL,
   displayName,
   read,
-}) => (
+}: Props) => (
   <FlexBox alignItems="flex-start" justifyContent="flex-start">
     <MessageAvatar alt={displayName} src={photoURL} />
     <div>

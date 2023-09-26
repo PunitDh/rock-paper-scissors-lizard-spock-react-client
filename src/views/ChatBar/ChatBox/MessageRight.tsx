@@ -1,9 +1,16 @@
 import { Avatar } from "@mui/material";
 import { MessageContent, TimeStamp } from "./styles";
-
 import styled from "@emotion/styled";
 import { DoneAll } from "@mui/icons-material";
 import FlexBox from "../../../components/shared/FlexBox";
+
+type Props = {
+  content: string;
+  timestamp: string;
+  photoURL: string;
+  displayName: string;
+  read: boolean;
+};
 
 const MessageOrange = styled.div({
   position: "relative",
@@ -57,7 +64,7 @@ export const MessageRight = ({
   timestamp,
   photoURL,
   read,
-}) => (
+}: Props) => (
   <FlexBox alignItems="flex-start" justifyContent="flex-end" width="100%">
     <FlexBox alignItems="flex-end" flexDirection="column" width="100%">
       <DisplayName>{displayName}</DisplayName>

@@ -1,4 +1,4 @@
-import { SheetConfig } from "../constants";
+import { SheetConfig, defaultInitialStateProps } from "../constants";
 import CellData from "../models/CellData";
 import CellFormatting from "../models/CellFormatting";
 import { initialState } from "../reducer";
@@ -22,52 +22,30 @@ export const generateClipboardContent = (state: State): string => {
         display: cellData?.display || "",
         formula: cellData?.formula || "",
       });
-    }),
+    })
   );
   const type = SheetConfig.FILE_TYPE;
-  return JSON.stringify({ type, content });
+  return stringifyJSON({ type, content });
 };
 
 export const generateJSONContent = (state: State): string => {
   const type = SheetConfig.FILE_TYPE;
   const { content } = state.sheets[state.activeSheet];
-  const { data, namedRanges } = content;
-  const filteredNamedRanges = Object.keys(namedRanges).reduce(
-    (acc, rangeName) => ({
-      ...acc,
-      [rangeName]: [...namedRanges[rangeName]],
-    }),
-    {},
-  );
 
-  const filtered = Object.keys(data).reduce(
-    (acc: StateContentData, cur: string) => {
-      if (String((data[cur] as CellData)?.value)?.length > 0) {
-        return {
-          ...acc,
-          [cur]: {
-            ...data[cur],
-            referenceCells: [...data[cur].referenceCells],
-          },
-        } as StateContentData;
-      }
-      return acc as StateContentData;
-    },
-    {} as StateContentData,
-  );
-
-  const filteredContent = {
-    ...content,
-    namedRanges: filteredNamedRanges,
-    data: filtered,
-  };
-
-  return JSON.stringify({ type, content: filteredContent }, null, 2);
+  return stringifyJSON({ type, content });
 };
+
+function stringifyJSON(object: { [key: string]: any }): string {
+  return JSON.stringify(
+    object,
+    (_key, value) => (value instanceof Set ? [...value] : value),
+    2
+  );
+}
 
 function typeInTextField(id: string, newText: string, replace: boolean) {
   const el: HTMLInputElement | null = document.getElementById(
-    id,
+    id
   ) as HTMLInputElement;
   if (!el) return;
   const [start, end] = [
@@ -128,34 +106,29 @@ export function parseJSON(stringifiedJSON: string): ParsedJSON {
       };
     }
 
-    const data = Object.keys(jsonObject.content.data).reduce((acc, cell) => {
-      if (acc[cell].id) {
-        return {
-          ...acc,
-          [cell]: new CellData({
-            ...acc[cell],
-            formatting: new CellFormatting(acc[cell].formatting),
-          }).setDisplay(),
-        };
-      } else {
-        delete acc[cell];
-      }
-      return acc;
-    }, jsonObject.content.data);
+    const data = { ...jsonObject.content.data };
+    const namedRanges = {};
 
-    const namedRanges = Object.keys(jsonObject.content.namedRanges).reduce(
-      (acc, rangeName) => ({
-        ...acc,
-        [rangeName]: setOf(acc[rangeName]),
-      }),
-      jsonObject.content.namedRanges,
-    );
+    for (const cell in data) {
+      if (data[cell].id) {
+        data[cell] = {
+          ...data[cell],
+          formatting: new CellFormatting(data[cell].formatting),
+        }.setDisplay();
+      } else {
+        delete data[cell];
+      }
+    }
+
+    for (const rangeName in jsonObject.content.namedRanges) {
+      namedRanges[rangeName] = setOf(jsonObject.content.namedRanges[rangeName]);
+    }
 
     const content = new StateContent(
       jsonObject.content.rowHeights,
       jsonObject.content.columnWidths,
       data,
-      namedRanges,
+      namedRanges
     );
 
     return { error: false, content };
@@ -170,8 +143,16 @@ export function parseJSON(stringifiedJSON: string): ParsedJSON {
 
 export const createInitialState = (
   props: SheetProps,
-  defaultProps: { [key: string]: any },
+  defaultProps: typeof defaultInitialStateProps
 ): State => {
+  const activeSheet = Object.keys(initialState.sheets).find((it) =>
+    [props.activeSheet, defaultProps.activeSheet].includes(
+      initialState.sheets[it].name
+    )
+  )!;
+
+  console.log({ activeSheet });
+
   const createdState = {
     ...initialState,
     maxRows: props.maxRows || defaultProps.maxRows,
@@ -183,10 +164,11 @@ export const createInitialState = (
     defaultRowHeight: props.defaultRowHeight || defaultProps.defaultRowHeight,
     defaultColumnWidth:
       props.defaultColumnWidth || defaultProps.defaultColumnWidth,
+    activeSheet,
     sheets: {
       ...initialState.sheets,
-      [initialState.activeSheet]: {
-        ...initialState.sheets[initialState.activeSheet],
+      [activeSheet]: {
+        ...initialState.sheets[activeSheet],
         content: generateInitialContent(props, defaultProps),
       },
     },
@@ -196,7 +178,7 @@ export const createInitialState = (
 
 const generateInitialContent = (
   props: SheetProps,
-  defaultProps: { [key: string]: any },
+  defaultProps: { [key: string]: any }
 ): StateContent => {
   const columnWidths = Array(props.maxColumns)
     .fill(0)
@@ -214,25 +196,22 @@ const generateInitialContent = (
 
   const initialData = props.initialData || defaultProps.initialData;
 
-  const data = Object.keys(initialData).reduce((stateContentData, it) => {
-    const cell = it.toUpperCase();
-    stateContentData[cell] = new CellData({ id: cell });
-    if (isObject(initialData[it])) {
-      stateContentData[cell] = new CellData({
-        id: cell,
-        ...initialData[it],
-      });
+  const data = Object.keys(initialData).reduce((stateContentData, cellId) => {
+    const cell = cellId.toUpperCase();
+    const cellData = new CellData({ id: cell });
+    if (isObject(initialData[cellId])) {
+      Object.assign(cellData, initialData[cellId]);
     } else {
-      if (isString(initialData[it]) && isFormula(initialData[it])) {
-        stateContentData[cell].formula = initialData[it];
-        stateContentData[cell].previousFormula = initialData[it];
+      if (isFormula(initialData[cellId])) {
+        cellData.formula = initialData[cellId];
+        cellData.previousFormula = initialData[cellId];
       } else {
-        stateContentData[cell].value = initialData[it];
-        stateContentData[cell].previousValue = initialData[it];
+        cellData.value = initialData[cellId];
+        cellData.previousValue = initialData[cellId];
       }
-      stateContentData[cell].display = initialData[it];
+      cellData.display = initialData[cellId];
     }
-
+    stateContentData[cell] = cellData;
     return stateContentData;
   }, {}) as Partial<StateContentData>;
 
@@ -249,14 +228,6 @@ export const isFormula = (value: unknown): boolean => {
     (typeof value === "string" || value instanceof String) &&
     Boolean(value?.startsWith("="))
   );
-};
-
-export const getWidth = (id: string): string | undefined => {
-  const element = document.getElementById(id);
-  if (element) {
-    return window.getComputedStyle(element).width;
-  }
-  return undefined;
 };
 
 export const cellSorter = (cellIdA: string, cellIdB: string): number => {

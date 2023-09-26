@@ -40,9 +40,8 @@ export const reducer = (state: State, action: Action): State => {
       };
     case CalculatorAction.SET_OUTPUT:
       const yValues = toList<number>(
-        action.payload.values.map((it: Coord) => it.y),
+        action.payload.values.map((it: Coord) => it.y)
       );
-      console.log(listOf<number>(5, 6, 8, 67));
       const [minY, maxY] = [yValues.min(), yValues.max()];
       return {
         ...state,

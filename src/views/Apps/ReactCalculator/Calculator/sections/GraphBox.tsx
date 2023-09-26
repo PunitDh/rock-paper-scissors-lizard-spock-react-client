@@ -5,7 +5,7 @@ import { FormControl, TextField } from "@mui/material";
 import FlexBox from "../../../../../components/shared/FlexBox";
 import { Dispatch, useState } from "react";
 import { setGraphRange } from "../actions";
-import { isBetween, lerp } from "../utils";
+import { isBetween, linearInterpolate } from "../utils";
 
 type Props = {
   state: State;
@@ -48,7 +48,7 @@ const GraphBox = ({ state, dispatch }: Props) => {
       if (valueIsBetween) {
         closest.low = state.graph.coords[i];
         closest.high = state.graph.coords[i + 1];
-        x = lerp(value, closest.low, closest.high);
+        x = linearInterpolate(value, closest.low, closest.high);
         break;
       } else if (value === state.graph.coords[i].y) {
         x = state.graph.coords[i].x;
@@ -75,6 +75,11 @@ const GraphBox = ({ state, dispatch }: Props) => {
         },
         fontFamily: "'Plus Jakarta Sans', sans-serif;",
         foreColor: "#adb0bb",
+        events: {
+          click: function(event, chartContext, config) {
+            console.log(event, chartContext, config);
+          },
+        }
       },
       dataLabels: {
         enabled: false,

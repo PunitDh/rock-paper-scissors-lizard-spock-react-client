@@ -2,6 +2,10 @@ import styled from "@emotion/styled";
 import { Delete } from "@mui/icons-material";
 import { Tooltip } from "@mui/material";
 
+type Props = {
+  onClick: (e: React.MouseEvent) => void;
+}
+
 const DeleteIcon = styled(Delete)(({ theme }) => ({
   cursor: "pointer",
   color: "#aaa",
@@ -10,7 +14,7 @@ const DeleteIcon = styled(Delete)(({ theme }) => ({
   },
 }));
 
-const DeleteButton = ({ onClick }) => (
+const DeleteButton = ({ onClick }: Props) => (
   <Tooltip title="Delete">
     <DeleteIcon onClick={onClick} />
   </Tooltip>

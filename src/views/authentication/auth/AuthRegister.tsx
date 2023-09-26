@@ -6,15 +6,21 @@ import { useAPI, useLoading } from "../../../hooks";
 import AvatarSelectField from "../../../components/shared/AvatarSelectField";
 import { avatars } from "../../../assets";
 
-const AuthRegister = ({ title, subtitle, subtext }) => {
+type Props = {
+  title?: string;
+  subtitle?: JSX.Element;
+  subtext?: string;
+};
+
+const AuthRegister = ({ title, subtitle, subtext }: Props) => {
   const api = useAPI();
   const [registerPlayer, loading] = useLoading(api.registerPlayer);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const { email, password, confirmPassword, firstName, lastName, avatar } =
-      e.target;
+      e.target as HTMLFormElement;
 
     const payload = {
       firstName: firstName.value,
@@ -128,7 +134,7 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
               fullWidth
             />
 
-            <AvatarSelectField selected={sample(avatars.map((it) => it.id))} />
+            <AvatarSelectField selected={sample(avatars.map((it) => it.id))!} />
           </Stack>
           <Button
             type="submit"

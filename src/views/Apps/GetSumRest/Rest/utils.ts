@@ -42,7 +42,10 @@ export const createBlankKeyValuePair = (
  * @param {KeyValuePair} keyValuePair
  * @returns {Array}
  */
-export const updateList = (currentList: any[], keyValuePair: KeyValuePair): any[] => {
+export const updateList = (
+  currentList: any[],
+  keyValuePair: KeyValuePair
+): any[] => {
   const index = currentList.findIndex((it) => it.id === keyValuePair.id);
   let updatedList = [...currentList];
   if (index < 0) {
@@ -50,10 +53,11 @@ export const updateList = (currentList: any[], keyValuePair: KeyValuePair): any[
   } else {
     updatedList[index] = keyValuePair;
   }
-  const prefix = keyValuePair.id.split("-")[0];
-  if (index === currentList.length - 1 && updatedList[index].filled) {
-    updatedList.push(createBlankKeyValuePair(prefix, true));
-  }
+  const prefix = keyValuePair.id?.split("-")[0];
+  if (prefix)
+    if (index === currentList.length - 1 && updatedList[index].filled) {
+      updatedList.push(createBlankKeyValuePair(prefix, true));
+    }
   return updatedList;
 };
 

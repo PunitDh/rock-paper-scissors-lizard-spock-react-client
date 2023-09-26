@@ -82,7 +82,7 @@ export default class CellData {
    * @returns {boolean} True if the cell contains a formula, otherwise false.
    */
   get isFormulaCell(): boolean {
-    return Boolean(isFormula(this.formula) && this.formula?.length! > 0);
+    return Boolean(isFormula(this.formula) && this.formula?.length);
   }
 
   get hasChanged(): Boolean {
@@ -99,11 +99,11 @@ export default class CellData {
   }
 
   isEmpty() {
-    return this.value && String(this.value).trim().length < 1;
+    return !String(this.value).trim().length;
   }
 
   isNotEmpty() {
-    return this.value && String(this.value).trim().length > 0;
+    return this.value && String(this.value).trim().length;
   }
 
   /**
@@ -189,7 +189,7 @@ export default class CellData {
       const referenceCells = getReferenceCells(this.formula);
       const evaluated = evaluate(
         this.formula.replace("=", ""),
-        stateContentData,
+        stateContentData
       );
 
       if (evaluated.error) {
@@ -218,7 +218,7 @@ export default class CellData {
  */
 const getNumberFormattedDisplay = (
   value: CellValue,
-  formatting: CellFormatting,
+  formatting: CellFormatting
 ): string => {
   if (isFalsy(value)) return "";
   switch (formatting.numberFormat) {
@@ -284,7 +284,7 @@ const processVLookup = (
   str: string,
   reg: RegExp,
   formulaCreator: Function,
-  zeroValue: undefined | null | 0,
+  zeroValue: undefined | null | 0
 ) => {
   const matches = [...str.matchAll(reg)];
   const referenceCells = matches.map(([_, match]) =>
@@ -292,7 +292,7 @@ const processVLookup = (
       const [rangeStart, rangeEnd] = it.split(":");
       const range = CellRange.createVerticalSliced(rangeStart, rangeEnd);
       return it.includes(":") ? range.cellIds : it;
-    }),
+    })
   );
 
   return referenceCells.map((it, idx) => ({
@@ -305,7 +305,7 @@ const processLookup = (
   str: string,
   reg: RegExp,
   formulaCreator: Function,
-  zeroValue: undefined | null | 0,
+  zeroValue: undefined | null | 0
 ) => {
   const matches = [...str.matchAll(reg)];
   const referenceCells = matches.map(([_, match]) =>
@@ -314,8 +314,8 @@ const processLookup = (
       .map((it: string) =>
         it.includes(":")
           ? CellRange.createFlat(it.split(":")[0], it.split(":")[1]).cellIds
-          : it,
-      ),
+          : it
+      )
   );
 
   return referenceCells.map((it, idx) => ({
@@ -338,7 +338,7 @@ const processMatches = (
   str: string,
   reg: RegExp,
   formulaCreator: Function,
-  zeroValue: undefined | null | 0,
+  zeroValue: undefined | null | 0
 ): Array<any> => {
   const matches = [...str.matchAll(reg)];
   const referenceCells = matches.map(([_, match]) =>
@@ -347,9 +347,9 @@ const processMatches = (
       .map((it) =>
         it.includes(":")
           ? CellRange.createFlat(it.split(":")[0], it.split(":")[1]).cellIds
-          : it,
+          : it
       )
-      .flat(),
+      .flat()
   );
 
   return referenceCells.map((it, idx) => ({
@@ -369,11 +369,11 @@ const processMatches = (
 const replaceFormulaWithValues = (
   str: string,
   stateContentData: StateContentData,
-  blankValue: undefined | null | 0,
+  blankValue: undefined | null | 0
 ): { string: string; referenceCells: SetExtended<string> } => {
   const cellReg = /([A-Z]\d+)/g;
   const cellMatches = [...new Set([...str.matchAll(cellReg)].flat())].sort(
-    cellSorter,
+    cellSorter
   );
 
   const referenceCells = setOf<string>();
@@ -387,7 +387,7 @@ const replaceFormulaWithValues = (
         ? `(${cellDataValue || blankValue})`
         : isString(cellDataValue)
         ? `'${cellDataValue}'`
-        : `null`,
+        : `null`
     );
   }, str);
 
@@ -408,7 +408,7 @@ const evaluateFormula = (cellValue: string): Array<any> => {
     str,
     /(?:SUM)\(([^)]+)\)/gi,
     (it: string[]) => `(${it.join("+")})`,
-    null,
+    null
   );
 
   const avgMatches = processMatches(
@@ -416,7 +416,7 @@ const evaluateFormula = (cellValue: string): Array<any> => {
     /(?:AVERAGE)\(([^)]+)\)/gi,
     (it: string[]) =>
       `((${it.join("+")})/${it.filter((it) => it !== null).length})`,
-    null,
+    null
   );
 
   const countMatches = processMatches(
@@ -424,7 +424,7 @@ const evaluateFormula = (cellValue: string): Array<any> => {
     /(?:COUNT)\(([^)]+)\)/gi,
     (it: string[]) =>
       `(${it.map((i: string) => `Number(!isNaN(${i}))`).join("+")})`,
-    undefined,
+    undefined
   );
 
   const lookupMatches = processLookup(
@@ -434,7 +434,7 @@ const evaluateFormula = (cellValue: string): Array<any> => {
       `[${it[2].map((i) => `${i}`).join(",")}][[${it[1]
         .map((i) => `${i}`)
         .join(",")}].findIndex(it => it == ${it[0]})]`,
-    null,
+    null
   );
 
   const vLookupMatches = processVLookup(
@@ -446,7 +446,7 @@ const evaluateFormula = (cellValue: string): Array<any> => {
       const colNumber = it[2];
       return `${range}[${colNumber}-1][${range}[0].findIndex(it => it == ${cell})]`;
     },
-    null,
+    null
   );
 
   return [
@@ -479,7 +479,7 @@ type ReplacedString = {
  */
 export const evaluate = (
   str: string,
-  stateContentData: StateContentData,
+  stateContentData: StateContentData
 ): Evaluated => {
   const parsedStrings = evaluateFormula(str);
 
@@ -488,7 +488,7 @@ export const evaluate = (
     const replaced = replaceFormulaWithValues(
       Object.values(it)[0] as string,
       stateContentData,
-      it.zeroValue,
+      it.zeroValue
     );
     return {
       [key]: {
@@ -520,7 +520,7 @@ export const evaluate = (
           curKey,
           isNaN(parseFloat(curValue.value))
             ? `"${curValue.value}"`
-            : `(${curValue.value})`,
+            : `(${curValue.value})`
         ),
         referenceCells: acc.referenceCells,
       };
@@ -528,17 +528,17 @@ export const evaluate = (
     {
       stringValue: str.toUpperCase(),
       referenceCells: setOf<string>(),
-    },
+    }
   );
 
   const substitutedString = replaceFormulaWithValues(
     replacedString.stringValue,
     stateContentData,
-    0,
+    0
   );
 
   const finalEvaluation: EvaluatedString = evaluateExpression(
-    substitutedString.string,
+    substitutedString.string
   );
 
   return {
@@ -546,7 +546,7 @@ export const evaluate = (
     parsedInput: finalEvaluation.parsedInput,
     error: finalEvaluation.error,
     referenceCells: replacedString.referenceCells.mergeWith(
-      substitutedString.referenceCells,
+      substitutedString.referenceCells
     ),
   };
 };
@@ -576,11 +576,11 @@ const evaluateExpression = (input: string): EvaluatedString => {
       .replaceAll(/(?<=\))(\d+)/g, "*$&")
       .replaceAll(
         /(\d+|\))(?=\s*(atan|acos|asin|sin|cos|tan|log|ln|Rnd|E|π))/gi,
-        "$&* ",
+        "$&* "
       )
       .replaceAll(
         /(\d+)(!+)/g,
-        "(Array($1).fill(0).map((_,i)=>i+1).reduce((a,c)=>a*c,1))",
+        "(Array($1).fill(0).map((_,i)=>i+1).reduce((a,c)=>a*c,1))"
       )
       .replaceAll(/(\d+)(√\()(\d+)/g, "(Math.pow($3, 1/$1))")
       .replaceAll(/SQRT\(/gi, "(Math.sqrt(")
@@ -592,7 +592,7 @@ const evaluateExpression = (input: string): EvaluatedString => {
       .replaceAll(/RND\(\)/gi, `(${Math.random()})`)
       .replaceAll(
         /\((\d+)\)!/g,
-        "(Array($1).fill(0).map((_,i)=>i+1).reduce((a,c)=>a*c,1))",
+        "(Array($1).fill(0).map((_,i)=>i+1).reduce((a,c)=>a*c,1))"
       )
       .replaceAll(/(asin|acos|atan)/gi, `Math.$1(`)
       .replaceAll(/(sin|cos|tan)/gi, `Math.$1(`)
@@ -652,11 +652,11 @@ export function getReferenceCells(formula: string): SetExtended<string> {
  */
 export function getFormulaTrackedCells(
   formula: string,
-  stateFormulaTrackedCells: SetExtended<string>,
+  stateFormulaTrackedCells: SetExtended<string>
 ): SetExtended<string> {
   const referenceCells = getReferenceCells(formula);
   const formulaTrackedCells = setOf<string>(
-    referenceCells.mergeWith(stateFormulaTrackedCells),
+    referenceCells.mergeWith(stateFormulaTrackedCells)
   );
   return formulaTrackedCells;
 }

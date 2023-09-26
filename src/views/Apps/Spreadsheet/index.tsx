@@ -4,7 +4,7 @@ import { useQueryParam } from "../../../hooks";
 
 export default function Spreadsheet() {
   const activeSheet = useQueryParam("activeSheet");
-  console.log({ activeSheet });
+
   return (
     <PageContainer title="Spreadsheet" description="React-based spreadsheet">
       <Sheet

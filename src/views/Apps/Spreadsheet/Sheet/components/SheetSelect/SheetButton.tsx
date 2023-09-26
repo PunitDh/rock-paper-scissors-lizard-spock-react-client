@@ -1,5 +1,5 @@
 import { Dispatch, useEffect, useRef, useState } from "react";
-import { renameSheet, setActiveSheet } from "../../actions";
+import { renameSheet, setActiveSheet, setSheets } from "../../actions";
 import { SheetButtonItem, SheetInputItem } from "./styles";
 import { Action, Sheet, State } from "../../types";
 import { useNotification } from "../../../../../../hooks";
@@ -49,12 +49,18 @@ const SheetButton = ({
   const handleRename = (e: React.FormEvent) => {
     e.preventDefault();
     onRename();
-    if (sheetName.trim().length > 0) {
-      dispatch(renameSheet(sheet.id, sheetName.trim()));
-      setSheetName(sheetName.trim());
+    const name = sheetName.trim();
+    if (name.length > 0) {
+      dispatch(renameSheet(sheet.id, name));
+      setSheetName(name);
     } else {
       setSheetName(sheet.name);
     }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    setSheetName(sheet.name);
+    onRename();
   };
 
   const handleDoubleClick = () => onDoubleClick(sheet.id);
@@ -63,10 +69,12 @@ const SheetButton = ({
   const checkPassword = () => {
     if (password === selectedSheet.password) {
       dispatch(setActiveSheet(sheet.id));
+      notification.success(`'${sheet.name}' unlocked`);
     } else {
       notification.error("Wrong password entered");
     }
     setPassword("");
+    setPasswordPromptOpen(false);
   };
 
   useEffect(() => {
@@ -78,33 +86,38 @@ const SheetButton = ({
   }, [renameMode, sheet.id, sheet.name.length]);
 
   function drag(e: React.DragEvent<HTMLFormElement>) {
-    e.dataTransfer.setData("text", (e.target as HTMLFormElement).id);
+    e.dataTransfer.setData(
+      "text",
+      (e.target as HTMLFormElement).getAttribute("data-sheet-id")!
+    );
     e.dataTransfer.effectAllowed = "move";
   }
 
   function drop(e: React.DragEvent<HTMLFormElement>) {
     e.preventDefault();
+    const target = e.target as HTMLFormElement;
     const data = e.dataTransfer.getData("text");
-    const sourceIndex = state.sheets[data].index;
-    const targetIndex = state.sheets[(e.target as HTMLFormElement).id].index;
+    const sourceSheet = state.sheets[data];
+    const targetSheet = state.sheets[target.id];
 
-    if (sourceIndex !== undefined && targetIndex !== undefined) {
+    if (sourceSheet && targetSheet) {
       const newSheets = { ...state.sheets };
-      newSheets[data].index = targetIndex;
-      newSheets[(e.target as HTMLFormElement).id].index = sourceIndex;
+      newSheets[data].index = targetSheet.index;
+      newSheets[target.id].index = sourceSheet.index;
 
-      // Sort the sheets by index to ensure correct rendering order
       const sortedSheets = Object.values(newSheets).sort(
-        (sheetA, sheetB) => sheetA.index - sheetB.index,
+        (sheetA: Sheet, sheetB: Sheet) => sheetA.index - sheetB.index
       );
 
-      // Create an object with the sorted sheets
-      const sortedSheetObject = {};
-      sortedSheets.forEach((sheet) => {
-        sortedSheetObject[sheet.id] = sheet;
-      });
+      const sortedSheetObject = sortedSheets.reduce(
+        (acc, sheet) => ({
+          ...acc,
+          [sheet.id]: sheet,
+        }),
+        {}
+      );
 
-      // dispatch(setSheets(sortedSheetObject));
+      dispatch(setSheets(sortedSheetObject));
     }
   }
 
@@ -120,6 +133,7 @@ const SheetButton = ({
       id={`form-${sheet.id}`}
       onDrop={drop}
       onDragOver={allowDrop}
+      data-sheet-id={sheet.id}
     >
       {renameMode ? (
         <>
@@ -128,7 +142,7 @@ const SheetButton = ({
             type="text"
             value={sheetName}
             onChange={handleChangeName}
-            onBlur={onRename}
+            onBlur={handleBlur}
           />
           <input type="submit" style={{ display: "none" }} />
         </>

@@ -4,8 +4,22 @@ import Selector from "./Selector";
 import { AuthorizationTypeItems } from "../../../constants";
 import { Bold } from "../../../../../../../components/shared/styles";
 import FlexBox from "../../../../../../../components/shared/FlexBox";
+import { Action, State } from "../../../types";
+import { Dispatch } from "react";
 
-const StyledBox = styled.div(({ border, width }) => ({
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+  value: number;
+  tabId: string;
+};
+
+type StyledBoxProps = {
+  border?: boolean;
+  width?: string;
+};
+
+const StyledBox = styled.div(({ border, width }: StyledBoxProps) => ({
   borderRight: border ? "1px solid rgba(0,0,0,0.1)" : 0,
   height: "15rem",
   justifyContent: "flex-start",
@@ -16,7 +30,7 @@ const StyledBox = styled.div(({ border, width }) => ({
   gap: "0.5rem",
 }));
 
-const AuthorizationTab = ({ state, dispatch, value, tabId }) => {
+const AuthorizationTab = ({ state, dispatch, value, tabId }: Props) => {
   const { Component } =
     AuthorizationTypeItems[state.request.authorization.type];
 
@@ -33,7 +47,7 @@ const AuthorizationTab = ({ state, dispatch, value, tabId }) => {
         <StyledBox border>
           <Selector state={state} dispatch={dispatch} />
         </StyledBox>
-        <StyledBox width="100%" height="">
+        <StyledBox width="100%">
           {Component && <Component state={state} dispatch={dispatch} />}
         </StyledBox>
       </FlexBox>

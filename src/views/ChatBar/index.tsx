@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import ChatBox from "./ChatBox";
 import { ChatBoxStatus } from "./constants";
 import { Theme, useMediaQuery } from "@mui/material";
+import { Conversation } from "../../redux/types";
 
 const Container = styled.div({
   position: "fixed",
@@ -27,7 +28,7 @@ const ChatBar = () => {
 
   return (
     <Container>
-      {openConversations.slice(-limit).map((conversation) => (
+      {openConversations.slice(-limit).map((conversation: Conversation) => (
         <ChatBox key={conversation.id} conversation={conversation} />
       ))}
     </Container>

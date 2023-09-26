@@ -21,15 +21,21 @@ import {
   setParams,
 } from "../../../../actions";
 import KeyValuePair from "../../../../models/KeyValuePair";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Dispatch, useCallback, useEffect, useRef, useState } from "react";
 import { Bold } from "../../../../../../../../components/shared/styles";
 import { FlexForm } from "../../../../../../Spreadsheet/Sheet/components/styles";
 import FlexBox from "../../../../../../../../components/shared/FlexBox";
+import { Action, State } from "../../../../types";
 
-export default function APIKey({ state, dispatch }) {
-  const formRef = useRef();
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+};
+
+export default function APIKey({ state, dispatch }: Props) {
+  const formRef = useRef<HTMLFormElement | null>(null);
   const [key, value, addTo] = Object.keys(
-    AuthorizationTypeItems.API_KEY.initialState,
+    AuthorizationTypeItems.API_KEY.initialState
   );
   const credentials = state.request.authorization[AuthorizationType.API_KEY];
   const [currentAddTo, setCurrentAddTo] = useState(credentials.addTo);
@@ -38,7 +44,7 @@ export default function APIKey({ state, dispatch }) {
     (value) => {
       const keyValuePair = new KeyValuePair(
         credentials.key,
-        credentials.value,
+        credentials.value
       ).setId(KeyValuePairType.API_KEY);
 
       switch (value) {
@@ -54,7 +60,7 @@ export default function APIKey({ state, dispatch }) {
           break;
       }
     },
-    [credentials.key, credentials.value, dispatch],
+    [credentials.key, credentials.value, dispatch]
   );
 
   const handleSubmit = (e) => e.preventDefault();
@@ -67,17 +73,13 @@ export default function APIKey({ state, dispatch }) {
   const handleChange = (e) => {
     e.preventDefault();
     dispatch(
-      setAuthorization(
-        AuthorizationType.API_KEY,
-        e.target.name,
-        e.target.value,
-      ),
+      setAuthorization(AuthorizationType.API_KEY, e.target.name, e.target.value)
     );
-    updateHeadersOrParams(formRef.current.addTo.value);
+    updateHeadersOrParams(formRef.current?.addTo.value);
   };
 
   useEffect(() => {
-    updateHeadersOrParams(formRef.current.addTo.value);
+    updateHeadersOrParams(formRef.current?.addTo.value);
   }, [currentAddTo, updateHeadersOrParams]);
 
   return (

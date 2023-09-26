@@ -28,7 +28,7 @@ const GameTitle = () => {
 
   return (
     <FlexBox gap="0" alignItems="stretch" justifyContent="flex-start">
-      <IconSelectField selected={icon.id} gameId={currentGame.id} />
+      <IconSelectField selected={icon!.id} gameId={currentGame.id} />
       <form onSubmit={handleRename}>
         <Tooltip title="Rename game">
           <InvisibleTextField

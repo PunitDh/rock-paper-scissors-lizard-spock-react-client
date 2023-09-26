@@ -2,9 +2,16 @@ import JSONInput from "react-json-editor-ajrm";
 import locale from "react-json-editor-ajrm/locale/en";
 import { setBodyContent } from "../../../../actions";
 import { ContentType, JSONEditorColors } from "../../../../constants";
+import { Action, State } from "../../../../types";
+import { Dispatch } from "react";
 
-const ApplicationJSON = ({ state, dispatch }) => {
-  const handleBodyChange = (e) =>
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+};
+
+const ApplicationJSON = ({ state, dispatch }: Props) => {
+  const handleBodyChange = (e: { jsObject: { [x: string]: any } }) =>
     dispatch(setBodyContent(ContentType.JSON, e.jsObject));
 
   return (

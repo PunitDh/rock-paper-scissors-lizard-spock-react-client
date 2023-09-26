@@ -8,6 +8,7 @@ import {
   CellValue,
   InsertColumnLocation,
   InsertRowLocation,
+  Sheet,
 } from "./types";
 
 export enum SheetAction {
@@ -31,6 +32,7 @@ export enum SheetAction {
   DELETE_COLUMN,
   SELECT_ALL,
   HIGHLIGHT_CELLS,
+  SET_SHEETS,
   ADD_SHEET,
   RENAME_SHEET,
   MOVE_SHEET,
@@ -136,7 +138,7 @@ export const setHighlightColumnAnchor = (payload: string): Action => ({
 
 export const pasteCellContent = (
   anchor: string | undefined,
-  data: StateContentData | string,
+  data: StateContentData | string
 ): Action => ({
   type: SheetAction.PASTE_CELL_CONTENT,
   payload: {
@@ -203,6 +205,11 @@ export const highlightCells = (start: string, end?: string): Action => ({
   payload: { start, end },
 });
 
+export const setSheets = (payload: { [key: string]: Sheet }): Action => ({
+  type: SheetAction.SET_SHEETS,
+  payload,
+});
+
 export const addSheet = (): Action => ({
   type: SheetAction.ADD_SHEET,
 });
@@ -251,7 +258,7 @@ export const setSheetIndex = (sheetId: string, index: number): Action => ({
 
 export const highlightFormulaCellRange = (
   start: string,
-  end: string,
+  end: string
 ): Action => ({
   type: SheetAction.FORMULA_HIGHLIGHT_CELL_RANGE,
   payload: {
@@ -261,7 +268,7 @@ export const highlightFormulaCellRange = (
 });
 
 export const highlightFormulaCells = (
-  payload: SetExtended<string>,
+  payload: SetExtended<string>
 ): Action => ({
   type: SheetAction.FORMULA_HIGHLIGHT_CELLS,
   payload,
@@ -269,7 +276,7 @@ export const highlightFormulaCells = (
 
 export const addCellsToHighlight = (
   cellIds: string[],
-  multiSelect: boolean = false,
+  multiSelect: boolean = false
 ): Action => ({
   type: SheetAction.ADD_CELLS_TO_HIGHLIGHT,
   payload: {
@@ -315,7 +322,7 @@ export const setCellContent = (cellId: string, value: string): Action => ({
 export const updateReferenceCells = (
   cellId: string,
   values: string[],
-  replace: boolean,
+  replace: boolean
 ): Action => ({
   type: SheetAction.UPDATE_REFERENCE_CELLS,
   payload: { cell: cellId, values, replace },

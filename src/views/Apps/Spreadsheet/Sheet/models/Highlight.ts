@@ -1,6 +1,7 @@
 import { isNumber } from "../../../../../utils";
 import SetExtended, { setOf } from "../../../../../utils/Set";
 import Cell from "./Cell";
+import CellData from "./CellData";
 import StateContentData from "./StateContentData";
 
 type Props = {
@@ -80,7 +81,8 @@ export default class Highlight {
     const cells = [...this.cells];
     let last = cells[0];
     for (let i = 0; i < cells.length; i++) {
-      if (stateContentData[cells[i]]?.isNotEmpty()) {
+      const cellData: CellData | undefined = stateContentData[cells[i]];
+      if (cellData?.isNotEmpty()) {
         last = cells[i];
       }
     }
@@ -123,7 +125,7 @@ export default class Highlight {
 
   setCells(
     cellIds: SetExtended<string>,
-    stateContentData: StateContentData,
+    stateContentData: StateContentData
   ): Highlight {
     this.cells = setOf<string>(cellIds);
     this.recalculate(stateContentData);
@@ -152,7 +154,7 @@ export default class Highlight {
 
   addCellAndRecalculate(
     cellId: string,
-    stateContentData: StateContentData,
+    stateContentData: StateContentData
   ): Highlight {
     const cell = new Cell(cellId);
     const rowsSet = setOf<number>(this.rows);
@@ -198,7 +200,7 @@ export default class Highlight {
       const count = this.cells
         .toArray()
         .filter((cell) =>
-          Boolean(stateContentData[cell]?.value?.toString()),
+          Boolean(stateContentData[cell]?.value?.toString())
         ).length;
       this.count = count;
     } else {

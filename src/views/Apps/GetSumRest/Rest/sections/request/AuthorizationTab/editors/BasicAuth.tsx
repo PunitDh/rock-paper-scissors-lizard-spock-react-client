@@ -10,16 +10,24 @@ import { AuthorizationType } from "../../../../constants";
 import FlexBox from "../../../../../../../../components/shared/FlexBox";
 import { Bold } from "../../../../../../../../components/shared/styles";
 import PasswordField from "../../../../../../../../components/shared/PasswordField";
+import { Action, State } from "../../../../types";
+import { Dispatch } from "react";
 
-export default function BasicAuth({ state, dispatch }) {
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+};
+
+export default function BasicAuth({ state, dispatch }: Props) {
   const credentials = state.request.authorization[AuthorizationType.BASIC_AUTH];
-  const handleChange = (e) =>
+  
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     dispatch(
       setAuthorization(
         AuthorizationType.BASIC_AUTH,
         e.target.name,
-        e.target.value,
-      ),
+        e.target.value
+      )
     );
 
   return (

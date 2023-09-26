@@ -47,7 +47,7 @@ export const setMethod = (payload: HttpMethod): Action => ({
   payload,
 });
 
-export const setAuthorizationType = (payload: AuthorizationType): Action => ({
+export const setAuthorizationType = (payload: string): Action => ({
   type: RestAction.SET_AUTHORIZATION_TYPE,
   payload,
 });
@@ -65,7 +65,7 @@ export const setAuthorization = (
   },
 });
 
-export const setHeaders = (payload): Action => ({
+export const setHeaders = (payload: KeyValuePair): Action => ({
   type: RestAction.SET_HEADERS,
   payload,
 });
@@ -75,7 +75,7 @@ export const removeHeader = (payload): Action => ({
   payload,
 });
 
-export const deleteHeaders = (payload): Action => ({
+export const deleteHeaders = (payload: KeyValuePair): Action => ({
   type: RestAction.DELETE_HEADERS,
   payload,
 });

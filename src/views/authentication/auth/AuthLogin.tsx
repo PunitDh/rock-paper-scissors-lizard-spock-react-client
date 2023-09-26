@@ -12,7 +12,13 @@ import { Link } from "react-router-dom";
 import CustomTextField from "../../../components/forms/theme-elements/CustomTextField";
 import { useAPI, useLoading } from "../../../hooks";
 
-const AuthLogin = ({ title, subtitle, subtext }) => {
+type Props = {
+  title?: string;
+  subtitle?: JSX.Element;
+  subtext?: string;
+};
+
+const AuthLogin = ({ title, subtitle, subtext }: Props) => {
   const api = useAPI();
   const [loginPlayer, loading] = useLoading(api.loginPlayer);
 

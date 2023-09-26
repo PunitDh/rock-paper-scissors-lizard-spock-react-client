@@ -9,15 +9,22 @@ import { RequestTabList, tabProps } from "../../constants";
 import { DividerBox } from "../../styles";
 import CustomTab from "../../components/CustomTab";
 import { useQueryParam } from "../../../../../../hooks";
+import { Dispatch } from "react";
+import { Action, State } from "../../types";
+
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+};
 
 const WideBox = styled(Box)({
   width: "100%",
 });
 
-export default function RequestTabs({ state, dispatch }) {
+export default function RequestTabs({ state, dispatch }: Props) {
   const requestTab = useQueryParam("requestTab");
-  const [tab, setTab] = useState(Number(requestTab) || 0);
-  const handleChange = (_, newValue) => setTab(newValue);
+  const [tab, setTab] = useState<number>(Number(requestTab) || 0);
+  const handleChange = (_, newValue: number) => setTab(newValue);
 
   return (
     <WideBox>

@@ -2,7 +2,12 @@ import { CloseSharp } from "@mui/icons-material";
 import { Button, Tooltip, useTheme } from "@mui/material";
 import FlexBox from "../../../../../components/shared/FlexBox";
 
-const Tag = ({ text, onClick }) => {
+type Props = {
+  text: string;
+  onClick: (e: React.MouseEvent) => void;
+};
+
+const Tag = ({ text, onClick }: Props) => {
   const theme = useTheme();
   return (
     <FlexBox

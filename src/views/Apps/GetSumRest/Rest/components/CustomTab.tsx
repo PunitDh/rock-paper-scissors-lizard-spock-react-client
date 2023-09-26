@@ -1,7 +1,13 @@
 import { Tab } from "@mui/material";
 import { Green } from "./styles";
 
-export default function CustomTab({ label, subLabel, ...others }) {
+type Props = {
+  label: string;
+  subLabel: () => string;
+  [x: string]: any;
+};
+
+export default function CustomTab({ label, subLabel, ...others }: Props) {
   const smallLabel = subLabel();
 
   const combinedLabel = smallLabel ? (

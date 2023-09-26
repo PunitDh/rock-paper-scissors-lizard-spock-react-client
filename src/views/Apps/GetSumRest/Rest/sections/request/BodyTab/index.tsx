@@ -11,6 +11,15 @@ import { setContentType } from "../../../actions";
 import { ContentTypeMenuItems } from "../../../constants";
 import FlexBox from "../../../../../../../components/shared/FlexBox";
 import { Bold } from "../../../../../../../components/shared/styles";
+import { Dispatch } from "react";
+import { Action, State } from "../../../types";
+
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+  value: number;
+  tabId: string;
+};
 
 const StyledFormControl = styled(FormControl)({
   flexDirection: "row",
@@ -21,8 +30,8 @@ const InputContainer = styled(RadioGroup)({
   width: "100%",
 });
 
-export default function Body({ state, dispatch, value, id: tabId }) {
-  const handleChange = (e) => {
+export default function Body({ state, dispatch, value, tabId }: Props) {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setContentType(e.target.value));
   };
 

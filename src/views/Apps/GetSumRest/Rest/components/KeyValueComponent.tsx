@@ -7,6 +7,14 @@ import {
   TableRow,
 } from "@mui/material";
 import KeyValueRow from "./KeyValueRow";
+import KeyValuePair from "../models/KeyValuePair";
+
+type Props = {
+  property: KeyValuePair[];
+  onChange: (pair: KeyValuePair) => void;
+  onDelete: (pair: KeyValuePair) => void;
+  fileUpload?: boolean;
+};
 
 const TableHeaderCell = styled(TableCell)(({ width }) => ({
   paddingLeft: 0,
@@ -19,8 +27,7 @@ const KeyValueComponent = ({
   onChange,
   onDelete,
   fileUpload,
-  type,
-}) => (
+}: Props) => (
   <Table style={{ tableLayout: "fixed" }}>
     <TableHead style={{ borderBottom: "1px solid rgba(0,0,0,1)" }}>
       <TableRow>
@@ -32,10 +39,9 @@ const KeyValueComponent = ({
       </TableRow>
     </TableHead>
     <TableBody>
-      {property.map((pair, index) => (
+      {property.map((pair: KeyValuePair, index: number) => (
         <KeyValueRow
           pair={pair}
-          type={type}
           onChange={onChange}
           onDelete={onDelete}
           key={index}

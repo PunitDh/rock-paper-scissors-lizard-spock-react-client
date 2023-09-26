@@ -14,6 +14,11 @@ import {
   openConversation,
 } from "../../../redux/conversationSlice";
 import { getAvatar } from "../../../assets";
+import { Conversation, Message } from "../../../redux/types";
+
+type Props = {
+  conversation: Conversation;
+};
 
 const CloseButton = styled(Close)(({ theme }) => ({
   cursor: "pointer",
@@ -37,19 +42,26 @@ const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
   zIndex: "5",
 }));
 
-const StyledPaper = styled(Paper)(({ maximized, toolbarheight }) => ({
-  width: "80dvw",
-  height: maximized > 0 ? "80dvh" : toolbarheight,
-  maxWidth: "300px",
-  maxHeight: "500px",
-  display: "flex",
-  alignItems: "center",
-  flexDirection: "column",
-  boxShadow: "-1rem -1rem 3rem -1rem rgba(0,0,0,0.7)",
-  borderTopRightRadius: "0.5rem",
-  borderTopLeftRadius: "0.5rem",
-  zIndex: "1500",
-}));
+type StyledPaperProps = {
+  maximized: number;
+  toolbarheight: number;
+};
+
+const StyledPaper = styled(Paper)(
+  ({ maximized, toolbarheight }: StyledPaperProps) => ({
+    width: "80dvw",
+    height: maximized > 0 ? "80dvh" : toolbarheight,
+    maxWidth: "300px",
+    maxHeight: "500px",
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "column",
+    boxShadow: "-1rem -1rem 3rem -1rem rgba(0,0,0,0.7)",
+    borderTopRightRadius: "0.5rem",
+    borderTopLeftRadius: "0.5rem",
+    zIndex: "1500",
+  })
+);
 
 const MessageBody = styled(Paper)({
   width: "calc(100% - 20px)",
@@ -58,26 +70,26 @@ const MessageBody = styled(Paper)({
   height: "calc(100% - 80px)",
 });
 
-function ChatBox({ conversation }) {
+function ChatBox({ conversation }: Props) {
   const dispatch = useDispatch();
-  const [toolbarHeight, setToolbarHeight] = useState();
+  const [toolbarHeight, setToolbarHeight] = useState<number>(0);
   const token = useToken();
   const { messages } = conversation;
 
-  const toolbarRef = useCallback((node) => {
+  const toolbarRef = useCallback((node: HTMLDivElement) => {
     const rect = node?.getBoundingClientRect();
     rect && setToolbarHeight(rect.bottom - rect.top);
   }, []);
 
   const scrollToBottomRef = useCallback(
-    (node) => node?.scrollIntoView(),
-    [messages.length],
+    (node: HTMLDivElement) => node?.scrollIntoView(),
+    [messages.length]
   );
 
   const isMinimized = conversation.status === ChatBoxStatus.MINIMIZED;
   const isOpen = conversation.status === ChatBoxStatus.OPEN;
 
-  const closeChatBox = (e) => {
+  const closeChatBox = (e: React.MouseEvent) => {
     e.stopPropagation();
     dispatch(closeConversation(conversation));
   };
@@ -88,14 +100,17 @@ function ChatBox({ conversation }) {
   };
 
   const receiver = conversation.players.find(
-    (player) => player.id !== token.decoded.id,
+    (player) => player.id !== token.decoded?.id
   );
 
   const allRead = messages
-    .filter((message) => message.sender !== token.decoded.id)
+    .filter((message) => message.sender !== token.decoded?.id)
     .every((message) => message.read);
 
-  return (
+  return token.decoded &&
+    toolbarHeight !== null &&
+    toolbarHeight !== undefined &&
+    receiver ? (
     <StyledPaper maximized={Number(isOpen)} toolbarheight={toolbarHeight}>
       <ToolbarStyled ref={toolbarRef} onClick={toggleMinimize}>
         <Typography>Chat with {receiver.firstName}</Typography>
@@ -104,16 +119,15 @@ function ChatBox({ conversation }) {
         </Tooltip>
       </ToolbarStyled>
       <MessageBody>
-        {messages.map((message) =>
-          message.sender === token.decoded.id ? (
+        {messages.map((message: Message) =>
+          message.sender === token.decoded!.id ? (
             <MessageRight
               key={message._id}
               content={message.content}
               read={message.read}
               timestamp={formatDate(message.createdAt)}
-              photoURL={getAvatar(token.decoded.avatar)}
-              displayName={token.decoded.firstName}
-              avatarDisp={true}
+              photoURL={getAvatar(token.decoded!.avatar)!}
+              displayName={token.decoded!.firstName}
             />
           ) : (
             <MessageLeft
@@ -121,11 +135,10 @@ function ChatBox({ conversation }) {
               content={message.content}
               read={message.read}
               timestamp={formatDate(message.createdAt)}
-              photoURL={getAvatar(receiver.avatar)}
+              photoURL={getAvatar(receiver.avatar)!}
               displayName={receiver.firstName}
-              avatarDisp={true}
             />
-          ),
+          )
         )}
         <div ref={scrollToBottomRef} />
       </MessageBody>
@@ -135,6 +148,8 @@ function ChatBox({ conversation }) {
         allRead={allRead}
       />
     </StyledPaper>
+  ) : (
+    <></>
   );
 }
 

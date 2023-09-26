@@ -31,20 +31,22 @@ const Cell = memo(
     formatting = new CellFormatting(),
     width,
   }: Props) => {
-    // console.log(id, formatting, "re-rendering cell formatting");
-    const borderProperties = useMemo(() => {
-      return getBorderProperties(
-        isSelected,
-        Number(isFormulaHighlighted),
-        formatting.borderId!,
+    console.log("Re-rendering cell:", id);
+    const borderProperties = useMemo(
+      () =>
+        getBorderProperties(
+          isSelected,
+          Number(isFormulaHighlighted),
+          formatting.borderId!,
+          formatting.borderTypes
+        ),
+      [
+        formatting.borderId,
         formatting.borderTypes,
-      );
-    }, [
-      formatting.borderId,
-      formatting.borderTypes,
-      isFormulaHighlighted,
-      isSelected,
-    ]);
+        isFormulaHighlighted,
+        isSelected,
+      ]
+    );
 
     return (
       <Item
@@ -61,7 +63,7 @@ const Cell = memo(
         {display}
       </Item>
     );
-  },
+  }
 );
 
 export default Cell;

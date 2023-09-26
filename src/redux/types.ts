@@ -1,4 +1,5 @@
 import { NavItemType } from "../layouts/FullLayout/Sidebar/types";
+import { PlayerType } from "../views/Apps/types";
 import { ChatBoxStatus } from "../views/ChatBar/constants";
 
 export const CURRENT_GAMES = "Current Games" as const;
@@ -11,19 +12,19 @@ export type PlayerState = {
   recentGames: { [key: string]: any }[];
 };
 
-type NavGroup = {
+export type NavGroupType = {
   maximized: boolean;
   items: NavItemType[];
 };
 
 export type MenuState = {
-  Admin: NavGroup;
-  Home: NavGroup;
-  Games: NavGroup;
-  Apps: NavGroup;
-  Messages: NavGroup;
-  [CURRENT_GAMES]: NavGroup;
-  Settings: NavGroup;
+  Admin: NavGroupType;
+  Home: NavGroupType;
+  Games: NavGroupType;
+  Apps: NavGroupType;
+  Messages: NavGroupType;
+  [CURRENT_GAMES]: NavGroupType;
+  Settings: NavGroupType;
 };
 
 export type ConversationState = {
@@ -33,6 +34,16 @@ export type ConversationState = {
 export type Conversation = {
   id: string;
   opener?: boolean;
+  messages: Message[];
+  players: PlayerType[];
   status: ChatBoxStatus;
   updatedAt: Date;
+};
+
+export type Message = {
+  _id: string;
+  content: string;
+  sender: string;
+  read: boolean;
+  createdAt: Date;
 };

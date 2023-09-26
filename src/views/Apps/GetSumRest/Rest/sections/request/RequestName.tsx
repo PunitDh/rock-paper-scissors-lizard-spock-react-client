@@ -1,6 +1,13 @@
 import { InputBase, Tooltip } from "@mui/material";
 import { setRequestName } from "../../actions";
 import styled from "@emotion/styled";
+import { Dispatch } from "react";
+import { Action, State } from "../../types";
+
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+};
 
 const RequestNameField = styled(InputBase)({
   padding: "0.5rem",
@@ -17,8 +24,8 @@ const RequestNameField = styled(InputBase)({
   },
 });
 
-const RequestName = ({ state, dispatch }) => {
-  const handleChange = (e) => {
+const RequestName = ({ state, dispatch }: Props) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     dispatch(setRequestName(e.target.value));
   };
@@ -34,9 +41,7 @@ const RequestName = ({ state, dispatch }) => {
         name="requestName"
         size="small"
         onChange={handleChange}
-        // onBlur={handleRename}
         autoComplete="off"
-        variant="standard"
       />
     </Tooltip>
     // <TextField

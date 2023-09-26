@@ -16,6 +16,15 @@ import { useRef } from "react";
 import Tag from "./Tag";
 import { FormDataFieldType } from "../constants";
 import FlexBox from "../../../../../components/shared/FlexBox";
+import KeyValuePair from "../models/KeyValuePair";
+
+type Props = {
+  pair: KeyValuePair;
+  onChange: (pair: KeyValuePair) => void;
+  onDelete: (pair: KeyValuePair) => void;
+  isLast: boolean;
+  fileUpload?: boolean;
+};
 
 const CheckboxCell = styled(TableCell)({
   width: "1rem",
@@ -26,11 +35,10 @@ const StyledTableCell = styled(TableCell)({
   padding: "0rem 0.5rem 0rem 0rem",
 });
 
-const StyledTextField = styled(TextField)(({ include }) => ({
+const StyledTextField = styled(TextField)({
   width: "100%",
   color: "green",
-  // color: include > 1 ? "initial" : "green",
-}));
+});
 
 const StyledTableRow = styled(TableRow)({
   backgroundColor: "rgba(220,220,220,0.1)",
@@ -62,26 +70,27 @@ export default function KeyValueRow({
   onDelete,
   isLast,
   fileUpload,
-}) {
-  const fileRef = useRef();
-  const handleChange = (e) => {
-    if (e.target.name === "include") {
+}: Props) {
+  const fileRef = useRef<HTMLButtonElement | null>(null);
+  const handleChange = (e: any) => {
+    const target = e.target as HTMLInputElement;
+    if (target.name === "include") {
       pair.include = !pair.include;
     } else {
-      pair[e.target.name] = e.target.value;
+      pair[target.name] = target.value;
     }
     return onChange(pair);
   };
 
   const handleDelete = () => onDelete(pair);
 
-  const handleSelectFiles = (e) => {
+  const handleSelectFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
     pair.files = e.target.files;
     return onChange(pair);
   };
 
   const handleDeleteFiles = () => {
-    pair.files = [];
+    pair.files = null;
     return onChange(pair);
   };
 
@@ -90,6 +99,7 @@ export default function KeyValueRow({
       <CheckboxCell>
         <FormGroup>
           <FormControlLabel
+            label=""
             control={
               <Checkbox
                 onChange={handleChange}
@@ -142,7 +152,7 @@ export default function KeyValueRow({
             justifyContent="flex-start"
             cursor="text"
           >
-            {pair.files.length ? (
+            {pair.files?.length ? (
               <Tag
                 text={
                   pair.files.length > 1
@@ -154,7 +164,7 @@ export default function KeyValueRow({
             ) : (
               <FileInputContainer>
                 <Button
-                  variant="primary"
+                  variant="contained"
                   type="button"
                   onClick={() => fileRef.current?.click()}
                   sx={{ height: "2rem", width: "6.8rem" }}

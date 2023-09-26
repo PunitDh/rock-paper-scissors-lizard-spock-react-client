@@ -2,6 +2,7 @@ import { useLocation } from "react-router";
 import { useSelector } from "react-redux";
 import { Box, List } from "@mui/material";
 import NavGroup from "./NavGroup";
+import NavGroupHeader from "./NavGroupHeader";
 
 type Props = {
   closeSideBar?: () => void;
@@ -16,13 +17,19 @@ const SidebarItems = ({ closeSideBar }: Props) => {
     <Box sx={{ px: 3 }}>
       <List sx={{ pt: 0 }}>
         {navGroups.map((group) => (
-          <NavGroup
-            key={group}
-            groupName={group}
-            navItems={menuItems[group]}
-            pathDirect={pathname}
-            closeSideBar={closeSideBar}
-          />
+          <div key={group}>
+            <NavGroupHeader
+              groupName={group}
+              maximized={menuItems[group].maximized}
+            />
+            {menuItems[group].maximized && (
+              <NavGroup
+                navItems={menuItems[group]}
+                pathDirect={pathname}
+                closeSideBar={closeSideBar}
+              />
+            )}
+          </div>
         ))}
       </List>
     </Box>
