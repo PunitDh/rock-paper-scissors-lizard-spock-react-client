@@ -1,7 +1,14 @@
+import { Dispatch } from "react";
 import FlexBox from "../../../../../../components/shared/FlexBox";
 import { setOutputDisplayType } from "../../actions";
 import { DisplayType } from "../../constants";
 import { StatusButton } from "../../styles";
+import { Action, State } from "../../types";
+
+// type Props = {
+//   state: State;
+//   dispatch: Dispatch<Action>;
+// };
 
 const ResponseType = ({ state, dispatch }) => {
   const handleSetDisplayType = (displayType) => () =>
@@ -12,7 +19,6 @@ const ResponseType = ({ state, dispatch }) => {
       <FlexBox width="100%" gap="0.1rem" justifyContent="flex-start">
         {Object.values(DisplayType).map((displayType) => (
           <StatusButton
-            variant="secondary"
             selected={state.response.displayType === displayType}
             onClick={handleSetDisplayType(displayType)}
             key={displayType}

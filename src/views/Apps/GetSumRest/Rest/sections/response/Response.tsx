@@ -3,7 +3,6 @@ import BodyOutput from "./BodyOutput";
 import { DividerBox } from "../../styles";
 import { useState } from "react";
 import { ResponseTabList, tabProps } from "../../constants";
-
 import CustomTabPanel from "../../components/CustomTabPanel";
 import Cookies from "./Cookies";
 import Header from "./Headers";
@@ -11,8 +10,15 @@ import ResponseStatus from "./ResponseStatus";
 import CustomTab from "../../components/CustomTab";
 import { useQueryParam } from "../../../../../../hooks";
 import FlexBox from "../../../../../../components/shared/FlexBox";
+import { Action, State } from "../../types";
+import { Dispatch } from "react";
 
-const Response = ({ state, dispatch }) => {
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+};
+
+const Response = ({ state, dispatch }: Props) => {
   const responseTab = useQueryParam("responseTab");
   const [tab, setTab] = useState(Number(responseTab) || 0);
   const handleChange = (_, newValue) => setTab(newValue);
@@ -50,7 +56,7 @@ const Response = ({ state, dispatch }) => {
         index={0}
         style={{ width: "100%" }}
       >
-        <BodyOutput state={state} dispatch={dispatch} id="response" />
+        <BodyOutput state={state} dispatch={dispatch} />
       </CustomTabPanel>
       <CustomTabPanel
         tabId="response"
@@ -58,7 +64,7 @@ const Response = ({ state, dispatch }) => {
         index={1}
         style={{ width: "100%" }}
       >
-        <Cookies state={state} id="response" />
+        <Cookies state={state} />
       </CustomTabPanel>
       <CustomTabPanel
         tabId="response"
@@ -66,7 +72,7 @@ const Response = ({ state, dispatch }) => {
         index={2}
         style={{ width: "100%" }}
       >
-        <Header state={state} id="response" />
+        <Header state={state} />
       </CustomTabPanel>
     </FlexBox>
   );

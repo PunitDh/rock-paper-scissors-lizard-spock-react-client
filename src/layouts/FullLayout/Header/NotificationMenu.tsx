@@ -7,7 +7,7 @@ import NotificationItem from "./NotificationItem";
 import { uniqueId } from "lodash";
 import { useToken } from "../../../hooks";
 import { Bold } from "../../../components/shared/styles";
-import { GameType, PlayerType } from "../../../views/Apps/types";
+import { GameRound, GameType, PlayerType } from "../../../views/Apps/types";
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -56,7 +56,7 @@ const StyledMenu = styled((props) => (
       "&:active": {
         backgroundColor: alpha(
           theme.palette.primary.main,
-          theme.palette.action.selectedOpacity,
+          theme.palette.action.selectedOpacity
         ),
       },
     },
@@ -77,14 +77,14 @@ const NotificationMenu = () => {
     setAnchorEl(null);
   };
 
-  const opponentPlayed = (round) =>
+  const opponentPlayed = (round: GameRound): boolean =>
     round.moves.length === 1 && round.moves[0].player !== token.decoded?.id;
 
   const notifications = currentGames
     .filter((game: GameType) => game.rounds.some(opponentPlayed))
     .map(function (game: GameType) {
       const player = game.players.find(
-        (player: PlayerType) => player.id !== token.decoded?.id,
+        (player: PlayerType) => player.id !== token.decoded?.id
       );
       return {
         id: uniqueId("notification-"),

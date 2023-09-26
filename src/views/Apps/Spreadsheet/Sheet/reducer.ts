@@ -12,6 +12,7 @@ import {
   InsertColumnLocation,
   InsertRowLocation,
   Memento,
+  Sheet,
   State,
 } from "./types";
 import StateContentData from "./models/StateContentData";
@@ -61,6 +62,7 @@ export const initialState: State = {
 
 export const reducer = (state: State, action: Action): State => {
   const activeSheet = state.sheets[state.activeSheet];
+  const activeSheetContentData = activeSheet.content.data;
   // action.type !== SheetAction.SET_HOVERED && console.log(action);
 
   switch (action.type) {
@@ -184,7 +186,7 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         highlighted: state.highlighted
-          .setCells(setOf(range.cellIds.flat()), activeSheet.content.data)
+          .setCells(setOf(range.cellIds.flat()), activeSheetContentData)
           .setRows(setOf(range.rows))
           .setColumns(setOf(range.columns))
           .setRangeStart(action.payload.start)
@@ -259,18 +261,22 @@ export const reducer = (state: State, action: Action): State => {
       }
 
       const index = sheetIds.findIndex((it) => it === action.payload);
-      const sheets = {};
-
-      sheetIds
+      const sheets = sheetIds
         .filter((sheetId) => sheetId !== action.payload)
-        .forEach((sheetId) => {
-          sheets[sheetId] = state.sheets[sheetId];
-        });
+        .reduce(
+          (stateSheets: { [key: string]: Sheet }, sheetId: string) => ({
+            ...stateSheets,
+            [sheetId]: state.sheets[sheetId],
+          }),
+          {}
+        );
+
+      const activeSheet = sheetIds[index - 1] || sheetIds[index + 1];
 
       return {
         ...state,
         sheets: reIndexSheets(sheets),
-        activeSheet: sheetIds[index - 1],
+        activeSheet,
       };
     }
 
@@ -347,7 +353,7 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         highlighted: state.highlighted
-          .setCells(cells, activeSheet.content.data)
+          .setCells(cells, activeSheetContentData)
           .setRows(state.highlighted.rows.mergeWith(rows))
           .setColumns(state.highlighted.columns.mergeWith(columns))
           .setMultiSelect(action.payload.multiSelect),
@@ -394,7 +400,7 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         highlighted: state.highlighted
-          .setCells(updatedCells, activeSheet.content.data)
+          .setCells(updatedCells, activeSheetContentData)
           .setRows(newHighlightedRows)
           .setColumns(newHighlightedColumns),
       };
@@ -411,7 +417,7 @@ export const reducer = (state: State, action: Action): State => {
               content: {
                 ...activeSheet.content,
                 data: {
-                  ...activeSheet.content.data,
+                  ...activeSheetContentData,
                   [action.payload]: new CellData({ id: action.payload }),
                 } as StateContentData,
               } as StateContent,
@@ -420,14 +426,14 @@ export const reducer = (state: State, action: Action): State => {
         };
       }
 
-      const data = Object.keys(activeSheet.content.data)
+      const data = Object.keys(activeSheetContentData)
         .filter((cell) => state.highlighted.includes(cell))
         .reduce((stateContentData, cell) => {
           return {
             ...stateContentData,
             [cell]: new CellData({ id: cell }),
           } as StateContentData;
-        }, activeSheet.content.data);
+        }, activeSheetContentData);
 
       return {
         ...state,
@@ -471,7 +477,7 @@ export const reducer = (state: State, action: Action): State => {
                 [cell]: updateObj[cell],
               } as StateContentData;
             },
-            activeSheet.content.data
+            activeSheetContentData
           );
           return {
             ...state,
@@ -498,7 +504,7 @@ export const reducer = (state: State, action: Action): State => {
               content: {
                 ...activeSheet.content,
                 data: {
-                  ...activeSheet.content.data,
+                  ...activeSheetContentData,
                   [action.payload.anchor.id]: {
                     value,
                   },
@@ -528,7 +534,7 @@ export const reducer = (state: State, action: Action): State => {
         ...state,
         selectedCell: new Cell(state.selectedCell.column + action.payload),
         highlighted: state.highlighted
-          .setCells(setOf(range.cellIds.flat()), activeSheet.content.data)
+          .setCells(setOf(range.cellIds.flat()), activeSheetContentData)
           .setRows(setOf(range.rows))
           .setColumns(setOf(range.columns)),
       };
@@ -562,7 +568,7 @@ export const reducer = (state: State, action: Action): State => {
         ...state,
         selectedCell: new Cell(action.payload + state.selectedCell.row),
         highlighted: state.highlighted
-          .setCells(setOf(range.cellIds.flat()), activeSheet.content.data)
+          .setCells(setOf(range.cellIds.flat()), activeSheetContentData)
           .setRows(setOf(range.rows))
           .setColumns(setOf(range.columns)),
       };
@@ -591,7 +597,7 @@ export const reducer = (state: State, action: Action): State => {
       const { row: selectedCellRow } = state.selectedCell;
       const location: InsertRowLocation = action.payload;
 
-      const data = Object.keys(activeSheet.content.data).reduceRight(
+      const data = Object.keys(activeSheetContentData).reduceRight(
         (stateContentData: StateContentData, cellId: string) => {
           const cell = new Cell(cellId);
           const isGreater: boolean =
@@ -601,7 +607,7 @@ export const reducer = (state: State, action: Action): State => {
           if (isGreater) {
             const newCell = cell.getOffset(0, 1, false);
             const cellData = CellData.getOrNew(
-              activeSheet.content.data,
+              activeSheetContentData,
               cellId
             ).setId(newCell.id);
             return {
@@ -612,7 +618,7 @@ export const reducer = (state: State, action: Action): State => {
           }
           return stateContentData;
         },
-        activeSheet.content.data
+        activeSheetContentData
       );
 
       return {
@@ -634,7 +640,7 @@ export const reducer = (state: State, action: Action): State => {
       const { columnCharCode: selectedCellColumnCharCode } = state.selectedCell;
       const location: InsertColumnLocation = action.payload;
 
-      const data = Object.keys(activeSheet.content.data).reduceRight(
+      const data = Object.keys(activeSheetContentData).reduceRight(
         (stateContentData: StateContentData, cellId: string) => {
           const cell = new Cell(cellId);
           const isGreater: boolean =
@@ -644,7 +650,7 @@ export const reducer = (state: State, action: Action): State => {
           if (isGreater) {
             const newCell = cell.getOffset(1, 0, false);
             const cellData = CellData.getOrNew(
-              activeSheet.content.data,
+              activeSheetContentData,
               cellId
             ).setId(newCell.id);
             return {
@@ -655,7 +661,7 @@ export const reducer = (state: State, action: Action): State => {
           }
           return stateContentData;
         },
-        activeSheet.content.data
+        activeSheetContentData
       );
 
       return {
@@ -676,7 +682,7 @@ export const reducer = (state: State, action: Action): State => {
     case SheetAction.DELETE_ROW: {
       const { row: selectedCellRow } = state.selectedCell;
 
-      const data = Object.keys(activeSheet.content.data)
+      const data = Object.keys(activeSheetContentData)
         .sort(cellSorter)
         .reduceRight((stateContentData: StateContentData, cellId: string) => {
           const cell = new Cell(cellId);
@@ -690,7 +696,7 @@ export const reducer = (state: State, action: Action): State => {
           } else if (isGreater) {
             const newCell = cell.getOffset(0, -1);
             const cellData = CellData.getOrNew(
-              activeSheet.content.data,
+              activeSheetContentData,
               cellId
             ).setId(newCell.id);
             return {
@@ -700,7 +706,7 @@ export const reducer = (state: State, action: Action): State => {
             } as StateContentData;
           }
           return stateContentData;
-        }, activeSheet.content.data);
+        }, activeSheetContentData);
 
       return {
         ...state,
@@ -720,7 +726,7 @@ export const reducer = (state: State, action: Action): State => {
     case SheetAction.DELETE_COLUMN: {
       const { columnCharCode: selectedCellColumnCharCode } = state.selectedCell;
 
-      const data = Object.keys(activeSheet.content.data).reduce(
+      const data = Object.keys(activeSheetContentData).reduce(
         (stateContentData: StateContentData, cellId: string) => {
           const cell = new Cell(cellId);
           const isGreater: boolean =
@@ -728,7 +734,7 @@ export const reducer = (state: State, action: Action): State => {
           if (isGreater) {
             const newCell = cell.getOffset(-1, 0);
             const cellData = CellData.getOrNew(
-              activeSheet.content.data,
+              activeSheetContentData,
               cellId
             ).setId(newCell.id);
 
@@ -740,7 +746,7 @@ export const reducer = (state: State, action: Action): State => {
           }
           return stateContentData;
         },
-        activeSheet.content.data
+        activeSheetContentData
       );
 
       return {
@@ -766,7 +772,7 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         highlighted: state.highlighted
-          .setCells(setOf(range.cellIds.flat()), activeSheet.content.data)
+          .setCells(setOf(range.cellIds.flat()), activeSheetContentData)
           .setRows(setOf(range.rows))
           .setColumns(setOf(range.columns)),
       };
@@ -802,20 +808,41 @@ export const reducer = (state: State, action: Action): State => {
 
     case SheetAction.RECALCULATE_FORMULAE: {
       console.log("Recalculation triggered");
-      const formulaTrackedCells: SetExtended<string> = Object.values(
-        activeSheet.content.data
-      )
-        .filter((cellData) => (cellData as CellData).isFormulaCell)
-        .map((cellData) =>
-          (cellData as CellData).evaluate(activeSheet.content.data)
-        )
-        .reduce((acc: SetExtended<string>, cur: CellData) => {
-          return acc.mergeWith(cur.referenceCells);
-        }, setOf<string>());
+
+      const formulaCells = Object.values(activeSheetContentData).filter(
+        (cellData: CellData) => cellData.isFormulaCell
+      );
+
+      const data = formulaCells.reduce(
+        (activeSheetContentData: StateContentData, cellData: CellData) => ({
+          ...activeSheetContentData,
+          [cellData.id]: new CellData({ ...cellData }).evaluate(
+            activeSheetContentData
+          ),
+        }),
+        activeSheetContentData
+      );
+
+      const formulaTrackedCells: SetExtended<string> = formulaCells.reduce(
+        (cellIds: SetExtended<string>, cellData: CellData) => {
+          return cellIds.mergeWith(cellData.referenceCells);
+        },
+        setOf<string>()
+      );
 
       return {
         ...state,
         formulaTrackedCells,
+        sheets: {
+          ...state.sheets,
+          [state.activeSheet]: {
+            ...activeSheet,
+            content: {
+              ...activeSheet.content,
+              data,
+            } as StateContent,
+          },
+        },
       };
     }
 
@@ -825,7 +852,7 @@ export const reducer = (state: State, action: Action): State => {
       const value = state.highlighted[type.toLowerCase() as AutoCalculate];
 
       const lastNotEmpty: Cell = state.highlighted.lastNotEmpty(
-        activeSheet.content.data
+        activeSheetContentData
       );
 
       if (hasLength && lastNotEmpty) {
@@ -834,13 +861,13 @@ export const reducer = (state: State, action: Action): State => {
             ? lastNotEmpty.getOffset(0, 1)
             : lastNotEmpty.getOffset(1, 0);
 
-        const cellData = CellData.getOrNew(activeSheet.content.data, offset.id);
+        const cellData = CellData.getOrNew(activeSheetContentData, offset.id);
 
         return {
           ...state,
           highlighted: state.highlighted.addCellAndRecalculate(
             offset.id,
-            activeSheet.content.data
+            activeSheetContentData
           ),
           sheets: {
             ...state.sheets,
@@ -849,7 +876,7 @@ export const reducer = (state: State, action: Action): State => {
               content: {
                 ...activeSheet.content,
                 data: {
-                  ...activeSheet.content.data,
+                  ...activeSheetContentData,
                   [offset.id]: cellData.setValue(String(value)),
                 },
               } as StateContent,
@@ -871,7 +898,7 @@ export const reducer = (state: State, action: Action): State => {
       );
 
       const cellData = CellData.getOrNew(
-        activeSheet.content.data,
+        activeSheetContentData,
         cellId
       ).setValue(value);
 
@@ -886,7 +913,7 @@ export const reducer = (state: State, action: Action): State => {
             content: {
               ...activeSheet.content,
               data: {
-                ...activeSheet.content.data,
+                ...activeSheetContentData,
                 [cellId]: cellData,
               },
             } as StateContent,
@@ -906,13 +933,13 @@ export const reducer = (state: State, action: Action): State => {
         ? setOf<string>(cellIds)
         : setOf<string>(
             [
-              ...activeSheet.content.data[action.payload.cell].referenceCells,
+              ...activeSheetContentData[action.payload.cell].referenceCells,
               ...cellIds,
             ].flat()
           );
 
       const cellData = CellData.getOrNew(
-        activeSheet.content.data,
+        activeSheetContentData,
         action.payload.cell
       );
 
@@ -925,7 +952,7 @@ export const reducer = (state: State, action: Action): State => {
             content: {
               ...activeSheet.content,
               data: {
-                ...activeSheet.content.data,
+                ...activeSheetContentData,
                 [action.payload.cell]:
                   cellData.setReferenceCells(referenceCells),
               },
@@ -959,7 +986,7 @@ export const reducer = (state: State, action: Action): State => {
 
     case SheetAction.SET_CELL_FORMATTING: {
       const cellData = CellData.getOrNew(
-        activeSheet.content.data,
+        activeSheetContentData,
         state.selectedCell.id
       );
 
@@ -972,7 +999,7 @@ export const reducer = (state: State, action: Action): State => {
             content: {
               ...activeSheet.content,
               data: {
-                ...activeSheet.content.data,
+                ...activeSheetContentData,
                 [state.selectedCell.id]: cellData.setFormatting(action.payload),
               },
             } as StateContent,
@@ -989,16 +1016,13 @@ export const reducer = (state: State, action: Action): State => {
             stateContentData: StateContentData,
             cellId: string
           ): StateContentData => {
-            const cellData = CellData.getOrNew(
-              activeSheet.content.data,
-              cellId
-            );
+            const cellData = CellData.getOrNew(activeSheetContentData, cellId);
             return {
               ...stateContentData,
               [cellId]: cellData.setFormatting(action.payload),
             } as StateContentData;
           },
-          activeSheet.content.data
+          activeSheetContentData
         );
       return {
         ...state,
@@ -1017,7 +1041,7 @@ export const reducer = (state: State, action: Action): State => {
 
     case SheetAction.SET_CELL_BORDER_FORMATTING: {
       const cellData = CellData.getOrNew(
-        activeSheet.content.data,
+        activeSheetContentData,
         state.selectedCell.id
       );
 
@@ -1030,7 +1054,7 @@ export const reducer = (state: State, action: Action): State => {
             content: {
               ...activeSheet.content,
               data: {
-                ...activeSheet.content.data,
+                ...activeSheetContentData,
                 [state.selectedCell.id]: cellData
                   .clearBorderFormatting()
                   .setFormatting(action.payload),
@@ -1045,14 +1069,14 @@ export const reducer = (state: State, action: Action): State => {
       const formattedData = state.highlighted.cells
         .toArray()
         .reduce((stateContentData: StateContentData, cellId: string) => {
-          const cellData = CellData.getOrNew(activeSheet.content.data, cellId);
+          const cellData = CellData.getOrNew(activeSheetContentData, cellId);
           return {
             ...stateContentData,
             [cellId]: cellData
               .clearBorderFormatting()
               .setFormatting(action.payload),
           } as StateContentData;
-        }, activeSheet.content.data);
+        }, activeSheetContentData);
 
       return {
         ...state,
@@ -1113,7 +1137,7 @@ export const reducer = (state: State, action: Action): State => {
       ].reduce(
         (data, { cells, border }) =>
           applyBorder(data, cells as string[], border),
-        activeSheet.content.data
+        activeSheetContentData
       );
 
       return {
@@ -1136,7 +1160,7 @@ export const reducer = (state: State, action: Action): State => {
         const data = state.highlighted.cells
           .toArray()
           .reduce((stateContentData: StateContentData, cellId: string) => {
-            const cellData = activeSheet.content.data[cellId];
+            const cellData = activeSheetContentData[cellId];
             if (cellData) {
               return {
                 ...stateContentData,
@@ -1144,7 +1168,7 @@ export const reducer = (state: State, action: Action): State => {
               } as StateContentData;
             }
             return stateContentData;
-          }, activeSheet.content.data);
+          }, activeSheetContentData);
 
         return {
           ...state,
@@ -1161,7 +1185,7 @@ export const reducer = (state: State, action: Action): State => {
         };
       } else {
         const selectedCellData = CellData.getOrNew(
-          activeSheet.content.data,
+          activeSheetContentData,
           state.selectedCell.id
         );
         return {
@@ -1173,7 +1197,7 @@ export const reducer = (state: State, action: Action): State => {
               content: {
                 ...activeSheet.content,
                 data: {
-                  ...activeSheet.content.data,
+                  ...activeSheetContentData,
                   [state.selectedCell.id]: selectedCellData.clearFormatting(),
                 },
               } as StateContent,

@@ -1,7 +1,11 @@
 import { isString } from "../../../../../utils";
 import { Blue, Green, Indent, Purple, Red } from "./styles";
 
-export default function PrettifyHTML({ children }) {
+type Props = {
+  children: { [key: string]: any };
+};
+
+export default function PrettifyHTML({ children }: Props): JSX.Element {
   if (!isString(children)) return <></>;
   // const metaRegex = /(<meta[^>]*>)/g;
   const selfClosingRegex = /(<[^>]*\/>)/g;
@@ -10,9 +14,9 @@ export default function PrettifyHTML({ children }) {
   const attributeRegex = /([a-z-]+)=(["'])([^"]*)(["'])/gi; // Identify attributes
 
   const parts = children.replaceAll("\n", "").split(tagRegex);
-  const stack = [];
+  const stack: any[] = [];
 
-  const jsx = parts.map((part, index) => {
+  const jsx = parts.map((part: string, index: number) => {
     const isTag = part.match(tagRegex);
     const isComment = part.match(commentRegex);
     const isSelfClosing = part.match(selfClosingRegex);
@@ -26,7 +30,7 @@ export default function PrettifyHTML({ children }) {
         level = stack.length;
       }
 
-      const tagParts = [];
+      const tagParts: any[] = [];
       let lastIndex = 0;
       let match;
 
@@ -43,7 +47,7 @@ export default function PrettifyHTML({ children }) {
             {match[2]}
             {match[3]}
             {match[4]}
-          </Green>,
+          </Green>
         );
 
         lastIndex = match.index + match[0].length;

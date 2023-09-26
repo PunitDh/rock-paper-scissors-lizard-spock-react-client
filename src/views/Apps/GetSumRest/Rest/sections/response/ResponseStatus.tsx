@@ -7,8 +7,13 @@ import { createSerializedFilename } from "../../utils";
 import { StatusButton } from "../../styles";
 import FlexBox from "../../../../../../components/shared/FlexBox";
 import { Bold } from "../../../../../../components/shared/styles";
+import { State } from "../../types";
 
-const ResponseStatus = ({ state }) => {
+type Props = {
+  state: State;
+}
+
+const ResponseStatus = ({ state }: Props) => {
   const handleSave = () => {
     const content = JSON.stringify(state.response.output, null, 2);
     const blob = new Blob([content], { type: "application/json" });
@@ -19,7 +24,7 @@ const ResponseStatus = ({ state }) => {
     link.setAttribute("download", `${serializedName}.json`);
     document.body.appendChild(link);
     link.click();
-    link.parentNode.removeChild(link);
+    link.parentNode?.removeChild(link);
   };
 
   return state.response.output ? (
@@ -39,7 +44,7 @@ const ResponseStatus = ({ state }) => {
         <Color type="green">{prettyBytes(state.response.size)}</Color>
       </Typography>
       <Tooltip title="Save File">
-        <StatusButton variant="primary" size="small" onClick={handleSave}>
+        <StatusButton variant="contained" size="small" onClick={handleSave}>
           <Save />
         </StatusButton>
       </Tooltip>

@@ -1,4 +1,4 @@
-import { AuthorizationType, HttpMethod } from "./constants";
+import { AuthorizationType, DisplayType, HttpMethod } from "./constants";
 import KeyValuePair from "./models/KeyValuePair";
 import { Action } from "./types";
 
@@ -105,7 +105,7 @@ export const setResponseTime = (payload): Action => ({
   payload,
 });
 
-export const setOutputDisplayType = (payload): Action => ({
+export const setOutputDisplayType = (payload: DisplayType): Action => ({
   type: RestAction.SET_OUTPUT_DISPLAY_TYPE,
   payload,
 });

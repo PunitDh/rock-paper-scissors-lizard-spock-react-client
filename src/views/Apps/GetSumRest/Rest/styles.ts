@@ -23,8 +23,10 @@ export const DividerBox = styled(Box)({
 });
 
 export const StatusButton = styled(Button)(
-  ({ selected }: { selected: boolean }) => ({
+  ({ selected }: { selected?: boolean }) => ({
     backgroundColor: selected ? "#eee" : "#eee",
+    border: "1px solid rgba(0,0,0,0.1)",
+    margin: "0.25rem",
     "&:hover": {
       backgroundColor: selected ? "#aaa" : "#bbb",
     },

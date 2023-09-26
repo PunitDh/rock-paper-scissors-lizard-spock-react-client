@@ -9,7 +9,7 @@ import { CellFormula, CellValue } from "../types";
 import SetExtended, { setOf } from "../../../../../utils/Set";
 
 type CellDataShape = {
-  id: string | null;
+  id: string;
   value?: CellValue;
   formula?: CellFormula;
   referenceCells?: SetExtended<string>;
@@ -19,7 +19,7 @@ type CellDataShape = {
 };
 
 export default class CellData {
-  id: string | null;
+  id: string;
   value: CellValue;
   previousValue: CellValue;
   formula: CellFormula;
@@ -41,7 +41,7 @@ export default class CellData {
    * @param {string} [obj.error] - Any error related to the cell.
    */
   constructor({
-    id = null,
+    id,
     value = null,
     formula = null,
     referenceCells = setOf<string>(),
@@ -113,7 +113,7 @@ export default class CellData {
    * @returns {CellData} The current `CellData` instance for chaining.
    */
   setId(id: string): CellData {
-    this.id = id || this.id || null;
+    this.id = id || this.id;
     return this;
   }
 

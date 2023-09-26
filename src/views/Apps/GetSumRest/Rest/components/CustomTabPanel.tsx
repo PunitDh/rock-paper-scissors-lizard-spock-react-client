@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 
 type Props = {
-  children: JSX.Element[];
+  children: JSX.Element | JSX.Element[];
   value: number;
   index: number;
   tabId: string;

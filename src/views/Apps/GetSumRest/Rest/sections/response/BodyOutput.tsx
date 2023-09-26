@@ -8,6 +8,13 @@ import PrettifyHTML from "../../components/PrettifyHTML";
 import ResponseType from "./ResponseType";
 import { isObject } from "../../../../../../utils";
 import FlexBox from "../../../../../../components/shared/FlexBox";
+import { Action, State } from "../../types";
+import { Dispatch } from "react";
+
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+};
 
 const OutputDisplay = styled.div({
   width: "100%",
@@ -18,7 +25,7 @@ const OutputDisplay = styled.div({
   overflowY: "scroll",
 });
 
-const BodyOutput = ({ state, dispatch }) => (
+const BodyOutput = ({ state, dispatch }: Props) => (
   <>
     <ResponseType state={state} dispatch={dispatch} />
     <FlexBox width="100%" flexGrow={1} flex="1 0 auto">

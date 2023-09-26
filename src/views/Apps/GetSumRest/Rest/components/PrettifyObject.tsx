@@ -1,10 +1,14 @@
 import { isBoolean, isNumber, isObject, isString } from "../../../../../utils";
 import { Blue, Red, Purple, Margin, Black, Green } from "./styles";
 
-const PrettifyObject = ({ children }) => {
+type Props = {
+  children: { [key: string]: any };
+}
+
+const PrettifyObject = ({ children }: Props): JSX.Element => {
   if (!isObject(children)) return <></>;
 
-  const prettify = (object, depth = 1) => {
+  const prettify = (object: { [key: string]: any }, depth: number = 1) => {
     if (Array.isArray(object)) {
       return (
         <>

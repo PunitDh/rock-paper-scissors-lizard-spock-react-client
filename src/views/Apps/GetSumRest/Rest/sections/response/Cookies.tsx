@@ -5,12 +5,16 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-
 import { Value } from "./styles";
 import FlexBox from "../../../../../../components/shared/FlexBox";
 import { Bold } from "../../../../../../components/shared/styles";
+import { State } from "../../types";
 
-const Cookies = ({ state }) => {
+type Props = {
+  state: State;
+}
+
+const Cookies = ({ state }: Props) => {
   const cookies = decodeURIComponent(document.cookie)
     .split(";")
     .map((it) => it.split("="))
