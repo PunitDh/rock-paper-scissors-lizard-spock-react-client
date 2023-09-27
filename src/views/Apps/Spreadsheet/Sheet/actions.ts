@@ -2,7 +2,7 @@ import SetExtended from "../../../../utils/Set";
 import { AutoCalculate } from "./components/Toolbar/constants";
 import Cell from "./models/Cell";
 import SheetContent from "./models/SheetContent";
-import StateContentData from "./models/StateContentData";
+import SheetContentData from "./models/SheetContentData";
 import {
   Action,
   CellValue,
@@ -138,7 +138,7 @@ export const setHighlightColumnAnchor = (payload: string): Action => ({
 
 export const pasteCellContent = (
   anchor: string | undefined,
-  data: StateContentData | string
+  data: SheetContentData | string
 ): Action => ({
   type: SheetAction.PASTE_CELL_CONTENT,
   payload: {

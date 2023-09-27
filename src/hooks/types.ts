@@ -58,7 +58,7 @@ export interface API {
 
   clearLogs: () => Promise<Data>;
 
-  translateSubtitles: (formData, sessionId) => void;
+  translateSubtitles: (formData, sessionId) => Promise<Data>;
 
   getDownloadFile: (location: string) => Promise<any>;
 

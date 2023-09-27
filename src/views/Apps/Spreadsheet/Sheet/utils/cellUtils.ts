@@ -5,7 +5,7 @@ import { initialState } from "../reducer";
 import SheetContent from "../models/SheetContent";
 import { isObject, isString } from "../../../../../utils";
 import { SheetProps, State } from "../types";
-import StateContentData from "../models/StateContentData";
+import SheetContentData from "../models/SheetContentData";
 import { setOf } from "../../../../../utils/Set";
 
 export const generateClipboardContent = (state: State): string => {
@@ -196,7 +196,7 @@ const generateInitialContent = (
 
   const initialData = props.initialData || defaultProps.initialData;
 
-  const data = Object.keys(initialData).reduce((stateContentData, cellId) => {
+  const data = Object.keys(initialData).reduce((sheetContentData, cellId) => {
     const cell = cellId.toUpperCase();
     const cellData = new CellData({ id: cell });
     if (isObject(initialData[cellId])) {
@@ -211,9 +211,9 @@ const generateInitialContent = (
       }
       cellData.display = initialData[cellId];
     }
-    stateContentData[cell] = cellData;
-    return stateContentData;
-  }, {}) as Partial<StateContentData>;
+    sheetContentData[cell] = cellData;
+    return sheetContentData;
+  }, {}) as Partial<SheetContentData>;
 
   return {
     rowHeights,
@@ -224,10 +224,7 @@ const generateInitialContent = (
 };
 
 export const isFormula = (value: unknown): boolean => {
-  return (
-    (typeof value === "string" || value instanceof String) &&
-    Boolean(value?.startsWith("="))
-  );
+  return isString(value) && Boolean((value as string).startsWith("="));
 };
 
 export const cellSorter = (cellIdA: string, cellIdB: string): number => {

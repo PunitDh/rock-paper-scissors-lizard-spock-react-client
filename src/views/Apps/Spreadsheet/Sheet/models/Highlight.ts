@@ -2,7 +2,7 @@ import { isNumber } from "../../../../../utils";
 import SetExtended, { setOf } from "../../../../../utils/Set";
 import Cell from "./Cell";
 import CellData from "./CellData";
-import StateContentData from "./StateContentData";
+import SheetContentData from "./SheetContentData";
 
 type Props = {
   rowAnchor?: null | number;
@@ -77,11 +77,11 @@ export default class Highlight {
     return this.cells.last();
   }
 
-  lastNotEmpty(stateContentData: StateContentData): Cell {
+  lastNotEmpty(sheetContentData: SheetContentData): Cell {
     const cells = [...this.cells];
     let last = cells[0];
     for (let i = 0; i < cells.length; i++) {
-      const cellData: CellData | undefined = stateContentData[cells[i]];
+      const cellData: CellData | undefined = sheetContentData[cells[i]];
       if (cellData?.isNotEmpty()) {
         last = cells[i];
       }
@@ -125,18 +125,18 @@ export default class Highlight {
 
   setCells(
     cellIds: SetExtended<string>,
-    stateContentData: StateContentData
+    sheetContentData: SheetContentData
   ): Highlight {
     this.cells = setOf<string>(cellIds);
-    this.recalculate(stateContentData);
+    this.recalculate(sheetContentData);
     return this;
   }
 
-  recalculate(stateContentData: StateContentData): Highlight {
-    const numbers = this.getNumbers(stateContentData);
+  recalculate(sheetContentData: SheetContentData): Highlight {
+    const numbers = this.getNumbers(sheetContentData);
     this.calculateSum(numbers);
     this.calculateAverage(numbers);
-    this.calculateCount(stateContentData);
+    this.calculateCount(sheetContentData);
     this.calculateMax(numbers);
     this.calculateMin(numbers);
     return this;
@@ -154,7 +154,7 @@ export default class Highlight {
 
   addCellAndRecalculate(
     cellId: string,
-    stateContentData: StateContentData
+    sheetContentData: SheetContentData
   ): Highlight {
     const cell = new Cell(cellId);
     const rowsSet = setOf<number>(this.rows);
@@ -166,7 +166,7 @@ export default class Highlight {
     this.cells = cellsSet;
     this.rows = rowsSet;
     this.columns = columnsSet;
-    this.recalculate(stateContentData);
+    this.recalculate(sheetContentData);
     return this;
   }
 
@@ -192,15 +192,15 @@ export default class Highlight {
 
   /**
    *
-   * @param {Object} stateContentData
+   * @param {Object} sheetContentData
    * @returns {Highlight}
    */
-  calculateCount(stateContentData: StateContentData): Highlight {
+  calculateCount(sheetContentData: SheetContentData): Highlight {
     if (this.hasLength) {
       const count = this.cells
         .toArray()
         .filter((cell) =>
-          Boolean(stateContentData[cell]?.value?.toString())
+          Boolean(sheetContentData[cell]?.value?.toString())
         ).length;
       this.count = count;
     } else {
@@ -227,10 +227,10 @@ export default class Highlight {
     return this;
   }
 
-  private getNumbers(stateContentData: StateContentData): number[] {
+  private getNumbers(sheetContentData: SheetContentData): number[] {
     return this.cells
       .toArray()
-      .filter((cell) => isNumber(stateContentData[cell]?.value))
-      .map((cell) => parseFloat(stateContentData[cell]?.value));
+      .filter((cell) => isNumber(sheetContentData[cell]?.value))
+      .map((cell) => parseFloat(sheetContentData[cell]?.value));
   }
 }

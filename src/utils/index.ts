@@ -2,8 +2,8 @@ import { Status } from "./constants";
 
 export function isSuccess(response: {
   status: Status;
-  payload: unknown;
-}): Promise<unknown> {
+  payload: any;
+}): Promise<any> {
   return new Promise((resolve, reject) =>
     ![Status.ERROR, Status.UNAUTHORIZED].includes(response.status)
       ? resolve(response.payload)

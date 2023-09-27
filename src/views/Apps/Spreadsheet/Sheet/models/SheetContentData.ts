@@ -9,32 +9,32 @@ type StateContentDataShape = {
   [key: string]: any;
 };
 
-export default class StateContentData {
+export default class SheetContentData {
   [key: string]: any;
 
   constructor(initialData: Partial<StateContentDataShape> = {}) {
     Object.keys(initialData).reduce<Partial<StateContentDataShape>>(
-      (stateContentData, it) => {
+      (sheetContentData, it) => {
         const cell = it.toUpperCase();
         const cellData = new CellData({ id: cell });
         if (!isObject(initialData[it])) {
           if (isString(initialData[it]) && isFormula(initialData[it])) {
             cellData.previousFormula = initialData[it];
             cellData.formula = initialData[it];
-            // stateContentData[cell].formula = initialData[it];
+            // sheetContentData[cell].formula = initialData[it];
           } else {
             cellData.previousValue = initialData[it];
             cellData.value = initialData[it];
           }
           cellData.display = initialData[it];
-          stateContentData[cell] = cellData;
+          sheetContentData[cell] = cellData;
         } else {
-          stateContentData[cell] = new CellData({
+          sheetContentData[cell] = new CellData({
             ...initialData[it],
             id: cell,
           });
         }
-        return stateContentData;
+        return sheetContentData;
       },
       this,
     );
@@ -44,9 +44,9 @@ export default class StateContentData {
     dimension: Dimension,
     selectedCell: Cell,
     location: -1 | 1,
-  ): StateContentData {
+  ): SheetContentData {
     return Object.keys(this).reduce(
-      (stateContentData: StateContentData, cellId: string) => {
+      (sheetContentData: SheetContentData, cellId: string) => {
         const cell = new Cell(cellId);
         const isGreater: boolean =
           location === -1
@@ -55,13 +55,13 @@ export default class StateContentData {
         if (isGreater) {
           const newId = cell.column + (cell.row + 1);
           const cellData = new CellData(this[cellId]);
-          stateContentData[cellId] = new CellData({ id: cellId });
+          sheetContentData[cellId] = new CellData({ id: cellId });
           return {
-            ...stateContentData,
+            ...sheetContentData,
             [newId]: cellData?.setId(newId),
-          } as StateContentData;
+          } as SheetContentData;
         }
-        return stateContentData;
+        return sheetContentData;
       },
       this,
     );
@@ -74,15 +74,15 @@ export default class StateContentData {
     }
     return Object.keys(this)
       .filter((cell) => highlight.includes(cell))
-      .reduce((stateContentData, cell) => {
+      .reduce((sheetContentData, cell) => {
         return {
-          ...stateContentData,
+          ...sheetContentData,
           [cell]: new CellData({ id: cell }),
         };
       }, this);
   }
 
-  setData(id: string, data: CellData): StateContentData {
+  setData(id: string, data: CellData): SheetContentData {
     this[id] = data;
     return this;
   }

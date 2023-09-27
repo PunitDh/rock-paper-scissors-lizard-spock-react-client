@@ -8,7 +8,7 @@ import { useRef } from "react";
 import { parseCSV } from "../../../utils/cellUtils";
 import SheetContent from "../../../models/SheetContent";
 import { useNotification } from "../../../../../../../hooks";
-import StateContentData from "../../../models/StateContentData";
+import SheetContentData from "../../../models/SheetContentData";
 import { Action } from "../../../types";
 
 type Props = {
@@ -43,7 +43,7 @@ const OpenFileCSV = ({ dispatch }: Props) => {
         return acc;
       }, {});
 
-      const content = new SheetContent({}, {}, data as StateContentData);
+      const content = new SheetContent({}, {}, data as SheetContentData);
 
       dispatch(setContentBulk(content));
     };

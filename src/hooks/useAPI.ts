@@ -239,7 +239,7 @@ export default function useAPI(): API {
 
     translateSubtitles: (formData, sessionId: string) => {
       socket.emit(SocketRequest.PROGRESS_UPDATE, secure({ sessionId }));
-      return request.post("/video/subtitles/translate", formData, authHeaders);
+      return request.post("/video/subtitles/translate", formData, authHeaders) as Promise<Data>;
     },
 
     getDownloadFile: (location: string) =>

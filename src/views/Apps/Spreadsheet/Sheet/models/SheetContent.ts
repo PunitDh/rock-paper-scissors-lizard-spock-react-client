@@ -1,17 +1,18 @@
+import { isObject } from "../../../../../utils";
 import { SheetConfig } from "../constants";
 import CellData from "./CellData";
-import StateContentData from "./StateContentData";
+import SheetContentData from "./SheetContentData";
 
 export default class SheetContent {
   rowHeights: { [key: string]: number };
   columnWidths: { [key: string]: number };
-  data: StateContentData;
+  data: SheetContentData;
   namedRanges: { [key: string]: string[] };
 
   constructor(
     rowHeights = {},
     columnWidths = {},
-    data = new StateContentData(),
+    data = new SheetContentData(),
     namedRanges = {}
   ) {
     this.rowHeights = rowHeights;
@@ -20,7 +21,7 @@ export default class SheetContent {
     this.namedRanges = namedRanges;
   }
 
-  setData(data: StateContentData) {
+  setData(data: SheetContentData) {
     this.data = data;
     return this;
   }
@@ -65,10 +66,7 @@ export default class SheetContent {
           if (!arraysEqual(thisObj[key], otherObj[key])) {
             diff[key] = otherObj[key];
           }
-        } else if (
-          typeof thisObj[key] === "object" &&
-          typeof otherObj[key] === "object"
-        ) {
+        } else if (isObject(thisObj[key]) && isObject(otherObj[key])) {
           const nestedDiff = compare(thisObj[key], otherObj[key]);
           if (Object.keys(nestedDiff).length > 0) {
             diff[key] = nestedDiff;
@@ -125,7 +123,7 @@ export default class SheetContent {
         {}
       );
 
-    const data = new StateContentData(initialData);
+    const data = new SheetContentData(initialData);
 
     return new SheetContent(rowHeights, columnWidths, data);
   }

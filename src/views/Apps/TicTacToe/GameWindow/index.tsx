@@ -23,17 +23,17 @@ const Game = () => {
   const api = useAPI();
 
   useEffect(() => {
-    api.getGame(gameId);
+    if (gameId) api.getGame(gameId);
   }, [gameId]);
 
   const opponent = currentGame.players?.find(
-    (player) => player.id !== token.decoded.id,
+    (player) => player.id !== token.decoded?.id
   );
 
   return currentGame.id ? (
-    <PageContainer title={currentGame.name}>
+    <PageContainer title={currentGame.name} description="Tic tac toe game">
       <GameCard
-        title={<GameTitle currentGame={currentGame} />}
+        title={<GameTitle />}
         action={
           <GameActions
             onMaxRoundsChange={setMaxRounds}
@@ -47,7 +47,7 @@ const Game = () => {
       </GameCard>
     </PageContainer>
   ) : (
-    <PageContainer title="Loading...">
+    <PageContainer title="Loading..." description="Loading screen">
       <LoadingScreen />
     </PageContainer>
   );

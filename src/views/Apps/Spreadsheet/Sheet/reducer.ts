@@ -15,7 +15,7 @@ import {
   Sheet,
   State,
 } from "./types";
-import StateContentData from "./models/StateContentData";
+import SheetContentData from "./models/SheetContentData";
 import { isInstance } from "../../../../utils";
 import SheetContent from "./models/SheetContent";
 import SetExtended, { setOf } from "../../../../utils/Set";
@@ -63,7 +63,7 @@ export const initialState: State = {
 export const reducer = (state: State, action: Action): State => {
   const activeSheet: Sheet = state.sheets[state.activeSheet];
   const activeSheetContent: SheetContent = activeSheet.content;
-  const activeSheetContentData: StateContentData = activeSheetContent.data;
+  const activeSheetContentData: SheetContentData = activeSheetContent.data;
   const selectedCellId: string = state.selectedCell.id;
   const highlightedCells: SetExtended<string> = state.highlighted.cells;
   // action.type !== SheetAction.SET_HOVERED && console.log(action);
@@ -443,7 +443,7 @@ export const reducer = (state: State, action: Action): State => {
                 data: {
                   ...activeSheetContentData,
                   [action.payload]: new CellData({ id: action.payload }),
-                } as StateContentData,
+                } as SheetContentData,
               } as SheetContent,
             },
           },
@@ -452,11 +452,11 @@ export const reducer = (state: State, action: Action): State => {
 
       const data = Object.keys(activeSheetContentData)
         .filter((cell) => state.highlighted.includes(cell))
-        .reduce((stateContentData, cell) => {
+        .reduce((sheetContentData, cell) => {
           return {
-            ...stateContentData,
+            ...sheetContentData,
             [cell]: new CellData({ id: cell }),
-          } as StateContentData;
+          } as SheetContentData;
         }, activeSheetContentData);
 
       return {
@@ -495,11 +495,11 @@ export const reducer = (state: State, action: Action): State => {
             })
           );
           const data = Object.keys(updateObj).reduce(
-            (stateContentData: StateContentData, cell: string) => {
+            (sheetContentData: SheetContentData, cell: string) => {
               return {
-                ...stateContentData,
+                ...sheetContentData,
                 [cell]: updateObj[cell],
-              } as StateContentData;
+              } as SheetContentData;
             },
             activeSheetContentData
           );
@@ -532,7 +532,7 @@ export const reducer = (state: State, action: Action): State => {
                   [action.payload.anchor.id]: {
                     value,
                   },
-                } as StateContentData,
+                } as SheetContentData,
               } as SheetContent,
             },
           },
@@ -622,7 +622,7 @@ export const reducer = (state: State, action: Action): State => {
       const location: InsertRowLocation = action.payload;
 
       const data = Object.keys(activeSheetContentData).reduceRight(
-        (stateContentData: StateContentData, cellId: string) => {
+        (sheetContentData: SheetContentData, cellId: string) => {
           const cell = new Cell(cellId);
           const isGreater: boolean =
             location === "above"
@@ -635,12 +635,12 @@ export const reducer = (state: State, action: Action): State => {
               cellId
             ).setId(newCell.id);
             return {
-              ...stateContentData,
+              ...sheetContentData,
               [cellId]: new CellData({ id: cellId }),
               [newCell.id]: cellData,
-            } as StateContentData;
+            } as SheetContentData;
           }
-          return stateContentData;
+          return sheetContentData;
         },
         activeSheetContentData
       );
@@ -665,7 +665,7 @@ export const reducer = (state: State, action: Action): State => {
       const location: InsertColumnLocation = action.payload;
 
       const data = Object.keys(activeSheetContentData).reduceRight(
-        (stateContentData: StateContentData, cellId: string) => {
+        (sheetContentData: SheetContentData, cellId: string) => {
           const cell = new Cell(cellId);
           const isGreater: boolean =
             location === "left"
@@ -678,12 +678,12 @@ export const reducer = (state: State, action: Action): State => {
               cellId
             ).setId(newCell.id);
             return {
-              ...stateContentData,
+              ...sheetContentData,
               [cellId]: new CellData({ id: cellId }),
               [newCell.id]: cellData,
-            } as StateContentData;
+            } as SheetContentData;
           }
-          return stateContentData;
+          return sheetContentData;
         },
         activeSheetContentData
       );
@@ -708,15 +708,15 @@ export const reducer = (state: State, action: Action): State => {
 
       const data = Object.keys(activeSheetContentData)
         .sort(cellSorter)
-        .reduceRight((stateContentData: StateContentData, cellId: string) => {
+        .reduceRight((sheetContentData: SheetContentData, cellId: string) => {
           const cell = new Cell(cellId);
           const isEqual: boolean = cell.row === selectedCellRow;
           const isGreater: boolean = cell.row > selectedCellRow;
           if (isEqual) {
             return {
-              ...stateContentData,
+              ...sheetContentData,
               [cellId]: new CellData({ id: cellId }),
-            } as StateContentData;
+            } as SheetContentData;
           } else if (isGreater) {
             const newCell = cell.getOffset(0, -1);
             const cellData = CellData.getOrNew(
@@ -724,12 +724,12 @@ export const reducer = (state: State, action: Action): State => {
               cellId
             ).setId(newCell.id);
             return {
-              ...stateContentData,
+              ...sheetContentData,
               [cellId]: new CellData({ id: cellId }),
               [newCell.id]: cellData,
-            } as StateContentData;
+            } as SheetContentData;
           }
-          return stateContentData;
+          return sheetContentData;
         }, activeSheetContentData);
 
       return {
@@ -751,7 +751,7 @@ export const reducer = (state: State, action: Action): State => {
       const { columnCharCode: selectedCellColumnCharCode } = state.selectedCell;
 
       const data = Object.keys(activeSheetContentData).reduce(
-        (stateContentData: StateContentData, cellId: string) => {
+        (sheetContentData: SheetContentData, cellId: string) => {
           const cell = new Cell(cellId);
           const isGreater: boolean =
             cell.columnCharCode > selectedCellColumnCharCode;
@@ -763,12 +763,12 @@ export const reducer = (state: State, action: Action): State => {
             ).setId(newCell.id);
 
             return {
-              ...stateContentData,
+              ...sheetContentData,
               [cellId]: new CellData({ id: cellId }),
               [newCell.id]: cellData,
-            } as StateContentData;
+            } as SheetContentData;
           }
-          return stateContentData;
+          return sheetContentData;
         },
         activeSheetContentData
       );
@@ -838,7 +838,7 @@ export const reducer = (state: State, action: Action): State => {
       );
 
       const data = formulaCells.reduce(
-        (activeSheetContentData: StateContentData, cellData: CellData) => ({
+        (activeSheetContentData: SheetContentData, cellData: CellData) => ({
           ...activeSheetContentData,
           [cellData.id]: new CellData({ ...cellData }).evaluate(
             activeSheetContentData
@@ -1037,14 +1037,14 @@ export const reducer = (state: State, action: Action): State => {
         .toArray()
         .reduce(
           (
-            stateContentData: StateContentData,
+            sheetContentData: SheetContentData,
             cellId: string
-          ): StateContentData => {
+          ): SheetContentData => {
             const cellData = CellData.getOrNew(activeSheetContentData, cellId);
             return {
-              ...stateContentData,
+              ...sheetContentData,
               [cellId]: cellData.setFormatting(action.payload),
-            } as StateContentData;
+            } as SheetContentData;
           },
           activeSheetContentData
         );
@@ -1092,14 +1092,14 @@ export const reducer = (state: State, action: Action): State => {
     case SheetAction.SET_CELL_BORDER_FORMATTING_BULK: {
       const formattedData = highlightedCells
         .toArray()
-        .reduce((stateContentData: StateContentData, cellId: string) => {
+        .reduce((sheetContentData: SheetContentData, cellId: string) => {
           const cellData = CellData.getOrNew(activeSheetContentData, cellId);
           return {
-            ...stateContentData,
+            ...sheetContentData,
             [cellId]: cellData
               .clearBorderFormatting()
               .setFormatting(action.payload),
-          } as StateContentData;
+          } as SheetContentData;
         }, activeSheetContentData);
 
       return {
@@ -1131,20 +1131,20 @@ export const reducer = (state: State, action: Action): State => {
       }
 
       const applyBorder = (
-        data: StateContentData,
+        data: SheetContentData,
         cells: string[],
         border: BorderType
       ) => {
         return cells.reduce(
           (
-            stateContentData: StateContentData,
+            sheetContentData: SheetContentData,
             cellId: string
-          ): StateContentData => {
-            const cellData = CellData.getOrNew(stateContentData, cellId);
+          ): SheetContentData => {
+            const cellData = CellData.getOrNew(sheetContentData, cellId);
             return {
-              ...stateContentData,
+              ...sheetContentData,
               [cellId]: cellData.addBorderFormatting(action.payload, border),
-            } as StateContentData;
+            } as SheetContentData;
           },
           data
         );
@@ -1183,15 +1183,15 @@ export const reducer = (state: State, action: Action): State => {
       if (state.highlighted.hasLength) {
         const data = highlightedCells
           .toArray()
-          .reduce((stateContentData: StateContentData, cellId: string) => {
+          .reduce((sheetContentData: SheetContentData, cellId: string) => {
             const cellData = activeSheetContentData[cellId];
             if (cellData) {
               return {
-                ...stateContentData,
+                ...sheetContentData,
                 [cellId]: cellData.clearFormatting(),
-              } as StateContentData;
+              } as SheetContentData;
             }
-            return stateContentData;
+            return sheetContentData;
           }, activeSheetContentData);
 
         return {

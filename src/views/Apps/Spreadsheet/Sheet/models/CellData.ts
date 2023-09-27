@@ -4,7 +4,7 @@ import CellFormatting from "./CellFormatting";
 import { BorderType, NumberFormat } from "../components/Toolbar/constants";
 import { isString } from "lodash";
 import { isFalsy, isNumber } from "../../../../../utils";
-import StateContentData from "./StateContentData";
+import SheetContentData from "./SheetContentData";
 import { CellFormula, CellValue } from "../types";
 import SetExtended, { setOf } from "../../../../../utils/Set";
 
@@ -65,15 +65,15 @@ export default class CellData {
   /**
    * Retrieves an existing `CellData` instance from state or creates a new one.
    *
-   * @param {Object} stateContentData - The state containing cell data instances.
+   * @param {Object} sheetContentData - The state containing cell data instances.
    * @param {string} id - The ID for retrieving or creating a `CellData` instance.
    * @returns {CellData} An existing or newly created `CellData` instance.
    */
-  static getOrNew(stateContentData: StateContentData, id: string): CellData {
-    if (stateContentData[id] instanceof CellData) {
-      return new CellData(stateContentData[id]);
+  static getOrNew(sheetContentData: SheetContentData, id: string): CellData {
+    if (sheetContentData[id] instanceof CellData) {
+      return new CellData(sheetContentData[id]);
     }
-    return new CellData({ ...stateContentData[id], id });
+    return new CellData({ ...sheetContentData[id], id });
   }
 
   /**
@@ -184,12 +184,12 @@ export default class CellData {
     return this;
   }
 
-  evaluate(stateContentData: StateContentData): CellData {
+  evaluate(sheetContentData: SheetContentData): CellData {
     if (this.formula) {
       const referenceCells = getReferenceCells(this.formula);
       const evaluated = evaluate(
         this.formula.replace("=", ""),
-        stateContentData
+        sheetContentData
       );
 
       if (evaluated.error) {
@@ -362,13 +362,13 @@ const processMatches = (
  * Replaces cell formulas in a string with their actual values.
  *
  * @param {string} str - The formula string to process.
- * @param {Object} stateContentData - An object containing cell values.
+ * @param {Object} sheetContentData - An object containing cell values.
  * @param {*} blankValue - Default value to use when cell value is not found.
  * @returns {string} The processed string with replaced cell values.
  */
 const replaceFormulaWithValues = (
   str: string,
-  stateContentData: StateContentData,
+  sheetContentData: SheetContentData,
   blankValue: undefined | null | 0
 ): { string: string; referenceCells: SetExtended<string> } => {
   const cellReg = /([A-Z]\d+)/g;
@@ -379,7 +379,7 @@ const replaceFormulaWithValues = (
   const referenceCells = setOf<string>();
 
   const string = cellMatches.reduce((acc, cell) => {
-    const cellDataValue = stateContentData[cell]?.value;
+    const cellDataValue = sheetContentData[cell]?.value;
     referenceCells.add(cell);
     return acc.replaceAll(
       cell,
@@ -474,12 +474,12 @@ type ReplacedString = {
  * Parses and evaluates a formula string. Replaces formulas with actual values and evaluates the resulting expression.
  *
  * @param {string} str - The formula string to evaluate.
- * @param {Object} stateContentData - An object containing cell values.
+ * @param {Object} sheetContentData - An object containing cell values.
  * @returns {Object} An object containing the evaluated result and reference cells.
  */
 export const evaluate = (
   str: string,
-  stateContentData: StateContentData
+  sheetContentData: SheetContentData
 ): Evaluated => {
   const parsedStrings = evaluateFormula(str);
 
@@ -487,7 +487,7 @@ export const evaluate = (
     const key = Object.keys(it)[0];
     const replaced = replaceFormulaWithValues(
       Object.values(it)[0] as string,
-      stateContentData,
+      sheetContentData,
       it.zeroValue
     );
     return {
@@ -533,7 +533,7 @@ export const evaluate = (
 
   const substitutedString = replaceFormulaWithValues(
     replacedString.stringValue,
-    stateContentData,
+    sheetContentData,
     0
   );
 

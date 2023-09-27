@@ -7,10 +7,12 @@ import {
   Fab,
   FormControlLabel,
   FormLabel,
+  InputProps,
   MenuItem,
   Radio,
   RadioGroup,
   Select,
+  SelectChangeEvent,
   TextField,
   Tooltip,
 } from "@mui/material";
@@ -55,12 +57,12 @@ const ResponsiveBox = styled(Box)(({ theme }) => ({
 }));
 
 const UploadForm = ({ dispatch, state }) => {
-  const fileRef = useRef();
+  const fileRef = useRef<HTMLInputElement | null>(null);
   const notification = useNotification();
   const token = useToken();
   const api = useAPI();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!state.video) return notification.error("A video file is required");
     dispatch(resetOutput());
@@ -71,11 +73,12 @@ const UploadForm = ({ dispatch, state }) => {
     formData.append("language", state.language);
     formData.append("format", state.format);
     formData.append("sessionId", sessionId);
-    if (state.debugMode && token.decoded.isAdmin) {
+    if (state.debugMode && token.decoded?.isAdmin) {
       formData.append("debug", state.debugMode);
     }
 
     dispatch(setLoading(true));
+
     return api
       .translateSubtitles(formData, sessionId)
       .then((data) => dispatch(setSubtitles(data.payload)))
@@ -85,8 +88,10 @@ const UploadForm = ({ dispatch, state }) => {
       });
   };
 
-  const handleSetOption = (e) => dispatch(setOption(e.target));
-  const handleUpload = (e) => dispatch(setVideo(e.target.files[0]));
+  const handleSetOption = (e: SelectChangeEvent) =>
+    dispatch(setOption(e.target));
+  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) =>
+    dispatch(setVideo((e.target as HTMLInputElement).files![0]));
 
   return (
     <ResponsiveForm onSubmit={handleSubmit}>
@@ -107,7 +112,9 @@ const UploadForm = ({ dispatch, state }) => {
             id="upload-video-file"
             inputRef={fileRef}
             onChange={handleUpload}
-            InputProps={{ accept: "video/mp4,video/x-m4v,video/*" }}
+            InputProps={
+              { accept: "video/mp4,video/x-m4v,video/*" } as Partial<InputProps>
+            }
           />
         </FormLabel>
       </InputGroup>
@@ -171,7 +178,7 @@ const UploadForm = ({ dispatch, state }) => {
         </RadioGroup>
       </InputGroup>
 
-      {token.decoded.isAdmin && (
+      {token.decoded?.isAdmin && (
         <InputGroup title="Admin:">
           <FormControlLabel
             control={

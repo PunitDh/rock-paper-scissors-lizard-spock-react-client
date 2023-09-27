@@ -130,7 +130,7 @@ const Toolbar = ({ state, dispatch }: Props) => {
   );
 
   const setFormattingChange: (...args: any[]) => any = useCallback(
-    (formattingKey: string) => (event) => {
+    (formattingKey: string) => (event: any) => {
       const value = ["string", "number"].includes(typeof event)
         ? event
         : (event.target as HTMLButtonElement)?.value;
