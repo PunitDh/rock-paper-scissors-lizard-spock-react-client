@@ -2,7 +2,7 @@ import { SheetConfig } from "../constants";
 import CellData from "./CellData";
 import StateContentData from "./StateContentData";
 
-export default class StateContent {
+export default class SheetContent {
   rowHeights: { [key: string]: number };
   columnWidths: { [key: string]: number };
   data: StateContentData;
@@ -127,6 +127,6 @@ export default class StateContent {
 
     const data = new StateContentData(initialData);
 
-    return new StateContent(rowHeights, columnWidths, data);
+    return new SheetContent(rowHeights, columnWidths, data);
   }
 }

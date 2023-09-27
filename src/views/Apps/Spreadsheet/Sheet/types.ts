@@ -1,7 +1,7 @@
 import { SheetAction } from "./actions";
 import Cell from "./models/Cell";
 import Highlight from "./models/Highlight";
-import StateContent from "./models/StateContent";
+import SheetContent from "./models/SheetContent";
 import SetExtended from "../../../../utils/Set";
 import CellData from "./models/CellData";
 
@@ -56,8 +56,8 @@ export type Sheet = {
   id: string;
   index: number;
   name: string;
-  content: StateContent;
-  initialContent: StateContent;
+  content: SheetContent;
+  initialContent: SheetContent;
   protected: boolean;
   password?: string;
 };

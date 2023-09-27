@@ -2,7 +2,7 @@ import { SheetConfig, defaultInitialStateProps } from "../constants";
 import CellData from "../models/CellData";
 import CellFormatting from "../models/CellFormatting";
 import { initialState } from "../reducer";
-import StateContent from "../models/StateContent";
+import SheetContent from "../models/SheetContent";
 import { isObject, isString } from "../../../../../utils";
 import { SheetProps, State } from "../types";
 import StateContentData from "../models/StateContentData";
@@ -91,7 +91,7 @@ export function parseCSV(csvString: string) {
 
 type ParsedJSON = {
   error: boolean;
-  content: StateContent | undefined;
+  content: SheetContent | undefined;
   message?: string;
 };
 
@@ -124,7 +124,7 @@ export function parseJSON(stringifiedJSON: string): ParsedJSON {
       namedRanges[rangeName] = setOf(jsonObject.content.namedRanges[rangeName]);
     }
 
-    const content = new StateContent(
+    const content = new SheetContent(
       jsonObject.content.rowHeights,
       jsonObject.content.columnWidths,
       data,
@@ -179,7 +179,7 @@ export const createInitialState = (
 const generateInitialContent = (
   props: SheetProps,
   defaultProps: { [key: string]: any }
-): StateContent => {
+): SheetContent => {
   const columnWidths = Array(props.maxColumns)
     .fill(0)
     .reduce((acc, _, idx) => {
@@ -220,7 +220,7 @@ const generateInitialContent = (
     columnWidths,
     data,
     namedRanges: {},
-  } as StateContent;
+  } as SheetContent;
 };
 
 export const isFormula = (value: unknown): boolean => {

@@ -17,7 +17,7 @@ import {
 } from "./types";
 import StateContentData from "./models/StateContentData";
 import { isInstance } from "../../../../utils";
-import StateContent from "./models/StateContent";
+import SheetContent from "./models/SheetContent";
 import SetExtended, { setOf } from "../../../../utils/Set";
 import { toList } from "../../../../utils/List";
 import { reIndexSheets } from "./utils/sheetUtils";
@@ -43,8 +43,8 @@ export const initialState: State = {
       id: initialSheetId,
       index: 1,
       name: "Sheet 1",
-      content: new StateContent(),
-      initialContent: new StateContent(),
+      content: new SheetContent(),
+      initialContent: new SheetContent(),
       protected: false,
     },
   },
@@ -61,8 +61,11 @@ export const initialState: State = {
 };
 
 export const reducer = (state: State, action: Action): State => {
-  const activeSheet = state.sheets[state.activeSheet];
-  const activeSheetContentData = activeSheet.content.data;
+  const activeSheet: Sheet = state.sheets[state.activeSheet];
+  const activeSheetContent: SheetContent = activeSheet.content;
+  const activeSheetContentData: StateContentData = activeSheetContent.data;
+  const selectedCellId: string = state.selectedCell.id;
+  const highlightedCells: SetExtended<string> = state.highlighted.cells;
   // action.type !== SheetAction.SET_HOVERED && console.log(action);
 
   switch (action.type) {
@@ -82,69 +85,79 @@ export const reducer = (state: State, action: Action): State => {
       return state;
     }
 
-    case SheetAction.SET_INPUT_REF:
+    case SheetAction.SET_INPUT_REF: {
       return {
         ...state,
         inputRef: action.payload,
       };
-
-    case SheetAction.SET_FILLER_REF:
+    }
+    case SheetAction.SET_FILLER_REF: {
       return {
         ...state,
         fillerRef: action.payload,
       };
+    }
 
-    case SheetAction.SET_FORMULA_FIELD_REF:
+    case SheetAction.SET_FORMULA_FIELD_REF: {
       return {
         ...state,
         formulaFieldRef: action.payload,
       };
+    }
 
-    case SheetAction.ADD_NAMED_RANGE:
+    case SheetAction.ADD_NAMED_RANGE: {
+      const stateContent = new SheetContent(
+        activeSheetContent.rowHeights,
+        activeSheetContent.columnWidths,
+        activeSheetContent.data,
+        {
+          ...activeSheetContent.namedRanges,
+          [action.payload]: state.highlighted.hasLength
+            ? highlightedCells
+            : [selectedCellId],
+        }
+      );
+
       return {
         ...state,
         sheets: {
           ...state.sheets,
           [state.activeSheet]: {
             ...activeSheet,
-            content: {
-              ...activeSheet.content,
-              namedRanges: {
-                ...activeSheet.content.namedRanges,
-                [action.payload]: state.highlighted.hasLength
-                  ? state.highlighted.cells
-                  : [state.selectedCell.id],
-              },
-            } as StateContent,
+            content: stateContent,
           },
         },
       };
+    }
 
-    case SheetAction.SET_FORMULA_FIELD_TEXT:
+    case SheetAction.SET_FORMULA_FIELD_TEXT: {
       return {
         ...state,
         formulaFieldText: action.payload,
       };
+    }
 
-    case SheetAction.SET_FORMULA_FIELD_FOCUSED:
+    case SheetAction.SET_FORMULA_FIELD_FOCUSED: {
       return {
         ...state,
         isFormulaFieldFocused: action.payload,
       };
-
-    case SheetAction.RESET_FORMULA_FIELD:
+    }
+    case SheetAction.RESET_FORMULA_FIELD: {
       return {
         ...state,
         formulaFieldText: "",
         isFormulaFieldFocused: false,
         formulaMode: false,
       };
+    }
 
-    case SheetAction.SET_FORMULA_MODE:
+    case SheetAction.SET_FORMULA_MODE: {
       return {
         ...state,
         formulaMode: action.payload,
       };
+    }
 
     case SheetAction.SET_HOVERED: {
       if (Cell.isValidId(action.payload))
@@ -155,27 +168,36 @@ export const reducer = (state: State, action: Action): State => {
       return state;
     }
 
-    case SheetAction.SET_HIGHLIGHT_CELL_ANCHOR:
-      return {
-        ...state,
-        highlighted: state.highlighted.setCellAnchor(action.payload),
-      };
+    case SheetAction.SET_HIGHLIGHT_CELL_ANCHOR: {
+      const highlighted = new Highlight({ ...state.highlighted }).setCellAnchor(
+        action.payload
+      );
 
-    case SheetAction.SET_HIGHLIGHT_ROW_ANCHOR:
       return {
         ...state,
-        highlighted: state.highlighted
-          .setRowAnchor(action.payload)
-          .setCellAnchor(null),
+        highlighted,
       };
+    }
+    case SheetAction.SET_HIGHLIGHT_ROW_ANCHOR: {
+      const highlighted = new Highlight({ ...state.highlighted })
+        .setRowAnchor(action.payload)
+        .setCellAnchor(null);
 
-    case SheetAction.SET_HIGHLIGHT_COLUMN_ANCHOR:
       return {
         ...state,
-        highlighted: state.highlighted
-          .setColumnAnchor(action.payload)
-          .setCellAnchor(null),
+        highlighted,
       };
+    }
+    case SheetAction.SET_HIGHLIGHT_COLUMN_ANCHOR: {
+      const highlighted = new Highlight({ ...state.highlighted })
+        .setColumnAnchor(action.payload)
+        .setCellAnchor(null);
+
+      return {
+        ...state,
+        highlighted,
+      };
+    }
 
     case SheetAction.HIGHLIGHT_CELLS: {
       const range = CellRange.createFlat(
@@ -183,14 +205,16 @@ export const reducer = (state: State, action: Action): State => {
         action.payload.end
       );
 
+      const highlighted = new Highlight({ ...state.highlighted })
+        .setCells(setOf(range.cellIds.flat()), activeSheetContentData)
+        .setRows(setOf(range.rows))
+        .setColumns(setOf(range.columns))
+        .setRangeStart(action.payload.start)
+        .setRangeEnd(action.payload.end);
+
       return {
         ...state,
-        highlighted: state.highlighted
-          .setCells(setOf(range.cellIds.flat()), activeSheetContentData)
-          .setRows(setOf(range.rows))
-          .setColumns(setOf(range.columns))
-          .setRangeStart(action.payload.start)
-          .setRangeEnd(action.payload.end),
+        highlighted,
       };
     }
 
@@ -209,8 +233,8 @@ export const reducer = (state: State, action: Action): State => {
         id: uniqueId("sheet-"),
         index: Math.max(...sheetIndices) + 1,
         name: `Sheet ${Object.keys(state.sheets).length + 1}`,
-        content: new StateContent(),
-        initialContent: new StateContent(),
+        content: new SheetContent(),
+        initialContent: new SheetContent(),
         protected: false,
       };
 
@@ -341,7 +365,7 @@ export const reducer = (state: State, action: Action): State => {
     case SheetAction.ADD_CELLS_TO_HIGHLIGHT: {
       const rows = setOf<number>();
       const columns = setOf<string>();
-      const cells = setOf<string>(state.highlighted.cells);
+      const cells = setOf<string>(highlightedCells);
 
       action.payload.cellIds.forEach((id: string) => {
         const cell = new Cell(id);
@@ -363,7 +387,7 @@ export const reducer = (state: State, action: Action): State => {
     case SheetAction.REMOVE_CELLS_FROM_HIGHLIGHT: {
       const rowsToRemove = setOf<number>();
       const columnsToRemove = setOf<string>();
-      const updatedCells = setOf<string>(state.highlighted.cells);
+      const updatedCells = setOf<string>(highlightedCells);
       action.payload.forEach((cellId: string) => {
         const cell = new Cell(cellId);
         if (state.highlighted.includes(cellId)) {
@@ -415,12 +439,12 @@ export const reducer = (state: State, action: Action): State => {
             [state.activeSheet]: {
               ...activeSheet,
               content: {
-                ...activeSheet.content,
+                ...activeSheetContent,
                 data: {
                   ...activeSheetContentData,
                   [action.payload]: new CellData({ id: action.payload }),
                 } as StateContentData,
-              } as StateContent,
+              } as SheetContent,
             },
           },
         };
@@ -442,9 +466,9 @@ export const reducer = (state: State, action: Action): State => {
           [state.activeSheet]: {
             ...activeSheet,
             content: {
-              ...activeSheet.content,
+              ...activeSheetContent,
               data,
-            } as StateContent,
+            } as SheetContent,
           },
         },
       };
@@ -486,9 +510,9 @@ export const reducer = (state: State, action: Action): State => {
               [state.activeSheet]: {
                 ...activeSheet,
                 content: {
-                  ...activeSheet.content,
+                  ...activeSheetContent,
                   data,
-                } as StateContent,
+                } as SheetContent,
               },
             },
           };
@@ -502,14 +526,14 @@ export const reducer = (state: State, action: Action): State => {
             [state.activeSheet]: {
               ...activeSheet,
               content: {
-                ...activeSheet.content,
+                ...activeSheetContent,
                 data: {
                   ...activeSheetContentData,
                   [action.payload.anchor.id]: {
                     value,
                   },
                 } as StateContentData,
-              } as StateContent,
+              } as SheetContent,
             },
           },
         };
@@ -548,12 +572,12 @@ export const reducer = (state: State, action: Action): State => {
           [state.activeSheet]: {
             ...activeSheet,
             content: {
-              ...activeSheet.content,
+              ...activeSheetContent,
               rowHeights: {
-                ...activeSheet.content.rowHeights,
+                ...activeSheetContent.rowHeights,
                 [action.payload.row]: action.payload.height,
               },
-            } as StateContent,
+            } as SheetContent,
           },
         },
       };
@@ -582,12 +606,12 @@ export const reducer = (state: State, action: Action): State => {
           [state.activeSheet]: {
             ...activeSheet,
             content: {
-              ...activeSheet.content,
+              ...activeSheetContent,
               columnWidths: {
-                ...activeSheet.content.columnWidths,
+                ...activeSheetContent.columnWidths,
                 [action.payload.column]: action.payload.width,
               },
-            } as StateContent,
+            } as SheetContent,
           },
         },
       };
@@ -628,9 +652,9 @@ export const reducer = (state: State, action: Action): State => {
           [state.activeSheet]: {
             ...activeSheet,
             content: {
-              ...activeSheet.content,
+              ...activeSheetContent,
               data,
-            } as StateContent,
+            } as SheetContent,
           },
         },
       };
@@ -671,9 +695,9 @@ export const reducer = (state: State, action: Action): State => {
           [state.activeSheet]: {
             ...activeSheet,
             content: {
-              ...activeSheet.content,
+              ...activeSheetContent,
               data,
-            } as StateContent,
+            } as SheetContent,
           },
         },
       };
@@ -715,9 +739,9 @@ export const reducer = (state: State, action: Action): State => {
           [state.activeSheet]: {
             ...activeSheet,
             content: {
-              ...activeSheet.content,
+              ...activeSheetContent,
               data,
-            } as StateContent,
+            } as SheetContent,
           },
         },
       };
@@ -756,9 +780,9 @@ export const reducer = (state: State, action: Action): State => {
           [state.activeSheet]: {
             ...activeSheet,
             content: {
-              ...activeSheet.content,
+              ...activeSheetContent,
               data,
-            } as StateContent,
+            } as SheetContent,
           },
         },
       };
@@ -838,9 +862,9 @@ export const reducer = (state: State, action: Action): State => {
           [state.activeSheet]: {
             ...activeSheet,
             content: {
-              ...activeSheet.content,
+              ...activeSheetContent,
               data,
-            } as StateContent,
+            } as SheetContent,
           },
         },
       };
@@ -874,12 +898,12 @@ export const reducer = (state: State, action: Action): State => {
             [state.activeSheet]: {
               ...activeSheet,
               content: {
-                ...activeSheet.content,
+                ...activeSheetContent,
                 data: {
                   ...activeSheetContentData,
                   [offset.id]: cellData.setValue(String(value)),
                 },
-              } as StateContent,
+              } as SheetContent,
             },
           },
         };
@@ -911,12 +935,12 @@ export const reducer = (state: State, action: Action): State => {
           [state.activeSheet]: {
             ...activeSheet,
             content: {
-              ...activeSheet.content,
+              ...activeSheetContent,
               data: {
                 ...activeSheetContentData,
                 [cellId]: cellData,
               },
-            } as StateContent,
+            } as SheetContent,
           },
         },
       };
@@ -950,13 +974,13 @@ export const reducer = (state: State, action: Action): State => {
           [state.activeSheet]: {
             ...activeSheet,
             content: {
-              ...activeSheet.content,
+              ...activeSheetContent,
               data: {
                 ...activeSheetContentData,
                 [action.payload.cell]:
                   cellData.setReferenceCells(referenceCells),
               },
-            } as StateContent,
+            } as SheetContent,
           },
         },
       };
@@ -987,7 +1011,7 @@ export const reducer = (state: State, action: Action): State => {
     case SheetAction.SET_CELL_FORMATTING: {
       const cellData = CellData.getOrNew(
         activeSheetContentData,
-        state.selectedCell.id
+        selectedCellId
       );
 
       return {
@@ -997,19 +1021,19 @@ export const reducer = (state: State, action: Action): State => {
           [state.activeSheet]: {
             ...activeSheet,
             content: {
-              ...activeSheet.content,
+              ...activeSheetContent,
               data: {
                 ...activeSheetContentData,
-                [state.selectedCell.id]: cellData.setFormatting(action.payload),
+                [selectedCellId]: cellData.setFormatting(action.payload),
               },
-            } as StateContent,
+            } as SheetContent,
           },
         },
       };
     }
 
     case SheetAction.SET_CELL_FORMATTING_BULK: {
-      const formattedData = state.highlighted.cells
+      const formattedData = highlightedCells
         .toArray()
         .reduce(
           (
@@ -1031,9 +1055,9 @@ export const reducer = (state: State, action: Action): State => {
           [state.activeSheet]: {
             ...activeSheet,
             content: {
-              ...activeSheet.content,
+              ...activeSheetContent,
               data: formattedData,
-            } as StateContent,
+            } as SheetContent,
           },
         },
       };
@@ -1042,7 +1066,7 @@ export const reducer = (state: State, action: Action): State => {
     case SheetAction.SET_CELL_BORDER_FORMATTING: {
       const cellData = CellData.getOrNew(
         activeSheetContentData,
-        state.selectedCell.id
+        selectedCellId
       );
 
       return {
@@ -1052,21 +1076,21 @@ export const reducer = (state: State, action: Action): State => {
           [state.activeSheet]: {
             ...activeSheet,
             content: {
-              ...activeSheet.content,
+              ...activeSheetContent,
               data: {
                 ...activeSheetContentData,
-                [state.selectedCell.id]: cellData
+                [selectedCellId]: cellData
                   .clearBorderFormatting()
                   .setFormatting(action.payload),
               },
-            } as StateContent,
+            } as SheetContent,
           },
         },
       };
     }
 
     case SheetAction.SET_CELL_BORDER_FORMATTING_BULK: {
-      const formattedData = state.highlighted.cells
+      const formattedData = highlightedCells
         .toArray()
         .reduce((stateContentData: StateContentData, cellId: string) => {
           const cellData = CellData.getOrNew(activeSheetContentData, cellId);
@@ -1085,9 +1109,9 @@ export const reducer = (state: State, action: Action): State => {
           [state.activeSheet]: {
             ...activeSheet,
             content: {
-              ...activeSheet.content,
+              ...activeSheetContent,
               data: formattedData,
-            } as StateContent,
+            } as SheetContent,
           },
         },
       };
@@ -1099,8 +1123,8 @@ export const reducer = (state: State, action: Action): State => {
       let range = CellRange.createHorizontalSliced(first, last).cellIds;
 
       if (!range.length) {
-        if (Cell.isValidId(state.selectedCell.id)) {
-          range = [[state.selectedCell.id]];
+        if (Cell.isValidId(selectedCellId)) {
+          range = [[selectedCellId]];
         } else {
           return state;
         }
@@ -1147,9 +1171,9 @@ export const reducer = (state: State, action: Action): State => {
           [state.activeSheet]: {
             ...activeSheet,
             content: {
-              ...activeSheet.content,
+              ...activeSheetContent,
               data,
-            } as StateContent,
+            } as SheetContent,
           },
         },
       };
@@ -1157,7 +1181,7 @@ export const reducer = (state: State, action: Action): State => {
 
     case SheetAction.CLEAR_CELL_FORMATTING: {
       if (state.highlighted.hasLength) {
-        const data = state.highlighted.cells
+        const data = highlightedCells
           .toArray()
           .reduce((stateContentData: StateContentData, cellId: string) => {
             const cellData = activeSheetContentData[cellId];
@@ -1177,16 +1201,16 @@ export const reducer = (state: State, action: Action): State => {
             [state.activeSheet]: {
               ...activeSheet,
               content: {
-                ...activeSheet.content,
+                ...activeSheetContent,
                 data,
-              } as StateContent,
+              } as SheetContent,
             },
           },
         };
       } else {
         const selectedCellData = CellData.getOrNew(
           activeSheetContentData,
-          state.selectedCell.id
+          selectedCellId
         );
         return {
           ...state,
@@ -1195,12 +1219,12 @@ export const reducer = (state: State, action: Action): State => {
             [state.activeSheet]: {
               ...activeSheet,
               content: {
-                ...activeSheet.content,
+                ...activeSheetContent,
                 data: {
                   ...activeSheetContentData,
-                  [state.selectedCell.id]: selectedCellData.clearFormatting(),
+                  [selectedCellId]: selectedCellData.clearFormatting(),
                 },
-              } as StateContent,
+              } as SheetContent,
             },
           },
         };
@@ -1214,16 +1238,16 @@ export const reducer = (state: State, action: Action): State => {
           ...state.sheets,
           [state.activeSheet]: {
             ...activeSheet,
-            initialContent: Object.freeze(cloneDeep(activeSheet.content)),
+            initialContent: Object.freeze(cloneDeep(activeSheetContent)),
           },
         },
       };
     }
 
     case SheetAction.ADD_MEMENTO: {
-      const delta = StateContent.findDelta(
+      const delta = SheetContent.findDelta(
         activeSheet.initialContent,
-        activeSheet.content
+        activeSheetContent
       );
       if (Object.keys(delta).length === 0) {
         return state;
@@ -1277,22 +1301,22 @@ export const reducer = (state: State, action: Action): State => {
           [state.activeSheet]: {
             ...activeSheet,
             content: {
-              ...activeSheet.content,
+              ...activeSheetContent,
               ...previousMemento.delta,
               rowHeights: {
-                ...activeSheet.content.rowHeights,
+                ...activeSheetContent.rowHeights,
                 ...previousMemento.delta.rowHeights,
               },
               columnWidths: {
-                ...activeSheet.content.columnWidths,
+                ...activeSheetContent.columnWidths,
                 ...previousMemento.delta.columnWidths,
               },
               namedRanges: {
-                ...activeSheet.content.namedRanges,
+                ...activeSheetContent.namedRanges,
                 ...previousMemento.delta.namedRanges,
               },
               data,
-            } as StateContent,
+            } as SheetContent,
           },
         },
         currentMementoId: previousMemento.id,
@@ -1326,22 +1350,22 @@ export const reducer = (state: State, action: Action): State => {
           [state.activeSheet]: {
             ...activeSheet,
             content: {
-              ...activeSheet.content,
+              ...activeSheetContent,
               ...nextMemento.delta,
               rowHeights: {
-                ...activeSheet.content.rowHeights,
+                ...activeSheetContent.rowHeights,
                 ...nextMemento.delta.rowHeights,
               },
               columnWidths: {
-                ...activeSheet.content.columnWidths,
+                ...activeSheetContent.columnWidths,
                 ...nextMemento.delta.columnWidths,
               },
               namedRanges: {
-                ...activeSheet.content.namedRanges,
+                ...activeSheetContent.namedRanges,
                 ...nextMemento.delta.namedRanges,
               },
               data,
-            } as StateContent,
+            } as SheetContent,
           },
         },
         currentMementoId: nextMemento.id,

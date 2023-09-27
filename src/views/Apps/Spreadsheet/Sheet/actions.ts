@@ -1,7 +1,7 @@
 import SetExtended from "../../../../utils/Set";
 import { AutoCalculate } from "./components/Toolbar/constants";
 import Cell from "./models/Cell";
-import StateContent from "./models/StateContent";
+import SheetContent from "./models/SheetContent";
 import StateContentData from "./models/StateContentData";
 import {
   Action,
@@ -328,7 +328,7 @@ export const updateReferenceCells = (
   payload: { cell: cellId, values, replace },
 });
 
-export const setContentBulk = (payload: StateContent): Action => ({
+export const setContentBulk = (payload: SheetContent): Action => ({
   type: SheetAction.SET_CONTENT_BULK,
   payload,
 });
