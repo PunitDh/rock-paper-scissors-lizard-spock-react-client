@@ -5,10 +5,12 @@ import SheetContent from "./models/SheetContent";
 import SheetContentData from "./models/SheetContentData";
 import {
   Action,
+  CellId,
   CellValue,
   InsertColumnLocation,
   InsertRowLocation,
   Sheet,
+  SheetId,
 } from "./types";
 
 export enum SheetAction {
@@ -72,7 +74,7 @@ export enum SheetAction {
   RESET_STATE,
 }
 
-export const selectCell = (payload: string | Cell) => ({
+export const selectCell = (payload: CellId | Cell) => ({
   type: SheetAction.SET_SELECTED,
   payload,
 });
@@ -116,12 +118,12 @@ export const setFormulaMode = (payload: boolean): Action => ({
   payload,
 });
 
-export const setHovered = (payload: string): Action => ({
+export const setHovered = (payload: CellId): Action => ({
   type: SheetAction.SET_HOVERED,
   payload,
 });
 
-export const setHighlightCellAnchor = (payload: string | null): Action => ({
+export const setHighlightCellAnchor = (payload: CellId | null): Action => ({
   type: SheetAction.SET_HIGHLIGHT_CELL_ANCHOR,
   payload,
 });
@@ -137,7 +139,7 @@ export const setHighlightColumnAnchor = (payload: string): Action => ({
 });
 
 export const pasteCellContent = (
-  anchor: string | undefined,
+  anchor: CellId | undefined,
   data: SheetContentData | string
 ): Action => ({
   type: SheetAction.PASTE_CELL_CONTENT,
@@ -147,7 +149,7 @@ export const pasteCellContent = (
   },
 });
 
-export const deleteCellContent = (payload?: string) => ({
+export const deleteCellContent = (payload?: CellId) => ({
   type: SheetAction.DELETE_CELL_CONTENT,
   payload,
 });
@@ -200,12 +202,12 @@ export const selectAll = (): Action => ({
   type: SheetAction.SELECT_ALL,
 });
 
-export const highlightCells = (start: string, end?: string): Action => ({
+export const highlightCells = (start: CellId, end?: CellId): Action => ({
   type: SheetAction.HIGHLIGHT_CELLS,
   payload: { start, end },
 });
 
-export const setSheets = (payload: { [key: string]: Sheet }): Action => ({
+export const setSheets = (payload: { [key: SheetId]: Sheet }): Action => ({
   type: SheetAction.SET_SHEETS,
   payload,
 });
@@ -214,7 +216,7 @@ export const addSheet = (): Action => ({
   type: SheetAction.ADD_SHEET,
 });
 
-export const renameSheet = (sheetId: string, sheetName: string): Action => ({
+export const renameSheet = (sheetId: SheetId, sheetName: string): Action => ({
   type: SheetAction.RENAME_SHEET,
   payload: {
     sheetId,
@@ -222,7 +224,7 @@ export const renameSheet = (sheetId: string, sheetName: string): Action => ({
   },
 });
 
-export const moveSheet = (sheetId: string, offset: number): Action => ({
+export const moveSheet = (sheetId: SheetId, offset: number): Action => ({
   type: SheetAction.MOVE_SHEET,
   payload: {
     sheetId,
@@ -230,12 +232,12 @@ export const moveSheet = (sheetId: string, offset: number): Action => ({
   },
 });
 
-export const deleteSheet = (payload: string): Action => ({
+export const deleteSheet = (payload: SheetId): Action => ({
   type: SheetAction.DELETE_SHEET,
   payload,
 });
 
-export const protectSheet = (sheetId: string, password: string): Action => ({
+export const protectSheet = (sheetId: SheetId, password: string): Action => ({
   type: SheetAction.PROTECT_SHEET,
   payload: {
     sheetId,
@@ -243,12 +245,12 @@ export const protectSheet = (sheetId: string, password: string): Action => ({
   },
 });
 
-export const setActiveSheet = (payload: string): Action => ({
+export const setActiveSheet = (payload: SheetId): Action => ({
   type: SheetAction.SET_ACTIVE_SHEET,
   payload,
 });
 
-export const setSheetIndex = (sheetId: string, index: number): Action => ({
+export const setSheetIndex = (sheetId: SheetId, index: number): Action => ({
   type: SheetAction.SET_SHEET_INDEX,
   payload: {
     sheetId,
@@ -257,8 +259,8 @@ export const setSheetIndex = (sheetId: string, index: number): Action => ({
 });
 
 export const highlightFormulaCellRange = (
-  start: string,
-  end: string
+  start: CellId,
+  end: CellId
 ): Action => ({
   type: SheetAction.FORMULA_HIGHLIGHT_CELL_RANGE,
   payload: {
@@ -275,7 +277,7 @@ export const highlightFormulaCells = (
 });
 
 export const addCellsToHighlight = (
-  cellIds: string[],
+  cellIds: CellId[],
   multiSelect: boolean = false
 ): Action => ({
   type: SheetAction.ADD_CELLS_TO_HIGHLIGHT,
@@ -285,7 +287,7 @@ export const addCellsToHighlight = (
   },
 });
 
-export const removeCellsFromHighlight = (payload: string[]): Action => ({
+export const removeCellsFromHighlight = (payload: CellId[]): Action => ({
   type: SheetAction.REMOVE_CELLS_FROM_HIGHLIGHT,
   payload,
 });
@@ -314,14 +316,14 @@ export const setFillerMode = (payload: boolean): Action => ({
   payload,
 });
 
-export const setCellContent = (cellId: string, value: string): Action => ({
+export const setCellContent = (cellId: CellId, value: string): Action => ({
   type: SheetAction.SET_CELL_CONTENT,
   payload: { cell: cellId, value },
 });
 
 export const updateReferenceCells = (
-  cellId: string,
-  values: string[],
+  cellId: CellId,
+  values: CellId[],
   replace: boolean
 ): Action => ({
   type: SheetAction.UPDATE_REFERENCE_CELLS,

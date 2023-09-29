@@ -20,6 +20,9 @@ const PasswordPrompt = ({ state, passwordPrompt, onCancel }: Props) => {
       const selectedSheet: Sheet = state.sheets[passwordPrompt.sheetId];
       if (password === selectedSheet.password) {
         passwordPrompt.onSuccess();
+        if (passwordPrompt.successMessage) {
+          notification.success(passwordPrompt.successMessage);
+        }
       } else {
         notification.error("Wrong password entered");
       }

@@ -8,4 +8,5 @@ export type Credentials = {
 export type PasswordPromptProps = {
   sheetId: SheetId | null;
   onSuccess: () => void;
+  successMessage?: string;
 };

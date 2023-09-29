@@ -8,7 +8,6 @@ import { DragArea, SheetButtonItem } from "./styles";
 import { IconPlus } from "@tabler/icons-react";
 import { toList } from "../../../../../../utils/List";
 import PasswordPrompt from "./Dialog/PasswordPrompt";
-import { useNotification } from "../../../../../../hooks";
 import { PasswordPromptProps } from "./types";
 
 type Props = {
@@ -19,6 +18,7 @@ type Props = {
 const initialPasswordPromptState: PasswordPromptProps = {
   sheetId: null,
   onSuccess: () => {},
+  successMessage: undefined,
 };
 
 const SheetSelect = ({ state, dispatch }: Props) => {
@@ -27,7 +27,6 @@ const SheetSelect = ({ state, dispatch }: Props) => {
   const [passwordPrompt, setPasswordPrompt] = useState<PasswordPromptProps>(
     initialPasswordPromptState
   );
-  const notification = useNotification();
 
   const handleContextMenu = (sheetId: SheetId) => (e: React.MouseEvent) => {
     e.preventDefault();
@@ -45,19 +44,25 @@ const SheetSelect = ({ state, dispatch }: Props) => {
   const selectSheet = (sheetId: SheetId) => () => {
     const selectedSheet: Sheet = state.sheets[sheetId];
     if (state.activeSheet !== sheetId) {
-      if (selectedSheet.protected) {
-        promptPassword(sheetId, () => {
-          dispatch(setActiveSheet(selectedSheet.id));
-          notification.success(`'${selectedSheet.name}' unlocked`);
-        });
-      } else {
-        dispatch(setActiveSheet(sheetId));
-      }
+      promptPassword(
+        sheetId,
+        () => dispatch(setActiveSheet(sheetId)),
+        `'${selectedSheet.name}' unlocked`
+      );
     }
   };
 
-  const promptPassword = (sheetId: SheetId, onSuccess: () => void): void =>
-    setPasswordPrompt({ sheetId, onSuccess });
+  const promptPassword = (
+    sheetId: SheetId,
+    onSuccess: () => void,
+    successMessage?: string
+  ): void => {
+    if (state.sheets[sheetId].protected) {
+      setPasswordPrompt({ sheetId, onSuccess, successMessage });
+    } else {
+      onSuccess();
+    }
+  };
 
   return (
     <FlexBox

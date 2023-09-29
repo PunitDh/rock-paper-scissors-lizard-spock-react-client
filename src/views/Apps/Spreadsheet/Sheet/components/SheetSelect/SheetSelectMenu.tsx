@@ -29,7 +29,11 @@ type Props = {
   anchor: HTMLElement | null;
   onClose: () => void;
   onRename: (sheetId: string) => void;
-  promptPassword: (sheetId: SheetId, onSuccess: () => void) => void;
+  promptPassword: (
+    sheetId: SheetId,
+    onSuccess: () => void,
+    successMessage?: string
+  ) => void;
 };
 
 const SheetSelectMenu = ({
@@ -77,7 +81,13 @@ const SheetSelectMenu = ({
   };
 
   const handleDelete = () => {
-    if (anchor) dispatch(deleteSheet(anchor.id));
+    if (anchor) {
+      const sheet: Sheet = state.sheets[anchor.id];
+      promptPassword(
+        sheet.id,
+        () => dispatch(deleteSheet(sheet.id)),
+      );
+    }
     onClose();
   };
 
@@ -87,13 +97,9 @@ const SheetSelectMenu = ({
 
   const handleCSVExport = () => {
     if (sheet) {
-      const handleExport = () =>
-        exportSheetAsCSV(sheet, state.maxRows, state.maxColumns, sheet.name);
-      if (sheet.protected) {
-        promptPassword(sheet.id, handleExport);
-      } else {
-        handleExport();
-      }
+      promptPassword(sheet.id, () =>
+        exportSheetAsCSV(sheet, state.maxRows, state.maxColumns, sheet.name)
+      );
     }
     onClose();
   };
