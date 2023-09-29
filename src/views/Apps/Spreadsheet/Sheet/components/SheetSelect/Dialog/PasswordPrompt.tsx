@@ -1,25 +1,25 @@
 import { useState } from "react";
 import ConfirmationDialog from "../../../../../../../components/shared/ConfirmationDialog";
 import EnterPassword from "./components/EnterPassword";
-import { Sheet, SheetId, State } from "../../../types";
+import { Sheet, State } from "../../../types";
 import { useNotification } from "../../../../../../../hooks";
+import { PasswordPromptProps } from "../types";
 
 type Props = {
-  open: SheetId | null;
+  passwordPrompt: PasswordPromptProps;
   onCancel: () => void;
-  onConfirm: (...args: any) => void;
   state: State;
 };
 
-const PasswordPrompt = ({ state, open, onCancel, onConfirm }: Props) => {
+const PasswordPrompt = ({ state, passwordPrompt, onCancel }: Props) => {
   const [password, setPassword] = useState<string>("");
   const notification = useNotification();
 
   const checkPassword = (): void => {
-    if (open) {
-      const selectedSheet: Sheet = state.sheets[open];
+    if (passwordPrompt.sheetId) {
+      const selectedSheet: Sheet = state.sheets[passwordPrompt.sheetId];
       if (password === selectedSheet.password) {
-        onConfirm();
+        passwordPrompt.onSuccess();
       } else {
         notification.error("Wrong password entered");
       }
@@ -32,7 +32,7 @@ const PasswordPrompt = ({ state, open, onCancel, onConfirm }: Props) => {
     <ConfirmationDialog
       id="sheet-password-prompt-confirmation-dialog"
       keepMounted
-      open={Boolean(open)}
+      open={Boolean(passwordPrompt.sheetId)}
       onCancel={onCancel}
       onConfirm={checkPassword}
       value={password}

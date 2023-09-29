@@ -9,18 +9,23 @@ import { IconPlus } from "@tabler/icons-react";
 import { toList } from "../../../../../../utils/List";
 import PasswordPrompt from "./Dialog/PasswordPrompt";
 import { useNotification } from "../../../../../../hooks";
+import { PasswordPromptProps } from "./types";
 
 type Props = {
   state: State;
   dispatch: Dispatch<Action>;
 };
 
+const initialPasswordPromptState: PasswordPromptProps = {
+  sheetId: null,
+  onSuccess: () => {},
+};
+
 const SheetSelect = ({ state, dispatch }: Props) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [renameState, setRenameState] = useState<SheetId | null>(null);
-  const [passwordPrompt, setPasswordPrompt] = useState<SheetId | null>(null);
-  const [onPasswordSuccess, setOnPasswordSuccess] = useState<() => void>(
-    () => {}
+  const [passwordPrompt, setPasswordPrompt] = useState<PasswordPromptProps>(
+    initialPasswordPromptState
   );
   const notification = useNotification();
 
@@ -31,16 +36,17 @@ const SheetSelect = ({ state, dispatch }: Props) => {
   };
 
   const closeMenu = () => setAnchorEl(null);
-  const closePasswordPrompt = () => setPasswordPrompt(null);
+  const closePasswordPrompt = () =>
+    setPasswordPrompt(initialPasswordPromptState);
   const handleAddSheet = () => dispatch(addSheet());
   const handleRename = (sheetId: SheetId) => setRenameState(sheetId);
   const handleCloseRename = () => setRenameState(null);
 
   const selectSheet = (sheetId: SheetId) => () => {
+    const selectedSheet: Sheet = state.sheets[sheetId];
     if (state.activeSheet !== sheetId) {
-      if (state.sheets[sheetId].protected) {
+      if (selectedSheet.protected) {
         promptPassword(sheetId, () => {
-          const selectedSheet: Sheet = state.sheets[sheetId];
           dispatch(setActiveSheet(selectedSheet.id));
           notification.success(`'${selectedSheet.name}' unlocked`);
         });
@@ -50,10 +56,8 @@ const SheetSelect = ({ state, dispatch }: Props) => {
     }
   };
 
-  const promptPassword = (sheetId: SheetId, onSuccess: () => void): void => {
-    setPasswordPrompt(sheetId);
-    setOnPasswordSuccess(() => onSuccess);
-  };
+  const promptPassword = (sheetId: SheetId, onSuccess: () => void): void =>
+    setPasswordPrompt({ sheetId, onSuccess });
 
   return (
     <FlexBox
@@ -64,9 +68,8 @@ const SheetSelect = ({ state, dispatch }: Props) => {
     >
       <PasswordPrompt
         state={state}
-        open={passwordPrompt}
         onCancel={closePasswordPrompt}
-        onConfirm={onPasswordSuccess}
+        passwordPrompt={passwordPrompt}
       />
       <SheetSelectMenu
         state={state}
