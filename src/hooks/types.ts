@@ -37,65 +37,35 @@ export type LogRequest = {
 
 export interface API {
   registerPlayer: (playerRegistration: PlayerRegistration) => void;
-
   loginPlayer: (formData: PlayerLogin) => void;
-
   getSiteSettings: () => void;
-
   getConversations: () => void;
-
   createGame: (gameData: GameData) => void;
-
   getCurrentGames: () => void;
-
   getRecentGames: (limit: number) => void;
-
   getCurrentUsers: () => void;
-
   getGame: (gameId: string) => void;
-
-  getLogs: ({ limit, type, time }: LogRequest) => Promise<Data>;
-
+  getLogs: (logRequest: LogRequest) => Promise<Data>;
   clearLogs: () => Promise<Data>;
-
-  translateSubtitles: (formData, sessionId) => Promise<Data>;
-
+  translateSubtitles: (formData, sessionId: string) => Promise<Data>;
   getDownloadFile: (location: string) => Promise<any>;
-
   sendRestRequest: (config) => Promise<void>;
-
   sendProxyRestRequest: (data) => Promise<void>;
-
   setSiteSettings: (request) => void;
-
   renameGame: (request) => void;
-
   deleteGame: (request) => void;
-
   playMove: (request) => void;
-
   resetGameRounds: (request) => void;
-
   changeGameIcon: (request) => void;
-
   logoutPlayer: () => void;
-
   sendMessage: (request) => void;
-
   updateProfile: (request) => void;
-
   updatePassword: (request) => void;
-
   deleteProfile: (request) => void;
-
   startChat: (request) => void;
-
   joinChats: () => void;
-
   joinChat: (request) => void;
-
   markConversationAsRead: (request) => void;
-
   requestProgressUpdate: (request) => void;
 }
 

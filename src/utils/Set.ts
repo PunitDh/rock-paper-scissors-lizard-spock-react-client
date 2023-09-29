@@ -44,20 +44,20 @@ export default class SetExtended<T> extends Set<T> {
   }
 
   filter(
-    filterFn: (value: T, index: number, array: List<T>) => boolean,
+    filterFn: (value: T, index: number, array: List<T>) => boolean
   ): SetExtended<T> {
     return toList(
       this.toArray().filter((value, index, array) =>
-        filterFn(value, index, toList(array)),
-      ),
+        filterFn(value, index, toList(array))
+      )
     ).toSetExtended();
   }
 
   find(
-    findFn: (value: T, index: number, array: List<T>) => boolean,
+    findFn: (value: T, index: number, array: List<T>) => boolean
   ): T | undefined {
     return this.toArray().find((value, index, array) =>
-      findFn(value, index, toList(array)),
+      findFn(value, index, toList(array))
     );
   }
 }

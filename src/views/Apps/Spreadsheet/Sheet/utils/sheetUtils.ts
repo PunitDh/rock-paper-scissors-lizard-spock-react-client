@@ -20,7 +20,7 @@ export const reIndexSheets = (sheets: {
     }, {});
 };
 
-export const handleExportAsCsv = (
+export const exportSheetAsCSV = (
   sheet: Sheet,
   maxRows: number,
   maxColumns: number,

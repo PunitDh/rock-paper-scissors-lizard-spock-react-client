@@ -2,7 +2,7 @@ import { Tooltip } from "@mui/material";
 import { FieldButton } from "../../styles";
 import CSVIcon from "./icons/CSVIcon";
 import { State } from "../../../types";
-import { handleExportAsCsv } from "../../../utils/sheetUtils";
+import { exportSheetAsCSV } from "../../../utils/sheetUtils";
 
 type Props = {
   state: State;
@@ -12,7 +12,7 @@ const SaveFileCSV = ({ state }: Props) => {
   const activeSheet = state.sheets[state.activeSheet];
 
   const exportAsCSV = () =>
-    handleExportAsCsv(
+    exportSheetAsCSV(
       activeSheet,
       state.maxRows,
       state.maxColumns,

@@ -23,7 +23,7 @@ export default function DeleteConfirmation({ state, dispatch, selectedGame }) {
   };
 
   const otherPlayer = selectedGame.players.find(
-    (player) => player.id !== token.decoded.id,
+    (player) => player.id !== token.decoded?.id,
   );
 
   return (

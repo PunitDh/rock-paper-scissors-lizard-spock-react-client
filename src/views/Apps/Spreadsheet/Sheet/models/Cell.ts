@@ -3,14 +3,15 @@ import {
   getLastColumnCharCode,
   getFirstColumnCharCode,
 } from "../constants";
+import { CellId } from "../types";
 
 export default class Cell {
-  id: string;
+  id: CellId;
   row: number;
   column: string;
   columnCharCode: number;
 
-  constructor(id: string) {
+  constructor(id: CellId) {
     this.id = id;
     const rowMatch = id?.match(/\d+/g);
     const columnMatch = id?.match(/[A-Z]+/g);
@@ -23,7 +24,7 @@ export default class Cell {
     }
   }
 
-  static isValidId(id: string): boolean {
+  static isValidId(id: CellId): boolean {
     return /[A-Z]+\d+/gi.test(id);
   }
 

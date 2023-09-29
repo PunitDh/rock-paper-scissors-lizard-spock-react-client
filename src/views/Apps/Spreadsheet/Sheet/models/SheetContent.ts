@@ -79,7 +79,10 @@ export default class SheetContent {
       return diff;
     };
 
-    const arraysEqual = (arr1: string | any[], arr2: string | any[]) => {
+    const arraysEqual = (
+      arr1: string | any[],
+      arr2: string | any[]
+    ): boolean => {
       if (arr1.length !== arr2.length) {
         return false;
       }

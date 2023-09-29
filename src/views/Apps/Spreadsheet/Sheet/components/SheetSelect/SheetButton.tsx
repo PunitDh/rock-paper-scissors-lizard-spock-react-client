@@ -1,9 +1,7 @@
 import { Dispatch, useEffect, useRef, useState } from "react";
-import { renameSheet, setActiveSheet, setSheets } from "../../actions";
+import { renameSheet, setSheets } from "../../actions";
 import { SheetButtonItem, SheetInputItem } from "./styles";
 import { Action, Sheet, State } from "../../types";
-import { useNotification } from "../../../../../../hooks";
-import PasswordPrompt from "./Dialog/PasswordPrompt";
 
 type SheetButtonProps = {
   state: State;
@@ -13,6 +11,7 @@ type SheetButtonProps = {
   onContextMenu: (e: React.MouseEvent) => void;
   onRename: () => void;
   onDoubleClick: (sheetId: string) => void;
+  onSelectSheet: (sheetId: string) => () => void;
 };
 
 const SheetButton = ({
@@ -23,23 +22,12 @@ const SheetButton = ({
   onContextMenu,
   onRename,
   onDoubleClick,
+  onSelectSheet,
 }: SheetButtonProps) => {
-  const notification = useNotification();
   const [sheetName, setSheetName] = useState(sheet.name);
-  const [passwordPromptOpen, setPasswordPromptOpen] = useState<boolean>(false);
-  const [password, setPassword] = useState<string>("");
 
   const sheetRenameRef = useRef<HTMLInputElement | null>(null);
   const renameMode: boolean = sheet.id === rename;
-  const selectedSheet: Sheet = state.sheets[sheet.id];
-
-  const selectSheet = (sheetId: string) => () => {
-    if (state.sheets[sheetId].protected && state.activeSheet !== sheet.id) {
-      setPasswordPromptOpen(true);
-    } else {
-      dispatch(setActiveSheet(sheetId));
-    }
-  };
 
   const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -64,18 +52,6 @@ const SheetButton = ({
   };
 
   const handleDoubleClick = () => onDoubleClick(sheet.id);
-  const handleClosePasswordPrompt = () => setPasswordPromptOpen(false);
-
-  const checkPassword = () => {
-    if (password === selectedSheet.password) {
-      dispatch(setActiveSheet(sheet.id));
-      notification.success(`'${sheet.name}' unlocked`);
-    } else {
-      notification.error("Wrong password entered");
-    }
-    setPassword("");
-    setPasswordPromptOpen(false);
-  };
 
   useEffect(() => {
     console.log("Sheet button hook triggered", sheet.id);
@@ -149,7 +125,7 @@ const SheetButton = ({
       ) : (
         <SheetButtonItem
           type="button"
-          onClick={selectSheet(sheet.id)}
+          onClick={onSelectSheet(sheet.id)}
           onContextMenu={onContextMenu}
           onDoubleClick={handleDoubleClick}
           active={state.activeSheet === sheet.id}
@@ -157,15 +133,6 @@ const SheetButton = ({
         >
           {sheet.name}
         </SheetButtonItem>
-      )}
-      {selectedSheet.protected && (
-        <PasswordPrompt
-          open={passwordPromptOpen}
-          onCancel={handleClosePasswordPrompt}
-          onConfirm={checkPassword}
-          value={password}
-          setValue={setPassword}
-        />
       )}
     </form>
   );

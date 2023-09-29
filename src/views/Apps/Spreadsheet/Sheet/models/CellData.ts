@@ -5,11 +5,11 @@ import { BorderType, NumberFormat } from "../components/Toolbar/constants";
 import { isString } from "lodash";
 import { isFalsy, isNumber } from "../../../../../utils";
 import SheetContentData from "./SheetContentData";
-import { CellFormula, CellValue } from "../types";
+import { CellFormula, CellId, CellValue } from "../types";
 import SetExtended, { setOf } from "../../../../../utils/Set";
 
 type CellDataShape = {
-  id: string;
+  id: CellId;
   value?: CellValue;
   formula?: CellFormula;
   referenceCells?: SetExtended<string>;
@@ -19,7 +19,7 @@ type CellDataShape = {
 };
 
 export default class CellData {
-  id: string;
+  id: CellId;
   value: CellValue;
   previousValue: CellValue;
   formula: CellFormula;
@@ -69,7 +69,7 @@ export default class CellData {
    * @param {string} id - The ID for retrieving or creating a `CellData` instance.
    * @returns {CellData} An existing or newly created `CellData` instance.
    */
-  static getOrNew(sheetContentData: SheetContentData, id: string): CellData {
+  static getOrNew(sheetContentData: SheetContentData, id: CellId): CellData {
     if (sheetContentData[id] instanceof CellData) {
       return new CellData(sheetContentData[id]);
     }
@@ -112,7 +112,7 @@ export default class CellData {
    * @param {string} id - The ID to set.
    * @returns {CellData} The current `CellData` instance for chaining.
    */
-  setId(id: string): CellData {
+  setId(id: CellId): CellData {
     this.id = id || this.id;
     return this;
   }

@@ -39,8 +39,6 @@ const ColorPicker = ({
 
   const handleClick = () => inputRef.current?.click();
 
-  const handleChange = (e) => {};
-
   return (
     <FieldButton onClick={handleClick}>
       <Icon sx={{ width: "1rem" }} />

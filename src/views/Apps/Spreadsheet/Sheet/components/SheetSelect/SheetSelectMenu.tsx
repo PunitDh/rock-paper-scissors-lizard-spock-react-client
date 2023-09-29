@@ -15,10 +15,10 @@ import {
   Lock,
   TextFields,
 } from "@mui/icons-material";
-import { Action, Sheet, State } from "../../types";
+import { Action, Sheet, SheetId, State } from "../../types";
 import { Credentials } from "./types";
 import { useNotification } from "../../../../../../hooks";
-import { handleExportAsCsv } from "../../utils/sheetUtils";
+import { exportSheetAsCSV } from "../../utils/sheetUtils";
 import ConfirmDeleteSheet from "./Dialog/ConfirmDeleteSheet";
 import ConfirmProtectSheet from "./Dialog/ConfirmProtectSheet";
 import { IconCsv } from "@tabler/icons-react";
@@ -29,6 +29,7 @@ type Props = {
   anchor: HTMLElement | null;
   onClose: () => void;
   onRename: (sheetId: string) => void;
+  promptPassword: (sheetId: SheetId, onSuccess: () => void) => void;
 };
 
 const SheetSelectMenu = ({
@@ -37,6 +38,7 @@ const SheetSelectMenu = ({
   anchor,
   onClose,
   onRename,
+  promptPassword,
 }: Props): JSX.Element => {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState<boolean>(false);
   const [protectConfirmOpen, setProtectConfirmOpen] = useState<boolean>(false);
@@ -83,9 +85,18 @@ const SheetSelectMenu = ({
     setDeleteConfirmOpen(true);
   };
 
-  const exportAsCSV = () =>
-    sheet &&
-    handleExportAsCsv(sheet, state.maxRows, state.maxColumns, sheet.name);
+  const handleCSVExport = () => {
+    if (sheet) {
+      const handleExport = () =>
+        exportSheetAsCSV(sheet, state.maxRows, state.maxColumns, sheet.name);
+      if (sheet.protected) {
+        promptPassword(sheet.id, handleExport);
+      } else {
+        handleExport();
+      }
+    }
+    onClose();
+  };
 
   return (
     <Box>
@@ -147,11 +158,7 @@ const SheetSelectMenu = ({
           </ListItemIcon>
           <ListItemText>Protect Sheet</ListItemText>
         </MenuItem>
-        <MenuItem
-          onClick={
-            sheet?.protected ? () => setProtectConfirmOpen(true) : exportAsCSV
-          }
-        >
+        <MenuItem onClick={handleCSVExport}>
           <ListItemIcon>
             <IconCsv width={20} />
           </ListItemIcon>
@@ -164,7 +171,10 @@ const SheetSelectMenu = ({
           </ListItemIcon>
           <ListItemText>Rename</ListItemText>
         </MenuItem>
-        <MenuItem onClick={confirmDelete}>
+        <MenuItem
+          onClick={confirmDelete}
+          disabled={Object.keys(state.sheets).length <= 1}
+        >
           <ListItemIcon>
             <Delete width={20} />
           </ListItemIcon>

@@ -1,5 +1,6 @@
 import { isNumber } from "../../../../../utils";
 import SetExtended, { setOf } from "../../../../../utils/Set";
+import { CellId } from "../types";
 import Cell from "./Cell";
 import CellData from "./CellData";
 import SheetContentData from "./SheetContentData";
@@ -8,7 +9,7 @@ type Props = {
   rowAnchor?: null | number;
   columnAnchor?: null | string;
   cellAnchor?: null | string;
-  cells?: SetExtended<string>;
+  cells?: SetExtended<CellId>;
   rows?: SetExtended<number>;
   columns?: SetExtended<string>;
   rangeStart?: null | string;
@@ -23,7 +24,7 @@ export default class Highlight {
   rowAnchor: null | number = null;
   columnAnchor: null | string = null;
   cellAnchor: null | string = null;
-  cells: SetExtended<string> = setOf<string>();
+  cells: SetExtended<CellId> = setOf<CellId>();
   rows: SetExtended<number> = setOf<number>();
   columns: SetExtended<string> = setOf<string>();
   rangeStart: null | string = null;
@@ -39,7 +40,7 @@ export default class Highlight {
     rowAnchor = null,
     columnAnchor = null,
     cellAnchor = null,
-    cells = setOf<string>(),
+    cells = setOf<CellId>(),
     rows = setOf<number>(),
     columns = setOf<string>(),
     rangeStart = null,
@@ -65,15 +66,15 @@ export default class Highlight {
     return this.cells.length > 1;
   }
 
-  get first(): string {
+  get first(): CellId {
     return this.cells.first();
   }
 
-  get second(): string {
+  get second(): CellId {
     return this.cells.second();
   }
 
-  get last(): string {
+  get last(): CellId {
     return this.cells.last();
   }
 
@@ -89,7 +90,7 @@ export default class Highlight {
     return new Cell(last);
   }
 
-  includes(cellId: string): Boolean {
+  includes(cellId: CellId): Boolean {
     return this.cells.has(cellId);
   }
 
@@ -103,17 +104,17 @@ export default class Highlight {
     return this;
   }
 
-  setCellAnchor(cellId: string | null): Highlight {
+  setCellAnchor(cellId: CellId | null): Highlight {
     this.cellAnchor = cellId;
     return this;
   }
 
-  setRangeStart(cellId: string): Highlight {
+  setRangeStart(cellId: CellId): Highlight {
     this.rangeStart = cellId;
     return this;
   }
 
-  setRangeEnd(cellId: string): Highlight {
+  setRangeEnd(cellId: CellId): Highlight {
     this.rangeEnd = cellId;
     return this;
   }
@@ -124,7 +125,7 @@ export default class Highlight {
   }
 
   setCells(
-    cellIds: SetExtended<string>,
+    cellIds: SetExtended<CellId>,
     sheetContentData: SheetContentData
   ): Highlight {
     this.cells = setOf<string>(cellIds);
@@ -153,13 +154,13 @@ export default class Highlight {
   }
 
   addCellAndRecalculate(
-    cellId: string,
+    cellId: CellId,
     sheetContentData: SheetContentData
   ): Highlight {
     const cell = new Cell(cellId);
     const rowsSet = setOf<number>(this.rows);
     const columnsSet = setOf<string>(this.columns);
-    const cellsSet = setOf<string>(this.cells);
+    const cellsSet = setOf<CellId>(this.cells);
     cellsSet.add(cell.id);
     rowsSet.add(cell.row);
     columnsSet.add(cell.column);

@@ -5,6 +5,13 @@ import SheetContent from "./models/SheetContent";
 import SetExtended from "../../../../utils/Set";
 import CellData from "./models/CellData";
 
+export type SheetId = string;
+export type CellId = string;
+export type CellValue = string | number | null;
+export type CellFormula = string | null;
+export type InsertColumnLocation = "left" | "right";
+export type InsertRowLocation = "above" | "below";
+
 export type State = {
   maxRows: number;
   maxColumns: number;
@@ -16,14 +23,12 @@ export type State = {
   maxUndos: number;
   selectedCell: Cell;
   formulaMode: boolean;
-  hovered: string;
+  hovered: CellId;
   highlighted: Highlight;
-  activeSheet: string;
+  activeSheet: SheetId;
   sheets: { [key: string]: Sheet };
   formulaTrackedCells: SetExtended<string>;
   formulaHighlighted: SetExtended<string>;
-  // initialContent: StateContent;
-  // content: StateContent;
   mouseDown: boolean;
   dragging: boolean;
   fillerMode: boolean;
@@ -53,7 +58,7 @@ export type SheetProps = {
 };
 
 export type Sheet = {
-  id: string;
+  id: SheetId;
   index: number;
   name: string;
   content: SheetContent;
@@ -62,19 +67,7 @@ export type Sheet = {
   password?: string;
 };
 
-// export type Memento = {
-//   id: string;
-//   content: StateContent;
-// };
-
 export type Memento = {
   id: string;
   delta: { [key: string]: any };
 };
-
-export type CellValue = string | number | null;
-
-export type CellFormula = string | null;
-
-export type InsertColumnLocation = "left" | "right";
-export type InsertRowLocation = "above" | "below";

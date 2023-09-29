@@ -8,7 +8,7 @@ const ContextMenu = ({ state, dispatch, ariaLabelledBy }) => (
       id="context-menu"
       keepMounted
       open={Boolean(state.anchorEl)}
-      onClose={() => dispatch(setAnchorEl(false))}
+      onClose={() => dispatch(setAnchorEl(null))}
       anchorEl={state.anchorEl}
       MenuListProps={{ "aria-labelledby": ariaLabelledBy }}
       anchorOrigin={{
