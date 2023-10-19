@@ -1,5 +1,3 @@
-import { ProjectIcon } from "../../layouts/FullLayout/Sidebar/types";
-
 export type LinkCardProps = {
   id: string;
   to: string;

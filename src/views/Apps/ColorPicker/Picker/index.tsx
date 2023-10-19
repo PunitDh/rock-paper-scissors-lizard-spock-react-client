@@ -5,12 +5,21 @@ import { setCarat, setContext, setRGB, setRect } from "./actions";
 import { Slider } from "@mui/material";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import { ResponsiveFlexBox } from "../../../../components/shared/styles";
+import { RGB } from "./types";
+
+type CaratProps = {
+  caratposition: number;
+};
+
+type OutputProps = {
+  rgb: RGB;
+};
 
 const Container = styled.div({
   position: "relative",
 });
 
-const Carat = styled.div(({ caratposition }) => ({
+const Carat = styled.div(({ caratposition }: CaratProps) => ({
   position: "absolute",
   left: `${caratposition}rem`,
   height: "calc(5rem + 4px)",
@@ -19,7 +28,7 @@ const Carat = styled.div(({ caratposition }) => ({
   width: "1px",
 }));
 
-const Output = styled.div(({ rgb }) => ({
+const Output = styled.div(({ rgb }: OutputProps) => ({
   border: "1px solid black",
   position: "relative",
   width: "8rem",
@@ -38,50 +47,60 @@ const Picker = () => {
   const canvasWidth = 512;
   const canvasHeight = 80;
 
-  function componentToHex(c) {
+  function componentToHex(c: number) {
     var hex = c.toString(16);
     return hex.length === 1 ? "0" + hex : hex;
   }
 
-  function rgbToHex(r, g, b) {
+  function rgbToHex(r: number, g: number, b: number) {
     return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
   }
 
-  const setOutput = (carat) => {
-    const x =
-      (carat / state.maxCarat) * (state.rect.right - state.rect.left) - 1;
-    const y = (state.rect.bottom - state.rect.top) * 0.5;
-    const { data: pixel } = state.context.getImageData(x, y, 1, 1);
-    dispatch(setRGB({ r: pixel[0], g: pixel[1], b: pixel[2] }));
-  };
+  const setOutput = useCallback(
+    (carat: number) => {
+      const x =
+        (carat / state.maxCarat) * (state.rect?.right! - state.rect?.left!) - 1;
+      const y = (state.rect?.bottom! - state.rect?.top!) * 0.5;
+      const pixel = state.context?.getImageData(x, y, 1, 1).data;
+      pixel && dispatch(setRGB({ r: pixel[0], g: pixel[1], b: pixel[2] }));
+    },
+    [
+      state.context,
+      state.maxCarat,
+      state.rect?.bottom,
+      state.rect?.left,
+      state.rect?.right,
+      state.rect?.top,
+    ]
+  );
 
   useEffect(() => {
     dispatch(setCarat(state.maxCarat / 3));
-  }, []);
+  }, [state.maxCarat]);
 
   useEffect(() => {
     if (state.rect && state.context) {
       setOutput(state.carat);
     }
-  }, [state.carat]);
+  }, [setOutput, state.carat, state.context, state.rect]);
 
-  const handleChange = (e) => {
-    const newCarat = parseInt(e.target.value);
+  const handleChange = (e: Event): void => {
+    const newCarat = parseInt((e.target as HTMLInputElement).value);
     dispatch(setCarat(newCarat));
     setOutput(newCarat);
   };
 
-  const handleClick = (e) => {
+  const handleClick = (e: React.MouseEvent) => {
     const x = Math.floor(e.nativeEvent.offsetX);
     const y = Math.floor(e.nativeEvent.offsetY);
-    const { data: pixel } = state.context.getImageData(x, y, 1, 1);
-    setRGB({ r: pixel[0], g: pixel[1], b: pixel[2] });
+    const pixel = state.context?.getImageData(x, y, 1, 1).data;
+    pixel && setRGB({ r: pixel[0], g: pixel[1], b: pixel[2] });
     dispatch(
-      setCarat((x / (state.rect.right - state.rect.left)) * state.maxCarat),
+      setCarat((x / (state.rect?.right! - state.rect?.left!)) * state.maxCarat)
     );
   };
 
-  const canvas = useCallback((node) => {
+  const canvas = useCallback((node: HTMLCanvasElement) => {
     const ctx = node?.getContext("2d");
     if (ctx) {
       ctx.canvas.width = canvasWidth;

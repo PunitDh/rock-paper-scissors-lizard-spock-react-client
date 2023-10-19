@@ -9,6 +9,7 @@ import { AutoCalculate, BorderType } from "./components/Toolbar/constants";
 import Highlight from "./models/Highlight";
 import {
   Action,
+  CellId,
   InsertColumnLocation,
   InsertRowLocation,
   Memento,
@@ -64,9 +65,8 @@ export const reducer = (state: State, action: Action): State => {
   const activeSheet: Sheet = state.sheets[state.activeSheet];
   const activeSheetContent: SheetContent = activeSheet.content;
   const activeSheetContentData: SheetContentData = activeSheetContent.data;
-  const selectedCellId: string = state.selectedCell.id;
+  const selectedCellId: CellId = state.selectedCell.id;
   const highlightedCells: SetExtended<string> = state.highlighted.cells;
-  // action.type !== SheetAction.SET_HOVERED && console.log(action);
 
   switch (action.type) {
     case SheetAction.SET_SELECTED: {
@@ -848,9 +848,8 @@ export const reducer = (state: State, action: Action): State => {
       );
 
       const formulaTrackedCells: SetExtended<string> = formulaCells.reduce(
-        (cellIds: SetExtended<string>, cellData: CellData) => {
-          return cellIds.mergeWith(cellData.referenceCells);
-        },
+        (cellIds: SetExtended<string>, cellData: CellData) =>
+          cellIds.mergeWith(cellData.referenceCells),
         setOf<string>()
       );
 

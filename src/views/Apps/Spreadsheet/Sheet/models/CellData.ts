@@ -2,8 +2,7 @@ import { cellSorter, isFormula } from "../utils/cellUtils";
 import CellRange from "./CellRange";
 import CellFormatting from "./CellFormatting";
 import { BorderType, NumberFormat } from "../components/Toolbar/constants";
-import { isString } from "lodash";
-import { isFalsy, isNumber } from "../../../../../utils";
+import { isFalsy, isNumber, isString } from "../../../../../utils";
 import SheetContentData from "./SheetContentData";
 import { CellFormula, CellId, CellValue } from "../types";
 import SetExtended, { setOf } from "../../../../../utils/Set";
@@ -12,7 +11,7 @@ type CellDataShape = {
   id: CellId;
   value?: CellValue;
   formula?: CellFormula;
-  referenceCells?: SetExtended<string>;
+  referenceCells?: SetExtended<CellId>;
   display?: string;
   formatting?: CellFormatting;
   error?: string | null;
@@ -24,7 +23,7 @@ export default class CellData {
   previousValue: CellValue;
   formula: CellFormula;
   previousFormula: CellFormula;
-  referenceCells: SetExtended<string>;
+  referenceCells: SetExtended<CellId>;
   display: string;
   formatting: CellFormatting;
   error: string | null;
@@ -44,7 +43,7 @@ export default class CellData {
     id,
     value = null,
     formula = null,
-    referenceCells = setOf<string>(),
+    referenceCells = setOf<CellId>(),
     display = "",
     formatting = new CellFormatting(),
     error = null,
@@ -85,7 +84,7 @@ export default class CellData {
     return Boolean(isFormula(this.formula) && this.formula?.length);
   }
 
-  get hasChanged(): Boolean {
+  get hasChanged(): boolean {
     return (
       (Boolean(this?.value && this?.previousValue) &&
         this?.value !== this?.previousValue) ||
@@ -94,16 +93,16 @@ export default class CellData {
     );
   }
 
-  isNumber() {
+  isNumber(): boolean {
     return isNumber(this.value);
   }
 
-  isEmpty() {
-    return !String(this.value).trim().length;
+  isEmpty(): boolean {
+    return isString(this.value) && String(this.value).trim().length === 0;
   }
 
-  isNotEmpty() {
-    return this.value && String(this.value).trim().length;
+  isNotEmpty(): boolean {
+    return Boolean(this.value && String(this.value).trim().length);
   }
 
   /**
@@ -117,7 +116,7 @@ export default class CellData {
     return this;
   }
 
-  setValue(value: string | null): CellData {
+  setValue(value: CellValue): CellData {
     if (isFormula(value)) {
       const formula = String(value).toUpperCase();
       this.setFormula(formula);
@@ -126,17 +125,17 @@ export default class CellData {
       this.value = value;
       this.setDisplay();
       this.formula = null;
-      this.referenceCells = setOf<string>();
+      this.referenceCells = setOf<CellId>();
     }
     return this;
   }
 
-  setReferenceCells(referenceCells: SetExtended<string>): CellData {
+  setReferenceCells(referenceCells: SetExtended<CellId>): CellData {
     this.referenceCells = referenceCells;
     return this;
   }
 
-  setFormula(formula: string): CellData {
+  setFormula(formula: CellFormula): CellData {
     this.previousFormula = this.formula;
     this.formula = formula;
     this.referenceCells = getReferenceCells(formula);
@@ -173,8 +172,8 @@ export default class CellData {
   }
 
   setData(obj: {
-    value: string | null;
-    id: string;
+    value: CellValue;
+    id: CellId;
     formatting: CellFormatting;
   }) {
     if (!obj) return this;
@@ -625,7 +624,8 @@ const evaluateExpression = (input: string): EvaluatedString => {
  * @param {string} formula - The formula string to extract cell references from.
  * @returns {Array} An array of cell references.
  */
-export function getReferenceCells(formula: string): SetExtended<string> {
+export function getReferenceCells(formula: CellFormula): SetExtended<CellId> {
+  if (!formula) return setOf();
   const cells = formula.toUpperCase().match(/([a-z]+[0-9]+)/gi) || [];
   const cellRanges =
     formula.toUpperCase().match(/([a-z]+[0-9]+):([a-z]+[0-9]+)/gi) || [];
@@ -639,7 +639,7 @@ export function getReferenceCells(formula: string): SetExtended<string> {
     .flat();
 
   // Combine all cell references without duplicates
-  return setOf<string>(expandedRanges.concat(cells).flat());
+  return setOf<CellId>(expandedRanges.concat(cells).flat());
 }
 
 /**
@@ -651,11 +651,12 @@ export function getReferenceCells(formula: string): SetExtended<string> {
  * @returns {Array} An array of combined cell references.
  */
 export function getFormulaTrackedCells(
-  formula: string,
-  stateFormulaTrackedCells: SetExtended<string>
-): SetExtended<string> {
+  formula: CellFormula,
+  stateFormulaTrackedCells: SetExtended<CellId>
+): SetExtended<CellId> {
+  if (!formula) return setOf<CellId>();
   const referenceCells = getReferenceCells(formula);
-  const formulaTrackedCells = setOf<string>(
+  const formulaTrackedCells = setOf<CellId>(
     referenceCells.mergeWith(stateFormulaTrackedCells)
   );
   return formulaTrackedCells;

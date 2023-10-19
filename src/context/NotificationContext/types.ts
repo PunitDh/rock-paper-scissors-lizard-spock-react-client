@@ -12,3 +12,14 @@ export type State = {
   duration: number;
   open: boolean;
 };
+
+export type NotificationParams = {
+  set: (
+    message: string | null,
+    type: NotificationType,
+    duration?: number
+  ) => void;
+  success: (message: string | null, duration?: number) => void;
+  error: (message: string | null, duration?: number) => void;
+  close: () => void;
+} & State;

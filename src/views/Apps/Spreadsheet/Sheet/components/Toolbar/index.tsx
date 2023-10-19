@@ -43,8 +43,8 @@ import {
   AutoCalculate,
   BorderType,
   NumberFormat,
-  fontSizes,
-  outsideBorders,
+  FontSizes,
+  OutsideBorders,
 } from "./constants";
 import OpenFileJSON from "./components/OpenFileJSON";
 import ClearFormattingIcon from "./components/icons/ClearFormatting";
@@ -95,7 +95,7 @@ const Toolbar = ({ state, dispatch }: Props) => {
     };
   }, [selectedCell]);
 
-  const stateCellFormatting = useMemo(() => {
+  const stateCellFormatting = useMemo<CellFormatting>(() => {
     return selectedCellData?.formatting || currentCellFormatting;
   }, [currentCellFormatting, selectedCellData?.formatting]);
 
@@ -160,7 +160,7 @@ const Toolbar = ({ state, dispatch }: Props) => {
 
   const selectBorder = (borderEvent: SelectChangeEvent): void => {
     const { value } = borderEvent.target;
-    if (outsideBorders.includes(value as BorderType)) {
+    if (OutsideBorders.includes(value as BorderType)) {
       dispatch(setCellOutsideBorderFormatting(value));
     } else {
       if (state.highlighted.hasLength)
@@ -225,7 +225,7 @@ const Toolbar = ({ state, dispatch }: Props) => {
             title="Decrease Font Size"
             isActive={false}
             Icon={IconMinus}
-            value={fontSizes[0]}
+            value={FontSizes[0]}
           />
           <FontSizeSelect
             state={selectedFormatting}
@@ -236,7 +236,7 @@ const Toolbar = ({ state, dispatch }: Props) => {
             title="Increase Font Size"
             isActive={false}
             Icon={IconPlus}
-            value={fontSizes[fontSizes.length - 1]}
+            value={FontSizes[FontSizes.length - 1]}
           />
           <BorderStyleSelect
             state={selectedFormatting}

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Paper, TableCell, TableCellProps } from "@mui/material";
+import { TableCell, TableCellProps } from "@mui/material";
 import { BorderType } from "./components/Toolbar/constants";
 import CellFormatting from "./models/CellFormatting";
 import { Theme as MuiTheme } from "@mui/material/styles";
@@ -25,7 +25,7 @@ export const HeaderItem = styled(TableCell)(
     "&:hover": {
       border: "2px solid blue",
     },
-  }),
+  })
 );
 
 export const SheetContainer = styled.div({
@@ -38,11 +38,11 @@ export const Container = styled.div({
   width: "100%",
 });
 
-const BorderStyles = Object.freeze({
-  NO_BORDER: "1px solid rgba(0,0,0,0.2)",
-  THIN_BORDER: "1px double rgba(0,0,0,1)",
-  THICK_BORDER: "2px solid rgba(0,0,0,1)",
-});
+enum BorderStyles {
+  NO_BORDER = "1px solid rgba(0,0,0,0.2)",
+  THIN_BORDER = "1px double rgba(0,0,0,1)",
+  THICK_BORDER = "2px solid rgba(0,0,0,1)",
+}
 
 const initialBorders = {
   borderTop: BorderStyles.NO_BORDER,
@@ -100,8 +100,8 @@ export const getBorderProperties = (
   selected: boolean,
   formulacell: number,
   borderId: string,
-  borderTypes: string[],
-): {} => {
+  borderTypes: string[]
+): { [key: string]: string } => {
   const getProperty = (property: string) =>
     selected
       ? "2px solid blue"
@@ -197,54 +197,5 @@ export const CellInput = styled.input(
     "&:hover": {
       // border: "1px solid blue",
     },
-  }),
+  })
 );
-
-export const DivItem = styled(Paper)(
-  ({ theme, selected }: { theme: MuiTheme; selected: boolean }) => ({
-    backgroundColor: selected ? theme.palette.primary.light : "#fff",
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-    boxSizing: "border-box",
-    borderRadius: 0,
-    cursor: "cell",
-    height: "1.5rem",
-    width: "100%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: "2px",
-    marginTop: "2px",
-    overflowX: "visible",
-    position: "relative",
-  }),
-);
-
-export const CellDiv = styled.div(({ contentEditable }) => ({
-  width: "100%",
-  height: "100%",
-  maxHeight: "100%",
-  borderRadius: 0,
-  outline: "none",
-  border: "none",
-  cursor: "cell",
-  textAlign: "right",
-  backgroundColor: "transparent",
-  padding: "1px",
-  userSelect: contentEditable ? "auto" : "none",
-  "&:focus": {
-    cursor: contentEditable ? "text" : "cell",
-    zIndex: "9",
-    overflowX: "auto",
-    position: "absolute",
-    width: "auto",
-    top: 0,
-    left: 0,
-  },
-  "&:disabled": {
-    backgroundColor: "transparent",
-  },
-  "&:hover": {
-    outline: "2px solid blue",
-  },
-}));

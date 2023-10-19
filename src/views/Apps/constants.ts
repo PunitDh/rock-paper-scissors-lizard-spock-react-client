@@ -61,4 +61,11 @@ export const AppList = listOf<LinkCardProps>(
     Icon: DashboardImage.VideoSubtitles,
     description: "Generate subtitles for a video in any language",
   },
+  {
+    id: uniqueId("app-"),
+    to: "/utils/audio",
+    title: "Audio Extractor",
+    Icon: DashboardImage.AudioExtractor,
+    description: "Extract audio from a video file",
+  }
 ).sortBy((it) => it.title);

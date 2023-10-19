@@ -4,13 +4,23 @@ import Highlight from "./models/Highlight";
 import SheetContent from "./models/SheetContent";
 import SetExtended from "../../../../utils/Set";
 import CellData from "./models/CellData";
+import { SheetConfig } from "./constants";
 
-export type SheetId = string;
-export type CellId = string;
+export type SheetId = string; // e.g. sheet-1
+export type CellId = string; //CellId1; // e.g. A1
+export type ColumnId = (typeof SheetConfig.COLUMNS)[number];
+export type RowId = number;
 export type CellValue = string | number | null;
 export type CellFormula = string | null;
 export type InsertColumnLocation = "left" | "right";
 export type InsertRowLocation = "above" | "below";
+
+// const columns = SheetConfig.COLUMNS.split("");
+// type Column = typeof columns[number];
+// const rows = Array(5000).fill(0).map((it: number) => it+1);
+// type Row = typeof rows[number];
+
+// type CellId1 = `${Column}${Row}`
 
 export type State = {
   maxRows: number;
@@ -70,4 +80,21 @@ export type Sheet = {
 export type Memento = {
   id: string;
   delta: { [key: string]: any };
+};
+
+export type InputData = {
+  highlighted: Highlight;
+  referenceCells: SetExtended<CellId>;
+  rowHeight: {
+    value: number;
+  };
+  column: string;
+  formulaBarValue: string | number;
+  columnWidth: {
+    value: number;
+  };
+  selectedCellData: CellData;
+  selectedId: string;
+  selectedCell: Cell;
+  currentCellInputValue: string | number;
 };

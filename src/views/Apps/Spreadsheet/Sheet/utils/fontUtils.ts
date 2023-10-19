@@ -1,4 +1,4 @@
-const fontCheck = new Set(
+const fontCheck = new Set<string>(
   [
     // Windows 10
     "Arial",
@@ -122,7 +122,7 @@ const fontCheck = new Set(
     "Trebuchet MS",
     "Verdana",
     "Zapfino",
-  ].sort(),
+  ].sort()
 );
 
 // export function listFonts() {
@@ -146,7 +146,7 @@ const fontCheck = new Set(
 //   );
 // }
 
-export async function getFonts() {
+export async function getFonts(): Promise<string[]> {
   return new Promise<string[]>(async (resolve) => {
     await document.fonts.ready;
     const availableFonts = new Set<string>();

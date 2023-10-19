@@ -1,6 +1,6 @@
 import { MenuItem, Select } from "@mui/material";
 import { formattingSelectStyle } from "../styles";
-import { fontSizes } from "../constants";
+import { FontSizes } from "../constants";
 import CellFormatting from "../../../models/CellFormatting";
 
 type Props = {
@@ -18,7 +18,7 @@ const FontSizeSelect = ({ state, onChange }: Props) => (
     size="small"
     sx={formattingSelectStyle({ fontSize: state.styles?.fontSize! })}
   >
-    {fontSizes.map((fontSize) => (
+    {FontSizes.map((fontSize) => (
       <MenuItem
         sx={{ fontSize }}
         selected={state.styles?.fontSize === fontSize}

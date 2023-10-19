@@ -4,7 +4,7 @@ import CellFormatting from "../models/CellFormatting";
 import { initialState } from "../reducer";
 import SheetContent from "../models/SheetContent";
 import { isObject, isString } from "../../../../../utils";
-import { SheetProps, State } from "../types";
+import { CellId, SheetProps, State } from "../types";
 import SheetContentData from "../models/SheetContentData";
 import { setOf } from "../../../../../utils/Set";
 
@@ -73,8 +73,8 @@ export function parseCSV(csvString: string) {
 
     rows.forEach((row: string, rowIndex: number) => {
       row.split(",").forEach((cellValue: string, colIndex: number) => {
-        const colLabel = SheetConfig.COLUMNS[colIndex];
-        const cellId = `${colLabel}${rowIndex + 1}`;
+        const colLabel: string = SheetConfig.COLUMNS[colIndex];
+        const cellId = `${colLabel}` + (+rowIndex + 1);
         data[cellId] = new CellData({
           id: cellId,
           value: cellValue,
@@ -111,17 +111,19 @@ export function parseJSON(stringifiedJSON: string): ParsedJSON {
 
     for (const cell in data) {
       if (data[cell].id) {
-        data[cell] = {
+        data[cell] = new CellData({
           ...data[cell],
           formatting: new CellFormatting(data[cell].formatting),
-        }.setDisplay();
+        }).setDisplay();
       } else {
         delete data[cell];
       }
     }
 
     for (const rangeName in jsonObject.content.namedRanges) {
-      namedRanges[rangeName] = setOf(jsonObject.content.namedRanges[rangeName]);
+      namedRanges[rangeName] = setOf<CellId>(
+        jsonObject.content.namedRanges[rangeName]
+      );
     }
 
     const content = new SheetContent(
@@ -133,6 +135,7 @@ export function parseJSON(stringifiedJSON: string): ParsedJSON {
 
     return { error: false, content };
   } catch (error: unknown) {
+    console.error(error);
     return {
       error: true,
       message: (error as Error).message,
@@ -150,8 +153,6 @@ export const createInitialState = (
       initialState.sheets[it].name
     )
   )!;
-
-  console.log({ activeSheet });
 
   const createdState = {
     ...initialState,
@@ -197,7 +198,7 @@ const generateInitialContent = (
   const initialData = props.initialData || defaultProps.initialData;
 
   const data = Object.keys(initialData).reduce((sheetContentData, cellId) => {
-    const cell = cellId.toUpperCase();
+    const cell: CellId = cellId.toUpperCase() as CellId;
     const cellData = new CellData({ id: cell });
     if (isObject(initialData[cellId])) {
       Object.assign(cellData, initialData[cellId]);

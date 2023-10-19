@@ -1,10 +1,7 @@
 import { useContext } from "react";
 import { NotificationContext } from "../context/NotificationContext";
+import { NotificationParams } from "../context/NotificationContext/types";
 
-/**
- *
- * @returns {{set: Function, success: Function, error: Function}}
- */
-export default function useNotification() {
+export default function useNotification(): NotificationParams {
   return useContext(NotificationContext);
 }

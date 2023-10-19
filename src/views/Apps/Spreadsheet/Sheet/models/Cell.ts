@@ -3,12 +3,12 @@ import {
   getLastColumnCharCode,
   getFirstColumnCharCode,
 } from "../constants";
-import { CellId } from "../types";
+import { CellId, ColumnId, RowId } from "../types";
 
 export default class Cell {
   id: CellId;
-  row: number;
-  column: string;
+  row: RowId;
+  column: ColumnId;
   columnCharCode: number;
 
   constructor(id: CellId) {

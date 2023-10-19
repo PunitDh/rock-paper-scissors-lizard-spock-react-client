@@ -1,5 +1,5 @@
 import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
-import { numberFormats } from "../constants";
+import { NumberFormats } from "../constants";
 import { formattingSelectStyle } from "../styles";
 import FlexBox from "../../../../../../../components/shared/FlexBox";
 import CellFormatting from "../../../models/CellFormatting";
@@ -16,11 +16,11 @@ const NumberFormattingSelect = ({ state, onChange }: Props) => {
       id={"number-format-selector"}
       name="numberFormatSelector"
       onChange={onChange}
-      value={state.numberFormat || numberFormats[0].id}
+      value={state.numberFormat || NumberFormats[0].id}
       size="small"
       sx={formattingSelectStyle()}
     >
-      {numberFormats.map((format) => (
+      {NumberFormats.map((format) => (
         <MenuItem
           selected={state.numberFormat === format.id}
           key={format.id}

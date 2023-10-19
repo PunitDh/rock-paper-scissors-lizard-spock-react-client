@@ -6,8 +6,8 @@ export default function useElementPosition(
   firstHighlighted: string,
   lastHighlighted: string,
   rowHeight: { value: number },
-  columnWidth: { value: number },
-) {
+  columnWidth: { value: number }
+): Position {
   const [position, setPosition] = useState<Position>({
     cellInput: {
       top: 0,

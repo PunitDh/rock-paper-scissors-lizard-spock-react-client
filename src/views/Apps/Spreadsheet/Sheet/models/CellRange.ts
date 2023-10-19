@@ -1,23 +1,24 @@
 import { List, listOf } from "../../../../../utils/List";
+import { CellId, ColumnId, RowId } from "../types";
 import Cell from "./Cell";
 
-type CellId = {
-  row?: number;
-  column?: string;
+type CellReference = {
+  row?: RowId;
+  column?: ColumnId;
   columnCharCode?: number;
 };
 
 export default class CellRange {
   cells: Cell[] | Cell[][];
-  cellIds: string[] | string[][];
-  rows: number[];
-  columns: string[];
+  cellIds: CellId[] | CellId[][];
+  rows: RowId[];
+  columns: ColumnId[];
 
   constructor(
     cells: Cell[] | Cell[][],
-    cellIds: string[] | string[][],
-    rows: number[],
-    columns: string[],
+    cellIds: CellId[] | CellId[][],
+    rows: RowId[],
+    columns: ColumnId[]
   ) {
     this.cells = cells;
     this.cellIds = Array.from(new Set<any>(cellIds));
@@ -50,13 +51,13 @@ export default class CellRange {
     const { minC, maxC, minR, maxR } = getCellMinMax([start, end]);
 
     const cells: Cell[][] = [];
-    const rows: List<number> = listOf();
-    const columns: List<string> = listOf();
-    const ids: string[][] = [];
+    const rows: List<RowId> = listOf();
+    const columns: List<ColumnId> = listOf();
+    const ids: CellId[][] = [];
 
     for (let row = minR; row <= maxR; row++) {
-      const createdRow: List<Cell> = listOf();
-      const createdIds: List<string> = listOf();
+      const createdRow = listOf<Cell>();
+      const createdIds = listOf<CellId>();
       for (let col = minC; col <= maxC; col++) {
         const column = String.fromCharCode(col);
         const id = `${column}${row}`;
@@ -76,13 +77,13 @@ export default class CellRange {
     const { minC, maxC, minR, maxR } = getCellMinMax([start, end]);
 
     const cells: List<List<Cell>> = listOf();
-    const rows: List<number> = listOf();
-    const columns: List<string> = listOf();
-    const ids: List<List<string>> = listOf();
+    const rows: List<RowId> = listOf();
+    const columns: List<ColumnId> = listOf();
+    const ids: List<List<CellId>> = listOf();
 
     for (let col = minC; col <= maxC; col++) {
       const createdColumns: List<Cell> = listOf();
-      const createdIds: List<string> = listOf();
+      const createdIds: List<CellId> = listOf();
       for (let row = minR; row <= maxR; row++) {
         const column = String.fromCharCode(col);
         const id = `${column}${row}`;
@@ -99,7 +100,7 @@ export default class CellRange {
   }
 }
 
-const getId = (id: string): CellId => {
+const getReference = (id: string): CellReference => {
   const row = id?.match(/\d+/g);
   const column = id?.match(/[A-Z]/g);
   const columnCharCode = id?.match(/[A-Z]/g);
@@ -113,8 +114,8 @@ const getId = (id: string): CellId => {
   return {};
 };
 
-const getCellMinMax = (highlighted: string[]) => {
-  const ids = highlighted.map(getId);
+const getCellMinMax = (highlighted: CellId[]) => {
+  const ids = highlighted.map(getReference);
 
   const columnCharCodes: number[] = ids.map((it) => it.columnCharCode!);
   const rows = ids.map((it) => Number(it.row));

@@ -6,6 +6,12 @@ import { setFillerMode } from "../../actions";
 import { Action, State } from "../../types";
 import { Position } from "./types";
 
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+  position: Position;
+};
+
 type ContainerProps = {
   top: number;
   left: number;
@@ -28,12 +34,6 @@ const FillerObject = styled.div({
   backgroundColor: "blue",
   cursor: "crosshair",
 });
-
-type Props = {
-  state: State;
-  dispatch: Dispatch<Action>;
-  position: Position;
-};
 
 const Filler = ({ dispatch, position }: Props): JSX.Element => {
   const eventHandler = useEventHandler();

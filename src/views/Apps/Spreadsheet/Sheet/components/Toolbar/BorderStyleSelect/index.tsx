@@ -1,6 +1,6 @@
 import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { formattingSelectStyle } from "../styles";
-import { BorderType, borderStyles } from "../constants";
+import { BorderType, BorderStyles } from "../constants";
 import BorderTypeMenuItem from "./BorderTypeMenuItem";
 import CellFormatting from "../../../models/CellFormatting";
 
@@ -19,12 +19,8 @@ const BorderStyleSelect = ({ state, onChange }: Props) => (
     size="small"
     sx={formattingSelectStyle()}
   >
-    {borderStyles.map((border) => (
-      <MenuItem
-        // selected={selectedFormatting.border === border}
-        key={border.value}
-        value={border.id}
-      >
+    {BorderStyles.map((border) => (
+      <MenuItem key={border.value} value={border.id}>
         <BorderTypeMenuItem {...border.props} title={border.value} />
       </MenuItem>
     ))}

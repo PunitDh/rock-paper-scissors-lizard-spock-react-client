@@ -9,7 +9,7 @@ type FontStyle = "italic" | "normal";
 type TextDecoration = "underline" | "none";
 
 type IncomingFormatting = {
-  borderId?: string | null;
+  borderId?: BorderType | null;
   borderTypes?: string[];
   decimals?: number;
   numberFormat?: NumberFormat;
@@ -26,7 +26,7 @@ type IncomingFormatting = {
 };
 
 export default class CellFormatting {
-  borderId?: string | null;
+  borderId?: BorderType | null;
   borderTypes: string[] = [];
   decimals?: number;
   numberFormat?: NumberFormat;
@@ -89,7 +89,7 @@ export default class CellFormatting {
 
   addBorder(
     borderId: string | null | undefined,
-    borderType: BorderType,
+    borderType: BorderType
   ): CellFormatting {
     const currentBorderTypes = new Set(this.borderTypes);
     currentBorderTypes.add(borderType);

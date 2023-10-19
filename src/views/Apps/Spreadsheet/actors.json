@@ -1,0 +1,573 @@
+{
+  "type": "_sheet",
+  "content": {
+    "rowHeights": {
+      "1": 32.40625
+    },
+    "columnWidths": {
+      "E": 100.6953125,
+      "F": 110.9921875,
+      "H": 100.9765625
+    },
+    "data": {
+      "D5": {
+        "id": "D5",
+        "value": null,
+        "previousValue": null,
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "D6": {
+        "id": "D6",
+        "value": null,
+        "previousValue": null,
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "D7": {
+        "id": "D7",
+        "value": null,
+        "previousValue": null,
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "D8": {
+        "id": "D8",
+        "value": null,
+        "previousValue": null,
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "D1": {
+        "id": "D1",
+        "value": null,
+        "previousValue": null,
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 5,
+          "styles": {}
+        },
+        "error": null
+      },
+      "D2": {
+        "id": "D2",
+        "value": null,
+        "previousValue": null,
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "D3": {
+        "id": "D3",
+        "value": null,
+        "previousValue": null,
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "D4": {
+        "id": "D4",
+        "value": null,
+        "previousValue": null,
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "D9": {
+        "id": "D9",
+        "value": null,
+        "previousValue": null,
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "D10": {
+        "id": "D10",
+        "value": "",
+        "previousValue": "",
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "D11": {
+        "id": "D11",
+        "value": null,
+        "previousValue": null,
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "D12": {
+        "id": "D12",
+        "value": null,
+        "previousValue": null,
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 5,
+          "styles": {}
+        },
+        "error": null
+      },
+      "E4": {
+        "id": "E4",
+        "value": "Ron",
+        "previousValue": "Ron",
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "Ron",
+        "formatting": {
+          "borderId": "ALL_BORDERS",
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "F4": {
+        "id": "F4",
+        "value": "Rupert Grint",
+        "previousValue": "Rupert Grint",
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "Rupert Grint",
+        "formatting": {
+          "borderId": "ALL_BORDERS",
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "E9": {
+        "id": "E9",
+        "value": null,
+        "previousValue": null,
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "E1": {
+        "id": "E1",
+        "value": "Character",
+        "previousValue": "Character",
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "Character",
+        "formatting": {
+          "borderId": "ALL_BORDERS",
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {
+            "fontWeight": "bold",
+            "fontSize": "16px",
+            "textAlign": "center"
+          }
+        },
+        "error": null
+      },
+      "F1": {
+        "id": "F1",
+        "value": "Actor",
+        "previousValue": "Actor",
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "Actor",
+        "formatting": {
+          "borderId": "ALL_BORDERS",
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {
+            "fontWeight": "bold",
+            "fontSize": "16px",
+            "textAlign": "center"
+          }
+        },
+        "error": null
+      },
+      "E2": {
+        "id": "E2",
+        "value": "Harry",
+        "previousValue": "Harry",
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "Harry",
+        "formatting": {
+          "borderId": "ALL_BORDERS",
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "F2": {
+        "id": "F2",
+        "value": "Daniel Radcliffe",
+        "previousValue": "Daniel Radcliffe",
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "Daniel Radcliffe",
+        "formatting": {
+          "borderId": "ALL_BORDERS",
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "E3": {
+        "id": "E3",
+        "value": "Dumbledore",
+        "previousValue": "Dumbledore",
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "Dumbledore",
+        "formatting": {
+          "borderId": "ALL_BORDERS",
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "F3": {
+        "id": "F3",
+        "value": "Michael Gambon",
+        "previousValue": "Michael Gambon",
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "Michael Gambon",
+        "formatting": {
+          "borderId": "ALL_BORDERS",
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "E5": {
+        "id": "E5",
+        "value": "Hermione",
+        "previousValue": "Hermione",
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "Hermione",
+        "formatting": {
+          "borderId": "ALL_BORDERS",
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "F5": {
+        "id": "F5",
+        "value": "Emma Watson",
+        "previousValue": "Emma Watson",
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "Emma Watson",
+        "formatting": {
+          "borderId": "ALL_BORDERS",
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "E6": {
+        "id": "E6",
+        "value": "Voldemort",
+        "previousValue": "Voldemort",
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "Voldemort",
+        "formatting": {
+          "borderId": "ALL_BORDERS",
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "F6": {
+        "id": "F6",
+        "value": "Ralph Fiennes",
+        "previousValue": "Ralph Fiennes",
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "Ralph Fiennes",
+        "formatting": {
+          "borderId": "ALL_BORDERS",
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "H8": {
+        "id": "H8",
+        "value": "Enter Character:",
+        "previousValue": "Enter Character:",
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "Enter Character:",
+        "formatting": {
+          "borderId": "ALL_BORDERS",
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {
+            "textAlign": "right"
+          }
+        },
+        "error": null
+      },
+      "H9": {
+        "id": "H9",
+        "value": null,
+        "previousValue": null,
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "I8": {
+        "id": "I8",
+        "value": "Voldemort",
+        "previousValue": "Voldemort",
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "Voldemort",
+        "formatting": {
+          "borderId": "ALL_BORDERS",
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {
+            "backgroundColor": "#ff0000",
+            "color": "#ffffff"
+          }
+        },
+        "error": null
+      },
+      "I9": {
+        "id": "I9",
+        "value": null,
+        "previousValue": null,
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "I10": {
+        "id": "I10",
+        "value": "Ralph Fiennes",
+        "previousValue": "Daniel Radcliffe",
+        "formula": "=VLOOKUP(I8,E2:F6,2)",
+        "previousFormula": "=VLOOKUP(I8,E2:F6,2)",
+        "referenceCells": [
+          "E2",
+          "E3",
+          "E4",
+          "E5",
+          "E6",
+          "F2",
+          "F3",
+          "F4",
+          "F5",
+          "F6",
+          "I8"
+        ],
+        "display": "Ralph Fiennes",
+        "formatting": {
+          "borderId": "ALL_BORDERS",
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "H10": {
+        "id": "H10",
+        "value": "Actor:",
+        "previousValue": "Actor:",
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "Actor:",
+        "formatting": {
+          "borderId": "ALL_BORDERS",
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {
+            "textAlign": "right"
+          }
+        },
+        "error": null
+      },
+      "E10": {
+        "id": "E10",
+        "value": null,
+        "previousValue": null,
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 0,
+          "styles": {}
+        },
+        "error": null
+      },
+      "D13": {
+        "id": "D13",
+        "value": null,
+        "previousValue": null,
+        "formula": null,
+        "previousFormula": null,
+        "referenceCells": [],
+        "display": "",
+        "formatting": {
+          "borderId": null,
+          "borderTypes": [],
+          "decimals": 5,
+          "styles": {}
+        },
+        "error": null
+      }
+    },
+    "namedRanges": {
+      "actors": ["E2", "E3", "E4", "E5", "E6", "F2", "F3", "F4", "F5", "F6"]
+    }
+  }
+}

@@ -9,34 +9,37 @@ const BlankLayout = Loadable(lazy(() => import("../layouts/BlankLayout")));
 /* ****Pages***** */
 const Dashboard = Loadable(lazy(() => import("../views/Dashboard")));
 const VideoConverter = Loadable(
-  lazy(() => import("../views/Apps/VideoConverter")),
+  lazy(() => import("../views/Apps/VideoConverter"))
+);
+const AudioExtractor = Loadable(
+  lazy(() => import("../views/Apps/AudioExtractor"))
 );
 const ColorPicker = Loadable(lazy(() => import("../views/Apps/ColorPicker")));
 const ReactCalculator = Loadable(
-  lazy(() => import("../views/Apps/ReactCalculator")),
+  lazy(() => import("../views/Apps/ReactCalculator"))
 );
 const Spreadsheet = Loadable(lazy(() => import("../views/Apps/Spreadsheet")));
 const GetSumRest = Loadable(lazy(() => import("../views/Apps/GetSumRest")));
 const Recipes = Loadable(lazy(() => import("../views/Apps/Recipes")));
 const Recipe = Loadable(
-  lazy(() => import("../views/Apps/Recipes/Picker/components/Recipe")),
+  lazy(() => import("../views/Apps/Recipes/Picker/components/Recipe"))
 );
 const RpslsHome = Loadable(lazy(() => import("../views/Apps/Rpsls")));
 const TicTacToeHome = Loadable(lazy(() => import("../views/Apps/TicTacToe")));
 const Apps = Loadable(lazy(() => import("../views/Apps")));
 const Utils = Loadable(lazy(() => import("../views/Apps/VideoConverter")));
 const RpslsGameWindow = Loadable(
-  lazy(() => import("../views/Apps/Rpsls/GameWindow")),
+  lazy(() => import("../views/Apps/Rpsls/GameWindow"))
 );
 const Profile = Loadable(lazy(() => import("../views/Profile")));
 
 const TypographyPage = Loadable(
-  lazy(() => import("../views/utilities/TypographyPage")),
+  lazy(() => import("../views/utilities/TypographyPage"))
 );
 const Shadow = Loadable(lazy(() => import("../views/utilities/Shadow")));
 const Error = Loadable(lazy(() => import("../views/authentication/Error")));
 const Register = Loadable(
-  lazy(() => import("../views/authentication/Register")),
+  lazy(() => import("../views/authentication/Register"))
 );
 const Login = Loadable(lazy(() => import("../views/authentication/Login")));
 const Logout = Loadable(lazy(() => import("../views/authentication/Logout")));
@@ -48,7 +51,6 @@ const Router = [
     children: [
       { path: "", element: <Navigate to="/apps" /> },
       { path: "dashboard", exact: true, element: <Dashboard /> },
-      { path: "video", exact: true, element: <VideoConverter /> },
       { path: "profile", exact: true, element: <Profile /> },
       { path: "ui/typography", exact: true, element: <TypographyPage /> },
       { path: "ui/shadow", exact: true, element: <Shadow /> },
@@ -70,6 +72,7 @@ const Router = [
     children: [
       { path: "", element: <Utils /> },
       { path: "video", exact: true, element: <VideoConverter /> },
+      { path: "audio", exact: true, element: <AudioExtractor /> },
       { path: "color", exact: true, element: <ColorPicker /> },
       { path: "calculator", exact: true, element: <ReactCalculator /> },
       { path: "sheets", exact: true, element: <Spreadsheet /> },

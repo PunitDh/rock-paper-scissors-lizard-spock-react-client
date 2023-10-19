@@ -1,14 +1,15 @@
 import { PickerAction } from "./actions";
+import { Action, State } from "./types";
 
-export const initialState = {
+export const initialState: State = {
   maxCarat: 256 ** 3 - 1,
-  carat: null,
+  carat: 0,
   context: null,
   rgb: { r: 0, g: 0, b: 0 },
   rect: null,
 };
 
-export const reducer = (state, action) => {
+export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case PickerAction.SET_CARAT:
       return {

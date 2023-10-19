@@ -235,11 +235,25 @@ export default function useAPI(): API {
         params: { limit, type, time },
       }) as Promise<Data>,
 
-    clearLogs: () => request.delete(`/admin/logs`, authHeaders) as Promise<Data>,
+    clearLogs: () =>
+      request.delete(`/admin/logs`, authHeaders) as Promise<Data>,
+
+    extractAudio: (formData, sessionId: string) => {
+      socket.emit(SocketRequest.PROGRESS_UPDATE, secure({ sessionId }));
+      return request.post(
+        "/video/audio/extract",
+        formData,
+        authHeaders
+      ) as Promise<Data>;
+    },
 
     translateSubtitles: (formData, sessionId: string) => {
       socket.emit(SocketRequest.PROGRESS_UPDATE, secure({ sessionId }));
-      return request.post("/video/subtitles/translate", formData, authHeaders) as Promise<Data>;
+      return request.post(
+        "/video/subtitles/translate",
+        formData,
+        authHeaders
+      ) as Promise<Data>;
     },
 
     getDownloadFile: (location: string) =>

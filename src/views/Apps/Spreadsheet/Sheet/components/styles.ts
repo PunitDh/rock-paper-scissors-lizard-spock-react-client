@@ -7,6 +7,28 @@ import {
   JustifyContent,
 } from "../../../../../components/shared/styles";
 
+type FlexFormProps = {
+  gap?: string;
+  flexWrap?: FlexWrap;
+  flexDirection?: FlexDirection;
+  height?: string;
+  alignItems?: AlignItems;
+  justifyContent?: JustifyContent;
+  width?: string;
+  marginLeft?: string;
+  backgroundColor?: string;
+  paddingRight?: string;
+  paddingLeft?: string;
+  borderRadius?: string;
+};
+
+type FieldButtonProps = {
+  variant?: string;
+  theme?: MuiTheme;
+  isactive?: boolean;
+  width?: string;
+};
+
 export const InputTextField = styled.input({
   width: "100%",
   outline: "none",
@@ -29,21 +51,6 @@ export const SmallAutoComplete = styled(Autocomplete)({
   padding: 0,
   textAlign: "center",
 });
-
-type FlexFormProps = {
-  gap?: string;
-  flexWrap?: FlexWrap;
-  flexDirection?: FlexDirection;
-  height?: string;
-  alignItems?: AlignItems;
-  justifyContent?: JustifyContent;
-  width?: string;
-  marginLeft?: string;
-  backgroundColor?: string;
-  paddingRight?: string;
-  paddingLeft?: string;
-  borderRadius?: string;
-};
 
 export const FlexForm = styled.form(
   ({
@@ -75,15 +82,8 @@ export const FlexForm = styled.form(
     marginLeft,
     paddingRight,
     paddingLeft,
-  }),
+  })
 );
-
-type FieldButtonProps = {
-  variant?: string;
-  theme?: MuiTheme;
-  isactive?: boolean;
-  width?: string;
-};
 
 export const FieldButton = styled.button(
   ({ variant, theme, isactive, width }: FieldButtonProps) => ({
@@ -112,7 +112,7 @@ export const FieldButton = styled.button(
       color: "#bbb",
       backgroundColor: "#eee",
     },
-  }),
+  })
 );
 
 export const SheetTab = styled.div({

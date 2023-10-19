@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import CellData from "../models/CellData";
-import { State } from "../types";
+import { InputData, State } from "../types";
 
-export default function useInputData(state: State) {
-  return useMemo(() => {
+export default function useInputData(state: State): InputData {
+  return useMemo<InputData>(() => {
     const {
       selectedCell,
       defaultRowHeight,

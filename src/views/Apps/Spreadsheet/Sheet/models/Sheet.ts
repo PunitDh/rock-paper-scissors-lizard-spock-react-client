@@ -1,7 +1,8 @@
+import { SheetId } from "../types";
 import SheetContent from "./SheetContent";
 
 export default class Sheet {
-  id: string;
+  id: SheetId;
   index: number;
   name: string;
   content: SheetContent;
@@ -10,7 +11,7 @@ export default class Sheet {
   password?: string;
 
   constructor(
-    id: string,
+    id: SheetId,
     index: number,
     name: string,
     content: SheetContent,

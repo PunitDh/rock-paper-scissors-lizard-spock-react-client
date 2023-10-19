@@ -1,5 +1,6 @@
 import { isObject } from "../../../../../utils";
 import { SheetConfig } from "../constants";
+import { CellId } from "../types";
 import CellData from "./CellData";
 import SheetContentData from "./SheetContentData";
 
@@ -7,7 +8,7 @@ export default class SheetContent {
   rowHeights: { [key: string]: number };
   columnWidths: { [key: string]: number };
   data: SheetContentData;
-  namedRanges: { [key: string]: string[] };
+  namedRanges: { [key: string]: CellId[] };
 
   constructor(
     rowHeights = {},
@@ -26,7 +27,7 @@ export default class SheetContent {
     return this;
   }
 
-  setCellData(id: string, data: CellData) {
+  setCellData(id: CellId, data: CellData) {
     this.data.setData(id, data);
     return this;
   }

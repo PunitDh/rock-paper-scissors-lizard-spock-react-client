@@ -1,5 +1,6 @@
 import {
   Api,
+  AudioFile,
   Calculate,
   Chat,
   ColorLens,
@@ -98,6 +99,12 @@ const initialState: MenuState = {
         title: "Video Subtitles",
         icon: VideoCall,
         href: "/utils/video",
+      },
+      {
+        id: uniqueId("apps-"),
+        title: "Audio Extractor",
+        icon: AudioFile,
+        href: "/utils/audio",
       },
       {
         id: uniqueId("apps-"),

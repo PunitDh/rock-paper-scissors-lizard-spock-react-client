@@ -1,5 +1,4 @@
-import { useMemo } from "react";
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import { Item, getBorderProperties } from "../styles";
 import CellFormatting from "../models/CellFormatting";
 import { isNumber } from "../../../../../utils";
@@ -18,52 +17,50 @@ type Props = {
   width: number;
 };
 
-const Cell = memo(
-  ({
-    id,
-    row,
-    columnCharCode,
-    isSelected,
-    maxRows,
-    value,
-    display,
-    isFormulaHighlighted,
-    formatting = new CellFormatting(),
-    width,
-  }: Props) => {
-    console.log("Re-rendering cell:", id);
-    const borderProperties = useMemo(
-      () =>
-        getBorderProperties(
-          isSelected,
-          Number(isFormulaHighlighted),
-          formatting.borderId!,
-          formatting.borderTypes
-        ),
-      [
-        formatting.borderId,
-        formatting.borderTypes,
-        isFormulaHighlighted,
+const Cell = ({
+  id,
+  row,
+  columnCharCode,
+  isSelected,
+  maxRows,
+  value,
+  display,
+  isFormulaHighlighted,
+  formatting = new CellFormatting(),
+  width,
+}: Props) => {
+  console.log("Re-rendering cell:", id);
+  const borderProperties = useMemo(
+    () =>
+      getBorderProperties(
         isSelected,
-      ]
-    );
+        Number(isFormulaHighlighted),
+        formatting.borderId!,
+        formatting.borderTypes
+      ),
+    [
+      formatting.borderId,
+      formatting.borderTypes,
+      isFormulaHighlighted,
+      isSelected,
+    ]
+  );
 
-    return (
-      <Item
-        colSpan={1}
-        selected={isSelected}
-        id={id}
-        tabIndex={row * maxRows + (columnCharCode - 65)}
-        textalign={isNumber(value) ? "right" : "left"}
-        formatting={formatting!}
-        width={width}
-        theme={baselightTheme}
-        borderproperties={borderProperties}
-      >
-        {display}
-      </Item>
-    );
-  }
-);
+  return (
+    <Item
+      colSpan={1}
+      selected={isSelected}
+      id={id}
+      tabIndex={row * maxRows + (columnCharCode - 65)}
+      textalign={isNumber(value) ? "right" : "left"}
+      formatting={formatting!}
+      width={width}
+      theme={baselightTheme}
+      borderproperties={borderProperties}
+    >
+      {display}
+    </Item>
+  );
+};
 
-export default Cell;
+export default memo(Cell);

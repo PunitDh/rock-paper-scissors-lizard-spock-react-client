@@ -19,7 +19,7 @@ const Table = styled.table(
     borderLeft: borderLeft || "1px dotted rgba(0,0,0,0.4)",
     padding: 0,
     borderSpacing: 0,
-  }),
+  })
 );
 
 const Body = styled.tbody({
@@ -38,27 +38,25 @@ const Cell = styled.td(
     borderBottom: borderBottom || "1px dotted rgba(0,0,0,0.4)",
     borderLeft: borderLeft || "1px dotted rgba(0,0,0,0.4)",
     margin: 0,
-  }),
+  })
 );
 
-const BorderTypeMenuItem = (props: any) => {
-  return (
-    <FlexBox justifyContent="space-between" gap="1rem">
-      <Table {...props}>
-        <Body>
-          <Row>
-            <Cell {...props.cellBorders}></Cell>
-            <Cell {...props.cellBorders}></Cell>
-          </Row>
-          <Row>
-            <Cell {...props.cellBorders}></Cell>
-            <Cell {...props.cellBorders}></Cell>
-          </Row>
-        </Body>
-      </Table>
-      {props.title}
-    </FlexBox>
-  );
-};
+const BorderTypeMenuItem = (props: any) => (
+  <FlexBox justifyContent="space-between" gap="1rem">
+    <Table {...props}>
+      <Body>
+        <Row>
+          <Cell {...props.cellBorders}></Cell>
+          <Cell {...props.cellBorders}></Cell>
+        </Row>
+        <Row>
+          <Cell {...props.cellBorders}></Cell>
+          <Cell {...props.cellBorders}></Cell>
+        </Row>
+      </Body>
+    </Table>
+    {props.title}
+  </FlexBox>
+);
 
 export default BorderTypeMenuItem;

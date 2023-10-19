@@ -1,19 +1,19 @@
 import { isNumber } from "../../../../../utils";
 import SetExtended, { setOf } from "../../../../../utils/Set";
-import { CellId } from "../types";
+import { CellId, ColumnId, RowId } from "../types";
 import Cell from "./Cell";
 import CellData from "./CellData";
 import SheetContentData from "./SheetContentData";
 
 type Props = {
-  rowAnchor?: null | number;
-  columnAnchor?: null | string;
-  cellAnchor?: null | string;
+  rowAnchor?: null | RowId;
+  columnAnchor?: null | ColumnId;
+  cellAnchor?: null | CellId;
   cells?: SetExtended<CellId>;
-  rows?: SetExtended<number>;
-  columns?: SetExtended<string>;
-  rangeStart?: null | string;
-  rangeEnd?: null | string;
+  rows?: SetExtended<RowId>;
+  columns?: SetExtended<ColumnId>;
+  rangeStart?: null | CellId;
+  rangeEnd?: null | CellId;
   multiSelect?: boolean;
   sum?: number | null;
   average?: number | null;
@@ -21,14 +21,14 @@ type Props = {
 };
 
 export default class Highlight {
-  rowAnchor: null | number = null;
-  columnAnchor: null | string = null;
-  cellAnchor: null | string = null;
+  rowAnchor: null | RowId = null;
+  columnAnchor: null | ColumnId = null;
+  cellAnchor: null | CellId = null;
   cells: SetExtended<CellId> = setOf<CellId>();
-  rows: SetExtended<number> = setOf<number>();
-  columns: SetExtended<string> = setOf<string>();
-  rangeStart: null | string = null;
-  rangeEnd: null | string = null;
+  rows: SetExtended<RowId> = setOf<RowId>();
+  columns: SetExtended<ColumnId> = setOf<string>();
+  rangeStart: null | CellId = null;
+  rangeEnd: null | CellId = null;
   sum: number | null = null;
   average: number | null = null;
   count: number | null = null;
@@ -41,8 +41,8 @@ export default class Highlight {
     columnAnchor = null,
     cellAnchor = null,
     cells = setOf<CellId>(),
-    rows = setOf<number>(),
-    columns = setOf<string>(),
+    rows = setOf<RowId>(),
+    columns = setOf<ColumnId>(),
     rangeStart = null,
     rangeEnd = null,
     multiSelect = false,
@@ -94,12 +94,12 @@ export default class Highlight {
     return this.cells.has(cellId);
   }
 
-  setRowAnchor(row: number): Highlight {
+  setRowAnchor(row: RowId): Highlight {
     this.rowAnchor = row;
     return this;
   }
 
-  setColumnAnchor(column: string): Highlight {
+  setColumnAnchor(column: ColumnId): Highlight {
     this.columnAnchor = column;
     return this;
   }
@@ -128,7 +128,7 @@ export default class Highlight {
     cellIds: SetExtended<CellId>,
     sheetContentData: SheetContentData
   ): Highlight {
-    this.cells = setOf<string>(cellIds);
+    this.cells = setOf<CellId>(cellIds);
     this.recalculate(sheetContentData);
     return this;
   }
@@ -143,12 +143,12 @@ export default class Highlight {
     return this;
   }
 
-  setRows(rowIds: SetExtended<number>): Highlight {
+  setRows(rowIds: SetExtended<RowId>): Highlight {
     this.rows = rowIds;
     return this;
   }
 
-  setColumns(columnIds: SetExtended<string>): Highlight {
+  setColumns(columnIds: SetExtended<ColumnId>): Highlight {
     this.columns = columnIds;
     return this;
   }
@@ -158,8 +158,8 @@ export default class Highlight {
     sheetContentData: SheetContentData
   ): Highlight {
     const cell = new Cell(cellId);
-    const rowsSet = setOf<number>(this.rows);
-    const columnsSet = setOf<string>(this.columns);
+    const rowsSet = setOf<RowId>(this.rows);
+    const columnsSet = setOf<ColumnId>(this.columns);
     const cellsSet = setOf<CellId>(this.cells);
     cellsSet.add(cell.id);
     rowsSet.add(cell.row);

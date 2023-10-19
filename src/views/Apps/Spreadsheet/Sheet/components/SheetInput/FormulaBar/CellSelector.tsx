@@ -9,7 +9,7 @@ type Props = {
 
 const CellSelector = ({ state }: Props) => {
   const { id: selectedId } = state.selectedCell;
-  const cellSelectorValue = useMemo(
+  const cellSelectorValue = useMemo<string>(
     () =>
       state.highlighted.hasLength && state.mouseDown
         ? `${state.highlighted.rows.length}R × ${state.highlighted.columns.length}C`
@@ -20,12 +20,13 @@ const CellSelector = ({ state }: Props) => {
       state.highlighted.rows.length,
       state.mouseDown,
       selectedId,
-    ],
+    ]
   );
 
   const eventHandler = useEventHandler();
   const [currentCellSelectorValue, setCurrentCellSelectorValue] =
-    useState(cellSelectorValue);
+    useState<string>(cellSelectorValue);
+
   const handleSelectCellSubmit = (e: React.FormEvent) =>
     eventHandler.handleSelectCellSubmit(e);
 
@@ -60,7 +61,7 @@ const CellSelector = ({ state }: Props) => {
               <option key={range} value={range}>
                 {range}
               </option>
-            ),
+            )
           )}
       </datalist>
     </FlexForm>

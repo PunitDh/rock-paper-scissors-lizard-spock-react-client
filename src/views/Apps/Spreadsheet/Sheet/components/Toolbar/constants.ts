@@ -7,8 +7,8 @@ import {
 } from "@mui/icons-material";
 import { IconClock, IconCurrencyDollar } from "@tabler/icons-react";
 
-export type FontSize = (typeof fontSizes)[number];
-export const fontSizes = [
+export type FontSize = (typeof FontSizes)[number];
+export const FontSizes = [
   "8px",
   "10px",
   "12px",
@@ -30,7 +30,7 @@ export enum BorderType {
   THICK_OUTSIDE_BORDERS = "THICK_OUTSIDE_BORDERS",
 }
 
-export const outsideBorders: ReadonlyArray<BorderType> = Object.freeze([
+export const OutsideBorders: ReadonlyArray<BorderType> = Object.freeze([
   BorderType.OUTSIDE_BORDERS,
   BorderType.THICK_OUTSIDE_BORDERS,
 ]);
@@ -41,7 +41,7 @@ export type BorderStyle = {
   value: string;
 };
 
-export const borderStyles: ReadonlyArray<BorderStyle> = Object.freeze([
+export const BorderStyles: ReadonlyArray<BorderStyle> = Object.freeze([
   {
     id: BorderType.BORDER_BOTTOM,
     props: { borderBottom: "1px solid black" },
@@ -127,7 +127,7 @@ type NumberFormatMenuItem = {
   Icon: any;
 };
 
-export const numberFormats: ReadonlyArray<NumberFormatMenuItem> = Object.freeze(
+export const NumberFormats: ReadonlyArray<NumberFormatMenuItem> = Object.freeze(
   [
     { id: NumberFormat.GENERAL, Icon: TextFormat },
     { id: NumberFormat.NUMBER, Icon: NumbersOutlined },
@@ -137,5 +137,5 @@ export const numberFormats: ReadonlyArray<NumberFormatMenuItem> = Object.freeze(
     { id: NumberFormat.TIME, Icon: IconClock },
     { id: NumberFormat.PERCENTAGE, Icon: Percent },
     { id: NumberFormat.TEXT, Icon: TextFields },
-  ],
+  ]
 );

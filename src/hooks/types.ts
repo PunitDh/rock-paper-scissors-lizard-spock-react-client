@@ -1,3 +1,4 @@
+import { AxiosRequestConfig } from "axios";
 import { Status } from "../utils/constants";
 
 export type Clipboard = {
@@ -48,8 +49,9 @@ export interface API {
   getLogs: (logRequest: LogRequest) => Promise<Data>;
   clearLogs: () => Promise<Data>;
   translateSubtitles: (formData, sessionId: string) => Promise<Data>;
+  extractAudio: (formData, sessionId: string) => Promise<Data>;
   getDownloadFile: (location: string) => Promise<any>;
-  sendRestRequest: (config) => Promise<void>;
+  sendRestRequest: (config: AxiosRequestConfig) => Promise<void>;
   sendProxyRestRequest: (data) => Promise<void>;
   setSiteSettings: (request) => void;
   renameGame: (request) => void;

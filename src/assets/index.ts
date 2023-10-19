@@ -53,6 +53,7 @@ import Rest from "./images/dashboard/Rest";
 import ColorPicker from "./images/dashboard/ColorPicker";
 import Spreadsheet from "./images/dashboard/Spreadsheet";
 import VideoSubtitles from "./images/dashboard/VideoSubtitles";
+import AudioExtractor from "./images/dashboard/AudioExtractor";
 import Recipes from "./images/dashboard/Recipes";
 
 type Avatar = {
@@ -168,6 +169,7 @@ const DashboardImage = {
   ColorPicker,
   Spreadsheet,
   VideoSubtitles,
+  AudioExtractor,
   Rest,
 } as const;
 

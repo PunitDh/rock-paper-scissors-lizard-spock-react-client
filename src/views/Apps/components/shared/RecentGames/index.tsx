@@ -8,7 +8,7 @@ import LoadingComponent from "../../../../../components/shared/LoadingComponent"
 
 const RecentGames = () => {
   const api = useAPI();
-  const { recentGames } = useSelector((state) => state.player);
+  const { recentGames } = useSelector((state) => (state as any).player);
   const [getRecentGames, loading] = useLoading(api.getRecentGames);
   const limit = 6;
 
