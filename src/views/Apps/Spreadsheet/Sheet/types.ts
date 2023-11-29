@@ -37,8 +37,8 @@ export type State = {
   highlighted: Highlight;
   activeSheet: SheetId;
   sheets: { [key: string]: Sheet };
-  formulaTrackedCells: SetExtended<string>;
-  formulaHighlighted: SetExtended<string>;
+  formulaTrackedCells: SetExtended<CellId>;
+  formulaHighlighted: SetExtended<CellId>;
   mouseDown: boolean;
   dragging: boolean;
   fillerMode: boolean;
@@ -58,11 +58,11 @@ export type SheetProps = {
   maxRows?: number;
   maxColumns?: number;
   maxUndos?: number;
-  activeSheet?: string | null;
+  activeSheet?: SheetId | null;
   toolbar?: boolean;
   formulaField?: boolean;
   statusField?: boolean;
-  initialData?: { [key: string]: CellData };
+  initialData?: { [key: CellId]: CellData };
   defaultRowHeight?: number;
   defaultColumnWidth?: number;
 };
@@ -97,4 +97,11 @@ export type InputData = {
   selectedId: string;
   selectedCell: Cell;
   currentCellInputValue: string | number;
+};
+
+export type CellMinMax = {
+  minC: number;
+  maxC: number;
+  minR: number;
+  maxR: number;
 };

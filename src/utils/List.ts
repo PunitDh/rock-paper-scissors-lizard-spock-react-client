@@ -2899,7 +2899,7 @@ class Utils {
 }
 
 function toList<T>(any: T[]): List<T> {
-  return new List(...any);
+  return new List<T>(...any);
 }
 
 function capitalize(string: string, joiner: string = " "): string {

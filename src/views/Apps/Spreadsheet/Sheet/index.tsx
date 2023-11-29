@@ -28,7 +28,7 @@ const Sheet = (props: SheetProps = defaultInitialStateProps): JSX.Element => {
   }, []);
 
   return (
-    <EventProvider state={state as State} dispatch={dispatch}>
+    <EventProvider state={state} dispatch={dispatch}>
       <DashboardCard sx={{ height: "100%" }} title="Spreadsheet">
         {state.menuAnchorElement && (
           <ContextMenu state={state} dispatch={dispatch} />

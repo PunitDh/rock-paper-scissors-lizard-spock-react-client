@@ -26,7 +26,7 @@ export default class Highlight {
   cellAnchor: null | CellId = null;
   cells: SetExtended<CellId> = setOf<CellId>();
   rows: SetExtended<RowId> = setOf<RowId>();
-  columns: SetExtended<ColumnId> = setOf<string>();
+  columns: SetExtended<ColumnId> = setOf<ColumnId>();
   rangeStart: null | CellId = null;
   rangeEnd: null | CellId = null;
   sum: number | null = null;

@@ -1,12 +1,6 @@
-import { List, listOf } from "../../../../../utils/List";
-import { CellId, ColumnId, RowId } from "../types";
+import { List, listOf, toList } from "../../../../../utils/List";
+import { CellId, CellMinMax, ColumnId, RowId } from "../types";
 import Cell from "./Cell";
-
-type CellReference = {
-  row?: RowId;
-  column?: ColumnId;
-  columnCharCode?: number;
-};
 
 export default class CellRange {
   cells: Cell[] | Cell[][];
@@ -26,13 +20,14 @@ export default class CellRange {
     this.columns = Array.from(new Set<string>(columns));
   }
 
-  static createFlat(start: string, end: string): CellRange {
-    const { minC, maxC, minR, maxR } = getCellMinMax([start, end]);
+  static createFlat(start: CellId, end: CellId): CellRange {
+    const { minC, maxC, minR, maxR } = getCellMinMax(start, end);
 
     const cells: List<Cell> = listOf();
-    const rows: List<number> = listOf();
-    const columns: List<string> = listOf();
-    const ids: List<string> = listOf();
+    const rows: List<RowId> = listOf();
+    const columns: List<ColumnId> = listOf();
+    const ids: List<CellId> = listOf();
+
     for (let col = minC; col <= maxC; col++) {
       for (let row = minR; row <= maxR; row++) {
         const column = String.fromCharCode(col);
@@ -47,8 +42,8 @@ export default class CellRange {
     return new CellRange(cells, ids, rows, columns);
   }
 
-  static createHorizontalSliced(start: string, end: string): CellRange {
-    const { minC, maxC, minR, maxR } = getCellMinMax([start, end]);
+  static createHorizontalSliced(start: CellId, end: CellId): CellRange {
+    const { minC, maxC, minR, maxR } = getCellMinMax(start, end);
 
     const cells: Cell[][] = [];
     const rows: List<RowId> = listOf();
@@ -73,13 +68,13 @@ export default class CellRange {
     return new CellRange(cells, ids, rows, columns);
   }
 
-  static createVerticalSliced(start: string, end: string): CellRange {
-    const { minC, maxC, minR, maxR } = getCellMinMax([start, end]);
+  static createVerticalSliced(start: CellId, end: CellId): CellRange {
+    const { minC, maxC, minR, maxR } = getCellMinMax(start, end);
 
     const cells: List<List<Cell>> = listOf();
     const rows: List<RowId> = listOf();
     const columns: List<ColumnId> = listOf();
-    const ids: List<List<CellId>> = listOf();
+    const cellIds: List<List<CellId>> = listOf();
 
     for (let col = minC; col <= maxC; col++) {
       const createdColumns: List<Cell> = listOf();
@@ -93,36 +88,23 @@ export default class CellRange {
         createdIds.push(id);
       }
       cells.push(createdColumns);
-      ids.push(createdIds);
+      cellIds.push(createdIds);
     }
     // return cells;
-    return new CellRange(cells, ids, rows, columns);
+    return new CellRange(cells, cellIds, rows, columns);
   }
 }
 
-const getReference = (id: string): CellReference => {
-  const row = id?.match(/\d+/g);
-  const column = id?.match(/[A-Z]/g);
-  const columnCharCode = id?.match(/[A-Z]/g);
+const getCellMinMax = (start: CellId, end: CellId): CellMinMax => {
+  const ids: Cell[] = [start, end].map((it) => new Cell(it));
 
-  if (row && column && columnCharCode)
-    return {
-      row: Number(row[0]),
-      column: column[0],
-      columnCharCode: columnCharCode[0].charCodeAt(0),
-    };
-  return {};
-};
+  const columnCharCodes: List<number> = toList<number>(
+    ids.map((it) => it.columnCharCode)
+  );
+  const rows = toList<number>(ids.map((it) => Number(it.row)));
 
-const getCellMinMax = (highlighted: CellId[]) => {
-  const ids = highlighted.map(getReference);
-
-  const columnCharCodes: number[] = ids.map((it) => it.columnCharCode!);
-  const rows = ids.map((it) => Number(it.row));
-  const minC = Math.min(...columnCharCodes);
-  const maxC = Math.max(...columnCharCodes);
-  const minR = Math.min(...rows);
-  const maxR = Math.max(...rows);
+  const { min: minC, max: maxC } = columnCharCodes.minmax();
+  const { min: minR, max: maxR } = rows.minmax();
 
   return {
     minC,

@@ -1,6 +1,6 @@
 import { isObject } from "../../../../../utils";
 import { SheetConfig } from "../constants";
-import { CellId } from "../types";
+import { CellId, ColumnId, RowId } from "../types";
 import CellData from "./CellData";
 import SheetContentData from "./SheetContentData";
 
@@ -32,17 +32,17 @@ export default class SheetContent {
     return this;
   }
 
-  setRowHeight(row: number, height: number) {
+  setRowHeight(row: RowId, height: number) {
     this.rowHeights[row] = height;
     return this;
   }
 
-  setColumnWidth(column: string, width: number) {
+  setColumnWidth(column: ColumnId, width: number) {
     this.columnWidths[column] = width;
     return this;
   }
 
-  setNamedRange(name: string, range: string[]) {
+  setNamedRange(name: string, range: CellId[]) {
     this.namedRanges[name] = range;
   }
 

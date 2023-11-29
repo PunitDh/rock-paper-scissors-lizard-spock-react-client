@@ -10,10 +10,13 @@ import Highlight from "./models/Highlight";
 import {
   Action,
   CellId,
+  ColumnId,
   InsertColumnLocation,
   InsertRowLocation,
   Memento,
+  RowId,
   Sheet,
+  SheetId,
   State,
 } from "./types";
 import SheetContentData from "./models/SheetContentData";
@@ -49,8 +52,8 @@ export const initialState: State = {
       protected: false,
     },
   },
-  formulaTrackedCells: setOf<string>(),
-  formulaHighlighted: setOf<string>(),
+  formulaTrackedCells: setOf<CellId>(),
+  formulaHighlighted: setOf<CellId>(),
   mouseDown: false,
   dragging: false,
   fillerMode: false,
@@ -66,7 +69,7 @@ export const reducer = (state: State, action: Action): State => {
   const activeSheetContent: SheetContent = activeSheet.content;
   const activeSheetContentData: SheetContentData = activeSheetContent.data;
   const selectedCellId: CellId = state.selectedCell.id;
-  const highlightedCells: SetExtended<string> = state.highlighted.cells;
+  const highlightedCells: SetExtended<CellId> = state.highlighted.cells;
 
   switch (action.type) {
     case SheetAction.SET_SELECTED: {
@@ -200,17 +203,17 @@ export const reducer = (state: State, action: Action): State => {
     }
 
     case SheetAction.HIGHLIGHT_CELLS: {
-      const range = CellRange.createFlat(
-        action.payload.start,
-        action.payload.end
-      );
+      const { start, end } = action.payload;
+      if (!start || !end) return state;
+
+      const range = CellRange.createFlat(start, end);
 
       const highlighted = new Highlight({ ...state.highlighted })
-        .setCells(setOf(range.cellIds.flat()), activeSheetContentData)
-        .setRows(setOf(range.rows))
-        .setColumns(setOf(range.columns))
-        .setRangeStart(action.payload.start)
-        .setRangeEnd(action.payload.end);
+        .setCells(setOf<CellId>(range.cellIds.flat()), activeSheetContentData)
+        .setRows(setOf<RowId>(range.rows))
+        .setColumns(setOf<ColumnId>(range.columns))
+        .setRangeStart(start)
+        .setRangeEnd(end);
 
       return {
         ...state,
@@ -288,7 +291,7 @@ export const reducer = (state: State, action: Action): State => {
       const sheets = sheetIds
         .filter((sheetId) => sheetId !== action.payload)
         .reduce(
-          (stateSheets: { [key: string]: Sheet }, sheetId: string) => ({
+          (stateSheets: { [key: SheetId]: Sheet }, sheetId: SheetId) => ({
             ...stateSheets,
             [sheetId]: state.sheets[sheetId],
           }),
@@ -356,18 +359,18 @@ export const reducer = (state: State, action: Action): State => {
       );
       return {
         ...state,
-        formulaHighlighted: toList<string>(
-          range.cellIds as string[]
+        formulaHighlighted: toList<CellId>(
+          range.cellIds as CellId[]
         ).toSetExtended(),
       };
     }
 
     case SheetAction.ADD_CELLS_TO_HIGHLIGHT: {
-      const rows = setOf<number>();
-      const columns = setOf<string>();
-      const cells = setOf<string>(highlightedCells);
+      const rows = setOf<RowId>();
+      const columns = setOf<ColumnId>();
+      const cells = setOf<CellId>(highlightedCells);
 
-      action.payload.cellIds.forEach((id: string) => {
+      action.payload.cellIds.forEach((id: CellId) => {
         const cell = new Cell(id);
         cells.add(cell.id);
         rows.add(cell.row);
@@ -385,10 +388,11 @@ export const reducer = (state: State, action: Action): State => {
     }
 
     case SheetAction.REMOVE_CELLS_FROM_HIGHLIGHT: {
-      const rowsToRemove = setOf<number>();
-      const columnsToRemove = setOf<string>();
-      const updatedCells = setOf<string>(highlightedCells);
-      action.payload.forEach((cellId: string) => {
+      const rowsToRemove = setOf<RowId>();
+      const columnsToRemove = setOf<ColumnId>();
+      const updatedCells = setOf<CellId>(highlightedCells);
+
+      action.payload.forEach((cellId: CellId) => {
         const cell = new Cell(cellId);
         if (state.highlighted.includes(cellId)) {
           updatedCells.delete(cellId);
@@ -402,19 +406,19 @@ export const reducer = (state: State, action: Action): State => {
           if (rowsToRemove.has(row)) {
             return !updatedCells
               .toArray()
-              .some((cellId: string) => new Cell(cellId).row === row);
+              .some((cellId: CellId) => new Cell(cellId).row === row);
           }
           return true;
         });
 
-      const newHighlightedColumns: SetExtended<string> =
-        state.highlighted.columns.filter((column: string) => {
+      const newHighlightedColumns: SetExtended<ColumnId> =
+        state.highlighted.columns.filter((column: ColumnId) => {
           if (columnsToRemove.has(column)) {
             // Check if there are other highlighted cells in this column
             return !updatedCells
               .toArray()
               .some(
-                (cellId: string): boolean =>
+                (cellId: CellId): boolean =>
                   (new Cell(cellId).column === column) as boolean
               );
           }
@@ -485,7 +489,8 @@ export const reducer = (state: State, action: Action): State => {
             false
           );
           const range = CellRange.createHorizontalSliced(anchor, cellOffset.id);
-          const updateObj: { [key: string]: CellData } = {};
+          const updateObj: { [key: CellId]: CellData } = {};
+
           (range.cells as Cell[][]).forEach((row: Cell[], rowIndex: number) =>
             row.forEach((cell: Cell, cellIndex: number) => {
               updateObj[cell.id] = new CellData({
@@ -494,15 +499,17 @@ export const reducer = (state: State, action: Action): State => {
               });
             })
           );
+
           const data = Object.keys(updateObj).reduce(
-            (sheetContentData: SheetContentData, cell: string) => {
+            (sheetContentData: SheetContentData, cellId: CellId) => {
               return {
                 ...sheetContentData,
-                [cell]: updateObj[cell],
+                [cellId]: updateObj[cellId],
               } as SheetContentData;
             },
             activeSheetContentData
           );
+
           return {
             ...state,
             sheets: {
@@ -558,9 +565,9 @@ export const reducer = (state: State, action: Action): State => {
         ...state,
         selectedCell: new Cell(state.selectedCell.column + action.payload),
         highlighted: state.highlighted
-          .setCells(setOf(range.cellIds.flat()), activeSheetContentData)
-          .setRows(setOf(range.rows))
-          .setColumns(setOf(range.columns)),
+          .setCells(setOf<CellId>(range.cellIds.flat()), activeSheetContentData)
+          .setRows(setOf<RowId>(range.rows))
+          .setColumns(setOf<ColumnId>(range.columns)),
       };
     }
 
@@ -592,9 +599,9 @@ export const reducer = (state: State, action: Action): State => {
         ...state,
         selectedCell: new Cell(action.payload + state.selectedCell.row),
         highlighted: state.highlighted
-          .setCells(setOf(range.cellIds.flat()), activeSheetContentData)
-          .setRows(setOf(range.rows))
-          .setColumns(setOf(range.columns)),
+          .setCells(setOf<CellId>(range.cellIds.flat()), activeSheetContentData)
+          .setRows(setOf<RowId>(range.rows))
+          .setColumns(setOf<ColumnId>(range.columns)),
       };
     }
 
@@ -622,7 +629,7 @@ export const reducer = (state: State, action: Action): State => {
       const location: InsertRowLocation = action.payload;
 
       const data = Object.keys(activeSheetContentData).reduceRight(
-        (sheetContentData: SheetContentData, cellId: string) => {
+        (sheetContentData: SheetContentData, cellId: CellId) => {
           const cell = new Cell(cellId);
           const isGreater: boolean =
             location === "above"
@@ -665,7 +672,7 @@ export const reducer = (state: State, action: Action): State => {
       const location: InsertColumnLocation = action.payload;
 
       const data = Object.keys(activeSheetContentData).reduceRight(
-        (sheetContentData: SheetContentData, cellId: string) => {
+        (sheetContentData: SheetContentData, cellId: CellId) => {
           const cell = new Cell(cellId);
           const isGreater: boolean =
             location === "left"
@@ -708,7 +715,7 @@ export const reducer = (state: State, action: Action): State => {
 
       const data = Object.keys(activeSheetContentData)
         .sort(cellSorter)
-        .reduceRight((sheetContentData: SheetContentData, cellId: string) => {
+        .reduceRight((sheetContentData: SheetContentData, cellId: CellId) => {
           const cell = new Cell(cellId);
           const isEqual: boolean = cell.row === selectedCellRow;
           const isGreater: boolean = cell.row > selectedCellRow;
@@ -751,7 +758,7 @@ export const reducer = (state: State, action: Action): State => {
       const { columnCharCode: selectedCellColumnCharCode } = state.selectedCell;
 
       const data = Object.keys(activeSheetContentData).reduce(
-        (sheetContentData: SheetContentData, cellId: string) => {
+        (sheetContentData: SheetContentData, cellId: CellId) => {
           const cell = new Cell(cellId);
           const isGreater: boolean =
             cell.columnCharCode > selectedCellColumnCharCode;
@@ -796,9 +803,9 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         highlighted: state.highlighted
-          .setCells(setOf(range.cellIds.flat()), activeSheetContentData)
-          .setRows(setOf(range.rows))
-          .setColumns(setOf(range.columns)),
+          .setCells(setOf<CellId>(range.cellIds.flat()), activeSheetContentData)
+          .setRows(setOf<RowId>(range.rows))
+          .setColumns(setOf<ColumnId>(range.columns)),
       };
     }
 
@@ -847,10 +854,10 @@ export const reducer = (state: State, action: Action): State => {
         activeSheetContentData
       );
 
-      const formulaTrackedCells: SetExtended<string> = formulaCells.reduce(
-        (cellIds: SetExtended<string>, cellData: CellData) =>
+      const formulaTrackedCells: SetExtended<CellId> = formulaCells.reduce(
+        (cellIds: SetExtended<CellId>, cellData: CellData) =>
           cellIds.mergeWith(cellData.referenceCells),
-        setOf<string>()
+        setOf<CellId>()
       );
 
       return {
@@ -953,8 +960,8 @@ export const reducer = (state: State, action: Action): State => {
           : values;
 
       const referenceCells = action.payload.replace
-        ? setOf<string>(cellIds)
-        : setOf<string>(
+        ? setOf<CellId>(cellIds)
+        : setOf<CellId>(
             [
               ...activeSheetContentData[action.payload.cell].referenceCells,
               ...cellIds,
@@ -1037,7 +1044,7 @@ export const reducer = (state: State, action: Action): State => {
         .reduce(
           (
             sheetContentData: SheetContentData,
-            cellId: string
+            cellId: CellId
           ): SheetContentData => {
             const cellData = CellData.getOrNew(activeSheetContentData, cellId);
             return {
@@ -1091,7 +1098,7 @@ export const reducer = (state: State, action: Action): State => {
     case SheetAction.SET_CELL_BORDER_FORMATTING_BULK: {
       const formattedData = highlightedCells
         .toArray()
-        .reduce((sheetContentData: SheetContentData, cellId: string) => {
+        .reduce((sheetContentData: SheetContentData, cellId: CellId) => {
           const cellData = CellData.getOrNew(activeSheetContentData, cellId);
           return {
             ...sheetContentData,
@@ -1131,13 +1138,13 @@ export const reducer = (state: State, action: Action): State => {
 
       const applyBorder = (
         data: SheetContentData,
-        cells: string[],
+        cells: CellId[],
         border: BorderType
       ) => {
         return cells.reduce(
           (
             sheetContentData: SheetContentData,
-            cellId: string
+            cellId: CellId
           ): SheetContentData => {
             const cellData = CellData.getOrNew(sheetContentData, cellId);
             return {
@@ -1159,7 +1166,7 @@ export const reducer = (state: State, action: Action): State => {
         },
       ].reduce(
         (data, { cells, border }) =>
-          applyBorder(data, cells as string[], border),
+          applyBorder(data, cells as CellId[], border),
         activeSheetContentData
       );
 
@@ -1182,7 +1189,7 @@ export const reducer = (state: State, action: Action): State => {
       if (state.highlighted.hasLength) {
         const data = highlightedCells
           .toArray()
-          .reduce((sheetContentData: SheetContentData, cellId: string) => {
+          .reduce((sheetContentData: SheetContentData, cellId: CellId) => {
             const cellData = activeSheetContentData[cellId];
             if (cellData) {
               return {

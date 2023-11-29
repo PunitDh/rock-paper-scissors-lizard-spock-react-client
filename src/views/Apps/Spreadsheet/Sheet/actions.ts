@@ -74,22 +74,22 @@ export enum SheetAction {
   RESET_STATE,
 }
 
-export const selectCell = (payload: CellId | Cell) => ({
+export const selectCell = (payload: CellId | Cell): Action => ({
   type: SheetAction.SET_SELECTED,
   payload,
 });
 
-export const setInputRef = (payload: HTMLInputElement) => ({
+export const setInputRef = (payload: HTMLInputElement): Action => ({
   type: SheetAction.SET_INPUT_REF,
   payload,
 });
 
-export const setFillerRef = (payload: HTMLElement) => ({
+export const setFillerRef = (payload: HTMLElement): Action => ({
   type: SheetAction.SET_FILLER_REF,
   payload,
 });
 
-export const setFormulaFieldRef = (payload: HTMLInputElement) => ({
+export const setFormulaFieldRef = (payload: HTMLInputElement): Action => ({
   type: SheetAction.SET_FORMULA_FIELD_REF,
   payload,
 });
@@ -149,7 +149,7 @@ export const pasteCellContent = (
   },
 });
 
-export const deleteCellContent = (payload?: CellId) => ({
+export const deleteCellContent = (payload?: CellId): Action => ({
   type: SheetAction.DELETE_CELL_CONTENT,
   payload,
 });
