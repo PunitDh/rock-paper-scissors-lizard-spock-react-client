@@ -28,7 +28,7 @@ const Output = ({ state, dispatch }: Props) => {
     if (state.subtitles.location && !state.debugMode) {
       api
         .getDownloadFile(state.subtitles.location)
-        .then((response) => dispatch(setDownloadBlob(response.data)));
+        .then((response) => dispatch(setDownloadBlob(response)));
     }
   }, [state.subtitles.location]);
 

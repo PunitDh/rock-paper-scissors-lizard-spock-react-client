@@ -46,6 +46,8 @@ export const reducer = (state: State, action: Action): State => {
         updates: [...state.updates, action.payload],
       };
     case ConvertAction.SET_DOWNLOAD_BLOB:
+      console.log("Action Payload");
+      console.log(action.payload);
       return {
         ...state,
         downloadBlob: URL.createObjectURL(action.payload),
