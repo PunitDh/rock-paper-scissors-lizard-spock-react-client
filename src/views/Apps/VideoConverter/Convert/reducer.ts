@@ -5,7 +5,7 @@ export const initialState: State = {
   video: null,
   language: "Spanish",
   format: "vtt",
-  debugMode: true,
+  debugMode: false,
   loading: false,
   updates: [],
   subtitles: {},
