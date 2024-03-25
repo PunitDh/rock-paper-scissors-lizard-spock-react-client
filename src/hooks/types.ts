@@ -48,8 +48,9 @@ export interface API {
   getGame: (gameId: string) => void;
   getLogs: (logRequest: LogRequest) => Promise<Data>;
   clearLogs: () => Promise<Data>;
-  translateSubtitles: (formData, sessionId: string) => Promise<Data>;
-  extractAudio: (formData, sessionId: string) => Promise<Data>;
+  translateSubtitles: (formData: FormData, sessionId: string) => Promise<Data>;
+  getSubtitlesTaskStatus: (taskId: string) => Promise<Data>;
+  extractAudio: (formData: FormData, sessionId: string) => Promise<Data>;
   getDownloadFile: (location: string) => Promise<any>;
   sendRestRequest: (config: AxiosRequestConfig) => Promise<void>;
   sendProxyRestRequest: (data) => Promise<void>;

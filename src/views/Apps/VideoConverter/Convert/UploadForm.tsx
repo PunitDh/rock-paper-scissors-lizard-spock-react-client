@@ -16,7 +16,7 @@ import {
   TextField,
   Tooltip,
 } from "@mui/material";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import InputGroup from "./InputGroup";
 import { ResponsiveForm } from "../styles";
 import {
@@ -30,6 +30,7 @@ import {
 import { Languages } from "../../../../assets";
 import TitledButton from "../../../../components/shared/TitledButton";
 import { useAPI, useNotification, useToken } from "../../../../hooks";
+import { TaskStatus } from "../types";
 
 const FileInput = styled(TextField)({
   display: "none",
@@ -58,6 +59,8 @@ const ResponsiveBox = styled(Box)(({ theme }) => ({
 
 const UploadForm = ({ dispatch, state }) => {
   const fileRef = useRef<HTMLInputElement | null>(null);
+  const [done, setDone] = useState<boolean>(false);
+  const [pollingInterval, setPollingInterval] = useState<NodeJS.Timer>();
   const notification = useNotification();
   const token = useToken();
   const api = useAPI();
@@ -79,9 +82,48 @@ const UploadForm = ({ dispatch, state }) => {
 
     dispatch(setLoading(true));
 
+    // return api
+    //   .translateSubtitles(formData, sessionId)
+    //   .then((data) => dispatch(setSubtitles(data.payload)))
+    //   .catch((data) => {
+    //     dispatch(setLoading(false));
+    //     notification.error(data.payload);
+    //   });
+
     return api
       .translateSubtitles(formData, sessionId)
-      .then((data) => dispatch(setSubtitles(data.payload)))
+      .then((data) => {
+        console.log(data);
+        setPollingInterval(
+          setInterval(
+            () =>
+              api.getSubtitlesTaskStatus(data.payload.id).then((data) => {
+                switch (data.payload.status) {
+                  case TaskStatus.COMPLETED:
+                    console.log(TaskStatus.COMPLETED, data);
+                    setDone(true);
+                    dispatch(setSubtitles(data.payload));
+                    dispatch(setLoading(false));
+                    break;
+
+                  case TaskStatus.ERROR:
+                    console.log(TaskStatus.ERROR, data);
+                    setDone(true);
+                    dispatch(setLoading(false));
+                    break;
+
+                  case TaskStatus.PENDING:
+                    console.log(TaskStatus.PENDING, data.payload);
+                    break;
+
+                  default:
+                    break;
+                }
+              }),
+            1000
+          )
+        );
+      })
       .catch((data) => {
         dispatch(setLoading(false));
         notification.error(data.payload);
@@ -90,8 +132,13 @@ const UploadForm = ({ dispatch, state }) => {
 
   const handleSetOption = (e: SelectChangeEvent) =>
     dispatch(setOption(e.target));
+
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) =>
     dispatch(setVideo((e.target as HTMLInputElement).files![0]));
+
+  if (done) {
+    clearInterval(pollingInterval as any);
+  }
 
   return (
     <ResponsiveForm onSubmit={handleSubmit}>
@@ -121,12 +168,19 @@ const UploadForm = ({ dispatch, state }) => {
 
       {state.video && (
         <InputGroup title="Preview:">
-          <Video src={URL.createObjectURL(state.video)} controls>
-            <track
-              kind="subtitles"
-              label={state.language}
-              src={`${process.env.REACT_APP_SERVER_URL}/${state.subtitles.location}`}
-            />
+          <Video
+            src={URL.createObjectURL(state.video)}
+            controls
+            crossOrigin="anonymous"
+          >
+            {state.subtitles?.location && (
+              <track
+                kind="captions"
+                label={state.language}
+                src={`${process.env.REACT_APP_SERVER_URL}/${state.subtitles.location}`}
+                default
+              />
+            )}
           </Video>
         </InputGroup>
       )}

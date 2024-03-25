@@ -23,3 +23,9 @@ export type Action = {
   type: ConvertAction;
   payload?: any;
 };
+
+export enum TaskStatus {
+  PENDING = "Pending",
+  COMPLETED = "Completed",
+  ERROR = "Error",
+}

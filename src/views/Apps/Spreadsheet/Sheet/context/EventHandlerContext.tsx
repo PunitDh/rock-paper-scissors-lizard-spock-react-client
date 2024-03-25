@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const EventDelegatorContext = createContext<EventHandler>(
-  {} as EventHandler,
+  {} as EventHandler
 );
 
 export const EventProvider = ({ state, dispatch, children }: Props) => {
@@ -22,7 +22,7 @@ export const EventProvider = ({ state, dispatch, children }: Props) => {
     state,
     dispatch,
     clipboard,
-    inputFocusRef,
+    inputFocusRef
   );
 
   return (

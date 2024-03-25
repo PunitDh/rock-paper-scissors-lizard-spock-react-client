@@ -1,8 +1,10 @@
 import { Clipboard } from "./types";
 
 export default function useClipboard(): Clipboard {
+  const clipboard: "clipboard" = "clipboard";
+
   async function copy(text: string) {
-    if ("clipboard" in navigator) {
+    if (clipboard in navigator) {
       return await navigator.clipboard.writeText(text);
     } else {
       return document.execCommand("copy", true, text);
@@ -10,7 +12,7 @@ export default function useClipboard(): Clipboard {
   }
 
   async function get() {
-    if ("clipboard" in navigator) {
+    if (clipboard in navigator) {
       return await navigator.clipboard.readText();
     }
   }

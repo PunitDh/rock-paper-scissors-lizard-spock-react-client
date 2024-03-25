@@ -256,6 +256,9 @@ export default function useAPI(): API {
       ) as Promise<Data>;
     },
 
+    getSubtitlesTaskStatus: (taskId: string): Promise<Data> =>
+      request.get(`/video/task-status/${taskId}`) as Promise<Data>,
+
     getDownloadFile: (location: string) =>
       request.get(`/${location}`, {
         responseType: "blob",
