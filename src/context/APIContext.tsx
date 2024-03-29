@@ -13,8 +13,16 @@ import {
 } from "../redux/playerSlice";
 import { setCurrentGamesNav, updateCurrentGameMenu } from "../redux/menuSlice";
 import { setSiteSettings } from "../redux/siteSlice";
+import { Data } from "../hooks/types";
 
-export const APIContext = createContext();
+enum HttpMethod {
+  GET = "get",
+  POST = "post",
+  PUT = "put",
+  DELETE = "delete",
+}
+
+export const APIContext = createContext({});
 
 export const APIProvider = ({ children }) => {
   const token = useToken();
@@ -29,13 +37,13 @@ export const APIProvider = ({ children }) => {
     },
   };
 
-  const secure = (request) => ({
+  const secure = (request?: { [key: string]: any } | undefined) => ({
     ...request,
     _jwt: token.jwt,
   });
 
   const restricted = (request) => {
-    if (token.decoded.isAdmin) {
+    if (token.decoded?.isAdmin) {
       return {
         ...request,
         _jwt: token.jwt,
@@ -44,33 +52,37 @@ export const APIProvider = ({ children }) => {
   };
 
   const request = {
-    send: function (method, endpoint, ...args) {
+    send: function (
+      method: HttpMethod,
+      endpoint: string,
+      args: any[]
+    ): Promise<Data> {
       return new Promise((resolve, reject) =>
         axios[method](`${process.env.REACT_APP_SERVER_URL}${endpoint}`, ...args)
           .then((response) =>
             response.status < 400
               ? resolve(response.data)
-              : reject(response.data),
+              : reject(response.data)
           )
-          .catch((error) => reject(error.response.data)),
+          .catch((error) => reject(error.response.data))
       );
     },
 
-    get: function (...args) {
-      return this.send("get", ...args);
+    get: function (endpoint: string, ...args: any[]) {
+      return this.send(HttpMethod.GET, endpoint, args);
     },
-    post: function (...args) {
-      return this.send("post", ...args);
+    post: function (endpoint: string, ...args: any[]) {
+      return this.send(HttpMethod.POST, endpoint, args);
     },
-    put: function (...args) {
-      return this.send("put", ...args);
+    put: function (endpoint: string, ...args: any[]) {
+      return this.send(HttpMethod.PUT, endpoint, args);
     },
-    delete: function (...args) {
-      return this.send("delete", ...args);
+    delete: function (endpoint: string, ...args: any[]) {
+      return this.send(HttpMethod.DELETE, endpoint, args);
     },
   };
 
-  const handleToken = (data, successMessage) => {
+  const handleToken = (data: Data, successMessage: string) => {
     if (data.code !== 200) {
       notification.error(data.payload);
     } else {
@@ -81,13 +93,13 @@ export const APIProvider = ({ children }) => {
   };
 
   const requests = {
-    registerPlayer: (formData) =>
+    registerPlayer: (formData: FormData) =>
       request
         .post("/player/register", formData)
         .then((response) => handleToken(response, "Registration successful!"))
         .catch((data) => notification.error(data.payload)),
 
-    loginPlayer: (formData) =>
+    loginPlayer: (formData: FormData) =>
       request
         .post("/player/login", formData)
         .then((response) => handleToken(response, "Login successful!"))
@@ -140,7 +152,7 @@ export const APIProvider = ({ children }) => {
         })
         .catch((data) => notification.error(data.payload)),
 
-    getRecentGames: (limit) =>
+    getRecentGames: (limit: number) =>
       request
         .get("/apps/recent", { ...authHeaders, params: { limit } })
         .then((data) => dispatch(setRecentGames(data.payload)))
@@ -152,7 +164,7 @@ export const APIProvider = ({ children }) => {
         .then((data) => dispatch(setCurrentUsers(data.payload)))
         .catch((data) => notification.error(data.payload)),
 
-    getGame: (gameId) => {
+    getGame: (gameId: string) => {
       socket.emit(SocketRequest.JOIN_CHAT, secure({ gameId }));
       return request
         .get(`/apps/${gameId}`, authHeaders)
@@ -163,17 +175,17 @@ export const APIProvider = ({ children }) => {
         });
     },
 
-    getLogs: (limit, type) =>
+    getLogs: (limit: number, type: string) =>
       request.get(`/admin/logs`, { ...authHeaders, params: { limit, type } }),
 
     clearLogs: () => request.delete(`/admin/logs`, authHeaders),
 
-    translateSubtitles: (formData, sessionId) => {
+    translateSubtitles: (formData: FormData, sessionId: string) => {
       socket.emit(SocketRequest.PROGRESS_UPDATE, secure({ sessionId }));
       return request.post("/video/subtitles/translate", formData, authHeaders);
     },
 
-    getDownloadFile: (location) =>
+    getDownloadFile: (location: string) =>
       request.get(`/${location}`, {
         responseType: "blob",
       }),

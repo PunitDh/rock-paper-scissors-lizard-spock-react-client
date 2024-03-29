@@ -16,7 +16,7 @@ import {
   TextField,
   Tooltip,
 } from "@mui/material";
-import { useRef, useState } from "react";
+import { Dispatch, useRef, useState } from "react";
 import InputGroup from "./InputGroup";
 import { ResponsiveForm } from "../styles";
 import {
@@ -30,7 +30,12 @@ import {
 import { Languages } from "../../../../assets";
 import TitledButton from "../../../../components/shared/TitledButton";
 import { useAPI, useNotification, useToken } from "../../../../hooks";
-import { TaskStatus } from "../types";
+import { Action, State, TaskStatus } from "../types";
+
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+};
 
 const FileInput = styled(TextField)({
   display: "none",
@@ -57,7 +62,7 @@ const ResponsiveBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-const UploadForm = ({ dispatch, state }) => {
+const UploadForm = ({ dispatch, state }: Props): JSX.Element => {
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [done, setDone] = useState<boolean>(false);
   const [pollingInterval, setPollingInterval] = useState<NodeJS.Timer>();
@@ -77,18 +82,10 @@ const UploadForm = ({ dispatch, state }) => {
     formData.append("format", state.format);
     formData.append("sessionId", sessionId);
     if (state.debugMode && token.decoded?.isAdmin) {
-      formData.append("debug", state.debugMode);
+      formData.append("debug", String(state.debugMode));
     }
 
     dispatch(setLoading(true));
-
-    // return api
-    //   .translateSubtitles(formData, sessionId)
-    //   .then((data) => dispatch(setSubtitles(data.payload)))
-    //   .catch((data) => {
-    //     dispatch(setLoading(false));
-    //     notification.error(data.payload);
-    //   });
 
     return api
       .translateSubtitles(formData, sessionId)
@@ -98,25 +95,21 @@ const UploadForm = ({ dispatch, state }) => {
           setInterval(
             () =>
               api.getSubtitlesTaskStatus(data.payload.id).then((data) => {
+                console.log(data.payload.status, data.payload);
                 switch (data.payload.status) {
                   case TaskStatus.COMPLETED:
-                    console.log(TaskStatus.COMPLETED, data);
                     setDone(true);
                     dispatch(setSubtitles(data.payload));
                     dispatch(setLoading(false));
                     break;
 
                   case TaskStatus.ERROR:
-                    console.log(TaskStatus.ERROR, data);
                     setDone(true);
                     dispatch(setLoading(false));
                     break;
 
-                  case TaskStatus.PENDING:
-                    console.log(TaskStatus.PENDING, data.payload);
-                    break;
-
                   default:
+                    setDone(false);
                     break;
                 }
               }),
