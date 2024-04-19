@@ -23,7 +23,7 @@ const DeleteMenu = ({
   menuRef,
   open,
   onClose,
-}: Props): JSX.Element => {
+}: Props): React.ReactNode => {
   const handleDeleteRow = () => {
     dispatch(deleteRow());
     dispatch(addMemento());

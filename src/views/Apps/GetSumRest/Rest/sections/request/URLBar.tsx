@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useRef } from "react";
+import { Dispatch, useRef } from "react";
 import {
   Autocomplete,
   Button,
@@ -12,6 +12,7 @@ import { createAuthorizationHeader, createHeaders } from "../../utils";
 import { ContentTypeMenuItems, HttpMethod } from "../../constants";
 import { useAPI, useLoading, useNotification } from "../../../../../../hooks";
 import FlexBox from "../../../../../../components/shared/FlexBox";
+import { Action, State } from "../../types";
 
 const FlexForm = styled.form({
   display: "flex",
@@ -20,12 +21,18 @@ const FlexForm = styled.form({
   alignItems: "stretch",
 });
 
-const URLBar = ({ state, dispatch }) => {
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+};
+
+const URLBar = ({ state, dispatch }: Props): React.ReactNode => {
   const api = useAPI();
   const [sendRequest, loading] = useLoading(api.sendRestRequest);
   const notification = useNotification();
   const startTime = useRef(0);
-  const handleSubmit = async (e) => {
+
+  const handleSubmit = async (e: React.FormEvent) => {
     startTime.current = Date.now();
     e.preventDefault();
 

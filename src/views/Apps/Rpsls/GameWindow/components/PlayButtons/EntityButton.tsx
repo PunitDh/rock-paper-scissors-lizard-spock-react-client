@@ -18,7 +18,7 @@ const ButtonAvatar = styled(Avatar)({
   height: "2rem",
 });
 
-const EntityButton = ({ gameId, entity }: Props) => {
+const EntityButton = ({ gameId, entity }: Props): React.ReactNode => {
   const token = useToken();
   const api = useAPI();
 

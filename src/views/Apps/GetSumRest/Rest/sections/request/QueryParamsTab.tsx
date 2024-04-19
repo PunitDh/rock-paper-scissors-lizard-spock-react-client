@@ -18,7 +18,7 @@ export default function QueryParamsTab({
   dispatch,
   value,
   tabId,
-}: Props) {
+}: Props): React.ReactNode {
   const handleChange = (keyValuePair: KeyValuePair) => {
     dispatch(setParams(keyValuePair));
   };

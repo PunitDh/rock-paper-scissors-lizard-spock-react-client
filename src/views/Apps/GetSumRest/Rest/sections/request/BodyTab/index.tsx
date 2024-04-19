@@ -30,7 +30,7 @@ const InputContainer = styled(RadioGroup)({
   width: "100%",
 });
 
-export default function Body({ state, dispatch, value, tabId }: Props) {
+export default function Body({ state, dispatch, value, tabId }: Props): React.ReactNode {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setContentType(e.target.value));
   };

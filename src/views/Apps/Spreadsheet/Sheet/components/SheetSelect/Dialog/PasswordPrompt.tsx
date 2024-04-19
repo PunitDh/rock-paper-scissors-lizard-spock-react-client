@@ -1,17 +1,24 @@
-import { useState } from "react";
+import { Dispatch, useState } from "react";
 import ConfirmationDialog from "../../../../../../../components/shared/ConfirmationDialog";
 import EnterPassword from "./components/EnterPassword";
-import { Sheet, State } from "../../../types";
+import { Action, Sheet, State } from "../../../types";
 import { useNotification } from "../../../../../../../hooks";
 import { PasswordPromptProps } from "../types";
+import { unlockSheet } from "../../../actions";
 
 type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
   passwordPrompt: PasswordPromptProps;
   onCancel: () => void;
-  state: State;
 };
 
-const PasswordPrompt = ({ state, passwordPrompt, onCancel }: Props) => {
+const PasswordPrompt = ({
+  state,
+  dispatch,
+  passwordPrompt,
+  onCancel,
+}: Props) => {
   const [password, setPassword] = useState<string>("");
   const notification = useNotification();
 
@@ -19,6 +26,7 @@ const PasswordPrompt = ({ state, passwordPrompt, onCancel }: Props) => {
     if (passwordPrompt.sheetId) {
       const selectedSheet: Sheet = state.sheets[passwordPrompt.sheetId];
       if (password === selectedSheet.password) {
+        dispatch(unlockSheet(passwordPrompt.sheetId));
         passwordPrompt.onSuccess();
         if (passwordPrompt.successMessage) {
           notification.success(passwordPrompt.successMessage);
@@ -40,7 +48,7 @@ const PasswordPrompt = ({ state, passwordPrompt, onCancel }: Props) => {
       onConfirm={checkPassword}
       value={password}
       title="Protected"
-      confirmBtnText="Submit"
+      confirmBtnText="Unlock"
       content={
         <EnterPassword
           password={password}

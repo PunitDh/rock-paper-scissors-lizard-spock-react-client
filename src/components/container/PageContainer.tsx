@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 type Props = {
   title: string;
   description: string;
-  children: string | JSX.Element;
+  children: string | React.ReactNode;
 };
 
 const PageContainer = ({ title, description, children }: Props) => (

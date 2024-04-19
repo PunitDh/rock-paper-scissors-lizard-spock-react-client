@@ -41,7 +41,7 @@ const Output = styled.div(({ rgb }: OutputProps) => ({
   color: `rgb(${255 - rgb.r}, ${255 - rgb.g}, ${255 - rgb.b})`,
 }));
 
-const Picker = () => {
+const Picker = (): React.ReactNode => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const maxWidth = 32;
   const canvasWidth = 512;

@@ -28,7 +28,7 @@ type Props = {
   multiSelect?: boolean;
 };
 
-const Highlight = ({ position }: Props): JSX.Element => (
+const Highlight = ({ position }: Props): React.ReactNode => (
   <Container
     top={position.highlight.top}
     left={position.highlight.left}

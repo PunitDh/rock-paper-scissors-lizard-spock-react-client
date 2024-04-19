@@ -106,7 +106,7 @@ const RecipeCard = () => {
             </Typography>
             <Grid container spacing={2}>
               {ingredients.map(
-                (ingredient: string): JSX.Element => (
+                (ingredient: string): React.ReactNode => (
                   <Grid xs={6} md={4} item key={ingredient}>
                     {ingredient}
                   </Grid>

@@ -14,7 +14,7 @@ const Root = styled("div")(
     theme.palette.mode === "dark" ? "rgba(255,255,255,0.65)" : "rgba(0,0,0,.85)"
   };
   font-size: 14px;
-`,
+`
 );
 
 const InputWrapper = styled("div")(
@@ -53,14 +53,14 @@ const InputWrapper = styled("div")(
     margin: 0;
     outline: 0;
   }
-`,
+`
 );
 
 interface TagProps extends ReturnType<AutocompleteGetTagProps> {
   label: string;
 }
 
-function Tag(props: TagProps) {
+function Tag(props: TagProps): React.ReactNode {
   const { label, onDelete, ...other } = props;
   return (
     <div {...other}>
@@ -103,7 +103,7 @@ const StyledTag = styled(Tag)<TagProps>(
     cursor: pointer;
     padding: 4px;
   }
-`,
+`
 );
 
 const Listbox = styled("ul")(
@@ -150,7 +150,7 @@ const Listbox = styled("ul")(
       color: currentColor;
     }
   }
-`,
+`
 );
 
 export default function IntolerancesSelector() {
@@ -190,7 +190,7 @@ export default function IntolerancesSelector() {
                 <span>{option}</span>
                 <CheckIcon fontSize="small" />
               </li>
-            ),
+            )
           )}
         </Listbox>
       ) : null}

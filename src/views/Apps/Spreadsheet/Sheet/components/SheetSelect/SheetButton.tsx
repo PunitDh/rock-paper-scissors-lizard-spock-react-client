@@ -1,7 +1,8 @@
 import { Dispatch, useEffect, useRef, useState } from "react";
-import { renameSheet, setSheets } from "../../actions";
+import { lockSheet, renameSheet, setSheets } from "../../actions";
 import { SheetButtonItem, SheetInputItem } from "./styles";
 import { Action, Sheet, State } from "../../types";
+import { Lock, LockOpen } from "@mui/icons-material";
 
 type SheetButtonProps = {
   state: State;
@@ -23,11 +24,12 @@ const SheetButton = ({
   onRename,
   onDoubleClick,
   onSelectSheet,
-}: SheetButtonProps) => {
+}: SheetButtonProps): React.ReactNode => {
   const [sheetName, setSheetName] = useState(sheet.name);
 
   const sheetRenameRef = useRef<HTMLInputElement | null>(null);
   const renameMode: boolean = sheet.id === rename;
+  const isActive: boolean = state.activeSheet === sheet.id;
 
   const handleChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -60,6 +62,11 @@ const SheetButton = ({
       sheetRenameRef.current.setSelectionRange(0, sheet.name.length);
     }
   }, [renameMode, sheet.id, sheet.name.length]);
+
+  useEffect(() => {
+    if (!isActive && sheet.protected && !sheet.locked)
+      dispatch(lockSheet(sheet.id));
+  }, [dispatch, isActive, sheet.id, sheet.locked, sheet.protected]);
 
   function drag(e: React.DragEvent<HTMLFormElement>) {
     e.dataTransfer.setData(
@@ -128,9 +135,15 @@ const SheetButton = ({
           onClick={onSelectSheet(sheet.id)}
           onContextMenu={onContextMenu}
           onDoubleClick={handleDoubleClick}
-          active={state.activeSheet === sheet.id}
+          active={isActive}
           id={sheet.id}
         >
+          {sheet.protected &&
+            (sheet.locked ? (
+              <Lock sx={{ width: "0.75rem" }} />
+            ) : (
+              <LockOpen sx={{ width: "0.75rem" }} />
+            ))}{" "}
           {sheet.name}
         </SheetButtonItem>
       )}

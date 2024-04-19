@@ -18,7 +18,7 @@ const ResultContainer = styled(FlexBox)({
   justifyContent: "flex-start",
 });
 
-const Game = () => {
+const Game = (): React.ReactNode => {
   const { gameId } = useParams();
   const currentGame = useCurrentGame();
   const [maxRounds, setMaxRounds] = useState(3);
@@ -27,7 +27,7 @@ const Game = () => {
 
   useEffect(() => {
     if (gameId) api.getGame(gameId);
-  }, [gameId]);
+  }, [api, gameId]);
 
   const lastRound =
     currentGame.rounds && currentGame.rounds[currentGame.rounds.length - 1];

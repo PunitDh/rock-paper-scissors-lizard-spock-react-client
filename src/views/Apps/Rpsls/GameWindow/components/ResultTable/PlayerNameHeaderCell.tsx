@@ -18,7 +18,7 @@ type Props = {
   score: number;
 };
 
-const PlayerNameHeaderCell = ({ player, score }: Props) => {
+const PlayerNameHeaderCell = ({ player, score }: Props): React.ReactNode => {
   if (!player) return null;
   const avatar = getAvatar(player.avatar);
 

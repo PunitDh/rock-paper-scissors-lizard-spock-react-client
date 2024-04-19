@@ -13,7 +13,7 @@ import { State } from "../../types";
 type Props = {
   state: State;
 }
-const Header = ({ state }: Props) => (
+const Header = ({ state }: Props): React.ReactNode => (
   <FlexBox width="100%" flexGrow={1} flex="1 0 auto">
     <Table>
       <TableHead>

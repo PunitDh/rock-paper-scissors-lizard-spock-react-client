@@ -1,7 +1,6 @@
 import { useState } from "react";
 import LimitSelect from "../../../../../components/shared/LimitSelect";
 import { Tooltip } from "@mui/material";
-
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import styled from "@emotion/styled";
 import { Chat } from "@mui/icons-material";
@@ -32,7 +31,7 @@ const GameActions = ({
   maxRounds,
   gameId,
   opponent,
-}: Props) => {
+}: Props): React.ReactNode => {
   const [confirmReset, setConfirmReset] = useState(false);
   const api = useAPI();
   const limits = [3, 5, 8];

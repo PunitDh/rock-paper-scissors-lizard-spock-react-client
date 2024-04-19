@@ -14,7 +14,7 @@ type Props = {
   state: State;
 }
 
-const Cookies = ({ state }: Props) => {
+const Cookies = ({ state }: Props): React.ReactNode => {
   const cookies = decodeURIComponent(document.cookie)
     .split(";")
     .map((it) => it.split("="))

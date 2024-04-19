@@ -53,7 +53,7 @@ const LinkCard = ({
   title,
   description,
   comingSoon,
-}: LinkCardProps) => (
+}: LinkCardProps): React.ReactNode => (
   <CardLink to={to} theme={undefined}>
     <ImageContainer>
       <Icon fill="none" width="50%" />

@@ -2,7 +2,11 @@ import { useState } from "react";
 import { ReloadIcon } from "../styles";
 import { Tooltip } from "@mui/material";
 
-const RefreshCuisines = ({ onClick }) => {
+type Props = {
+  onClick: () => void;
+};
+
+const RefreshCuisines = ({ onClick }: Props): React.ReactNode => {
   const [rotateicon, setRotateIcon] = useState(false);
   const duration = 500;
 

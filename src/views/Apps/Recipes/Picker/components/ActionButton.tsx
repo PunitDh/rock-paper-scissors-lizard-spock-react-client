@@ -24,7 +24,7 @@ type Props = {
   onClick: () => void;
 };
 
-const ActionButton = ({ Icon, color, title, onClick }: Props) => (
+const ActionButton = ({ Icon, color, title, onClick }: Props): React.ReactNode => (
   <Tooltip title={title}>
     <Container elevation={7} onClick={onClick}>
       {<Icon style={{ width: "2rem", height: "2rem", color }} />}

@@ -6,7 +6,7 @@ import { Action, State } from "../types";
 
 type Props = {
   value: string;
-  display?: string | JSX.Element;
+  display?: string | React.ReactNode;
   state: State;
   dispatch: Dispatch<Action>;
   operation?: boolean;

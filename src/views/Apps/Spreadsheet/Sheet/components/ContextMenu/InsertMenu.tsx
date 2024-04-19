@@ -34,7 +34,7 @@ const InsertMenu = ({
   menuRef,
   open,
   onClose,
-}: Props): JSX.Element => {
+}: Props): React.ReactNode => {
   const handleInsertRow = (location: InsertRowLocation) => () => {
     dispatch(insertRow(location));
     dispatch(addMemento());

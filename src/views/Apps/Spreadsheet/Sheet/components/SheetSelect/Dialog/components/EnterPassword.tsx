@@ -23,7 +23,7 @@ const EnterPassword = ({ password, setPassword, onSubmit }: Props) => {
   return (
     <Stack>
       <FlexBox gap="0.5rem" flexDirection="column" alignItems="stretch">
-        <Box>This sheet is protected. Enter password to proceed.</Box>
+        <Box>This sheet is protected. Enter password to unlock.</Box>
         <form onSubmit={handleSubmit}>
           <PasswordField value={password} onChange={handleChange} />
         </form>

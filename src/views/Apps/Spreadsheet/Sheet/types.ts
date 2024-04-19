@@ -75,6 +75,7 @@ export type Sheet = {
   initialContent: SheetContent;
   protected: boolean;
   password?: string;
+  locked: boolean;
 };
 
 export type Memento = {

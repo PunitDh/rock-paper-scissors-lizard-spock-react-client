@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import { useNotification } from "../../hooks";
 import NotificationComponent from "../../components/shared/Notification";
 
-function BlankLayout() {
+function BlankLayout(): React.ReactNode {
   const notification = useNotification();
 
   return (

@@ -6,7 +6,7 @@ import FlexBox from "../../../../../components/shared/FlexBox";
 import IconSelectField from "../../../../../components/shared/IconSelectField";
 import { InvisibleTextField } from "../../../../../components/shared/InvisibleTextField";
 
-const GameTitle = () => {
+const GameTitle = (): React.ReactNode => {
   const currentGame = useCurrentGame();
   const [gameName, setGameName] = useState(currentGame.name);
   const icon = getIcon(currentGame.icon);

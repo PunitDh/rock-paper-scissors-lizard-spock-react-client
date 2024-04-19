@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 type Props = {
   handleClose: (any: any) => void;
   link: string;
-  children: string | JSX.Element;
+  children: string | React.ReactNode;
   buttonText: string;
 };
 

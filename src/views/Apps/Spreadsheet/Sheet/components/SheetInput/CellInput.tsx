@@ -71,7 +71,7 @@ const CellInput = ({
   position,
   cell,
   value,
-}: Props): JSX.Element => {
+}: Props): React.ReactNode => {
   const eventHandler = useEventHandler();
   const navigateRef = useRef(true);
   const inputRef: (node: HTMLInputElement) => void = useCallback(

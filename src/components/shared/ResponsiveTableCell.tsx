@@ -1,7 +1,7 @@
 import { TableCell } from "@mui/material";
 
 type Props = {
-  children: string | JSX.Element;
+  children: string | React.ReactNode;
   [x: string]: any;
 };
 

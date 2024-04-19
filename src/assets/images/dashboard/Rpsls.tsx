@@ -1,4 +1,4 @@
-export default function Rpsls(props: { [key: string]: string }): JSX.Element {
+export default function Rpsls(props: { [key: string]: string }): React.ReactNode {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

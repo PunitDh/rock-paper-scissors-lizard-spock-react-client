@@ -35,7 +35,7 @@ const FillerObject = styled.div({
   cursor: "crosshair",
 });
 
-const Filler = ({ dispatch, position }: Props): JSX.Element => {
+const Filler = ({ dispatch, position }: Props): React.ReactNode => {
   const eventHandler = useEventHandler();
   const fillerRef: (node: HTMLInputElement) => void = useCallback(
     (node: HTMLDivElement) => eventHandler.setFillerRef(node),

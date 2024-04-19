@@ -17,7 +17,7 @@ type Closest = {
   high: Coord;
 };
 
-const GraphBox = ({ state, dispatch }: Props) => {
+const GraphBox = ({ state, dispatch }: Props): React.ReactNode => {
   const handleGraphRangeChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     dispatch(setGraphRange(e.target.name, Number(e.target.value)));
   const [solveY, setSolveY] = useState<number>(0);

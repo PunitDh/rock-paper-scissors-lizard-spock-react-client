@@ -20,7 +20,7 @@ const GameButton = styled(PlayCircleFilled)(({ theme }: { theme: Theme }) => ({
   height: "1.5rem",
 }));
 
-export default function StartGame({ user }: Props) {
+export default function StartGame({ user }: Props): React.ReactNode {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [value, setValue] = useState<string>("");
   const api = useAPI();

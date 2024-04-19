@@ -15,7 +15,7 @@ const ResultContainer = styled(FlexBox)({
   justifyContent: "flex-start",
 });
 
-const Game = () => {
+const Game = (): React.ReactNode => {
   const { gameId } = useParams();
   const currentGame = useCurrentGame();
   const [maxRounds, setMaxRounds] = useState(3);
@@ -24,7 +24,7 @@ const Game = () => {
 
   useEffect(() => {
     if (gameId) api.getGame(gameId);
-  }, [gameId]);
+  }, [api, gameId]);
 
   const opponent = currentGame.players?.find(
     (player) => player.id !== token.decoded?.id
@@ -35,12 +35,14 @@ const Game = () => {
       <GameCard
         title={<GameTitle />}
         action={
-          <GameActions
-            onMaxRoundsChange={setMaxRounds}
-            maxRounds={maxRounds}
-            gameId={gameId}
-            opponent={opponent}
-          />
+          opponent && (
+            <GameActions
+              onMaxRoundsChange={setMaxRounds}
+              maxRounds={maxRounds}
+              gameId={gameId}
+              opponent={opponent}
+            />
+          )
         }
       >
         <ResultContainer></ResultContainer>

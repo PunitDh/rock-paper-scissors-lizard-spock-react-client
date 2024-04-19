@@ -14,7 +14,7 @@ import { useAPI, useLoading } from "../../../hooks";
 
 type Props = {
   title?: string;
-  subtitle?: JSX.Element;
+  subtitle?: React.ReactNode;
   subtext?: string;
 };
 

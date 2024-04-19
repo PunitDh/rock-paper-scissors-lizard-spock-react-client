@@ -7,7 +7,7 @@ type Props = {
   title: string;
   isActive: boolean;
   Icon?:
-    | ((props: SvgIconProps) => JSX.Element)
+    | ((props: SvgIconProps) => React.ReactNode)
     | (OverridableComponent<SvgIconTypeMap<{}, "svg">> & { muiName: string });
   children?: any;
   value?: string;

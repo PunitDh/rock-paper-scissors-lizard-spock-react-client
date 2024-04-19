@@ -21,7 +21,7 @@ const initialPasswordPromptState: PasswordPromptProps = {
   successMessage: undefined,
 };
 
-const SheetSelect = ({ state, dispatch }: Props) => {
+const SheetSelect = ({ state, dispatch }: Props): React.ReactNode => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [renameState, setRenameState] = useState<SheetId | null>(null);
   const [passwordPrompt, setPasswordPrompt] = useState<PasswordPromptProps>(
@@ -73,6 +73,7 @@ const SheetSelect = ({ state, dispatch }: Props) => {
     >
       <PasswordPrompt
         state={state}
+        dispatch={dispatch}
         onCancel={closePasswordPrompt}
         passwordPrompt={passwordPrompt}
       />

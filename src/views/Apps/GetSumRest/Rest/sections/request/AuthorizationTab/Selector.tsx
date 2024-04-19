@@ -18,10 +18,11 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-const Selector = ({ state, dispatch }: Props) => {
+const Selector = ({ state, dispatch }: Props): React.ReactNode => {
   const handleChange = (e: SelectChangeEvent) => {
     dispatch(setAuthorizationType(e.target.value));
   };
+
   return (
     <Table>
       <TableBody>

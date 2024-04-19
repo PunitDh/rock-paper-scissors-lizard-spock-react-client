@@ -13,7 +13,7 @@ export const reIndexSheets = (sheets: {
       return {
         ...acc,
         [cur.id]: {
-          ...cur, // Use the current sheet, not acc[cur.id]
+          ...cur,
           index: index + 1,
         },
       };
@@ -27,7 +27,7 @@ export const exportSheetAsCSV = (
   filename: string
 ) => {
   const range = CellRange.createHorizontalSliced(
-    `A1`,
+    "A1",
     `${SheetConfig.COLUMNS[maxColumns - 1]}${maxRows}`
   );
   const content = (range.cells as Cell[][])

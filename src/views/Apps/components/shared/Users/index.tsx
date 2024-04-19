@@ -21,14 +21,14 @@ type Props = {
   search: string;
 };
 
-const Users = ({ search }: Props) => {
+const Users = ({ search }: Props): React.ReactNode => {
   const { currentUsers } = useSelector((state) => (state as any).player);
   const api = useAPI();
   const [getCurrentUsers, loading] = useLoading(api.getCurrentUsers);
 
   useEffect(() => {
     getCurrentUsers();
-  }, []);
+  }, [getCurrentUsers]);
 
   const currentUsersFiltered =
     search.length > 0

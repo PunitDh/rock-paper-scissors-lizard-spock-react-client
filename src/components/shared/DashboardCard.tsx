@@ -5,7 +5,7 @@ type Props = {
   subtitle?: string;
   children: any;
   action?: any;
-  footer?: JSX.Element;
+  footer?: React.ReactNode;
   cardheading?: string;
   headtitle?: string;
   headsubtitle?: string;

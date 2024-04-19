@@ -25,7 +25,7 @@ const OutputDisplay = styled.div({
   overflowY: "scroll",
 });
 
-const BodyOutput = ({ state, dispatch }: Props) => (
+const BodyOutput = ({ state, dispatch }: Props): React.ReactNode => (
   <>
     <ResponseType state={state} dispatch={dispatch} />
     <FlexBox width="100%" flexGrow={1} flex="1 0 auto">

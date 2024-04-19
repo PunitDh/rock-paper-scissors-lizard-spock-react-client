@@ -7,7 +7,7 @@ type Props = {
   state: State;
 };
 
-const StatusBar = ({ state }: Props) => {
+const StatusBar = ({ state }: Props): React.ReactNode => {
   const handleSubmit = (e: React.FormEvent) => e.preventDefault();
   const { average, sum, count } = state.highlighted;
 
@@ -18,7 +18,7 @@ const StatusBar = ({ state }: Props) => {
         justifyContent="space-between"
         height="2rem"
       >
-        <FlexBox gap="1.5rem"> </FlexBox>
+        <FlexBox gap="1.5rem"></FlexBox>
         <FlexBox>
           {sum && average && (
             <>

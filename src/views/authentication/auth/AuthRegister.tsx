@@ -8,7 +8,7 @@ import { avatars } from "../../../assets";
 
 type Props = {
   title?: string;
-  subtitle?: JSX.Element;
+  subtitle?: React.ReactNode;
   subtext?: string;
 };
 

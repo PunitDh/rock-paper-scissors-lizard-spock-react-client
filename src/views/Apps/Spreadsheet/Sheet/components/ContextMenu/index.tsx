@@ -26,7 +26,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-const ContextMenu = ({ state, dispatch }: Props): JSX.Element => {
+const ContextMenu = ({ state, dispatch }: Props): React.ReactNode => {
   const eventHandler = useEventHandler();
   const [insertMenuOpen, setInsertMenuOpen] = useState(false);
   const [deleteMenuOpen, setDeleteMenuOpen] = useState(false);

@@ -16,7 +16,7 @@ const GameButton = styled(Chat)(({ theme }) => ({
   cursor: "pointer",
 }));
 
-export default function StartChat({ user }: Props) {
+export default function StartChat({ user }: Props): React.ReactNode {
   const [loading, setLoading] = useState(false);
   const socket = useSocket();
   const api = useAPI();

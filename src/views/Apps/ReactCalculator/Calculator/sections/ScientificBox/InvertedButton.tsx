@@ -5,8 +5,8 @@ import { Action, State } from "../../types";
 type Props = {
   value: string;
   invertedValue: string;
-  display: string | JSX.Element;
-  invertedDisplay: string | JSX.Element;
+  display: string | React.ReactNode;
+  invertedDisplay: string | React.ReactNode;
   state: State;
   dispatch: Dispatch<Action>;
   operation?: boolean;

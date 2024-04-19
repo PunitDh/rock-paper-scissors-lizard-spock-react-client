@@ -40,6 +40,8 @@ export enum SheetAction {
   MOVE_SHEET,
   DELETE_SHEET,
   PROTECT_SHEET,
+  UNLOCK_SHEET,
+  LOCK_SHEET,
   SET_ACTIVE_SHEET,
   SET_SHEET_INDEX,
   FORMULA_HIGHLIGHT_CELL_RANGE,
@@ -242,6 +244,20 @@ export const protectSheet = (sheetId: SheetId, password: string): Action => ({
   payload: {
     sheetId,
     password,
+  },
+});
+
+export const unlockSheet = (sheetId: SheetId): Action => ({
+  type: SheetAction.UNLOCK_SHEET,
+  payload: {
+    sheetId,
+  },
+});
+
+export const lockSheet = (sheetId: SheetId): Action => ({
+  type: SheetAction.LOCK_SHEET,
+  payload: {
+    sheetId,
   },
 });
 

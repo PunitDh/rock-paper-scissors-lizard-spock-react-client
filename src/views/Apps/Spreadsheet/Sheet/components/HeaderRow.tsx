@@ -10,7 +10,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-const HeaderRow = ({ state, dispatch }: Props): JSX.Element => (
+const HeaderRow = ({ state, dispatch }: Props): React.ReactNode => (
   <TableHead sx={{ width: "100%" }}>
     <TableRow>
       <SelectAll state={state} dispatch={dispatch} />

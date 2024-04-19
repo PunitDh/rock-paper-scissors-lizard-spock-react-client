@@ -5,9 +5,9 @@ import Users from "../components/shared/Users";
 import UserSearchBar from "../components/shared/UserSearchBar";
 import PageContainer from "../../../components/container/PageContainer";
 
-const Rpsls = () => {
+const Rpsls = (): React.ReactNode => {
   const [search, setSearch] = useState<string>("");
-  
+
   return (
     <PageContainer
       title="Rock Paper Scissors Lizard Spock"

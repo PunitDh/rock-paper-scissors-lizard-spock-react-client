@@ -1,7 +1,7 @@
 import { InputBase, Tooltip } from "@mui/material";
 import { setRequestName } from "../../actions";
 import styled from "@emotion/styled";
-import { Dispatch } from "react";
+import React, { Dispatch } from "react";
 import { Action, State } from "../../types";
 
 type Props = {
@@ -24,7 +24,7 @@ const RequestNameField = styled(InputBase)({
   },
 });
 
-const RequestName = ({ state, dispatch }: Props) => {
+const RequestName = ({ state, dispatch }: Props): React.ReactNode => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     dispatch(setRequestName(e.target.value));

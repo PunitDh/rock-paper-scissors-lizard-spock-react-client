@@ -5,7 +5,7 @@ type Props = {
   children: { [key: string]: any };
 };
 
-export default function PrettifyHTML({ children }: Props): JSX.Element {
+export default function PrettifyHTML({ children }: Props): React.ReactNode {
   if (!isString(children)) return <></>;
   // const metaRegex = /(<meta[^>]*>)/g;
   const selfClosingRegex = /(<[^>]*\/>)/g;

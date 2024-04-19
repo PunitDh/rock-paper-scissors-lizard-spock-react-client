@@ -16,7 +16,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-const Output = ({ state, dispatch }: Props) => {
+const Output = ({ state, dispatch }: Props): React.ReactNode => {
   const socket = useSocket();
   const api = useAPI();
 
@@ -26,7 +26,7 @@ const Output = ({ state, dispatch }: Props) => {
         .getDownloadFile(state.audio.location)
         .then((response) => dispatch(setDownloadBlob(response.data)));
     }
-  }, [state.audio]);
+  }, [api, dispatch, state.audio]);
 
   useEffect(() => {
     socket.on(SocketResponse.PROGRESS_UPDATE, (update) =>

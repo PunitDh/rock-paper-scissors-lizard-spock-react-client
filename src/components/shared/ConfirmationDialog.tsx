@@ -13,7 +13,7 @@ type Props = {
   value?: string;
   open: boolean;
   title: string;
-  content: string | JSX.Element;
+  content: string | React.ReactNode;
   confirmBtnText: string;
   confirmdisabled?: boolean;
   [x: string]: any;

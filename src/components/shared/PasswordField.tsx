@@ -23,7 +23,7 @@ const Icon = styled.span(({ theme }: IconProps) => ({
   },
 }));
 
-const PasswordField = (props: any): JSX.Element => {
+const PasswordField = (props: any): React.ReactNode => {
   const [show, setShow] = useState<boolean>(false);
   return (
     <Container>

@@ -3,7 +3,7 @@ import { IndentedBox, ResponsiveTypography } from "../styles";
 
 type Props = {
   title: string;
-  children: string | JSX.Element;
+  children: string | React.ReactNode;
 };
 
 const InputGroup = ({ title, children }: Props) => (

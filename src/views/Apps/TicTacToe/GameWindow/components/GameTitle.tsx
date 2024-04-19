@@ -6,25 +6,25 @@ import FlexBox from "../../../../../components/shared/FlexBox";
 import IconSelectField from "../../../../../components/shared/IconSelectField";
 import { InvisibleTextField } from "../../../../../components/shared/InvisibleTextField";
 
-const GameTitle = () => {
+const GameTitle = (): React.ReactNode => {
   const currentGame = useCurrentGame();
   const api = useAPI();
   const [gameName, setGameName] = useState(currentGame.name);
   const icon = getIcon(currentGame.icon);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setGameName(e.target.value);
   };
 
-  const handleRename = (e) => {
+  const handleRename = (e: React.FocusEvent | React.FormEvent) => {
     e.preventDefault();
     api.renameGame({ gameId: currentGame.id, name: gameName });
   };
 
   useEffect(() => {
     setGameName(currentGame.name);
-  }, [currentGame?.id]);
+  }, [currentGame.id, currentGame.name]);
 
   return (
     <FlexBox gap="0" alignItems="stretch" justifyContent="flex-start">

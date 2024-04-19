@@ -32,7 +32,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-export default function APIKey({ state, dispatch }: Props) {
+export default function APIKey({ state, dispatch }: Props): React.ReactNode {
   const formRef = useRef<HTMLFormElement | null>(null);
   const [key, value, addTo] = Object.keys(
     AuthorizationTypeItems.API_KEY.initialState

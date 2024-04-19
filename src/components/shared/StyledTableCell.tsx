@@ -1,7 +1,7 @@
 import { TableCell, Typography } from "@mui/material";
 
 type Props = {
-  children: JSX.Element | string;
+  children: React.ReactNode | string;
   props?: { [key: string]: any }[];
 };
 

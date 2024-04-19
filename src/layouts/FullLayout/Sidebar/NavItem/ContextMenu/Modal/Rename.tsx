@@ -17,14 +17,17 @@ export default function RenameGameModal({ state, dispatch, selectedGame }) {
 
   const handleClose = () => dispatch(showConfirmRename(false));
 
-  const handleRename = (e) => {
+  const handleRename = (e: React.FormEvent) => {
     e.preventDefault();
-    api.renameGame({ gameId: selectedGame.id, name: e.target.name.value });
+    api.renameGame({
+      gameId: selectedGame.id,
+      name: (e.target as any).name.value,
+    });
     handleClose();
   };
 
   const otherPlayer = selectedGame.players.find(
-    (player) => player.id !== token.decoded?.id,
+    (player) => player.id !== token.decoded?.id
   );
 
   return (

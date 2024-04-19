@@ -43,7 +43,7 @@ const SheetSelectMenu = ({
   onClose,
   onRename,
   promptPassword,
-}: Props): JSX.Element => {
+}: Props): React.ReactNode => {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState<boolean>(false);
   const [protectConfirmOpen, setProtectConfirmOpen] = useState<boolean>(false);
   const [credentials, setCredentials] = useState<Credentials>({
@@ -83,10 +83,7 @@ const SheetSelectMenu = ({
   const handleDelete = () => {
     if (anchor) {
       const sheet: Sheet = state.sheets[anchor.id];
-      promptPassword(
-        sheet.id,
-        () => dispatch(deleteSheet(sheet.id)),
-      );
+      promptPassword(sheet.id, () => dispatch(deleteSheet(sheet.id)));
     }
     onClose();
   };
@@ -123,7 +120,6 @@ const SheetSelectMenu = ({
           />
         </>
       )}
-
       <Menu
         id="sheet-select-context-menu"
         keepMounted={true}

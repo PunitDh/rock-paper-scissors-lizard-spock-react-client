@@ -21,7 +21,7 @@ const WideBox = styled(Box)({
   width: "100%",
 });
 
-export default function RequestTabs({ state, dispatch }: Props) {
+export default function RequestTabs({ state, dispatch }: Props): React.ReactNode {
   const requestTab = useQueryParam("requestTab");
   const [tab, setTab] = useState<number>(Number(requestTab) || 0);
   const handleChange = (_, newValue: number) => setTab(newValue);

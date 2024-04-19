@@ -5,12 +5,12 @@ import { DisplayType } from "../../constants";
 import { StatusButton } from "../../styles";
 import { Action, State } from "../../types";
 
-// type Props = {
-//   state: State;
-//   dispatch: Dispatch<Action>;
-// };
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+};
 
-const ResponseType = ({ state, dispatch }) => {
+const ResponseType = ({ state, dispatch }: Props): React.ReactNode => {
   const handleSetDisplayType = (displayType) => () =>
     dispatch(setOutputDisplayType(displayType));
 

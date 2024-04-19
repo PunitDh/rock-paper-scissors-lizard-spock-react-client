@@ -27,6 +27,7 @@ export const SheetButtonItem = styled.button(
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    gap: "0.25rem",
     userSelect: "element",
     "&:hover": {
       backgroundColor: "#E0E9F7",

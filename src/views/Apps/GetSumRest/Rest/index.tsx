@@ -9,7 +9,7 @@ import { useToken } from "../../../../hooks";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import FlexBox from "../../../../components/shared/FlexBox";
 
-const Rest = () => {
+const Rest = (): React.ReactNode => {
   const [state, dispatch] = useReducer(reducer, initialState, initializeState);
   const token = useToken();
 

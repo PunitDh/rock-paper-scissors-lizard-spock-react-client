@@ -18,7 +18,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-const Response = ({ state, dispatch }: Props) => {
+const Response = ({ state, dispatch }: Props): React.ReactNode => {
   const responseTab = useQueryParam("responseTab");
   const [tab, setTab] = useState(Number(responseTab) || 0);
   const handleChange = (_, newValue) => setTab(newValue);

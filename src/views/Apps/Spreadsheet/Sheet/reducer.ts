@@ -50,6 +50,7 @@ export const initialState: State = {
       content: new SheetContent(),
       initialContent: new SheetContent(),
       protected: false,
+      locked: false,
     },
   },
   formulaTrackedCells: setOf<CellId>(),
@@ -239,6 +240,7 @@ export const reducer = (state: State, action: Action): State => {
         content: new SheetContent(),
         initialContent: new SheetContent(),
         protected: false,
+        locked: false,
       };
 
       return {
@@ -317,7 +319,38 @@ export const reducer = (state: State, action: Action): State => {
           [sheetId]: {
             ...state.sheets[sheetId],
             protected: true,
+            locked: true,
             password,
+          },
+        },
+      };
+    }
+
+    case SheetAction.UNLOCK_SHEET: {
+      const { sheetId } = action.payload;
+
+      return {
+        ...state,
+        sheets: {
+          ...state.sheets,
+          [sheetId]: {
+            ...state.sheets[sheetId],
+            locked: false,
+          },
+        },
+      };
+    }
+
+    case SheetAction.LOCK_SHEET: {
+      const { sheetId } = action.payload;
+
+      return {
+        ...state,
+        sheets: {
+          ...state.sheets,
+          [sheetId]: {
+            ...state.sheets[sheetId],
+            locked: true,
           },
         },
       };
