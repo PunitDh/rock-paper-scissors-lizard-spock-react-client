@@ -18,7 +18,7 @@ const ResultContainer = styled(FlexBox)({
   justifyContent: "flex-start",
 });
 
-const Game = (): React.ReactNode => {
+const Game = (): JSX.Element => {
   const { gameId } = useParams();
   const currentGame = useCurrentGame();
   const [maxRounds, setMaxRounds] = useState(3);

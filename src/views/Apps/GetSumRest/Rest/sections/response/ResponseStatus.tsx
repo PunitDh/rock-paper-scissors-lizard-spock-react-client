@@ -13,7 +13,7 @@ type Props = {
   state: State;
 }
 
-const ResponseStatus = ({ state }: Props): React.ReactNode => {
+const ResponseStatus = ({ state }: Props): JSX.Element | null => {
   const handleSave = () => {
     const content = JSON.stringify(state.response.output, null, 2);
     const blob = new Blob([content], { type: "application/json" });

@@ -31,7 +31,7 @@ const GameActions = ({
   maxRounds,
   gameId,
   opponent,
-}: Props): React.ReactNode => {
+}: Props): JSX.Element => {
   const [confirmReset, setConfirmReset] = useState(false);
   const api = useAPI();
   const limits = [3, 5, 8];

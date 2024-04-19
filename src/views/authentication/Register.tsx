@@ -6,7 +6,7 @@ import PageContainer from "../../components/container/PageContainer";
 import Logo from "../../components/shared/Logo";
 import { AuthPage } from "../../utils/constants";
 
-const Register = (): React.ReactNode => (
+const Register = (): JSX.Element => (
   <PageContainer title="Register" description="Register page">
     <AuthBox>
       <Grid

@@ -71,7 +71,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-const Toolbar = ({ state, dispatch }: Props): React.ReactNode => {
+const Toolbar = ({ state, dispatch }: Props): JSX.Element => {
   const canUndo =
     state.memento.length > 0 && state.currentMementoId !== state.memento[0].id;
   const canRedo =

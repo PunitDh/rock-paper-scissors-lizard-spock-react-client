@@ -10,7 +10,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-const ResponseType = ({ state, dispatch }: Props): React.ReactNode => {
+const ResponseType = ({ state, dispatch }: Props): JSX.Element => {
   const handleSetDisplayType = (displayType: DisplayType) => () =>
     dispatch(setOutputDisplayType(displayType));
 

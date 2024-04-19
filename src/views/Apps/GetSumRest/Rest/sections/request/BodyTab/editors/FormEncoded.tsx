@@ -12,7 +12,7 @@ type Props = {
 export default function FormEncoded({
   state,
   dispatch,
-}: Props): React.ReactNode {
+}: Props): JSX.Element {
   const handleChange = (e) =>
     dispatch(setBodyContent(ContentType.FORM_ENCODED, e));
   const handleDelete = (e) =>

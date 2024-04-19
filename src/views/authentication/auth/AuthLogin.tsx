@@ -14,11 +14,11 @@ import { useAPI, useLoading } from "../../../hooks";
 
 type Props = {
   title?: string;
-  subtitle?: React.ReactNode;
+  subtitle?: JSX.Element;
   subtext?: string;
 };
 
-const AuthLogin = ({ title, subtitle, subtext }: Props): React.ReactNode => {
+const AuthLogin = ({ title, subtitle, subtext }: Props): JSX.Element => {
   const api = useAPI();
   const [loginPlayer, loading] = useLoading(api.loginPlayer);
 

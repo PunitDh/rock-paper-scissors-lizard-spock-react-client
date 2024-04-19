@@ -19,7 +19,7 @@ import { TableCellProps } from "@mui/material";
 type HeaderItemProps = {
   dimension: Dimension;
   dimensionsize: number;
-  children?: React.ReactNode | React.ReactNode[];
+  children?: JSX.Element | JSX.Element[];
 } & TableCellProps;
 
 const HeaderItemComponent = styled(HeaderItem)(
@@ -63,7 +63,7 @@ const HeaderCell = ({
   dispatch,
   id,
   dimension,
-}: Props): React.ReactNode => {
+}: Props): JSX.Element => {
   const eventHandler = useEventHandler();
   const headerRef = useRef<HTMLDivElement>(null);
   const posRef = useRef<number>(0);

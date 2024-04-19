@@ -63,7 +63,7 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-const NotificationMenu = (): React.ReactNode => {
+const NotificationMenu = (): JSX.Element => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
   const { currentGames } = useSelector((state) => (state as any).player);

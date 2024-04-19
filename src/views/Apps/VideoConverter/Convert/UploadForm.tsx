@@ -67,7 +67,7 @@ const ResponsiveBox = styled(Box)(({ theme }: MuiTheme) => ({
   },
 }));
 
-const UploadForm = ({ dispatch, state }: Props): React.ReactNode => {
+const UploadForm = ({ dispatch, state }: Props): JSX.Element => {
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [done, setDone] = useState<boolean>(false);
   const [pollingInterval, setPollingInterval] = useState<NodeJS.Timer>();

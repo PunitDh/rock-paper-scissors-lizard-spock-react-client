@@ -28,7 +28,7 @@ const Cell = ({
   isFormulaHighlighted,
   formatting = new CellFormatting(),
   width,
-}: Props): React.ReactNode => {
+}: Props): JSX.Element => {
   console.log("Re-rendering cell:", id);
   const borderProperties = useMemo(
     () =>

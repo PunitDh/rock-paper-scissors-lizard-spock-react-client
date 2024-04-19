@@ -2,7 +2,7 @@ import PageContainer from "../../../components/container/PageContainer";
 import Sheet from "./Sheet";
 import { useQueryParam } from "../../../hooks";
 
-export default function Spreadsheet(): React.ReactNode {
+export default function Spreadsheet(): JSX.Element {
   const activeSheet = useQueryParam("activeSheet");
 
   return (

@@ -10,7 +10,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-function OperationsBox({ state, dispatch }: Props): React.ReactNode {
+function OperationsBox({ state, dispatch }: Props): JSX.Element {
   const operations = ["+", "-", "×", "÷"];
   return (
     <FlexBox flexDirection="column">

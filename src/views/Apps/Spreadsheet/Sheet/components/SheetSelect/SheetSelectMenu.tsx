@@ -43,7 +43,7 @@ const SheetSelectMenu = ({
   onClose,
   onRename,
   promptPassword,
-}: Props): React.ReactNode => {
+}: Props): JSX.Element => {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState<boolean>(false);
   const [protectConfirmOpen, setProtectConfirmOpen] = useState<boolean>(false);
   const [credentials, setCredentials] = useState<Credentials>({

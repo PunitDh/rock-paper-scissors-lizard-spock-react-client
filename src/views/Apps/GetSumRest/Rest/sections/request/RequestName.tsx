@@ -24,7 +24,7 @@ const RequestNameField = styled(InputBase)({
   },
 });
 
-const RequestName = ({ state, dispatch }: Props): React.ReactNode => {
+const RequestName = ({ state, dispatch }: Props): JSX.Element => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     dispatch(setRequestName(e.target.value));

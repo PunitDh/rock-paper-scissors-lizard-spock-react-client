@@ -30,7 +30,7 @@ const StyledBox = styled.div(({ border, width }: StyledBoxProps) => ({
   gap: "0.5rem",
 }));
 
-const AuthorizationTab = ({ state, dispatch, value, tabId }: Props): React.ReactNode => {
+const AuthorizationTab = ({ state, dispatch, value, tabId }: Props): JSX.Element => {
   const { Component } =
     AuthorizationTypeItems[state.request.authorization.type];
 

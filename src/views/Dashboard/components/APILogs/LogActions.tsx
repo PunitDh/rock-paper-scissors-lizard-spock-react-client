@@ -41,7 +41,7 @@ const LogActions = ({
   state,
   dispatch,
   onClearLogs,
-}: Props): React.ReactNode => {
+}: Props): JSX.Element => {
   const handleFilter = (e: SelectChangeEvent) => dispatch(setFilter(e.target));
 
   return (

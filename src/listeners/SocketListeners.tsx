@@ -14,7 +14,7 @@ import { AuthPage, SocketResponse, Status } from "../utils/constants";
 import { Conversation } from "../redux/types";
 import { Data } from "../hooks/types";
 
-const SocketListeners = (): React.ReactNode => {
+const SocketListeners = (): JSX.Element => {
   const socket = useSocket();
   const token = useToken();
   const notification = useNotification();

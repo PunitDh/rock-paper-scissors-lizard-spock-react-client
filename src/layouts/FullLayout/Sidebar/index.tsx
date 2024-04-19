@@ -24,14 +24,14 @@ const Sidebar = ({
   isSidebarOpen,
   isMobileSidebarOpen,
   onSidebarClose,
-}: Props): React.ReactNode => {
+}: Props): JSX.Element => {
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up("lg"));
   const api = useAPI();
   const sidebarWidth = "270px";
 
   useEffect(() => {
     api.getCurrentGames();
-  }, []);
+  }, [api]);
 
   if (lgUp) {
     return (

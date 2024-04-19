@@ -2,7 +2,7 @@ import { Box, Container, Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { ErrorImg } from "../../assets";
 
-const Error = (): React.ReactNode => (
+const Error = (): JSX.Element => (
   <Box
     display="flex"
     flexDirection="column"

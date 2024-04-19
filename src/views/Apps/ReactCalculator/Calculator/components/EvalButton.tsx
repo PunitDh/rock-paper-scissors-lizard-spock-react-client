@@ -9,7 +9,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-const EvalButton = ({ state, dispatch }: Props): React.ReactNode => {
+const EvalButton = ({ state, dispatch }: Props): JSX.Element => {
   const handleClick = () => {
     const output = evaluateExpression(state);
     dispatch(setOutput(output));

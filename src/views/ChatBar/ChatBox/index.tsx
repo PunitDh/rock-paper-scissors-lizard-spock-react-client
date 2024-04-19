@@ -70,7 +70,7 @@ const MessageBody = styled(Paper)({
   height: "calc(100% - 80px)",
 });
 
-function ChatBox({ conversation }: Props): React.ReactNode {
+function ChatBox({ conversation }: Props): JSX.Element {
   const dispatch = useDispatch();
   const [toolbarHeight, setToolbarHeight] = useState<number>(0);
   const token = useToken();

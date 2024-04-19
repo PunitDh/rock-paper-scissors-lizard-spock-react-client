@@ -18,7 +18,7 @@ export const EventProvider = ({
   state,
   dispatch,
   children,
-}: Props): React.ReactNode => {
+}: Props): JSX.Element => {
   const inputFocusRef = useRef(false);
   const clipboard: Clipboard = useClipboard();
 

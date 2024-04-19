@@ -27,7 +27,7 @@ export const TextInput = ({
   conversationId,
   receiver,
   allRead,
-}: Props): React.ReactNode => {
+}: Props): JSX.Element => {
   const [messageLength, setMessageLength] = useState(0);
   const api = useAPI();
 

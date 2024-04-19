@@ -3,7 +3,7 @@ import Convert from "./Convert";
 import { useSelector } from "react-redux";
 import PageContainer from "../../../components/container/PageContainer";
 
-export default function VideoConverter(): React.ReactNode {
+export default function VideoConverter(): JSX.Element {
   const { videoConverter } = useSelector(
     (state) => (state as any).site.siteSettings
   );

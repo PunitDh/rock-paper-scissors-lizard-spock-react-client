@@ -27,7 +27,7 @@ const StyledTable = styled(Table)({
   height: "60%",
 });
 
-const ResultTable = ({ rounds, maxRounds, players = [], score }: Props): React.ReactNode => {
+const ResultTable = ({ rounds, maxRounds, players = [], score }: Props): JSX.Element => {
   const token = useToken();
   const firstPlayer: PlayerType | undefined = players.find(
     (it) => it.id === token.decoded?.id

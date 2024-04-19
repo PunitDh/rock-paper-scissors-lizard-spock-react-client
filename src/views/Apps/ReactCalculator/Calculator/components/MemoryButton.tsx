@@ -21,7 +21,7 @@ type Props = {
   value: string;
 };
 
-function MemoryButton({ value, state, dispatch }: Props): React.ReactNode {
+function MemoryButton({ value, state, dispatch }: Props): JSX.Element {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const openMenu = (event: React.MouseEvent<HTMLElement>) =>
     setAnchorEl(event.currentTarget);

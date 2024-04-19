@@ -1,7 +1,7 @@
 import { Table, TableBody, TableCell, TableRow } from "@mui/material";
 import FlexBox from "../../../../../../../../components/shared/FlexBox";
 
-const NoAuth = (): React.ReactNode => (
+const NoAuth = (): JSX.Element => (
   <FlexBox
     height="20rem"
     alignItems="flex-start"

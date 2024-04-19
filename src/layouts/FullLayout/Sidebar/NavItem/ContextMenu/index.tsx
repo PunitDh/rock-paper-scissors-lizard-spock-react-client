@@ -14,7 +14,7 @@ const ContextMenu = ({
   state,
   dispatch,
   ariaLabelledBy,
-}: Props): React.ReactNode => (
+}: Props): JSX.Element => (
   <Box>
     <Menu
       id="context-menu"

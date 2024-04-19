@@ -4,7 +4,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-const EventDelegator = ({ children }: Props): React.ReactNode => {
+const EventDelegator = ({ children }: Props) => {
   const eventHandler = useEventHandler();
 
   const handleMouseUp = (e: React.MouseEvent) => eventHandler.handleMouseUp(e);

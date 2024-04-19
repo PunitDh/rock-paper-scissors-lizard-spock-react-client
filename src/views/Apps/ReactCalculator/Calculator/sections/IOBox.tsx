@@ -8,7 +8,7 @@ type Props = {
   state: State;
 };
 
-const IOBox = ({ state }: Props): React.ReactNode => {
+const IOBox = ({ state }: Props): JSX.Element => {
   const token = useToken();
   return (
     <CalculatorBox width="100%">

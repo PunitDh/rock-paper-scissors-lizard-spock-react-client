@@ -11,7 +11,7 @@ import {
 } from "@mui/lab";
 import { Link, Typography } from "@mui/material";
 
-const RecentTransactions = (): React.ReactNode => (
+const RecentTransactions = (): JSX.Element => (
   <DashboardCard title="Recent Transactions">
     <>
       <Timeline

@@ -48,7 +48,7 @@ const ecoCard = [
   },
 ];
 
-const Blog = (): React.ReactNode => (
+const Blog = (): JSX.Element => (
   <Grid container spacing={3}>
     {ecoCard.map((product, index) => (
       <Grid item sm={12} md={4} lg={3} key={index}>

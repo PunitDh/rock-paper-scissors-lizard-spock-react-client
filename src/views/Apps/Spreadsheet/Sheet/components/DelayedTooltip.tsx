@@ -12,7 +12,7 @@ const DelayedTooltip = ({
   delay = 1000,
   children,
   ...others
-}: Props): React.ReactNode => (
+}: Props): JSX.Element => (
   <Tooltip title={title} enterDelay={delay} enterNextDelay={delay} {...others}>
     {children}
   </Tooltip>

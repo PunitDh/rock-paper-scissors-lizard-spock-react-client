@@ -4,7 +4,7 @@ import { Grid, Stack, Typography, Avatar } from "@mui/material";
 import { IconArrowUpLeft } from "@tabler/icons-react";
 import DashboardCard from "../../../components/shared/DashboardCard";
 
-const YearlyBreakup = (): React.ReactNode => {
+const YearlyBreakup = (): JSX.Element => {
   // chart color
   const theme = useTheme();
   const primary = theme.palette.primary.main;

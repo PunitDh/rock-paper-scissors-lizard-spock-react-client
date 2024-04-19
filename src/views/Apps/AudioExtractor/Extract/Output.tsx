@@ -16,7 +16,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-const Output = ({ state, dispatch }: Props): React.ReactNode => {
+const Output = ({ state, dispatch }: Props): JSX.Element => {
   const socket = useSocket();
   const api = useAPI();
 

@@ -17,7 +17,7 @@ const Container = styled.div({
   gap: "0.25rem",
 });
 
-const ChatBar = (): React.ReactNode => {
+const ChatBar = (): JSX.Element => {
   const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up("md"));
   const { conversations } = useSelector((state: any) => state.conversation);
   const limit = mdUp ? 4 : 1;

@@ -20,7 +20,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-const Output = ({ state, dispatch }: Props): React.ReactNode => {
+const Output = ({ state, dispatch }: Props): JSX.Element => {
   const socket = useSocket();
   const api = useAPI();
 
@@ -40,7 +40,7 @@ const Output = ({ state, dispatch }: Props): React.ReactNode => {
     return () => {
       socket.off(SocketResponse.PROGRESS_UPDATE);
     };
-  }, []);
+  }, [dispatch, socket]);
 
   return (
     <>

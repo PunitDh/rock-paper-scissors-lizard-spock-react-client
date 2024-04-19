@@ -18,7 +18,7 @@ export default function HeadersTab({
   dispatch,
   value,
   tabId,
-}: Props): React.ReactNode {
+}: Props): JSX.Element {
   const handleChange = (pair: KeyValuePair) => dispatch(setHeaders(pair));
   const handleDelete = (pair: KeyValuePair) => dispatch(deleteHeaders(pair));
 

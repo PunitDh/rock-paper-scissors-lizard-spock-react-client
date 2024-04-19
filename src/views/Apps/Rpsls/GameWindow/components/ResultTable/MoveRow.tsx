@@ -19,7 +19,7 @@ const StyledAvatar = styled(Avatar)({
   alignItems: "center",
 });
 
-const MoveRow = ({ firstPlayer, secondPlayer, moves, winner }: Props): React.ReactNode => {
+const MoveRow = ({ firstPlayer, secondPlayer, moves, winner }: Props): JSX.Element => {
   const firstPlayerMove = moves.find((move) => move.player === firstPlayer.id);
   const secondPlayerMove = moves.find(
     (move) => move.player === secondPlayer.id

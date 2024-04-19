@@ -64,7 +64,7 @@ export const MessageRight = ({
   timestamp,
   photoURL,
   read,
-}: Props): React.ReactNode => (
+}: Props): JSX.Element => (
   <FlexBox alignItems="flex-start" justifyContent="flex-end" width="100%">
     <FlexBox alignItems="flex-end" flexDirection="column" width="100%">
       <DisplayName>{displayName}</DisplayName>

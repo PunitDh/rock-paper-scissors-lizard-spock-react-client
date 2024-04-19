@@ -28,7 +28,7 @@ const FloatingFab = styled.div({
   cursor: "pointer",
 });
 
-const UserSearchBar = ({ search, setSearch }: Props): React.ReactNode => (
+const UserSearchBar = ({ search, setSearch }: Props): JSX.Element => (
   <DashboardCard title="Search User">
     <SearchGroup>
       <SearchField

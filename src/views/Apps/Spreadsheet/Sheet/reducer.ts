@@ -95,6 +95,7 @@ export const reducer = (state: State, action: Action): State => {
         inputRef: action.payload,
       };
     }
+
     case SheetAction.SET_FILLER_REF: {
       return {
         ...state,
@@ -147,6 +148,7 @@ export const reducer = (state: State, action: Action): State => {
         isFormulaFieldFocused: action.payload,
       };
     }
+
     case SheetAction.RESET_FORMULA_FIELD: {
       return {
         ...state,
@@ -182,6 +184,7 @@ export const reducer = (state: State, action: Action): State => {
         highlighted,
       };
     }
+
     case SheetAction.SET_HIGHLIGHT_ROW_ANCHOR: {
       const highlighted = new Highlight({ ...state.highlighted })
         .setRowAnchor(action.payload)
@@ -192,6 +195,7 @@ export const reducer = (state: State, action: Action): State => {
         highlighted,
       };
     }
+
     case SheetAction.SET_HIGHLIGHT_COLUMN_ANCHOR: {
       const highlighted = new Highlight({ ...state.highlighted })
         .setColumnAnchor(action.payload)

@@ -24,7 +24,7 @@ const SheetContent = ({
   toolbar,
   formulaField,
   statusField,
-}: SheetContentProps): React.ReactNode => (
+}: SheetContentProps): JSX.Element => (
   <Container>
     {toolbar && <Toolbar state={state} dispatch={dispatch} />}
     <SheetInput state={state} dispatch={dispatch} formulaField={formulaField} />

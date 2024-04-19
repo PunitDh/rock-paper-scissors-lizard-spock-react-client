@@ -5,7 +5,7 @@ import Users from "../components/shared/Users";
 import UserSearchBar from "../components/shared/UserSearchBar";
 import PageContainer from "../../../components/container/PageContainer";
 
-const Rpsls = (): React.ReactNode => {
+const Rpsls = (): JSX.Element => {
   const [search, setSearch] = useState<string>("");
 
   return (

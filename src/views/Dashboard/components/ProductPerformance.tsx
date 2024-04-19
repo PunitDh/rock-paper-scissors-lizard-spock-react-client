@@ -49,7 +49,7 @@ const products = [
   },
 ];
 
-const ProductPerformance = (): React.ReactNode => (
+const ProductPerformance = (): JSX.Element => (
   <DashboardCard title="Product Performance">
     <Box sx={{ overflow: "auto", width: { xs: "280px", sm: "auto" } }}>
       <Table

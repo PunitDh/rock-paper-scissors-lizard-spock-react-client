@@ -6,7 +6,7 @@ import RecentGame from "./RecentGame";
 import { useAPI, useLoading } from "../../../../../hooks";
 import LoadingComponent from "../../../../../components/shared/LoadingComponent";
 
-const RecentGames = (): React.ReactNode => {
+const RecentGames = (): JSX.Element => {
   const api = useAPI();
   const { recentGames } = useSelector((state) => (state as any).player);
   const [getRecentGames, loading] = useLoading(api.getRecentGames);
@@ -14,7 +14,7 @@ const RecentGames = (): React.ReactNode => {
 
   useEffect(() => {
     getRecentGames(limit);
-  }, []);
+  }, [getRecentGames]);
 
   return (
     <DashboardCard title="Recent Games">

@@ -17,7 +17,7 @@ export type Action = {
 export type ProjectIcon =
   | (OverridableComponent<SvgIconTypeMap<{}, "svg">> & { muiName: string })
   | ((props: TablerIconsProps) => Element)
-  | ((props: TablerIconsProps) => React.ReactNode);
+  | ((props: TablerIconsProps) => JSX.Element);
 
 export type NavItemType = {
   id: string;

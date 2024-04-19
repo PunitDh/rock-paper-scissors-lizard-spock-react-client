@@ -12,7 +12,7 @@ const RedBox = styled(Box)({
   color: "red",
 });
 
-const DialogContent = ({ password, setPassword }: Props): React.ReactNode => (
+const DialogContent = ({ password, setPassword }: Props): JSX.Element => (
   <Stack>
     <FlexBox gap="0.5rem" flexDirection="column" alignItems="stretch">
       <Box>

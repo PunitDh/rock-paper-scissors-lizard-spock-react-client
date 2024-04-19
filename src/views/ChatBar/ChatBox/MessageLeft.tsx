@@ -65,7 +65,7 @@ export const MessageLeft = ({
   photoURL,
   displayName,
   read,
-}: Props): React.ReactNode => (
+}: Props): JSX.Element => (
   <FlexBox alignItems="flex-start" justifyContent="flex-start">
     <MessageAvatar alt={displayName} src={photoURL} />
     <div>

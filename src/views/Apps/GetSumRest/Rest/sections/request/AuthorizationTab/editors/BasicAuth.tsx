@@ -18,7 +18,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-export default function BasicAuth({ state, dispatch }: Props): React.ReactNode {
+export default function BasicAuth({ state, dispatch }: Props): JSX.Element {
   const credentials = state.request.authorization[AuthorizationType.BASIC_AUTH];
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>

@@ -34,7 +34,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-const SelectAll = ({ state, dispatch }: Props): React.ReactNode => {
+const SelectAll = ({ state, dispatch }: Props): JSX.Element => {
   const eventHandler = useEventHandler();
   const handleClick = () => {
     dispatch(selectAll());

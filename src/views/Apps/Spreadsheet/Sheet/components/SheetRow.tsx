@@ -11,7 +11,7 @@ type Props = {
   row: number;
 };
 
-const SheetRow = ({ state, dispatch, row }: Props): React.ReactNode => (
+const SheetRow = ({ state, dispatch, row }: Props): JSX.Element => (
   <TableRow sx={{ tableLayout: "fixed" }}>
     {Array(state.maxColumns + 1)
       .fill(0)

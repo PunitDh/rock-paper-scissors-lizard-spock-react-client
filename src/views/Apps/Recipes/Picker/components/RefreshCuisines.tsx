@@ -6,7 +6,7 @@ type Props = {
   onClick: () => void;
 };
 
-const RefreshCuisines = ({ onClick }: Props): React.ReactNode => {
+const RefreshCuisines = ({ onClick }: Props): JSX.Element => {
   const [rotateicon, setRotateIcon] = useState(false);
   const duration = 500;
 

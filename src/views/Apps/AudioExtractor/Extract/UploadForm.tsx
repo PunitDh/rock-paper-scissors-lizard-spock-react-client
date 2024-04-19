@@ -57,7 +57,7 @@ const ResponsiveBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-const UploadForm = ({ dispatch, state }: Props): React.ReactNode => {
+const UploadForm = ({ dispatch, state }: Props): JSX.Element => {
   const fileRef = useRef<HTMLInputElement | null>(null);
   const notification = useNotification();
   const api = useAPI();

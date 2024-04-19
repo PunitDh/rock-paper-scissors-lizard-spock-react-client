@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useAPI } from "../../hooks";
 
-const Logout = (): React.ReactNode => {
+const Logout = (): JSX.Element => {
   const api = useAPI();
 
   useEffect(() => {

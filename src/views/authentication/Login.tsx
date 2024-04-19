@@ -6,7 +6,7 @@ import PageContainer from "../../components/container/PageContainer";
 import Logo from "../../components/shared/Logo";
 import { AuthPage } from "../../utils/constants";
 
-const Login = (): React.ReactNode => (
+const Login = (): JSX.Element => (
   <PageContainer title="Login" description="Login page">
     <AuthBox>
       <Grid

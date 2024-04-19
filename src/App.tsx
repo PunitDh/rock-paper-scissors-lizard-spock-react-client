@@ -7,7 +7,7 @@ import { NotificationProvider } from "./context/NotificationContext";
 import SocketListeners from "./listeners/SocketListeners";
 import { TokenProvider } from "./context/TokenContext";
 
-function App(): React.ReactNode {
+function App(): JSX.Element {
   const routing = useRoutes(Router);
 
   return (

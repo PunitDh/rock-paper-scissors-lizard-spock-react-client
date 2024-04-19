@@ -8,11 +8,11 @@ import { avatars } from "../../../assets";
 
 type Props = {
   title?: string;
-  subtitle?: React.ReactNode;
+  subtitle?: JSX.Element;
   subtext?: string;
 };
 
-const AuthRegister = ({ title, subtitle, subtext }: Props): React.ReactNode => {
+const AuthRegister = ({ title, subtitle, subtext }: Props): JSX.Element => {
   const api = useAPI();
   const [registerPlayer, loading] = useLoading(api.registerPlayer);
 

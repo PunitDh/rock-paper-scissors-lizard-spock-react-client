@@ -6,7 +6,7 @@ import { Action, State } from "../types";
 
 type Props = {
   value: string;
-  display?: string | React.ReactNode;
+  display?: string | JSX.Element;
   state: State;
   dispatch: Dispatch<Action>;
   operation?: boolean;
@@ -20,7 +20,7 @@ function CalcButton({
   dispatch,
   operation,
   invertedOperation,
-}: Props): React.ReactNode {
+}: Props): JSX.Element {
   const handleClick = () => {
     if (state.evaled) {
       dispatch(resetOutput());

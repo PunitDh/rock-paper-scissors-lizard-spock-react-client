@@ -10,7 +10,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-export default function FormDataComponent({ state, dispatch }: Props): React.ReactNode {
+export default function FormDataComponent({ state, dispatch }: Props): JSX.Element {
   const handleChange = (pair: KeyValuePair) =>
     dispatch(setBodyContent(ContentType.FORM_DATA, pair));
   const handleDelete = (pair: KeyValuePair) =>

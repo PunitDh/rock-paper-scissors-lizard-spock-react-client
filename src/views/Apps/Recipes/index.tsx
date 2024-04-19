@@ -2,7 +2,7 @@ import { Box, Grid } from "@mui/material";
 import Picker from "./Picker";
 import PageContainer from "../../../components/container/PageContainer";
 
-const Recipes = (): React.ReactNode => (
+const Recipes = (): JSX.Element => (
   <PageContainer title="Flavor Match" description="Find your favourite recipe">
     <Box>
       <Grid>

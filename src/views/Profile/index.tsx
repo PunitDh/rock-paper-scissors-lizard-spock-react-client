@@ -4,7 +4,7 @@ import ChangePassword from "./components/ChangePassword";
 import DeleteProfile from "./components/DeleteProfile";
 import PageContainer from "../../components/container/PageContainer";
 
-const Profile = (): React.ReactNode => (
+const Profile = (): JSX.Element => (
   <PageContainer title="Update Profile" description="Update player profile">
     <Box>
       <Grid container spacing={3}>

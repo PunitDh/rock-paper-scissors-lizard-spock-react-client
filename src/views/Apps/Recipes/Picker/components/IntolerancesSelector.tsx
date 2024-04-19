@@ -60,7 +60,7 @@ interface TagProps extends ReturnType<AutocompleteGetTagProps> {
   label: string;
 }
 
-function Tag(props: TagProps): React.ReactNode {
+function Tag(props: TagProps): JSX.Element {
   const { label, onDelete, ...other } = props;
   return (
     <div {...other}>

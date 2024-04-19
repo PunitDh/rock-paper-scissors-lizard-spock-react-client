@@ -26,7 +26,7 @@ const ProfileAvatar = styled(Avatar)({
   height: 35,
 });
 
-const CornerProfile = ({ decoded }: Props): React.ReactNode => {
+const CornerProfile = ({ decoded }: Props): JSX.Element => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const navigate = useNavigate();
   const api = useAPI();

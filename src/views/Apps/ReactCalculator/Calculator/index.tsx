@@ -11,7 +11,7 @@ import GraphBox from "./sections/GraphBox";
 import Debug from "./components/Debug";
 import { useToken } from "../../../../hooks";
 
-const Calculator = (): React.ReactNode => {
+const Calculator = (): JSX.Element => {
   const token = useToken();
   const [state, dispatch]: [State, Dispatch<Action>] = useReducer<
     Reducer<State, Action>

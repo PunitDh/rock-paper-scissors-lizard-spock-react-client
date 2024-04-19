@@ -18,7 +18,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-const Selector = ({ state, dispatch }: Props): React.ReactNode => {
+const Selector = ({ state, dispatch }: Props): JSX.Element => {
   const handleChange = (e: SelectChangeEvent) => {
     dispatch(setAuthorizationType(e.target.value));
   };

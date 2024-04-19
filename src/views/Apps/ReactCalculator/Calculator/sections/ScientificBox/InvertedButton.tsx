@@ -5,8 +5,8 @@ import { Action, State } from "../../types";
 type Props = {
   value: string;
   invertedValue: string;
-  display: string | React.ReactNode;
-  invertedDisplay: string | React.ReactNode;
+  display: string | JSX.Element;
+  invertedDisplay: string | JSX.Element;
   state: State;
   dispatch: Dispatch<Action>;
   operation?: boolean;
@@ -22,7 +22,7 @@ const InvertedButton = ({
   dispatch,
   operation,
   invertedOperation,
-}: Props): React.ReactNode => (
+}: Props): JSX.Element => (
   <CalcButton
     display={state.inverse ? invertedDisplay : display}
     state={state}

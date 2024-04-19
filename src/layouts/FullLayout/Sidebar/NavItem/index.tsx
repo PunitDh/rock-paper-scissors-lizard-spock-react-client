@@ -1,8 +1,4 @@
-import React, {
-  ForwardRefExoticComponent,
-  RefAttributes,
-  useReducer,
-} from "react";
+import { ForwardRefExoticComponent, RefAttributes, useReducer } from "react";
 import {
   ListItemIcon,
   ListItem,
@@ -82,7 +78,7 @@ const NavItem = ({
   onClick,
   closeSideBar,
   hasContextMenu = false,
-}: Props): React.ReactNode => {
+}: Props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const theme = useTheme();
 

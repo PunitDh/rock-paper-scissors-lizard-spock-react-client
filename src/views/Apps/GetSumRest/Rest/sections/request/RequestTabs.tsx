@@ -24,7 +24,7 @@ const WideBox = styled(Box)({
 export default function RequestTabs({
   state,
   dispatch,
-}: Props): React.ReactNode {
+}: Props): JSX.Element {
   const requestTab = useQueryParam("requestTab");
   const [tab, setTab] = useState<number>(Number(requestTab) || 0);
   const handleChange = (_, newValue: number) => setTab(newValue);

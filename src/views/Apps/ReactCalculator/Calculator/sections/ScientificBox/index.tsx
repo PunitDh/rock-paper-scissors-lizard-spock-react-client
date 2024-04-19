@@ -12,7 +12,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-const ScientificBox = ({ state, dispatch }: Props): React.ReactNode => (
+const ScientificBox = ({ state, dispatch }: Props): JSX.Element => (
   <FlexBox width="100%" flexDirection="column" alignItems="flex-end">
     <FlexBox justifyContent="flex-end">
       <AngleButton value="Rad" state={state} dispatch={dispatch} />

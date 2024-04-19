@@ -84,7 +84,7 @@ const getAvatar = (id: number): string | undefined =>
 
 type GameIcon = {
   id: number;
-  icon: (props: TablerIconsProps) => React.ReactNode;
+  icon: (props: TablerIconsProps) => JSX.Element;
 };
 
 const icons: ReadonlyArray<GameIcon> = [

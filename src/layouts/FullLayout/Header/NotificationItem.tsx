@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 type Props = {
   handleClose: (any: any) => void;
   link: string;
-  children: string | React.ReactNode;
+  children: string | JSX.Element;
   buttonText: string;
 };
 
@@ -13,7 +13,7 @@ const NotificationItem = ({
   link,
   children,
   buttonText,
-}: Props): React.ReactNode => {
+}: Props): JSX.Element => {
   const navigate = useNavigate();
   const navigateTo = (to: string) => () => handleClose(navigate(to));
 

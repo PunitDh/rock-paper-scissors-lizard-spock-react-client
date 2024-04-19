@@ -17,7 +17,7 @@ const StatusBox = styled(Box)(({ active }: StatusBoxProps) => ({
   },
 }));
 
-const HighlightedStats = ({ data, title }): React.ReactNode => {
+const HighlightedStats = ({ data, title }): JSX.Element => {
   const [active, setActive] = useState<boolean>(false);
   const initialTooltip = `Copy '${data}'`;
   const [tooltip, setTooltip] = useState<string>(initialTooltip);

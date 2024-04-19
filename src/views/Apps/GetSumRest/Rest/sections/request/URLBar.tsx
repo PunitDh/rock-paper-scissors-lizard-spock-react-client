@@ -26,7 +26,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-const URLBar = ({ state, dispatch }: Props): React.ReactNode => {
+const URLBar = ({ state, dispatch }: Props): JSX.Element => {
   const api = useAPI();
   const [sendRequest, loading] = useLoading(api.sendRestRequest);
   const notification = useNotification();

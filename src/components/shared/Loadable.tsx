@@ -5,8 +5,8 @@ type Props = {
 };
 
 const Loadable =
-  (Component: LazyExoticComponent<() => React.ReactNode>) =>
-  (props: Props): React.ReactNode => (
+  (Component: LazyExoticComponent<() => JSX.Element>) =>
+  (props: Props): JSX.Element => (
     <Suspense>
       <Component {...props} />
     </Suspense>

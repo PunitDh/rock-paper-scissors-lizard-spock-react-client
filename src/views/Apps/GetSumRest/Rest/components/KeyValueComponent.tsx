@@ -27,7 +27,7 @@ const KeyValueComponent = ({
   onChange,
   onDelete,
   fileUpload,
-}: Props): React.ReactNode => (
+}: Props): JSX.Element => (
   <Table style={{ tableLayout: "fixed" }}>
     <TableHead style={{ borderBottom: "1px solid rgba(0,0,0,1)" }}>
       <TableRow>

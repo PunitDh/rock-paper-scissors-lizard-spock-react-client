@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 
 type Props = {
-  children: React.ReactNode | React.ReactNode[];
+  children: JSX.Element | JSX.Element[];
   value: number;
   index: number;
   tabId: string;
@@ -14,7 +14,7 @@ export default function CustomTabPanel({
   index,
   tabId,
   ...other
-}: Props): React.ReactNode {
+}: Props): JSX.Element {
   return (
     <div
       role="tabpanel"

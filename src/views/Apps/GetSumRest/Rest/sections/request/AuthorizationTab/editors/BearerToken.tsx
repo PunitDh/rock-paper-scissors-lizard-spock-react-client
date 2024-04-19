@@ -17,7 +17,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-export default function BearerToken({ state, dispatch }: Props): React.ReactNode {
+export default function BearerToken({ state, dispatch }: Props): JSX.Element {
   const credentials =
     state.request.authorization[AuthorizationType.BEARER_TOKEN];
 

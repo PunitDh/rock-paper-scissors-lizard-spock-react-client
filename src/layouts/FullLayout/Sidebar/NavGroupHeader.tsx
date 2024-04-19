@@ -25,7 +25,7 @@ const ListSubheaderStyle = styled((props: any) => (
   },
 }));
 
-const NavGroupHeader = ({ groupName, maximized }: Props): React.ReactNode => {
+const NavGroupHeader = ({ groupName, maximized }: Props): JSX.Element => {
   const dispatch = useDispatch();
   const handleMaximize = () => dispatch(toggleShowNavGroup(groupName));
   return (

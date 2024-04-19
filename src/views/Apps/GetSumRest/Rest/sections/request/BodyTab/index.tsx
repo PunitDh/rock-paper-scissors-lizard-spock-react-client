@@ -35,7 +35,7 @@ export default function Body({
   dispatch,
   value,
   tabId,
-}: Props): React.ReactNode {
+}: Props): JSX.Element {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setContentType(e.target.value));
   };

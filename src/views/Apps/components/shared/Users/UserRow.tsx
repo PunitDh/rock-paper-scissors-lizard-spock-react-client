@@ -32,7 +32,7 @@ const SmallAvatar = styled(Avatar)({
   cursor: "pointer",
 });
 
-const UserRow = ({ user }: Props): React.ReactNode => {
+const UserRow = ({ user }: Props): JSX.Element => {
   const token = useToken();
   const onlineIconTitle = `${user.firstName} is ${
     user.isOnline ? "online" : "offline"

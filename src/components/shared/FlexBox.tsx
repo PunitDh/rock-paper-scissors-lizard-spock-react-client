@@ -51,7 +51,7 @@ export function FlexBox({
   position,
   textAlign,
   onClick,
-}: FlexBoxProps): React.ReactNode {
+}: FlexBoxProps): JSX.Element {
   return (
     <Box
       onClick={onClick}

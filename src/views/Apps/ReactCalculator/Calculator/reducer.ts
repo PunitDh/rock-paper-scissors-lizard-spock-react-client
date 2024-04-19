@@ -1,4 +1,4 @@
-import { listOf, toList } from "../../../../utils/List";
+import { toList } from "../../../../utils/List";
 import { CalculatorAction } from "./actions";
 import { Action, Coord, State } from "./types";
 
@@ -38,6 +38,7 @@ export const reducer = (state: State, action: Action): State => {
         ...state,
         input: [...state.input, ...action.payload],
       };
+
     case CalculatorAction.SET_OUTPUT:
       const yValues = toList<number>(
         action.payload.values.map((it: Coord) => it.y)
@@ -63,6 +64,7 @@ export const reducer = (state: State, action: Action): State => {
           },
         ],
       };
+
     case CalculatorAction.SET_GRAPH_RANGE:
       return {
         ...state,
@@ -71,26 +73,31 @@ export const reducer = (state: State, action: Action): State => {
           [action.payload.key]: action.payload.value,
         },
       };
+
     case CalculatorAction.SET_EVALED:
       return {
         ...state,
         evaled: action.payload,
       };
+
     case CalculatorAction.SET_DEBUG_VALUE:
       return {
         ...state,
         parsedInput: action.payload,
       };
+
     case CalculatorAction.SET_INVERSE_MODE:
       return {
         ...state,
         inverse: action.payload,
       };
+
     case CalculatorAction.TOGGLE_DEG_MODE:
       return {
         ...state,
         degrees: action.payload,
       };
+
     case CalculatorAction.TOGGLE_INVERSE_MODE:
       return {
         ...state,
@@ -103,6 +110,7 @@ export const reducer = (state: State, action: Action): State => {
         input: state.input.slice(0, -1),
         evaled: false,
       };
+
     case CalculatorAction.ADD_MEMORY:
       return {
         ...state,
@@ -114,6 +122,7 @@ export const reducer = (state: State, action: Action): State => {
           },
         },
       };
+
     case CalculatorAction.REMOVE_MEMORY:
       return {
         ...state,
@@ -122,17 +131,20 @@ export const reducer = (state: State, action: Action): State => {
           [action.payload]: { filled: false, value: 0 },
         },
       };
+
     case CalculatorAction.CLEAR_MEMORY:
       return {
         ...state,
         memory: initialState.memory,
       };
+
     case CalculatorAction.RESET_OUTPUT:
       return {
         ...state,
         evaled: initialState.evaled,
         input: initialState.input,
       };
+
     case CalculatorAction.RESET_STATE:
       return {
         ...initialState,
@@ -140,6 +152,7 @@ export const reducer = (state: State, action: Action): State => {
         memory: state.memory,
         degrees: state.degrees,
       };
+
     default:
       return initialState;
   }

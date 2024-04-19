@@ -5,7 +5,7 @@ type Props = {
   children: { [key: string]: any };
 }
 
-const PrettifyObject = ({ children }: Props): React.ReactNode => {
+const PrettifyObject = ({ children }: Props): JSX.Element => {
   if (!isObject(children)) return <></>;
 
   const prettify = (object: { [key: string]: any }, depth: number = 1) => {

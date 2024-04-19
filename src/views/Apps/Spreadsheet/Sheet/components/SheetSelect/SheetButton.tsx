@@ -24,7 +24,7 @@ const SheetButton = ({
   onRename,
   onDoubleClick,
   onSelectSheet,
-}: SheetButtonProps): React.ReactNode => {
+}: SheetButtonProps): JSX.Element => {
   const [sheetName, setSheetName] = useState(sheet.name);
 
   const sheetRenameRef = useRef<HTMLInputElement | null>(null);

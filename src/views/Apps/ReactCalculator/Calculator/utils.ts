@@ -21,7 +21,7 @@ export const linearInterpolate = (
 };
 
 export const evaluateExpression = (state: State): Output => {
-  const _input = Calc.OPERATIONS.includes(state.input[state.input.length - 1])
+  const _input = Calc.OPERATIONS.includes(state.input[state.input.length - 1] as any)
     ? state.input.concat(Calc.ANS)
     : state.input;
 

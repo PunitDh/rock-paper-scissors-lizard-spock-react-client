@@ -10,7 +10,7 @@ type Props = {
   value: string;
 };
 
-function AngleButton({ state, dispatch, value }: Props): React.ReactNode {
+function AngleButton({ state, dispatch, value }: Props): JSX.Element {
   const isDeg = value === Calc.DEG;
   const handleClick = () => dispatch(setDegreesMode(isDeg));
 

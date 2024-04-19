@@ -7,7 +7,7 @@ type Props = {
   state: State;
 };
 
-const StatusBar = ({ state }: Props): React.ReactNode => {
+const StatusBar = ({ state }: Props): JSX.Element => {
   const handleSubmit = (e: React.FormEvent) => e.preventDefault();
   const { average, sum, count } = state.highlighted;
 

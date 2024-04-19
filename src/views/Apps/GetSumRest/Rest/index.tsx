@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import React, { useReducer } from "react";
 import { initialState, reducer } from "./reducer";
 import URLBar from "./sections/request/URLBar";
 import RequestTabs from "./sections/request/RequestTabs";
@@ -9,7 +9,7 @@ import { useToken } from "../../../../hooks";
 import DashboardCard from "../../../../components/shared/DashboardCard";
 import FlexBox from "../../../../components/shared/FlexBox";
 
-const Rest = (): React.ReactNode => {
+const Rest = () => {
   const [state, dispatch] = useReducer(reducer, initialState, initializeState);
   const token = useToken();
 

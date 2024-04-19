@@ -2,9 +2,9 @@ import { Box, CardContent, Stack, Typography } from "@mui/material";
 import { ResponsiveCard } from "./styles";
 
 type Props = {
-  title: React.ReactNode | string;
+  title: JSX.Element | string;
   children: any;
-  action: React.ReactNode | string | undefined;
+  action: JSX.Element | string | undefined;
 };
 
 const GameCard = ({ title, children, action }: Props) => (

@@ -2,7 +2,7 @@ import { Box, Grid } from "@mui/material";
 import Picker from "./Picker";
 import PageContainer from "../../../components/container/PageContainer";
 
-const ColorPicker = (): React.ReactNode => (
+const ColorPicker = (): JSX.Element => (
   <PageContainer title="Color Picker" description="React color picker">
     <Box>
       <Grid>

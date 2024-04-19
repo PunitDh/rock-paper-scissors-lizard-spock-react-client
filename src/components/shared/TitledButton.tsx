@@ -2,7 +2,7 @@ import { Button, Tooltip } from "@mui/material";
 
 type Props = {
   title: string;
-  children: React.ReactNode | string;
+  children: JSX.Element | string;
   [x: string]: any;
 };
 

@@ -22,7 +22,7 @@ export default function DeleteConfirmation({
   state,
   dispatch,
   selectedGame,
-}: Props) {
+}: Props): JSX.Element {
   const api = useAPI();
   const token = useToken();
 
@@ -38,27 +38,27 @@ export default function DeleteConfirmation({
     (player) => player.id !== token.decoded?.id
   );
 
-  return (
-    otherPlayer && (
-      <div>
-        <Dialog open={state.confirmDelete} onClose={handleClose}>
-          <DialogTitle>Delete Game</DialogTitle>
-          <form onSubmit={handleDelete}>
-            <DialogContent>
-              <DialogContentText>
-                Delete game <Bold>{selectedGame.title}</Bold> with{" "}
-                <Bold>{otherPlayer.firstName}</Bold>?
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button type="button" onClick={handleClose}>
-                Cancel
-              </Button>
-              <Button type="submit">Delete</Button>
-            </DialogActions>
-          </form>
-        </Dialog>
-      </div>
-    )
+  return otherPlayer ? (
+    <div>
+      <Dialog open={state.confirmDelete} onClose={handleClose}>
+        <DialogTitle>Delete Game</DialogTitle>
+        <form onSubmit={handleDelete}>
+          <DialogContent>
+            <DialogContentText>
+              Delete game <Bold>{selectedGame.title}</Bold> with{" "}
+              <Bold>{otherPlayer.firstName}</Bold>?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button type="button" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button type="submit">Delete</Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+    </div>
+  ) : (
+    <></>
   );
 }

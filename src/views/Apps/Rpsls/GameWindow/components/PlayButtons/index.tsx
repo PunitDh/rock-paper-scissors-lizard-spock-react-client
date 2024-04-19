@@ -20,7 +20,7 @@ const ButtonContainer = styled(Container)({
   flexWrap: "wrap",
 });
 
-const PlayButtons = ({ id, playerId, lastRound, opponent }: Props): React.ReactNode =>
+const PlayButtons = ({ id, playerId, lastRound, opponent }: Props): JSX.Element =>
   lastRound.moves && (
     <ButtonContainer>
       {lastRound.moves.length === 1 &&

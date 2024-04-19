@@ -14,7 +14,7 @@ const RedButton = styled(TitledButton)({
   },
 });
 
-const DeleteProfile = (): React.ReactNode => {
+const DeleteProfile = (): JSX.Element => {
   const api = useAPI();
   const [confirm, setConfirm] = useState<boolean>(false);
   const [value, setValue] = useState<string | undefined>();

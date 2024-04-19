@@ -2,7 +2,7 @@ import { Box, Grid } from "@mui/material";
 import Extract from "./Extract";
 import PageContainer from "../../../components/container/PageContainer";
 
-const AudioExtractor = (): React.ReactNode => (
+const AudioExtractor = (): JSX.Element => (
   <PageContainer
     title="Audio Extractor"
     description="Extract audio from a video file"

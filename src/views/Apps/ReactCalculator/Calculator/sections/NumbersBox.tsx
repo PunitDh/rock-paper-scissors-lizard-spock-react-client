@@ -11,7 +11,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-const NumbersBox = ({ state, dispatch }: Props): React.ReactNode => {
+const NumbersBox = ({ state, dispatch }: Props): JSX.Element => {
   const numberGroups: string[][] = [
     // ["(", ")", "%"],
     ["x", "7", "8", "9"],

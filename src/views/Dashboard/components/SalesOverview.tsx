@@ -4,7 +4,7 @@ import DashboardCard from "../../../components/shared/DashboardCard";
 import Chart from "react-apexcharts";
 import { useState } from "react";
 
-const SalesOverview = (): React.ReactNode => {
+const SalesOverview = (): JSX.Element => {
   const [month, setMonth] = useState("1");
 
   const handleChange = (event: SelectChangeEvent) => {
