@@ -6,7 +6,7 @@ import FlexBox from "../../../components/shared/FlexBox";
 import TitledButton from "../../../components/shared/TitledButton";
 import FormField from "../../../components/shared/FormField";
 
-const UpdateProfile = () => {
+const UpdateProfile = (): React.ReactNode => {
   const api = useAPI();
   const token = useToken();
 

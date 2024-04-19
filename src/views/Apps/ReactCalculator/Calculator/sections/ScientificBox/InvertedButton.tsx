@@ -22,17 +22,15 @@ const InvertedButton = ({
   dispatch,
   operation,
   invertedOperation,
-}: Props) => {
-  return (
-    <CalcButton
-      display={state.inverse ? invertedDisplay : display}
-      state={state}
-      dispatch={dispatch}
-      value={state.inverse ? invertedValue : value}
-      operation={operation}
-      invertedOperation={invertedOperation}
-    />
-  );
-};
+}: Props): React.ReactNode => (
+  <CalcButton
+    display={state.inverse ? invertedDisplay : display}
+    state={state}
+    dispatch={dispatch}
+    value={state.inverse ? invertedValue : value}
+    operation={operation}
+    invertedOperation={invertedOperation}
+  />
+);
 
 export default InvertedButton;

@@ -32,7 +32,7 @@ const HeaderItemComponent = styled(HeaderItem)(
       color: "#FFFFFF",
     },
     height: dimension === Dimension.ROW ? dimensionsize + "px" : "initial",
-  }),
+  })
 );
 
 type ResizerProps = {
@@ -58,7 +58,12 @@ type Props = {
   dimension: Dimension;
 };
 
-const HeaderCell = ({ state, dispatch, id, dimension }: Props): React.ReactNode => {
+const HeaderCell = ({
+  state,
+  dispatch,
+  id,
+  dimension,
+}: Props): React.ReactNode => {
   const eventHandler = useEventHandler();
   const headerRef = useRef<HTMLDivElement>(null);
   const posRef = useRef<number>(0);

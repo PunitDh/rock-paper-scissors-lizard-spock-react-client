@@ -14,13 +14,13 @@ const RedButton = styled(TitledButton)({
   },
 });
 
-const DeleteProfile = () => {
+const DeleteProfile = (): React.ReactNode => {
   const api = useAPI();
-  const [confirm, setConfirm] = useState(false);
-  const [value, setValue] = useState();
-  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState<boolean>(false);
+  const [value, setValue] = useState<string | undefined>();
+  const [password, setPassword] = useState<string>("");
 
-  const handleClose = (newValue) => {
+  const handleClose = (newValue: string) => {
     setConfirm(false);
     newValue && setValue(newValue);
   };

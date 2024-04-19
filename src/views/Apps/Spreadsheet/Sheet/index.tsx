@@ -14,10 +14,12 @@ import { defaultInitialStateProps } from "./constants";
 import { SheetContainer } from "./styles";
 import SheetSelect from "./components/SheetSelect";
 
-const Sheet = (props: SheetProps = defaultInitialStateProps): React.ReactNode => {
+const Sheet = (
+  props: SheetProps = defaultInitialStateProps
+): React.ReactNode => {
   const [state, dispatch]: [state: State, dispatch: Dispatch<Action>] =
     useReducer(reducer, initialState, () =>
-      createInitialState(props, defaultInitialStateProps),
+      createInitialState(props, defaultInitialStateProps)
     );
 
   useEffect(() => {

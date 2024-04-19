@@ -4,12 +4,21 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  SelectChangeEvent,
 } from "@mui/material";
 import { limits, logTypes, times } from "./constants";
 import { setConfirmClear, setFilter } from "./actions";
 import FlexBox from "../../../../components/shared/FlexBox";
 import ConfirmationDialog from "../../../../components/shared/ConfirmationDialog";
 import LimitSelect from "../../../../components/shared/LimitSelect";
+import { Action, State } from "./types";
+import { Dispatch } from "react";
+
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+  onClearLogs: () => void;
+};
 
 const whiteStyle = {
   color: "white",
@@ -28,8 +37,12 @@ const whiteStyle = {
   },
 };
 
-const LogActions = ({ state, dispatch, onClearLogs }) => {
-  const handleFilter = (e) => dispatch(setFilter(e.target));
+const LogActions = ({
+  state,
+  dispatch,
+  onClearLogs,
+}: Props): React.ReactNode => {
+  const handleFilter = (e: SelectChangeEvent) => dispatch(setFilter(e.target));
 
   return (
     <FlexBox gap="0.5rem">
@@ -55,7 +68,7 @@ const LogActions = ({ state, dispatch, onClearLogs }) => {
         <Select
           labelId="log-time"
           id="log-time"
-          value={state.time}
+          value={String(state.time)}
           size="small"
           name="time"
           label="Time"

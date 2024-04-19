@@ -17,13 +17,13 @@ const Container = styled.div({
   gap: "0.25rem",
 });
 
-const ChatBar = () => {
+const ChatBar = (): React.ReactNode => {
   const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up("md"));
   const { conversations } = useSelector((state: any) => state.conversation);
   const limit = mdUp ? 4 : 1;
 
   const openConversations = [...conversations].filter(
-    (conversation) => conversation.status !== ChatBoxStatus.CLOSED,
+    (conversation) => conversation.status !== ChatBoxStatus.CLOSED
   );
 
   return (

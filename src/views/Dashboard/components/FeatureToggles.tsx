@@ -18,7 +18,7 @@ const Toggle = styled(Typography)({
   userSelect: "none",
 });
 
-const FeatureToggles = () => {
+const FeatureToggles = (): React.ReactNode => {
   const { siteSettings } = useSelector((state) => (state as any).site);
   const api = useAPI();
 

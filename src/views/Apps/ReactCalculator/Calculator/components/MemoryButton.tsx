@@ -21,7 +21,7 @@ type Props = {
   value: string;
 };
 
-function MemoryButton({ value, state, dispatch }: Props) {
+function MemoryButton({ value, state, dispatch }: Props): React.ReactNode {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const openMenu = (event: React.MouseEvent<HTMLElement>) =>
     setAnchorEl(event.currentTarget);
@@ -34,7 +34,7 @@ function MemoryButton({ value, state, dispatch }: Props) {
           dispatch(addMemory(address, state.output));
         } else {
           const output = evaluateExpression(
-            state.input.length === 0 ? { ...state, input: ["0"] } : state,
+            state.input.length === 0 ? { ...state, input: ["0"] } : state
           );
           dispatch(setOutput(output));
           dispatch(addMemory(address, Number(output.value)));

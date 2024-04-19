@@ -1,6 +1,10 @@
 import useEventHandler from "../hooks/useEventHandler";
 
-const EventDelegator = ({ children }) => {
+type Props = {
+  children: React.ReactNode;
+};
+
+const EventDelegator = ({ children }: Props): React.ReactNode => {
   const eventHandler = useEventHandler();
 
   const handleMouseUp = (e: React.MouseEvent) => eventHandler.handleMouseUp(e);

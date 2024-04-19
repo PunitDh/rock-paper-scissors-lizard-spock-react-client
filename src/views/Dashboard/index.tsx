@@ -3,7 +3,7 @@ import FeatureToggles from "./components/FeatureToggles";
 import APILogs from "./components/APILogs";
 import PageContainer from "../../components/container/PageContainer";
 
-const Dashboard = () => (
+const Dashboard = (): React.ReactNode => (
   <PageContainer title="Admin Dashboard" description="Admin dashboard">
     <Box>
       <Grid sx={{ mb: "1rem" }} container spacing={3}>

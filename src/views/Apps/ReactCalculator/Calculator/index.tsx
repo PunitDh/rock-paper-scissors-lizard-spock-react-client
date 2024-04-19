@@ -11,14 +11,14 @@ import GraphBox from "./sections/GraphBox";
 import Debug from "./components/Debug";
 import { useToken } from "../../../../hooks";
 
-const Calculator = () => {
+const Calculator = (): React.ReactNode => {
   const token = useToken();
   const [state, dispatch]: [State, Dispatch<Action>] = useReducer<
     Reducer<State, Action>
   >(reducer, initialState);
 
   const mdUp = useMediaQuery((theme) =>
-    (theme as MuiTheme).breakpoints.up("md"),
+    (theme as MuiTheme).breakpoints.up("md")
   );
 
   return (

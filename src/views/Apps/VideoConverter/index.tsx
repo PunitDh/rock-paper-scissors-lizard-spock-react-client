@@ -3,8 +3,11 @@ import Convert from "./Convert";
 import { useSelector } from "react-redux";
 import PageContainer from "../../../components/container/PageContainer";
 
-export default function VideoConverter() {
-  const { videoConverter } = useSelector((state) => (state as any).site.siteSettings);
+export default function VideoConverter(): React.ReactNode {
+  const { videoConverter } = useSelector(
+    (state) => (state as any).site.siteSettings
+  );
+
   return (
     <PageContainer
       title="Video Subtitle Generator"

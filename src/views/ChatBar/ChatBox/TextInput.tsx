@@ -23,7 +23,11 @@ const MessageField = styled(TextField)({
   width: "100%",
 });
 
-export const TextInput = ({ conversationId, receiver, allRead }: Props) => {
+export const TextInput = ({
+  conversationId,
+  receiver,
+  allRead,
+}: Props): React.ReactNode => {
   const [messageLength, setMessageLength] = useState(0);
   const api = useAPI();
 

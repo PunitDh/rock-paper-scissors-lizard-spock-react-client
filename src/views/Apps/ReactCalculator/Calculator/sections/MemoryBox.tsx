@@ -10,7 +10,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-function MemoryBox({ state, dispatch }: Props) {
+function MemoryBox({ state, dispatch }: Props): React.ReactNode {
   return (
     <FlexBox flexDirection="column" justifyContent="flex-start">
       <InvButton state={state} dispatch={dispatch} />

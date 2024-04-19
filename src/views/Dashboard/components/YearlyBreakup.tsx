@@ -2,10 +2,9 @@ import Chart from "react-apexcharts";
 import { useTheme } from "@mui/material/styles";
 import { Grid, Stack, Typography, Avatar } from "@mui/material";
 import { IconArrowUpLeft } from "@tabler/icons-react";
-
 import DashboardCard from "../../../components/shared/DashboardCard";
 
-const YearlyBreakup = () => {
+const YearlyBreakup = (): React.ReactNode => {
   // chart color
   const theme = useTheme();
   const primary = theme.palette.primary.main;

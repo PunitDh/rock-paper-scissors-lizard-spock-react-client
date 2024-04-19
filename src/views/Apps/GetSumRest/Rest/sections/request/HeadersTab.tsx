@@ -13,7 +13,12 @@ type Props = {
   tabId: string;
 };
 
-export default function HeadersTab({ state, dispatch, value, tabId }: Props): React.ReactNode {
+export default function HeadersTab({
+  state,
+  dispatch,
+  value,
+  tabId,
+}: Props): React.ReactNode {
   const handleChange = (pair: KeyValuePair) => dispatch(setHeaders(pair));
   const handleDelete = (pair: KeyValuePair) => dispatch(deleteHeaders(pair));
 

@@ -60,7 +60,7 @@ export const reducer = (state: State, action: Action): State => {
         const params = [...url.searchParams.entries()].map(([key, value]) =>
           new KeyValuePair(key, value)
             .setInclude(true)
-            .setUniqueId(KeyValuePairType.PARAM),
+            .setUniqueId(KeyValuePairType.PARAM)
         );
         if (params[params.length - 1]?.filled) {
           params.push(createBlankKeyValuePair(KeyValuePairType.PARAM));
@@ -116,7 +116,7 @@ export const reducer = (state: State, action: Action): State => {
       const params = state.request.params.filter((it) => {
         state.request.url.searchParams.delete(
           action.payload.key,
-          action.payload.value,
+          action.payload.value
         );
         return it.id !== action.payload.id;
       });
@@ -162,7 +162,7 @@ export const reducer = (state: State, action: Action): State => {
     }
     case RestAction.DELETE_HEADERS: {
       const headers = state.request.headers.filter(
-        (it) => it.id !== action.payload.id,
+        (it) => it.id !== action.payload.id
       );
 
       if (headers.length === 0) {
@@ -189,7 +189,7 @@ export const reducer = (state: State, action: Action): State => {
         case ContentType.FORM_ENCODED:
           const updated = updateList(
             state.request.body[action.payload.type],
-            action.payload.value,
+            action.payload.value
           );
           return {
             ...state,
@@ -205,7 +205,7 @@ export const reducer = (state: State, action: Action): State => {
     }
     case RestAction.DELETE_BODY_CONTENT: {
       const updatedList = state.request.body[action.payload.type].filter(
-        (it) => it.id !== action.payload.value.id,
+        (it) => it.id !== action.payload.value.id
       );
 
       if (updatedList.length === 0) {

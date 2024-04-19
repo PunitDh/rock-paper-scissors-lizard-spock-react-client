@@ -42,7 +42,7 @@ const APILogs = () => {
 
   useEffect(() => {
     api.getLogs(state).then((data) => dispatch(setLogs(data.payload)));
-  }, [state.type, state.time, state.limit]);
+  }, [api, state]);
 
   return (
     <DashboardCard

@@ -8,6 +8,7 @@ import {
 import { IconClock, IconCurrencyDollar } from "@tabler/icons-react";
 
 export type FontSize = (typeof FontSizes)[number];
+
 export const FontSizes = [
   "8px",
   "10px",
@@ -30,10 +31,10 @@ export enum BorderType {
   THICK_OUTSIDE_BORDERS = "THICK_OUTSIDE_BORDERS",
 }
 
-export const OutsideBorders: ReadonlyArray<BorderType> = Object.freeze([
+export const OutsideBorders: ReadonlyArray<BorderType> = [
   BorderType.OUTSIDE_BORDERS,
   BorderType.THICK_OUTSIDE_BORDERS,
-]);
+] as const;
 
 export type BorderStyle = {
   id: BorderType;
@@ -41,7 +42,7 @@ export type BorderStyle = {
   value: string;
 };
 
-export const BorderStyles: ReadonlyArray<BorderStyle> = Object.freeze([
+export const BorderStyles: ReadonlyArray<BorderStyle> = [
   {
     id: BorderType.BORDER_BOTTOM,
     props: { borderBottom: "1px solid black" },
@@ -103,7 +104,7 @@ export const BorderStyles: ReadonlyArray<BorderStyle> = Object.freeze([
     },
     value: "Thick Outside Borders",
   },
-]);
+] as const;
 
 export enum NumberFormat {
   GENERAL = "General",
@@ -127,15 +128,13 @@ type NumberFormatMenuItem = {
   Icon: any;
 };
 
-export const NumberFormats: ReadonlyArray<NumberFormatMenuItem> = Object.freeze(
-  [
-    { id: NumberFormat.GENERAL, Icon: TextFormat },
-    { id: NumberFormat.NUMBER, Icon: NumbersOutlined },
-    { id: NumberFormat.CURRENCY, Icon: IconCurrencyDollar },
-    { id: NumberFormat.SHORT_DATE, Icon: CalendarMonth },
-    { id: NumberFormat.LONG_DATE, Icon: CalendarMonth },
-    { id: NumberFormat.TIME, Icon: IconClock },
-    { id: NumberFormat.PERCENTAGE, Icon: Percent },
-    { id: NumberFormat.TEXT, Icon: TextFields },
-  ]
-);
+export const NumberFormats: ReadonlyArray<NumberFormatMenuItem> = [
+  { id: NumberFormat.GENERAL, Icon: TextFormat },
+  { id: NumberFormat.NUMBER, Icon: NumbersOutlined },
+  { id: NumberFormat.CURRENCY, Icon: IconCurrencyDollar },
+  { id: NumberFormat.SHORT_DATE, Icon: CalendarMonth },
+  { id: NumberFormat.LONG_DATE, Icon: CalendarMonth },
+  { id: NumberFormat.TIME, Icon: IconClock },
+  { id: NumberFormat.PERCENTAGE, Icon: Percent },
+  { id: NumberFormat.TEXT, Icon: TextFields },
+] as const;

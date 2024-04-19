@@ -18,9 +18,9 @@ import { Action, State } from "../types";
 type Props = {
   state: State;
   dispatch: Dispatch<Action>;
-}
+};
 
-const Output = ({ state, dispatch }: Props) => {
+const Output = ({ state, dispatch }: Props): React.ReactNode => {
   const socket = useSocket();
   const api = useAPI();
 
@@ -30,11 +30,11 @@ const Output = ({ state, dispatch }: Props) => {
         .getDownloadFile(state.subtitles.location)
         .then((response) => dispatch(setDownloadBlob(response)));
     }
-  }, [state.subtitles.location]);
+  }, [api, dispatch, state.debugMode, state.subtitles.location]);
 
   useEffect(() => {
     socket.on(SocketResponse.PROGRESS_UPDATE, (update) =>
-      dispatch(setProgressUpdate(update)),
+      dispatch(setProgressUpdate(update))
     );
 
     return () => {

@@ -18,7 +18,7 @@ type Props = {
   subtext?: string;
 };
 
-const AuthLogin = ({ title, subtitle, subtext }: Props) => {
+const AuthLogin = ({ title, subtitle, subtext }: Props): React.ReactNode => {
   const api = useAPI();
   const [loginPlayer, loading] = useLoading(api.loginPlayer);
 

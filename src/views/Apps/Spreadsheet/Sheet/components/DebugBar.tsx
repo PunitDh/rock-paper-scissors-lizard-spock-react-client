@@ -16,7 +16,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-const DebugBar = ({ state, dispatch }: Props) => {
+const DebugBar = ({ state, dispatch }: Props): React.ReactNode => {
   const token = useToken();
   const selectedCell: string = state.selectedCell.id;
   const cellData = state.sheets[state.activeSheet].content.data[selectedCell];

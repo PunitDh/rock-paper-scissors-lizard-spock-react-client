@@ -11,7 +11,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-const ButtonsBox = ({ state, dispatch }: Props) => (
+const ButtonsBox = ({ state, dispatch }: Props): React.ReactNode => (
   <CalculatorBox
     flexDirection="row"
     width="100%"

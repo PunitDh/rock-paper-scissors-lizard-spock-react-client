@@ -4,7 +4,7 @@ import DashboardCard from "../../components/shared/DashboardCard";
 import { ResponsiveFlexBox } from "../../components/shared/styles";
 import { AppList } from "./constants";
 
-const Apps = () => (
+const Apps = (): React.ReactNode => (
   <PageContainer title="Apps" description="Apps dashboard">
     <DashboardCard
       title="Apps"

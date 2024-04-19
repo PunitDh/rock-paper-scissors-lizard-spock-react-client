@@ -12,7 +12,7 @@ type Props = {
   subtext?: string;
 };
 
-const AuthRegister = ({ title, subtitle, subtext }: Props) => {
+const AuthRegister = ({ title, subtitle, subtext }: Props): React.ReactNode => {
   const api = useAPI();
   const [registerPlayer, loading] = useLoading(api.registerPlayer);
 

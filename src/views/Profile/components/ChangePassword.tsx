@@ -4,7 +4,7 @@ import { useAPI } from "../../../hooks";
 import TitledButton from "../../../components/shared/TitledButton";
 import FormField from "../../../components/shared/FormField";
 
-const ChangePassword = () => {
+const ChangePassword = (): React.ReactNode => {
   const api = useAPI();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

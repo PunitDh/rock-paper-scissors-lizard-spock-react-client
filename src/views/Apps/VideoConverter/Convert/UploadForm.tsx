@@ -31,17 +31,22 @@ import { Languages } from "../../../../assets";
 import TitledButton from "../../../../components/shared/TitledButton";
 import { useAPI, useNotification, useToken } from "../../../../hooks";
 import { Action, State, TaskStatus } from "../types";
+import { Theme } from "@emotion/react";
 
 type Props = {
   state: State;
   dispatch: Dispatch<Action>;
 };
 
+type MuiTheme = {
+  theme: Theme;
+};
+
 const FileInput = styled(TextField)({
   display: "none",
 });
 
-const Video = styled.video(({ theme }) => ({
+const Video = styled.video(({ theme }: MuiTheme) => ({
   width: "80%",
   [theme.breakpoints.up("md")]: {
     width: 360,
@@ -50,7 +55,7 @@ const Video = styled.video(({ theme }) => ({
   },
 }));
 
-const ResponsiveBox = styled(Box)(({ theme }) => ({
+const ResponsiveBox = styled(Box)(({ theme }: MuiTheme) => ({
   marginTop: "1rem",
   width: "100%",
   margin: "auto",

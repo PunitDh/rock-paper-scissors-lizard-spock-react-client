@@ -102,7 +102,7 @@ export const ResponseTabList = Object.freeze([
   },
 ]);
 
-export const tabProps = (index) => ({
+export const tabProps = (index: number) => ({
   id: `header-tab-${index}`,
   "aria-controls": `rest-tabpanel-${index}`,
 });

@@ -2,7 +2,7 @@ import { Grid } from "@mui/material";
 import Calculator from "./Calculator";
 import PageContainer from "../../../components/container/PageContainer";
 
-const ReactCalculator = () => (
+const ReactCalculator = (): React.ReactNode => (
   <PageContainer
     title="React Calculator"
     description="A calculator build with react"

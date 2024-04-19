@@ -8,7 +8,7 @@ type Props = {
   display: string;
 };
 
-const ClearButton = ({ dispatch, fn, display }: Props) => (
+const ClearButton = ({ dispatch, fn, display }: Props): React.ReactNode => (
   <CalculatorButton
     variant="contained"
     color="error"

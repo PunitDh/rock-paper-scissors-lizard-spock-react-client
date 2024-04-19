@@ -9,7 +9,7 @@ const ZFab = styled(Fab)({
   zIndex: "0",
 });
 
-const MonthlyEarnings = () => {
+const MonthlyEarnings = (): React.ReactNode => {
   // chart color
   const theme = useTheme();
   const secondary = theme.palette.secondary.main;

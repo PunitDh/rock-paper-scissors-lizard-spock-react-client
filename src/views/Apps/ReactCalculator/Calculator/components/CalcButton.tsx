@@ -20,7 +20,7 @@ function CalcButton({
   dispatch,
   operation,
   invertedOperation,
-}: Props) {
+}: Props): React.ReactNode {
   const handleClick = () => {
     if (state.evaled) {
       dispatch(resetOutput());

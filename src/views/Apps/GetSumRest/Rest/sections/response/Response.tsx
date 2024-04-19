@@ -21,7 +21,7 @@ type Props = {
 const Response = ({ state, dispatch }: Props): React.ReactNode => {
   const responseTab = useQueryParam("responseTab");
   const [tab, setTab] = useState(Number(responseTab) || 0);
-  const handleChange = (_, newValue) => setTab(newValue);
+  const handleChange = (_, newValue: number) => setTab(newValue);
 
   return (
     <FlexBox

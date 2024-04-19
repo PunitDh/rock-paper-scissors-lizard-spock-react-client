@@ -194,14 +194,10 @@ export default class EventHandler {
       }
       case KeyEvent.ARROW_UP: {
         this.#handleArrowKeys(e);
-
-        // this.dispatch(selectCell(cell.getPreviousRow()));
         break;
       }
       case KeyEvent.ARROW_DOWN: {
         this.#handleArrowKeys(e);
-
-        // this.dispatch(selectCell(cell.getNextRow(this.state.maxRows)));
         break;
       }
       default:

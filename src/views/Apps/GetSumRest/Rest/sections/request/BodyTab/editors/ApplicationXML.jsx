@@ -1,4 +1,4 @@
-import XMLEditor from "../../../../components/XMLEditor";
+import XMLEditor from "../../../../components/XMLEditor.jsx";
 
 const ApplicationXML = ({ state, dispatch }) => {
   return <XMLEditor />;

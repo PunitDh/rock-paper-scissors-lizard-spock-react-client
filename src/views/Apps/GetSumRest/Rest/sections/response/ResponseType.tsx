@@ -11,7 +11,7 @@ type Props = {
 };
 
 const ResponseType = ({ state, dispatch }: Props): React.ReactNode => {
-  const handleSetDisplayType = (displayType) => () =>
+  const handleSetDisplayType = (displayType: DisplayType) => () =>
     dispatch(setOutputDisplayType(displayType));
 
   return (

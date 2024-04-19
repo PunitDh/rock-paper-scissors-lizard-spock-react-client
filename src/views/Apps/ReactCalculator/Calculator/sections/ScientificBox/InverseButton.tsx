@@ -8,7 +8,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-function InvButton({ state, dispatch }: Props) {
+function InvButton({ state, dispatch }: Props): React.ReactNode {
   const handleClick = () => dispatch(toggleInverseMode());
 
   return (

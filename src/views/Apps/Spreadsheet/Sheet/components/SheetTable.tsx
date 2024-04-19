@@ -8,7 +8,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-const SheetTable = ({ state, dispatch }: Props) => (
+const SheetTable = ({ state, dispatch }: Props): React.ReactNode => (
   <Table sx={{ tableLayout: "fixed", width: "100%" }}>
     <TableBody sx={{ width: "100%" }}>
       {Array(state.maxRows)

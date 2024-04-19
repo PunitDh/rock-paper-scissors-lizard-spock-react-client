@@ -14,7 +14,11 @@ export const EventDelegatorContext = createContext<EventHandler>(
   {} as EventHandler
 );
 
-export const EventProvider = ({ state, dispatch, children }: Props) => {
+export const EventProvider = ({
+  state,
+  dispatch,
+  children,
+}: Props): React.ReactNode => {
   const inputFocusRef = useRef(false);
   const clipboard: Clipboard = useClipboard();
 

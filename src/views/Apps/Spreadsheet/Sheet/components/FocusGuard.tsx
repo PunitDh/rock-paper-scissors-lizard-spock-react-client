@@ -15,7 +15,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-const FocusGuard = ({ state, dispatch }: Props) => {
+const FocusGuard = ({ state, dispatch }: Props): React.ReactNode => {
   const handleFocusGuard = (e: React.FocusEvent<HTMLInputElement>): void => {
     e.preventDefault();
     e.target.blur();

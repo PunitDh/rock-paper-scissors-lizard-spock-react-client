@@ -34,7 +34,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-const SelectAll = ({ state, dispatch }: Props) => {
+const SelectAll = ({ state, dispatch }: Props): React.ReactNode => {
   const eventHandler = useEventHandler();
   const handleClick = () => {
     dispatch(selectAll());
@@ -57,7 +57,7 @@ const SelectAll = ({ state, dispatch }: Props) => {
       state.highlighted.rows,
       state.maxColumns,
       state.maxRows,
-    ],
+    ]
   );
 
   return (
