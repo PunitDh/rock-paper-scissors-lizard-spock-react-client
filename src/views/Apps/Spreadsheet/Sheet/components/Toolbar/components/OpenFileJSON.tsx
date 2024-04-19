@@ -11,7 +11,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-const OpenFileJSON = ({ dispatch }: Props) => {
+const OpenFileJSON = ({ dispatch }: Props): JSX.Element => {
   const notification = useNotification();
   const fileRef = useRef<HTMLInputElement>(null);
 

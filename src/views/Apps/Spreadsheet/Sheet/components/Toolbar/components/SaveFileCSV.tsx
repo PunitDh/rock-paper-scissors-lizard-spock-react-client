@@ -8,7 +8,7 @@ type Props = {
   state: State;
 };
 
-const SaveFileCSV = ({ state }: Props) => {
+const SaveFileCSV = ({ state }: Props): JSX.Element => {
   const activeSheet = state.sheets[state.activeSheet];
 
   const exportAsCSV = () =>
@@ -16,7 +16,7 @@ const SaveFileCSV = ({ state }: Props) => {
       activeSheet,
       state.maxRows,
       state.maxColumns,
-      activeSheet.name,
+      activeSheet.name
     );
 
   return (

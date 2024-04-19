@@ -15,7 +15,7 @@ type Props = {
   dispatch: Dispatch<Action>;
 };
 
-const OpenFileCSV = ({ dispatch }: Props) => {
+const OpenFileCSV = ({ dispatch }: Props): JSX.Element => {
   const fileRef = useRef<HTMLInputElement>(null);
   const notification = useNotification();
 

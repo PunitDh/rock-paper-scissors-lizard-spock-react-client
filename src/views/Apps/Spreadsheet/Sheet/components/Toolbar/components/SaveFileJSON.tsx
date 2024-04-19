@@ -8,7 +8,7 @@ type Props = {
   state: State;
 };
 
-const SaveFileJSON = ({ state }: Props) => {
+const SaveFileJSON = ({ state }: Props): JSX.Element => {
   const activeSheet = state.sheets[state.activeSheet];
 
   const handleExportAsJSON = () => {

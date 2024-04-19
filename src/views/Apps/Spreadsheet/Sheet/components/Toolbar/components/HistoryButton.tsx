@@ -9,7 +9,12 @@ type Props = {
   Icon: OverridableComponent<SvgIconTypeMap<{}, "svg">> & { muiName: string };
 };
 
-const HistoryButton = ({ title, disabled, onClick, Icon }: Props) => (
+const HistoryButton = ({
+  title,
+  disabled,
+  onClick,
+  Icon,
+}: Props): JSX.Element => (
   <Tooltip title={`${title} ${disabled ? "(disabled)" : ""}`}>
     <span>
       <FieldButton type="button" onClick={onClick} disabled={disabled}>

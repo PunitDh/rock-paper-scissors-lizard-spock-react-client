@@ -9,7 +9,7 @@ type Props = {
   onChange: (e: SelectChangeEvent) => void;
 };
 
-const BorderStyleSelect = ({ state, onChange }: Props) => (
+const BorderStyleSelect = ({ state, onChange }: Props): JSX.Element => (
   <Select
     labelId={"border-style-selector"}
     id={"border-style-selector"}

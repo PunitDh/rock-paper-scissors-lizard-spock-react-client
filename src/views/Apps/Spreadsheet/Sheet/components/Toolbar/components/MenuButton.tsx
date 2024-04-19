@@ -11,10 +11,9 @@ type Props = {
   title: string;
   isActive: boolean;
   Icon: any;
-  children?: any;
 };
 
-const MenuButton = ({ onClick, title, isActive, Icon, children }: Props) => {
+const MenuButton = ({ onClick, title, isActive, Icon }: Props): JSX.Element => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const ref = useRef<HTMLButtonElement>(null);
 

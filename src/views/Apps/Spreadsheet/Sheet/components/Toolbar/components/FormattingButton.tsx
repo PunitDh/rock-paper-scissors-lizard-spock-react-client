@@ -20,7 +20,7 @@ const FormattingButton = ({
   Icon,
   children,
   value,
-}: Props) => (
+}: Props): JSX.Element => (
   <Tooltip title={title}>
     <span>
       <FieldButton

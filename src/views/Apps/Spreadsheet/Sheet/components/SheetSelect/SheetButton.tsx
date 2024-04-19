@@ -3,6 +3,7 @@ import { lockSheet, renameSheet, setSheets } from "../../actions";
 import { SheetButtonItem, SheetInputItem } from "./styles";
 import { Action, Sheet, State } from "../../types";
 import { Lock, LockOpen } from "@mui/icons-material";
+import { useNotification } from "../../../../../../hooks";
 
 type SheetButtonProps = {
   state: State;
@@ -26,6 +27,7 @@ const SheetButton = ({
   onSelectSheet,
 }: SheetButtonProps): JSX.Element => {
   const [sheetName, setSheetName] = useState(sheet.name);
+  const notification = useNotification();
 
   const sheetRenameRef = useRef<HTMLInputElement | null>(null);
   const renameMode: boolean = sheet.id === rename;
@@ -64,9 +66,19 @@ const SheetButton = ({
   }, [renameMode, sheet.id, sheet.name.length]);
 
   useEffect(() => {
-    if (!isActive && sheet.protected && !sheet.locked)
+    if (!isActive && sheet.protected && !sheet.locked) {
       dispatch(lockSheet(sheet.id));
-  }, [dispatch, isActive, sheet.id, sheet.locked, sheet.protected]);
+      notification.success(`'${sheet.name}' locked`);
+    }
+  }, [
+    dispatch,
+    isActive,
+    notification,
+    sheet.id,
+    sheet.locked,
+    sheet.name,
+    sheet.protected,
+  ]);
 
   function drag(e: React.DragEvent<HTMLFormElement>) {
     e.dataTransfer.setData(

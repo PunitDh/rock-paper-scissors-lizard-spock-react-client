@@ -26,7 +26,7 @@ const CellLabel = styled.div({
   fontSize: "8px",
 });
 
-const Contente = styled.div({
+const Content = styled.div({
   position: "absolute",
   top: "14px",
   left: "0px",
@@ -39,16 +39,14 @@ type Props = {
   children: any;
 };
 
-const StatusCell = function ({ label, children }: Props) {
-  return (
-    <CellContainer>
-      <CellLabel>{label}</CellLabel>
-      <Contente>{children}</Contente>
-    </CellContainer>
-  );
-};
+const StatusCell = ({ label, children }: Props): JSX.Element => (
+  <CellContainer>
+    <CellLabel>{label}</CellLabel>
+    <Content>{children}</Content>
+  </CellContainer>
+);
 
-const TestingArea = ({ state }: { state: State }) => {
+const TestingArea = ({ state }: { state: State }): JSX.Element | null => {
   const token = useToken();
   const [keyboard, setKeyboard] = useState("");
 

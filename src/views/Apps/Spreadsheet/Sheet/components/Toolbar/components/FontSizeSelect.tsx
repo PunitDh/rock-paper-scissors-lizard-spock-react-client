@@ -8,7 +8,7 @@ type Props = {
   onChange: (text: string) => void;
 };
 
-const FontSizeSelect = ({ state, onChange }: Props) => (
+const FontSizeSelect = ({ state, onChange }: Props): JSX.Element => (
   <Select
     labelId={"font-size-selector"}
     id={"font-size-selector"}

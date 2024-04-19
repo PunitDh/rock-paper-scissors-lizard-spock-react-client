@@ -30,7 +30,7 @@ const ColorPicker = ({
   onChange,
   property,
   defaultValue,
-}: Props) => {
+}: Props): JSX.Element => {
   const style =
     stateCellFormatting?.styles && stateCellFormatting?.styles[property];
   const inputRef = useRef<HTMLInputElement>(null);
