@@ -10,8 +10,20 @@ import {
 import { showConfirmRename } from "../../actions";
 import { useAPI, useToken } from "../../../../../../hooks";
 import { Bold } from "../../../../../../components/shared/styles";
+import { Action, NavItemType, State } from "../../../types";
+import { Dispatch } from "react";
 
-export default function RenameGameModal({ state, dispatch, selectedGame }) {
+type Props = {
+  state: State;
+  dispatch: Dispatch<Action>;
+  selectedGame: NavItemType;
+};
+
+export default function RenameGameModal({
+  state,
+  dispatch,
+  selectedGame,
+}: Props): React.ReactNode {
   const api = useAPI();
   const token = useToken();
 
@@ -26,39 +38,41 @@ export default function RenameGameModal({ state, dispatch, selectedGame }) {
     handleClose();
   };
 
-  const otherPlayer = selectedGame.players.find(
+  const otherPlayer = selectedGame.players?.find(
     (player) => player.id !== token.decoded?.id
   );
 
   return (
-    <div>
-      <Dialog open={state.confirmRename} onClose={handleClose}>
-        <DialogTitle>Rename Game</DialogTitle>
-        <form onSubmit={handleRename}>
-          <DialogContent>
-            <DialogContentText>
-              Rename your game with <Bold>{otherPlayer.firstName}</Bold>
-            </DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Enter game name"
-              type="text"
-              fullWidth
-              variant="standard"
-              defaultValue={selectedGame.title}
-              autoComplete="off"
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button type="button" onClick={handleClose}>
-              Cancel
-            </Button>
-            <Button type="submit">Rename</Button>
-          </DialogActions>
-        </form>
-      </Dialog>
-    </div>
+    otherPlayer && (
+      <div>
+        <Dialog open={state.confirmRename} onClose={handleClose}>
+          <DialogTitle>Rename Game</DialogTitle>
+          <form onSubmit={handleRename}>
+            <DialogContent>
+              <DialogContentText>
+                Rename your game with <Bold>{otherPlayer.firstName}</Bold>
+              </DialogContentText>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="name"
+                label="Enter game name"
+                type="text"
+                fullWidth
+                variant="standard"
+                defaultValue={selectedGame.title}
+                autoComplete="off"
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button type="button" onClick={handleClose}>
+                Cancel
+              </Button>
+              <Button type="submit">Rename</Button>
+            </DialogActions>
+          </form>
+        </Dialog>
+      </div>
+    )
   );
 }

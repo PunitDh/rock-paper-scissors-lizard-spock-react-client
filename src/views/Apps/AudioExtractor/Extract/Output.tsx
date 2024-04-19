@@ -36,7 +36,7 @@ const Output = ({ state, dispatch }: Props): React.ReactNode => {
     return () => {
       socket.off(SocketResponse.PROGRESS_UPDATE);
     };
-  }, []);
+  }, [dispatch, socket]);
 
   return (
     <>

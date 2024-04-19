@@ -6,7 +6,7 @@ import RecentGame from "./RecentGame";
 import { useAPI, useLoading } from "../../../../../hooks";
 import LoadingComponent from "../../../../../components/shared/LoadingComponent";
 
-const RecentGames = () => {
+const RecentGames = (): React.ReactNode => {
   const api = useAPI();
   const { recentGames } = useSelector((state) => (state as any).player);
   const [getRecentGames, loading] = useLoading(api.getRecentGames);

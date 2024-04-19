@@ -8,7 +8,7 @@ type Props = {
   closeSideBar?: () => void;
 };
 
-const SidebarItems = ({ closeSideBar }: Props) => {
+const SidebarItems = ({ closeSideBar }: Props): React.ReactNode => {
   const { pathname } = useLocation();
   const menuItems = useSelector((state: any) => state.menu);
   const navGroups = Object.keys(menuItems);

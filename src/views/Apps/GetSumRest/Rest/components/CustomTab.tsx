@@ -7,7 +7,7 @@ type Props = {
   [x: string]: any;
 };
 
-export default function CustomTab({ label, subLabel, ...others }: Props) {
+export default function CustomTab({ label, subLabel, ...others }: Props): React.ReactNode {
   const smallLabel = subLabel();
 
   const combinedLabel = smallLabel ? (

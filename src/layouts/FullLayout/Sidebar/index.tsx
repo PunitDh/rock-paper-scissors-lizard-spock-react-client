@@ -5,6 +5,12 @@ import { useEffect } from "react";
 import styled from "@emotion/styled";
 import { useAPI } from "../../../hooks";
 
+type Props = {
+  isSidebarOpen: boolean;
+  isMobileSidebarOpen: boolean;
+  onSidebarClose: () => void;
+};
+
 type WideBoxProps = {
   width: string;
 };
@@ -14,7 +20,11 @@ const WideBox = styled(Box)(({ width }: WideBoxProps) => ({
   flexShrink: 0,
 }));
 
-const Sidebar = ({ isSidebarOpen, isMobileSidebarOpen, onSidebarClose }) => {
+const Sidebar = ({
+  isSidebarOpen,
+  isMobileSidebarOpen,
+  onSidebarClose,
+}: Props): React.ReactNode => {
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up("lg"));
   const api = useAPI();
   const sidebarWidth = "270px";

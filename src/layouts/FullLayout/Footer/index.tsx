@@ -10,7 +10,7 @@ const ToolbarStyled = styled(Toolbar)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const Footer = () => {
+const Footer = (): React.ReactNode => {
   const { siteSettings } = useSelector((state) => (state as any).site);
   return (
     <ToolbarStyled>

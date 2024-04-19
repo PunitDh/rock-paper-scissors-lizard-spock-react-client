@@ -14,7 +14,7 @@ const DeleteIcon = styled(Delete)(({ theme }) => ({
   },
 }));
 
-const DeleteButton = ({ onClick }: Props) => (
+const DeleteButton = ({ onClick }: Props): React.ReactNode => (
   <Tooltip title="Delete">
     <DeleteIcon onClick={onClick} />
   </Tooltip>

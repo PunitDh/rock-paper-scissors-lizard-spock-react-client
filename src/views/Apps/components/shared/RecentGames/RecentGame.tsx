@@ -15,7 +15,7 @@ type Props = {
   game: GameType;
 };
 
-const RecentGame = ({ game }: Props) => {
+const RecentGame = ({ game }: Props): React.ReactNode => {
   const currentGame = useCurrentGame(game);
 
   const playerScores = Object.values(currentGame.score)

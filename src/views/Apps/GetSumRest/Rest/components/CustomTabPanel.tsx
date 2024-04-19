@@ -14,7 +14,7 @@ export default function CustomTabPanel({
   index,
   tabId,
   ...other
-}: Props) {
+}: Props): React.ReactNode {
   return (
     <div
       role="tabpanel"

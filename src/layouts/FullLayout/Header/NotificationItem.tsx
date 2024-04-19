@@ -13,7 +13,7 @@ const NotificationItem = ({
   link,
   children,
   buttonText,
-}: Props) => {
+}: Props): React.ReactNode => {
   const navigate = useNavigate();
   const navigateTo = (to: string) => () => handleClose(navigate(to));
 

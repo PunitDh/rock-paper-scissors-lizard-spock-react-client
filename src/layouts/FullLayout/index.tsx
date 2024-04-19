@@ -24,8 +24,8 @@ const PageWrapper = styled("div")(() => ({
 }));
 
 const FullLayout = () => {
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
-  const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [isSidebarOpen] = useState<boolean>(true);
+  const [isMobileSidebarOpen, setMobileSidebarOpen] = useState<boolean>(false);
   const token = useToken();
   const notification = useNotification();
   const api = useAPI();
@@ -36,7 +36,7 @@ const FullLayout = () => {
     if (token.decoded) {
       api.getConversations();
     }
-  }, []);
+  }, [api, token.decoded]);
 
   if (!token.decoded) {
     console.log("It's the full layout page");

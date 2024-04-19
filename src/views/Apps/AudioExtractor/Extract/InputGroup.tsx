@@ -6,7 +6,7 @@ type Props = {
   children: string | React.ReactNode;
 };
 
-const InputGroup = ({ title, children }: Props) => (
+const InputGroup = ({ title, children }: Props): React.ReactNode => (
   <ResponsiveFlexBox gap="1rem" flexDirection="column" width="100%">
     <ResponsiveTypography variant="subtitle1">{title}</ResponsiveTypography>
     <IndentedBox>{children}</IndentedBox>

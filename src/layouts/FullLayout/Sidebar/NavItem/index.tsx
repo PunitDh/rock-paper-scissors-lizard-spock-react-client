@@ -1,4 +1,8 @@
-import { ForwardRefExoticComponent, RefAttributes, useReducer } from "react";
+import React, {
+  ForwardRefExoticComponent,
+  RefAttributes,
+  useReducer,
+} from "react";
 import {
   ListItemIcon,
   ListItem,
@@ -15,6 +19,15 @@ import { NavLink, NavLinkProps } from "react-router-dom";
 import { initialState, reducer } from "./reducer";
 import { setAnchorEl } from "./actions";
 import FlexBox from "../../../../components/shared/FlexBox";
+
+type Props = {
+  item: any;
+  level: number;
+  pathDirect: string;
+  onClick?: (...args: any[]) => any;
+  closeSideBar?: () => void;
+  hasContextMenu?: boolean;
+};
 
 type ListItemStyledProps = {
   theme: Theme;
@@ -50,7 +63,7 @@ const ListItemStyled = styled(ListItem)(
         color: "white",
       },
     },
-  }),
+  })
 );
 
 const MovePlayedNotification = styled(FlexBox)({
@@ -69,7 +82,7 @@ const NavItem = ({
   onClick,
   closeSideBar,
   hasContextMenu = false,
-}) => {
+}: Props): React.ReactNode => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const theme = useTheme();
 

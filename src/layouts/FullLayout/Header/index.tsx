@@ -44,10 +44,12 @@ const Header = ({ toggleMobileSidebar }: Props) => {
         </IconButton>
         <NotificationMenu />
         <Box flexGrow={1} />
-        <Stack spacing={1} direction="row" alignItems="center">
-          {token.decoded?.firstName} {token.decoded?.lastName}
-          <CornerProfile decoded={token.decoded} />
-        </Stack>
+        {token.decoded && (
+          <Stack spacing={1} direction="row" alignItems="center">
+            {token.decoded.firstName} {token.decoded.lastName}
+            <CornerProfile decoded={token.decoded} />
+          </Stack>
+        )}
       </ToolbarStyled>
     </AppBarStyled>
   );

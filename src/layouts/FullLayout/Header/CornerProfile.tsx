@@ -15,13 +15,18 @@ import styled from "@emotion/styled";
 import { useAPI } from "../../../hooks";
 import { ProfileImg, getAvatar } from "../../../assets";
 import { isObject } from "../../../utils";
+import { Decoded } from "../../../hooks/types";
+
+type Props = {
+  decoded: Decoded;
+};
 
 const ProfileAvatar = styled(Avatar)({
   width: 35,
   height: 35,
 });
 
-const CornerProfile = ({ decoded }) => {
+const CornerProfile = ({ decoded }: Props): React.ReactNode => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const navigate = useNavigate();
   const api = useAPI();

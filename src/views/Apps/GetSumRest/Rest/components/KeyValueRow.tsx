@@ -70,7 +70,7 @@ export default function KeyValueRow({
   onDelete,
   isLast,
   fileUpload,
-}: Props) {
+}: Props): React.ReactNode {
   const fileRef = useRef<HTMLButtonElement | null>(null);
   const handleChange = (e: any) => {
     const target = e.target as HTMLInputElement;

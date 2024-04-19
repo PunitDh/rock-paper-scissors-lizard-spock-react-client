@@ -7,7 +7,7 @@ type Props = {
   onClick: (e: React.MouseEvent) => void;
 };
 
-const Tag = ({ text, onClick }: Props) => {
+const Tag = ({ text, onClick }: Props): React.ReactNode => {
   const theme = useTheme();
   return (
     <FlexBox

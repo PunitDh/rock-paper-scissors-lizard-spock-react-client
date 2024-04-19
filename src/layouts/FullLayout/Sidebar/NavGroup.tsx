@@ -12,7 +12,7 @@ type Props = {
 const NavGroup = ({ navItems, pathDirect, closeSideBar }: Props) => {
   const token = useToken();
 
-  return  (
+  return (
     <>
       {navItems.items
         .filter(
