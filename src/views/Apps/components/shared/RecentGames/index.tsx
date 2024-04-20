@@ -14,7 +14,7 @@ const RecentGames = (): JSX.Element => {
 
   useEffect(() => {
     getRecentGames(limit);
-  }, [getRecentGames]);
+  }, []);
 
   return (
     <DashboardCard title="Recent Games">

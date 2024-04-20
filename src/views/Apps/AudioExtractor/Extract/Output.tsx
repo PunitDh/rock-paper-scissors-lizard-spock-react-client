@@ -26,7 +26,7 @@ const Output = ({ state, dispatch }: Props): JSX.Element => {
         .getDownloadFile(state.audio.location)
         .then((response) => dispatch(setDownloadBlob(response.data)));
     }
-  }, [api, dispatch, state.audio]);
+  }, [state.audio]);
 
   useEffect(() => {
     socket.on(SocketResponse.PROGRESS_UPDATE, (update) =>
@@ -36,7 +36,7 @@ const Output = ({ state, dispatch }: Props): JSX.Element => {
     return () => {
       socket.off(SocketResponse.PROGRESS_UPDATE);
     };
-  }, [dispatch, socket]);
+  }, []);
 
   return (
     <>

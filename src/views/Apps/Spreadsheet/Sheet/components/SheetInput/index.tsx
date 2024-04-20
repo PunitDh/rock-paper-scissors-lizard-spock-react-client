@@ -53,7 +53,7 @@ const SheetInput = ({ state, dispatch, formulaField }: Props) => {
       dispatch(setFormulaFieldText(""));
       dispatch(highlightFormulaCells(setOf<string>()));
     }
-  }, [dispatch, referenceCells, selectedCellData, selectedId]);
+  }, [referenceCells, selectedCellData, selectedId]);
 
   return (
     <>

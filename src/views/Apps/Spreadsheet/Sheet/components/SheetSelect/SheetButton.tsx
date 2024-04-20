@@ -71,7 +71,6 @@ const SheetButton = ({
       notification.success(`'${sheet.name}' locked`);
     }
   }, [
-    dispatch,
     isActive,
     notification,
     sheet.id,

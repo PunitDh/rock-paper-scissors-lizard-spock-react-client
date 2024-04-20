@@ -28,7 +28,7 @@ const Users = ({ search }: Props): JSX.Element => {
 
   useEffect(() => {
     getCurrentUsers();
-  }, [getCurrentUsers]);
+  }, []);
 
   const currentUsersFiltered =
     search.length > 0

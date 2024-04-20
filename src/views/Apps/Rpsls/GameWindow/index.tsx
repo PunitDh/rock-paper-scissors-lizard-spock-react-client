@@ -27,7 +27,7 @@ const Game = (): JSX.Element => {
 
   useEffect(() => {
     if (gameId) api.getGame(gameId);
-  }, [api, gameId]);
+  }, [gameId]);
 
   const lastRound =
     currentGame.rounds && currentGame.rounds[currentGame.rounds.length - 1];

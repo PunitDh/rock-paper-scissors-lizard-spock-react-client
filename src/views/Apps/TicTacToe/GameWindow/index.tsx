@@ -24,7 +24,7 @@ const Game = (): JSX.Element => {
 
   useEffect(() => {
     if (gameId) api.getGame(gameId);
-  }, [api, gameId]);
+  }, [gameId]);
 
   const opponent = currentGame.players?.find(
     (player) => player.id !== token.decoded?.id

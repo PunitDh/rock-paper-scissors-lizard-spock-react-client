@@ -31,7 +31,7 @@ const Sidebar = ({
 
   useEffect(() => {
     api.getCurrentGames();
-  }, [api]);
+  }, []);
 
   if (lgUp) {
     return (

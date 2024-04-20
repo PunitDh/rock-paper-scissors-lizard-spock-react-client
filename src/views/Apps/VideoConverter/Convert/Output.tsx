@@ -30,7 +30,7 @@ const Output = ({ state, dispatch }: Props): JSX.Element => {
         .getDownloadFile(state.subtitles.location)
         .then((response) => dispatch(setDownloadBlob(response)));
     }
-  }, [api, dispatch, state.debugMode, state.subtitles.location]);
+  }, [state.debugMode, state.subtitles.location]);
 
   useEffect(() => {
     socket.on(SocketResponse.PROGRESS_UPDATE, (update) =>

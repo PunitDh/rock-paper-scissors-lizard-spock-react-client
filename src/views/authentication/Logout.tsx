@@ -6,7 +6,7 @@ const Logout = (): JSX.Element => {
 
   useEffect(() => {
     api.logoutPlayer();
-  }, [api]);
+  }, []);
 
   return <></>;
 };

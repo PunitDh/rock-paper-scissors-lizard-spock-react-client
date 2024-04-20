@@ -36,7 +36,7 @@ const FullLayout = () => {
     if (token.decoded) {
       api.getConversations();
     }
-  }, [api, token.decoded]);
+  }, [token.decoded]);
 
   if (!token.decoded) {
     console.log("It's the full layout page");
